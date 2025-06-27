@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,43 +53,54 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+				omni: {
+					red: '#FF0000',
+					orange: '#FFA500', 
+					yellow: '#FFFF00',
+					green: '#008000',
+					blue: '#0000FF',
+					indigo: '#4B0082',
+					violet: '#EE82EE'
+				}
+			},
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+				heading: ['Montserrat', 'sans-serif']
+			},
+			backgroundImage: {
+				'rainbow-gradient': 'linear-gradient(135deg, #FF0000 0%, #FFA500 16.66%, #FFFF00 33.33%, #008000 50%, #0000FF 66.66%, #4B0082 83.33%, #EE82EE 100%)',
+				'rainbow-subtle': 'linear-gradient(135deg, rgba(255,0,0,0.1) 0%, rgba(255,165,0,0.1) 16.66%, rgba(255,255,0,0.1) 33.33%, rgba(0,128,0,0.1) 50%, rgba(0,0,255,0.1) 66.66%, rgba(75,0,130,0.1) 83.33%, rgba(238,130,238,0.1) 100%)'
+			},
+			animation: {
+				'rainbow': 'rainbow 8s ease-in-out infinite',
+				'fade-in-up': 'fade-in-up 0.6s ease-out',
+				'fade-in': 'fade-in 0.4s ease-out',
+				'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+			},
+			keyframes: {
+				rainbow: {
+					'0%, 100%': { 'background-position': '0% 50%' },
+					'50%': { 'background-position': '100% 50%' }
+				},
+				'fade-in-up': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(20px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
-			},
-			keyframes: {
-				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
-				},
-				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
-				}
-			},
-			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
 			}
 		}
 	},
