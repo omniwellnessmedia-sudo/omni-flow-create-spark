@@ -1,4 +1,3 @@
-
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
@@ -7,8 +6,6 @@ const About = () => {
     { name: "Chad", role: "Founder & Creative Director", image: "/lovable-uploads/00bcae7d-32b7-4512-ba26-c767559ee023.png" },
     { name: "Tumelo", role: "Content Strategist", image: "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png" },
     { name: "Abbi", role: "Community Manager", image: "/lovable-uploads/fcf93d20-65c1-4e39-8c34-360afdf825f1.png" },
-    { name: "Galen", role: "Video Producer", image: "/lovable-uploads/83be8984-2c43-478e-ba25-b848902c104f.png" },
-    { name: "Simeon", role: "Brand Consultant", image: "/lovable-uploads/9d51151d-b05c-4392-9f83-9e301a4f790d.png" },
     { name: "Zenith", role: "Wellness Coach", image: "/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png" }
   ];
 
