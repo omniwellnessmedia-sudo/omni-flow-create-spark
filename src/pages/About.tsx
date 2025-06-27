@@ -8,31 +8,31 @@ const About = () => {
       name: "Chad Cupido", 
       role: "Founder & Head of Media and Strategy", 
       image: "/lovable-uploads/4a01dcd5-fe18-4590-afd3-fe656ef63428.png",
-      description: "Chad oversees content creation and overall design direction, leveraging his strong background in media to produce high-quality, impactful content."
+      description: "Chad oversees content creation and overall design direction, leveraging his strong background in media to produce high-quality, impactful content that bridges communities and inspires positive change."
     },
     { 
       name: "Abbi", 
       role: "Content Developer", 
       image: "/lovable-uploads/e8cedac1-53a9-4d1a-84c4-308d24ca529c.png",
-      description: "Abbi works closely with Chad on content development, creating engaging copy and organizing visuals for the website and other platforms."
+      description: "Abbi works closely with Chad on content development, creating engaging copy and organizing visuals for the website and other platforms. She specializes in distributing content across Facebook and TikTok."
     },
     { 
       name: "Tumelo", 
       role: "Web Development Lead", 
       image: "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png",
-      description: "Tumelo leads our web development and e-commerce services, ensuring a strong online presence for our clients."
+      description: "Tumelo leads our web development and e-commerce services, ensuring a strong online presence for our clients with cutting-edge technical solutions."
     },
     { 
       name: "Zenith", 
       role: "Administration and Coordination", 
       image: "/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png",
-      description: "Zenith handles the administrative and coordination aspects, ensuring deadlines are met and managing client relationships."
+      description: "Zenith handles the administrative and coordination aspects, ensuring deadlines are met and managing client relationships with precision and care."
     },
     { 
       name: "Feroza", 
       role: "Strategic Consultant", 
       image: "/lovable-uploads/521beecf-f15f-46a9-a1c6-0e3973419248.png",
-      description: "Feroza brings strategic insights and innovative thinking to help clients achieve their conscious business goals."
+      description: "Feroza brings strategic insights and innovative thinking to help clients achieve their conscious business goals and sustainable growth."
     }
   ];
 
@@ -100,7 +100,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* Meet Our Team */}
+        {/* Meet Our Team - New Large Image-Focused Layout */}
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -112,23 +112,25 @@ const About = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Grid Layout with Large Images */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {team.map((member, index) => (
                 <div 
                   key={member.name}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden animate-fade-in-up hover:shadow-xl transition-all duration-300"
+                  className="group bg-white rounded-3xl shadow-lg overflow-hidden animate-fade-in-up hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="aspect-w-16 aspect-h-12">
+                  <div className="relative overflow-hidden">
                     <img 
                       src={member.image}
                       alt={member.name}
-                      className="w-full h-64 object-cover"
+                      className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-500"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="font-heading font-semibold text-xl mb-2">{member.name}</h3>
-                    <p className="text-omni-indigo font-medium mb-3">{member.role}</p>
+                  <div className="p-8">
+                    <h3 className="font-heading font-bold text-2xl mb-2 text-gray-800">{member.name}</h3>
+                    <p className="text-omni-indigo font-semibold mb-4 text-lg">{member.role}</p>
                     <p className="text-gray-600 leading-relaxed">{member.description}</p>
                   </div>
                 </div>
