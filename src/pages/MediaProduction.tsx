@@ -1,0 +1,320 @@
+
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { Play, Camera, Mic, Film, Calendar, Download, Calculator, CheckCircle } from "lucide-react";
+
+const MediaProduction = () => {
+  const [projectData, setProjectData] = useState({ type: '', duration: '', complexity: '' });
+  const [estimate, setEstimate] = useState(null);
+  const [formData, setFormData] = useState({ name: '', email: '', project: '', budget: '' });
+
+  const calculateEstimate = () => {
+    const baseCosts = {
+      video: { simple: 2000, medium: 5000, complex: 10000 },
+      documentary: { simple: 8000, medium: 15000, complex: 30000 },
+      commercial: { simple: 5000, medium: 12000, complex: 25000 },
+      social: { simple: 800, medium: 2000, complex: 4000 }
+    };
+
+    const duration = parseInt(projectData.duration) || 1;
+    const multiplier = duration > 5 ? 1.5 : duration > 2 ? 1.2 : 1;
+    
+    if (projectData.type && projectData.complexity && baseCosts[projectData.type]) {
+      const baseCost = baseCosts[projectData.type][projectData.complexity];
+      const finalEstimate = Math.round(baseCost * multiplier);
+      setEstimate({
+        low: Math.round(finalEstimate * 0.8),
+        high: Math.round(finalEstimate * 1.2),
+        timeline: duration > 5 ? '6-12 weeks' : duration > 2 ? '3-6 weeks' : '1-3 weeks'
+      });
+    }
+  };
+
+  const portfolioItems = [
+    { title: "The Conscious Content Creators", type: "Documentary", thumbnail: "🎬" },
+    { title: "Uniting for Our Baboons", type: "Environmental", thumbnail: "🐒" },
+    { title: "Legacy Beyond Success", type: "Business Story", thumbnail: "💼" },
+    { title: "Indigenous Tour Kalk Bay", type: "Cultural", thumbnail: "🏛️" }
+  ];
+
+  return (
+    <div className="min-h-screen bg-white">
+      <Navigation />
+      
+      {/* Hero Section */}
+      <section className="pt-24 pb-16 bg-gradient-to-br from-white via-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
+                Create <span className="bg-rainbow-gradient bg-clip-text text-transparent">Powerful Stories</span> That Inspire
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                From documentaries to social media content, we craft authentic visual narratives that connect, 
+                educate, and drive meaningful change. Award-winning production quality meets conscious storytelling.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+                  <Play className="mr-2 w-5 h-5" />
+                  View Our Reel
+                </Button>
+                <Button variant="outline" size="lg" className="px-8 py-4 text-lg rounded-full border-2">
+                  <Download className="mr-2 w-5 h-5" />
+                  Production Guide
+                </Button>
+              </div>
+              <div className="flex items-center space-x-8 text-sm text-gray-600">
+                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />4K Production Quality</div>
+                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Full Rights Included</div>
+                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Fast Turnaround</div>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-8 border">
+                <h3 className="font-heading font-bold text-2xl mb-6 text-center">Get Your Project Quote</h3>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input 
+                      id="name" 
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input 
+                      id="email" 
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="project">Project Type</Label>
+                    <Select onValueChange={(value) => setFormData({...formData, project: value})}>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select project type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="video">Promotional Video</SelectItem>
+                        <SelectItem value="documentary">Documentary</SelectItem>
+                        <SelectItem value="commercial">Commercial</SelectItem>
+                        <SelectItem value="social">Social Media Content</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="budget">Budget Range</Label>
+                    <Select onValueChange={(value) => setFormData({...formData, budget: value})}>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Select budget range" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="under-5k">Under $5,000</SelectItem>
+                        <SelectItem value="5k-15k">$5,000 - $15,000</SelectItem>
+                        <SelectItem value="15k-30k">$15,000 - $30,000</SelectItem>
+                        <SelectItem value="over-30k">Over $30,000</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 rounded-full">
+                    Get My Custom Quote
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Project Calculator */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
+              Project <span className="bg-rainbow-gradient bg-clip-text text-transparent">Cost Calculator</span>
+            </h2>
+            <p className="text-lg text-gray-600">Get an instant estimate for your video production project</p>
+          </div>
+          
+          <Card className="shadow-xl border-0">
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-t-lg">
+              <CardTitle className="flex items-center text-2xl">
+                <Calculator className="mr-3 w-6 h-6" />
+                Video Production Calculator
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div>
+                  <Label className="text-sm font-medium">Project Type</Label>
+                  <Select onValueChange={(value) => setProjectData({...projectData, type: value})}>
+                    <SelectTrigger className="mt-2">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="video">Promotional Video</SelectItem>
+                      <SelectItem value="documentary">Documentary</SelectItem>
+                      <SelectItem value="commercial">Commercial</SelectItem>
+                      <SelectItem value="social">Social Media</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Duration (minutes)</Label>
+                  <Input 
+                    type="number"
+                    value={projectData.duration}
+                    onChange={(e) => setProjectData({...projectData, duration: e.target.value})}
+                    placeholder="3"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Complexity Level</Label>
+                  <Select onValueChange={(value) => setProjectData({...projectData, complexity: value})}>
+                    <SelectTrigger className="mt-2">
+                      <SelectValue placeholder="Select complexity" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="simple">Simple</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="complex">Complex</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <Button onClick={calculateEstimate} className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 mb-6">
+                Calculate Project Cost
+              </Button>
+              
+              {estimate && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <h3 className="font-bold text-xl mb-4 text-blue-800">Your Project Estimate:</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-blue-600">${estimate.low.toLocaleString()} - ${estimate.high.toLocaleString()}</div>
+                      <div className="text-sm text-blue-700">Project Cost Range</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-blue-600">{estimate.timeline}</div>
+                      <div className="text-sm text-blue-700">Production Timeline</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Services Grid */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
+              Complete <span className="bg-rainbow-gradient bg-clip-text text-transparent">Production Services</span>
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { icon: Film, title: "Documentary Production", desc: "Full-service documentary creation from concept to distribution" },
+              { icon: Camera, title: "Commercial Videos", desc: "High-impact promotional content that drives results" },
+              { icon: Mic, title: "Podcast Production", desc: "Professional audio production and post-production services" },
+              { icon: Play, title: "Social Media Content", desc: "Engaging short-form content optimized for each platform" },
+              { icon: Camera, title: "Event Coverage", desc: "Comprehensive event documentation and highlights" },
+              { icon: Film, title: "Brand Storytelling", desc: "Authentic narratives that showcase your brand values" }
+            ].map((service, index) => (
+              <Card key={service.title} className="hover:shadow-lg transition-all duration-300 border-0 shadow-md">
+                <CardHeader>
+                  <service.icon className="w-12 h-12 text-blue-600 mb-4" />
+                  <CardTitle className="text-xl">{service.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-gray-600">{service.desc}</CardDescription>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Portfolio Showcase */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
+              Featured <span className="bg-rainbow-gradient bg-clip-text text-transparent">Work</span>
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {portfolioItems.map((item, index) => (
+              <Card key={item.title} className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300 overflow-hidden">
+                <div className="aspect-video bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-6xl">
+                  {item.thumbnail}
+                </div>
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-bold text-xl">{item.title}</h3>
+                    <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                      {item.type}
+                    </span>
+                  </div>
+                  <Button variant="outline" className="w-full mt-4">
+                    <Play className="mr-2 w-4 h-4" />
+                    Watch Now
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Booking Section */}
+      <section className="py-20 bg-gray-900 text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
+            Ready to Tell Your Story?
+          </h2>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Book a free creative consultation to discuss your vision and get a detailed project proposal.
+          </p>
+          <div className="bg-white rounded-2xl p-8 shadow-2xl">
+            <h3 className="font-heading font-bold text-2xl mb-6 text-gray-900">Schedule Your Creative Consultation</h3>
+            <div className="text-gray-900 mb-6">
+              <p className="mb-2">🎬 45-minute creative session</p>
+              <p className="mb-2">📋 Detailed project breakdown</p>
+              <p className="mb-2">💰 Custom pricing proposal</p>
+              <p>🎯 Timeline and deliverables</p>
+            </div>
+            <div className="bg-gray-100 p-6 rounded-lg mb-6">
+              <p className="text-gray-700">Calendly booking widget will be integrated here</p>
+            </div>
+            <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+              <Calendar className="mr-2 w-5 h-5" />
+              Book My Creative Session
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default MediaProduction;

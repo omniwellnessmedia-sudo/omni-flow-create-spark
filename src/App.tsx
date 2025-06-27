@@ -12,6 +12,10 @@ import Blog from "./pages/Blog";
 import Podcast from "./pages/Podcast";
 import Contact from "./pages/Contact";
 import AITools from "./pages/AITools";
+import BusinessConsulting from "./pages/BusinessConsulting";
+import MediaProduction from "./pages/MediaProduction";
+import SocialMediaStrategy from "./pages/SocialMediaStrategy";
+import WebDevelopment from "./pages/WebDevelopment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +30,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/business-consulting" element={<BusinessConsulting />} />
+          <Route path="/services/media-production" element={<MediaProduction />} />
+          <Route path="/services/social-media-strategy" element={<SocialMediaStrategy />} />
+          <Route path="/services/web-development" element={<WebDevelopment />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/podcast" element={<Podcast />} />

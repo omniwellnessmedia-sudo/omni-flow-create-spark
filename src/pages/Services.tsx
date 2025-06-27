@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 const Services = () => {
   const services = [
@@ -18,7 +19,8 @@ const Services = () => {
         "NPO Project Integration",
         "Impact Measurement"
       ],
-      icon: "🚀"
+      icon: "🚀",
+      link: "/services/business-consulting"
     },
     {
       title: "Media & Content Creation",
@@ -31,23 +33,25 @@ const Services = () => {
         "Podcast Production",
         "Multimedia Campaigns"
       ],
-      icon: "🎬"
+      icon: "🎬",
+      link: "/services/media-production"
     },
     {
-      title: "Community Engagement & Outreach",
-      description: "Building authentic connections between brands and communities through meaningful engagement strategies.",
+      title: "Social Media Strategy",
+      description: "Build authentic connections between brands and communities through meaningful engagement strategies.",
       features: [
-        "Community Building",
-        "Event Planning & Management", 
-        "Stakeholder Engagement",
-        "Cultural Sensitivity Training",
-        "Local Partnership Development",
-        "Grassroots Marketing"
+        "Content Strategy & Planning",
+        "Community Management", 
+        "Platform Optimization",
+        "Influencer Partnerships",
+        "Analytics & Reporting",
+        "Paid Social Campaigns"
       ],
-      icon: "🤝"
+      icon: "📱",
+      link: "/services/social-media-strategy"
     },
     {
-      title: "Digital Strategy & Web Development",
+      title: "Web Development",
       description: "Modern, responsive digital solutions that reflect your brand's values and drive meaningful engagement.",
       features: [
         "Website Design & Development",
@@ -57,7 +61,8 @@ const Services = () => {
         "Digital Marketing Strategy",
         "Analytics & Reporting"
       ],
-      icon: "💻"
+      icon: "💻",
+      link: "/services/web-development"
     }
   ];
 
@@ -85,7 +90,7 @@ const Services = () => {
               {services.map((service, index) => (
                 <Card 
                   key={service.title}
-                  className="hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up border-0 shadow-md"
+                  className="hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up border-0 shadow-md group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   <CardHeader>
@@ -96,7 +101,7 @@ const Services = () => {
                     <CardDescription className="text-gray-600 text-base">{service.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                       {service.features.map((feature) => (
                         <div key={feature} className="flex items-center text-sm text-gray-700">
                           <span className="w-2 h-2 bg-rainbow-gradient rounded-full mr-3 flex-shrink-0"></span>
@@ -104,6 +109,15 @@ const Services = () => {
                         </div>
                       ))}
                     </div>
+                    <Button 
+                      asChild 
+                      className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-6 py-3 rounded-full shadow-lg group-hover:shadow-xl transition-all duration-300"
+                    >
+                      <Link to={service.link} className="inline-flex items-center justify-center">
+                        Learn More & Get Quote
+                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
