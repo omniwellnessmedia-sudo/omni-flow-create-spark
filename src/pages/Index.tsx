@@ -7,8 +7,6 @@ import ServicesSection from "@/components/sections/ServicesSection";
 import FeaturedProjectsSection from "@/components/sections/FeaturedProjectsSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import AIToolsPreview from "@/components/sections/AIToolsPreview";
-import PartnersSection from "@/components/sections/PartnersSection";
-import VideoShowcaseSection from "@/components/sections/VideoShowcaseSection";
 
 const Index = () => {
   return (
@@ -19,8 +17,6 @@ const Index = () => {
         <MissionSection />
         <ServicesSection />
         <AIToolsPreview />
-        <VideoShowcaseSection />
-        <PartnersSection />
         <FeaturedProjectsSection />
         <TestimonialsSection />
       </main>
