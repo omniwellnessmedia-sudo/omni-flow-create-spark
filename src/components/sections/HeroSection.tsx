@@ -14,12 +14,12 @@ const HeroSection = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="animate-fade-in-up">
-          {/* Logo */}
-          <div className="flex justify-center mb-8">
+          {/* Logo - Made Much Larger */}
+          <div className="flex justify-center mb-12">
             <img 
               src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
               alt="Omni Wellness Media" 
-              className="h-24 w-24 sm:h-32 sm:w-32 animate-pulse-slow"
+              className="h-32 w-32 sm:h-40 sm:w-40 lg:h-48 lg:w-48 animate-pulse-slow"
             />
           </div>
 
@@ -53,12 +53,21 @@ const HeroSection = () => {
             ))}
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - Softer styling */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+            <Button 
+              asChild 
+              size="lg" 
+              className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white font-medium px-8 py-3 text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 border-0"
+            >
               <Link to="/services">Our Services</Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-2 border-omni-indigo text-omni-indigo hover:bg-omni-indigo hover:text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300">
+            <Button 
+              asChild 
+              variant="outline" 
+              size="lg" 
+              className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 font-medium px-8 py-3 text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 bg-white/80 backdrop-blur-sm"
+            >
               <Link to="/ai-tools">Try Our AI Tools</Link>
             </Button>
           </div>
