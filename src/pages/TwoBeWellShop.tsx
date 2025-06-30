@@ -1,4 +1,3 @@
-
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ import { ShoppingCart, Coins, Users, Gift, Star, Heart, Leaf, Award, Plus, Minus
 const TwoBeWellShop = () => {
   const [cart, setCart] = useState<{[key: string]: number}>({});
   const [wellCoins, setWellCoins] = useState(250); // User's current WellCoins
+  const [activeTab, setActiveTab] = useState("products");
 
   const products = [
     {
@@ -165,7 +165,7 @@ const TwoBeWellShop = () => {
         {/* Main Content */}
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Tabs defaultValue="products" className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-4 mb-8">
                 <TabsTrigger value="products">Products</TabsTrigger>
                 <TabsTrigger value="wellcoins">WellCoins</TabsTrigger>
@@ -436,7 +436,7 @@ const TwoBeWellShop = () => {
                           <div className="text-center py-12">
                             <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                             <p className="text-gray-500">Your cart is empty</p>
-                            <Button className="mt-4" onClick={() => document.querySelector('[value="products"]')?.click()}>
+                            <Button className="mt-4" onClick={() => setActiveTab("products")}>
                               Continue Shopping
                             </Button>
                           </div>
