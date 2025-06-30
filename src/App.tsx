@@ -16,6 +16,8 @@ import BusinessConsulting from "./pages/BusinessConsulting";
 import MediaProduction from "./pages/MediaProduction";
 import SocialMediaStrategy from "./pages/SocialMediaStrategy";
 import WebDevelopment from "./pages/WebDevelopment";
+import TwoBeWell from "./pages/TwoBeWell";
+import TwoBeWellShop from "./pages/TwoBeWellShop";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +40,8 @@ const App = () => (
           <Route path="/blog" element={<Blog />} />
           <Route path="/podcast" element={<Podcast />} />
           <Route path="/ai-tools" element={<AITools />} />
+          <Route path="/2bewell" element={<TwoBeWell />} />
+          <Route path="/2bewell-shop" element={<TwoBeWellShop />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
