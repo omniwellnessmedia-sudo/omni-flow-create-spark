@@ -82,11 +82,11 @@ const Portfolio = () => {
                   className="overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up border-0 shadow-lg"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="aspect-video overflow-hidden">
+                  <div className="aspect-square overflow-hidden">
                     <img 
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      className="instagram-post-img hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                   <CardHeader>
