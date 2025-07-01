@@ -55,67 +55,88 @@ const WellnessExchange = () => {
     <div className="min-h-screen bg-white">
       <Navigation />
       <main className="pt-16">
-        {/* Hero Section - Fixed */}
-        <section className="relative py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <Badge className="mb-6 px-6 py-3 bg-rainbow-gradient text-white text-sm font-medium shadow-lg border-0">
-              Revolutionizing Wellness Exchange in South Africa
-            </Badge>
-            
-            <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6 text-gray-900">
-              The <span className="bg-rainbow-gradient bg-clip-text text-transparent font-extrabold">Wellness Exchange</span>
-            </h1>
-            
-            <p className="text-lg sm:text-xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
-              Where wellness meets innovation. Trade services, earn WellCoins, and build meaningful connections 
-              in South Africa's most advanced conscious commerce platform.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              {user ? (
-                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-semibold border-0">
-                  <Link to="/wellness-exchange/marketplace">
-                    Explore Marketplace
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              ) : (
-                <>
-                  <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-semibold border-0">
-                    <Link to="/auth">
-                      Join as Provider
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" size="lg" className="px-8 py-3 border-2 border-gray-300 bg-white hover:bg-gray-50 font-semibold text-gray-800">
-                    <Link to="/auth">
-                      Join as Consumer
-                    </Link>
-                  </Button>
-                </>
-              )}
-            </div>
-            
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center bg-white rounded-lg p-4 shadow-md border border-gray-100">
-                  <div className="text-3xl sm:text-4xl font-bold bg-rainbow-gradient bg-clip-text text-transparent mb-2">
-                    {stat.number}
-                  </div>
-                  <div className="text-sm text-gray-700 font-medium">{stat.label}</div>
+        {/* Hero Section with Community Image */}
+        <section className="relative py-20 bg-white overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img 
+              src="/lovable-uploads/edf104cf-2a2d-4ccc-9e08-1f426620f690.png"
+              alt="Community gathering" 
+              className="w-full h-full object-cover opacity-10"
+            />
+          </div>
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <Badge className="mb-6 px-6 py-3 bg-omni-violet text-white text-sm font-medium shadow-lg border-0">
+                  Revolutionizing Wellness Exchange in South Africa
+                </Badge>
+                
+                <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6 text-gray-900">
+                  The <span className="text-omni-violet font-extrabold">Wellness Exchange</span>
+                </h1>
+                
+                <p className="text-lg sm:text-xl text-gray-700 mb-8 max-w-xl leading-relaxed">
+                  Where wellness meets innovation. Trade services, earn WellCoins, and build meaningful connections 
+                  in South Africa's most advanced conscious commerce platform.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                  {user ? (
+                    <Button asChild size="lg" className="bg-omni-violet hover:bg-omni-indigo text-white px-8 py-3 shadow-lg font-semibold border-0">
+                      <Link to="/wellness-exchange/marketplace">
+                        Explore Marketplace
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Link>
+                    </Button>
+                  ) : (
+                    <>
+                      <Button asChild size="lg" className="bg-omni-violet hover:bg-omni-indigo text-white px-8 py-3 shadow-lg font-semibold border-0">
+                        <Link to="/auth">
+                          Join as Provider
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Link>
+                      </Button>
+                      <Button asChild variant="outline" size="lg" className="px-8 py-3 border-2 border-gray-300 bg-white hover:bg-gray-50 font-semibold text-gray-800">
+                        <Link to="/auth">
+                          Join as Consumer
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
-              ))}
+                
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-8">
+                  {stats.map((stat) => (
+                    <div key={stat.label} className="text-center bg-white rounded-lg p-4 shadow-md border border-gray-100">
+                      <div className="text-3xl sm:text-4xl font-bold text-omni-violet mb-2">
+                        {stat.number}
+                      </div>
+                      <div className="text-sm text-gray-700 font-medium">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="lg:pl-8">
+                <img 
+                  src="/lovable-uploads/83be8984-2c43-478e-ba25-b848902c104f.png"
+                  alt="Wellness professionals collaborating" 
+                  className="w-full h-96 object-cover rounded-2xl shadow-2xl"
+                />
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Features Section - Fixed */}
+        {/* Features Section */}
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6 text-gray-900">
-                Why Choose the <span className="bg-rainbow-gradient bg-clip-text text-transparent font-extrabold">Wellness Exchange</span>?
+                Why Choose the <span className="text-omni-violet font-extrabold">Wellness Exchange</span>?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Experience the future of wellness commerce with features designed to empower your journey.
@@ -143,12 +164,12 @@ const WellnessExchange = () => {
           </div>
         </section>
 
-        {/* How It Works - Fixed */}
+        {/* How It Works with Images */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6 text-gray-900">
-                How the <span className="bg-rainbow-gradient bg-clip-text text-transparent font-extrabold">Exchange</span> Works
+                How the <span className="text-omni-violet font-extrabold">Exchange</span> Works
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Simple steps to start your wellness exchange journey.
@@ -157,14 +178,21 @@ const WellnessExchange = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* For Providers */}
-              <Card className="p-8 hover:shadow-xl transition-all duration-300 bg-white border border-gray-200">
-                <CardHeader className="text-center pb-6">
+              <Card className="p-8 hover:shadow-xl transition-all duration-300 bg-white border border-gray-200 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                  <img 
+                    src="/lovable-uploads/965c3c16-d837-4f01-8f8a-220d4a14a83b.png"
+                    alt="Wellness provider" 
+                    className="w-full h-full object-cover rounded-bl-full"
+                  />
+                </div>
+                <CardHeader className="text-center pb-6 relative z-10">
                   <div className="w-16 h-16 bg-omni-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-omni-green" />
                   </div>
                   <CardTitle className="text-2xl mb-4 text-gray-900">For Providers</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <div className="space-y-4">
                     <div className="flex items-start space-x-3">
                       <div className="w-6 h-6 bg-omni-green rounded-full flex items-center justify-center flex-shrink-0 mt-1">
@@ -198,14 +226,21 @@ const WellnessExchange = () => {
               </Card>
 
               {/* For Consumers */}
-              <Card className="p-8 hover:shadow-xl transition-all duration-300 bg-white border border-gray-200">
-                <CardHeader className="text-center pb-6">
+              <Card className="p-8 hover:shadow-xl transition-all duration-300 bg-white border border-gray-200 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+                  <img 
+                    src="/lovable-uploads/76a99deb-2c78-4ed9-9276-4d468c36b33b.png"
+                    alt="Wellness consumer" 
+                    className="w-full h-full object-cover rounded-bl-full"
+                  />
+                </div>
+                <CardHeader className="text-center pb-6 relative z-10">
                   <div className="w-16 h-16 bg-omni-blue/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Heart className="h-8 w-8 text-omni-blue" />
                   </div>
                   <CardTitle className="text-2xl mb-4 text-gray-900">For Consumers</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative z-10">
                   <div className="space-y-4">
                     <div className="flex items-start space-x-3">
                       <div className="w-6 h-6 bg-omni-blue rounded-full flex items-center justify-center flex-shrink-0 mt-1">
@@ -241,7 +276,7 @@ const WellnessExchange = () => {
           </div>
         </section>
 
-        {/* WellCoin System - Fixed */}
+        {/* WellCoin System */}
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -337,11 +372,11 @@ const WellnessExchange = () => {
           </div>
         </section>
 
-        {/* CTA Section - Fixed */}
+        {/* CTA Section */}
         <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl mb-6 text-white">
-              Ready to Transform Your <span className="bg-rainbow-gradient bg-clip-text text-transparent font-extrabold">Wellness Journey</span>?
+              Ready to Transform Your <span className="text-omni-violet font-extrabold">Wellness Journey</span>?
             </h2>
             <p className="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
               Join thousands of wellness professionals and conscious consumers who are already benefiting 
@@ -349,14 +384,14 @@ const WellnessExchange = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               {user ? (
-                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-bold border-0">
+                <Button asChild size="lg" className="bg-omni-violet hover:bg-omni-indigo text-white px-8 py-3 shadow-lg font-bold border-0">
                   <Link to="/wellness-exchange/marketplace">
                     Explore Marketplace
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
               ) : (
-                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-bold border-0">
+                <Button asChild size="lg" className="bg-omni-violet hover:bg-omni-indigo text-white px-8 py-3 shadow-lg font-bold border-0">
                   <Link to="/auth">
                     Get Started Now
                     <ArrowRight className="ml-2 h-5 w-5" />
