@@ -98,7 +98,7 @@
   }
 }
 
-/* Brand Color Classes */
+/* Brand Color Classes - Individual colors only */
 .text-omni-red { color: hsl(var(--omni-red)); }
 .text-omni-orange { color: hsl(var(--omni-orange)); }
 .text-omni-yellow { color: hsl(var(--omni-yellow)); }
@@ -114,38 +114,6 @@
 .bg-omni-blue { background-color: hsl(var(--omni-blue)); }
 .bg-omni-indigo { background-color: hsl(var(--omni-indigo)); }
 .bg-omni-violet { background-color: hsl(var(--omni-violet)); }
-
-/* Rainbow gradient - ONLY for specific elements, not global */
-.bg-rainbow-gradient {
-  background: linear-gradient(135deg, 
-    hsl(var(--omni-red)) 0%, 
-    hsl(var(--omni-orange)) 14.28%, 
-    hsl(var(--omni-yellow)) 28.56%, 
-    hsl(var(--omni-green)) 42.84%, 
-    hsl(var(--omni-blue)) 57.12%, 
-    hsl(var(--omni-indigo)) 71.4%, 
-    hsl(var(--omni-violet)) 85.68%, 
-    hsl(var(--omni-red)) 100%
-  );
-}
-
-.bg-rainbow-subtle {
-  background: linear-gradient(135deg, 
-    hsl(var(--omni-red) / 0.1) 0%, 
-    hsl(var(--omni-orange) / 0.1) 14.28%, 
-    hsl(var(--omni-yellow) / 0.1) 28.56%, 
-    hsl(var(--omni-green) / 0.1) 42.84%, 
-    hsl(var(--omni-blue) / 0.1) 57.12%, 
-    hsl(var(--omni-indigo) / 0.1) 71.4%, 
-    hsl(var(--omni-violet) / 0.1) 85.68%, 
-    hsl(var(--omni-red) / 0.1) 100%
-  );
-}
-
-/* Enhanced Button Text Visibility */
-.text-shadow {
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-}
 
 /* Instagram Post Size Images */
 .instagram-post-img {
