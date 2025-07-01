@@ -1,3 +1,4 @@
+
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -15,37 +16,31 @@ const WellnessExchange = () => {
       icon: <Bot className="h-8 w-8 text-omni-violet" />,
       title: "AI-Guided Onboarding",
       description: "Get personalized assistance every step of the way with our intelligent AI assistant that helps you maximize your success.",
-      image: "/lovable-uploads/9d51151d-b05c-4392-9f83-9e301a4f790d.png"
     },
     {
       icon: <Coins className="h-8 w-8 text-omni-orange" />,
       title: "WellCoin Currency",
       description: "Earn and spend WellCoins through community participation. 1 WellCoin = 1 ZAR base value with hybrid payment options.",
-      image: "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png"
     },
     {
       icon: <Users className="h-8 w-8 text-omni-green" />,
       title: "Vibrant Community",
       description: "Connect with like-minded wellness professionals and conscious consumers in a supportive ecosystem.",
-      image: "/lovable-uploads/bb1d5ac4-6c06-4ce7-8866-b0376ad65c36.png"
     },
     {
       icon: <Star className="h-8 w-8 text-omni-blue" />,
       title: "Trust & Reviews",
       description: "Build your reputation with our robust two-way review system and verified member profiles.",
-      image: "/lovable-uploads/2c1edd03-b748-4129-ad38-5ed1db48917e.png"
     },
     {
       icon: <Zap className="h-8 w-8 text-omni-red" />,
       title: "Smart Matching",
       description: "AI-powered recommendations connect the right providers with the right consumers effortlessly.",
-      image: "/lovable-uploads/c30dfe79-4b96-4249-94c7-9857d7d6c9d9.png"
     },
     {
       icon: <Heart className="h-8 w-8 text-pink-500" />,
       title: "Conscious Commerce",
       description: "Every transaction supports wellness, sustainability, and positive community impact.",
-      image: "/lovable-uploads/fcf93d20-65c1-4e39-8c34-360afdf825f1.png"
     }
   ];
 
@@ -57,27 +52,18 @@ const WellnessExchange = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <Navigation />
       <main className="pt-16">
-        {/* Hero Section with New Images */}
-        <section className="relative py-20 bg-gradient-to-br from-white via-gray-50 to-white overflow-hidden">
-          {/* Background Image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-30"
-            style={{
-              backgroundImage: `url('/lovable-uploads/521beecf-f15f-46a9-a1c6-0e3973419248.png')`
-            }}
-          ></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/60 to-white/80"></div>
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <Badge className="mb-6 px-6 py-3 bg-rainbow-gradient text-white text-sm font-medium shadow-lg">
+        {/* Hero Section - Fixed */}
+        <section className="relative py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <Badge className="mb-6 px-6 py-3 bg-rainbow-gradient text-white text-sm font-medium shadow-lg border-0">
               Revolutionizing Wellness Exchange in South Africa
             </Badge>
             
-            <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-              The <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Exchange</span>
+            <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6 text-gray-900">
+              The <span className="bg-rainbow-gradient bg-clip-text text-transparent font-extrabold">Wellness Exchange</span>
             </h1>
             
             <p className="text-lg sm:text-xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed">
@@ -87,7 +73,7 @@ const WellnessExchange = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               {user ? (
-                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-semibold text-shadow">
+                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-semibold border-0">
                   <Link to="/wellness-exchange/marketplace">
                     Explore Marketplace
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -95,13 +81,13 @@ const WellnessExchange = () => {
                 </Button>
               ) : (
                 <>
-                  <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-semibold text-shadow">
+                  <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-semibold border-0">
                     <Link to="/auth">
                       Join as Provider
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="px-8 py-3 border-2 border-gray-300 bg-white/90 backdrop-blur-sm hover:bg-white font-semibold text-gray-800">
+                  <Button asChild variant="outline" size="lg" className="px-8 py-3 border-2 border-gray-300 bg-white hover:bg-gray-50 font-semibold text-gray-800">
                     <Link to="/auth">
                       Join as Consumer
                     </Link>
@@ -110,10 +96,10 @@ const WellnessExchange = () => {
               )}
             </div>
             
-            {/* Stats with enhanced styling */}
+            {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-              {stats.map((stat, index) => (
-                <div key={stat.label} className="text-center bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-md">
+              {stats.map((stat) => (
+                <div key={stat.label} className="text-center bg-white rounded-lg p-4 shadow-md border border-gray-100">
                   <div className="text-3xl sm:text-4xl font-bold bg-rainbow-gradient bg-clip-text text-transparent mb-2">
                     {stat.number}
                   </div>
@@ -124,12 +110,12 @@ const WellnessExchange = () => {
           </div>
         </section>
 
-        {/* Features Section with New Images */}
-        <section className="py-20 bg-white">
+        {/* Features Section - Fixed */}
+        <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Why Choose the <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Exchange</span>?
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6 text-gray-900">
+                Why Choose the <span className="bg-rainbow-gradient bg-clip-text text-transparent font-extrabold">Wellness Exchange</span>?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Experience the future of wellness commerce with features designed to empower your journey.
@@ -137,24 +123,16 @@ const WellnessExchange = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
+              {features.map((feature) => (
                 <Card 
                   key={feature.title}
-                  className="hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-0 shadow-md overflow-hidden group"
+                  className="hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-white border border-gray-200 text-center p-6"
                 >
-                  <div className="relative h-48 overflow-hidden">
-                    <img 
-                      src={feature.image} 
-                      alt={feature.title}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                  </div>
-                  <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-4 p-3 rounded-full bg-white w-fit -mt-8 relative z-10 shadow-lg border-4 border-white">
+                  <CardHeader className="pb-4">
+                    <div className="mx-auto mb-4 p-3 rounded-full bg-gray-50 w-fit">
                       {feature.icon}
                     </div>
-                    <CardTitle className="text-xl mb-2">{feature.title}</CardTitle>
+                    <CardTitle className="text-xl mb-2 text-gray-900">{feature.title}</CardTitle>
                     <CardDescription className="text-gray-600">
                       {feature.description}
                     </CardDescription>
@@ -165,21 +143,12 @@ const WellnessExchange = () => {
           </div>
         </section>
 
-        {/* How It Works - Enhanced with new imagery */}
-        <section className="py-20 relative overflow-hidden">
-          {/* Background with new community image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-10"
-            style={{
-              backgroundImage: `url('/lovable-uploads/d369fae4-4adf-4e4c-89dd-9d37a01ea88e.png')`
-            }}
-          ></div>
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* How It Works - Fixed */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                How the <span className="bg-rainbow-gradient bg-clip-text text-transparent">Exchange</span> Works
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6 text-gray-900">
+                How the <span className="bg-rainbow-gradient bg-clip-text text-transparent font-extrabold">Exchange</span> Works
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Simple steps to start your wellness exchange journey.
@@ -188,12 +157,12 @@ const WellnessExchange = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* For Providers */}
-              <Card className="p-8 hover:shadow-xl transition-all duration-300">
+              <Card className="p-8 hover:shadow-xl transition-all duration-300 bg-white border border-gray-200">
                 <CardHeader className="text-center pb-6">
                   <div className="w-16 h-16 bg-omni-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-omni-green" />
                   </div>
-                  <CardTitle className="text-2xl mb-4">For Providers</CardTitle>
+                  <CardTitle className="text-2xl mb-4 text-gray-900">For Providers</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -202,7 +171,7 @@ const WellnessExchange = () => {
                         <span className="text-white text-xs font-bold">1</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">Sign Up & Get AI Guidance</h4>
+                        <h4 className="font-semibold mb-1 text-gray-900">Sign Up & Get AI Guidance</h4>
                         <p className="text-sm text-gray-600">Our AI assistant helps you create your profile and first service listings.</p>
                       </div>
                     </div>
@@ -211,7 +180,7 @@ const WellnessExchange = () => {
                         <span className="text-white text-xs font-bold">2</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">List Your Services</h4>
+                        <h4 className="font-semibold mb-1 text-gray-900">List Your Services</h4>
                         <p className="text-sm text-gray-600">Create compelling offerings with pricing in both ZAR and WellCoins.</p>
                       </div>
                     </div>
@@ -220,7 +189,7 @@ const WellnessExchange = () => {
                         <span className="text-white text-xs font-bold">3</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">Earn & Grow</h4>
+                        <h4 className="font-semibold mb-1 text-gray-900">Earn & Grow</h4>
                         <p className="text-sm text-gray-600">Provide services, earn WellCoins, build your reputation, and grow your business.</p>
                       </div>
                     </div>
@@ -229,12 +198,12 @@ const WellnessExchange = () => {
               </Card>
 
               {/* For Consumers */}
-              <Card className="p-8 hover:shadow-xl transition-all duration-300">
+              <Card className="p-8 hover:shadow-xl transition-all duration-300 bg-white border border-gray-200">
                 <CardHeader className="text-center pb-6">
                   <div className="w-16 h-16 bg-omni-blue/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Heart className="h-8 w-8 text-omni-blue" />
                   </div>
-                  <CardTitle className="text-2xl mb-4">For Consumers</CardTitle>
+                  <CardTitle className="text-2xl mb-4 text-gray-900">For Consumers</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -243,7 +212,7 @@ const WellnessExchange = () => {
                         <span className="text-white text-xs font-bold">1</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">Join the Community</h4>
+                        <h4 className="font-semibold mb-1 text-gray-900">Join the Community</h4>
                         <p className="text-sm text-gray-600">Sign up and let our AI help you discover wellness services that match your needs.</p>
                       </div>
                     </div>
@@ -252,7 +221,7 @@ const WellnessExchange = () => {
                         <span className="text-white text-xs font-bold">2</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">Explore & Connect</h4>
+                        <h4 className="font-semibold mb-1 text-gray-900">Explore & Connect</h4>
                         <p className="text-sm text-gray-600">Browse services, read reviews, and connect with trusted wellness providers.</p>
                       </div>
                     </div>
@@ -261,7 +230,7 @@ const WellnessExchange = () => {
                         <span className="text-white text-xs font-bold">3</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">Pay Your Way</h4>
+                        <h4 className="font-semibold mb-1 text-gray-900">Pay Your Way</h4>
                         <p className="text-sm text-gray-600">Use traditional currency, WellCoins, or a hybrid payment for maximum flexibility.</p>
                       </div>
                     </div>
@@ -272,15 +241,15 @@ const WellnessExchange = () => {
           </div>
         </section>
 
-        {/* WellCoin System */}
-        <section className="py-20 bg-white">
+        {/* WellCoin System - Fixed */}
+        <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <div className="w-20 h-20 bg-gradient-to-br from-omni-orange to-omni-red rounded-full flex items-center justify-center mx-auto mb-6">
                 <Coins className="h-10 w-10 text-white" />
               </div>
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                The <span className="bg-gradient-to-r from-omni-orange to-omni-red bg-clip-text text-transparent">WellCoin</span> System
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6 text-gray-900">
+                The <span className="bg-gradient-to-r from-omni-orange to-omni-red bg-clip-text text-transparent font-extrabold">WellCoin</span> System
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
                 Our innovative digital currency that powers the wellness exchange ecosystem.
@@ -288,9 +257,9 @@ const WellnessExchange = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-              <Card className="p-6 border-2 border-omni-orange/20 hover:border-omni-orange/40 transition-colors">
+              <Card className="p-6 border-2 border-omni-orange/20 hover:border-omni-orange/40 transition-colors bg-white">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-xl flex items-center">
+                  <CardTitle className="text-xl flex items-center text-gray-900">
                     <Zap className="h-6 w-6 text-omni-orange mr-2" />
                     Earn WellCoins
                   </CardTitle>
@@ -299,31 +268,31 @@ const WellnessExchange = () => {
                   <ul className="space-y-3 text-sm">
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-orange rounded-full mr-3"></div>
-                      Provide wellness services to community members
+                      <span className="text-gray-700">Provide wellness services to community members</span>
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-orange rounded-full mr-3"></div>
-                      Refer new active members to the platform
+                      <span className="text-gray-700">Refer new active members to the platform</span>
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-orange rounded-full mr-3"></div>
-                      Write helpful reviews and testimonials
+                      <span className="text-gray-700">Write helpful reviews and testimonials</span>
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-orange rounded-full mr-3"></div>
-                      Participate in community forums and events
+                      <span className="text-gray-700">Participate in community forums and events</span>
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-orange rounded-full mr-3"></div>
-                      Contribute valuable content and tutorials
+                      <span className="text-gray-700">Contribute valuable content and tutorials</span>
                     </li>
                   </ul>
                 </CardContent>
               </Card>
 
-              <Card className="p-6 border-2 border-omni-green/20 hover:border-omni-green/40 transition-colors">
+              <Card className="p-6 border-2 border-omni-green/20 hover:border-omni-green/40 transition-colors bg-white">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-xl flex items-center">
+                  <CardTitle className="text-xl flex items-center text-gray-900">
                     <Heart className="h-6 w-6 text-omni-green mr-2" />
                     Spend WellCoins
                   </CardTitle>
@@ -332,23 +301,23 @@ const WellnessExchange = () => {
                   <ul className="space-y-3 text-sm">
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-green rounded-full mr-3"></div>
-                      Book wellness services from providers
+                      <span className="text-gray-700">Book wellness services from providers</span>
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-green rounded-full mr-3"></div>
-                      Purchase natural products from 2BeWell
+                      <span className="text-gray-700">Purchase natural products from 2BeWell</span>
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-green rounded-full mr-3"></div>
-                      Access premium platform features
+                      <span className="text-gray-700">Access premium platform features</span>
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-green rounded-full mr-3"></div>
-                      Combine with ZAR for hybrid payments
+                      <span className="text-gray-700">Combine with ZAR for hybrid payments</span>
                     </li>
                     <li className="flex items-center">
                       <div className="w-2 h-2 bg-omni-green rounded-full mr-3"></div>
-                      Support community initiatives and causes
+                      <span className="text-gray-700">Support community initiatives and causes</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -356,9 +325,9 @@ const WellnessExchange = () => {
             </div>
 
             <div className="text-center">
-              <div className="inline-flex items-center bg-gradient-to-r from-omni-orange/10 to-omni-green/10 rounded-full px-6 py-3 mb-4">
+              <div className="inline-flex items-center bg-gradient-to-r from-omni-orange/10 to-omni-green/10 rounded-full px-6 py-3 mb-4 border border-gray-200">
                 <Coins className="h-5 w-5 text-omni-orange mr-2" />
-                <span className="text-lg font-semibold">1 WellCoin = 1 ZAR Base Value</span>
+                <span className="text-lg font-semibold text-gray-900">1 WellCoin = 1 ZAR Base Value</span>
               </div>
               <p className="text-gray-600 max-w-2xl mx-auto">
                 Transparent, stable, and flexible. Our hybrid payment system gives you the freedom to choose 
@@ -368,19 +337,11 @@ const WellnessExchange = () => {
           </div>
         </section>
 
-        {/* Enhanced CTA Section */}
-        <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white relative overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-20"
-            style={{
-              backgroundImage: `url('/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png')`
-            }}
-          ></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50"></div>
-          
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl mb-6">
-              Ready to Transform Your <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Journey</span>?
+        {/* CTA Section - Fixed */}
+        <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl mb-6 text-white">
+              Ready to Transform Your <span className="bg-rainbow-gradient bg-clip-text text-transparent font-extrabold">Wellness Journey</span>?
             </h2>
             <p className="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
               Join thousands of wellness professionals and conscious consumers who are already benefiting 
@@ -388,14 +349,14 @@ const WellnessExchange = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               {user ? (
-                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-bold text-shadow">
+                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-bold border-0">
                   <Link to="/wellness-exchange/marketplace">
                     Explore Marketplace
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
               ) : (
-                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-bold text-shadow">
+                <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 shadow-lg font-bold border-0">
                   <Link to="/auth">
                     Get Started Now
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -403,7 +364,7 @@ const WellnessExchange = () => {
                 </Button>
               )}
               <Button asChild variant="outline" size="lg" className="px-8 py-3 border-2 border-white text-white hover:bg-white hover:text-gray-900 font-semibold bg-white/10 backdrop-blur-sm">
-                <Link to="/wellness-exchange">
+                <Link to="/contact">
                   Learn More
                 </Link>
               </Button>
