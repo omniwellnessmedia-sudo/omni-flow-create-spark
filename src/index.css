@@ -115,7 +115,7 @@
 .bg-omni-indigo { background-color: hsl(var(--omni-indigo)); }
 .bg-omni-violet { background-color: hsl(var(--omni-violet)); }
 
-/* Rainbow gradient */
+/* Rainbow gradient - ONLY for specific elements, not global */
 .bg-rainbow-gradient {
   background: linear-gradient(135deg, 
     hsl(var(--omni-red)) 0%, 
