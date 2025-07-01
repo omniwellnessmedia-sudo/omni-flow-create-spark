@@ -9,7 +9,236 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      consumer_profiles: {
+        Row: {
+          created_at: string | null
+          id: string
+          location: string | null
+          preferred_services: string[] | null
+          updated_at: string | null
+          wellcoin_balance: number | null
+          wellness_goals: string[] | null
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          location?: string | null
+          preferred_services?: string[] | null
+          updated_at?: string | null
+          wellcoin_balance?: number | null
+          wellness_goals?: string[] | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          location?: string | null
+          preferred_services?: string[] | null
+          updated_at?: string | null
+          wellcoin_balance?: number | null
+          wellness_goals?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consumer_profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      onboarding_sessions: {
+        Row: {
+          completed: boolean | null
+          created_at: string | null
+          current_step: number | null
+          id: string
+          session_data: Json | null
+          total_steps: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          created_at?: string | null
+          current_step?: number | null
+          id?: string
+          session_data?: Json | null
+          total_steps?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          created_at?: string | null
+          current_step?: number | null
+          id?: string
+          session_data?: Json | null
+          total_steps?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+          user_type: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+          user_type: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          user_type?: string
+        }
+        Relationships: []
+      }
+      provider_profiles: {
+        Row: {
+          availability: Json | null
+          business_name: string | null
+          certifications: string[] | null
+          created_at: string | null
+          description: string | null
+          experience_years: number | null
+          id: string
+          location: string | null
+          phone: string | null
+          pricing_info: Json | null
+          specialties: string[] | null
+          updated_at: string | null
+          verified: boolean | null
+          website: string | null
+          wellcoin_balance: number | null
+        }
+        Insert: {
+          availability?: Json | null
+          business_name?: string | null
+          certifications?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          experience_years?: number | null
+          id: string
+          location?: string | null
+          phone?: string | null
+          pricing_info?: Json | null
+          specialties?: string[] | null
+          updated_at?: string | null
+          verified?: boolean | null
+          website?: string | null
+          wellcoin_balance?: number | null
+        }
+        Update: {
+          availability?: Json | null
+          business_name?: string | null
+          certifications?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          experience_years?: number | null
+          id?: string
+          location?: string | null
+          phone?: string | null
+          pricing_info?: Json | null
+          specialties?: string[] | null
+          updated_at?: string | null
+          verified?: boolean | null
+          website?: string | null
+          wellcoin_balance?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          active: boolean | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          images: string[] | null
+          is_online: boolean | null
+          location: string | null
+          price_wellcoins: number | null
+          price_zar: number | null
+          provider_id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          images?: string[] | null
+          is_online?: boolean | null
+          location?: string | null
+          price_wellcoins?: number | null
+          price_zar?: number | null
+          provider_id: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          images?: string[] | null
+          is_online?: boolean | null
+          location?: string | null
+          price_wellcoins?: number | null
+          price_zar?: number | null
+          provider_id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

@@ -45,6 +45,15 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Omni brand colors */
+    --omni-red: 0 100% 50%;
+    --omni-orange: 39 100% 50%;
+    --omni-yellow: 60 100% 50%;
+    --omni-green: 120 100% 25%;
+    --omni-blue: 240 100% 50%;
+    --omni-indigo: 275 100% 25%;
+    --omni-violet: 300 100% 50%;
   }
 
   .dark {
@@ -85,7 +94,52 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
+}
+
+/* Brand Color Classes */
+.text-omni-red { color: hsl(var(--omni-red)); }
+.text-omni-orange { color: hsl(var(--omni-orange)); }
+.text-omni-yellow { color: hsl(var(--omni-yellow)); }
+.text-omni-green { color: hsl(var(--omni-green)); }
+.text-omni-blue { color: hsl(var(--omni-blue)); }
+.text-omni-indigo { color: hsl(var(--omni-indigo)); }
+.text-omni-violet { color: hsl(var(--omni-violet)); }
+
+.bg-omni-red { background-color: hsl(var(--omni-red)); }
+.bg-omni-orange { background-color: hsl(var(--omni-orange)); }
+.bg-omni-yellow { background-color: hsl(var(--omni-yellow)); }
+.bg-omni-green { background-color: hsl(var(--omni-green)); }
+.bg-omni-blue { background-color: hsl(var(--omni-blue)); }
+.bg-omni-indigo { background-color: hsl(var(--omni-indigo)); }
+.bg-omni-violet { background-color: hsl(var(--omni-violet)); }
+
+/* Rainbow gradient */
+.bg-rainbow-gradient {
+  background: linear-gradient(135deg, 
+    hsl(var(--omni-red)) 0%, 
+    hsl(var(--omni-orange)) 14.28%, 
+    hsl(var(--omni-yellow)) 28.56%, 
+    hsl(var(--omni-green)) 42.84%, 
+    hsl(var(--omni-blue)) 57.12%, 
+    hsl(var(--omni-indigo)) 71.4%, 
+    hsl(var(--omni-violet)) 85.68%, 
+    hsl(var(--omni-red)) 100%
+  );
+}
+
+.bg-rainbow-subtle {
+  background: linear-gradient(135deg, 
+    hsl(var(--omni-red) / 0.1) 0%, 
+    hsl(var(--omni-orange) / 0.1) 14.28%, 
+    hsl(var(--omni-yellow) / 0.1) 28.56%, 
+    hsl(var(--omni-green) / 0.1) 42.84%, 
+    hsl(var(--omni-blue) / 0.1) 57.12%, 
+    hsl(var(--omni-indigo) / 0.1) 71.4%, 
+    hsl(var(--omni-violet) / 0.1) 85.68%, 
+    hsl(var(--omni-red) / 0.1) 100%
+  );
 }
 
 /* Enhanced Button Text Visibility */
@@ -135,10 +189,29 @@
   animation: fadeInUp 0.6s ease-out;
 }
 
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
 /* Line clamp utilities */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Font classes */
+.font-heading {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 700;
 }

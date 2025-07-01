@@ -2,11 +2,19 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { useAuth } from "@/components/AuthProvider";
+import { Menu, X, User, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -55,6 +63,33 @@ const Navigation = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Auth Section */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="ml-4">
+                    <User className="h-4 w-4 mr-2" />
+                    {user.user_metadata?.full_name || user.email}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link to="/wellness-exchange/provider-dashboard">
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button asChild variant="default" size="sm" className="ml-4 bg-rainbow-gradient text-white">
+                <Link to="/auth">Sign In</Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -88,6 +123,41 @@ const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* Mobile Auth Section */}
+              {user ? (
+                <div className="border-t pt-2 mt-2">
+                  <div className="px-3 py-2 text-sm text-gray-600">
+                    {user.user_metadata?.full_name || user.email}
+                  </div>
+                  <Link
+                    to="/wellness-exchange/provider-dashboard"
+                    onClick={() => setIsOpen(false)}
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-omni-indigo hover:bg-rainbow-subtle"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      signOut();
+                      setIsOpen(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-omni-indigo hover:bg-rainbow-subtle"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="border-t pt-2 mt-2">
+                  <Link
+                    to="/auth"
+                    onClick={() => setIsOpen(false)}
+                    className="block px-3 py-2 rounded-md text-base font-medium bg-rainbow-gradient text-white text-center"
+                  >
+                    Sign In
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
