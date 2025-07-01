@@ -19,6 +19,9 @@ import WebDevelopment from "./pages/WebDevelopment";
 import TwoBeWell from "./pages/TwoBeWell";
 import TwoBeWellShop from "./pages/TwoBeWellShop";
 import PartnerPortal from "./pages/PartnerPortal";
+import WellnessExchange from "./pages/WellnessExchange";
+import WellnessMarketplace from "./pages/WellnessMarketplace";
+import ProviderDashboard from "./pages/ProviderDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +47,9 @@ const App = () => (
           <Route path="/2bewell" element={<TwoBeWell />} />
           <Route path="/2bewell-shop" element={<TwoBeWellShop />} />
           <Route path="/partner-portal" element={<PartnerPortal />} />
+          <Route path="/wellness-exchange" element={<WellnessExchange />} />
+          <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
+          <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
