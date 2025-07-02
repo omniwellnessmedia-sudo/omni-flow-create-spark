@@ -4,7 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import MobileNavigation from "@/components/MobileNavigation";
+import Navigation from "@/components/Navigation";
+import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
+import Footer from "@/components/Footer";
 import { Search, Filter, MapPin, Star, TrendingUp, Clock, Users } from "lucide-react";
 
 const SearchServices = () => {
@@ -64,9 +66,10 @@ const SearchServices = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MobileNavigation />
+      <Navigation />
+      <WellnessExchangeNavigation />
       
-      <main className="pt-20 pb-20 lg:pt-8">
+      <main className="pt-0 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8 text-center">
@@ -218,6 +221,7 @@ const SearchServices = () => {
           </Card>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };
