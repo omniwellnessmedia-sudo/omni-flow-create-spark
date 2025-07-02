@@ -33,6 +33,8 @@ import ProviderDashboard from "./pages/ProviderDashboard";
 import Auth from "./pages/Auth";
 import TransactionPage from "./pages/TransactionPage";
 import WellnessExchangeSignup from "./pages/WellnessExchangeSignup";
+import PartnersDirectory from "./pages/PartnersDirectory";
+import PartnerProfile from "./pages/PartnerProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -72,6 +74,8 @@ const App = () => (
             <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
             <Route path="/wellness-exchange/provider-signup" element={<WellnessExchangeSignup />} />
             <Route path="/wellness-exchange/consumer-signup" element={<WellnessExchangeSignup />} />
+            <Route path="/partners" element={<PartnersDirectory />} />
+            <Route path="/partners/:id" element={<PartnerProfile />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
