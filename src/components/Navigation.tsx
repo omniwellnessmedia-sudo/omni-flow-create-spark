@@ -3,13 +3,21 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/AuthProvider";
-import { Menu, X, User, LogOut } from "lucide-react";
+import { Menu, X, User, LogOut, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,10 +32,18 @@ const Navigation = () => {
     { name: "Blog", path: "/blog" },
     { name: "Podcast", path: "/podcast" },
     { name: "2BeWell", path: "/2bewell" },
-    { name: "Wellness Exchange", path: "/wellness-exchange" },
     { name: "Partners", path: "/partner-portal" },
     { name: "AI Tools", path: "/ai-tools" },
     { name: "Contact", path: "/contact" },
+  ];
+
+  const wellnessExchangeItems = [
+    { name: "Overview", path: "/wellness-exchange" },
+    { name: "Marketplace", path: "/wellness-exchange/marketplace" },
+    { name: "Post a Want", path: "/wellness-exchange/wants" },
+    { name: "Community", path: "/wellness-exchange/community" },
+    { name: "My Dashboard", path: "/wellness-exchange/provider-dashboard" },
+    { name: "Join Exchange", path: "/wellness-exchange/provider-signup" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -50,19 +66,72 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-rainbow-subtle ${
-                  isActive(item.path)
-                    ? "bg-rainbow-subtle text-omni-indigo font-semibold"
-                    : "text-gray-700 hover:text-omni-indigo"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+            <NavigationMenu>
+              <NavigationMenuList>
+                {navItems.slice(0, 6).map((item) => (
+                  <NavigationMenuItem key={item.name}>
+                    <Link
+                      to={item.path}
+                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-100 ${
+                        isActive(item.path)
+                          ? "bg-gray-100 text-omni-indigo font-semibold"
+                          : "text-gray-700 hover:text-omni-indigo"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  </NavigationMenuItem>
+                ))}
+                
+                {/* Wellness Exchange Dropdown */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-gray-700 hover:text-omni-indigo">
+                    Wellness Exchange
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="grid gap-3 p-4 w-[400px]">
+                      <div className="grid gap-1">
+                        <h4 className="font-medium text-sm text-gray-900">Wellness Exchange</h4>
+                        <p className="text-xs text-gray-600">
+                          Trade services, earn WellCoins, and build community connections
+                        </p>
+                      </div>
+                      <div className="grid gap-2">
+                        {wellnessExchangeItems.map((item) => (
+                          <NavigationMenuLink key={item.name} asChild>
+                            <Link
+                              to={item.path}
+                              className={`block px-3 py-2 rounded-md text-sm transition-colors hover:bg-gray-100 ${
+                                isActive(item.path)
+                                  ? "bg-gray-100 text-omni-indigo font-semibold"
+                                  : "text-gray-700 hover:text-omni-indigo"
+                              }`}
+                            >
+                              {item.name}
+                            </Link>
+                          </NavigationMenuLink>
+                        ))}
+                      </div>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                {navItems.slice(7).map((item) => (
+                  <NavigationMenuItem key={item.name}>
+                    <Link
+                      to={item.path}
+                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-100 ${
+                        isActive(item.path)
+                          ? "bg-gray-100 text-omni-indigo font-semibold"
+                          : "text-gray-700 hover:text-omni-indigo"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
             
             {/* Auth Section */}
             {user ? (

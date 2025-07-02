@@ -9,6 +9,120 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          amount_wellcoins: number | null
+          amount_zar: number | null
+          booking_date: string
+          consumer_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          payment_method: string
+          provider_id: string
+          service_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount_wellcoins?: number | null
+          amount_zar?: number | null
+          booking_date: string
+          consumer_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_method: string
+          provider_id: string
+          service_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_wellcoins?: number | null
+          amount_zar?: number | null
+          booking_date?: string
+          consumer_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_method?: string
+          provider_id?: string
+          service_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_consumer_id_fkey"
+            columns: ["consumer_id"]
+            isOneToOne: false
+            referencedRelation: "consumer_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_posts: {
+        Row: {
+          comments_count: number | null
+          content: string
+          created_at: string
+          id: string
+          likes_count: number | null
+          post_type: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comments_count?: number | null
+          content: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          post_type: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comments_count?: number | null
+          content?: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          post_type?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consumer_profiles: {
         Row: {
           created_at: string | null
@@ -180,6 +294,61 @@ export type Database = {
           },
         ]
       }
+      reviews: {
+        Row: {
+          booking_id: string
+          created_at: string
+          id: string
+          rating: number
+          review_text: string | null
+          review_type: string
+          reviewee_id: string
+          reviewer_id: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          review_text?: string | null
+          review_type: string
+          reviewee_id: string
+          reviewer_id: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          review_text?: string | null
+          review_type?: string
+          reviewee_id?: string
+          reviewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_reviewee_id_fkey"
+            columns: ["reviewee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       services: {
         Row: {
           active: boolean | null
@@ -235,6 +404,174 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          amount_wellcoins: number | null
+          amount_zar: number | null
+          created_at: string
+          description: string
+          id: string
+          related_service_id: string | null
+          related_user_id: string | null
+          status: string
+          transaction_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_wellcoins?: number | null
+          amount_zar?: number | null
+          created_at?: string
+          description: string
+          id?: string
+          related_service_id?: string | null
+          related_user_id?: string | null
+          status?: string
+          transaction_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_wellcoins?: number | null
+          amount_zar?: number | null
+          created_at?: string
+          description?: string
+          id?: string
+          related_service_id?: string | null
+          related_user_id?: string | null
+          status?: string
+          transaction_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_related_service_id_fkey"
+            columns: ["related_service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_related_user_id_fkey"
+            columns: ["related_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      want_responses: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          proposed_price_wellcoins: number | null
+          proposed_price_zar: number | null
+          provider_id: string
+          status: string
+          want_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          proposed_price_wellcoins?: number | null
+          proposed_price_zar?: number | null
+          provider_id: string
+          status?: string
+          want_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          proposed_price_wellcoins?: number | null
+          proposed_price_zar?: number | null
+          provider_id?: string
+          status?: string
+          want_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "want_responses_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "want_responses_want_id_fkey"
+            columns: ["want_id"]
+            isOneToOne: false
+            referencedRelation: "wants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wants: {
+        Row: {
+          budget_wellcoins: number | null
+          budget_zar: number | null
+          category: string | null
+          created_at: string
+          description: string
+          expires_at: string | null
+          id: string
+          location: string | null
+          responses_count: number | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_wellcoins?: number | null
+          budget_zar?: number | null
+          category?: string | null
+          created_at?: string
+          description: string
+          expires_at?: string | null
+          id?: string
+          location?: string | null
+          responses_count?: number | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_wellcoins?: number | null
+          budget_zar?: number | null
+          category?: string | null
+          created_at?: string
+          description?: string
+          expires_at?: string | null
+          id?: string
+          location?: string | null
+          responses_count?: number | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

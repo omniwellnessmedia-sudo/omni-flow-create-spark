@@ -22,6 +22,8 @@ import TwoBeWellShop from "./pages/TwoBeWellShop";
 import PartnerPortal from "./pages/PartnerPortal";
 import WellnessExchange from "./pages/WellnessExchange";
 import WellnessMarketplace from "./pages/WellnessMarketplace";
+import WellnessWants from "./pages/WellnessWants";
+import WellnessCommunity from "./pages/WellnessCommunity";
 import ProviderDashboard from "./pages/ProviderDashboard";
 import Auth from "./pages/Auth";
 import WellnessExchangeSignup from "./pages/WellnessExchangeSignup";
@@ -53,6 +55,8 @@ const App = () => (
             <Route path="/partner-portal" element={<PartnerPortal />} />
             <Route path="/wellness-exchange" element={<WellnessExchange />} />
             <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
+            <Route path="/wellness-exchange/wants" element={<WellnessWants />} />
+            <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
             <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
             <Route path="/wellness-exchange/provider-signup" element={<WellnessExchangeSignup />} />
             <Route path="/wellness-exchange/consumer-signup" element={<WellnessExchangeSignup />} />
