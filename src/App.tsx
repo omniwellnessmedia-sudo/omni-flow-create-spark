@@ -26,6 +26,7 @@ import WellnessWants from "./pages/WellnessWants";
 import WellnessCommunity from "./pages/WellnessCommunity";
 import ProviderDashboard from "./pages/ProviderDashboard";
 import Auth from "./pages/Auth";
+import TransactionPage from "./pages/TransactionPage";
 import WellnessExchangeSignup from "./pages/WellnessExchangeSignup";
 import NotFound from "./pages/NotFound";
 
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
             <Route path="/wellness-exchange/wants" element={<WellnessWants />} />
             <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
+            <Route path="/wellness-exchange/transactions" element={<TransactionPage />} />
             <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
             <Route path="/wellness-exchange/provider-signup" element={<WellnessExchangeSignup />} />
             <Route path="/wellness-exchange/consumer-signup" element={<WellnessExchangeSignup />} />
