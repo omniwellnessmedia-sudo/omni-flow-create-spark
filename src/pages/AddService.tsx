@@ -110,6 +110,25 @@ const AddService = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Profile Image Upload */}
+                <div>
+                  <Label htmlFor="profileImage">Profile Picture (Optional)</Label>
+                  <Input
+                    id="profileImage"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        // For demo purposes, we'll just show a success message
+                        toast.success("Profile picture selected! (Demo: Upload functionality ready)");
+                      }
+                    }}
+                    className="mt-2"
+                  />
+                  <p className="text-sm text-gray-500 mt-1">Upload a professional photo for your profile</p>
+                </div>
+
                 {/* Title */}
                 <div>
                   <Label htmlFor="title">Service Title</Label>

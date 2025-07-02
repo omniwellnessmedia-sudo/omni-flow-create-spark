@@ -244,6 +244,7 @@ export type Database = {
           location: string | null
           phone: string | null
           pricing_info: Json | null
+          profile_image_url: string | null
           specialties: string[] | null
           updated_at: string | null
           verified: boolean | null
@@ -261,6 +262,7 @@ export type Database = {
           location?: string | null
           phone?: string | null
           pricing_info?: Json | null
+          profile_image_url?: string | null
           specialties?: string[] | null
           updated_at?: string | null
           verified?: boolean | null
@@ -278,6 +280,7 @@ export type Database = {
           location?: string | null
           phone?: string | null
           pricing_info?: Json | null
+          profile_image_url?: string | null
           specialties?: string[] | null
           updated_at?: string | null
           verified?: boolean | null

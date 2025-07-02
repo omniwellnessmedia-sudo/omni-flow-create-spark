@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { 
   Users, 
   Store, 
@@ -156,10 +157,12 @@ const PartnerPortal = () => {
                   <Button 
                     size="lg" 
                     className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-xl"
-                    onClick={() => setActiveTab("application")}
+                    asChild
                   >
-                    Start Your Journey
-                    <ArrowRight className="ml-2 w-5 h-5" />
+                    <Link to="/wellness-exchange/provider-signup">
+                      Start Your Journey
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </Link>
                   </Button>
                   <Button 
                     size="lg" 
