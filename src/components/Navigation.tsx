@@ -32,7 +32,7 @@ const Navigation = () => {
     { name: "Blog", path: "/blog" },
     { name: "Podcast", path: "/podcast" },
     { name: "2BeWell", path: "/2bewell" },
-    { name: "Partners", path: "/partner-portal" },
+    { name: "Partners", path: "/partners" },
     { name: "AI Tools", path: "/ai-tools" },
     { name: "Contact", path: "/contact" },
   ];
@@ -42,6 +42,8 @@ const Navigation = () => {
     { name: "Marketplace", path: "/wellness-exchange/marketplace" },
     { name: "Post a Want", path: "/wellness-exchange/wants" },
     { name: "Community", path: "/wellness-exchange/community" },
+    { name: "Search Services", path: "/wellness-exchange/search" },
+    { name: "My Account", path: "/wellness-exchange/account" },
     { name: "My Dashboard", path: "/wellness-exchange/provider-dashboard" },
     { name: "Join Exchange", path: "/wellness-exchange/provider-signup" },
   ];
