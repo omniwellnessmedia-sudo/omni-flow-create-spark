@@ -62,8 +62,8 @@ const WellnessMarketplace = () => {
   ];
 
   useEffect(() => {
+    fetchServices();
     if (user) {
-      fetchServices();
       fetchWellCoinBalance();
     }
   }, [user]);
@@ -100,11 +100,13 @@ const WellnessMarketplace = () => {
   };
 
   const fetchWellCoinBalance = async () => {
+    if (!user) return;
+    
     try {
       const { data, error } = await supabase
         .from('consumer_profiles')
         .select('wellcoin_balance')
-        .eq('id', user?.id)
+        .eq('id', user.id)
         .single();
 
       if (error && error.code !== 'PGRST116') throw error;
@@ -280,16 +282,18 @@ const WellnessMarketplace = () => {
                 <p className="text-gray-600 mt-1">Discover and book wellness services</p>
               </div>
               
-              {/* WellCoin Balance */}
-              <Card className="p-3 bg-gradient-to-r from-omni-orange/10 to-omni-yellow/10">
-                <div className="flex items-center">
-                  <Coins className="h-5 w-5 text-omni-orange mr-2" />
-                  <div>
-                    <p className="text-xs text-gray-600">Your Balance</p>
-                    <p className="font-bold text-omni-orange">{wellCoinBalance} WC</p>
+              {/* WellCoin Balance - Only show for authenticated users */}
+              {user && (
+                <Card className="p-3 bg-gradient-to-r from-omni-orange/10 to-omni-yellow/10">
+                  <div className="flex items-center">
+                    <Coins className="h-5 w-5 text-omni-orange mr-2" />
+                    <div>
+                      <p className="text-xs text-gray-600">Your Balance</p>
+                      <p className="font-bold text-omni-orange">{wellCoinBalance} WC</p>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              )}
             </div>
 
             {/* Search and Filters */}
