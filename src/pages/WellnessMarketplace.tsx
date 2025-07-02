@@ -8,7 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import MobileNavigation from "@/components/MobileNavigation";
+import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { 
   Search, 
   Filter, 
@@ -246,8 +248,9 @@ const WellnessMarketplace = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <MobileNavigation />
-        <div className="pt-20 pb-20 lg:pt-8">
+        <Navigation />
+        <WellnessExchangeNavigation />
+        <div className="pt-8">
           <div className="max-w-7xl mx-auto px-4">
             <div className="animate-pulse space-y-4">
               {[...Array(6)].map((_, i) => (
@@ -262,9 +265,10 @@ const WellnessMarketplace = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MobileNavigation />
+      <Navigation />
+      <WellnessExchangeNavigation />
       
-      <main className="pt-20 pb-20 lg:pt-8">
+      <main className="pt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
@@ -463,6 +467,7 @@ const WellnessMarketplace = () => {
           )}
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

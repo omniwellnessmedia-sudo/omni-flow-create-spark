@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -152,7 +153,8 @@ const WellnessCommunity = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      <main className="pt-16">
+      <WellnessExchangeNavigation />
+      <main className="pt-0">
         {/* Header */}
         <section className="py-12 bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

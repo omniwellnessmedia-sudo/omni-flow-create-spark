@@ -1,7 +1,10 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/components/AuthProvider";
+import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,12 +27,41 @@ import {
 } from "lucide-react";
 
 const ProviderDashboard = () => {
-  const [wellCoinBalance] = useState(2847);
+  const { user } = useAuth();
+  const [wellCoinBalance, setWellCoinBalance] = useState(0);
   const [zarEarnings] = useState(15640);
   const [activeListings] = useState(8);
   const [totalBookings] = useState(156);
   const [rating] = useState(4.8);
   const [profileCompletion] = useState(85);
+  const [providerProfile, setProviderProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      fetchProviderData();
+    }
+  }, [user]);
+
+  const fetchProviderData = async () => {
+    if (!user) return;
+    
+    try {
+      // Fetch provider profile with WellCoin balance
+      const { data: profile } = await supabase
+        .from('provider_profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      setProviderProfile(profile);
+      setWellCoinBalance(profile?.wellcoin_balance || 0);
+    } catch (error) {
+      console.error('Error fetching provider data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const recentTransactions = [
     {
@@ -147,10 +179,22 @@ const ProviderDashboard = () => {
     }
   ];
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-omni-blue mx-auto mb-4"></div>
+          <p>Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      <main className="pt-16">
+      <WellnessExchangeNavigation />
+      <main className="pt-0">
         {/* Header */}
         <section className="py-8 bg-white border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -159,7 +203,7 @@ const ProviderDashboard = () => {
                 <h1 className="font-heading font-bold text-3xl sm:text-4xl mb-2">
                   Provider <span className="bg-rainbow-gradient bg-clip-text text-transparent">Dashboard</span>
                 </h1>
-                <p className="text-gray-600">Welcome back, Dr. Sarah Mitchell</p>
+                <p className="text-gray-600">Welcome back, {providerProfile?.business_name || user?.email}</p>
               </div>
               
               <div className="flex gap-3">

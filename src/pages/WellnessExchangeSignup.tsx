@@ -97,7 +97,7 @@ const WellnessExchangeSignup = () => {
 
         if (providerError) throw providerError;
       } else {
-        // Create consumer profile
+      // Create consumer profile with default 50 WellCoins
         const { error: consumerError } = await supabase
           .from('consumer_profiles')
           .insert({
@@ -105,6 +105,7 @@ const WellnessExchangeSignup = () => {
             wellness_goals: wellnessGoals,
             preferred_services: preferredServices,
             location,
+            wellcoin_balance: 50,
           });
 
         if (consumerError) throw consumerError;

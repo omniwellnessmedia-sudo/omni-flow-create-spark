@@ -1,23 +1,85 @@
+import { useState, useEffect } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import MobileNavigation from "@/components/MobileNavigation";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { User, Settings, Heart, Star, Calendar, Coins, Gift } from "lucide-react";
 import { toast } from "sonner";
 
 const WellnessAccount = () => {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [wellCoinBalance, setWellCoinBalance] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserData();
+    }
+  }, [user]);
+
+  const fetchUserData = async () => {
+    if (!user) return;
+    
+    try {
+      // Fetch user profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      setUserProfile(profile);
+
+      // Fetch WellCoin balance based on user type
+      if (profile?.user_type === 'provider') {
+        const { data: providerProfile } = await supabase
+          .from('provider_profiles')
+          .select('wellcoin_balance')
+          .eq('id', user.id)
+          .single();
+        
+        setWellCoinBalance(providerProfile?.wellcoin_balance || 0);
+      } else {
+        const { data: consumerProfile } = await supabase
+          .from('consumer_profiles')
+          .select('wellcoin_balance')
+          .eq('id', user.id)
+          .single();
+        
+        setWellCoinBalance(consumerProfile?.wellcoin_balance || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleStartTrial = () => {
     toast.success("7-day free trial activated! Welcome to Omni Wellness!");
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-omni-blue mx-auto mb-4"></div>
+          <p>Loading your account...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <MobileNavigation />
+      <WellnessExchangeNavigation />
       
-      <main className="pt-20 pb-20 lg:pt-8">
+      <main className="pt-8 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
@@ -68,7 +130,9 @@ const WellnessAccount = () => {
                     <p className="text-lg">Welcome to the community!</p>
                   </div>
                   <div className="flex gap-2">
-                    <Badge variant="secondary">Consumer</Badge>
+                    <Badge variant="secondary">
+                      {userProfile?.user_type === 'provider' ? 'Provider' : 'Consumer'}
+                    </Badge>
                     <Badge className="bg-green-100 text-green-800">Active</Badge>
                   </div>
                 </div>
@@ -85,9 +149,15 @@ const WellnessAccount = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-omni-orange mb-2">10 WC</div>
-                  <p className="text-sm text-gray-600">Welcome bonus included</p>
-                  <Button variant="outline" className="mt-4 w-full">
+                  <div className="text-3xl font-bold text-omni-orange mb-2">{wellCoinBalance} WC</div>
+                  <p className="text-sm text-gray-600">
+                    {wellCoinBalance === 50 ? "Welcome bonus included!" : "Your current balance"}
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    className="mt-4 w-full"
+                    onClick={() => toast.info("Coming soon! WellCoin top-up feature.")}
+                  >
                     Add WellCoins
                   </Button>
                 </div>
@@ -104,15 +174,27 @@ const WellnessAccount = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => navigate('/wellness-exchange/wants')}
+                  >
                     <Heart className="h-4 w-4 mr-2" />
                     My Wants
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => navigate('/wellness-exchange/transactions')}
+                  >
                     <Calendar className="h-4 w-4 mr-2" />
-                    Bookings
+                    Transactions
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => toast.info("Reviews feature coming soon!")}
+                  >
                     <Star className="h-4 w-4 mr-2" />
                     Reviews
                   </Button>
