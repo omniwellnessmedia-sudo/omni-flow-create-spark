@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/AuthProvider";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,21 +9,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import MobileNavigation from "@/components/MobileNavigation";
+import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { ArrowLeft, Plus, DollarSign, Coins, Clock, MapPin } from "lucide-react";
 import { toast } from "sonner";
 
 const AddService = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  
+  // Pre-filled demo data for yoga teacher
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "",
-    priceZar: "",
-    priceWellcoins: "",
-    duration: "",
-    location: "",
-    isOnline: false
+    title: "Hatha Yoga Classes - Mind, Body & Soul Connection",
+    description: "Join me for transformative Hatha Yoga sessions designed to help you find balance, strength, and inner peace. Each class combines traditional postures, breathing techniques, and mindfulness practices suitable for all levels. I create a safe, nurturing space for your yoga journey.",
+    category: "Yoga",
+    priceZar: "150",
+    priceWellcoins: "25",
+    duration: "60",
+    location: "Cape Town, Sea Point Studio",
+    isOnline: true
   });
 
   const categories = [
@@ -30,10 +36,40 @@ const AddService = () => {
     "QiGong", "Pilates"
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Service created successfully! It will be reviewed before going live.");
-    navigate("/wellness-exchange/marketplace");
+    if (!user) {
+      toast.error("Please log in to create a service");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await supabase
+        .from('services')
+        .insert({
+          provider_id: user.id,
+          title: formData.title,
+          description: formData.description,
+          category: formData.category,
+          price_zar: formData.priceZar ? parseFloat(formData.priceZar) : null,
+          price_wellcoins: formData.priceWellcoins ? parseInt(formData.priceWellcoins) : null,
+          duration_minutes: formData.duration ? parseInt(formData.duration) : null,
+          location: formData.location,
+          is_online: formData.isOnline,
+          active: true
+        });
+
+      if (error) throw error;
+
+      toast.success("Service created successfully and is now live on the marketplace!");
+      navigate("/wellness-exchange/marketplace");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string | boolean) => {
@@ -42,7 +78,7 @@ const AddService = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MobileNavigation />
+      <WellnessExchangeNavigation />
       
       <main className="pt-20 pb-20 lg:pt-8">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -195,11 +231,12 @@ const AddService = () => {
                   <Button 
                     type="submit" 
                     className="w-full bg-rainbow-gradient hover:opacity-90 text-white"
+                    disabled={loading}
                   >
-                    Create Service
+                    {loading ? "Creating Service..." : "Create Service"}
                   </Button>
                   <p className="text-sm text-gray-600 mt-2 text-center">
-                    Your service will be reviewed before being published to the marketplace
+                    Your service will be published immediately to the marketplace
                   </p>
                 </div>
               </CardContent>
