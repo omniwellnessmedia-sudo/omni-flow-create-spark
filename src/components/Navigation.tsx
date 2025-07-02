@@ -32,6 +32,7 @@ const Navigation = () => {
     { name: "Blog", path: "/blog" },
     { name: "Podcast", path: "/podcast" },
     { name: "2BeWell", path: "/2bewell" },
+    { name: "2BeWell Shop", path: "/2bewell-shop" },
     { name: "Partners", path: "/partners" },
     { name: "AI Tools", path: "/ai-tools" },
     { name: "Contact", path: "/contact" },
@@ -40,7 +41,7 @@ const Navigation = () => {
   const wellnessExchangeItems = [
     { name: "Overview", path: "/wellness-exchange" },
     { name: "Marketplace", path: "/wellness-exchange/marketplace" },
-    { name: "Post a Want", path: "/wellness-exchange/wants" },
+    { name: "Post a Want", path: "/wellness-exchange/add-want" },
     { name: "Community", path: "/wellness-exchange/community" },
     { name: "Search Services", path: "/wellness-exchange/search" },
     { name: "My Account", path: "/wellness-exchange/account" },
