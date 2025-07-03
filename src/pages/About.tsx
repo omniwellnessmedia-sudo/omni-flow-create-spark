@@ -25,7 +25,7 @@ const About = () => {
     { 
       name: "Zenith", 
       role: "Administration and Coordination", 
-      image: "/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png",
+      image: "/lovable-uploads/19bf84a4-63da-41b9-b117-545dd1a52294.png",
       description: "Zenith handles the administrative and coordination aspects, ensuring deadlines are met and managing client relationships with precision and care."
     },
     { 
