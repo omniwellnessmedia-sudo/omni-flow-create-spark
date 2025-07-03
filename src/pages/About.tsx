@@ -7,19 +7,19 @@ const About = () => {
     { 
       name: "Chad Cupido", 
       role: "Founder & Head of Media and Strategy", 
-      image: "/lovable-uploads/4a01dcd5-fe18-4590-afd3-fe656ef63428.png",
+      image: "/lovable-uploads/0bcc5fe8-fb43-437e-ab96-09f995fcc57c.png",
       description: "Chad oversees content creation and overall design direction, leveraging his strong background in media to produce high-quality, impactful content that bridges communities and inspires positive change."
     },
     { 
       name: "Abbi", 
       role: "Content Developer", 
-      image: "/lovable-uploads/e8cedac1-53a9-4d1a-84c4-308d24ca529c.png",
+      image: "/lovable-uploads/acc84685-2d7b-4845-99fd-744ce2c3c932.png",
       description: "Abbi works closely with Chad on content development, creating engaging copy and organizing visuals for the website and other platforms. She specializes in distributing content across Facebook and TikTok."
     },
     { 
       name: "Tumelo", 
       role: "Web Development Lead", 
-      image: "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png",
+      image: "/lovable-uploads/02a39b74-87a2-432a-bf6c-10d490350b0c.png",
       description: "Tumelo leads our web development and e-commerce services, ensuring a strong online presence for our clients with cutting-edge technical solutions."
     },
     { 
