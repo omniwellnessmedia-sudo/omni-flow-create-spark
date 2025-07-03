@@ -19,7 +19,7 @@ const About = () => {
     { 
       name: "Tumelo", 
       role: "Web Development Lead", 
-      image: "/lovable-uploads/02a39b74-87a2-432a-bf6c-10d490350b0c.png",
+      image: "/lovable-uploads/6d1fcc0d-a3de-47d0-91c1-353fecb2f9ca.png",
       description: "Tumelo leads our web development and e-commerce services, ensuring a strong online presence for our clients with cutting-edge technical solutions."
     },
     { 
