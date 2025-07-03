@@ -103,6 +103,15 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
+.text-shadow-strong {
+  text-shadow: 
+    -1px -1px 0 rgba(0, 0, 0, 0.8),
+    1px -1px 0 rgba(0, 0, 0, 0.8),
+    -1px 1px 0 rgba(0, 0, 0, 0.8),
+    1px 1px 0 rgba(0, 0, 0, 0.8),
+    0 0 3px rgba(0, 0, 0, 0.9);
+}
+
 /* Brand Color Classes - Individual colors only */
 .text-omni-red { color: hsl(var(--omni-red)); }
 .text-omni-orange { color: hsl(var(--omni-orange)); }
