@@ -7,7 +7,7 @@ const About = () => {
     { 
       name: "Chad Cupido", 
       role: "Founder & Head of Media and Strategy", 
-      image: "/lovable-uploads/0bcc5fe8-fb43-437e-ab96-09f995fcc57c.png",
+      image: "/lovable-uploads/d149bef9-d800-4673-8e57-4c9befd8ad7c.png",
       description: "Chad oversees content creation and overall design direction, leveraging his strong background in media to produce high-quality, impactful content that bridges communities and inspires positive change."
     },
     { 
