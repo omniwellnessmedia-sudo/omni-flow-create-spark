@@ -31,7 +31,7 @@ const About = () => {
     { 
       name: "Feroza", 
       role: "Strategic Consultant", 
-      image: "/lovable-uploads/521beecf-f15f-46a9-a1c6-0e3973419248.png",
+      image: "/lovable-uploads/3e329aa7-398b-4473-948d-2d5f9d54915a.png",
       description: "Feroza brings strategic insights and innovative thinking to help clients achieve their conscious business goals and sustainable growth."
     }
   ];
