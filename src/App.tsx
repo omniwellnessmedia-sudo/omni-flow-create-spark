@@ -17,6 +17,10 @@ import BusinessConsulting from "./pages/BusinessConsulting";
 import MediaProduction from "./pages/MediaProduction";
 import SocialMediaStrategy from "./pages/SocialMediaStrategy";
 import WebDevelopment from "./pages/WebDevelopment";
+import Videography from "./pages/services/Videography";
+import DocumentaryProduction from "./pages/services/DocumentaryProduction";
+import CustomArt from "./pages/services/CustomArt";
+import Consultation from "./pages/services/Consultation";
 import TwoBeWell from "./pages/TwoBeWell";
 import TwoBeWellShop from "./pages/TwoBeWellShop";
 import PartnerPortal from "./pages/PartnerPortal";
@@ -50,10 +54,14 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
-            <Route path="/services/business-consulting" element={<BusinessConsulting />} />
-            <Route path="/services/media-production" element={<MediaProduction />} />
-            <Route path="/services/social-media-strategy" element={<SocialMediaStrategy />} />
-            <Route path="/services/web-development" element={<WebDevelopment />} />
+          <Route path="/services/business-consulting" element={<BusinessConsulting />} />
+          <Route path="/services/media-production" element={<MediaProduction />} />
+          <Route path="/services/social-media-strategy" element={<SocialMediaStrategy />} />
+          <Route path="/services/web-development" element={<WebDevelopment />} />
+          <Route path="/services/videography" element={<Videography />} />
+          <Route path="/services/documentary-production" element={<DocumentaryProduction />} />
+          <Route path="/services/custom-art" element={<CustomArt />} />
+          <Route path="/services/consultation" element={<Consultation />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/podcast" element={<Podcast />} />

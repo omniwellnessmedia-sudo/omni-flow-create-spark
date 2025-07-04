@@ -63,6 +63,62 @@ const Services = () => {
       ],
       icon: "💻",
       link: "/services/web-development"
+    },
+    {
+      title: "Videography Services",
+      description: "Crafting visual stories that matter through genuine partnerships and conscious media experiences.",
+      features: [
+        "Non-profit Campaign Videos",
+        "Educational Content Creation",
+        "Corporate Responsibility Films",
+        "Event Documentation",
+        "Interview & Testimonial Videos",
+        "Commercial Video Production"
+      ],
+      icon: "🎥",
+      link: "/services/videography"
+    },
+    {
+      title: "Documentary Production",
+      description: "Authentic storytelling through documentary films with ethical filmmaking practices and deep research.",
+      features: [
+        "Full-length Documentary Production",
+        "Short-form Documentary Films",
+        "Concept Development & Research",
+        "Ethical Filmmaking Practices",
+        "Post-production & Editing",
+        "Impact Distribution Strategy"
+      ],
+      icon: "🎞️",
+      link: "/services/documentary-production"
+    },
+    {
+      title: "Custom Art & Illustration",
+      description: "Commissioned artwork that tells your story through bespoke visual experiences and artistic consultation.",
+      features: [
+        "Custom Illustration Work",
+        "Commissioned Graffiti Art",
+        "Murals & Large-scale Artwork",
+        "Brand Visual Identity Design",
+        "Artistic Consultation",
+        "Concept Development"
+      ],
+      icon: "🎨",
+      link: "/services/custom-art"
+    },
+    {
+      title: "Strategic Consultation",
+      description: "Building lasting partnerships through conscious communication and deep understanding of your mission.",
+      features: [
+        "Initial Project Consultation",
+        "Story Development Guidance",
+        "Media Strategy Planning",
+        "Ethical Storytelling Workshops",
+        "Impact Measurement Planning",
+        "Partnership Development"
+      ],
+      icon: "💡",
+      link: "/services/consultation"
     }
   ];
 
@@ -86,6 +142,15 @@ const Services = () => {
         {/* Services Grid */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
+                Complete <span className="bg-rainbow-gradient bg-clip-text text-transparent">Service Suite</span>
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                From strategy to execution, we offer comprehensive solutions in partnership with 
+                1000 Things Productions to deliver exceptional results.
+              </p>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {services.map((service, index) => (
                 <Card 
