@@ -161,6 +161,39 @@ export type Database = {
           },
         ]
       }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          organization: string | null
+          service: string | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          organization?: string | null
+          service?: string | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          organization?: string | null
+          service?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       onboarding_sessions: {
         Row: {
           completed: boolean | null
@@ -351,6 +384,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      service_quotes: {
+        Row: {
+          budget_range: string | null
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          project_details: string
+          service_type: string
+          status: string | null
+          timeline: string | null
+        }
+        Insert: {
+          budget_range?: string | null
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          project_details: string
+          service_type: string
+          status?: string | null
+          timeline?: string | null
+        }
+        Update: {
+          budget_range?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          project_details?: string
+          service_type?: string
+          status?: string | null
+          timeline?: string | null
+        }
+        Relationships: []
       }
       services: {
         Row: {

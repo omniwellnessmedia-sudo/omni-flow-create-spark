@@ -8,11 +8,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { CheckCircle, TrendingUp, Users, Target, Calendar, Download, Calculator } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const BusinessConsulting = () => {
   const [roiData, setRoiData] = useState({ revenue: '', investment: '', timeframe: '' });
   const [roiResult, setRoiResult] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', company: '', challenge: '' });
+  const { toast } = useToast();
 
   const calculateROI = () => {
     const revenue = parseFloat(roiData.revenue) || 0;
@@ -23,6 +26,39 @@ const BusinessConsulting = () => {
       const roi = ((revenue - investment) / investment) * 100;
       const monthlyReturn = revenue / months;
       setRoiResult({ roi: roi.toFixed(1), monthlyReturn: monthlyReturn.toFixed(0) });
+    }
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('submit-service-quote', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          service_type: 'Business Consulting',
+          project_details: formData.challenge,
+          budget_range: null,
+          timeline: null
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Assessment Request Submitted!",
+        description: "We'll review your information and get back to you within 24 hours with your personalized assessment.",
+      });
+      setFormData({ name: '', email: '', company: '', challenge: '' });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Error",
+        description: "There was an issue submitting your request. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -76,7 +112,7 @@ const BusinessConsulting = () => {
             <div className="relative">
               <div className="bg-white rounded-2xl shadow-2xl p-8 border">
                 <h3 className="font-heading font-bold text-2xl mb-6 text-center">Free Business Assessment</h3>
-                <div className="space-y-4">
+                <form onSubmit={handleFormSubmit} className="space-y-4">
                   <div>
                     <Label htmlFor="name">Full Name</Label>
                     <Input 
@@ -115,10 +151,10 @@ const BusinessConsulting = () => {
                       rows={3}
                     />
                   </div>
-                  <Button className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 rounded-full">
+                  <Button type="submit" className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 rounded-full">
                     Get My Free Assessment
                   </Button>
-                </div>
+                </form>
               </div>
             </div>
           </div>
