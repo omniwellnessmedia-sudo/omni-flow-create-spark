@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/AuthProvider";
+import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -40,13 +41,15 @@ import WellnessExchangeSignup from "./pages/WellnessExchangeSignup";
 import PartnersDirectory from "./pages/PartnersDirectory";
 import PartnerProfile from "./pages/PartnerProfile";
 import NotFound from "./pages/NotFound";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
+      <CartProvider>
+        <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
@@ -85,11 +88,13 @@ const App = () => (
             <Route path="/partners" element={<PartnersDirectory />} />
             <Route path="/partners/:id" element={<PartnerProfile />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
+      </CartProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

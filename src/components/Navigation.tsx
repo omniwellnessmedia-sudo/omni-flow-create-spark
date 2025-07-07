@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/AuthProvider";
 import { Menu, X, User, LogOut, ChevronDown } from "lucide-react";
+import { CartIcon } from "@/components/cart/CartIcon";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -135,6 +136,9 @@ const Navigation = () => {
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
+            
+            {/* Cart Icon */}
+            <CartIcon />
             
             {/* Auth Section */}
             {user ? (

@@ -6,56 +6,62 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
-import { ShoppingCart, Coins, Users, Gift, Star, Heart, Leaf, Award, Plus, Minus } from "lucide-react";
+import { ShoppingCart, Coins, Users, Gift, Star, Heart, Leaf, Award } from "lucide-react";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { useCart } from "@/contexts/CartContext";
 
 const TwoBeWellShop = () => {
-  const [cart, setCart] = useState<{[key: string]: number}>({});
-  const [wellCoins, setWellCoins] = useState(250); // User's current WellCoins
+  const { state } = useCart();
+  const [wellCoins, setWellCoins] = useState(250);
   const [activeTab, setActiveTab] = useState("products");
 
   const products = [
     {
       id: "lip-balm",
-      name: "2BeKissed - Natural Lip Balm",
-      price: 85,
-      wellCoins: 42,
+      title: "2BeKissed - Natural Lip Balm",
+      price_zar: 85,
+      price_wellcoins: 42,
       image: "/lovable-uploads/d369fae4-4adf-4e4c-89dd-9d37a01ea88e.png",
       description: "Mint-infused natural lip balm with Shea Butter, Coconut Oil, and Vitamin E for lasting moisture and protection.",
       ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Essential Oil, Vitamin E",
       benefits: ["100ml", "Vegan", "Handcrafted"],
+      category: "Skincare",
       inStock: true
     },
     {
       id: "face-serum",
-      name: "2BeGlow - Radiance Face Serum",
-      price: 165,
-      wellCoins: 82,
+      title: "2BeGlow - Radiance Face Serum",
+      price_zar: 165,
+      price_wellcoins: 82,
       image: "/lovable-uploads/bb1d5ac4-6c06-4ce7-8866-b0376ad65c36.png",
       description: "Glow & Calm face serum with Macadamia Nut Oil and Essential Oil Blend for radiant, healthy-looking skin.",
       ingredients: "Macadamia Nut Oil + Essential Oil Blend",
       benefits: ["130ml", "Vegan", "Natural Ingredients"],
+      category: "Skincare",
       inStock: true
     },
     {
       id: "body-butter",
-      name: "2BeSmooth - Whipped Body Butter",
-      price: 125,
-      wellCoins: 62,
+      title: "2BeSmooth - Whipped Body Butter",
+      price_zar: 125,
+      price_wellcoins: 62,
       image: "/lovable-uploads/55337f01-2391-4c96-a2a3-0044cb84cd8b.png",
       description: "Luxuriously whipped body butter with Shea Butter, Cocoa Butter, and nourishing oils for silky-smooth skin.",
       ingredients: "Shea Butter, Cocoa Butter, Coconut Oil, Sweet Almond Oil, Arrowroot Powder, Vitamin E",
       benefits: ["100ml", "Vegan", "Whipped Texture"],
+      category: "Skincare",
       inStock: true
     },
     {
       id: "cleaner",
-      name: "2BeFresh - All-Purpose Cleaner",
-      price: 95,
-      wellCoins: 47,
+      title: "2BeFresh - All-Purpose Cleaner",
+      price_zar: 95,
+      price_wellcoins: 47,
       image: "/lovable-uploads/76a99deb-2c78-4ed9-9276-4d468c36b33b.png",
       description: "Natural all-purpose cleaning spray with plant-based ingredients for a chemical-free, eco-friendly home.",
       ingredients: "Natural plant-based ingredients, Essential oils",
       benefits: ["130ml", "Vegan", "Eco-Friendly"],
+      category: "Home & Cleaning",
       inStock: true
     }
   ];
@@ -90,38 +96,6 @@ const TwoBeWellShop = () => {
     }
   ];
 
-  const addToCart = (productId: string) => {
-    setCart(prev => ({
-      ...prev,
-      [productId]: (prev[productId] || 0) + 1
-    }));
-  };
-
-  const removeFromCart = (productId: string) => {
-    setCart(prev => ({
-      ...prev,
-      [productId]: Math.max((prev[productId] || 0) - 1, 0)
-    }));
-  };
-
-  const getTotalItems = () => {
-    return Object.values(cart).reduce((sum, quantity) => sum + quantity, 0);
-  };
-
-  const getTotalPrice = () => {
-    return Object.entries(cart).reduce((total, [productId, quantity]) => {
-      const product = products.find(p => p.id === productId);
-      return total + (product ? product.price * quantity : 0);
-    }, 0);
-  };
-
-  const getTotalWellCoins = () => {
-    return Object.entries(cart).reduce((total, [productId, quantity]) => {
-      const product = products.find(p => p.id === productId);
-      return total + (product ? product.wellCoins * quantity : 0);
-    }, 0);
-  };
-
   return (
     <div className="min-h-screen">
       <Navigation />
@@ -153,7 +127,7 @@ const TwoBeWellShop = () => {
                     <ShoppingCart className="w-8 h-8 text-green-600" />
                     <div>
                       <p className="text-sm text-gray-600">Cart Items</p>
-                      <p className="text-2xl font-bold text-green-600">{getTotalItems()}</p>
+                      <p className="text-2xl font-bold text-green-600">{state.itemCount}</p>
                     </div>
                   </div>
                 </Card>
@@ -170,7 +144,7 @@ const TwoBeWellShop = () => {
                 <TabsTrigger value="products">Products</TabsTrigger>
                 <TabsTrigger value="wellcoins">WellCoins</TabsTrigger>
                 <TabsTrigger value="community">Community</TabsTrigger>
-                <TabsTrigger value="cart">Cart ({getTotalItems()})</TabsTrigger>
+                <TabsTrigger value="cart">Cart ({state.itemCount})</TabsTrigger>
               </TabsList>
 
               {/* Products Tab */}
@@ -181,17 +155,17 @@ const TwoBeWellShop = () => {
                       <div className="relative">
                         <img 
                           src={product.image} 
-                          alt={product.name}
+                          alt={product.title}
                           className="instagram-post-img group-hover:scale-105 transition-transform duration-300"
                         />
                         <Badge className="absolute top-3 right-3 bg-yellow-100 text-yellow-800">
-                          🪙 {product.wellCoins} WellCoins
+                          🪙 {product.price_wellcoins} WellCoins
                         </Badge>
                       </div>
                       <CardHeader>
-                        <CardTitle className="font-heading text-lg">{product.name}</CardTitle>
+                        <CardTitle className="font-heading text-lg">{product.title}</CardTitle>
                         <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-green-600">R{product.price}</span>
+                          <span className="text-2xl font-bold text-green-600">R{product.price_zar}</span>
                           <div className="flex gap-1">
                             {product.benefits.map((benefit) => (
                               <Badge key={benefit} variant="secondary" className="text-xs">
@@ -206,30 +180,10 @@ const TwoBeWellShop = () => {
                         <p className="text-xs text-gray-500 mb-4">
                           <strong>Key Ingredients:</strong> {product.ingredients}
                         </p>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removeFromCart(product.id)}
-                            disabled={!cart[product.id]}
-                          >
-                            <Minus className="w-4 h-4" />
-                          </Button>
-                          <span className="mx-3 font-semibold">{cart[product.id] || 0}</span>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => addToCart(product.id)}
-                          >
-                            <Plus className="w-4 h-4" />
-                          </Button>
-                        </div>
-                        <Button 
-                          onClick={() => addToCart(product.id)}
+                        <AddToCartButton 
+                          item={product}
                           className="w-full bg-green-600 hover:bg-green-700 text-white rounded-full"
-                        >
-                          Add to Cart
-                        </Button>
+                        />
                       </CardContent>
                     </Card>
                   ))}
