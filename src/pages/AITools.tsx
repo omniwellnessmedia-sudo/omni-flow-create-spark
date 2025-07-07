@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 
 const AITools = () => {
   const [contentInput, setContentInput] = useState("");
@@ -81,6 +82,18 @@ const AITools = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h4 className="font-semibold text-green-800">Professional Content Package</h4>
+                          <p className="text-sm text-green-600">Get 5 custom posts + captions + hashtags</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-green-700">R49</div>
+                          <div className="text-sm text-green-600">One-time</div>
+                        </div>
+                      </div>
+                    </div>
                     <div>
                       <Label htmlFor="content-topic">Content Topic or Theme</Label>
                       <Input
@@ -98,12 +111,17 @@ const AITools = () => {
                         className="min-h-[100px]"
                       />
                     </div>
-                    <Button 
-                      onClick={handleContentGenerate}
-                      className="w-full bg-gradient-to-r from-omni-red to-omni-orange hover:opacity-90 text-white"
-                    >
-                      Generate Content
-                    </Button>
+                    <AddToCartButton
+                      item={{
+                        id: "ai-content-creator",
+                        title: "AI Content Creator - Professional Package",
+                        price_zar: 49,
+                        price_wellcoins: 25,
+                        category: "AI Tools",
+                        image: "/placeholder.svg"
+                      }}
+                      className="w-full"
+                    />
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -120,6 +138,18 @@ const AITools = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h4 className="font-semibold text-blue-800">Personal Wellness Report</h4>
+                          <p className="text-sm text-blue-600">Complete assessment + action plan + resources</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-blue-700">R79</div>
+                          <div className="text-sm text-blue-600">One-time</div>
+                        </div>
+                      </div>
+                    </div>
                     <div>
                       <Label htmlFor="sleep">How would you rate your sleep quality? (1-10)</Label>
                       <Input
@@ -162,12 +192,17 @@ const AITools = () => {
                         onChange={(e) => setWellnessAnswers({...wellnessAnswers, nutrition: e.target.value})}
                       />
                     </div>
-                    <Button 
-                      onClick={handleWellnessAssess}
-                      className="w-full bg-gradient-to-r from-omni-green to-omni-blue hover:opacity-90 text-white"
-                    >
-                      Get Wellness Assessment
-                    </Button>
+                    <AddToCartButton
+                      item={{
+                        id: "wellness-assessment",
+                        title: "Personal Wellness Assessment & Action Plan",
+                        price_zar: 79,
+                        price_wellcoins: 40,
+                        category: "AI Tools",
+                        image: "/placeholder.svg"
+                      }}
+                      className="w-full"
+                    />
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -184,6 +219,18 @@ const AITools = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h4 className="font-semibold text-purple-800">Brand Voice Analysis</h4>
+                          <p className="text-sm text-purple-600">Complete analysis + strategy + recommendations</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-purple-700">R59</div>
+                          <div className="text-sm text-purple-600">One-time</div>
+                        </div>
+                      </div>
+                    </div>
                     <div>
                       <Label htmlFor="brand-name">Brand Name</Label>
                       <Input
@@ -209,12 +256,17 @@ const AITools = () => {
                         className="min-h-[100px]"
                       />
                     </div>
-                    <Button 
-                      onClick={handleBrandAnalyze}
-                      className="w-full bg-gradient-to-r from-omni-indigo to-omni-violet hover:opacity-90 text-white"
-                    >
-                      Analyze Brand Voice
-                    </Button>
+                    <AddToCartButton
+                      item={{
+                        id: "brand-voice-analyzer",
+                        title: "Brand Voice Analysis & Strategy Report",
+                        price_zar: 59,
+                        price_wellcoins: 30,
+                        category: "AI Tools",
+                        image: "/placeholder.svg"
+                      }}
+                      className="w-full"
+                    />
                   </CardContent>
                 </Card>
               </TabsContent>

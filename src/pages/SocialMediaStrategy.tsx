@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { Hash, TrendingUp, Users, MessageCircle, Calendar, Download, Calculator, CheckCircle, Instagram, Facebook, Twitter } from "lucide-react";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 
 const SocialMediaStrategy = () => {
   const [auditData, setAuditData] = useState({ followers: '', engagement: '', posts: '' });
@@ -230,6 +231,138 @@ const SocialMediaStrategy = () => {
               )}
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      {/* Premium Packages */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
+              Premium <span className="bg-rainbow-gradient bg-clip-text text-transparent">Strategy Packages</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Take your social media to the next level with our professional packages
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="border-2 border-gray-200 hover:shadow-lg transition-all duration-300">
+              <CardHeader className="text-center">
+                <CardTitle className="text-xl mb-2">Content Calendar</CardTitle>
+                <div className="text-3xl font-bold text-green-600 mb-2">R99</div>
+                <CardDescription>30-day content calendar with captions</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    30 post ideas & captions
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Platform-specific optimization
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Hashtag recommendations
+                  </div>
+                </div>
+                <AddToCartButton
+                  item={{
+                    id: "content-calendar",
+                    title: "30-Day Content Calendar",
+                    price_zar: 99,
+                    price_wellcoins: 50,
+                    category: "Social Media",
+                    image: "/placeholder.svg"
+                  }}
+                  className="w-full"
+                />
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-purple-300 hover:shadow-lg transition-all duration-300 relative">
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span className="bg-purple-500 text-white px-4 py-1 rounded-full text-sm font-semibold">Most Popular</span>
+              </div>
+              <CardHeader className="text-center">
+                <CardTitle className="text-xl mb-2">Strategy Audit</CardTitle>
+                <div className="text-3xl font-bold text-purple-600 mb-2">R299</div>
+                <CardDescription>Complete social media audit & strategy</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Full competitor analysis
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Platform-specific strategy
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    60-day action plan
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Growth projections
+                  </div>
+                </div>
+                <AddToCartButton
+                  item={{
+                    id: "strategy-audit",
+                    title: "Complete Social Media Strategy Audit",
+                    price_zar: 299,
+                    price_wellcoins: 150,
+                    category: "Social Media",
+                    image: "/placeholder.svg"
+                  }}
+                  className="w-full"
+                />
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-blue-300 hover:shadow-lg transition-all duration-300">
+              <CardHeader className="text-center">
+                <CardTitle className="text-xl mb-2">1-on-1 Strategy Call</CardTitle>
+                <div className="text-3xl font-bold text-blue-600 mb-2">R599</div>
+                <CardDescription>60-minute personalized strategy session</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Live strategy session
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Custom action plan
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Follow-up resources
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Recording provided
+                  </div>
+                </div>
+                <AddToCartButton
+                  item={{
+                    id: "strategy-call",
+                    title: "1-on-1 Social Media Strategy Call",
+                    price_zar: 599,
+                    price_wellcoins: 300,
+                    category: "Social Media",
+                    image: "/placeholder.svg"
+                  }}
+                  className="w-full"
+                />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
