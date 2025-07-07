@@ -29,7 +29,8 @@ import {
   BarChart,
   Globe,
   Users,
-  MessageSquare
+  MessageSquare,
+  Calendar
 } from "lucide-react";
 
 const AITools = () => {
@@ -49,102 +50,208 @@ const AITools = () => {
   const journeyStages = {
     practitioner: [
       {
-        stage: "Foundation",
-        title: "Build Your Brand Voice",
-        description: "Establish your unique wellness identity",
+        stage: "Just Getting Started",
+        title: "🚀 Launch Your Wellness Business",
+        description: "Everything you need to start your wellness practice from scratch",
+        bundlePrice: 499,
+        bundleWellcoins: 250,
+        savingsText: "Save R300 vs individual tools",
         tools: [
           {
-            id: "brand-foundation",
-            title: "Brand Voice Generator",
-            description: "Create your authentic wellness brand voice that resonates with your ideal clients",
-            price: 79,
-            wellcoins: 40,
-            icon: MessageSquare,
-            features: ["Brand personality analysis", "Voice guidelines", "Tone examples", "Client avatars"]
+            id: "logo-generator",
+            title: "Logo & Brand Identity Kit",
+            description: "Professional logo designs with brand guidelines and color palettes",
+            price: 199,
+            wellcoins: 100,
+            icon: Palette,
+            features: ["5 logo variations", "Brand color palette", "Typography guide", "Social media kit"],
+            demoAvailable: true
           },
           {
-            id: "content-pillars",
-            title: "Content Pillar Creator",
-            description: "Define your core content themes and messaging strategy",
-            price: 59,
-            wellcoins: 30,
-            icon: Target,
-            features: ["5 core content pillars", "Post templates", "Hashtag sets", "Engagement strategies"]
-          }
-        ]
-      },
-      {
-        stage: "Content Creation",
-        title: "Scale Your Content",
-        description: "Create engaging content that converts",
-        tools: [
-          {
-            id: "ai-copywriter",
-            title: "Wellness Copywriter AI",
-            description: "Generate high-converting copy for your services, workshops, and programs",
+            id: "business-plan",
+            title: "Wellness Business Plan Generator",
+            description: "Complete business plan template tailored for wellness professionals",
             price: 149,
             wellcoins: 75,
             icon: FileText,
-            features: ["Sales page copy", "Email sequences", "Social captions", "Workshop descriptions"]
+            features: ["Executive summary", "Financial projections", "Marketing strategy", "Operations plan"],
+            demoAvailable: true
           },
           {
-            id: "visual-creator",
-            title: "Visual Content Generator",
-            description: "Create stunning visuals for your wellness brand",
-            price: 199,
-            wellcoins: 100,
-            icon: Camera,
-            features: ["Custom graphics", "Quote cards", "Story templates", "Brand consistency"]
+            id: "legal-templates",
+            title: "Legal Document Library",
+            description: "Essential legal templates and waivers for wellness practices",
+            price: 99,
+            wellcoins: 50,
+            icon: CheckCircle,
+            features: ["Client waivers", "Service contracts", "Privacy policies", "Terms & conditions"],
+            demoAvailable: true
+          },
+          {
+            id: "class-calendar",
+            title: "Class & Session Calendar Builder",
+            description: "Smart scheduling system with booking integration",
+            price: 179,
+            wellcoins: 90,
+            icon: Calendar,
+            features: ["Schedule templates", "Booking widgets", "Automated reminders", "Payment integration"],
+            demoAvailable: true
+          },
+          {
+            id: "pricing-calculator",
+            title: "Pricing Strategy Calculator",
+            description: "Data-driven pricing recommendations for your services",
+            price: 79,
+            wellcoins: 40,
+            icon: TrendingUp,
+            features: ["Market analysis", "Competitor pricing", "Profit margins", "Package recommendations"],
+            demoAvailable: true
           }
         ]
       },
       {
-        stage: "Business Growth",
-        title: "Launch & Scale",
-        description: "Take your practice to the next level",
+        stage: "Already Going",
+        title: "📈 Optimize & Grow Your Practice",
+        description: "Advanced tools to scale your existing wellness business",
+        bundlePrice: 899,
+        bundleWellcoins: 450,
+        savingsText: "Save R500 vs individual tools",
         tools: [
           {
-            id: "program-builder",
-            title: "Wellness Program Builder",
-            description: "Design comprehensive wellness programs that sell",
+            id: "content-calendar-pro",
+            title: "90-Day Content Calendar",
+            description: "Professional content strategy with ready-to-post content",
             price: 299,
             wellcoins: 150,
-            icon: Presentation,
-            features: ["Program structure", "Pricing strategy", "Marketing materials", "Launch sequence"]
+            icon: Calendar,
+            features: ["90 days of posts", "Platform optimization", "Hashtag research", "Engagement tactics"],
+            demoAvailable: true
           },
           {
-            id: "market-analyzer",
-            title: "Market Intelligence",
-            description: "Analyze your competition and find your unique position",
+            id: "email-sequences",
+            title: "Client Retention Email System",
+            description: "Automated email sequences that convert and retain clients",
+            price: 249,
+            wellcoins: 125,
+            icon: MessageSquare,
+            features: ["Welcome sequences", "Re-engagement campaigns", "Upsell templates", "A/B test variants"],
+            demoAvailable: true
+          },
+          {
+            id: "workshop-builder",
+            title: "Workshop & Program Creator",
+            description: "Design and package your expertise into profitable programs",
             price: 399,
             wellcoins: 200,
+            icon: Presentation,
+            features: ["Program outlines", "Workbook templates", "Pricing strategies", "Launch sequences"],
+            demoAvailable: true
+          },
+          {
+            id: "social-strategy",
+            title: "Advanced Social Media Strategy",
+            description: "Platform-specific content and growth strategies",
+            price: 199,
+            wellcoins: 100,
+            icon: Users,
+            features: ["Platform strategies", "Content templates", "Growth hacks", "Analytics tracking"],
+            demoAvailable: true
+          },
+          {
+            id: "review-system",
+            title: "Review & Testimonial Generator",
+            description: "Automated system to collect and showcase client testimonials",
+            price: 149,
+            wellcoins: 75,
+            icon: Star,
+            features: ["Review collection", "Testimonial templates", "Social proof widgets", "Response templates"],
+            demoAvailable: true
+          },
+          {
+            id: "financial-dashboard",
+            title: "Financial Tracking Dashboard",
+            description: "Complete financial management system for wellness businesses",
+            price: 179,
+            wellcoins: 90,
             icon: BarChart,
-            features: ["Competitor analysis", "Market positioning", "Pricing insights", "Growth opportunities"]
+            features: ["Revenue tracking", "Expense management", "Profit analysis", "Tax preparation"],
+            demoAvailable: true
           }
         ]
       },
       {
-        stage: "Go-to-Market",
-        title: "Platform Domination",
-        description: "Expand across all wellness platforms",
+        stage: "Ready to Scale",
+        title: "🏆 Dominate Your Market",
+        description: "Enterprise-level tools and our premium services for market leaders",
+        bundlePrice: 2999,
+        bundleWellcoins: 1500,
+        savingsText: "Save R1000 + Free consultation calls",
         tools: [
           {
-            id: "platform-optimizer",
-            title: "Multi-Platform Optimizer",
-            description: "Optimize your presence across all major wellness platforms",
-            price: 599,
-            wellcoins: 300,
+            id: "multi-location-planner",
+            title: "Multi-Location Business Expansion",
+            description: "Strategic planning for opening multiple wellness locations",
+            price: 799,
+            wellcoins: 400,
             icon: Globe,
-            features: ["Platform analysis", "Content adaptation", "Cross-promotion strategy", "Analytics dashboard"]
+            features: ["Location analysis", "Expansion timeline", "Investment planning", "Team structure"],
+            demoAvailable: true,
+            premium: true
           },
           {
-            id: "growth-accelerator",
-            title: "Growth Accelerator Suite",
-            description: "Complete growth system for scaling wellness businesses",
-            price: 999,
-            wellcoins: 500,
+            id: "staff-training-system",
+            title: "Staff Training Program Builder",
+            description: "Complete training systems for your wellness team",
+            price: 599,
+            wellcoins: 300,
+            icon: Users,
+            features: ["Training modules", "Certification tracks", "Performance metrics", "Onboarding guides"],
+            demoAvailable: true,
+            premium: true
+          },
+          {
+            id: "advanced-analytics",
+            title: "Advanced Analytics & Intelligence",
+            description: "Deep business insights and predictive analytics",
+            price: 699,
+            wellcoins: 350,
+            icon: BarChart,
+            features: ["Predictive analytics", "Customer insights", "Market trends", "ROI optimization"],
+            demoAvailable: true,
+            premium: true
+          },
+          {
+            id: "partnership-finder",
+            title: "Partnership & Collaboration Hub",
+            description: "Find and manage strategic partnerships in the wellness industry",
+            price: 499,
+            wellcoins: 250,
+            icon: Users,
+            features: ["Partnership matching", "Collaboration templates", "Revenue sharing", "Joint ventures"],
+            demoAvailable: true,
+            premium: true
+          },
+          {
+            id: "white-label-creator",
+            title: "White-Label Program Generator",
+            description: "Create licensable wellness programs for other practitioners",
+            price: 899,
+            wellcoins: 450,
             icon: Rocket,
-            features: ["Full marketing system", "Automation setup", "Partnership network", "Revenue optimization"]
+            features: ["Program packaging", "Licensing agreements", "Training materials", "Marketing support"],
+            demoAvailable: true,
+            premium: true
+          },
+          {
+            id: "platform-integration",
+            title: "Platform Integration Suite",
+            description: "Seamless integration with all major wellness platforms",
+            price: 799,
+            wellcoins: 400,
+            icon: Globe,
+            features: ["API integrations", "Data synchronization", "Multi-platform management", "Custom dashboards"],
+            demoAvailable: true,
+            premium: true
           }
         ]
       }
@@ -324,24 +431,63 @@ const AITools = () => {
 
             {journeyStages[userType].map((stage, stageIndex) => (
               <div key={stage.stage} className="mb-20">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    {stageIndex + 1}
+                {/* Stage Header with Bundle Option */}
+                <div className="flex flex-col lg:flex-row items-start gap-8 mb-12">
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      {stageIndex + 1}
+                    </div>
+                    <div>
+                      <h3 className="font-heading font-bold text-2xl text-gray-900">{stage.title}</h3>
+                      <p className="text-gray-600">{stage.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-heading font-bold text-2xl text-gray-900">{stage.title}</h3>
-                    <p className="text-gray-600">{stage.description}</p>
-                  </div>
+
+                  {/* Bundle Pricing Card for Practitioners */}
+                  {userType === 'practitioner' && stage.bundlePrice && (
+                    <Card className="bg-gradient-to-br from-purple-600 to-pink-600 text-white border-0 min-w-[300px]">
+                      <CardContent className="p-6">
+                        <div className="text-center">
+                          <Badge className="bg-white/20 text-white mb-3">
+                            🔥 Bundle Deal
+                          </Badge>
+                          <div className="text-3xl font-bold mb-2">R{stage.bundlePrice}</div>
+                          <div className="text-purple-100 text-sm mb-3">or {stage.bundleWellcoins} WellCoins</div>
+                          <div className="text-green-200 text-sm font-medium mb-4">{stage.savingsText}</div>
+                          <Button 
+                            className="w-full bg-white text-purple-600 hover:bg-gray-100 font-semibold"
+                            onClick={() => handleToolComplete(`${stage.stage} Bundle`)}
+                          >
+                            Get Complete Bundle
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
                 </div>
 
+                {/* Individual Tools Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {stage.tools.map((tool, toolIndex) => (
                     <Card 
                       key={tool.id} 
-                      className="hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm overflow-hidden group"
+                      className={`hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm overflow-hidden group ${
+                        tool.premium ? 'ring-2 ring-gradient-to-r from-purple-400 to-pink-400' : ''
+                      }`}
                     >
                       <div className="relative">
-                        <div className="absolute top-4 right-4 z-10">
+                        {/* Badges */}
+                        <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+                          {tool.premium && (
+                            <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+                              ⭐ Premium
+                            </Badge>
+                          )}
+                          {tool.demoAvailable && (
+                            <Badge variant="outline" className="bg-white/90 text-green-600 border-green-300">
+                              🎯 Demo Available
+                            </Badge>
+                          )}
                           {toolIndex === 0 && stageIndex === 0 && (
                             <Badge className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white border-0">
                               <Star className="w-3 h-3 mr-1" />
@@ -353,8 +499,14 @@ const AITools = () => {
                         <CardHeader className="pb-4">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <tool.icon className="w-6 h-6 text-purple-600" />
+                              <div className={`w-12 h-12 ${
+                                tool.premium 
+                                  ? 'bg-gradient-to-br from-purple-500 to-pink-500' 
+                                  : 'bg-gradient-to-br from-purple-100 to-pink-100'
+                              } rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                                <tool.icon className={`w-6 h-6 ${
+                                  tool.premium ? 'text-white' : 'text-purple-600'
+                                }`} />
                               </div>
                               <div>
                                 <CardTitle className="text-xl">{tool.title}</CardTitle>
@@ -384,7 +536,17 @@ const AITools = () => {
                             </div>
                           </div>
 
-                          <div className="pt-4 border-t">
+                          {/* Action Buttons */}
+                          <div className="pt-4 border-t space-y-3">
+                            {tool.demoAvailable && (
+                              <Button
+                                variant="outline"
+                                className="w-full border-purple-300 text-purple-600 hover:bg-purple-50"
+                                onClick={() => handleToolComplete(`${tool.title} Demo`)}
+                              >
+                                🎯 Try Interactive Demo
+                              </Button>
+                            )}
                             <AddToCartButton
                               item={{
                                 id: tool.id,
@@ -394,7 +556,11 @@ const AITools = () => {
                                 category: "AI Tools",
                                 image: "/placeholder.svg"
                               }}
-                              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 font-semibold py-3 rounded-xl group-hover:shadow-lg transition-all"
+                              className={`w-full ${
+                                tool.premium 
+                                  ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:via-pink-700 hover:to-orange-600' 
+                                  : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+                              } text-white border-0 font-semibold py-3 rounded-xl group-hover:shadow-lg transition-all`}
                             />
                           </div>
                         </CardContent>
@@ -403,12 +569,17 @@ const AITools = () => {
                   ))}
                 </div>
 
+                {/* Stage Separator */}
                 {stageIndex < journeyStages[userType].length - 1 && (
-                  <div className="flex justify-center mt-12">
-                    <div className="flex items-center gap-2 text-gray-400">
-                      <ArrowRight className="w-5 h-5" />
-                      <span className="text-sm">Next Stage</span>
-                      <ArrowRight className="w-5 h-5" />
+                  <div className="flex justify-center mt-16">
+                    <div className="flex items-center gap-4 text-gray-400">
+                      <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-20"></div>
+                      <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-gray-200">
+                        <ArrowRight className="w-4 h-4" />
+                        <span className="text-sm font-medium">Next Stage</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                      <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent w-20"></div>
                     </div>
                   </div>
                 )}
