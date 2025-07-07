@@ -10,6 +10,8 @@ import { useState } from "react";
 import { CheckCircle, TrendingUp, Users, Target, Calendar, Download, Calculator } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { BookingCalendar } from "@/components/booking/BookingCalendar";
+import { format } from "date-fns";
 
 const BusinessConsulting = () => {
   const [roiData, setRoiData] = useState({ revenue: '', investment: '', timeframe: '' });
@@ -324,9 +326,18 @@ const BusinessConsulting = () => {
               <p className="mb-2">🎯 Clear action steps</p>
               <p>✅ No sales pressure, just value</p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg mb-6">
-              <p className="text-gray-700">Calendly booking widget will be integrated here</p>
-            </div>
+            <BookingCalendar
+              serviceTitle="Business Consulting Session"
+              duration={30}
+              price_zar={500}
+              price_wellcoins={150}
+              onBookingSelect={(date, time) => {
+                toast({
+                  title: "Booking Confirmed!",
+                  description: `Your consultation is scheduled for ${format(date, 'EEEE, MMMM d, yyyy')} at ${time}. You'll receive a confirmation email shortly.`,
+                });
+              }}
+            />
             <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
               <Calendar className="mr-2 w-5 h-5" />
               Book My Free Session Now

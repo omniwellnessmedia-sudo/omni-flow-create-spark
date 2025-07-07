@@ -42,6 +42,7 @@ import PartnersDirectory from "./pages/PartnersDirectory";
 import PartnerProfile from "./pages/PartnerProfile";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
+import ProductDetail from "./pages/ProductDetail";
 
 const queryClient = new QueryClient();
 
@@ -71,7 +72,9 @@ const App = () => (
             <Route path="/ai-tools" element={<AITools />} />
             <Route path="/2bewell" element={<TwoBeWell />} />
             <Route path="/2bewell-shop" element={<TwoBeWellShop />} />
-            <Route path="/partner-portal" element={<PartnerPortal />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/transactions" element={<TransactionPage />} />
             <Route path="/wellness-exchange" element={<WellnessExchange />} />
             <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
             <Route path="/wellness-exchange/wants" element={<WellnessWants />} />

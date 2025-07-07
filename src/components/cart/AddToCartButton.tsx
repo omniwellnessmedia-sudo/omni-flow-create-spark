@@ -9,13 +9,15 @@ interface AddToCartButtonProps {
   variant?: "default" | "outline" | "ghost";
   size?: "sm" | "default" | "lg";
   className?: string;
+  disabled?: boolean;
 }
 
 export const AddToCartButton = ({ 
   item, 
   variant = "default", 
   size = "default", 
-  className = "" 
+  className = "",
+  disabled = false
 }: AddToCartButtonProps) => {
   const { addItem } = useCart();
   const { toast } = useToast();
@@ -40,7 +42,7 @@ export const AddToCartButton = ({
       size={size}
       onClick={handleAddToCart}
       className={`${className} ${isAdded ? 'bg-green-600 hover:bg-green-700' : ''}`}
-      disabled={isAdded}
+      disabled={isAdded || disabled}
     >
       {isAdded ? (
         <>
