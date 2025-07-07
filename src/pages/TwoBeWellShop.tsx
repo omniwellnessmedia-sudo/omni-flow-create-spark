@@ -140,11 +140,10 @@ const TwoBeWellShop = () => {
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-8">
+              <TabsList className="grid w-full grid-cols-3 mb-8">
                 <TabsTrigger value="products">Products</TabsTrigger>
                 <TabsTrigger value="wellcoins">WellCoins</TabsTrigger>
                 <TabsTrigger value="community">Community</TabsTrigger>
-                <TabsTrigger value="cart">Cart ({state.itemCount})</TabsTrigger>
               </TabsList>
 
               {/* Products Tab */}
@@ -374,128 +373,6 @@ const TwoBeWellShop = () => {
                 </div>
               </TabsContent>
 
-              {/* Cart Tab */}
-              <TabsContent value="cart">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <div className="lg:col-span-2">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Shopping Cart</CardTitle>
-                        <CardDescription>
-                          {getTotalItems()} items in your cart
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        {getTotalItems() === 0 ? (
-                          <div className="text-center py-12">
-                            <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                            <p className="text-gray-500">Your cart is empty</p>
-                            <Button className="mt-4" onClick={() => setActiveTab("products")}>
-                              Continue Shopping
-                            </Button>
-                          </div>
-                        ) : (
-                          <div className="space-y-4">
-                            {Object.entries(cart).filter(([_, quantity]) => quantity > 0).map(([productId, quantity]) => {
-                              const product = products.find(p => p.id === productId);
-                              if (!product) return null;
-                              
-                              return (
-                                <div key={productId} className="flex items-center gap-4 p-4 border rounded-lg">
-                                  <img 
-                                    src={product.image} 
-                                    alt={product.name}
-                                    className="w-16 h-16 object-cover rounded-lg"
-                                  />
-                                  <div className="flex-1">
-                                    <h3 className="font-semibold">{product.name}</h3>
-                                    <p className="text-sm text-gray-500">R{product.price} each</p>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() => removeFromCart(productId)}
-                                    >
-                                      <Minus className="w-4 h-4" />
-                                    </Button>
-                                    <span className="mx-3 font-semibold">{quantity}</span>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() => addToCart(productId)}
-                                    >
-                                      <Plus className="w-4 h-4" />
-                                    </Button>
-                                  </div>
-                                  <div className="text-right">
-                                    <p className="font-semibold">R{product.price * quantity}</p>
-                                    <p className="text-sm text-yellow-600">🪙 {product.wellCoins * quantity} WellCoins</p>
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Order Summary</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="flex justify-between">
-                          <span>Subtotal</span>
-                          <span>R{getTotalPrice()}</span>
-                        </div>
-                        <div className="flex justify-between text-yellow-600">
-                          <span>WellCoin Value</span>
-                          <span>🪙 {getTotalWellCoins()}</span>
-                        </div>
-                        <div className="border-t pt-4">
-                          <div className="flex justify-between font-semibold text-lg">
-                            <span>Total</span>
-                            <span>R{getTotalPrice()}</span>
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-3 pt-4">
-                          <Button 
-                            className="w-full bg-green-600 hover:bg-green-700 text-white"
-                            disabled={getTotalItems() === 0}
-                          >
-                            Pay with Cash (R{getTotalPrice()})
-                          </Button>
-                          <Button 
-                            variant="outline"
-                            className="w-full border-yellow-500 text-yellow-600 hover:bg-yellow-50"
-                            disabled={getTotalItems() === 0 || wellCoins < getTotalWellCoins()}
-                          >
-                            Pay with WellCoins (🪙 {getTotalWellCoins()})
-                          </Button>
-                          <Button 
-                            variant="outline"
-                            className="w-full"
-                            disabled={getTotalItems() === 0}
-                          >
-                            Mix Payment (Cash + WellCoins)
-                          </Button>
-                        </div>
-
-                        {wellCoins < getTotalWellCoins() && getTotalItems() > 0 && (
-                          <div className="p-3 bg-yellow-50 rounded-lg text-sm text-yellow-800">
-                            You need {getTotalWellCoins() - wellCoins} more WellCoins for full payment. 
-                            Participate in community activities to earn more!
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
             </Tabs>
           </div>
         </section>
