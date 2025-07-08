@@ -30,13 +30,15 @@ import {
 const ProviderDashboard = () => {
   const { user } = useAuth();
   const [wellCoinBalance, setWellCoinBalance] = useState(0);
-  const [zarEarnings] = useState(15640);
+  const [zarEarnings, setZarEarnings] = useState(0);
   const [activeListings, setActiveListings] = useState(0);
-  const [totalBookings] = useState(156);
-  const [rating] = useState(4.8);
-  const [profileCompletion] = useState(85);
+  const [totalBookings, setTotalBookings] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [profileCompletion, setProfileCompletion] = useState(0);
   const [providerProfile, setProviderProfile] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
+  const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
+  const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,6 +61,18 @@ const ProviderDashboard = () => {
       setProviderProfile(profile);
       setWellCoinBalance(profile?.wellcoin_balance || 0);
 
+      // Calculate profile completion
+      const completionFields = [
+        profile?.business_name,
+        profile?.description,
+        profile?.location,
+        profile?.phone,
+        profile?.specialties?.length > 0,
+        profile?.certifications?.length > 0
+      ];
+      const filledFields = completionFields.filter(Boolean).length;
+      setProfileCompletion(Math.round((filledFields / completionFields.length) * 100));
+
       // Fetch provider's services
       const { data: servicesData } = await supabase
         .from('services')
@@ -68,6 +82,60 @@ const ProviderDashboard = () => {
 
       setServices(servicesData || []);
       setActiveListings(servicesData?.filter(s => s.active).length || 0);
+
+      // Fetch recent transactions
+      const { data: transactionsData } = await supabase
+        .from('transactions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      setRecentTransactions(transactionsData || []);
+
+      // Calculate ZAR earnings for this month
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      const monthlyEarnings = transactionsData?.filter(t => {
+        const transactionDate = new Date(t.created_at);
+        return transactionDate.getMonth() === currentMonth && 
+               transactionDate.getFullYear() === currentYear &&
+               t.transaction_type === 'earning' &&
+               t.amount_zar > 0;
+      }).reduce((sum, t) => sum + (t.amount_zar || 0), 0) || 0;
+      
+      setZarEarnings(monthlyEarnings);
+
+      // Fetch upcoming bookings
+      const { data: bookingsData } = await supabase
+        .from('bookings')
+        .select(`
+          *,
+          services(title),
+          consumer_profiles!bookings_consumer_id_fkey(
+            id,
+            profiles!consumer_profiles_id_fkey(full_name)
+          )
+        `)
+        .eq('provider_id', user.id)
+        .gte('booking_date', new Date().toISOString())
+        .order('booking_date', { ascending: true })
+        .limit(5);
+
+      setUpcomingBookings(bookingsData || []);
+      setTotalBookings(bookingsData?.length || 0);
+
+      // Fetch reviews to calculate rating
+      const { data: reviewsData } = await supabase
+        .from('reviews')
+        .select('rating')
+        .eq('reviewee_id', user.id);
+
+      if (reviewsData && reviewsData.length > 0) {
+        const avgRating = reviewsData.reduce((sum, review) => sum + review.rating, 0) / reviewsData.length;
+        setRating(Math.round(avgRating * 10) / 10);
+      }
+
     } catch (error) {
       console.error('Error fetching provider data:', error);
     } finally {
@@ -75,40 +143,6 @@ const ProviderDashboard = () => {
     }
   };
 
-  const recentTransactions = [
-    {
-      id: 1,
-      type: "earning",
-      description: "Holistic Nutrition Consultation - Sarah M.",
-      amount: { wellcoins: 320, zar: 380 },
-      date: "2 hours ago",
-      status: "completed"
-    },
-    {
-      id: 2,
-      type: "earning",
-      description: "Yoga Class - Group Session",
-      amount: { wellcoins: 150, zar: 180 },
-      date: "1 day ago",
-      status: "completed"
-    },
-    {
-      id: 3,
-      type: "bonus",
-      description: "Community Engagement Bonus",
-      amount: { wellcoins: 50, zar: 0 },
-      date: "3 days ago",
-      status: "completed"
-    },
-    {
-      id: 4,
-      type: "referral",
-      description: "Referral Bonus - New Provider",
-      amount: { wellcoins: 100, zar: 0 },
-      date: "1 week ago",
-      status: "completed"
-    }
-  ];
 
   // Function to toggle service active status
   const toggleServiceStatus = async (serviceId: string, currentStatus: boolean) => {
@@ -147,53 +181,30 @@ const ProviderDashboard = () => {
     }
   };
 
-  const upcomingBookings = [
-    {
-      id: 1,
-      service: "Holistic Nutrition Consultation",
-      client: "Emma Thompson",
-      date: "Today, 2:00 PM",
-      payment: "280 WellCoins + R170",
-      status: "confirmed"
-    },
-    {
-      id: 2,
-      service: "Yoga Class",
-      client: "Michael Brown",
-      date: "Tomorrow, 9:00 AM",
-      payment: "R180",
-      status: "confirmed"
-    },
-    {
-      id: 3,
-      service: "Mindfulness Workshop",
-      client: "Lisa Garcia",
-      date: "Friday, 6:00 PM",
-      payment: "280 WellCoins",
-      status: "pending"
-    }
-  ];
+  // Helper function to format date
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Tomorrow';
+    return date.toLocaleDateString();
+  };
 
-  const aiSuggestions = [
-    {
-      type: "optimization",
-      title: "Boost Your Nutrition Service",
-      description: "Your nutrition consultation has high views but low bookings. Consider reducing the WellCoin price by 10% to increase conversions.",
-      action: "Optimize Pricing"
-    },
-    {
-      type: "content",
-      title: "Add Video Introduction",
-      description: "Services with video introductions get 40% more bookings. Add a 2-minute video to your yoga classes.",
-      action: "Add Video"
-    },
-    {
-      type: "engagement",
-      title: "Community Opportunity",
-      description: "There are 3 new 'Wants' in your category. Respond to build your reputation and earn WellCoins.",
-      action: "View Wants"
-    }
-  ];
+  // Helper function to format transaction date
+  const formatTransactionDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return date.toLocaleDateString();
+  };
 
   if (loading) {
     return (
@@ -353,26 +364,31 @@ const ProviderDashboard = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {recentTransactions.slice(0, 4).map((transaction) => (
-                          <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <div className="flex-1">
-                              <p className="font-medium text-sm">{transaction.description}</p>
-                              <p className="text-xs text-gray-500">{transaction.date}</p>
-                            </div>
-                            <div className="text-right">
-                              {transaction.amount.wellcoins > 0 && (
-                                <p className="text-sm font-medium text-omni-orange">
-                                  +{transaction.amount.wellcoins} WC
-                                </p>
-                              )}
-                              {transaction.amount.zar > 0 && (
-                                <p className="text-sm font-medium text-green-600">
-                                  +R{transaction.amount.zar}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        ))}
+                         {recentTransactions.length > 0 ? recentTransactions.slice(0, 4).map((transaction) => (
+                           <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                             <div className="flex-1">
+                               <p className="font-medium text-sm">{transaction.description}</p>
+                               <p className="text-xs text-gray-500">{formatTransactionDate(transaction.created_at)}</p>
+                             </div>
+                             <div className="text-right">
+                               {transaction.amount_wellcoins > 0 && (
+                                 <p className="text-sm font-medium text-omni-orange">
+                                   +{transaction.amount_wellcoins} WC
+                                 </p>
+                               )}
+                               {transaction.amount_zar > 0 && (
+                                 <p className="text-sm font-medium text-green-600">
+                                   +R{transaction.amount_zar}
+                                 </p>
+                               )}
+                             </div>
+                           </div>
+                         )) : (
+                           <div className="text-center py-8 text-gray-500">
+                             <p>No transactions yet</p>
+                             <p className="text-sm">Your transaction history will appear here</p>
+                           </div>
+                         )}
                       </div>
                     </CardContent>
                   </Card>
@@ -505,29 +521,40 @@ const ProviderDashboard = () => {
                     <CardDescription>Manage your scheduled appointments</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      {upcomingBookings.map((booking) => (
-                        <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg">
-                          <div className="flex-1">
-                            <h4 className="font-medium">{booking.service}</h4>
-                            <p className="text-sm text-gray-600">Client: {booking.client}</p>
-                            <p className="text-sm text-gray-600">{booking.date}</p>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-medium text-sm">{booking.payment}</p>
-                            <Badge className={booking.status === 'confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
-                              {booking.status}
-                            </Badge>
-                          </div>
-                          <div className="ml-4">
-                            <Button size="sm" variant="outline">
-                              <MessageCircle className="h-4 w-4 mr-1" />
-                              Contact
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                     <div className="space-y-4">
+                       {upcomingBookings.length > 0 ? upcomingBookings.map((booking: any) => (
+                         <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg">
+                           <div className="flex-1">
+                             <h4 className="font-medium">{booking.services?.title || 'Service'}</h4>
+                             <p className="text-sm text-gray-600">
+                               Client: {booking.consumer_profiles?.profiles?.full_name || 'Anonymous'}
+                             </p>
+                             <p className="text-sm text-gray-600">{formatDate(booking.booking_date)}</p>
+                           </div>
+                           <div className="text-right">
+                             <p className="font-medium text-sm">
+                               {booking.amount_wellcoins > 0 ? `${booking.amount_wellcoins} WC` : ''}
+                               {booking.amount_wellcoins > 0 && booking.amount_zar > 0 ? ' + ' : ''}
+                               {booking.amount_zar > 0 ? `R${booking.amount_zar}` : ''}
+                             </p>
+                             <Badge className={booking.status === 'confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
+                               {booking.status}
+                             </Badge>
+                           </div>
+                           <div className="ml-4">
+                             <Button size="sm" variant="outline">
+                               <MessageCircle className="h-4 w-4 mr-1" />
+                               Contact
+                             </Button>
+                           </div>
+                         </div>
+                       )) : (
+                         <div className="text-center py-8 text-gray-500">
+                           <p>No upcoming bookings</p>
+                           <p className="text-sm">Your scheduled appointments will appear here</p>
+                         </div>
+                       )}
+                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -540,29 +567,34 @@ const ProviderDashboard = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {recentTransactions.map((transaction) => (
-                        <div key={transaction.id} className="flex items-center justify-between p-3 border-b">
-                          <div className="flex-1">
-                            <p className="font-medium text-sm">{transaction.description}</p>
-                            <p className="text-xs text-gray-500">{transaction.date}</p>
-                          </div>
-                          <div className="text-right">
-                            {transaction.amount.wellcoins > 0 && (
-                              <p className="text-sm font-medium text-omni-orange">
-                                +{transaction.amount.wellcoins} WellCoins
-                              </p>
-                            )}
-                            {transaction.amount.zar > 0 && (
-                              <p className="text-sm font-medium text-green-600">
-                                +R{transaction.amount.zar}
-                              </p>
-                            )}
-                            <Badge className="bg-green-100 text-green-800 text-xs mt-1">
-                              {transaction.status}
-                            </Badge>
-                          </div>
-                        </div>
-                      ))}
+                       {recentTransactions.length > 0 ? recentTransactions.map((transaction) => (
+                         <div key={transaction.id} className="flex items-center justify-between p-3 border-b">
+                           <div className="flex-1">
+                             <p className="font-medium text-sm">{transaction.description}</p>
+                             <p className="text-xs text-gray-500">{formatTransactionDate(transaction.created_at)}</p>
+                           </div>
+                           <div className="text-right">
+                             {transaction.amount_wellcoins > 0 && (
+                               <p className="text-sm font-medium text-omni-orange">
+                                 +{transaction.amount_wellcoins} WellCoins
+                               </p>
+                             )}
+                             {transaction.amount_zar > 0 && (
+                               <p className="text-sm font-medium text-green-600">
+                                 +R{transaction.amount_zar}
+                               </p>
+                             )}
+                             <Badge className="bg-green-100 text-green-800 text-xs mt-1">
+                               {transaction.status}
+                             </Badge>
+                           </div>
+                         </div>
+                       )) : (
+                         <div className="text-center py-8 text-gray-500">
+                           <p>No transactions yet</p>
+                           <p className="text-sm">Complete your first service to see your earnings here</p>
+                         </div>
+                       )}
                     </div>
                   </CardContent>
                 </Card>
@@ -580,26 +612,13 @@ const ProviderDashboard = () => {
                         Personalized recommendations to grow your wellness business
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {aiSuggestions.map((suggestion, index) => (
-                          <div key={index} className="p-4 bg-gradient-to-r from-gray-50 to-white rounded-lg border">
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <h4 className="font-medium mb-2">{suggestion.title}</h4>
-                                <p className="text-sm text-gray-600 mb-3">{suggestion.description}</p>
-                                <Button size="sm" className="bg-omni-violet hover:bg-omni-violet/90 text-white">
-                                  {suggestion.action}
-                                </Button>
-                              </div>
-                              <Badge className="ml-4 bg-omni-violet/10 text-omni-violet">
-                                {suggestion.type}
-                              </Badge>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
+                     <CardContent>
+                       <div className="text-center py-8 text-gray-500">
+                         <Bot className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                         <p>AI insights coming soon</p>
+                         <p className="text-sm">Personalized recommendations will appear here once you have more activity</p>
+                       </div>
+                     </CardContent>
                   </Card>
                 </div>
               </TabsContent>
