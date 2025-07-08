@@ -81,10 +81,10 @@ const WellnessExchangeSignup = () => {
       if (profileError) throw profileError;
 
       if (userType === 'provider') {
-        // Create provider profile
+        // Create or update provider profile using UPSERT
         const { error: providerError } = await supabase
           .from('provider_profiles')
-          .insert({
+          .upsert({
             id: user.id,
             business_name: businessName,
             description,
@@ -93,19 +93,23 @@ const WellnessExchangeSignup = () => {
             phone,
             website: website || null,
             experience_years: experienceYears ? parseInt(experienceYears) : null,
+          }, {
+            onConflict: 'id'
           });
 
         if (providerError) throw providerError;
       } else {
-      // Create consumer profile with default 50 WellCoins
+        // Create or update consumer profile using UPSERT
         const { error: consumerError } = await supabase
           .from('consumer_profiles')
-          .insert({
+          .upsert({
             id: user.id,
             wellness_goals: wellnessGoals,
             preferred_services: preferredServices,
             location,
             wellcoin_balance: 50,
+          }, {
+            onConflict: 'id'
           });
 
         if (consumerError) throw consumerError;
