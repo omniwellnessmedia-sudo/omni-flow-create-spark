@@ -139,53 +139,104 @@ const Services = () => {
           </div>
         </section>
 
-        {/* Services Grid */}
+        {/* Core Services Grid */}
         <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Complete <span className="bg-rainbow-gradient bg-clip-text text-transparent">Service Suite</span>
+              <h2 className="font-heading font-bold text-4xl sm:text-5xl mb-6 text-gray-900">
+                What We <span className="text-blue-600">Create</span>
               </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                From strategy to execution, we offer comprehensive solutions in partnership with 
-                1000 Things Productions to deliver exceptional results.
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Professional solutions that drive real results for conscious businesses.
               </p>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {services.map((service, index) => (
+
+            {/* Core 4 Services */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+              {services.slice(0, 4).map((service, index) => (
                 <Card 
                   key={service.title}
-                  className="hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up border-0 shadow-md group"
-                  style={{ animationDelay: `${index * 0.2}s` }}
+                  className="group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg hover:-translate-y-2 bg-white overflow-hidden"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <CardHeader>
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="text-3xl">{service.icon}</span>
-                      <CardTitle className="font-heading text-2xl">{service.title}</CardTitle>
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="text-4xl bg-blue-50 p-3 rounded-2xl group-hover:bg-blue-100 transition-colors">
+                        {service.icon}
+                      </div>
+                      <div className="flex-1">
+                        <CardTitle className="font-heading text-2xl text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                          {service.title}
+                        </CardTitle>
+                        <CardDescription className="text-gray-600 text-lg leading-relaxed">
+                          {service.description}
+                        </CardDescription>
+                      </div>
                     </div>
-                    <CardDescription className="text-gray-600 text-base">{service.description}</CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                      {service.features.map((feature) => (
-                        <div key={feature} className="flex items-center text-sm text-gray-700">
-                          <span className="w-2 h-2 bg-rainbow-gradient rounded-full mr-3 flex-shrink-0"></span>
-                          {feature}
+                  <CardContent className="pt-0">
+                    <div className="space-y-3 mb-8">
+                      {service.features.slice(0, 3).map((feature) => (
+                        <div key={feature} className="flex items-center text-gray-700">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full mr-4 flex-shrink-0"></div>
+                          <span className="text-base">{feature}</span>
                         </div>
                       ))}
                     </div>
                     <Button 
                       asChild 
-                      className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-6 py-3 rounded-full shadow-lg group-hover:shadow-xl transition-all duration-300"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group/btn"
                     >
-                      <Link to={service.link} className="inline-flex items-center justify-center">
-                        Learn More & Get Quote
-                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <Link to={service.link} className="inline-flex items-center justify-center text-lg">
+                        Get Started
+                        <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
                   </CardContent>
                 </Card>
               ))}
+            </div>
+
+            {/* Additional Services Expandable */}
+            <div className="text-center">
+              <details className="group">
+                <summary className="cursor-pointer inline-flex items-center gap-2 text-lg font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+                  <span>View All Services</span>
+                  <svg className="w-5 h-5 group-open:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                
+                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {services.slice(4).map((service, index) => (
+                    <Card 
+                      key={service.title}
+                      className="group hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-blue-200 bg-white"
+                    >
+                      <CardHeader className="text-center pb-4">
+                        <div className="text-3xl mb-3">{service.icon}</div>
+                        <CardTitle className="font-heading text-lg text-gray-900 group-hover:text-blue-600 transition-colors">
+                          {service.title}
+                        </CardTitle>
+                        <CardDescription className="text-gray-600 text-sm">
+                          {service.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <Button 
+                          asChild 
+                          variant="outline"
+                          className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300"
+                        >
+                          <Link to={service.link}>
+                            Learn More
+                          </Link>
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </details>
             </div>
           </div>
         </section>
