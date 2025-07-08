@@ -46,8 +46,9 @@ const Navigation = () => {
     { name: "Community", path: "/wellness-exchange/community" },
     { name: "Search Services", path: "/wellness-exchange/search" },
     { name: "My Account", path: "/wellness-exchange/account" },
-    { name: "My Dashboard", path: "/wellness-exchange/provider-dashboard" },
-    { name: "Join Exchange", path: "/wellness-exchange/provider-signup" },
+    { name: "Provider Dashboard", path: "/wellness-exchange/provider-dashboard" },
+    { name: "Become a Provider", path: "/wellness-exchange/provider-signup" },
+    { name: "Add Service", path: "/wellness-exchange/add-service" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -199,6 +200,25 @@ const Navigation = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* Mobile Wellness Exchange Items */}
+              <div className="border-t pt-2 mt-2">
+                <h4 className="px-3 py-2 text-sm font-medium text-gray-600">Wellness Exchange</h4>
+                {wellnessExchangeItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                      isActive(item.path)
+                        ? "bg-rainbow-subtle text-omni-indigo font-semibold"
+                        : "text-gray-700 hover:text-omni-indigo hover:bg-rainbow-subtle"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
               
               {/* Mobile Auth Section */}
               {user ? (

@@ -24,11 +24,11 @@ const MobileNavigation = () => {
   const { user, signOut } = useAuth();
 
   const navigationItems = [
-    { icon: Home, label: "Home", path: "/wellness-exchange/marketplace" },
-    { icon: Store, label: "Services", path: "/wellness-exchange/marketplace" },
+    { icon: Home, label: "Home", path: "/" },
+    { icon: Store, label: "Marketplace", path: "/wellness-exchange/marketplace" },
     { icon: Heart, label: "Wants", path: "/wellness-exchange/wants" },
     { icon: MessageSquare, label: "Community", path: "/wellness-exchange/community" },
-    { icon: Users, label: "Find Users", path: "/wellness-exchange/users" },
+    { icon: Users, label: "Partners", path: "/partners" },
     { icon: Coins, label: "WellCoins", path: "/wellness-exchange/transactions" },
     { icon: User, label: "My Account", path: "/wellness-exchange/account" },
   ];

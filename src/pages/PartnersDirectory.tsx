@@ -193,7 +193,7 @@ const PartnersDirectory = () => {
             <div className="text-center py-12">
               <p className="text-gray-600 mb-4">No verified partners yet.</p>
               <Button asChild className="bg-rainbow-gradient hover:opacity-90 text-white">
-                <Link to="/partner-portal">Become a Partner</Link>
+                <Link to="/wellness-exchange/provider-signup">Become a Partner</Link>
               </Button>
             </div>
           )}
