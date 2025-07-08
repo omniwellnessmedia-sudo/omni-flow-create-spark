@@ -127,69 +127,69 @@ const Services = () => {
       <Navigation />
       <main className="pt-16">
         {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-              Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Services</span>
+        <section className="py-24 bg-wellness-subtle-gradient">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="font-heading font-bold text-5xl sm:text-6xl lg:text-7xl mb-8 text-wellness-primary leading-tight">
+              Conscious <span className="text-wellness-accent">Services</span>
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
-              Comprehensive solutions that align with your values and amplify your impact. 
-              From strategy to execution, we're your partners in conscious growth.
+            <p className="text-xl sm:text-2xl text-wellness-deep mb-12 max-w-4xl mx-auto leading-relaxed font-light">
+              Premium solutions that align with your values and amplify your impact through conscious growth and authentic storytelling.
             </p>
           </div>
         </section>
 
         {/* Core Services Grid */}
-        <section className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-4xl sm:text-5xl mb-6 text-gray-900">
-                What We <span className="text-blue-600">Create</span>
+        <section className="py-28 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-20">
+              <h2 className="font-heading font-bold text-4xl sm:text-5xl mb-8 text-wellness-primary">
+                What We <span className="text-wellness-accent">Create</span>
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Professional solutions that drive real results for conscious businesses.
+              <p className="text-xl text-wellness-deep max-w-3xl mx-auto leading-relaxed font-light">
+                Premium solutions crafted with intention, designed to amplify your authentic voice and create lasting impact.
               </p>
             </div>
 
             {/* Core 4 Services */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
               {services.slice(0, 4).map((service, index) => (
                 <Card 
                   key={service.title}
-                  className="group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg hover:-translate-y-2 bg-white overflow-hidden"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  className="group hover:shadow-wellness-lg transition-all duration-700 border-0 shadow-wellness hover:-translate-y-3 bg-white overflow-hidden rounded-3xl"
+                  style={{ animationDelay: `${index * 0.15}s` }}
                 >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="text-4xl bg-blue-50 p-3 rounded-2xl group-hover:bg-blue-100 transition-colors">
+                  <CardHeader className="pb-6 p-8">
+                    <div className="flex items-start gap-6 mb-6">
+                      <div className="text-4xl bg-wellness-glow p-4 rounded-2xl group-hover:bg-wellness-accent group-hover:text-white transition-all duration-500">
                         {service.icon}
                       </div>
                       <div className="flex-1">
-                        <CardTitle className="font-heading text-2xl text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                        <CardTitle className="font-heading text-2xl text-wellness-primary group-hover:text-wellness-accent transition-colors mb-3 leading-tight">
                           {service.title}
                         </CardTitle>
-                        <CardDescription className="text-gray-600 text-lg leading-relaxed">
+                        <CardDescription className="text-wellness-deep text-lg leading-relaxed font-light">
                           {service.description}
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-3 mb-8">
+                  <CardContent className="pt-0 p-8">
+                    <div className="space-y-4 mb-10">
                       {service.features.slice(0, 3).map((feature) => (
-                        <div key={feature} className="flex items-center text-gray-700">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full mr-4 flex-shrink-0"></div>
-                          <span className="text-base">{feature}</span>
+                        <div key={feature} className="flex items-center text-wellness-deep">
+                          <div className="w-2 h-2 bg-wellness-accent rounded-full mr-4 flex-shrink-0"></div>
+                          <span className="text-base font-light">{feature}</span>
                         </div>
                       ))}
                     </div>
                     <Button 
+                      variant="premium"
                       asChild 
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group/btn"
+                      className="w-full py-4 px-6 rounded-2xl text-lg font-medium"
                     >
-                      <Link to={service.link} className="inline-flex items-center justify-center text-lg">
-                        Get Started
-                        <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                      <Link to={service.link} className="inline-flex items-center justify-center">
+                        Explore Service
+                        <ArrowRight className="ml-3 w-5 h-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
                       </Link>
                     </Button>
                   </CardContent>
@@ -242,34 +242,34 @@ const Services = () => {
         </section>
 
         {/* Process Section */}
-        <section className="py-20 bg-gray-50">
+        <section className="py-28 bg-wellness-muted">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Process</span>
+            <div className="text-center mb-20">
+              <h2 className="font-heading font-bold text-4xl sm:text-5xl mb-8 text-wellness-primary">
+                Our <span className="text-wellness-accent">Approach</span>
               </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                We follow a structured yet flexible approach to ensure every project delivers maximum impact.
+              <p className="text-xl text-wellness-deep max-w-4xl mx-auto leading-relaxed font-light">
+                A refined, intentional process that ensures every project delivers meaningful impact through conscious collaboration.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               {[
-                { step: "01", title: "Discovery", desc: "Understanding your vision, values, and goals" },
-                { step: "02", title: "Strategy", desc: "Developing a comprehensive plan for success" },
-                { step: "03", title: "Creation", desc: "Bringing your story to life with authentic content" },
-                { step: "04", title: "Impact", desc: "Measuring results and optimizing for growth" }
+                { step: "01", title: "Discovery", desc: "Deep understanding of your vision, values, and authentic purpose" },
+                { step: "02", title: "Strategy", desc: "Crafting a comprehensive roadmap for conscious growth" },
+                { step: "03", title: "Creation", desc: "Bringing your story to life through premium, authentic content" },
+                { step: "04", title: "Impact", desc: "Measuring meaningful results and optimizing for lasting change" }
               ].map((phase, index) => (
                 <div 
                   key={phase.step}
-                  className="text-center animate-fade-in-up"
+                  className="text-center animate-fade-in-up group"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white font-bold text-lg">{phase.step}</span>
+                  <div className="w-20 h-20 bg-wellness-gradient rounded-full flex items-center justify-center mx-auto mb-6 shadow-wellness group-hover:shadow-wellness-lg transition-all duration-500">
+                    <span className="text-white font-bold text-xl">{phase.step}</span>
                   </div>
-                  <h3 className="font-heading font-semibold text-xl mb-2">{phase.title}</h3>
-                  <p className="text-gray-600">{phase.desc}</p>
+                  <h3 className="font-heading font-semibold text-2xl mb-4 text-wellness-primary">{phase.title}</h3>
+                  <p className="text-wellness-deep leading-relaxed font-light">{phase.desc}</p>
                 </div>
               ))}
             </div>
@@ -277,16 +277,21 @@ const Services = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Ready to Create <span className="bg-rainbow-gradient bg-clip-text text-transparent">Positive Change</span>?
+        <section className="py-28 bg-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="font-heading font-bold text-4xl sm:text-5xl mb-8 text-wellness-primary leading-tight">
+              Ready to Create <span className="text-wellness-accent">Lasting Impact</span>?
             </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Let's work together to amplify your impact and create content that inspires meaningful change in your community.
+            <p className="text-xl text-wellness-deep mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+              Let's collaborate to amplify your authentic voice and create premium content that drives meaningful change in your community.
             </p>
-            <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
-              <Link to="/contact">Start Your Project</Link>
+            <Button 
+              variant="premium" 
+              asChild 
+              size="lg" 
+              className="px-12 py-4 text-xl rounded-2xl"
+            >
+              <Link to="/contact">Begin Your Journey</Link>
             </Button>
           </div>
         </section>

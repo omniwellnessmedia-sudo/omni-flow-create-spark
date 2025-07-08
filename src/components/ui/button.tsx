@@ -10,15 +10,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gray-800 text-white hover:bg-gray-900 shadow-md [&.bg-rainbow-gradient]:text-white [&.bg-rainbow-gradient]:font-bold [&.bg-rainbow-gradient]:text-shadow-strong [&.bg-rainbow-gradient:hover]:text-white",
+        default: "bg-wellness-accent text-white hover:bg-wellness-deep shadow-wellness transition-all duration-300 [&.bg-wellness-gradient]:text-white [&.bg-wellness-gradient]:font-semibold [&.bg-wellness-gradient]:text-shadow-strong",
         destructive:
-          "bg-red-500 text-white hover:bg-red-600 shadow-md",
+          "bg-red-500 text-white hover:bg-red-600 shadow-wellness",
         outline:
-          "border border-gray-300 bg-white/80 backdrop-blur-sm hover:bg-gray-50 hover:border-gray-400 text-gray-700 font-medium",
+          "border border-wellness-soft bg-white/90 backdrop-blur-sm hover:bg-wellness-glow hover:border-wellness-accent text-wellness-primary font-medium",
         secondary:
-          "bg-gray-100 text-gray-900 hover:bg-gray-200",
-        ghost: "hover:bg-gray-100 hover:text-gray-900",
-        link: "text-gray-700 underline-offset-4 hover:underline",
+          "bg-wellness-muted text-wellness-primary hover:bg-wellness-soft",
+        ghost: "hover:bg-wellness-glow hover:text-wellness-primary",
+        link: "text-wellness-accent underline-offset-4 hover:underline",
+        premium: "bg-wellness-gradient text-white hover:shadow-wellness-lg transform hover:-translate-y-0.5 transition-all duration-300"
       },
       size: {
         default: "h-10 px-4 py-2",
