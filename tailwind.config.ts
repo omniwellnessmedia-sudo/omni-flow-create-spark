@@ -64,8 +64,22 @@ export default {
 				}
 			},
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-				heading: ['Montserrat', 'sans-serif']
+				sans: [
+					'Inter',
+					'-apple-system',
+					'BlinkMacSystemFont',
+					'"Segoe UI"',
+					'Roboto',
+					'sans-serif'
+				],
+				heading: [
+					'Inter',
+					'-apple-system',
+					'BlinkMacSystemFont',
+					'"Segoe UI"',
+					'Roboto',
+					'sans-serif'
+				]
 			},
 			backgroundImage: {
 				'rainbow-gradient': 'linear-gradient(135deg, #FF0000 0%, #FFA500 16.66%, #FFFF00 33.33%, #008000 50%, #0000FF 66.66%, #4B0082 83.33%, #EE82EE 100%)',

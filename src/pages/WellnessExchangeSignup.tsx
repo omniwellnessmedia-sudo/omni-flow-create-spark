@@ -133,59 +133,59 @@ const WellnessExchangeSignup = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <Navigation />
       <main className="pt-16">
-        <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
+        <section className="py-20 bg-gradient-to-br from-background via-accent to-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h1 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Join the <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Exchange</span>
+            <div className="text-center mb-16">
+              <h1 className="font-heading font-semibold text-4xl sm:text-5xl mb-6 text-foreground tracking-tight">
+                Join the Wellness Exchange
               </h1>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Complete your profile to start connecting with our conscious wellness community.
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                Complete your profile to start connecting with our conscious wellness community
               </p>
             </div>
 
-            <Card className="max-w-2xl mx-auto">
-              <CardHeader className="text-center pb-6">
-                <CardTitle className="text-2xl">Choose Your Path</CardTitle>
-                <CardDescription>
-                  Select how you'd like to participate in the wellness exchange.
+            <Card className="max-w-2xl mx-auto border-0 shadow-xl bg-card/50 backdrop-blur-sm">
+              <CardHeader className="text-center pb-8">
+                <CardTitle className="text-3xl font-medium text-foreground tracking-tight">Choose Your Path</CardTitle>
+                <CardDescription className="text-lg text-muted-foreground mt-3">
+                  Select how you'd like to participate in the wellness exchange
                 </CardDescription>
               </CardHeader>
 
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                   <Card 
-                    className={`cursor-pointer border-2 transition-all ${
+                    className={`cursor-pointer border-2 transition-all duration-300 hover:shadow-lg ${
                       userType === 'provider' 
-                        ? 'border-omni-green bg-omni-green/5' 
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-primary bg-primary/5 shadow-md' 
+                        : 'border-border hover:border-primary/50 bg-card'
                     }`}
                     onClick={() => setUserType('provider')}
                   >
-                    <CardContent className="p-6 text-center">
-                      <User className="h-12 w-12 text-omni-green mx-auto mb-4" />
-                      <h3 className="font-semibold text-lg mb-2">Wellness Provider</h3>
-                      <p className="text-sm text-gray-600">
+                    <CardContent className="p-8 text-center">
+                      <User className="h-14 w-14 text-primary mx-auto mb-6" />
+                      <h3 className="font-medium text-xl mb-3 text-foreground">Wellness Provider</h3>
+                      <p className="text-muted-foreground leading-relaxed">
                         Offer your wellness services and grow your practice
                       </p>
                     </CardContent>
                   </Card>
 
                   <Card 
-                    className={`cursor-pointer border-2 transition-all ${
+                    className={`cursor-pointer border-2 transition-all duration-300 hover:shadow-lg ${
                       userType === 'consumer' 
-                        ? 'border-omni-blue bg-omni-blue/5' 
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-primary bg-primary/5 shadow-md' 
+                        : 'border-border hover:border-primary/50 bg-card'
                     }`}
                     onClick={() => setUserType('consumer')}
                   >
-                    <CardContent className="p-6 text-center">
-                      <Heart className="h-12 w-12 text-omni-blue mx-auto mb-4" />
-                      <h3 className="font-semibold text-lg mb-2">Wellness Seeker</h3>
-                      <p className="text-sm text-gray-600">
+                    <CardContent className="p-8 text-center">
+                      <Heart className="h-14 w-14 text-primary mx-auto mb-6" />
+                      <h3 className="font-medium text-xl mb-3 text-foreground">Wellness Seeker</h3>
+                      <p className="text-muted-foreground leading-relaxed">
                         Discover and book wellness services that nurture your growth
                       </p>
                     </CardContent>
@@ -330,7 +330,9 @@ const WellnessExchangeSignup = () => {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3"
+                    variant="premium"
+                    size="lg"
+                    className="w-full h-12 text-base"
                     disabled={loading}
                   >
                     {loading ? "Creating Profile..." : "Complete Registration"}
