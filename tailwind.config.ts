@@ -53,14 +53,14 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				wellness: {
-					'primary': 'hsl(var(--primary-wellness))',
-					'soft': 'hsl(var(--wellness-soft))',
-					'muted': 'hsl(var(--wellness-muted))',
-					'accent': 'hsl(var(--wellness-accent))',
-					'warm': 'hsl(var(--wellness-warm))',
-					'deep': 'hsl(var(--wellness-deep))',
-					'glow': 'hsl(var(--wellness-glow))'
+				omni: {
+					red: '#FF0000',
+					orange: '#FFA500', 
+					yellow: '#FFFF00',
+					green: '#008000',
+					blue: '#0000FF',
+					indigo: '#4B0082',
+					violet: '#EE82EE'
 				}
 			},
 			fontFamily: {
@@ -68,9 +68,8 @@ export default {
 				heading: ['Montserrat', 'sans-serif']
 			},
 			backgroundImage: {
-				'wellness-gradient': 'linear-gradient(135deg, hsl(var(--wellness-accent)) 0%, hsl(var(--wellness-deep)) 100%)',
-				'wellness-subtle': 'linear-gradient(135deg, hsl(var(--wellness-glow)) 0%, hsl(var(--wellness-muted)) 100%)',
-				'wellness-warm': 'linear-gradient(135deg, hsl(var(--wellness-warm)) 0%, hsl(var(--wellness-glow)) 100%)'
+				'rainbow-gradient': 'linear-gradient(135deg, #FF0000 0%, #FFA500 16.66%, #FFFF00 33.33%, #008000 50%, #0000FF 66.66%, #4B0082 83.33%, #EE82EE 100%)',
+				'rainbow-subtle': 'linear-gradient(135deg, rgba(255,0,0,0.1) 0%, rgba(255,165,0,0.1) 16.66%, rgba(255,255,0,0.1) 33.33%, rgba(0,128,0,0.1) 50%, rgba(0,0,255,0.1) 66.66%, rgba(75,0,130,0.1) 83.33%, rgba(238,130,238,0.1) 100%)'
 			},
 			animation: {
 				'rainbow': 'rainbow 8s ease-in-out infinite',
