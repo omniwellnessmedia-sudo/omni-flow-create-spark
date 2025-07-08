@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
@@ -30,11 +31,12 @@ const ProviderDashboard = () => {
   const { user } = useAuth();
   const [wellCoinBalance, setWellCoinBalance] = useState(0);
   const [zarEarnings] = useState(15640);
-  const [activeListings] = useState(8);
+  const [activeListings, setActiveListings] = useState(0);
   const [totalBookings] = useState(156);
   const [rating] = useState(4.8);
   const [profileCompletion] = useState(85);
   const [providerProfile, setProviderProfile] = useState<any>(null);
+  const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -56,6 +58,16 @@ const ProviderDashboard = () => {
 
       setProviderProfile(profile);
       setWellCoinBalance(profile?.wellcoin_balance || 0);
+
+      // Fetch provider's services
+      const { data: servicesData } = await supabase
+        .from('services')
+        .select('*')
+        .eq('provider_id', user.id)
+        .order('created_at', { ascending: false });
+
+      setServices(servicesData || []);
+      setActiveListings(servicesData?.filter(s => s.active).length || 0);
     } catch (error) {
       console.error('Error fetching provider data:', error);
     } finally {
@@ -98,38 +110,42 @@ const ProviderDashboard = () => {
     }
   ];
 
-  const activeServices = [
-    {
-      id: 1,
-      title: "Holistic Nutrition Consultation",
-      category: "Nutrition",
-      price: { zar: 450, wellcoins: 380 },
-      views: 247,
-      bookings: 23,
-      rating: 4.9,
-      status: "active"
-    },
-    {
-      id: 2,
-      title: "Vinyasa Flow Yoga Classes",
-      category: "Yoga",
-      price: { zar: 180, wellcoins: 150 },
-      views: 189,
-      bookings: 45,
-      rating: 4.8,
-      status: "active"
-    },
-    {
-      id: 3,
-      title: "Mindfulness Workshop",
-      category: "Wellness",
-      price: { zar: 320, wellcoins: 280 },
-      views: 134,
-      bookings: 12,
-      rating: 5.0,
-      status: "draft"
+  // Function to toggle service active status
+  const toggleServiceStatus = async (serviceId: string, currentStatus: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('services')
+        .update({ active: !currentStatus })
+        .eq('id', serviceId);
+
+      if (error) throw error;
+
+      // Refresh services data
+      fetchProviderData();
+      toast.success(`Service ${!currentStatus ? 'activated' : 'deactivated'} successfully`);
+    } catch (error: any) {
+      toast.error(error.message);
     }
-  ];
+  };
+
+  // Function to delete service
+  const deleteService = async (serviceId: string) => {
+    if (!confirm('Are you sure you want to delete this service?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('services')
+        .delete()
+        .eq('id', serviceId);
+
+      if (error) throw error;
+
+      fetchProviderData();
+      toast.success('Service deleted successfully');
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   const upcomingBookings = [
     {
@@ -267,16 +283,16 @@ const ProviderDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
-                  <Calendar className="h-4 w-4 text-omni-blue" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-omni-blue">{totalBookings}</div>
-                  <p className="text-xs text-gray-600">All time</p>
-                </CardContent>
-              </Card>
+               <Card className="hover:shadow-lg transition-shadow">
+                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                   <CardTitle className="text-sm font-medium">Active Services</CardTitle>
+                   <Calendar className="h-4 w-4 text-omni-blue" />
+                 </CardHeader>
+                 <CardContent>
+                   <div className="text-2xl font-bold text-omni-blue">{activeListings}</div>
+                   <p className="text-xs text-gray-600">Live on marketplace</p>
+                 </CardContent>
+               </Card>
 
               <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -405,60 +421,80 @@ const ProviderDashboard = () => {
 
               <TabsContent value="services" className="mt-6">
                 <div className="space-y-4">
-                  {activeServices.map((service) => (
-                    <Card key={service.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <CardTitle className="text-lg">{service.title}</CardTitle>
-                            <div className="flex items-center gap-4 mt-2">
-                              <Badge variant="secondary">{service.category}</Badge>
-                              <Badge className={service.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
-                                {service.status}
-                              </Badge>
+                  {services.length > 0 ? (
+                    services.map((service) => (
+                      <Card key={service.id} className="hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <CardTitle className="text-lg">{service.title}</CardTitle>
+                              <div className="flex items-center gap-4 mt-2">
+                                <Badge variant="secondary">{service.category}</Badge>
+                                <Badge className={service.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
+                                  {service.active ? 'active' : 'inactive'}
+                                </Badge>
+                                {service.is_online && (
+                                  <Badge variant="outline">Online</Badge>
+                                )}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className="font-medium">
+                                {service.price_zar ? `R${service.price_zar}` : ''} 
+                                {service.price_zar && service.price_wellcoins ? ' / ' : ''}
+                                {service.price_wellcoins ? `${service.price_wellcoins} WC` : ''}
+                              </p>
+                              <p className="text-sm text-gray-600">{service.location}</p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-medium">R{service.price.zar} / {service.price.wellcoins} WC</p>
-                            <div className="flex items-center mt-1">
-                              <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                              <span className="text-sm ml-1">{service.rating}</span>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-gray-600 mb-4">{service.description}</p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                variant={service.active ? "outline" : "default"}
+                                onClick={() => toggleServiceStatus(service.id, service.active)}
+                              >
+                                {service.active ? 'Deactivate' : 'Activate'}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => window.location.href = `/wellness-exchange/edit-service/${service.id}`}
+                              >
+                                <Settings className="h-4 w-4 mr-2" />
+                                Edit
+                              </Button>
                             </div>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => deleteService(service.id)}
+                            >
+                              Delete
+                            </Button>
                           </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-3 gap-4 mb-4">
-                          <div className="text-center">
-                            <div className="flex items-center justify-center mb-1">
-                              <Eye className="h-4 w-4 text-gray-500 mr-1" />
-                            </div>
-                            <p className="text-lg font-semibold">{service.views}</p>
-                            <p className="text-xs text-gray-600">Views</p>
-                          </div>
-                          <div className="text-center">
-                            <div className="flex items-center justify-center mb-1">
-                              <Calendar className="h-4 w-4 text-gray-500 mr-1" />
-                            </div>
-                            <p className="text-lg font-semibold">{service.bookings}</p>
-                            <p className="text-xs text-gray-600">Bookings</p>
-                          </div>
-                          <div className="text-center">
-                            <div className="flex items-center justify-center mb-1">
-                              <TrendingUp className="h-4 w-4 text-gray-500 mr-1" />
-                            </div>
-                            <p className="text-lg font-semibold">{((service.bookings / service.views) * 100).toFixed(1)}%</p>
-                            <p className="text-xs text-gray-600">Conversion</p>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline">Edit</Button>
-                          <Button size="sm" variant="outline">Duplicate</Button>
-                          <Button size="sm" variant="outline">Analytics</Button>
-                        </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <Card>
+                      <CardContent className="text-center py-12">
+                        <Plus className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                        <h3 className="font-medium text-lg mb-2">No services yet</h3>
+                        <p className="text-gray-600 mb-6">Start by creating your first wellness service</p>
+                        <Button 
+                          className="bg-rainbow-gradient hover:opacity-90 text-white"
+                          onClick={() => window.location.href = '/wellness-exchange/add-service'}
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Create Your First Service
+                        </Button>
                       </CardContent>
                     </Card>
-                  ))}
+                  )}
                 </div>
               </TabsContent>
 
