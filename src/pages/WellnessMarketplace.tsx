@@ -350,19 +350,35 @@ const WellnessMarketplace = () => {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-            <Button variant="outline" className="h-16 flex-col">
+            <Button 
+              variant="outline" 
+              className="h-16 flex-col"
+              onClick={() => window.location.href = '/wellness-exchange/add-service'}
+            >
               <Plus className="h-5 w-5 mb-1" />
               <span className="text-xs">Add Service</span>
             </Button>
-            <Button variant="outline" className="h-16 flex-col">
+            <Button 
+              variant="outline" 
+              className="h-16 flex-col"
+              onClick={() => window.location.href = '/wellness-exchange/add-want'}
+            >
               <Heart className="h-5 w-5 mb-1" />
               <span className="text-xs">Post Want</span>
             </Button>
-            <Button variant="outline" className="h-16 flex-col">
+            <Button 
+              variant="outline" 
+              className="h-16 flex-col"
+              onClick={() => window.location.href = '/wellness-exchange/search'}
+            >
               <Search className="h-5 w-5 mb-1" />
-              <span className="text-xs">Find Users</span>
+              <span className="text-xs">Find Services</span>
             </Button>
-            <Button variant="outline" className="h-16 flex-col">
+            <Button 
+              variant="outline" 
+              className="h-16 flex-col"
+              onClick={() => window.location.href = '/wellness-exchange/transactions'}
+            >
               <Coins className="h-5 w-5 mb-1" />
               <span className="text-xs">My Transactions</span>
             </Button>

@@ -207,7 +207,10 @@ const ProviderDashboard = () => {
               </div>
               
               <div className="flex gap-3">
-                <Button className="bg-rainbow-gradient hover:opacity-90 text-white">
+                <Button 
+                  className="bg-rainbow-gradient hover:opacity-90 text-white"
+                  onClick={() => window.location.href = '/wellness-exchange/add-service'}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   New Service
                 </Button>
