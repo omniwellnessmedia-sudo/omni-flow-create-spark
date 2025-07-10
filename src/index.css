@@ -324,3 +324,47 @@
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-weight: 700;
 }
+
+/* Tour highlight effect */
+.tour-highlight {
+  @apply ring-4 ring-wellhub-accent ring-opacity-75 relative z-50;
+  animation: tour-pulse 2s infinite;
+}
+
+@keyframes tour-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 hsl(var(--wellhub-accent) / 0.7);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px hsl(var(--wellhub-accent) / 0);
+  }
+}
+
+/* Enhanced button contrast */
+.bg-wellhub-gradient {
+  background: linear-gradient(135deg, hsl(var(--wellhub-primary)), hsl(var(--wellhub-accent)));
+}
+
+.bg-wellhub-gradient,
+.bg-rainbow-gradient {
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Improved glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Wellhub-inspired spacing */
+.section-padding {
+  @apply py-16 lg:py-24;
+}
+
+.container-padding {
+  @apply px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto;
+}

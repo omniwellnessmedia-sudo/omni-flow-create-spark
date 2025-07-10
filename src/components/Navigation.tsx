@@ -79,22 +79,22 @@ const Navigation = () => {
   return (
     <nav className="fixed top-0 w-full glass shadow-lg z-50 border-b border-white/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-4 group">
+          <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
               <img 
                 src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
                 alt="Omni Wellness Media" 
-                className="h-12 w-12 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                className="h-10 w-10 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
               />
               <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-lg"></div>
             </div>
             <div>
-              <span className="font-heading font-bold text-2xl text-rainbow-enhanced">
+              <span className="font-heading font-bold text-xl text-rainbow-enhanced">
                 Omni Wellness
               </span>
-              <div className="text-sm text-gray-600 -mt-1 font-medium">Conscious Media</div>
+              <div className="text-xs text-gray-600 -mt-1 font-medium">Conscious Media</div>
             </div>
           </Link>
 
@@ -109,9 +109,9 @@ const Navigation = () => {
                     <NavigationMenuItem key={item.name}>
                       <Link
                         to={item.path}
-                        className={`flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105 ${
+                        className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           isActive(item.path)
-                            ? "bg-wellhub-gradient text-white shadow-lg"
+                            ? "bg-wellhub-gradient text-white shadow-md"
                             : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         }`}
                       >

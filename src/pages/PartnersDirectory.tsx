@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Hero from "@/components/ui/hero";
+import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -82,20 +84,35 @@ const PartnersDirectory = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-purple/5">
+    <div className="min-h-screen">
       <Navigation />
+      <BreadcrumbNav />
       
-      <main className="pt-20 pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="font-heading font-bold text-4xl md:text-5xl mb-4">
-              Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Partners</span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover verified wellness practitioners and services in our community
-            </p>
-          </div>
+      <Hero
+        title={
+          <>
+            Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Partners</span>
+          </>
+        }
+        description="Discover verified wellness practitioners and services in our community"
+        variant="minimal"
+        height="small"
+        actions={[
+          {
+            label: "Become a Partner",
+            href: "/wellness-exchange/provider-signup",
+            variant: "wellness"
+          },
+          {
+            label: "Browse Services",
+            href: "/wellness-exchange/marketplace",
+            variant: "outline"
+          }
+        ]}
+      />
+      
+      <main className="section-padding">
+        <div className="container-padding">
 
           {/* Partners Grid */}
           {partners.length > 0 ? (

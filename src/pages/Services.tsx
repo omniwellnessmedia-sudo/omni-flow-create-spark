@@ -1,6 +1,8 @@
 
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Hero from "@/components/ui/hero";
+import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -125,19 +127,32 @@ const Services = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
-      <main className="pt-16">
-        {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-              Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Services</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
-              Comprehensive solutions that align with your values and amplify your impact. 
-              From strategy to execution, we're your partners in conscious growth.
-            </p>
-          </div>
-        </section>
+      <BreadcrumbNav />
+      
+      <Hero
+        title={
+          <>
+            Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Services</span>
+          </>
+        }
+        description="Comprehensive solutions that align with your values and amplify your impact. From strategy to execution, we're your partners in conscious growth."
+        variant="minimal"
+        height="small"
+        actions={[
+          {
+            label: "Get a Quote",
+            href: "/contact",
+            variant: "wellness"
+          },
+          {
+            label: "View Portfolio",
+            href: "/portfolio",
+            variant: "outline"
+          }
+        ]}
+      />
+      
+      <main>
 
         {/* Core Services Grid */}
         <section className="py-20 bg-white">

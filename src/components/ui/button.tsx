@@ -17,9 +17,9 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         premium: "bg-wellhub-gradient text-white hover:scale-105 shadow-xl hover:shadow-2xl",
-        wellness: "bg-rainbow-enhanced text-white hover:scale-105 shadow-xl hover:shadow-2xl relative before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
-        solid: "bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl hover:scale-105",
-        soft: "bg-gray-100 text-gray-900 hover:bg-gray-200 shadow-md hover:shadow-lg border border-gray-200",
+        wellness: "bg-wellhub-gradient hover:bg-wellhub-gradient/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 font-semibold",
+        solid: "bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-lg font-semibold",
+        soft: "bg-white/90 text-gray-800 border border-gray-200 hover:bg-white hover:shadow-md backdrop-blur-sm font-medium hover:border-gray-300",
       },
       size: {
         default: "h-10 px-4 py-2",

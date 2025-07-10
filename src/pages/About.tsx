@@ -1,6 +1,8 @@
 
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Hero from "@/components/ui/hero";
+import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 
 const About = () => {
   const team = [
@@ -39,28 +41,34 @@ const About = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
-      <main className="pt-16">
-        {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-              About <span className="bg-rainbow-gradient bg-clip-text text-transparent">Omni Wellness Media</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-12 max-w-4xl mx-auto">
-              We are messengers to humanity, creating authentic content that bridges communities 
-              and inspires positive change from South Africa to the world.
-            </p>
-            
-            {/* Team Group Photo */}
-            <div className="max-w-4xl mx-auto mb-16">
-              <img 
-                src="/lovable-uploads/362cb38a-2c1c-4857-a238-75f8e507408e.png"
-                alt="Omni Wellness Media Team"
-                className="w-full h-96 object-cover rounded-3xl shadow-2xl"
-              />
-            </div>
-          </div>
-        </section>
+      <BreadcrumbNav />
+      
+      <Hero
+        title={
+          <>
+            About <span className="bg-rainbow-gradient bg-clip-text text-transparent">Omni Wellness Media</span>
+          </>
+        }
+        description="We are messengers to humanity, creating authentic content that bridges communities and inspires positive change from South Africa to the world."
+        image="/lovable-uploads/362cb38a-2c1c-4857-a238-75f8e507408e.png"
+        imageAlt="Omni Wellness Media Team"
+        variant="split"
+        height="medium"
+        actions={[
+          {
+            label: "Our Services",
+            href: "/services",
+            variant: "wellness"
+          },
+          {
+            label: "Contact Us",
+            href: "/contact",
+            variant: "outline"
+          }
+        ]}
+      />
+      
+      <main>
 
         {/* Our Story */}
         <section className="py-20 bg-white">
