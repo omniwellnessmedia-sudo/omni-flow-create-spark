@@ -65,7 +65,7 @@ const BreadcrumbNav = ({ items, className }: BreadcrumbNavProps) => {
               {item.href ? (
                 <Link 
                   to={item.href}
-                  className="flex items-center text-gray-600 hover:text-wellhub-accent transition-colors duration-200"
+                  className="flex items-center text-gray-600 hover:text-omni-orange transition-colors duration-200"
                 >
                   {index === 0 && <Home className="w-4 h-4 mr-1" />}
                   {item.label}

@@ -93,7 +93,7 @@ const AppTour = ({
           <DialogHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-wellhub-accent" />
+                <Target className="w-5 h-5 text-omni-orange" />
                 <DialogTitle className="text-lg font-semibold">
                   {currentStepData.title}
                 </DialogTitle>
@@ -113,7 +113,7 @@ const AppTour = ({
             {/* Progress bar */}
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
-                className="bg-wellhub-gradient h-2 rounded-full transition-all duration-300"
+                className="bg-omni-orange h-2 rounded-full transition-all duration-300"
                 style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
               />
             </div>
@@ -155,7 +155,7 @@ const AppTour = ({
               <Button
                 onClick={nextStep}
                 size="sm"
-                className="bg-wellhub-gradient hover:opacity-90 text-white flex items-center gap-1"
+                className="bg-omni-orange hover:bg-omni-orange/90 text-white flex items-center gap-1"
               >
                 {currentStep === steps.length - 1 ? 'Complete' : 'Next'}
                 <ArrowRight className="w-4 h-4" />
@@ -175,7 +175,7 @@ export const TourTrigger = ({ onClick }: { onClick: () => void }) => {
       onClick={onClick}
       variant="outline"
       size="sm"
-      className="fixed bottom-6 right-6 z-40 shadow-lg bg-white border-wellhub-accent text-wellhub-accent hover:bg-wellhub-accent hover:text-white"
+      className="fixed bottom-6 right-6 z-40 shadow-lg bg-white border-omni-orange text-omni-orange hover:bg-omni-orange hover:text-white"
     >
       <Target className="w-4 h-4 mr-2" />
       Take Tour

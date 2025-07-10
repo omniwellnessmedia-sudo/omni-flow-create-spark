@@ -327,18 +327,18 @@
 
 /* Tour highlight effect */
 .tour-highlight {
-  @apply ring-4 ring-wellhub-accent ring-opacity-75 relative z-50;
+  @apply ring-4 ring-omni-orange ring-opacity-75 relative z-50;
   animation: tour-pulse 2s infinite;
 }
 
 @keyframes tour-pulse {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 hsl(var(--wellhub-accent) / 0.7);
+    box-shadow: 0 0 0 0 hsl(var(--omni-orange) / 0.7);
   }
   50% {
     transform: scale(1.02);
-    box-shadow: 0 0 0 10px hsl(var(--wellhub-accent) / 0);
+    box-shadow: 0 0 0 10px hsl(var(--omni-orange) / 0);
   }
 }
 
