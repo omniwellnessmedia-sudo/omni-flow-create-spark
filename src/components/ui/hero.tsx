@@ -36,10 +36,10 @@ const Hero = ({
   children
 }: HeroProps) => {
   const heightClasses = {
-    small: 'min-h-[50vh]',
-    medium: 'min-h-[70vh]',
-    large: 'min-h-[80vh]',
-    full: 'min-h-screen'
+    small: 'min-h-[40vh] py-16',
+    medium: 'min-h-[60vh] py-20',
+    large: 'min-h-[70vh] py-24',
+    full: 'min-h-screen py-32'
   };
 
   const variantClasses = {
@@ -65,8 +65,8 @@ const Hero = ({
         )}
         
         <h1 className={cn(
-          "font-heading font-bold leading-tight mb-6",
-          variant === 'minimal' ? 'text-3xl sm:text-4xl lg:text-5xl' : 'text-4xl sm:text-5xl lg:text-6xl xl:text-7xl'
+          "font-heading font-bold leading-tight mb-6 max-w-4xl",
+          variant === 'minimal' ? 'text-2xl sm:text-3xl lg:text-4xl mx-auto' : 'text-3xl sm:text-4xl lg:text-5xl xl:text-6xl mx-auto'
         )}>
           {title}
         </h1>

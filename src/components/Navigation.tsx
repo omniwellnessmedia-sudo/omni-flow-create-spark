@@ -101,22 +101,22 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1">
             <NavigationMenu>
-              <NavigationMenuList>
+              <NavigationMenuList className="flex-wrap max-w-none">
                 {/* Main Navigation */}
-                {mainNavItems.map((item) => {
+                {mainNavItems.slice(0, 4).map((item) => {
                   const Icon = item.icon;
                   return (
                     <NavigationMenuItem key={item.name}>
                       <Link
                         to={item.path}
-                        className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        className={`flex items-center space-x-1 px-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           isActive(item.path)
                             ? "bg-wellhub-gradient text-white shadow-md"
                             : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         }`}
                       >
                         <Icon className="h-4 w-4" />
-                        <span>{item.name}</span>
+                        <span className="whitespace-nowrap">{item.name}</span>
                       </Link>
                     </NavigationMenuItem>
                   );
@@ -131,7 +131,7 @@ const Navigation = () => {
                     Platforms
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="grid gap-3 p-6 w-[450px]">
+                    <div className="grid gap-3 p-4 w-[380px]">
                       <div className="grid gap-1">
                         <h4 className="font-semibold text-lg text-gray-900">Wellness Platforms</h4>
                         <p className="text-sm text-gray-600 leading-relaxed">
@@ -195,14 +195,14 @@ const Navigation = () => {
                     <NavigationMenuItem key={item.name}>
                       <Link
                         to={item.path}
-                        className={`flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50 ${
+                        className={`flex items-center space-x-1 px-2 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50 ${
                           isActive(item.path)
                             ? "bg-rainbow-subtle text-omni-indigo font-semibold"
                             : "text-gray-700 hover:text-omni-indigo"
                         }`}
                       >
                         <Icon className="h-4 w-4" />
-                        <span>{item.name}</span>
+                        <span className="whitespace-nowrap">{item.name}</span>
                       </Link>
                     </NavigationMenuItem>
                   );
