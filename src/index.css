@@ -53,9 +53,9 @@
     --gradient-primary: linear-gradient(135deg, hsl(180 25% 15%) 0%, hsl(180 30% 25%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(35 15% 97%) 0%, hsl(35 20% 94%) 100%);
     --gradient-subtle: linear-gradient(180deg, hsl(35 15% 98%) 0%, hsl(35 15% 95%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(var(--omni-violet)) 0%, hsl(var(--omni-indigo)) 50%, hsl(var(--omni-blue)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(280 50% 55%) 0%, hsl(240 45% 35%) 50%, hsl(200 50% 45%) 100%);
     --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
-    --gradient-cta: linear-gradient(135deg, hsl(var(--omni-orange)) 0%, hsl(var(--omni-red)) 100%);
+    --gradient-cta: linear-gradient(135deg, hsl(25 85% 55%) 0%, hsl(0 70% 50%) 100%);
 
     /* Omni brand colors - updated for harmony */
     --omni-red: 0 70% 50%;
