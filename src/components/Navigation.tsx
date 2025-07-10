@@ -77,23 +77,24 @@ const Navigation = () => {
   const isWellnessActive = () => location.pathname.startsWith('/wellness-exchange');
 
   return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-sm z-50 border-b border-gray-100">
+    <nav className="fixed top-0 w-full glass shadow-lg z-50 border-b border-white/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          <Link to="/" className="flex items-center space-x-4 group">
             <div className="relative">
               <img 
                 src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
                 alt="Omni Wellness Media" 
-                className="h-10 w-10 transition-transform group-hover:scale-105"
+                className="h-12 w-12 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
               />
+              <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-lg"></div>
             </div>
             <div>
-              <span className="font-heading font-bold text-xl bg-rainbow-gradient bg-clip-text text-transparent">
-                Omni Wellness Media
+              <span className="font-heading font-bold text-2xl text-rainbow-enhanced">
+                Omni Wellness
               </span>
-              <div className="text-xs text-gray-500 -mt-1">Conscious Media & Wellness</div>
+              <div className="text-sm text-gray-600 -mt-1 font-medium">Conscious Media</div>
             </div>
           </Link>
 
@@ -108,10 +109,10 @@ const Navigation = () => {
                     <NavigationMenuItem key={item.name}>
                       <Link
                         to={item.path}
-                        className={`flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-50 ${
+                        className={`flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105 ${
                           isActive(item.path)
-                            ? "bg-rainbow-subtle text-omni-indigo font-semibold"
-                            : "text-gray-700 hover:text-omni-indigo"
+                            ? "bg-wellhub-gradient text-white shadow-lg"
+                            : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                         }`}
                       >
                         <Icon className="h-4 w-4" />
@@ -245,7 +246,7 @@ const Navigation = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild size="sm" className="ml-4 bg-rainbow-gradient hover:opacity-90 text-white font-medium">
+              <Button asChild variant="wellness" size="lg" className="ml-4">
                 <Link to="/auth">Get Started</Link>
               </Button>
             )}

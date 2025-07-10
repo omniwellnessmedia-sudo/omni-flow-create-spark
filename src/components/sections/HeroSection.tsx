@@ -4,48 +4,57 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-white">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-wellhub-light">
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-rainbow-gradient rounded-full blur-xl animate-pulse-slow"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-rainbow-gradient rounded-full blur-xl animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-rainbow-gradient rounded-full blur-2xl animate-pulse-slow" style={{ animationDelay: '4s' }}></div>
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-32 h-32 bg-wellhub-gradient rounded-full blur-xl animate-float opacity-30"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-rainbow-enhanced rounded-full blur-xl animate-float opacity-20" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-full blur-3xl animate-float opacity-10" style={{ animationDelay: '4s' }}></div>
+        
+        {/* Vector-like geometric shapes */}
+        <div className="absolute top-32 right-20 w-16 h-16 border-4 border-purple-300 rotate-45 animate-pulse-slow opacity-40"></div>
+        <div className="absolute bottom-32 left-20 w-20 h-20 border-4 border-pink-300 rounded-full animate-pulse-slow opacity-40" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/3 right-1/3 w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg rotate-12 animate-float opacity-30" style={{ animationDelay: '3s' }}></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="animate-fade-in-up">
-          {/* Logo - Made Much Larger */}
-          <div className="flex justify-center mb-12">
-            <img 
-              src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
-              alt="Omni Wellness Media" 
-              className="h-32 w-32 sm:h-40 sm:w-40 lg:h-48 lg:w-48 animate-pulse-slow"
-            />
+          {/* Logo - Made Much Larger with cool effect */}
+          <div className="flex justify-center mb-16">
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+                alt="Omni Wellness Media" 
+                className="h-40 w-40 sm:h-48 sm:w-48 lg:h-56 lg:w-56 animate-float relative z-10"
+              />
+              <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-20 animate-pulse-slow blur-2xl"></div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse-slow rounded-full"></div>
+            </div>
           </div>
 
           {/* Main Heading */}
-          <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-6">
-            <span className="bg-rainbow-gradient bg-clip-text text-transparent">
+          <h1 className="font-heading font-bold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl mb-8 leading-tight">
+            <span className="text-rainbow-enhanced animate-slide-in-left">
               Conscious Content
             </span>
             <br />
-            <span className="text-gray-800">
+            <span className="text-gray-800 animate-slide-in-right">
               for Positive Change
             </span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl sm:text-2xl lg:text-3xl text-gray-700 mb-12 max-w-5xl mx-auto leading-relaxed font-medium">
             Empowering communities through holistic wellness, authentic storytelling, 
-            and conscious business development. From South Africa to the world.
+            and conscious business development. <span className="text-wellhub-gradient font-semibold">From South Africa to the world.</span>
           </p>
 
           {/* Content Pillars */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <div className="flex flex-wrap justify-center gap-6 mb-16">
             {['Inspiration', 'Education', 'Empowerment', 'Wellness'].map((pillar, index) => (
               <span 
                 key={pillar}
-                className="px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 border border-gray-200 shadow-sm animate-fade-in"
+                className="px-6 py-3 glass rounded-2xl text-lg font-semibold text-gray-800 shadow-lg hover-lift cursor-default transform hover:scale-110 transition-all duration-300"
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 {pillar}
@@ -53,20 +62,21 @@ const HeroSection = () => {
             ))}
           </div>
 
-          {/* CTA Buttons - Softer styling */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          {/* CTA Buttons - Wellhub inspired */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Button 
               asChild 
+              variant="wellness"
               size="lg" 
-              className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white font-medium px-8 py-3 text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 border-0"
+              className="px-12 py-4 text-xl"
             >
-              <Link to="/services">Our Services</Link>
+              <Link to="/services">Explore Our Services</Link>
             </Button>
             <Button 
               asChild 
-              variant="outline" 
+              variant="soft"
               size="lg" 
-              className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 font-medium px-8 py-3 text-lg rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 bg-white/80 backdrop-blur-sm"
+              className="px-12 py-4 text-xl"
             >
               <Link to="/ai-tools">Try Our AI Tools</Link>
             </Button>

@@ -201,6 +201,116 @@
   animation: pulse-slow 3s ease-in-out infinite;
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.8s ease-out;
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.8s ease-out;
+}
+
+/* Gradient Text & Backgrounds - Wellhub inspired */
+.bg-wellhub-gradient {
+  background: linear-gradient(135deg, #e94d6b 0%, #d63384 50%, #7c3aed 100%);
+}
+
+.bg-wellhub-light {
+  background: linear-gradient(135deg, #fef7ff 0%, #f8fafc 100%);
+}
+
+.text-wellhub-gradient {
+  background: linear-gradient(135deg, #e94d6b 0%, #d63384 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced Rainbow Gradient */
+.bg-rainbow-enhanced {
+  background: linear-gradient(135deg, 
+    hsl(var(--omni-red)) 0%, 
+    hsl(var(--omni-orange)) 16.66%, 
+    hsl(var(--omni-yellow)) 33.33%, 
+    hsl(var(--omni-green)) 50%, 
+    hsl(var(--omni-blue)) 66.66%, 
+    hsl(var(--omni-indigo)) 83.33%, 
+    hsl(var(--omni-violet)) 100%
+  );
+}
+
+.text-rainbow-enhanced {
+  background: linear-gradient(135deg, 
+    hsl(var(--omni-red)) 0%, 
+    hsl(var(--omni-orange)) 16.66%, 
+    hsl(var(--omni-yellow)) 33.33%, 
+    hsl(var(--omni-green)) 50%, 
+    hsl(var(--omni-blue)) 66.66%, 
+    hsl(var(--omni-indigo)) 83.33%, 
+    hsl(var(--omni-violet)) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Glass Morphism */
+.glass {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 /* Line clamp utilities */
 .line-clamp-2 {
   display: -webkit-box;
