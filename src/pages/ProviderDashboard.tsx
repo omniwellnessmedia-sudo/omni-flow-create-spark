@@ -19,13 +19,19 @@ import {
   Star, 
   Plus, 
   Eye, 
-  MessageCircle, 
+  MessageCircle,
+  MessageSquare,
   Settings,
   Bot,
   DollarSign,
   Heart,
-  Award
+  Award,
+  Globe,
+  Image as ImageIcon,
+  FileText,
+  Upload
 } from "lucide-react";
+import WebsiteBuilder from "@/components/WebsiteBuilder";
 
 const ProviderDashboard = () => {
   const { user } = useAuth();
@@ -346,9 +352,12 @@ const ProviderDashboard = () => {
             </Card>
 
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className="grid w-full grid-cols-8 overflow-x-auto">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="services">Services</TabsTrigger>
+                <TabsTrigger value="media">Media</TabsTrigger>
+                <TabsTrigger value="website">Website</TabsTrigger>
+                <TabsTrigger value="testimonials">Reviews</TabsTrigger>
                 <TabsTrigger value="bookings">Bookings</TabsTrigger>
                 <TabsTrigger value="transactions">Transactions</TabsTrigger>
                 <TabsTrigger value="insights">AI Insights</TabsTrigger>
@@ -598,6 +607,103 @@ const ProviderDashboard = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="media" className="mt-6">
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <ImageIcon className="w-5 h-5" />
+                        Media Library
+                      </CardTitle>
+                      <CardDescription>
+                        Upload and manage images, videos, and audio content for your profile
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
+                        <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-semibold mb-2">Upload Your Media</h3>
+                        <p className="text-gray-600 mb-4">
+                          Share videos of your sessions, showcase your workspace, or upload testimonial clips
+                        </p>
+                        <div className="space-y-3">
+                          <Button className="bg-omni-orange hover:bg-omni-orange/90 text-white">
+                            <Upload className="w-4 h-4 mr-2" />
+                            Upload Video
+                          </Button>
+                          <div className="flex gap-2 justify-center">
+                            <Button variant="outline" size="sm">
+                              <ImageIcon className="w-4 h-4 mr-2" />
+                              Upload Images
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              <FileText className="w-4 h-4 mr-2" />
+                              Audio Files
+                            </Button>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-4">
+                          Supported formats: MP4, JPG, PNG, MP3. Max file size: 50MB
+                        </p>
+                      </div>
+                      
+                      {/* Sample media items */}
+                      <div className="mt-8">
+                        <h4 className="font-semibold mb-4">Your Media</h4>
+                        <div className="text-center py-8 text-gray-500">
+                          <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                          <p className="text-sm">No media uploaded yet</p>
+                          <p className="text-xs">Upload your first video or image to get started</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="website" className="mt-6">
+                <WebsiteBuilder />
+              </TabsContent>
+
+              <TabsContent value="testimonials" className="mt-6">
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <MessageSquare className="w-5 h-5" />
+                        Client Testimonials
+                      </CardTitle>
+                      <CardDescription>
+                        Collect and manage testimonials from your clients
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h3 className="font-semibold">Request Testimonials</h3>
+                            <p className="text-sm text-gray-600">Send requests to clients who have completed sessions</p>
+                          </div>
+                          <Button>
+                            <MessageSquare className="w-4 h-4 mr-2" />
+                            Send Request
+                          </Button>
+                        </div>
+                        
+                        <div className="border-t pt-4">
+                          <h4 className="font-semibold mb-4">Recent Testimonials</h4>
+                          <div className="text-center py-8 text-gray-500">
+                            <Star className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                            <p className="text-sm">No testimonials yet</p>
+                            <p className="text-xs">Client testimonials will appear here once you start receiving them</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </TabsContent>
 
               <TabsContent value="insights" className="mt-6">

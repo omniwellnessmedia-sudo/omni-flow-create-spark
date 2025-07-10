@@ -17,7 +17,14 @@ import {
   Calendar,
   DollarSign,
   Coins,
-  ArrowLeft
+  ArrowLeft,
+  Play,
+  Image as ImageIcon,
+  FileText,
+  MessageSquare,
+  Heart,
+  Eye,
+  ExternalLink
 } from "lucide-react";
 
 interface PartnerProfile {
@@ -49,6 +56,42 @@ interface PartnerProfile {
     is_online: boolean | null;
     location: string | null;
   }>;
+  media?: Array<{
+    id: string;
+    title: string;
+    description: string | null;
+    media_type: string;
+    media_url: string;
+    thumbnail_url: string | null;
+    featured: boolean;
+    view_count: number;
+    created_at: string;
+  }>;
+  testimonials?: Array<{
+    id: string;
+    client_name: string;
+    client_image_url: string | null;
+    testimonial_text: string;
+    rating: number;
+    service_type: string | null;
+    featured: boolean;
+    created_at: string;
+  }>;
+  posts?: Array<{
+    id: string;
+    title: string;
+    excerpt: string | null;
+    featured_image_url: string | null;
+    category: string | null;
+    view_count: number;
+    created_at: string;
+  }>;
+  website_info?: {
+    id: string;
+    page_title: string;
+    published: boolean;
+    custom_domain: string | null;
+  };
 }
 
 const PartnerProfile = () => {
@@ -65,7 +108,8 @@ const PartnerProfile = () => {
 
   const fetchPartner = async (partnerId: string) => {
     try {
-      const { data, error } = await supabase
+      // Fetch provider profile
+      const { data: profileData, error: profileError } = await supabase
         .from('provider_profiles')
         .select(`
           *,
@@ -75,8 +119,55 @@ const PartnerProfile = () => {
         .eq('id', partnerId)
         .single();
 
-      if (error) throw error;
-      setPartner(data);
+      if (profileError) throw profileError;
+
+      // Fetch media
+      const { data: mediaData } = await supabase
+        .from('provider_media')
+        .select('*')
+        .eq('provider_id', partnerId)
+        .eq('active', true)
+        .order('featured', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(6);
+
+      // Fetch testimonials
+      const { data: testimonialsData } = await supabase
+        .from('provider_testimonials')
+        .select('*')
+        .eq('provider_id', partnerId)
+        .eq('approved', true)
+        .order('featured', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(4);
+
+      // Fetch blog posts
+      const { data: postsData } = await supabase
+        .from('provider_posts')
+        .select('id, title, excerpt, featured_image_url, category, view_count, created_at')
+        .eq('provider_id', partnerId)
+        .eq('published', true)
+        .order('featured', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      // Fetch website info
+      const { data: websiteData } = await supabase
+        .from('provider_websites')
+        .select('id, page_title, published, custom_domain')
+        .eq('provider_id', partnerId)
+        .single();
+
+      // Combine all data
+      const combinedData = {
+        ...profileData,
+        media: mediaData || [],
+        testimonials: testimonialsData || [],
+        posts: postsData || [],
+        website_info: websiteData
+      };
+
+      setPartner(combinedData);
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -266,6 +357,91 @@ const PartnerProfile = () => {
                 </CardContent>
               </Card>
 
+              {/* Website Link Section */}
+              {partner.website_info?.published && (
+                <Card className="border-omni-orange/20 bg-gradient-to-r from-omni-orange/5 to-omni-yellow/5">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <ExternalLink className="w-5 h-5 text-omni-orange" />
+                      Personal Website
+                    </CardTitle>
+                    <CardDescription>
+                      {getDisplayName()} has their own wellness website
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold">{partner.website_info.page_title}</h3>
+                        <p className="text-sm text-gray-600">
+                          {partner.website_info.custom_domain || `${getDisplayName()}'s Wellness Hub`}
+                        </p>
+                      </div>
+                      <Button className="bg-omni-orange hover:bg-omni-orange/90 text-white">
+                        Visit Website
+                        <ExternalLink className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Media Gallery Section */}
+              {partner.media && partner.media.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <ImageIcon className="w-5 h-5" />
+                      Media Gallery
+                    </CardTitle>
+                    <CardDescription>
+                      Videos, images, and content shared by {getDisplayName()}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {partner.media.map((media) => (
+                        <div key={media.id} className="relative group cursor-pointer">
+                          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                            {media.media_type === 'video' ? (
+                              <div className="relative w-full h-full">
+                                <img
+                                  src={media.thumbnail_url || media.media_url}
+                                  alt={media.title}
+                                  className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                                  <Play className="w-12 h-12 text-white" />
+                                </div>
+                              </div>
+                            ) : (
+                              <img
+                                src={media.media_url}
+                                alt={media.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                              />
+                            )}
+                          </div>
+                          <div className="mt-2">
+                            <h4 className="font-medium text-sm">{media.title}</h4>
+                            {media.description && (
+                              <p className="text-xs text-gray-600 mt-1 line-clamp-2">{media.description}</p>
+                            )}
+                            <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                              <Eye className="w-3 h-3" />
+                              <span>{media.view_count} views</span>
+                              {media.featured && (
+                                <Badge variant="outline" className="text-xs">Featured</Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Services Section */}
               <Card>
                 <CardHeader>
@@ -337,6 +513,112 @@ const PartnerProfile = () => {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Testimonials Section */}
+              {partner.testimonials && partner.testimonials.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <MessageSquare className="w-5 h-5" />
+                      Client Testimonials
+                    </CardTitle>
+                    <CardDescription>
+                      What clients are saying about {getDisplayName()}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-6">
+                      {partner.testimonials.map((testimonial) => (
+                        <div key={testimonial.id} className="border-l-4 border-omni-orange/30 pl-6 py-4">
+                          <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                              <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
+                                <img
+                                  src={testimonial.client_image_url || '/placeholder.svg'}
+                                  alt={testimonial.client_name}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <div className="flex">
+                                  {[...Array(5)].map((_, i) => (
+                                    <Star
+                                      key={i}
+                                      className={`w-4 h-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                                    />
+                                  ))}
+                                </div>
+                                {testimonial.service_type && (
+                                  <Badge variant="outline" className="text-xs">
+                                    {testimonial.service_type}
+                                  </Badge>
+                                )}
+                                {testimonial.featured && (
+                                  <Badge className="bg-omni-orange text-white text-xs">Featured</Badge>
+                                )}
+                              </div>
+                              <p className="text-gray-600 italic mb-2">"{testimonial.testimonial_text}"</p>
+                              <p className="text-sm font-medium">— {testimonial.client_name}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Blog Posts Section */}
+              {partner.posts && partner.posts.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="w-5 h-5" />
+                      Latest Articles
+                    </CardTitle>
+                    <CardDescription>
+                      Insights and articles by {getDisplayName()}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-6">
+                      {partner.posts.map((post) => (
+                        <div key={post.id} className="flex gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer">
+                          {post.featured_image_url && (
+                            <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gray-100">
+                              <img
+                                src={post.featured_image_url}
+                                alt={post.title}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          )}
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-lg mb-2">{post.title}</h3>
+                            {post.excerpt && (
+                              <p className="text-gray-600 text-sm mb-2 line-clamp-2">{post.excerpt}</p>
+                            )}
+                            <div className="flex items-center gap-4 text-xs text-gray-500">
+                              {post.category && (
+                                <Badge variant="outline" className="text-xs">
+                                  {post.category}
+                                </Badge>
+                              )}
+                              <div className="flex items-center gap-1">
+                                <Eye className="w-3 h-3" />
+                                {post.view_count} views
+                              </div>
+                              <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
         </div>

@@ -270,6 +270,127 @@ export type Database = {
         }
         Relationships: []
       }
+      provider_media: {
+        Row: {
+          active: boolean | null
+          created_at: string
+          description: string | null
+          duration_seconds: number | null
+          featured: boolean | null
+          file_size: number | null
+          id: string
+          media_type: string
+          media_url: string
+          provider_id: string
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          featured?: boolean | null
+          file_size?: number | null
+          id?: string
+          media_type: string
+          media_url: string
+          provider_id: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          featured?: boolean | null
+          file_size?: number | null
+          id?: string
+          media_type?: string
+          media_url?: string
+          provider_id?: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_media_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_posts: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          excerpt: string | null
+          featured: boolean | null
+          featured_image_url: string | null
+          id: string
+          provider_id: string
+          published: boolean | null
+          slug: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          excerpt?: string | null
+          featured?: boolean | null
+          featured_image_url?: string | null
+          id?: string
+          provider_id: string
+          published?: boolean | null
+          slug: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          featured?: boolean | null
+          featured_image_url?: string | null
+          id?: string
+          provider_id?: string
+          published?: boolean | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_posts_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       provider_profiles: {
         Row: {
           availability: Json | null
@@ -331,6 +452,133 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_testimonials: {
+        Row: {
+          approved: boolean | null
+          client_image_url: string | null
+          client_name: string
+          created_at: string
+          featured: boolean | null
+          id: string
+          provider_id: string
+          rating: number | null
+          service_type: string | null
+          testimonial_text: string
+          updated_at: string
+        }
+        Insert: {
+          approved?: boolean | null
+          client_image_url?: string | null
+          client_name: string
+          created_at?: string
+          featured?: boolean | null
+          id?: string
+          provider_id: string
+          rating?: number | null
+          service_type?: string | null
+          testimonial_text: string
+          updated_at?: string
+        }
+        Update: {
+          approved?: boolean | null
+          client_image_url?: string | null
+          client_name?: string
+          created_at?: string
+          featured?: boolean | null
+          id?: string
+          provider_id?: string
+          rating?: number | null
+          service_type?: string | null
+          testimonial_text?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_testimonials_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provider_websites: {
+        Row: {
+          about_section: string | null
+          contact_section_title: string | null
+          created_at: string
+          custom_css: string | null
+          custom_domain: string | null
+          facebook_pixel_id: string | null
+          google_analytics_id: string | null
+          hero_image_url: string | null
+          hero_video_url: string | null
+          id: string
+          page_subtitle: string | null
+          page_title: string
+          provider_id: string
+          published: boolean | null
+          seo_meta_description: string | null
+          seo_meta_title: string | null
+          services_section_title: string | null
+          testimonials_section_title: string | null
+          theme_color: string | null
+          updated_at: string
+        }
+        Insert: {
+          about_section?: string | null
+          contact_section_title?: string | null
+          created_at?: string
+          custom_css?: string | null
+          custom_domain?: string | null
+          facebook_pixel_id?: string | null
+          google_analytics_id?: string | null
+          hero_image_url?: string | null
+          hero_video_url?: string | null
+          id?: string
+          page_subtitle?: string | null
+          page_title?: string
+          provider_id: string
+          published?: boolean | null
+          seo_meta_description?: string | null
+          seo_meta_title?: string | null
+          services_section_title?: string | null
+          testimonials_section_title?: string | null
+          theme_color?: string | null
+          updated_at?: string
+        }
+        Update: {
+          about_section?: string | null
+          contact_section_title?: string | null
+          created_at?: string
+          custom_css?: string | null
+          custom_domain?: string | null
+          facebook_pixel_id?: string | null
+          google_analytics_id?: string | null
+          hero_image_url?: string | null
+          hero_video_url?: string | null
+          id?: string
+          page_subtitle?: string | null
+          page_title?: string
+          provider_id?: string
+          published?: boolean | null
+          seo_meta_description?: string | null
+          seo_meta_title?: string | null
+          services_section_title?: string | null
+          testimonials_section_title?: string | null
+          theme_color?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_websites_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: true
+            referencedRelation: "provider_profiles"
             referencedColumns: ["id"]
           },
         ]
