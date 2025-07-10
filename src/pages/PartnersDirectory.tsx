@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Star, Clock, ExternalLink, Users } from "lucide-react";
+import { MapPin, Star, Clock, ExternalLink } from "lucide-react";
 
 interface Partner {
   id: string;
@@ -82,82 +82,49 @@ const PartnersDirectory = () => {
   }
 
   return (
-    <div className="min-h-screen bg-hero-gradient relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-[url('/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png')] opacity-5 bg-cover bg-center"></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/85"></div>
-      
+    <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-purple/5">
       <Navigation />
       
-      <main className="relative pt-20 pb-20">
+      <main className="pt-20 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Enhanced Header */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-white/20">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-gray-700">Verified Practitioners Available</span>
-            </div>
-            <h1 className="font-heading font-bold text-5xl md:text-6xl mb-6 leading-tight">
-              Meet Our Trusted <br />
-              <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Partners</span>
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="font-heading font-bold text-4xl md:text-5xl mb-4">
+              Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Partners</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-              Connect with verified wellness practitioners who share our commitment to conscious healing and transformative experiences
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Discover verified wellness practitioners and services in our community
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="btn-primary hover-lift">
-                <Link to="/wellness-exchange/provider-signup" className="flex items-center gap-2">
-                  Become a Partner
-                  <ExternalLink className="w-4 h-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" className="btn-secondary hover-scale">
-                <Link to="/wellness-exchange/marketplace">
-                  Browse Services
-                </Link>
-              </Button>
-            </div>
           </div>
 
           {/* Partners Grid */}
           {partners.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {partners.map((partner) => (
-                <Card key={partner.id} className="group hover-lift border-0 bg-card-gradient backdrop-blur-sm overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-                  <CardHeader className="text-center relative pb-4">
-                    {/* Floating verification badge */}
-                    {partner.verified && (
-                      <div className="absolute top-4 right-4 z-10">
-                        <Badge className="bg-green-500 text-white shadow-lg border-0">
+                <Card key={partner.id} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm">
+                  <CardHeader className="text-center">
+                    <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-4 border-omni-orange/20">
+                      <img
+                        src={getProfileImage(partner)}
+                        alt={getDisplayName(partner)}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = '/placeholder.svg';
+                        }}
+                      />
+                    </div>
+                    <CardTitle className="flex items-center justify-center gap-2">
+                      {getDisplayName(partner)}
+                      {partner.verified && (
+                        <Badge variant="secondary" className="bg-green-100 text-green-700">
                           <Star className="w-3 h-3 mr-1 fill-current" />
                           Verified
                         </Badge>
-                      </div>
-                    )}
-                    
-                    {/* Enhanced profile image */}
-                    <div className="relative w-28 h-28 mx-auto mb-6">
-                      <div className="absolute inset-0 bg-rainbow-gradient rounded-full p-1 animate-pulse-slow">
-                        <div className="w-full h-full rounded-full overflow-hidden bg-white">
-                          <img
-                            src={getProfileImage(partner)}
-                            alt={getDisplayName(partner)}
-                            className="w-full h-full object-cover hover-scale"
-                            onError={(e) => {
-                              e.currentTarget.src = '/placeholder.svg';
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <CardTitle className="text-xl font-bold mb-2 group-hover:text-omni-indigo transition-colors">
-                      {getDisplayName(partner)}
+                      )}
                     </CardTitle>
-                    
                     {partner.location && (
-                      <CardDescription className="flex items-center justify-center gap-1 text-gray-600">
-                        <MapPin className="w-4 h-4 text-omni-orange" />
+                      <CardDescription className="flex items-center justify-center gap-1">
+                        <MapPin className="w-4 h-4" />
                         {partner.location}
                       </CardDescription>
                     )}
@@ -202,50 +169,32 @@ const PartnersDirectory = () => {
                       </p>
                     )}
 
-                    {/* Enhanced Action Buttons */}
-                    <div className="flex flex-col gap-3 pt-6">
-                      <Button asChild className="w-full btn-primary hover-lift">
+                    {/* Action Buttons */}
+                    <div className="flex gap-2 pt-4">
+                      <Button asChild className="flex-1 bg-rainbow-gradient hover:opacity-90 text-white">
                         <Link to={`/partners/${partner.id}`}>
-                          View Full Profile
+                          View Profile
                           <ExternalLink className="w-4 h-4 ml-2" />
                         </Link>
                       </Button>
-                      <div className="flex gap-2">
-                        {partner.website && (
-                          <Button variant="outline" className="flex-1 btn-secondary" asChild>
-                            <a href={partner.website} target="_blank" rel="noopener noreferrer">
-                              Website
-                            </a>
-                          </Button>
-                        )}
-                        <Button variant="outline" className="flex-1 btn-secondary" asChild>
-                          <Link to="/wellness-exchange/marketplace">
-                            Book Now
-                          </Link>
+                      {partner.website && (
+                        <Button variant="outline" size="sm" asChild>
+                          <a href={partner.website} target="_blank" rel="noopener noreferrer">
+                            Website
+                          </a>
                         </Button>
-                      </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : (
-            <div className="text-center py-20">
-              <div className="max-w-md mx-auto">
-                <div className="w-24 h-24 mx-auto mb-6 bg-rainbow-gradient rounded-full flex items-center justify-center">
-                  <Users className="w-12 h-12 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4">No Partners Yet</h3>
-                <p className="text-gray-600 mb-8 leading-relaxed">
-                  Be among the first verified wellness practitioners to join our conscious community
-                </p>
-                <Button size="lg" className="btn-primary hover-lift" asChild>
-                  <Link to="/wellness-exchange/provider-signup">
-                    Become Our First Partner
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
-              </div>
+            <div className="text-center py-12">
+              <p className="text-gray-600 mb-4">No verified partners yet.</p>
+              <Button asChild className="bg-rainbow-gradient hover:opacity-90 text-white">
+                <Link to="/wellness-exchange/provider-signup">Become a Partner</Link>
+              </Button>
             </div>
           )}
         </div>
