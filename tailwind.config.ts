@@ -54,13 +54,18 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				omni: {
-					red: '#FF0000',
-					orange: '#FFA500', 
-					yellow: '#FFFF00',
-					green: '#008000',
-					blue: '#0000FF',
-					indigo: '#4B0082',
-					violet: '#EE82EE'
+					red: 'hsl(var(--omni-red))',
+					orange: 'hsl(var(--omni-orange))', 
+					yellow: 'hsl(var(--omni-yellow))',
+					green: 'hsl(var(--omni-green))',
+					blue: 'hsl(var(--omni-blue))',
+					indigo: 'hsl(var(--omni-indigo))',
+					violet: 'hsl(var(--omni-violet))'
+				},
+				wellhub: {
+					primary: 'hsl(180 25% 15%)',
+					accent: 'hsl(var(--omni-orange))',
+					light: 'hsl(35 15% 97%)'
 				}
 			},
 			fontFamily: {
@@ -82,8 +87,9 @@ export default {
 				]
 			},
 			backgroundImage: {
-				'rainbow-gradient': 'linear-gradient(135deg, #FF0000 0%, #FFA500 16.66%, #FFFF00 33.33%, #008000 50%, #0000FF 66.66%, #4B0082 83.33%, #EE82EE 100%)',
-				'rainbow-subtle': 'linear-gradient(135deg, rgba(255,0,0,0.1) 0%, rgba(255,165,0,0.1) 16.66%, rgba(255,255,0,0.1) 33.33%, rgba(0,128,0,0.1) 50%, rgba(0,0,255,0.1) 66.66%, rgba(75,0,130,0.1) 83.33%, rgba(238,130,238,0.1) 100%)'
+				'rainbow-gradient': 'linear-gradient(135deg, hsl(var(--omni-red)) 0%, hsl(var(--omni-orange)) 16.66%, hsl(var(--omni-yellow)) 33.33%, hsl(var(--omni-green)) 50%, hsl(var(--omni-blue)) 66.66%, hsl(var(--omni-indigo)) 83.33%, hsl(var(--omni-violet)) 100%)',
+				'rainbow-subtle': 'linear-gradient(135deg, hsl(var(--omni-red) / 0.1) 0%, hsl(var(--omni-orange) / 0.1) 16.66%, hsl(var(--omni-yellow) / 0.1) 33.33%, hsl(var(--omni-green) / 0.1) 50%, hsl(var(--omni-blue) / 0.1) 66.66%, hsl(var(--omni-indigo) / 0.1) 83.33%, hsl(var(--omni-violet) / 0.1) 100%)',
+				'wellhub-gradient': 'linear-gradient(135deg, hsl(180 25% 15%) 0%, hsl(var(--omni-orange)) 100%)'
 			},
 			animation: {
 				'rainbow': 'rainbow 8s ease-in-out infinite',
