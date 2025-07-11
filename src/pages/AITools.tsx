@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -337,7 +337,7 @@ const AITools = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-purple-50 to-pink-50">
-      <Navigation />
+      <MegaNavigation />
       
       {/* Hero Section */}
       <section className="pt-24 pb-16">

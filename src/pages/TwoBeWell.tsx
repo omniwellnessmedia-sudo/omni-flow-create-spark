@@ -1,5 +1,5 @@
 
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -68,7 +68,7 @@ const TwoBeWell = () => {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
+      <MegaNavigation />
       <main className="pt-16">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-green-50 via-white to-blue-50">

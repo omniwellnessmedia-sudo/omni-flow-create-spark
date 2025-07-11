@@ -300,9 +300,10 @@
 
 /* Glass Morphism */
 .glass {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .glass-dark {
@@ -349,32 +350,24 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Wellhub-inspired spacing */
-.section-padding {
-  @apply py-20 lg:py-32;
-}
-
-.container-padding {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-}
-
-.hero-padding {
-  @apply pt-20 pb-16 lg:pt-24 lg:pb-20;
-}
-
-.container-padding {
-  @apply px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto;
-}
-
-/* Full-screen breathable sections */
+/* Clean spacing system */
 .section-breathable {
-  @apply min-h-screen py-32 flex items-center;
+  @apply min-h-screen py-24 lg:py-32 flex items-center justify-center;
 }
 
 .section-large {
-  @apply min-h-[80vh] py-24 flex items-center;
+  @apply min-h-[85vh] py-20 lg:py-28 flex items-center justify-center;
 }
 
 .section-medium {
-  @apply min-h-[60vh] py-16 flex items-center;
+  @apply min-h-[70vh] py-16 lg:py-20 flex items-center justify-center;
+}
+
+.container-width {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Navigation spacing */
+.nav-offset {
+  @apply pt-20;
 }

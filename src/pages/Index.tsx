@@ -15,32 +15,32 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <MegaNavigation />
-      <main className="pt-20">
-        <div className="section-breathable">
+      <main>
+        <div className="section-breathable bg-wellhub-light-gradient">
           <HeroSection />
         </div>
-        <div className="section-large bg-gradient-to-br from-wellhub-light/30 to-white">
+        <div className="section-large bg-white">
           <WellnessHumansSection />
         </div>
-        <div className="section-breathable bg-gradient-to-br from-white to-wellhub-light/20">
+        <div className="section-breathable bg-wellhub-light-gradient">
           <MissionSection />
         </div>
-        <div className="section-large bg-gradient-to-br from-wellhub-light/30 to-white">
+        <div className="section-large bg-white">
           <ServicesSection />
         </div>
-        <div className="section-breathable bg-gradient-to-br from-white to-wellhub-accent/10">
+        <div className="section-breathable bg-wellhub-light-gradient">
           <VideoShowcaseSection />
         </div>
-        <div className="section-large bg-gradient-to-br from-wellhub-light/30 to-white">
+        <div className="section-large bg-white">
           <AIToolsPreview />
         </div>
-        <div className="section-breathable bg-gradient-to-br from-white to-wellhub-light/20">
+        <div className="section-breathable bg-wellhub-light-gradient">
           <FeaturedProjectsSection />
         </div>
-        <div className="section-large bg-gradient-to-br from-wellhub-light/30 to-white">
+        <div className="section-large bg-white">
           <PartnersSection />
         </div>
-        <div className="section-breathable bg-gradient-to-br from-white to-wellhub-accent/10">
+        <div className="section-breathable bg-wellhub-light-gradient">
           <TestimonialsSection />
         </div>
       </main>

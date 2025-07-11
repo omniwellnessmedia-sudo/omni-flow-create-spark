@@ -64,7 +64,7 @@ export default {
 				},
 				wellhub: {
 					primary: 'hsl(180 25% 15%)',
-					accent: 'hsl(var(--omni-orange))',
+					accent: 'hsl(25 85% 55%)',
 					light: 'hsl(35 15% 97%)'
 				}
 			},
@@ -88,8 +88,9 @@ export default {
 			},
 			backgroundImage: {
 				'rainbow-gradient': 'linear-gradient(135deg, hsl(var(--omni-red)) 0%, hsl(var(--omni-orange)) 16.66%, hsl(var(--omni-yellow)) 33.33%, hsl(var(--omni-green)) 50%, hsl(var(--omni-blue)) 66.66%, hsl(var(--omni-indigo)) 83.33%, hsl(var(--omni-violet)) 100%)',
-				'rainbow-subtle': 'linear-gradient(135deg, hsl(var(--omni-red) / 0.1) 0%, hsl(var(--omni-orange) / 0.1) 16.66%, hsl(var(--omni-yellow) / 0.1) 33.33%, hsl(var(--omni-green) / 0.1) 50%, hsl(var(--omni-blue) / 0.1) 66.66%, hsl(var(--omni-indigo) / 0.1) 83.33%, hsl(var(--omni-violet) / 0.1) 100%)',
-				'wellhub-gradient': 'linear-gradient(135deg, hsl(180 25% 15%) 0%, hsl(var(--omni-orange)) 100%)'
+				'rainbow-subtle': 'linear-gradient(135deg, hsl(var(--omni-red) / 0.05) 0%, hsl(var(--omni-orange) / 0.05) 16.66%, hsl(var(--omni-yellow) / 0.05) 33.33%, hsl(var(--omni-green) / 0.05) 50%, hsl(var(--omni-blue) / 0.05) 66.66%, hsl(var(--omni-indigo) / 0.05) 83.33%, hsl(var(--omni-violet) / 0.05) 100%)',
+				'wellhub-gradient': 'linear-gradient(135deg, hsl(180 25% 15%) 0%, hsl(25 85% 55%) 100%)',
+				'wellhub-light-gradient': 'linear-gradient(135deg, hsl(35 15% 98%) 0%, hsl(35 20% 95%) 100%)'
 			},
 			animation: {
 				'rainbow': 'rainbow 8s ease-in-out infinite',

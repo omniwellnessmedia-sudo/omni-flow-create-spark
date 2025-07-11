@@ -1,5 +1,5 @@
 
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,7 +53,7 @@ const WellnessExchange = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navigation />
+      <MegaNavigation />
       <main className="pt-16">
         {/* Hero Section with Community Image */}
         <section className="relative py-20 bg-white overflow-hidden">

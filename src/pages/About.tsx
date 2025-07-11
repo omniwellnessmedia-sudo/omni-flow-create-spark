@@ -1,5 +1,5 @@
 
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
@@ -40,7 +40,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
+      <MegaNavigation />
       <BreadcrumbNav />
       
       <Hero

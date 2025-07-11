@@ -1,5 +1,5 @@
 
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -66,7 +66,7 @@ const Podcast = () => {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
+      <MegaNavigation />
       <main className="pt-16">
         {/* Hero Section - Funnel Focused */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
