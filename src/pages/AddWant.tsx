@@ -54,7 +54,7 @@ const AddWant = () => {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <h1 className="font-heading font-bold text-2xl sm:text-3xl">
+            <h1 className="heading-secondary no-faded-text text-center">
               Post a <span className="bg-rainbow-gradient bg-clip-text text-transparent">Want</span>
             </h1>
             <p className="text-gray-600 mt-1">Tell the community what wellness service you're looking for</p>

@@ -74,7 +74,7 @@ const Blog = () => {
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
+            <h1 className="heading-secondary no-faded-text">
               Insights & <span className="bg-rainbow-gradient bg-clip-text text-transparent">Stories</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
@@ -152,7 +152,7 @@ const Blog = () => {
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
+              <h2 className="heading-secondary no-faded-text">
                 Featured <span className="bg-rainbow-gradient bg-clip-text text-transparent">Topics</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">

@@ -75,8 +75,8 @@ const Podcast = () => {
               🎧 Free Access • Real Stories • Transformative Insights
             </Badge>
             
-            <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-              Conversations That <span className="text-omni-violet">Transform</span> Lives
+            <h1 className="heading-secondary no-faded-text">
+              Conversations That <span className="bg-rainbow-gradient bg-clip-text text-transparent">Transform</span> Lives
             </h1>
             
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
@@ -145,8 +145,8 @@ const Podcast = () => {
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Featured <span className="text-omni-violet">Episodes</span>
+              <h2 className="heading-secondary no-faded-text">
+                Featured <span className="bg-rainbow-gradient bg-clip-text text-transparent">Episodes</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Dive into our most impactful conversations with entrepreneurs, healers, and visionaries 

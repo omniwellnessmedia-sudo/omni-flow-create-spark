@@ -146,7 +146,7 @@ const PartnerPortal = () => {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
+                <h1 className="heading-secondary no-faded-text">
                   Join the <span className="bg-rainbow-gradient bg-clip-text text-transparent">Conscious</span> Partner Network
                 </h1>
                 <p className="text-xl text-gray-200 mb-8 leading-relaxed">

@@ -50,19 +50,19 @@ const WebsiteBuilder = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [website, setWebsite] = useState<WebsiteData>({
-    page_title: 'My Wellness Practice',
-    page_subtitle: '',
+    page_title: 'Transform Your Life Through Wellness',
+    page_subtitle: 'Discover authentic healing and sustainable growth with our expert wellness services',
     custom_domain: '',
-    hero_image_url: '',
+    hero_image_url: '/lovable-uploads/wellness-humans.png',
     hero_video_url: '',
-    about_section: '',
-    services_section_title: 'My Services',
-    testimonials_section_title: 'Client Testimonials',
-    contact_section_title: 'Get In Touch',
+    about_section: 'I believe in the power of holistic wellness to transform lives. With years of experience and a deep commitment to authentic healing, I help individuals discover their path to optimal health and conscious living. My approach combines ancient wisdom with modern techniques to create lasting positive change.',
+    services_section_title: 'Wellness Services That Transform Lives',
+    testimonials_section_title: 'Success Stories from Our Community',
+    contact_section_title: 'Start Your Transformation Today',
     theme_color: '#f97316',
     custom_css: '',
-    seo_meta_title: '',
-    seo_meta_description: '',
+    seo_meta_title: 'Premium Wellness Services | Transform Your Life Today',
+    seo_meta_description: 'Experience transformative wellness services designed to elevate your mind, body, and spirit. Book your consultation and begin your journey to optimal health.',
     google_analytics_id: '',
     facebook_pixel_id: '',
     published: false
@@ -157,13 +157,15 @@ const WebsiteBuilder = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Website Builder</h2>
-          <p className="text-gray-600">Create your personalized wellness website</p>
-        </div>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="heading-secondary no-faded-text">
+              Website <span className="bg-rainbow-gradient bg-clip-text text-transparent">Builder</span>
+            </h2>
+            <p className="text-gray-600">Create your high-converting wellness sales page and lead magnet funnel</p>
+          </div>
         <div className="flex gap-3">
           <Button variant="outline" onClick={previewWebsite}>
             <Eye className="w-4 h-4 mr-2" />
@@ -273,8 +275,8 @@ const WebsiteBuilder = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Section Titles</CardTitle>
-                <CardDescription>Customize the headings for different sections</CardDescription>
+                <CardTitle>Sales Page Framework</CardTitle>
+                <CardDescription>High-converting sections optimized for wellness practitioners</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
@@ -283,23 +285,63 @@ const WebsiteBuilder = () => {
                     id="services_title"
                     value={website.services_section_title}
                     onChange={(e) => setWebsite({...website, services_section_title: e.target.value})}
+                    placeholder="Transform Your Life With These Proven Services"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="testimonials_title">Testimonials Section Title</Label>
+                  <Label htmlFor="testimonials_title">Social Proof Section Title</Label>
                   <Input
                     id="testimonials_title"
                     value={website.testimonials_section_title}
                     onChange={(e) => setWebsite({...website, testimonials_section_title: e.target.value})}
+                    placeholder="Real Results From Real People"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="contact_title">Contact Section Title</Label>
+                  <Label htmlFor="contact_title">Call-to-Action Section Title</Label>
                   <Input
                     id="contact_title"
                     value={website.contact_section_title}
                     onChange={(e) => setWebsite({...website, contact_section_title: e.target.value})}
+                    placeholder="Ready to Begin Your Transformation?"
                   />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-purple-700">
+                  <Star className="w-5 h-5" />
+                  Sales Page Best Practices
+                </CardTitle>
+                <CardDescription>Pre-optimized content templates for maximum conversion</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-purple-700">✨ Proven Headline Formulas</h4>
+                    <ul className="text-gray-600 space-y-1">
+                      <li>• "Transform [Problem] Into [Desired Result]"</li>
+                      <li>• "Discover The [Time] Method For [Benefit]"</li>
+                      <li>• "Finally, A [Solution] That Actually Works"</li>
+                    </ul>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-purple-700">🎯 Conversion Elements</h4>
+                    <ul className="text-gray-600 space-y-1">
+                      <li>• Urgency & scarcity triggers</li>
+                      <li>• Social proof & testimonials</li>
+                      <li>• Clear value propositions</li>
+                      <li>• Risk-free guarantees</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="mt-4 p-3 bg-white rounded border border-purple-200">
+                  <p className="text-sm text-purple-700 font-medium">🚀 Pro Tip:</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Your landing page is automatically optimized with conversion-tested layouts, mobile responsiveness, and lead capture forms.
+                  </p>
                 </div>
               </CardContent>
             </Card>

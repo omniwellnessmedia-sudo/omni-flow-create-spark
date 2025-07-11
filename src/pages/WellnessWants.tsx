@@ -186,8 +186,8 @@ const WellnessWants = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div>
-                <h1 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-                  Community <span className="text-omni-violet">Wants</span>
+                <h1 className="heading-secondary no-faded-text text-center">
+                  Community <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wants</span>
                 </h1>
                 <p className="text-lg text-gray-600 max-w-2xl">
                   Post what you're looking for or browse community requests for wellness services
@@ -336,7 +336,7 @@ const WellnessWants = () => {
                           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                             <div className="flex items-center">
                               <User className="h-4 w-4 mr-1" />
-                              {want.profiles.full_name}
+                              {want.profiles?.full_name || 'Anonymous User'}
                             </div>
                             <div className="flex items-center">
                               <Calendar className="h-4 w-4 mr-1" />

@@ -88,13 +88,12 @@ export const BookingCalendar = ({
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CalendarIcon className="w-5 h-5" />
-            Book Your Session
+      <Card className="border-2 border-primary/20 shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-primary/5 to-secondary/5">
+          <CardTitle className="heading-secondary no-faded-text">
+            Book Your <span className="bg-rainbow-gradient bg-clip-text text-transparent">Session</span>
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-lg">
             Select your preferred date and time for "{serviceTitle}"
           </CardDescription>
         </CardHeader>
@@ -166,9 +165,12 @@ export const BookingCalendar = ({
 
       {/* Booking Summary */}
       {selectedDate && selectedTime && (
-        <Card>
+        <Card className="border-2 border-green-200 bg-green-50">
           <CardHeader>
-            <CardTitle>Booking Summary</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-green-800">
+              <Badge className="bg-green-600">Ready</Badge>
+              Booking Summary
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between items-start">
@@ -209,11 +211,13 @@ export const BookingCalendar = ({
       )}
 
       {/* Booking Policies */}
-      <Card>
+      <Card className="bg-blue-50 border-blue-200">
         <CardHeader>
-          <CardTitle className="text-lg">Booking Information</CardTitle>
+          <CardTitle className="text-lg flex items-center gap-2 text-blue-800">
+            📋 Important Booking Information
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3 text-sm text-gray-600">
+        <CardContent className="space-y-3 text-sm text-gray-700">
           <div className="flex items-start gap-2">
             <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
             <span>Sessions can be rescheduled up to 24 hours before the appointment</span>

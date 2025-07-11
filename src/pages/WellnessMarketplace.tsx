@@ -191,7 +191,7 @@ const WellnessMarketplace = () => {
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h1 className="font-heading font-bold text-2xl sm:text-3xl">
+                <h1 className="heading-secondary no-faded-text text-center">
                   Wellness <span className="bg-rainbow-gradient bg-clip-text text-transparent">Marketplace</span>
                 </h1>
                 <p className="text-gray-600 mt-1">Discover and book wellness services</p>

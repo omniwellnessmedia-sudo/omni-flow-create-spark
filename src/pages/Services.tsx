@@ -158,8 +158,8 @@ const Services = () => {
         <section className="py-20 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-4xl sm:text-5xl mb-6 text-gray-900">
-                What We <span className="text-blue-600">Create</span>
+              <h2 className="heading-secondary no-faded-text">
+                What We <span className="bg-rainbow-gradient bg-clip-text text-transparent">Create</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
                 Professional solutions that drive real results for conscious businesses.

@@ -481,7 +481,7 @@
 
 /* Logo Standards - Increased height for better fit */
 .logo-header {
-  @apply h-16 w-auto;
+  @apply h-20 w-auto;
   min-width: 120px;
   max-width: 200px;
   object-fit: contain;
