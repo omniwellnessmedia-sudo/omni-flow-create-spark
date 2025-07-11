@@ -13,9 +13,9 @@ const HeroSection = () => {
       <Hero
         title={
           <>
-            <span className="text-rainbow-enhanced font-bold text-shadow-strong">Conscious Content</span>
+            <span className="text-rainbow-enhanced">Conscious Content</span>
             <br />
-            <span className="text-white font-bold text-shadow-strong">for Positive Change</span>
+            <span className="text-gray-900 dark:text-gray-100">for Positive Change</span>
           </>
         }
         description="Empowering communities through holistic wellness, authentic storytelling, and conscious business development. From South Africa to the world."
@@ -32,7 +32,7 @@ const HeroSection = () => {
             variant: "soft"
           }
         ]}
-        className="relative text-white text-shadow font-medium"
+        className="relative"
       >
         {/* Logo Section */}
         <div className="flex justify-center mb-12 mt-8">

@@ -36,27 +36,24 @@ const TestimonialsSection = () => {
           </p>
         </div>
 
-        <div className="grid-responsive">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <Card 
               key={testimonial.author}
               variant="standard"
-              className="card-fixed-height hover:shadow-lg transition-all duration-300 animate-fade-in-up border-0 bg-rainbow-subtle"
+              className="hover:shadow-lg transition-all duration-300 animate-fade-in-up border-0 bg-rainbow-subtle"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <CardContent className="p-6 flex flex-col h-full">
-                <div className="card-content-grow mb-6">
+                <div className="flex-1 mb-6">
                   <div className="text-4xl text-omni-indigo mb-4">"</div>
-                  <p className="text-gray-700 italic leading-relaxed text-truncate-3">{testimonial.quote}</p>
+                  <p className="text-gray-700 italic leading-relaxed card-description-clamp">{testimonial.quote}</p>
                 </div>
                 <div className="flex items-center mt-auto">
                   <img 
                     src={testimonial.image}
                     alt={testimonial.author}
-                    className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-white shadow-md lazy-image"
-                    loading="lazy"
-                    width="48"
-                    height="48"
+                    className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
                     <div className="font-bold text-gray-800">{testimonial.author}</div>
