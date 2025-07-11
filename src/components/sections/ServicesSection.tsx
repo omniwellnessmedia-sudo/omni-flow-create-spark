@@ -109,6 +109,7 @@ const ServicesSection = () => {
           {services.map((service, index) => (
             <Card 
               key={service.title}
+              variant="standard"
               className={`hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up cursor-pointer ${
                 activeService === index ? 'ring-2 ring-rainbow-gradient' : ''
               }`}
@@ -118,12 +119,12 @@ const ServicesSection = () => {
               <CardHeader>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-3xl">{service.icon}</span>
-                  <CardTitle className="font-heading text-xl">{service.title}</CardTitle>
+                  <CardTitle variant="clamp" className="font-heading text-xl">{service.title}</CardTitle>
                 </div>
-                <CardDescription className="text-gray-600">{service.description}</CardDescription>
+                <CardDescription variant="clamp" className="text-gray-600">{service.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2">
+                <ul className="space-y-2 mb-6">
                   {service.features.map((feature) => (
                     <li key={feature} className="flex items-center text-sm text-gray-600">
                       <span className="w-2 h-2 bg-rainbow-gradient rounded-full mr-3"></span>
@@ -131,6 +132,16 @@ const ServicesSection = () => {
                     </li>
                   ))}
                 </ul>
+                <Button 
+                  variant="outline"
+                  className="w-full card-button-standard"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Navigate to service detail
+                  }}
+                >
+                  Learn More
+                </Button>
               </CardContent>
             </Card>
           ))}

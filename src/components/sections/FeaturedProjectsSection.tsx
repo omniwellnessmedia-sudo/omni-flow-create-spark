@@ -1,5 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const FeaturedProjectsSection = () => {
   const projects = [
@@ -40,6 +41,7 @@ const FeaturedProjectsSection = () => {
           {projects.map((project, index) => (
             <Card 
               key={project.title}
+              variant="standard"
               className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
@@ -50,11 +52,19 @@ const FeaturedProjectsSection = () => {
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <CardHeader>
+              <CardHeader className="flex-1">
                 <div className="text-sm text-omni-indigo font-medium mb-2">{project.category}</div>
-                <CardTitle className="font-heading text-xl mb-2">{project.title}</CardTitle>
-                <CardDescription className="text-gray-600">{project.description}</CardDescription>
+                <CardTitle variant="clamp" className="font-heading text-xl mb-2">{project.title}</CardTitle>
+                <CardDescription variant="clamp" className="text-gray-600">{project.description}</CardDescription>
               </CardHeader>
+              <CardContent className="pt-0">
+                <Button 
+                  variant="soft"
+                  className="w-full card-button-standard"
+                >
+                  View Project
+                </Button>
+              </CardContent>
             </Card>
           ))}
         </div>

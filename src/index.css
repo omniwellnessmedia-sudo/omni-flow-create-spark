@@ -351,20 +351,64 @@
 }
 
 /* Clean spacing system */
+/* Global section padding system */
 .section-breathable {
-  @apply w-full py-24 lg:py-32;
+  @apply py-10 px-5 md:py-15 md:px-8 lg:py-20 lg:px-10;
 }
 
 .section-large {
-  @apply w-full py-20 lg:py-28;
+  @apply py-10 px-5 md:py-15 md:px-8 lg:py-20 lg:px-10;
 }
 
 .section-medium {
-  @apply w-full py-16 lg:py-20;
+  @apply py-10 px-5 md:py-15 md:px-8 lg:py-20 lg:px-10;
 }
 
 .container-width {
-  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply max-w-7xl mx-auto;
+}
+
+/* Card standardization utilities */
+.card-standard {
+  @apply h-[520px] overflow-hidden;
+}
+
+.card-title-clamp {
+  @apply line-clamp-2;
+}
+
+.card-description-clamp {
+  @apply line-clamp-3 hover:overflow-y-auto hover:line-clamp-none;
+}
+
+.card-button-standard {
+  @apply h-12 px-6 rounded-xl;
+}
+
+/* Form field standards */
+.form-field-standard {
+  @apply min-h-[44px];
+}
+
+.form-spacing-standard {
+  @apply space-y-4;
+}
+
+/* Typography standards */
+.heading-bold {
+  @apply font-bold;
+}
+
+/* Dropdown z-index fix */
+.dropdown-menu-standard {
+  @apply z-50 p-3 shadow-xl;
+}
+
+/* Mobile responsive utilities */
+@media (max-width: 480px) {
+  .calendar-mobile-scroll {
+    @apply overflow-x-auto;
+  }
 }
 
 /* Navigation spacing */

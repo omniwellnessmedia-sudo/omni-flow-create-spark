@@ -222,7 +222,7 @@ const MegaNavigation = () => {
                       <ChevronDown className="h-4 w-4 ml-2" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuContent align="end" className="dropdown-menu-standard w-56">
                     <DropdownMenuItem asChild>
                       <Link to="/wellness-exchange/account" className="flex items-center">
                         <User className="h-4 w-4 mr-2" />

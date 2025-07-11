@@ -40,22 +40,23 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <Card 
               key={testimonial.author}
+              variant="standard"
               className="hover:shadow-lg transition-all duration-300 animate-fade-in-up border-0 bg-rainbow-subtle"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <CardContent className="p-6">
-                <div className="mb-6">
+              <CardContent className="p-6 flex flex-col h-full">
+                <div className="flex-1 mb-6">
                   <div className="text-4xl text-omni-indigo mb-4">"</div>
-                  <p className="text-gray-700 italic leading-relaxed">{testimonial.quote}</p>
+                  <p className="text-gray-700 italic leading-relaxed card-description-clamp">{testimonial.quote}</p>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center mt-auto">
                   <img 
                     src={testimonial.image}
                     alt={testimonial.author}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
-                    <div className="font-semibold text-gray-800">{testimonial.author}</div>
+                    <div className="font-bold text-gray-800">{testimonial.author}</div>
                     <div className="text-sm text-gray-600">{testimonial.role}</div>
                   </div>
                 </div>

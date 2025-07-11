@@ -1,10 +1,16 @@
 
 import { Link } from "react-router-dom";
+import { ChevronUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="bg-gray-900 text-white section-large">
+      <div className="container-width">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Description */}
           <div className="col-span-1 md:col-span-2">
@@ -77,6 +83,19 @@ const Footer = () => {
                 Terms of Service
               </a>
             </div>
+          </div>
+
+          {/* Back to Top - Mobile Only */}
+          <div className="flex justify-center mt-8 md:hidden">
+            <Button
+              onClick={scrollToTop}
+              variant="outline"
+              size="sm"
+              className="bg-transparent border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white card-button-standard"
+            >
+              <ChevronUp className="w-4 h-4 mr-2" />
+              Back to Top
+            </Button>
           </div>
         </div>
       </div>
