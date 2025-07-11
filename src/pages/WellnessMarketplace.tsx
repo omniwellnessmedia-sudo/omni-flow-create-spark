@@ -271,8 +271,8 @@ const WellnessMarketplace = () => {
       <MegaNavigation />
       <WellnessExchangeNavigation />
       
-      <main className="pt-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Section size="large" background="white" id="hero">
+        <div className="py-8">
           {/* Header */}
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
@@ -487,7 +487,7 @@ const WellnessMarketplace = () => {
             </div>
           )}
         </div>
-      </main>
+      </Section>
       <Footer />
     </div>
   );

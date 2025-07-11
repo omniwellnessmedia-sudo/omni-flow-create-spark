@@ -155,9 +155,9 @@ const WellnessCommunity = () => {
     <div className="min-h-screen bg-gray-50">
       <MegaNavigation />
       <WellnessExchangeNavigation />
-      <main className="pt-0">
-        {/* Header */}
-        <section className="py-12 bg-white border-b">
+      
+      <Section size="large" background="white" id="hero">
+        <div className="py-8 border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div>
@@ -269,10 +269,10 @@ const WellnessCommunity = () => {
               })}
             </div>
           </div>
-        </section>
+        </div>
 
         {/* Posts Feed */}
-        <section className="py-12">
+        <div className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {filteredPosts.length === 0 ? (
               <div className="text-center py-12">
@@ -354,8 +354,8 @@ const WellnessCommunity = () => {
               </div>
             )}
           </div>
-        </section>
-      </main>
+        </div>
+      </Section>
       <Footer />
     </div>
   );

@@ -6,13 +6,15 @@ interface SectionProps {
   className?: string;
   size?: 'breathable' | 'large' | 'medium';
   background?: 'light' | 'white' | 'gradient';
+  id?: string;
 }
 
 export const Section = ({ 
   children, 
   className, 
   size = 'large', 
-  background = 'white' 
+  background = 'white',
+  id
 }: SectionProps) => {
   const sizeClasses = {
     breathable: 'section-breathable',
@@ -27,15 +29,18 @@ export const Section = ({
   };
 
   return (
-    <div className={cn(
-      "w-full",
-      sizeClasses[size],
-      backgroundClasses[background],
-      className
-    )}>
+    <section 
+      id={id}
+      className={cn(
+        "w-full",
+        sizeClasses[size],
+        backgroundClasses[background],
+        className
+      )}
+    >
       <div className="container-width">
         {children}
       </div>
-    </div>
+    </section>
   );
 };

@@ -105,9 +105,9 @@ const MegaNavigation = () => {
           {
             title: "Wellness Exchange",
             items: [
-              { name: "Marketplace", path: "/wellness-exchange/marketplace", description: "Browse wellness services" },
-              { name: "Post a Want", path: "/wellness-exchange/add-want", description: "Request services from community" },
-              { name: "Community", path: "/wellness-exchange/community", description: "Connect with practitioners" },
+              { name: "Marketplace", path: "/wellness-exchange/marketplace#hero", description: "Browse wellness services" },
+              { name: "Post a Want", path: "/wellness-exchange/add-want#hero", description: "Request services from community" },
+              { name: "Community", path: "/wellness-exchange/community#hero", description: "Connect with practitioners" },
               { name: "Provider Dashboard", path: "/wellness-exchange/provider-dashboard", description: "Manage your services" }
             ]
           }

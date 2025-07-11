@@ -352,15 +352,15 @@
 
 /* Clean spacing system */
 .section-breathable {
-  @apply w-full min-h-screen py-24 lg:py-32 flex items-center justify-center;
+  @apply w-full py-24 lg:py-32;
 }
 
 .section-large {
-  @apply w-full min-h-[85vh] py-20 lg:py-28 flex items-center justify-center;
+  @apply w-full py-20 lg:py-28;
 }
 
 .section-medium {
-  @apply w-full min-h-[70vh] py-16 lg:py-20 flex items-center justify-center;
+  @apply w-full py-16 lg:py-20;
 }
 
 .container-width {

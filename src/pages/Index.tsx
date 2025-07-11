@@ -16,33 +16,51 @@ const Index = () => {
     <div className="min-h-screen">
       <MegaNavigation />
       <main>
-        <div className="section-breathable bg-wellhub-light-gradient">
-          <HeroSection />
-        </div>
-        <div className="section-large bg-white">
-          <WellnessHumansSection />
-        </div>
-        <div className="section-breathable bg-wellhub-light-gradient">
-          <MissionSection />
-        </div>
-        <div className="section-large bg-white">
-          <ServicesSection />
-        </div>
-        <div className="section-breathable bg-wellhub-light-gradient">
-          <VideoShowcaseSection />
-        </div>
-        <div className="section-large bg-white">
-          <AIToolsPreview />
-        </div>
-        <div className="section-breathable bg-wellhub-light-gradient">
-          <FeaturedProjectsSection />
-        </div>
-        <div className="section-large bg-white">
-          <PartnersSection />
-        </div>
-        <div className="section-breathable bg-wellhub-light-gradient">
-          <TestimonialsSection />
-        </div>
+        <section className="section-breathable bg-wellhub-light-gradient">
+          <div className="container-width">
+            <HeroSection />
+          </div>
+        </section>
+        <section className="section-large bg-white">
+          <div className="container-width">
+            <WellnessHumansSection />
+          </div>
+        </section>
+        <section className="section-breathable bg-wellhub-light-gradient">
+          <div className="container-width">
+            <MissionSection />
+          </div>
+        </section>
+        <section className="section-large bg-white">
+          <div className="container-width">
+            <ServicesSection />
+          </div>
+        </section>
+        <section className="section-breathable bg-wellhub-light-gradient">
+          <div className="container-width">
+            <VideoShowcaseSection />
+          </div>
+        </section>
+        <section className="section-large bg-white">
+          <div className="container-width">
+            <AIToolsPreview />
+          </div>
+        </section>
+        <section className="section-breathable bg-wellhub-light-gradient">
+          <div className="container-width">
+            <FeaturedProjectsSection />
+          </div>
+        </section>
+        <section className="section-large bg-white">
+          <div className="container-width">
+            <PartnersSection />
+          </div>
+        </section>
+        <section className="section-breathable bg-wellhub-light-gradient">
+          <div className="container-width">
+            <TestimonialsSection />
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
