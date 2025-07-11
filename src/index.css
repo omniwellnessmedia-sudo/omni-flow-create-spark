@@ -99,6 +99,15 @@
     --sidebar-accent-foreground: 35 15% 97%;
     --sidebar-border: 25 5.3% 15%;
     --sidebar-ring: 180 50% 70%;
+
+    /* Ensure dark mode text is visible */
+    --omni-red: 0 80% 60%;
+    --omni-orange: 25 90% 65%;
+    --omni-yellow: 45 95% 70%;
+    --omni-green: 150 50% 50%;
+    --omni-blue: 200 60% 55%;
+    --omni-indigo: 240 55% 45%;
+    --omni-violet: 280 60% 65%;
   }
 }
 
@@ -343,11 +352,30 @@
   }
 }
 
-/* Enhanced button contrast */
+/* Enhanced button contrast for readability */
 .bg-wellhub-gradient,
+.bg-rainbow-enhanced,
 .bg-rainbow-gradient {
   color: white !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.bg-wellhub-gradient *,
+.bg-rainbow-enhanced *,
+.bg-rainbow-gradient * {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* High contrast text utilities */
+.text-high-contrast {
+  color: hsl(20 14.3% 4.1%) !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.dark .text-high-contrast {
+  color: hsl(35 15% 97%) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 /* Clean spacing system */

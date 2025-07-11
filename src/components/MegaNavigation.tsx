@@ -158,11 +158,11 @@ const MegaNavigation = () => {
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
               <img 
-                src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+                src="/src/assets/omni-logo.png" 
                 alt="Omni Wellness Media" 
-                className="h-12 w-12 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                className="h-14 w-14 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 drop-shadow-lg"
               />
-              <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-lg"></div>
+              <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-lg scale-110"></div>
             </div>
             <div>
               <span className="font-heading font-bold text-2xl text-rainbow-enhanced">
