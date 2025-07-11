@@ -38,8 +38,8 @@ const VideoShowcaseSection = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl mb-6">
-            Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Story</span> in Motion
+          <h2 className="heading-primary mb-6">
+            Our Story in Motion
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
             Experience our journey through powerful visual storytelling and authentic community narratives.

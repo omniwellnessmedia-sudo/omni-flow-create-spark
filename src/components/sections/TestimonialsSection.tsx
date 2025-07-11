@@ -27,8 +27,8 @@ const TestimonialsSection = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl mb-6">
-            What Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Partners</span> Say
+          <h2 className="heading-primary mb-6">
+            What Our Partners Say
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             We're honored to work with incredible individuals and organizations 

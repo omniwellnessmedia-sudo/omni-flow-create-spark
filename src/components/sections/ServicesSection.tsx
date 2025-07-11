@@ -43,8 +43,8 @@ const ServicesSection = () => {
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl mb-6">
-            Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Services</span>
+          <h2 className="heading-primary mb-6">
+            Our Services
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             We offer comprehensive solutions that align with your values and amplify your impact. 

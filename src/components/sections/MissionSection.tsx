@@ -6,8 +6,8 @@ const MissionSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className="animate-fade-in-up">
-            <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl mb-6 text-gray-900 dark:text-white">
-              Our <span className="bg-rainbow-gradient bg-clip-text text-transparent font-bold">Mission</span>
+            <h2 className="heading-primary mb-6">
+              Our Mission
             </h2>
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">
               We serve as messengers to humanity, starting with South Africa and reaching the world. 
