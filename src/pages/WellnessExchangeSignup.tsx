@@ -11,11 +11,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
-import { User, Heart, ArrowRight } from "lucide-react";
+import { User, Heart, ArrowRight, Sparkles, Loader2 } from "lucide-react";
 
 const WellnessExchangeSignup = () => {
   const [userType, setUserType] = useState<'provider' | 'consumer'>('consumer');
   const [loading, setLoading] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -64,6 +65,38 @@ const WellnessExchangeSignup = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const generateBio = async () => {
+    if (!businessName) {
+      toast.error("Please enter your business name first");
+      return;
+    }
+    
+    setAiLoading(true);
+    try {
+      const response = await fetch('/functions/v1/generate-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'bio',
+          businessName,
+          specialties,
+          experienceYears,
+          location
+        })
+      });
+      
+      const data = await response.json();
+      if (data.content) {
+        setDescription(data.content);
+        toast.success("Bio generated successfully!");
+      }
+    } catch (error) {
+      toast.error("Failed to generate bio. Please try again.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -211,7 +244,24 @@ const WellnessExchangeSignup = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="description">Description</Label>
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="description">Description</Label>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={generateBio}
+                            disabled={aiLoading}
+                            className="text-xs"
+                          >
+                            {aiLoading ? (
+                              <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                            ) : (
+                              <Sparkles className="h-3 w-3 mr-1" />
+                            )}
+                            AI Generate
+                          </Button>
+                        </div>
                         <textarea
                           id="description"
                           value={description}

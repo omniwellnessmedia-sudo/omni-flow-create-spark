@@ -10,13 +10,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
-import { ArrowLeft, Plus, DollarSign, Coins, Clock, MapPin } from "lucide-react";
+import { ArrowLeft, Plus, Coins, Clock, MapPin, Sparkles, Loader2, PiggyBank } from "lucide-react";
 import { toast } from "sonner";
 
 const AddService = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [aiLoading, setAiLoading] = useState({ title: false, description: false });
   
   // Pre-filled demo data for yoga teacher
   const [formData, setFormData] = useState({
@@ -89,6 +90,35 @@ const AddService = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const generateContent = async (type: 'title' | 'description') => {
+    if (!formData.category) {
+      toast.error("Please select a category first");
+      return;
+    }
+    
+    setAiLoading(prev => ({ ...prev, [type]: true }));
+    try {
+      const response = await fetch('/functions/v1/generate-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: type === 'title' ? 'service_title' : 'service_description',
+          specialties: [formData.category]
+        })
+      });
+      
+      const data = await response.json();
+      if (data.content) {
+        handleInputChange(type === 'title' ? 'title' : 'description', data.content);
+        toast.success(`${type === 'title' ? 'Title' : 'Description'} generated successfully!`);
+      }
+    } catch (error) {
+      toast.error("Failed to generate content. Please try again.");
+    } finally {
+      setAiLoading(prev => ({ ...prev, [type]: false }));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <WellnessExchangeNavigation />
@@ -152,7 +182,24 @@ const AddService = () => {
 
                 {/* Title */}
                 <div>
-                  <Label htmlFor="title">Service Title</Label>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="title">Service Title</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => generateContent('title')}
+                      disabled={aiLoading.title}
+                      className="text-xs"
+                    >
+                      {aiLoading.title ? (
+                        <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                      ) : (
+                        <Sparkles className="h-3 w-3 mr-1" />
+                      )}
+                      AI Generate
+                    </Button>
+                  </div>
                   <Input
                     id="title"
                     value={formData.title}
@@ -164,7 +211,24 @@ const AddService = () => {
 
                 {/* Description */}
                 <div>
-                  <Label htmlFor="description">Description</Label>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="description">Description</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => generateContent('description')}
+                      disabled={aiLoading.description}
+                      className="text-xs"
+                    >
+                      {aiLoading.description ? (
+                        <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                      ) : (
+                        <Sparkles className="h-3 w-3 mr-1" />
+                      )}
+                      AI Generate
+                    </Button>
+                  </div>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -214,7 +278,7 @@ const AddService = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="priceZar" className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-1" />
+                      <PiggyBank className="h-4 w-4 mr-1" />
                       Price (ZAR)
                     </Label>
                     <Input

@@ -23,7 +23,7 @@ import {
   MessageSquare,
   Settings,
   Bot,
-  DollarSign,
+  PiggyBank,
   Heart,
   Award,
   Globe,
@@ -319,7 +319,7 @@ const ProviderDashboard = () => {
               <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">ZAR Earnings</CardTitle>
-                  <DollarSign className="h-4 w-4 text-green-600" />
+                  <PiggyBank className="h-4 w-4 text-green-600" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-green-600">R{zarEarnings.toLocaleString()}</div>
@@ -655,7 +655,7 @@ const ProviderDashboard = () => {
                       </div>
                     ) : (
                       <div className="text-center py-12 text-muted-foreground">
-                        <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                        <PiggyBank className="h-12 w-12 mx-auto mb-4 opacity-50" />
                         <p>No transactions yet</p>
                         <p className="text-sm">Your transaction history will appear here</p>
                       </div>
