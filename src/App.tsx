@@ -41,6 +41,7 @@ import TransactionPage from "./pages/TransactionPage";
 import WellnessExchangeSignup from "./pages/WellnessExchangeSignup";
 import PartnersDirectory from "./pages/PartnersDirectory";
 import PartnerProfile from "./pages/PartnerProfile";
+import Resources from "./pages/Resources";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
@@ -93,6 +94,7 @@ const App = () => (
             <Route path="/partners" element={<PartnersDirectory />} />
             <Route path="/partners/:id" element={<PartnerProfile />} />
             <Route path="/platforms" element={<PartnersDirectory />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />

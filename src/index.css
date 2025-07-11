@@ -380,29 +380,29 @@
 
 /* ===== GLOBAL DESIGN SYSTEM ===== */
 
-/* Standardized Spacing System - Optimized for better scaling */
+/* Standardized Spacing System - Optimized for 100% zoom */
 .section-spacing {
-  @apply py-20 lg:py-24;
+  @apply py-12 lg:py-16;
 }
 
 .section-spacing-large {
-  @apply py-24 lg:py-32;
+  @apply py-16 lg:py-20;
 }
 
 .section-spacing-small {
-  @apply py-16 lg:py-20;
+  @apply py-8 lg:py-12;
 }
 
 /* Mobile responsive spacing - optimized for 100% zoom */
 @media (max-width: 768px) {
-  .section-spacing { @apply py-10; }
-  .section-spacing-large { @apply py-14; }
-  .section-spacing-small { @apply py-8; }
+  .section-spacing { @apply py-8; }
+  .section-spacing-large { @apply py-10; }
+  .section-spacing-small { @apply py-6; }
 }
 
-/* Container Standards */
+/* Container Standards - Reduced width for 100% zoom */
 .container-width {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
 /* ===== TYPOGRAPHY SYSTEM ===== */

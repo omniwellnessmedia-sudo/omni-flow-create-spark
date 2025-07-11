@@ -13,9 +13,9 @@ const About = () => {
       description: "Chad oversees content creation and overall design direction, leveraging his strong background in media to produce high-quality, impactful content that bridges communities and inspires positive change."
     },
     { 
-      name: "Abbi", 
+      name: "Abbi Berkovitz", 
       role: "Content Developer", 
-      image: "/lovable-uploads/acc84685-2d7b-4845-99fd-744ce2c3c932.png",
+      image: "/lovable-uploads/310e880f-0ee8-41fe-b098-6a2d5481ea5b.png",
       description: "Abbi works closely with Chad on content development, creating engaging copy and organizing visuals for the website and other platforms. She specializes in distributing content across Facebook and TikTok."
     },
     { 
@@ -32,7 +32,7 @@ const About = () => {
     },
     { 
       name: "Feroza", 
-      role: "Strategic Consultant", 
+      role: "Project Lead Support", 
       image: "/lovable-uploads/3e329aa7-398b-4473-948d-2d5f9d54915a.png",
       description: "Feroza brings strategic insights and innovative thinking to help clients achieve their conscious business goals and sustainable growth."
     }
@@ -50,8 +50,8 @@ const About = () => {
           </>
         }
         description="We are messengers to humanity, creating authentic content that bridges communities and inspires positive change from South Africa to the world."
-        image="/lovable-uploads/362cb38a-2c1c-4857-a238-75f8e507408e.png"
-        imageAlt="Omni Wellness Media Team"
+        image="/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png"
+        imageAlt="Community outreach with distribution boxes"
         variant="split"
         height="medium"
         actions={[
