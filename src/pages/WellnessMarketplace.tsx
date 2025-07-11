@@ -58,8 +58,9 @@ const WellnessMarketplace = () => {
   const [wellCoinBalance, setWellCoinBalance] = useState(0);
 
   const categories = [
-    "Yoga", "Meditation", "Nutrition", "Massage Therapy", "Acupuncture",
-    "Life Coaching", "Personal Training", "Reiki", "Aromatherapy", "Herbalism"
+    "Yoga", "Meditation", "Nutrition Counseling", "Massage Therapy", "Acupuncture",
+    "Life Coaching", "Personal Training", "Reiki", "Aromatherapy", "Herbalism",
+    "Breathwork", "Sound Healing", "Crystal Healing", "Energy Healing", "Pilates"
   ];
 
   useEffect(() => {
@@ -117,7 +118,7 @@ const WellnessMarketplace = () => {
     }
   };
 
-  // Use only real services from database
+  // Use only real services from database - no sample data
   const displayServices = services;
 
   // Helper function to get service image
@@ -243,18 +244,18 @@ const WellnessMarketplace = () => {
               <div className="flex flex-col md:flex-row items-center justify-between">
                 <div className="text-center md:text-left mb-4 md:mb-0">
                   <h3 className="font-bold text-xl mb-2">
-                    🎯 Exclusive Offer: <span className="bg-rainbow-gradient bg-clip-text text-transparent">7-Day Free Trial</span>
+                    🎯 Welcome to Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Marketplace</span>
                   </h3>
                   <p className="text-gray-600 max-w-2xl">
-                    Try all Omni Wellness services for 7 days completely free! Access premium wellness content, business consulting, and media services from our expert team.
+                    Discover verified wellness practitioners and holistic services designed to support your journey to optimal health and consciousness.
                   </p>
                 </div>
                 <Button 
                   size="lg" 
                   className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 whitespace-nowrap"
-                  onClick={() => toast.success("7-day trial activation coming soon!")}
+                  onClick={() => window.location.href = '/wellness-exchange/provider-signup'}
                 >
-                  Start Free Trial
+                  Become a Partner
                 </Button>
               </div>
             </CardContent>
@@ -265,34 +266,34 @@ const WellnessMarketplace = () => {
             <Button 
               variant="outline" 
               className="h-16 flex-col"
-              onClick={() => window.location.href = '/wellness-exchange/add-service'}
+              onClick={() => window.location.href = '/wellness-exchange/provider-signup'}
             >
               <Plus className="h-5 w-5 mb-1" />
-              <span className="text-xs">Add Service</span>
+              <span className="text-xs">Become Partner</span>
             </Button>
             <Button 
               variant="outline" 
               className="h-16 flex-col"
-              onClick={() => window.location.href = '/wellness-exchange/add-want'}
+              onClick={() => window.location.href = '/wellness-exchange/wants'}
             >
               <Heart className="h-5 w-5 mb-1" />
-              <span className="text-xs">Post Want</span>
+              <span className="text-xs">Browse Wants</span>
             </Button>
             <Button 
               variant="outline" 
               className="h-16 flex-col"
-              onClick={() => window.location.href = '/wellness-exchange/search'}
+              onClick={() => window.location.href = '/wellness-exchange/directory'}
             >
               <Search className="h-5 w-5 mb-1" />
-              <span className="text-xs">Find Services</span>
+              <span className="text-xs">Find Partners</span>
             </Button>
             <Button 
               variant="outline" 
               className="h-16 flex-col"
-              onClick={() => window.location.href = '/wellness-exchange/transactions'}
+              onClick={() => window.location.href = '/wellness-exchange/community'}
             >
               <Coins className="h-5 w-5 mb-1" />
-              <span className="text-xs">My Transactions</span>
+              <span className="text-xs">Community</span>
             </Button>
           </div>
 
