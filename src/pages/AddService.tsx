@@ -30,11 +30,24 @@ const AddService = () => {
     isOnline: true
   });
 
-  const categories = [
-    "Yoga", "Meditation", "Nutrition", "Massage Therapy", "Acupuncture",
-    "Life Coaching", "Personal Training", "Reiki", "Aromatherapy", "Herbalism",
-    "QiGong", "Pilates"
+  const [categoryInput, setCategoryInput] = useState(formData.category);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  
+  const allCategories = [
+    "Yoga", "Meditation", "Nutrition", "Massage Therapy", "Acupuncture", "Life Coaching", 
+    "Personal Training", "Reiki", "Aromatherapy", "Herbalism", "QiGong", "Pilates",
+    "Sound Healing", "Crystal Therapy", "Energy Healing", "Breathwork", "Tai Chi",
+    "Ayurveda", "Naturopathy", "Hypnotherapy", "Art Therapy", "Dance Therapy",
+    "Mindfulness", "Spiritual Coaching", "Wellness Coaching", "Fitness Training",
+    "Nutritional Therapy", "Detox Programs", "Weight Management", "Sleep Therapy",
+    "Stress Management", "Anger Management", "Trauma Therapy", "Grief Counseling",
+    "Relationship Coaching", "Career Coaching", "Financial Wellness", "Raw Food",
+    "Vegan Lifestyle", "Juice Cleansing", "Fasting", "Meditation Retreats"
   ];
+
+  const filteredCategories = allCategories.filter(category =>
+    category.toLowerCase().includes(categoryInput.toLowerCase())
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,21 +175,39 @@ const AddService = () => {
                   />
                 </div>
 
-                {/* Category */}
-                <div>
-                  <Label htmlFor="category">Category</Label>
-                  <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
+                {/* Category with Smart Autocomplete */}
+                <div className="relative">
+                  <Label htmlFor="category">Service Category</Label>
+                  <Input
+                    id="category"
+                    value={categoryInput}
+                    onChange={(e) => {
+                      setCategoryInput(e.target.value);
+                      setShowSuggestions(true);
+                      handleInputChange("category", e.target.value);
+                    }}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                    placeholder="Type to search categories..."
+                    required
+                  />
+                  {showSuggestions && filteredCategories.length > 0 && (
+                    <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-md shadow-lg max-h-40 overflow-y-auto">
+                      {filteredCategories.slice(0, 8).map((category) => (
+                        <div
+                          key={category}
+                          className="px-3 py-2 cursor-pointer hover:bg-accent text-sm"
+                          onClick={() => {
+                            setCategoryInput(category);
+                            handleInputChange("category", category);
+                            setShowSuggestions(false);
+                          }}
+                        >
                           {category}
-                        </SelectItem>
+                        </div>
                       ))}
-                    </SelectContent>
-                  </Select>
+                    </div>
+                  )}
                 </div>
 
                 {/* Pricing */}

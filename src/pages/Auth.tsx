@@ -40,9 +40,10 @@ const Auth = () => {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/wellness-exchange/provider-signup`,
           data: {
             full_name: fullName,
+            user_type: 'provider'
           }
         }
       });
