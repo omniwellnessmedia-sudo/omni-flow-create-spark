@@ -443,3 +443,13 @@
 .nav-offset {
   @apply pt-20;
 }
+
+/* Breathing animation for hero logo */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
