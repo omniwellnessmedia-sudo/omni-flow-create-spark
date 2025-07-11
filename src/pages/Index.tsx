@@ -16,31 +16,31 @@ const Index = () => {
     <div className="min-h-screen">
       <MegaNavigation />
       <main>
-        <Section id="hero" size="breathable" background="gradient">
+        <Section id="hero" size="breathable" background="gradient" className="section-margin-large">
           <HeroSection />
         </Section>
-        <Section size="large" background="white">
+        <Section size="large" background="white" className="section-margin">
           <WellnessHumansSection />
         </Section>
-        <Section size="breathable" background="light">
+        <Section size="breathable" background="light" className="section-margin">
           <MissionSection />
         </Section>
-        <Section size="large" background="white">
+        <Section size="large" background="white" className="section-margin">
           <ServicesSection />
         </Section>
-        <Section size="breathable" background="light">
+        <Section size="breathable" background="light" className="section-margin">
           <VideoShowcaseSection />
         </Section>
-        <Section size="large" background="white">
+        <Section size="large" background="white" className="section-margin">
           <AIToolsPreview />
         </Section>
-        <Section size="breathable" background="light">
+        <Section size="breathable" background="light" className="section-margin">
           <FeaturedProjectsSection />
         </Section>
-        <Section size="large" background="white">
+        <Section size="large" background="white" className="section-margin">
           <PartnersSection />
         </Section>
-        <Section size="breathable" background="light">
+        <Section size="breathable" background="light" className="section-margin">
           <TestimonialsSection />
         </Section>
       </main>

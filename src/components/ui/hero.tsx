@@ -65,7 +65,7 @@ const Hero = ({
         )}
         
         <h1 className={cn(
-          "font-heading font-bold leading-tight mb-6 max-w-4xl",
+          "font-heading font-bold leading-tight mb-6 max-w-4xl text-shadow-strong",
           variant === 'minimal' ? 'text-2xl sm:text-3xl lg:text-4xl mx-auto' : 'text-3xl sm:text-4xl lg:text-5xl xl:text-6xl mx-auto'
         )}>
           {title}
@@ -73,8 +73,8 @@ const Hero = ({
 
         {description && (
           <p className={cn(
-            "text-gray-600 mb-8 leading-relaxed",
-            variant === 'split' ? 'text-lg max-w-lg' : 'text-xl sm:text-2xl max-w-4xl mx-auto'
+            "mb-8 leading-relaxed text-shadow",
+            variant === 'split' ? 'text-lg max-w-lg text-gray-600' : 'text-xl sm:text-2xl max-w-4xl mx-auto'
           )}>
             {description}
           </p>

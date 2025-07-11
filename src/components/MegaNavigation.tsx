@@ -151,7 +151,7 @@ const MegaNavigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full glass shadow-lg z-50 border-b border-white/20">
+    <nav className="navbar-fixed glass shadow-lg border-b border-white/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
@@ -261,7 +261,7 @@ const MegaNavigation = () => {
         {/* Mega Menu Dropdown */}
         {activeDropdown && (
           <div 
-            className="absolute left-0 right-0 top-full bg-white shadow-2xl border-t border-gray-100 z-50"
+            className="absolute left-0 right-0 top-full dropdown-enhanced"
             onMouseLeave={() => setActiveDropdown(null)}
           >
             {mainNavItems.map((item) => {

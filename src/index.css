@@ -124,18 +124,24 @@
   }
 }
 
-/* Button text shadow for better readability */
+/* Text Shadow Classes - Enhanced for better contrast */
+.text-shadow-sm {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
 .text-shadow {
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
 }
 
 .text-shadow-strong {
   text-shadow: 
-    -1px -1px 0 rgba(0, 0, 0, 0.8),
-    1px -1px 0 rgba(0, 0, 0, 0.8),
-    -1px 1px 0 rgba(0, 0, 0, 0.8),
-    1px 1px 0 rgba(0, 0, 0, 0.8),
-    0 0 3px rgba(0, 0, 0, 0.9);
+    0 2px 4px rgba(0, 0, 0, 0.8),
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 0 16px rgba(0, 0, 0, 0.4);
 }
 
 /* Brand Color Classes - Individual colors only */
@@ -379,26 +385,95 @@
 }
 
 /* Clean spacing system */
+/* Enhanced Spacing System */
+.section-spacing {
+  @apply py-16 sm:py-20 lg:py-24;
+}
+
+.section-spacing-large {
+  @apply py-20 sm:py-24 lg:py-32;
+}
+
+.section-margin {
+  margin-block: 4rem;
+}
+
+.section-margin-large {
+  margin-block: 6rem;
+}
+
+.section-padding {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+/* Enhanced responsive padding */
+.responsive-padding {
+  @apply px-6 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-16;
+}
+
 /* Global section padding system */
 .section-breathable {
-  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
+  @apply py-16 px-4 md:py-20 md:px-6 lg:py-24 lg:px-8;
 }
 
 .section-large {
-  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
+  @apply py-20 px-4 md:py-24 md:px-6 lg:py-32 lg:px-8;
 }
 
 .section-medium {
-  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
+  @apply py-12 px-4 md:py-16 md:px-6 lg:py-20 lg:px-8;
 }
 
 .container-width {
   @apply max-w-7xl mx-auto;
 }
 
-/* Card standardization utilities */
+/* Card Utilities - Enhanced with consistent heights and image handling */
+.card-hover {
+  @apply transition-all duration-300 hover:scale-105 hover:shadow-xl;
+}
+
 .card-standard {
-  @apply h-[520px] overflow-hidden;
+  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm;
+}
+
+.card-image-container {
+  @apply relative w-full h-48 overflow-hidden rounded-t-xl;
+}
+
+.card-image {
+  @apply w-full h-full object-cover transition-transform duration-300 hover:scale-110;
+}
+
+.card-profile-image {
+  @apply w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full mx-auto border-4 border-white shadow-lg;
+}
+
+.card-fixed-height {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content-grow {
+  flex-grow: 1;
+}
+
+/* Text truncation utilities */
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.6;
 }
 
 .card-title-clamp {
@@ -430,6 +505,43 @@
 /* Dropdown z-index fix */
 .dropdown-menu-standard {
   @apply z-50 p-3 shadow-xl;
+}
+
+/* Grid Layout Utilities */
+.grid-responsive {
+  @apply grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.grid-responsive-2 {
+  @apply grid gap-6 grid-cols-1 lg:grid-cols-2;
+}
+
+.grid-center-orphan {
+  @apply last:col-span-full last:mx-auto last:max-w-md;
+}
+
+/* Improved navbar */
+.navbar-fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  transition: transform 0.3s ease-in-out;
+}
+
+.dropdown-enhanced {
+  @apply bg-white/95 backdrop-blur-md shadow-2xl border border-gray-100;
+  z-index: 9998;
+}
+
+/* Image loading and lazy loading */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
 }
 
 /* Mobile responsive utilities */

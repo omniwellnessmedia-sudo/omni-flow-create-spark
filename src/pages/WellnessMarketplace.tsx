@@ -191,10 +191,10 @@ const WellnessMarketplace = () => {
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h1 className="font-heading font-bold text-2xl sm:text-3xl">
+                <h1 className="font-heading font-bold text-3xl sm:text-4xl text-shadow">
                   Wellness <span className="bg-rainbow-gradient bg-clip-text text-transparent">Marketplace</span>
                 </h1>
-                <p className="text-gray-600 mt-1">Discover and book wellness services</p>
+                <p className="text-gray-600 mt-2 text-lg">Discover and book wellness services from our community</p>
               </div>
               
               {/* WellCoin Balance - Only show for authenticated users */}
@@ -240,13 +240,13 @@ const WellnessMarketplace = () => {
             </div>
           </div>
 
-          {/* 7-Day Trial Promotion Banner */}
-          <Card className="mb-8 bg-gradient-to-r from-omni-blue/10 via-omni-purple/10 to-omni-pink/10 border-omni-blue/20">
+          {/* Community Welcome Banner */}
+          <Card className="mb-8 bg-gradient-to-r from-omni-blue/10 via-omni-indigo/10 to-omni-violet/10 border-omni-blue/20">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-center justify-between">
                 <div className="text-center md:text-left mb-4 md:mb-0">
                   <h3 className="font-bold text-xl mb-2">
-                    🎯 Welcome to Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Marketplace</span>
+                    🌟 Scale Your <span className="bg-rainbow-gradient bg-clip-text text-transparent">Conscious Business</span>
                   </h3>
                   <p className="text-gray-600 max-w-2xl">
                     Discover verified wellness practitioners and holistic services designed to support your journey to optimal health and consciousness.
@@ -331,15 +331,18 @@ const WellnessMarketplace = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid-responsive grid-center-orphan">
                 {filteredServices.map((service) => (
-                  <Card key={service.id} className="hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+                  <Card key={service.id} className="card-fixed-height hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
                     {/* Service Image */}
-                    <div className="h-48 overflow-hidden">
+                    <div className="card-image-container">
                       <img 
                         src={service.images && service.images.length > 0 ? service.images[0] : getServiceImage(service.title, service.category)} 
                         alt={service.title}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        className="card-image lazy-image"
+                        loading="lazy"
+                        width="300"
+                        height="200"
                       />
                     </div>
                     
@@ -358,8 +361,8 @@ const WellnessMarketplace = () => {
                       </CardDescription>
                     </CardHeader>
                     
-                    <CardContent>
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                    <CardContent className="card-content-grow">
+                      <p className="text-sm text-gray-600 mb-4 text-truncate-3">
                         {service.description}
                       </p>
                       
