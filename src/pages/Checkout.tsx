@@ -1,4 +1,4 @@
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,7 +47,7 @@ const Checkout = () => {
   if (state.items.length === 0) {
     return (
       <div className="min-h-screen">
-        <Navigation />
+        <MegaNavigation />
         <main className="pt-20 pb-16">
           <div className="max-w-2xl mx-auto px-4 text-center">
             <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
@@ -64,7 +64,7 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
+      <MegaNavigation />
       
       <main className="pt-20 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

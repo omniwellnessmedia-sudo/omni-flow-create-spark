@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
@@ -72,7 +72,7 @@ const PartnersDirectory = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-violet/5">
-        <Navigation />
+        <MegaNavigation />
         <div className="pt-20 pb-20 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-omni-orange mx-auto mb-4"></div>
@@ -85,7 +85,7 @@ const PartnersDirectory = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-wellhub-light via-white to-omni-violet/5">
-      <Navigation />
+      <MegaNavigation />
       <BreadcrumbNav />
       
       {/* Background Video */}

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import Footer from "@/components/Footer";
 import { Search, Filter, MapPin, Star, TrendingUp, Clock, Users } from "lucide-react";
