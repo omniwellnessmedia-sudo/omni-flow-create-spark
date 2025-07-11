@@ -23,9 +23,9 @@ export const Section = ({
   };
 
   const backgroundClasses = {
-    light: 'bg-wellhub-light-gradient',
+    light: 'bg-gradient-to-br from-gray-50 to-purple-50',
     white: 'bg-white',
-    gradient: 'bg-gradient-to-br from-wellhub-light to-white'
+    gradient: 'bg-gradient-to-br from-violet-50 via-white to-cyan-50'
   };
 
   return (
