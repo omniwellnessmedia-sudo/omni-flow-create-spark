@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import { User, Heart, ArrowRight } from "lucide-react";
 
@@ -138,7 +138,7 @@ const WellnessExchangeSignup = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <MegaNavigation />
       <main className="pt-16">
         <section className="py-20 bg-gradient-to-br from-background via-accent to-background">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -79,7 +79,7 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <div className="min-h-screen">
-        <Navigation />
+        <MegaNavigation />
         <main className="pt-20 pb-16">
           <div className="max-w-2xl mx-auto px-4 text-center">
             <h1 className="text-2xl font-bold mb-4">Product not found</h1>
@@ -95,7 +95,7 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
+      <MegaNavigation />
       
       <main className="pt-20 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

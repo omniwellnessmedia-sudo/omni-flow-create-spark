@@ -66,7 +66,7 @@ const SearchServices = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
+      <MegaNavigation />
       <WellnessExchangeNavigation />
       
       <main className="pt-0 pb-20">

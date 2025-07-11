@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import Navigation from "@/components/Navigation";
+import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { Coins, DollarSign, ArrowUpRight, ArrowDownRight, Plus } from "lucide-react";
@@ -109,7 +109,7 @@ const TransactionPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
+      <MegaNavigation />
       <WellnessExchangeNavigation />
       
       <main className="pt-8 pb-20">

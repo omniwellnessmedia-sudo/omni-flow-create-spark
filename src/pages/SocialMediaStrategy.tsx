@@ -66,7 +66,7 @@ const SocialMediaStrategy = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navigation />
+      <MegaNavigation />
       
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-white via-gray-50 to-green-50">
