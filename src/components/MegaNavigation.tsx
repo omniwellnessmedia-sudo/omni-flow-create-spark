@@ -153,7 +153,7 @@ const MegaNavigation = () => {
   return (
     <nav className="nav-sticky w-full glass shadow-lg border-b border-white/20">
       <div className="container-width">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-24">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
