@@ -256,19 +256,24 @@ const ProviderDashboard = () => {
           </div>
         </section>
 
-        {/* AI Assistant Banner */}
+        {/* Quick Actions Banner */}
         <section className="py-4 bg-gradient-to-r from-omni-violet/10 to-omni-blue/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Bot className="h-6 w-6 text-omni-violet mr-3" />
                 <div>
-                  <p className="font-medium">AI Assistant has 3 new suggestions to improve your performance</p>
-                  <p className="text-sm text-gray-600">Implementing these could increase your earnings by 25%</p>
+                  <p className="font-medium">Welcome to your wellness provider dashboard</p>
+                  <p className="text-sm text-gray-600">Manage your services, track earnings, and grow your practice</p>
                 </div>
               </div>
-              <Button variant="outline" size="sm">
-                View Suggestions
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => window.location.href = '/wellness-exchange/add-service'}
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Add Service
               </Button>
             </div>
           </div>

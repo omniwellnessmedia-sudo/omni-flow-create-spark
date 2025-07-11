@@ -164,12 +164,6 @@ const MegaNavigation = () => {
               />
               <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-lg scale-110"></div>
             </div>
-            <div>
-              <span className="font-heading font-bold text-2xl text-rainbow-enhanced">
-                Omni Wellness
-              </span>
-              <div className="text-sm text-gray-600 -mt-1 font-medium">Conscious Media</div>
-            </div>
           </Link>
 
           {/* Desktop Navigation */}

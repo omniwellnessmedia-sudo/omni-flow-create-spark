@@ -138,8 +138,14 @@ const WebsiteBuilder = () => {
   };
 
   const previewWebsite = () => {
-    // In a real app, this would open a preview window
-    toast.info('Preview feature coming soon!');
+    if (website.id) {
+      // Open the live website in a new tab
+      const baseUrl = window.location.origin;
+      const websiteUrl = `${baseUrl}/provider-website/${website.id}`;
+      window.open(websiteUrl, '_blank');
+    } else {
+      toast.info('Please save your website first to preview it');
+    }
   };
 
   if (loading) {
@@ -195,8 +201,16 @@ const WebsiteBuilder = () => {
                 </p>
               </div>
             </div>
-            {website.published && (
-              <Button variant="outline" size="sm">
+            {website.published && website.id && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  const baseUrl = window.location.origin;
+                  const websiteUrl = `${baseUrl}/provider-website/${website.id}`;
+                  window.open(websiteUrl, '_blank');
+                }}
+              >
                 <ExternalLink className="w-4 h-4 mr-2" />
                 View Live Site
               </Button>

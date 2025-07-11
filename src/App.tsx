@@ -35,6 +35,7 @@ import AddService from "./pages/AddService";
 import SearchServices from "./pages/SearchServices";
 import AddWant from "./pages/AddWant";
 import ProviderDashboard from "./pages/ProviderDashboard";
+import ProviderWebsite from "./pages/ProviderWebsite";
 import Auth from "./pages/Auth";
 import TransactionPage from "./pages/TransactionPage";
 import WellnessExchangeSignup from "./pages/WellnessExchangeSignup";
@@ -88,6 +89,7 @@ const App = () => (
             <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
             <Route path="/wellness-exchange/provider-signup" element={<WellnessExchangeSignup />} />
             <Route path="/wellness-exchange/consumer-signup" element={<WellnessExchangeSignup />} />
+            <Route path="/provider-website/:websiteId" element={<ProviderWebsite />} />
             <Route path="/partners" element={<PartnersDirectory />} />
             <Route path="/partners/:id" element={<PartnerProfile />} />
             <Route path="/auth" element={<Auth />} />
