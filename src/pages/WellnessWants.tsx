@@ -17,7 +17,7 @@ import {
   MapPin, 
   Clock, 
   Coins, 
-  DollarSign, 
+  PiggyBank, 
   MessageCircle,
   User,
   Calendar
@@ -134,14 +134,30 @@ const WellnessWants = () => {
     setExpiresIn("7");
   };
 
-  const handleRespondToWant = (wantId: string) => {
+  const handleRespondToWant = async (wantId: string) => {
     if (!user) {
       toast.error("Please sign in to respond to wants");
       return;
     }
     
-    // In a real app, this would open a response modal
-    toast.success("Response sent! The want creator will contact you soon.");
+    try {
+      // Check if user is a provider
+      const { data: providerProfile } = await supabase
+        .from('provider_profiles')
+        .select('id')
+        .eq('id', user.id)
+        .single();
+        
+      if (!providerProfile) {
+        toast.error("Only verified providers can respond to wants");
+        return;
+      }
+      
+      // Navigate to response form
+      window.location.href = `/wellness-exchange/wants/${wantId}/respond`;
+    } catch (error) {
+      toast.error("Failed to respond to want");
+    }
   };
 
   if (loading) {
@@ -359,12 +375,12 @@ const WellnessWants = () => {
 
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          {want.budget_zar && (
-                            <div className="flex items-center text-green-600">
-                              <DollarSign className="h-4 w-4 mr-1" />
-                              <span className="font-semibold">Up to R{want.budget_zar}</span>
-                            </div>
-                          )}
+                           {want.budget_zar && (
+                             <div className="flex items-center text-green-600">
+                               <PiggyBank className="h-4 w-4 mr-1" />
+                               <span className="font-semibold">Up to R{want.budget_zar}</span>
+                             </div>
+                           )}
                           {want.budget_wellcoins && (
                             <div className="flex items-center text-omni-orange">
                               <Coins className="h-4 w-4 mr-1" />

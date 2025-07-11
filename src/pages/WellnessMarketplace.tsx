@@ -150,8 +150,13 @@ const WellnessMarketplace = () => {
   });
 
   const handleBookService = async (serviceId: string, priceZar: number, priceWellcoins: number) => {
-    // This would open a booking modal or navigate to booking page
-    toast.success("Booking functionality coming soon!");
+    if (!user) {
+      toast.error("Please sign in to book services");
+      return;
+    }
+    
+    // Navigate to service detail page or open booking modal
+    window.location.href = `/services/${serviceId}`;
   };
 
   if (loading) {
