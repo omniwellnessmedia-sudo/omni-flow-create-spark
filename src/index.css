@@ -365,3 +365,16 @@
 .container-padding {
   @apply px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto;
 }
+
+/* Full-screen breathable sections */
+.section-breathable {
+  @apply min-h-screen py-32 flex items-center;
+}
+
+.section-large {
+  @apply min-h-[80vh] py-24 flex items-center;
+}
+
+.section-medium {
+  @apply min-h-[60vh] py-16 flex items-center;
+}

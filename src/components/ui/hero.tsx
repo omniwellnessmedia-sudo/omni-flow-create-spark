@@ -36,10 +36,10 @@ const Hero = ({
   children
 }: HeroProps) => {
   const heightClasses = {
-    small: 'min-h-[40vh] py-16',
-    medium: 'min-h-[60vh] py-20',
-    large: 'min-h-[70vh] py-24',
-    full: 'min-h-screen py-32'
+    small: 'min-h-[50vh] py-20',
+    medium: 'min-h-[70vh] py-24',
+    large: 'min-h-screen py-32',
+    full: 'min-h-screen py-40'
   };
 
   const variantClasses = {

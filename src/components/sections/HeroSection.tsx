@@ -15,11 +15,11 @@ const HeroSection = () => {
           <>
             <span className="text-rainbow-enhanced">Conscious Content</span>
             <br />
-            <span className="text-gray-800">for Positive Change</span>
+            <span className="text-gray-900 dark:text-gray-100">for Positive Change</span>
           </>
         }
         description="Empowering communities through holistic wellness, authentic storytelling, and conscious business development. From South Africa to the world."
-        height="large"
+        height="full"
         actions={[
           {
             label: "Explore Our Services",
