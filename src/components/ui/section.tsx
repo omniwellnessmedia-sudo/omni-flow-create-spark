@@ -28,11 +28,12 @@ export const Section = ({
 
   return (
     <div className={cn(
+      "w-full",
       sizeClasses[size],
       backgroundClasses[background],
       className
     )}>
-      <div className="container-width w-full">
+      <div className="container-width">
         {children}
       </div>
     </div>

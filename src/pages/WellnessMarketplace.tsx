@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
+import { Section } from "@/components/ui/section";
 import { 
   Search, 
   Filter, 

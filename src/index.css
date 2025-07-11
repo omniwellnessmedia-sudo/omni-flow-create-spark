@@ -352,19 +352,19 @@
 
 /* Clean spacing system */
 .section-breathable {
-  @apply min-h-screen py-24 lg:py-32 flex items-center justify-center;
+  @apply w-full min-h-screen py-24 lg:py-32 flex items-center justify-center;
 }
 
 .section-large {
-  @apply min-h-[85vh] py-20 lg:py-28 flex items-center justify-center;
+  @apply w-full min-h-[85vh] py-20 lg:py-28 flex items-center justify-center;
 }
 
 .section-medium {
-  @apply min-h-[70vh] py-16 lg:py-20 flex items-center justify-center;
+  @apply w-full min-h-[70vh] py-16 lg:py-20 flex items-center justify-center;
 }
 
 .container-width {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
 /* Navigation spacing */
