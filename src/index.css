@@ -353,15 +353,15 @@
 /* Clean spacing system */
 /* Global section padding system */
 .section-breathable {
-  @apply py-10 px-5 md:py-15 md:px-8 lg:py-20 lg:px-10;
+  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
 }
 
 .section-large {
-  @apply py-10 px-5 md:py-15 md:px-8 lg:py-20 lg:px-10;
+  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
 }
 
 .section-medium {
-  @apply py-10 px-5 md:py-15 md:px-8 lg:py-20 lg:px-10;
+  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
 }
 
 .container-width {
