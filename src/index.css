@@ -407,44 +407,22 @@
 
 /* ===== TYPOGRAPHY SYSTEM ===== */
 
-/* Gradient headings - main style for all headings */
+/* High contrast headings - no faded text */
 .heading-primary {
   @apply font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-center;
-  background: linear-gradient(135deg, 
-    hsl(var(--foreground)) 0%, 
-    hsl(var(--foreground)) 60%,
-    hsl(var(--omni-violet)) 60%,
-    hsl(var(--omni-orange)) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: hsl(var(--foreground)) !important;
+  text-shadow: none !important;
 }
 
 .heading-secondary {
   @apply font-heading font-bold text-2xl sm:text-3xl lg:text-4xl text-center;
-  background: linear-gradient(135deg, 
-    hsl(var(--foreground)) 0%, 
-    hsl(var(--foreground)) 60%,
-    hsl(var(--omni-violet)) 60%,
-    hsl(var(--omni-orange)) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: hsl(var(--foreground)) !important;
+  text-shadow: none !important;
 }
 
 .heading-tertiary {
   @apply font-heading font-semibold text-xl sm:text-2xl text-center;
-  background: linear-gradient(135deg, 
-    hsl(var(--foreground)) 0%, 
-    hsl(var(--foreground)) 60%,
-    hsl(var(--omni-violet)) 60%,
-    hsl(var(--omni-orange)) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: hsl(var(--foreground)) !important;
 }
 
 /* Remove any faded background text */
@@ -494,7 +472,7 @@
 
 /* Logo Standards */
 .logo-header {
-  @apply h-16 w-auto;
+  @apply h-auto;
   min-width: 120px;
   max-width: 200px;
 }
