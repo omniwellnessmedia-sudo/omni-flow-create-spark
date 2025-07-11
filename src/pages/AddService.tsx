@@ -48,26 +48,47 @@ const AddService = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase
+      // First ensure the user has a provider profile
+      const { error: profileError } = await supabase.rpc('ensure_provider_profile', {
+        user_id: user.id
+      });
+
+      if (profileError) {
+        console.error("Profile creation error:", profileError);
+        throw new Error("Failed to create provider profile");
+      }
+
+      const serviceData = {
+        provider_id: user.id,
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        price_zar: formData.priceZar ? parseFloat(formData.priceZar) : null,
+        price_wellcoins: formData.priceWellcoins ? parseInt(formData.priceWellcoins) : null,
+        duration_minutes: formData.duration ? parseInt(formData.duration) : null,
+        location: formData.location,
+        is_online: formData.isOnline,
+        active: true
+      };
+
+      console.log("Creating service with data:", serviceData);
+
+      const { data, error } = await supabase
         .from('services')
-        .insert({
-          provider_id: user.id,
-          title: formData.title,
-          description: formData.description,
-          category: formData.category,
-          price_zar: formData.priceZar ? parseFloat(formData.priceZar) : null,
-          price_wellcoins: formData.priceWellcoins ? parseInt(formData.priceWellcoins) : null,
-          duration_minutes: formData.duration ? parseInt(formData.duration) : null,
-          location: formData.location,
-          is_online: formData.isOnline,
-          active: true
-        });
+        .insert(serviceData)
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Service creation error:", error);
+        throw error;
+      }
 
+      console.log("Service created successfully:", data);
       toast.success("Service created successfully and is now live on the marketplace!");
       navigate("/wellness-exchange/marketplace");
     } catch (error: any) {
+      console.error("Service creation failed:", error);
       toast.error(error.message);
     } finally {
       setLoading(false);

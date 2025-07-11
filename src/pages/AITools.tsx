@@ -40,10 +40,14 @@ const AITools = () => {
   const { toast } = useToast();
 
   const handleToolComplete = (toolName: string) => {
+    console.log("Tool activated:", toolName);
     toast({
       title: "🎉 Tool Activated!",
       description: `${toolName} is ready to supercharge your wellness journey!`,
     });
+    
+    // TODO: Implement actual AI tool functionality
+    // For now, this is a demo placeholder
   };
 
   // Journey-based tool categories

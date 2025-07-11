@@ -64,10 +64,23 @@ export const BookingCalendar = ({
     setSelectedTime(time);
   };
 
-  const handleConfirmBooking = () => {
+  const handleConfirmBooking = async () => {
     if (selectedDate && selectedTime) {
-      onBookingSelect(selectedDate, selectedTime);
       setIsConfirming(true);
+      try {
+        console.log("Confirming booking:", { date: selectedDate, time: selectedTime });
+        
+        // Call the booking handler
+        await onBookingSelect(selectedDate, selectedTime);
+        
+        // Reset form on success
+        setSelectedDate(undefined);
+        setSelectedTime("");
+      } catch (error) {
+        console.error("Booking failed:", error);
+      } finally {
+        setIsConfirming(false);
+      }
     }
   };
 

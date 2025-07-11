@@ -618,3 +618,34 @@
 .animate-breathe {
   animation: breathe 4s ease-in-out infinite;
 }
+
+/* Base styles adjustments for 100% zoom */
+body {
+  zoom: 0.9; /* Scale down to fit better on screen */
+}
+
+.container {
+  max-width: 1100px !important; /* Reduced from 1200px */
+}
+
+/* Fix white text on white background issue */
+.heading-secondary,
+.heading-tertiary,
+h1, h2, h3, h4, h5, h6 {
+  color: hsl(var(--foreground)) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.no-faded-text {
+  color: hsl(var(--foreground)) !important;
+  opacity: 1 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Specific fix for gradient text elements */
+.bg-rainbow-gradient.bg-clip-text {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--omni-orange))) !important;
+}

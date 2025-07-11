@@ -94,10 +94,16 @@ const WellnessMarketplace = () => {
         .eq('active', true)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Services fetch error:", error);
+        throw error;
+      }
+      
+      console.log("Fetched services:", data);
       setServices(data || []);
     } catch (error: any) {
-      toast.error("Failed to load services");
+      console.error("Failed to load services:", error);
+      toast.error("Failed to load services: " + error.message);
     } finally {
       setLoading(false);
     }
