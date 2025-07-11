@@ -26,7 +26,7 @@ const PartnersSection = () => {
     <section className="py-20 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="heading-primary mb-6">
+          <h2 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
             Our Partners
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">

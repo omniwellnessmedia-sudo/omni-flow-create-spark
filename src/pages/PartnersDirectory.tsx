@@ -153,8 +153,8 @@ const PartnersDirectory = () => {
       <section className="section-padding bg-gradient-to-br from-omni-violet/5 to-omni-orange/5">
         <div className="container-padding">
           <div className="text-center mb-16">
-            <h2 className="font-heading font-bold text-3xl lg:text-4xl mb-6">
-              Why Partner With <span className="bg-rainbow-gradient bg-clip-text text-transparent">Omni Wellness</span>
+            <h2 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+              Why Partner With Omni Wellness
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Join a community of conscious practitioners making a real difference in people's lives
@@ -190,8 +190,8 @@ const PartnersDirectory = () => {
       <main className="section-padding">
         <div className="container-padding">
           <div className="text-center mb-12">
-            <h2 className="font-heading font-bold text-3xl lg:text-4xl mb-4">
-              Meet Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Partners</span>
+            <h2 className="text-5xl md:text-6xl font-bold text-center mb-4 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+              Meet Our Partners
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Discover verified wellness practitioners ready to support your journey
@@ -307,8 +307,8 @@ const PartnersDirectory = () => {
 
           {/* Call to Action */}
           <div className="mt-20 text-center bg-gradient-to-r from-omni-orange/10 via-omni-violet/10 to-omni-green/10 rounded-2xl p-12">
-            <h3 className="font-heading font-bold text-2xl lg:text-3xl mb-4">
-              Ready to Join Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Community?</span>
+            <h3 className="text-4xl md:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+              Ready to Join Our Wellness Community?
             </h3>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               Whether you're a practitioner looking to connect or someone seeking wellness services, we're here to support your journey.

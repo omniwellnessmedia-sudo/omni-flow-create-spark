@@ -92,6 +92,7 @@ const App = () => (
             <Route path="/provider-website/:websiteId" element={<ProviderWebsite />} />
             <Route path="/partners" element={<PartnersDirectory />} />
             <Route path="/partners/:id" element={<PartnerProfile />} />
+            <Route path="/platforms" element={<PartnersDirectory />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />

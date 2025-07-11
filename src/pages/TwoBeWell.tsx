@@ -78,11 +78,8 @@ const TwoBeWell = () => {
                 <Badge className="mb-4 bg-green-100 text-green-800 hover:bg-green-200">
                   🌿 Women-Led • Eco-Conscious • South African
                 </Badge>
-                <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                  The Natural Touch of{" "}
-                  <span className="bg-rainbow-gradient bg-clip-text text-transparent">
-                    2BeWell
-                  </span>
+                <h1 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+                  The Natural Touch of 2BeWell
                 </h1>
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed">
                   Discover skincare that works in harmony with your body. Made with clean ingredients 
@@ -140,8 +137,8 @@ const TwoBeWell = () => {
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Natural Collection</span>
+              <h2 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+                Our Natural Collection
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Each product is lovingly handcrafted by Zenith and Feroza using only the finest natural ingredients. 
@@ -197,8 +194,8 @@ const TwoBeWell = () => {
         <section className="py-20 bg-gradient-to-br from-green-50 to-blue-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Why Choose <span className="bg-rainbow-gradient bg-clip-text text-transparent">2BeWell</span>?
+              <h2 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+                Why Choose 2BeWell?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 More than skincare - we're building a conscious community rooted in wellness, sustainability, and shared values.
@@ -232,8 +229,8 @@ const TwoBeWell = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="animate-fade-in-up">
-                <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                  Rooted in <span className="bg-rainbow-gradient bg-clip-text text-transparent">Purpose</span>
+                <h2 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+                  Rooted in Purpose
                 </h2>
                 <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                   At 2BeWell, we believe wellness should be natural, intentional, and accessible. 

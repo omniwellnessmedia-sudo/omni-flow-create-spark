@@ -348,12 +348,8 @@ const AITools = () => {
               <span className="text-sm font-medium text-purple-700">AI-Powered Wellness Tools</span>
             </div>
             
-            <h1 className="font-heading font-bold text-4xl sm:text-6xl lg:text-7xl mb-6">
-              Your Wellness Journey,
-              <br />
-              <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-                AI-Accelerated
-              </span>
+            <h1 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+              Your Wellness Journey, AI-Accelerated
             </h1>
             
             <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
