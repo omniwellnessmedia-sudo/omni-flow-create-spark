@@ -47,22 +47,36 @@ const HeroSection = () => {
         </div>
 
         {/* Content Pillars */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          {['Inspiration', 'Education', 'Empowerment', 'Wellness'].map((pillar, index) => (
-            <span 
-              key={pillar}
-              className="px-4 py-2 glass rounded-xl text-sm font-semibold text-gray-800 shadow-lg hover-lift cursor-default transform hover:scale-105 transition-all duration-300"
+        <div className="flex flex-wrap justify-center gap-6 mb-16 relative z-10">
+          {[
+            { name: 'Inspiration', color: 'from-purple-500 to-pink-500', icon: '✨' },
+            { name: 'Education', color: 'from-blue-500 to-cyan-500', icon: '📚' },
+            { name: 'Empowerment', color: 'from-green-500 to-emerald-500', icon: '💪' },
+            { name: 'Wellness', color: 'from-orange-500 to-yellow-500', icon: '🧘' }
+          ].map((pillar, index) => (
+            <div 
+              key={pillar.name}
+              className={`group relative px-6 py-3 bg-gradient-to-r ${pillar.color} rounded-2xl text-white font-semibold text-sm shadow-xl cursor-pointer transform transition-all duration-500 hover:scale-110 hover:rotate-1 hover:shadow-2xl animate-fade-in`}
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              {pillar}
-            </span>
+              <div className="flex items-center gap-2">
+                <span className="text-lg group-hover:scale-125 transition-transform duration-300">
+                  {pillar.icon}
+                </span>
+                <span className="group-hover:tracking-wider transition-all duration-300">
+                  {pillar.name}
+                </span>
+              </div>
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-300"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+            </div>
           ))}
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-pulse"></div>
+        {/* Scroll Indicator - positioned lower to avoid overlap */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce z-0">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center backdrop-blur-sm">
+            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse"></div>
           </div>
         </div>
       </Hero>
