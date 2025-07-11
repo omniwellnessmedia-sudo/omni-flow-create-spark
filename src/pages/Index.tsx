@@ -19,30 +19,30 @@ const Index = () => {
         <Section id="hero" size="breathable" background="gradient">
           <HeroSection />
         </Section>
-        <Section size="large" background="white">
+        <section className="section-spacing bg-white">
           <WellnessHumansSection />
-        </Section>
-        <Section size="breathable" background="light">
+        </section>
+        <section className="section-spacing bg-gray-50">
           <MissionSection />
-        </Section>
-        <Section size="large" background="white">
+        </section>
+        <section className="section-spacing bg-white">
           <ServicesSection />
-        </Section>
-        <Section size="breathable" background="light">
+        </section>
+        <section className="section-spacing bg-gray-50">
           <VideoShowcaseSection />
-        </Section>
-        <Section size="large" background="white">
+        </section>
+        <section className="section-spacing bg-white">
           <AIToolsPreview />
-        </Section>
-        <Section size="breathable" background="light">
+        </section>
+        <section className="section-spacing bg-gray-50">
           <FeaturedProjectsSection />
-        </Section>
-        <Section size="large" background="white">
+        </section>
+        <section className="section-spacing bg-white">
           <PartnersSection />
-        </Section>
-        <Section size="breathable" background="light">
+        </section>
+        <section className="section-spacing bg-gray-50">
           <TestimonialsSection />
-        </Section>
+        </section>
       </main>
       <Footer />
     </div>

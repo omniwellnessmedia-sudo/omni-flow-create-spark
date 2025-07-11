@@ -151,8 +151,8 @@ const MegaNavigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full glass shadow-lg z-50 border-b border-white/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="nav-sticky w-full glass shadow-lg border-b border-white/20">
+      <div className="container-width">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
@@ -160,7 +160,7 @@ const MegaNavigation = () => {
               <img 
                 src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
                 alt="Omni Wellness Media" 
-                className="h-16 w-16 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 drop-shadow-lg"
+                className="logo-header transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 drop-shadow-lg"
               />
               <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-lg scale-110"></div>
             </div>
@@ -216,7 +216,7 @@ const MegaNavigation = () => {
                       <ChevronDown className="h-4 w-4 ml-2" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="dropdown-menu-standard w-56">
+                  <DropdownMenuContent align="end" className="nav-dropdown w-56">
                     <DropdownMenuItem asChild>
                       <Link to="/wellness-exchange/account" className="flex items-center">
                         <User className="h-4 w-4 mr-2" />
@@ -261,7 +261,7 @@ const MegaNavigation = () => {
         {/* Mega Menu Dropdown */}
         {activeDropdown && (
           <div 
-            className="absolute left-0 right-0 top-full bg-white shadow-2xl border-t border-gray-100 z-50"
+            className="absolute left-0 right-0 top-full nav-dropdown shadow-2xl border-t border-gray-100"
             onMouseLeave={() => setActiveDropdown(null)}
           >
             {mainNavItems.map((item) => {

@@ -378,58 +378,193 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* Clean spacing system */
-/* Global section padding system */
-.section-breathable {
-  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
+/* ===== GLOBAL DESIGN SYSTEM ===== */
+
+/* Standardized Spacing System */
+.section-spacing {
+  @apply py-20 lg:py-24;
 }
 
-.section-large {
-  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
+.section-spacing-large {
+  @apply py-24 lg:py-32;
 }
 
-.section-medium {
-  @apply py-10 px-5 md:py-16 md:px-8 lg:py-20 lg:px-10;
+.section-spacing-small {
+  @apply py-16 lg:py-20;
 }
 
+/* Mobile responsive spacing */
+@media (max-width: 768px) {
+  .section-spacing { @apply py-12; }
+  .section-spacing-large { @apply py-16; }
+  .section-spacing-small { @apply py-10; }
+}
+
+/* Container Standards */
 .container-width {
-  @apply max-w-7xl mx-auto;
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
-/* Card standardization utilities */
+/* ===== TYPOGRAPHY SYSTEM ===== */
+
+/* High contrast headings - no faded text */
+.heading-primary {
+  @apply font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-center;
+  color: hsl(var(--foreground)) !important;
+  text-shadow: none !important;
+}
+
+.heading-secondary {
+  @apply font-heading font-bold text-2xl sm:text-3xl lg:text-4xl text-center;
+  color: hsl(var(--foreground)) !important;
+  text-shadow: none !important;
+}
+
+.heading-tertiary {
+  @apply font-heading font-semibold text-xl sm:text-2xl text-center;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Remove any faded background text */
+.no-faded-text {
+  position: relative;
+}
+
+.no-faded-text::before {
+  display: none !important;
+}
+
+/* ===== IMAGE STANDARDS ===== */
+
+/* Portrait Images (3:4 ratio) */
+.img-portrait {
+  @apply aspect-[3/4] object-cover w-full;
+  min-height: 480px;
+}
+
+/* Team Profile Images (1:1 circular) */
+.img-profile {
+  @apply aspect-square object-cover w-full rounded-full;
+  min-width: 240px;
+  min-height: 240px;
+}
+
+/* Landscape Images */
+.img-hero {
+  @apply aspect-video object-cover w-full;
+  max-height: 90vh;
+}
+
+.img-card {
+  @apply aspect-[4/3] object-cover w-full;
+  max-height: 240px;
+}
+
+.img-square {
+  @apply aspect-square object-cover w-full;
+}
+
+/* Never stretch images */
+.img-preserve-ratio {
+  @apply object-cover;
+  object-position: center;
+}
+
+/* Logo Standards */
+.logo-header {
+  @apply h-auto;
+  min-width: 120px;
+  max-width: 200px;
+}
+
+/* ===== CARD SYSTEM ===== */
+
+/* Standardized Card Heights */
 .card-standard {
-  @apply h-[520px] overflow-hidden;
+  @apply min-h-[400px] overflow-hidden;
 }
 
+.card-team {
+  @apply min-h-[520px] overflow-hidden;
+}
+
+.card-service {
+  @apply min-h-[450px] overflow-hidden;
+}
+
+/* Card Content Standards */
 .card-title-clamp {
-  @apply line-clamp-2;
+  @apply line-clamp-2 text-xl font-bold;
 }
 
 .card-description-clamp {
-  @apply line-clamp-3 hover:overflow-y-auto hover:line-clamp-none;
+  @apply line-clamp-3 text-gray-600 leading-relaxed;
 }
 
-.card-button-standard {
-  @apply h-12 px-6 rounded-xl;
+/* ===== BUTTON SYSTEM ===== */
+
+/* Standardized Button Dimensions */
+.btn-standard {
+  @apply px-6 py-4 font-bold text-base rounded-xl min-h-[48px];
 }
 
-/* Form field standards */
-.form-field-standard {
-  @apply min-h-[44px];
+.btn-primary {
+  @apply bg-rainbow-enhanced text-white font-bold px-6 py-4 rounded-xl;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.form-spacing-standard {
-  @apply space-y-4;
+.btn-secondary {
+  @apply border-2 border-primary text-primary bg-transparent font-bold px-6 py-4 rounded-xl;
 }
 
-/* Typography standards */
-.heading-bold {
-  @apply font-bold;
+/* ===== LAYOUT SYSTEM ===== */
+
+/* Grid Standards */
+.grid-responsive-2 {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-8;
 }
 
-/* Dropdown z-index fix */
-.dropdown-menu-standard {
-  @apply z-50 p-3 shadow-xl;
+.grid-responsive-3 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+}
+
+.grid-responsive-4 {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8;
+}
+
+/* Prevent orphan cards on mid-screens */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid-responsive-3 {
+    @apply grid-cols-2;
+  }
+  
+  .grid-responsive-3 > *:nth-child(3n) {
+    @apply col-span-2 max-w-md mx-auto;
+  }
+}
+
+/* Navigation z-index standards */
+.nav-dropdown {
+  @apply z-[9999] bg-white shadow-xl border;
+}
+
+.nav-sticky {
+  @apply sticky top-0 z-[9998];
+}
+
+/* ===== ENHANCED CONTRAST ===== */
+
+/* High contrast text on gradients */
+.text-on-gradient {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+  font-weight: 700 !important;
+}
+
+/* Ensure proper contrast */
+.contrast-safe {
+  color: hsl(var(--foreground)) !important;
+  background: hsl(var(--background)) !important;
 }
 
 /* Mobile responsive utilities */

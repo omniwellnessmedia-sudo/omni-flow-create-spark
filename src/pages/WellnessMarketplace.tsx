@@ -331,15 +331,16 @@ const WellnessMarketplace = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid-responsive-3">
                 {filteredServices.map((service) => (
-                  <Card key={service.id} className="hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+                <Card key={service.id} className="card-service hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
                     {/* Service Image */}
-                    <div className="h-48 overflow-hidden">
+                    <div className="overflow-hidden">
                       <img 
                         src={service.images && service.images.length > 0 ? service.images[0] : getServiceImage(service.title, service.category)} 
                         alt={service.title}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        className="img-card hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
                       />
                     </div>
                     

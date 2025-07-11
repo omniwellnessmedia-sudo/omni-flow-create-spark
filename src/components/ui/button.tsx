@@ -6,26 +6,26 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 relative overflow-hidden",
+  "btn-standard inline-flex items-center justify-center gap-2 whitespace-nowrap text-base font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 relative overflow-hidden",
   {
     variants: {
       variant: {
-        default: "bg-primary text-white hover:bg-primary/90 shadow-lg hover:shadow-xl hover:scale-105",
+        default: "btn-primary shadow-lg hover:shadow-xl hover:scale-105",
         destructive: "bg-destructive text-white hover:bg-destructive/90 shadow-lg hover:shadow-xl",
-        outline: "border-2 border-primary/20 bg-white text-primary hover:bg-primary/5 hover:border-primary/40 shadow-md hover:shadow-lg",
+        outline: "btn-secondary shadow-md hover:shadow-lg",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-md hover:shadow-lg",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        premium: "bg-wellhub-gradient text-white hover:scale-105 shadow-xl hover:shadow-2xl card-button-standard",
-        wellness: "bg-wellhub-gradient hover:opacity-90 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 font-semibold card-button-standard",
-        solid: "bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 shadow-lg font-semibold card-button-standard",
-        soft: "bg-white/90 text-gray-800 border border-gray-200 hover:bg-white hover:shadow-md backdrop-blur-sm font-medium hover:border-gray-300 card-button-standard",
+        ghost: "bg-transparent border-0 hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline bg-transparent border-0",
+        premium: "btn-primary shadow-xl hover:shadow-2xl hover:scale-105",
+        wellness: "btn-primary shadow-lg hover:shadow-xl hover:scale-105",
+        solid: "btn-primary shadow-lg hover:shadow-xl hover:scale-105",
+        soft: "bg-white text-gray-800 border-2 border-gray-200 hover:bg-gray-50 hover:shadow-md backdrop-blur-sm",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "min-h-[48px] px-6 py-4",
+        sm: "min-h-[40px] px-4 py-2 text-sm",
+        lg: "min-h-[56px] px-8 py-5 text-lg",
+        icon: "min-h-[48px] w-12",
       },
     },
     defaultVariants: {
