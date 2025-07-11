@@ -36,6 +36,7 @@ import {
   ToggleRight
 } from "lucide-react";
 import WebsiteBuilder from "@/components/WebsiteBuilder";
+import ProviderMediaUpload from "@/components/ProviderMediaUpload";
 
 const ProviderDashboard = () => {
   const { user } = useAuth();
@@ -669,19 +670,7 @@ const ProviderDashboard = () => {
               </TabsContent>
 
               <TabsContent value="media" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Media Gallery</CardTitle>
-                    <CardDescription>Upload and manage your service photos and videos</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-12 text-muted-foreground">
-                      <ImageIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>Media management coming soon</p>
-                      <p className="text-sm">Upload photos and videos of your services</p>
-                    </div>
-                  </CardContent>
-                </Card>
+                <ProviderMediaUpload onMediaUpdate={() => loadDashboardData(user!.id)} />
               </TabsContent>
 
               <TabsContent value="testimonials" className="mt-6">

@@ -43,6 +43,7 @@ interface Service {
   duration_minutes: number;
   location: string;
   is_online: boolean;
+  images: string[] | null;
   provider_profiles: {
     business_name: string;
     specialties: string[];
@@ -84,6 +85,7 @@ const WellnessMarketplace = () => {
           duration_minutes,
           location,
           is_online,
+          images,
           provider_profiles (
             business_name,
             specialties
@@ -298,105 +300,138 @@ const WellnessMarketplace = () => {
           </div>
 
           {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredServices.map((service) => (
-              <Card key={service.id} className="hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
-                {/* Service Image */}
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={getServiceImage(service.title, service.category)} 
-                    alt={service.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
+          {services.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-omni-blue/20 to-omni-purple/20 rounded-full flex items-center justify-center">
+                  <Plus className="h-12 w-12 text-omni-blue" />
                 </div>
-                
-                <CardHeader className="pb-4">
-                  <div className="flex justify-between items-start">
-                    <Badge variant="secondary" className="mb-2">
-                      {service.category}
-                    </Badge>
-                    {service.is_online && (
-                      <Badge className="bg-green-100 text-green-800">Online</Badge>
-                    )}
-                  </div>
-                  <CardTitle className="text-lg leading-tight">{service.title}</CardTitle>
-                  <CardDescription className="text-sm">
-                    by {service.provider_profiles?.business_name}
-                  </CardDescription>
-                </CardHeader>
-                
-                <CardContent>
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                    {service.description}
-                  </p>
-                  
-                  <div className="space-y-3">
-                    {/* Location and Duration */}
-                    <div className="flex items-center text-sm text-gray-600">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      <span className="flex-1">{service.location}</span>
-                      {service.duration_minutes && (
-                        <>
-                          <Clock className="h-4 w-4 ml-4 mr-1" />
-                          <span>{service.duration_minutes}min</span>
-                        </>
-                      )}
+                <h3 className="font-bold text-xl mb-4">Welcome to the Wellness Marketplace!</h3>
+                <p className="text-gray-600 mb-8">
+                  This is where wellness providers will showcase their services. Ready to join our community of conscious practitioners?
+                </p>
+                <div className="space-y-3">
+                  <Button 
+                    size="lg"
+                    className="bg-rainbow-gradient hover:opacity-90 text-white w-full"
+                    onClick={() => window.location.href = '/wellness-exchange/provider-signup'}
+                  >
+                    Become a Wellness Partner
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="lg"
+                    className="w-full"
+                    onClick={() => window.location.href = '/wellness-exchange/wants'}
+                  >
+                    Browse Community Wants
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredServices.map((service) => (
+                  <Card key={service.id} className="hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
+                    {/* Service Image */}
+                    <div className="h-48 overflow-hidden">
+                      <img 
+                        src={service.images && service.images.length > 0 ? service.images[0] : getServiceImage(service.title, service.category)} 
+                        alt={service.title}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
                     
-                    {/* Pricing */}
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-1">
-                        {service.price_zar > 0 && (
-                          <div className="flex items-center text-green-600">
-                            <PiggyBank className="h-4 w-4 mr-1" />
-                            <span className="font-medium">R{service.price_zar}</span>
-                          </div>
-                        )}
-                        {service.price_wellcoins > 0 && (
-                          <div className="flex items-center text-omni-orange">
-                            <Coins className="h-4 w-4 mr-1" />
-                            <span className="font-medium">{service.price_wellcoins} WC</span>
-                          </div>
+                    <CardHeader className="pb-4">
+                      <div className="flex justify-between items-start">
+                        <Badge variant="secondary" className="mb-2">
+                          {service.category}
+                        </Badge>
+                        {service.is_online && (
+                          <Badge className="bg-green-100 text-green-800">Online</Badge>
                         )}
                       </div>
+                      <CardTitle className="text-lg leading-tight">{service.title}</CardTitle>
+                      <CardDescription className="text-sm">
+                        by {service.provider_profiles?.business_name || 'Wellness Provider'}
+                      </CardDescription>
+                    </CardHeader>
+                    
+                    <CardContent>
+                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                        {service.description}
+                      </p>
                       
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          size="sm"
-                          className="bg-rainbow-gradient hover:opacity-90 text-white"
-                          onClick={() => handleBookService(
-                            service.id, 
-                            service.price_zar, 
-                            service.price_wellcoins
+                      <div className="space-y-3">
+                        {/* Location and Duration */}
+                        <div className="flex items-center text-sm text-gray-600">
+                          <MapPin className="h-4 w-4 mr-2" />
+                          <span className="flex-1">{service.location}</span>
+                          {service.duration_minutes && (
+                            <>
+                              <Clock className="h-4 w-4 ml-4 mr-1" />
+                              <span>{service.duration_minutes}min</span>
+                            </>
                           )}
-                        >
-                          Book Now
-                        </Button>
+                        </div>
+                        
+                        {/* Pricing */}
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            {service.price_zar > 0 && (
+                              <div className="flex items-center text-green-600">
+                                <PiggyBank className="h-4 w-4 mr-1" />
+                                <span className="font-medium">R{service.price_zar}</span>
+                              </div>
+                            )}
+                            {service.price_wellcoins > 0 && (
+                              <div className="flex items-center text-omni-orange">
+                                <Coins className="h-4 w-4 mr-1" />
+                                <span className="font-medium">{service.price_wellcoins} WC</span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="flex gap-2">
+                            <Button size="sm" variant="outline">
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              size="sm"
+                              className="bg-rainbow-gradient hover:opacity-90 text-white"
+                              onClick={() => handleBookService(
+                                service.id, 
+                                service.price_zar, 
+                                service.price_wellcoins
+                              )}
+                            >
+                              Book Now
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
 
-          {filteredServices.length === 0 && (
-            <div className="text-center py-12">
-              <Search className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-              <h3 className="font-medium text-lg mb-2">No services found</h3>
-              <p className="text-gray-600 mb-6">
-                Try adjusting your search criteria or browse all categories
-              </p>
-              <Button onClick={() => {
-                setSearchTerm("");
-                setSelectedCategory("all");
-              }}>
-                Clear Filters
-              </Button>
-            </div>
+              {filteredServices.length === 0 && services.length > 0 && (
+                <div className="text-center py-12">
+                  <Search className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                  <h3 className="font-medium text-lg mb-2">No services found</h3>
+                  <p className="text-gray-600 mb-6">
+                    Try adjusting your search criteria or browse all categories
+                  </p>
+                  <Button onClick={() => {
+                    setSearchTerm("");
+                    setSelectedCategory("all");
+                  }}>
+                    Clear Filters
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </Section>
