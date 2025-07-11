@@ -14,6 +14,10 @@ serve(async (req) => {
   }
 
   try {
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key not configured');
+    }
+
     const { type, businessName, specialties, experienceYears, location } = await req.json();
 
     let prompt = '';

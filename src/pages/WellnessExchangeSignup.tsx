@@ -11,7 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
-import { User, Heart, ArrowRight, Sparkles, Loader2 } from "lucide-react";
+import { User, Heart, ArrowRight, Sparkles, Loader2, Search } from "lucide-react";
+import { wellnessSpecialties, wellnessCategories, getCategoryForSpecialty } from "@/data/wellnessGlossary";
 
 const WellnessExchangeSignup = () => {
   const [userType, setUserType] = useState<'provider' | 'consumer'>('consumer');
@@ -32,11 +33,15 @@ const WellnessExchangeSignup = () => {
   // Consumer form data
   const [wellnessGoals, setWellnessGoals] = useState<string[]>([]);
   const [preferredServices, setPreferredServices] = useState<string[]>([]);
+  const [specialtySearch, setSpecialtySearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const availableSpecialties = [
-    "Yoga", "Meditation", "Nutrition", "Massage Therapy", "Acupuncture",
-    "Life Coaching", "Personal Training", "Reiki", "Aromatherapy", "Herbalism"
-  ];
+  // Filter specialties based on search and category
+  const filteredSpecialties = wellnessSpecialties.filter(specialty => {
+    const matchesSearch = specialty.toLowerCase().includes(specialtySearch.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || getCategoryForSpecialty(specialty) === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const availableGoals = [
     "Stress Relief", "Weight Management", "Mental Health", "Physical Fitness",
@@ -74,9 +79,12 @@ const WellnessExchangeSignup = () => {
     
     setAiLoading(true);
     try {
-      const response = await fetch('/functions/v1/generate-content', {
+      const response = await fetch(`https://dtjmhieeywdvhjxqyxad.supabase.co/functions/v1/generate-content`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0am1oaWVleXdkdmhqeHF5eGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNTUzMzcsImV4cCI6MjA2NjkzMTMzN30.1sNuCHnmmLsxT_qyew3RXVDw-jA9guR1UVBqIgqroXM`,
+        },
         body: JSON.stringify({
           type: 'bio',
           businessName,
@@ -272,17 +280,64 @@ const WellnessExchangeSignup = () => {
                         />
                       </div>
 
-                      <div className="space-y-2">
-                        <Label>Specialties</Label>
-                        <div className="grid grid-cols-2 gap-2">
-                          {availableSpecialties.map((specialty) => (
-                            <div key={specialty} className="flex items-center space-x-2">
+                      <div className="space-y-4">
+                        <Label>Specialties & Services</Label>
+                        
+                        {/* Search and Filter */}
+                        <div className="space-y-3">
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                            <Input
+                              placeholder="Search specialties..."
+                              value={specialtySearch}
+                              onChange={(e) => setSpecialtySearch(e.target.value)}
+                              className="pl-10"
+                            />
+                          </div>
+                          
+                          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Filter by category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="All">All Categories</SelectItem>
+                              {wellnessCategories.map((category) => (
+                                <SelectItem key={category} value={category}>{category}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        {/* Selected specialties */}
+                        {specialties.length > 0 && (
+                          <div className="flex flex-wrap gap-2 p-3 bg-muted/50 rounded-lg">
+                            {specialties.map((specialty) => (
+                              <span
+                                key={specialty}
+                                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary text-primary-foreground cursor-pointer"
+                                onClick={() => toggleArrayItem(specialties, setSpecialties, specialty)}
+                              >
+                                {specialty} ×
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Specialty grid */}
+                        <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto border rounded-lg p-4">
+                          {filteredSpecialties.map((specialty) => (
+                            <div key={specialty} className="flex items-center space-x-2 py-1">
                               <Checkbox
                                 id={specialty}
                                 checked={specialties.includes(specialty)}
                                 onCheckedChange={() => toggleArrayItem(specialties, setSpecialties, specialty)}
                               />
-                              <Label htmlFor={specialty} className="text-sm">{specialty}</Label>
+                              <Label htmlFor={specialty} className="text-sm flex-1 cursor-pointer">
+                                {specialty}
+                                <span className="text-xs text-muted-foreground ml-2">
+                                  ({getCategoryForSpecialty(specialty)})
+                                </span>
+                              </Label>
                             </div>
                           ))}
                         </div>
@@ -364,17 +419,64 @@ const WellnessExchangeSignup = () => {
                         </div>
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-4">
                         <Label>Preferred Services</Label>
-                        <div className="grid grid-cols-2 gap-2">
-                          {availableSpecialties.map((service) => (
-                            <div key={service} className="flex items-center space-x-2">
+                        
+                        {/* Search and Filter for preferred services */}
+                        <div className="space-y-3">
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                            <Input
+                              placeholder="Search services..."
+                              value={specialtySearch}
+                              onChange={(e) => setSpecialtySearch(e.target.value)}
+                              className="pl-10"
+                            />
+                          </div>
+                          
+                          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Filter by category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="All">All Categories</SelectItem>
+                              {wellnessCategories.map((category) => (
+                                <SelectItem key={category} value={category}>{category}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        {/* Selected services */}
+                        {preferredServices.length > 0 && (
+                          <div className="flex flex-wrap gap-2 p-3 bg-muted/50 rounded-lg">
+                            {preferredServices.map((service) => (
+                              <span
+                                key={service}
+                                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary text-primary-foreground cursor-pointer"
+                                onClick={() => toggleArrayItem(preferredServices, setPreferredServices, service)}
+                              >
+                                {service} ×
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Services grid */}
+                        <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto border rounded-lg p-4">
+                          {filteredSpecialties.map((service) => (
+                            <div key={service} className="flex items-center space-x-2 py-1">
                               <Checkbox
                                 id={`service-${service}`}
                                 checked={preferredServices.includes(service)}
                                 onCheckedChange={() => toggleArrayItem(preferredServices, setPreferredServices, service)}
                               />
-                              <Label htmlFor={`service-${service}`} className="text-sm">{service}</Label>
+                              <Label htmlFor={`service-${service}`} className="text-sm flex-1 cursor-pointer">
+                                {service}
+                                <span className="text-xs text-muted-foreground ml-2">
+                                  ({getCategoryForSpecialty(service)})
+                                </span>
+                              </Label>
                             </div>
                           ))}
                         </div>

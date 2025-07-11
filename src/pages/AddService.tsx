@@ -10,14 +10,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
-import { ArrowLeft, Plus, Coins, Clock, MapPin, Sparkles, Loader2, PiggyBank } from "lucide-react";
+import { ArrowLeft, Plus, Coins, Clock, MapPin, Sparkles, Loader2, PiggyBank, Search } from "lucide-react";
 import { toast } from "sonner";
+import { wellnessSpecialties, wellnessCategories, getCategoryForSpecialty } from "@/data/wellnessGlossary";
 
 const AddService = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState({ title: false, description: false });
+  const [categorySearch, setCategorySearch] = useState("");
   
   // Pre-filled demo data for yoga teacher
   const [formData, setFormData] = useState({
@@ -31,23 +33,9 @@ const AddService = () => {
     isOnline: true
   });
 
-  const [categoryInput, setCategoryInput] = useState(formData.category);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  
-  const allCategories = [
-    "Yoga", "Meditation", "Nutrition", "Massage Therapy", "Acupuncture", "Life Coaching", 
-    "Personal Training", "Reiki", "Aromatherapy", "Herbalism", "QiGong", "Pilates",
-    "Sound Healing", "Crystal Therapy", "Energy Healing", "Breathwork", "Tai Chi",
-    "Ayurveda", "Naturopathy", "Hypnotherapy", "Art Therapy", "Dance Therapy",
-    "Mindfulness", "Spiritual Coaching", "Wellness Coaching", "Fitness Training",
-    "Nutritional Therapy", "Detox Programs", "Weight Management", "Sleep Therapy",
-    "Stress Management", "Anger Management", "Trauma Therapy", "Grief Counseling",
-    "Relationship Coaching", "Career Coaching", "Financial Wellness", "Raw Food",
-    "Vegan Lifestyle", "Juice Cleansing", "Fasting", "Meditation Retreats"
-  ];
-
-  const filteredCategories = allCategories.filter(category =>
-    category.toLowerCase().includes(categoryInput.toLowerCase())
+  // Filter categories based on search
+  const filteredCategories = wellnessSpecialties.filter(specialty => 
+    specialty.toLowerCase().includes(categorySearch.toLowerCase())
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -98,9 +86,12 @@ const AddService = () => {
     
     setAiLoading(prev => ({ ...prev, [type]: true }));
     try {
-      const response = await fetch('/functions/v1/generate-content', {
+      const response = await fetch(`https://dtjmhieeywdvhjxqyxad.supabase.co/functions/v1/generate-content`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0am1oaWVleXdkdmhqeHF5eGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNTUzMzcsImV4cCI6MjA2NjkzMTMzN30.1sNuCHnmmLsxT_qyew3RXVDw-jA9guR1UVBqIgqroXM`,
+        },
         body: JSON.stringify({
           type: type === 'title' ? 'service_title' : 'service_description',
           specialties: [formData.category]
@@ -239,39 +230,61 @@ const AddService = () => {
                   />
                 </div>
 
-                {/* Category with Smart Autocomplete */}
-                <div className="relative">
+                {/* Category with Wellness Glossary */}
+                <div className="space-y-4">
                   <Label htmlFor="category">Service Category</Label>
-                  <Input
-                    id="category"
-                    value={categoryInput}
-                    onChange={(e) => {
-                      setCategoryInput(e.target.value);
-                      setShowSuggestions(true);
-                      handleInputChange("category", e.target.value);
-                    }}
-                    onFocus={() => setShowSuggestions(true)}
-                    onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                    placeholder="Type to search categories..."
-                    required
-                  />
-                  {showSuggestions && filteredCategories.length > 0 && (
-                    <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-md shadow-lg max-h-40 overflow-y-auto">
-                      {filteredCategories.slice(0, 8).map((category) => (
-                        <div
-                          key={category}
-                          className="px-3 py-2 cursor-pointer hover:bg-accent text-sm"
-                          onClick={() => {
-                            setCategoryInput(category);
-                            handleInputChange("category", category);
-                            setShowSuggestions(false);
-                          }}
-                        >
-                          {category}
-                        </div>
-                      ))}
+                  
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                      <Input
+                        placeholder="Search wellness specialties..."
+                        value={categorySearch}
+                        onChange={(e) => setCategorySearch(e.target.value)}
+                        className="pl-10"
+                      />
                     </div>
-                  )}
+                    
+                    {/* Selected category */}
+                    {formData.category && (
+                      <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
+                        <span className="text-sm font-medium">Selected:</span>
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary text-primary-foreground">
+                          {formData.category}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('category', '')}
+                          className="text-xs text-muted-foreground hover:text-foreground"
+                        >
+                          Change
+                        </button>
+                      </div>
+                    )}
+                    
+                    {/* Category selection */}
+                    {!formData.category && (
+                      <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto border rounded-lg p-4">
+                        {filteredCategories.map((category) => (
+                          <div
+                            key={category}
+                            className="flex items-center justify-between p-2 hover:bg-muted/50 rounded cursor-pointer"
+                            onClick={() => {
+                              handleInputChange('category', category);
+                              setCategorySearch('');
+                            }}
+                          >
+                            <div>
+                              <span className="text-sm font-medium">{category}</span>
+                              <span className="text-xs text-muted-foreground ml-2">
+                                ({getCategoryForSpecialty(category)})
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Pricing */}
