@@ -101,12 +101,12 @@ export const BookingCalendar = ({
 
   return (
     <div className="space-y-6">
-      <Card className="border-2 border-primary/20 shadow-lg">
+      <Card className="border-2 border-primary/20 shadow-lg bg-white">
         <CardHeader className="bg-gradient-to-r from-primary/5 to-secondary/5">
-          <CardTitle className="heading-secondary no-faded-text">
+          <CardTitle className="text-xl font-bold text-gray-900">
             Book Your <span className="bg-rainbow-gradient bg-clip-text text-transparent">Session</span>
           </CardTitle>
-          <CardDescription className="text-lg">
+          <CardDescription className="text-lg text-gray-700">
             Select your preferred date and time for "{serviceTitle}"
           </CardDescription>
         </CardHeader>

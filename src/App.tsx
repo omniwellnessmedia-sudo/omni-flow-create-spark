@@ -68,6 +68,15 @@ const App = () => (
           <Route path="/services/documentary-production" element={<DocumentaryProduction />} />
           <Route path="/services/custom-art" element={<CustomArt />} />
           <Route path="/services/consultation" element={<Consultation />} />
+          {/* Missing service pages that cause 404 errors */}
+          <Route path="/services/social-media" element={<SocialMediaStrategy />} />
+          <Route path="/services/marketing" element={<BusinessConsulting />} />
+          <Route path="/services/content" element={<MediaProduction />} />
+          <Route path="/services/photography" element={<Videography />} />
+          <Route path="/services/financial" element={<BusinessConsulting />} />
+          <Route path="/services/branding" element={<BusinessConsulting />} />
+          {/* Dynamic service route for marketplace services */}
+          <Route path="/services/:serviceId" element={<ProductDetail />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/podcast" element={<Podcast />} />
@@ -90,6 +99,7 @@ const App = () => (
             <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
             <Route path="/wellness-exchange/provider-signup" element={<WellnessExchangeSignup />} />
             <Route path="/wellness-exchange/consumer-signup" element={<WellnessExchangeSignup />} />
+            <Route path="/wellness-exchange/service/:serviceId" element={<ProductDetail />} />
             <Route path="/provider-website/:websiteId" element={<ProviderWebsite />} />
             <Route path="/partners" element={<PartnersDirectory />} />
             <Route path="/partners/:id" element={<PartnerProfile />} />

@@ -260,26 +260,126 @@ const MediaProduction = () => {
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {portfolioItems.map((item, index) => (
-              <Card key={item.title} className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300 overflow-hidden">
-                <div className="aspect-video bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-6xl">
-                  {item.thumbnail}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Indigenous Heritage Journey in Kalk Bay */}
+            <Card className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300 overflow-hidden">
+              <div className="aspect-video">
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src="https://www.youtube.com/embed/ycYl7KSGkUU" 
+                  title="An Indigenous Heritage Journey in Kalk Bay with Travel and Tours Cape Town" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  allowFullScreen
+                  className="rounded-t-lg"
+                />
+              </div>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-xl">Indigenous Heritage Journey</h3>
+                  <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    Cultural
+                  </span>
                 </div>
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-xl">{item.title}</h3>
-                    <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
-                      {item.type}
-                    </span>
-                  </div>
-                  <Button variant="outline" className="w-full mt-4">
-                    <Play className="mr-2 w-4 h-4" />
-                    Watch Now
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                <p className="text-gray-600 mb-4">A meaningful exploration of indigenous heritage in Kalk Bay with Travel and Tours Cape Town.</p>
+                <Button variant="outline" className="w-full" onClick={() => window.open('https://www.youtube.com/watch?v=ycYl7KSGkUU', '_blank')}>
+                  <Play className="mr-2 w-4 h-4" />
+                  Watch Full Video
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Uniting for Our Baboons */}
+            <Card className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300 overflow-hidden">
+              <div className="aspect-video">
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src="https://www.youtube.com/embed/KuusruAQeT4" 
+                  title="Uniting for Our Baboons – A Shared Mission" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  allowFullScreen
+                  className="rounded-t-lg"
+                />
+              </div>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-xl">Uniting for Our Baboons</h3>
+                  <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    Environmental
+                  </span>
+                </div>
+                <p className="text-gray-600 mb-4">A shared mission to protect and preserve baboon communities through conscious conservation efforts.</p>
+                <Button variant="outline" className="w-full" onClick={() => window.open('https://www.youtube.com/watch?v=KuusruAQeT4', '_blank')}>
+                  <Play className="mr-2 w-4 h-4" />
+                  Watch Full Video
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Transform Your Workout with Omni */}
+            <Card className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300 overflow-hidden">
+              <div className="aspect-video">
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src="https://www.youtube.com/embed/8KeDzKgGTHg" 
+                  title="Transform your workout with Omni" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  allowFullScreen
+                  className="rounded-t-lg"
+                />
+              </div>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-xl">Transform Your Workout</h3>
+                  <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    Wellness
+                  </span>
+                </div>
+                <p className="text-gray-600 mb-4">Discover how to transform your workout routine with Omni's holistic wellness approach.</p>
+                <Button variant="outline" className="w-full" onClick={() => window.open('https://www.youtube.com/watch?v=8KeDzKgGTHg', '_blank')}>
+                  <Play className="mr-2 w-4 h-4" />
+                  Watch Full Video
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Muizenberg Conference Interview */}
+            <Card className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300 overflow-hidden">
+              <div className="aspect-video">
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  src="https://www.youtube.com/embed/uE1tcp9KP-Y" 
+                  title="We ask Joah Pereira about the Muiz Electric conference" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  allowFullScreen
+                  className="rounded-t-lg"
+                />
+              </div>
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-xl">Muizenberg Electric Conference</h3>
+                  <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    Interview
+                  </span>
+                </div>
+                <p className="text-gray-600 mb-4">An insightful interview with Joah Pereira discussing the innovative Muizenberg Electric conference.</p>
+                <Button variant="outline" className="w-full" onClick={() => window.open('https://www.youtube.com/watch?v=uE1tcp9KP-Y', '_blank')}>
+                  <Play className="mr-2 w-4 h-4" />
+                  Watch Full Video
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

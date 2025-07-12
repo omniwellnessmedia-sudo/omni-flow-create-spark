@@ -45,7 +45,7 @@ const FeaturedProjectsSection = () => {
               className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <div className="aspect-video overflow-hidden">
+              <div className="aspect-square overflow-hidden">
                 <img 
                   src={project.image}
                   alt={project.title}

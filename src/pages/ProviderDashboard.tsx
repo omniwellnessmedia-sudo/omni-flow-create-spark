@@ -270,7 +270,10 @@ const ProviderDashboard = () => {
                   <Plus className="h-4 w-4 mr-2" />
                   New Service
                 </Button>
-                <Button variant="outline">
+                <Button 
+                  variant="outline"
+                  onClick={() => toast.info("Settings panel coming soon! Configure your profile, pricing, and preferences.")}
+                >
                   <Settings className="h-4 w-4 mr-2" />
                   Settings
                 </Button>
@@ -296,7 +299,7 @@ const ProviderDashboard = () => {
                 onClick={() => navigate('/wellness-exchange/add-service')}
               >
                 <Plus className="h-4 w-4 mr-1" />
-                Add Service
+                New Service
               </Button>
             </div>
           </div>

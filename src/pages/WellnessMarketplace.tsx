@@ -164,8 +164,12 @@ const WellnessMarketplace = () => {
       return;
     }
     
-    // Navigate to service detail page or open booking modal
-    window.location.href = `/services/${serviceId}`;
+    // Navigate to service detail page
+    window.location.href = `/wellness-exchange/service/${serviceId}`;
+  };
+
+  const handleViewService = (serviceId: string) => {
+    window.location.href = `/wellness-exchange/service/${serviceId}`;
   };
 
   if (loading) {
@@ -385,23 +389,27 @@ const WellnessMarketplace = () => {
                         
                         {/* Pricing */}
                         <div className="flex items-center justify-between">
-                          <div className="space-y-1">
+                          <div className="space-y-1 min-w-0 flex-1 pr-3">
                             {service.price_zar > 0 && (
                               <div className="flex items-center text-green-600">
-                                <PiggyBank className="h-4 w-4 mr-1" />
-                                <span className="font-medium">R{service.price_zar}</span>
+                                <PiggyBank className="h-4 w-4 mr-1 flex-shrink-0" />
+                                <span className="font-medium text-sm sm:text-base">R{service.price_zar}</span>
                               </div>
                             )}
                             {service.price_wellcoins > 0 && (
                               <div className="flex items-center text-omni-orange">
-                                <Coins className="h-4 w-4 mr-1" />
-                                <span className="font-medium">{service.price_wellcoins} WC</span>
+                                <Coins className="h-4 w-4 mr-1 flex-shrink-0" />
+                                <span className="font-medium text-sm sm:text-base">{service.price_wellcoins} WC</span>
                               </div>
                             )}
                           </div>
                           
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleViewService(service.id)}
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button 

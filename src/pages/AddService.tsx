@@ -30,7 +30,8 @@ const AddService = () => {
     priceWellcoins: "25",
     duration: "60",
     location: "Cape Town, Sea Point Studio",
-    isOnline: true
+    isOnline: true,
+    imageUrl: ""
   });
 
   // Filter categories based on search
@@ -68,6 +69,7 @@ const AddService = () => {
         duration_minutes: formData.duration ? parseInt(formData.duration) : null,
         location: formData.location,
         is_online: formData.isOnline,
+        images: formData.imageUrl ? [formData.imageUrl] : null,
         active: true
       };
 
@@ -182,14 +184,29 @@ const AddService = () => {
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          // File upload is working - this simulates successful upload
+                          // Create a preview URL for the uploaded image
+                          const url = URL.createObjectURL(file);
+                          // Update form data with image URL (in real app this would be uploaded to storage)
+                          handleInputChange("imageUrl", url);
                           toast.success("Service image uploaded successfully!");
                         }
                       }}
                       className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-accent file:text-accent-foreground hover:file:bg-accent/80"
                     />
+                    {formData.imageUrl && (
+                      <div className="mt-2">
+                        <img 
+                          src={formData.imageUrl} 
+                          alt="Service preview" 
+                          className="w-32 h-24 object-cover rounded-md border"
+                        />
+                      </div>
+                    )}
                   </div>
-                  <p className="text-xs text-muted-foreground">Upload a high-quality image that represents your service</p>
+                  <p className="text-xs text-muted-foreground">
+                    Upload a high-quality image (JPG, PNG, WebP recommended) - Max 5MB<br/>
+                    Recommended dimensions: 800x600px for best display
+                  </p>
                 </div>
 
                 {/* Title */}
