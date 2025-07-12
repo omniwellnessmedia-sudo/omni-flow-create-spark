@@ -121,27 +121,27 @@ const About = () => {
               </p>
             </div>
 
-            {/* Grid Layout with Large Images */}
-            <div className="grid-responsive-3">
+            {/* Grid Layout with Square Images */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
               {team.map((member, index) => (
                 <div 
                   key={member.name}
-                  className="card-team group bg-white rounded-3xl shadow-lg overflow-hidden animate-fade-in-up hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                  className="card-team group bg-white rounded-3xl shadow-lg overflow-hidden animate-fade-in-up hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 max-w-sm w-full"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="relative overflow-hidden">
+                  <div className="relative overflow-hidden flex justify-center">
                     <img 
                       src={member.image}
                       alt={member.name}
-                      className="img-portrait group-hover:scale-105 transition-transform duration-500"
+                      className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
-                  <div className="p-8">
+                  <div className="p-8 text-center">
                     <h3 className="card-title-clamp text-gray-800">{member.name}</h3>
                     <p className="text-omni-indigo font-semibold mb-4 text-lg">{member.role}</p>
-                    <p className="card-description-clamp">{member.description}</p>
+                    <p className="card-description-clamp text-left">{member.description}</p>
                   </div>
                 </div>
               ))}
