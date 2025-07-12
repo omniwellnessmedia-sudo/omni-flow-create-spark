@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
@@ -10,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -19,23 +17,30 @@ const Contact = () => {
     service: "",
     message: ""
   });
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     try {
-      const { data, error } = await supabase.functions.invoke('submit-contact', {
+      const {
+        data,
+        error
+      } = await supabase.functions.invoke('submit-contact', {
         body: formData
       });
-
       if (error) throw error;
-
       toast({
         title: "Message Sent!",
-        description: "Thank you for reaching out. We'll get back to you within 24 hours.",
+        description: "Thank you for reaching out. We'll get back to you within 24 hours."
       });
-      setFormData({ name: "", email: "", organization: "", service: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        organization: "",
+        service: "",
+        message: ""
+      });
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({
@@ -45,13 +50,13 @@ const Contact = () => {
       });
     }
   };
-
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <MegaNavigation />
       <main className="pt-16">
         {/* Hero Section */}
@@ -84,40 +89,22 @@ const Contact = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="name">Full Name *</Label>
-                        <Input
-                          id="name"
-                          required
-                          value={formData.name}
-                          onChange={(e) => handleInputChange("name", e.target.value)}
-                          placeholder="Your full name"
-                        />
+                        <Input id="name" required value={formData.name} onChange={e => handleInputChange("name", e.target.value)} placeholder="Your full name" />
                       </div>
                       <div>
                         <Label htmlFor="email">Email Address *</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => handleInputChange("email", e.target.value)}
-                          placeholder="your.email@example.com"
-                        />
+                        <Input id="email" type="email" required value={formData.email} onChange={e => handleInputChange("email", e.target.value)} placeholder="your.email@example.com" />
                       </div>
                     </div>
                     
                     <div>
                       <Label htmlFor="organization">Organization/Company</Label>
-                      <Input
-                        id="organization"
-                        value={formData.organization}
-                        onChange={(e) => handleInputChange("organization", e.target.value)}
-                        placeholder="Your organization name (optional)"
-                      />
+                      <Input id="organization" value={formData.organization} onChange={e => handleInputChange("organization", e.target.value)} placeholder="Your organization name (optional)" />
                     </div>
 
                     <div>
                       <Label htmlFor="service">Service of Interest</Label>
-                      <Select value={formData.service} onValueChange={(value) => handleInputChange("service", value)}>
+                      <Select value={formData.service} onValueChange={value => handleInputChange("service", value)}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
@@ -135,20 +122,10 @@ const Contact = () => {
 
                     <div>
                       <Label htmlFor="message">Project Details *</Label>
-                      <Textarea
-                        id="message"
-                        required
-                        value={formData.message}
-                        onChange={(e) => handleInputChange("message", e.target.value)}
-                        placeholder="Tell us about your project, goals, timeline, and how we can help..."
-                        className="min-h-[120px]"
-                      />
+                      <Textarea id="message" required value={formData.message} onChange={e => handleInputChange("message", e.target.value)} placeholder="Tell us about your project, goals, timeline, and how we can help..." className="min-h-[120px]" />
                     </div>
 
-                    <Button 
-                      type="submit"
-                      className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 text-lg rounded-full shadow-lg"
-                    >
+                    <Button type="submit" className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 text-lg rounded-full shadow-lg">
                       Send Message
                     </Button>
                   </form>
@@ -176,7 +153,7 @@ const Contact = () => {
                     </h3>
                     <div className="space-y-2 text-gray-600">
                       <p>📧 hello@omniwellnessmedia.co.za</p>
-                      <p>📱 +27 (0) 123 456 789</p>
+                      <p>📱 +27 74 831 5961</p>
                       <p>🕐 Mon - Fri, 9AM - 5PM SAST</p>
                     </div>
                   </CardContent>
@@ -237,42 +214,31 @@ const Contact = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[
-                {
-                  question: "What types of projects do you work on?",
-                  answer: "We work on a wide range of projects including community documentaries, business development consulting, brand storytelling, social media campaigns, and wellness program development."
-                },
-                {
-                  question: "How long does a typical project take?",
-                  answer: "Project timelines vary depending on scope and complexity. Simple content projects may take 2-4 weeks, while comprehensive campaigns or documentaries can take 2-6 months."
-                },
-                {
-                  question: "Do you work with organizations outside South Africa?",
-                  answer: "Yes! While we're based in South Africa, we work with organizations globally, especially those focused on community development, wellness, and social impact."
-                },
-                {
-                  question: "What makes your approach different?",
-                  answer: "We focus on authentic storytelling that bridges communities and creates real impact. Our holistic approach combines conscious business development with genuine community engagement."
-                }
-              ].map((faq, index) => (
-                <Card 
-                  key={faq.question}
-                  className="border-0 shadow-md animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
+              {[{
+              question: "What types of projects do you work on?",
+              answer: "We work on a wide range of projects including community documentaries, business development consulting, brand storytelling, social media campaigns, and wellness program development."
+            }, {
+              question: "How long does a typical project take?",
+              answer: "Project timelines vary depending on scope and complexity. Simple content projects may take 2-4 weeks, while comprehensive campaigns or documentaries can take 2-6 months."
+            }, {
+              question: "Do you work with organizations outside South Africa?",
+              answer: "Yes! While we're based in South Africa, we work with organizations globally, especially those focused on community development, wellness, and social impact."
+            }, {
+              question: "What makes your approach different?",
+              answer: "We focus on authentic storytelling that bridges communities and creates real impact. Our holistic approach combines conscious business development with genuine community engagement."
+            }].map((faq, index) => <Card key={faq.question} className="border-0 shadow-md animate-fade-in-up" style={{
+              animationDelay: `${index * 0.1}s`
+            }}>
                   <CardContent className="p-6">
                     <h3 className="font-heading font-semibold text-lg mb-3">{faq.question}</h3>
                     <p className="text-gray-600">{faq.answer}</p>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
           </div>
         </section>
       </main>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Contact;
