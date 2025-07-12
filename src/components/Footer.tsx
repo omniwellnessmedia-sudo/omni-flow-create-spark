@@ -64,7 +64,7 @@ const Footer = () => {
             <div className="bg-gray-800 rounded-lg p-4 mb-6">
               <div className="flex items-center gap-2 mb-2">
                 <MessageCircle className="w-4 h-4 text-omni-blue" />
-                <h4 className="font-semibold text-white">Stay Connected</h4>
+                <h4 className="font-bold text-white">Stay Connected</h4>
               </div>
               <p className="text-gray-300 text-sm mb-3">
                 Subscribe for wellness tips and project updates
@@ -100,7 +100,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-heading font-semibold text-lg mb-6 text-white">Quick Links</h3>
+            <h3 className="font-heading font-bold text-lg mb-6 text-white">Quick Links</h3>
             <ul className="space-y-3">
               <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">About Us</Link></li>
               <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Services</Link></li>
@@ -111,7 +111,7 @@ const Footer = () => {
 
           {/* Content & Resources */}
           <div>
-            <h3 className="font-heading font-semibold text-lg mb-6 text-white">Content & Resources</h3>
+            <h3 className="font-heading font-bold text-lg mb-6 text-white">Content & Resources</h3>
             <ul className="space-y-3">
               <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Blog</Link></li>
               <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Podcast</Link></li>
