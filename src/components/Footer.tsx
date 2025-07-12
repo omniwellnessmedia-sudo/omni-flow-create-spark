@@ -8,7 +8,7 @@ const Footer = () => {
       behavior: 'smooth'
     });
   };
-  return <footer className="text-white pt-16 pb-8 bg-teal-700">
+  return <footer className="text-white pt-16 pb-8 bg-[gradient] bg-teal-700">
       <div className="container-width">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Logo and Description */}
