@@ -330,8 +330,8 @@ const About = () => {
         <section className="section-spacing bg-gradient-to-br from-omni-violet via-omni-blue to-omni-teal text-white">
           <div className="container-width text-center">
             <div className="max-w-4xl mx-auto">
-              <h2 className="heading-secondary text-white mb-6">
-                Ready to Create <span className="text-yellow-300">Positive Change</span> Together?
+              <h2 className="heading-secondary text-white mb-6 drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                Ready to Create <span className="text-yellow-300 drop-shadow-lg font-bold">Positive Change</span> Together?
               </h2>
               <p className="text-xl text-white/90 mb-8 leading-relaxed">
                 Join us in bridging wellness, outreach, and media to empower communities and inspire 
