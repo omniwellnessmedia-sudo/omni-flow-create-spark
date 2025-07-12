@@ -86,17 +86,23 @@ const BlogPost = () => {
       // Load post
       const { data: postData, error: postError } = await supabase
         .from('blog_posts')
-        .select(`
-          *,
-          profiles (full_name, avatar_url)
-        `)
+        .select('*')
         .eq('slug', slug)
         .eq('status', 'published')
         .single();
 
       if (postError) throw postError;
 
-      setPost(postData);
+      // Load author profile
+      const { data: authorProfile, error: profileError } = await supabase
+        .from('profiles')
+        .select('full_name, avatar_url')
+        .eq('id', postData.user_id)
+        .single();
+
+      if (profileError) throw profileError;
+
+      setPost({ ...postData, profiles: authorProfile });
 
       // Increment view count
       await supabase
@@ -107,16 +113,36 @@ const BlogPost = () => {
       // Load comments
       const { data: commentsData, error: commentsError } = await supabase
         .from('blog_comments')
-        .select(`
-          *,
-          profiles (full_name, avatar_url)
-        `)
+        .select('*')
         .eq('blog_post_id', postData.id)
         .order('created_at', { ascending: false });
 
       if (commentsError) throw commentsError;
 
-      setComments(commentsData || []);
+      // Load comment authors
+      if (commentsData && commentsData.length > 0) {
+        const userIds = [...new Set(commentsData.map(comment => comment.user_id))];
+        const { data: profiles, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, full_name, avatar_url')
+          .in('id', userIds);
+
+        if (profilesError) throw profilesError;
+
+        const profilesMap = profiles?.reduce((acc, profile) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {} as Record<string, any>) || {};
+
+        const commentsWithProfiles = commentsData.map(comment => ({
+          ...comment,
+          profiles: profilesMap[comment.user_id] || { full_name: 'Unknown', avatar_url: null }
+        }));
+
+        setComments(commentsWithProfiles);
+      } else {
+        setComments([]);
+      }
     } catch (error: any) {
       toast.error("Failed to load post: " + error.message);
       navigate("/blog/community");
@@ -190,15 +216,22 @@ const BlogPost = () => {
           user_id: user.id,
           content: newComment.trim()
         }])
-        .select(`
-          *,
-          profiles (full_name, avatar_url)
-        `)
+        .select('*')
         .single();
 
       if (error) throw error;
 
-      setComments(prev => [data, ...prev]);
+      // Get user profile for the comment
+      const { data: userProfile, error: profileError } = await supabase
+        .from('profiles')
+        .select('full_name, avatar_url')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) throw profileError;
+
+      const commentWithProfile = { ...data, profiles: userProfile };
+      setComments(prev => [commentWithProfile, ...prev]);
       setPost(prev => prev ? { ...prev, comments_count: prev.comments_count + 1 } : null);
       setNewComment("");
       toast.success("Comment added successfully!");

@@ -68,16 +68,40 @@ const CommunityBlog = () => {
     try {
       const { data, error } = await supabase
         .from('blog_posts')
-        .select(`
-          *,
-          profiles (full_name, avatar_url)
-        `)
+        .select('*')
         .eq('status', 'published')
         .order('published_at', { ascending: false });
 
       if (error) throw error;
 
-      setPosts(data || []);
+      if (data && data.length > 0) {
+        // Get unique user IDs
+        const userIds = [...new Set(data.map(post => post.user_id))];
+        
+        // Fetch profiles for all users
+        const { data: profiles, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, full_name, avatar_url')
+          .in('id', userIds);
+
+        if (profilesError) throw profilesError;
+
+        // Create a map of user profiles
+        const profilesMap = profiles?.reduce((acc, profile) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {} as Record<string, any>) || {};
+
+        // Combine posts with profiles
+        const postsWithProfiles = data.map(post => ({
+          ...post,
+          profiles: profilesMap[post.user_id] || { full_name: 'Unknown', avatar_url: null }
+        }));
+
+        setPosts(postsWithProfiles);
+      } else {
+        setPosts([]);
+      }
       
       // Extract all unique tags
       const tags = new Set<string>();
@@ -98,16 +122,32 @@ const CommunityBlog = () => {
     try {
       const { data, error } = await supabase
         .from('blog_posts')
-        .select(`
-          *,
-          profiles (full_name, avatar_url)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
 
       if (error) throw error;
 
-      setMyPosts(data || []);
+      if (data && data.length > 0) {
+        // Get user profile
+        const { data: userProfile, error: profileError } = await supabase
+          .from('profiles')
+          .select('full_name, avatar_url')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        // Add profile to all posts
+        const postsWithProfile = data.map(post => ({
+          ...post,
+          profiles: userProfile
+        }));
+
+        setMyPosts(postsWithProfile);
+      } else {
+        setMyPosts([]);
+      }
     } catch (error: any) {
       toast.error("Failed to load your posts: " + error.message);
     }
