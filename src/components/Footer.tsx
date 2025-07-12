@@ -27,7 +27,7 @@ const Footer = () => {
                 <span className="font-heading font-bold text-xl bg-rainbow-gradient bg-clip-text text-transparent block">
                   Omni Wellness Media
                 </span>
-                <span className="text-gray-400 text-sm">Conscious Content Creation</span>
+                <span className="text-gray-300 text-sm">Conscious Content Creation</span>
               </div>
             </div>
             <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
@@ -66,7 +66,7 @@ const Footer = () => {
                 <MessageCircle className="w-4 h-4 text-omni-blue" />
                 <h4 className="font-semibold text-white">Stay Connected</h4>
               </div>
-              <p className="text-gray-400 text-sm mb-3">
+              <p className="text-gray-300 text-sm mb-3">
                 Subscribe for wellness tips and project updates
               </p>
               <a 
@@ -130,14 +130,14 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-300 text-sm">
               © 2024 Omni Wellness Media. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors">
                 Terms of Service
               </a>
             </div>
