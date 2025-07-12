@@ -491,6 +491,31 @@ div {
   background-clip: text;
 }
 
+/* Rainbow gradient backgrounds */
+.bg-rainbow-gradient {
+  background: linear-gradient(135deg, 
+    hsl(var(--omni-red)) 0%, 
+    hsl(var(--omni-orange)) 16.66%, 
+    hsl(var(--omni-yellow)) 33.33%, 
+    hsl(var(--omni-green)) 50%, 
+    hsl(var(--omni-blue)) 66.66%, 
+    hsl(var(--omni-indigo)) 83.33%, 
+    hsl(var(--omni-violet)) 100%
+  );
+}
+
+.bg-rainbow-subtle {
+  background: linear-gradient(135deg, 
+    hsla(var(--omni-red), 0.1) 0%, 
+    hsla(var(--omni-orange), 0.1) 16.66%, 
+    hsla(var(--omni-yellow), 0.1) 33.33%, 
+    hsla(var(--omni-green), 0.1) 50%, 
+    hsla(var(--omni-blue), 0.1) 66.66%, 
+    hsla(var(--omni-indigo), 0.1) 83.33%, 
+    hsla(var(--omni-violet), 0.1) 100%
+  );
+}
+
 /* Remove any faded background text */
 .no-faded-text {
   position: relative;
@@ -612,6 +637,34 @@ img {
 }
 
 /* ===== BUTTON ENHANCEMENTS ===== */
+
+.btn-standard {
+  @apply rounded-xl border-2 transition-all duration-200;
+  min-height: 44px !important;
+  overflow: visible !important;
+  transform: none !important;
+}
+
+.btn-primary {
+  @apply bg-rainbow-enhanced text-white border-transparent;
+  background: linear-gradient(135deg, hsl(var(--omni-violet)) 0%, hsl(var(--omni-orange)) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  @apply bg-white text-gray-800 border-gray-200;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+  @apply bg-gray-50 border-gray-300;
+  transform: translateY(-1px) !important;
+}
 
 .btn-responsive {
   @apply px-4 py-2 sm:px-6 sm:py-3 min-h-[44px];

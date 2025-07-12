@@ -121,7 +121,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md mx-auto">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
