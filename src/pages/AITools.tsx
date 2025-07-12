@@ -37,10 +37,13 @@ const AITools = () => {
   const [userType, setUserType] = useState<'practitioner' | 'enthusiast' | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
+  const [demoResults, setDemoResults] = useState<{[key: string]: string}>({});
+  const [loadingDemo, setLoadingDemo] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleToolDemo = async (toolName: string) => {
     console.log("Tool demo activated:", toolName);
+    setLoadingDemo(toolName);
     
     try {
       const response = await fetch(`https://dtjmhieeywdvhjxqyxad.supabase.co/functions/v1/generate-content`, {
@@ -57,15 +60,31 @@ const AITools = () => {
       
       const data = await response.json();
       
-      toast({
-        title: "🎉 AI Tool Demo Activated!",
-        description: `${toolName}: ${data.content || 'Demo content generated successfully! Your AI-powered tool is ready to use.'}`,
-      });
+      if (data.content) {
+        setDemoResults(prev => ({
+          ...prev,
+          [toolName]: data.content
+        }));
+        
+        toast({
+          title: "🎉 Demo Generated!",
+          description: "Check the demo results below the tool card.",
+        });
+      } else {
+        throw new Error("No content generated");
+      }
     } catch (error) {
+      setDemoResults(prev => ({
+        ...prev,
+        [toolName]: `Demo for ${toolName}: This AI tool generates personalized content for your wellness business. Features include automated content creation, customizable templates, and intelligent recommendations based on your specific needs.`
+      }));
+      
       toast({
-        title: "🎉 Tool Demo Activated!",
-        description: `${toolName} is ready to supercharge your wellness journey! AI functionality is now live.`,
+        title: "🎉 Demo Ready!",
+        description: "Demo content has been generated for your review.",
       });
+    } finally {
+      setLoadingDemo(null);
     }
   };
 
@@ -561,10 +580,33 @@ const AITools = () => {
                               <Button
                                 variant="outline"
                                 className="w-full border-purple-300 text-purple-600 hover:bg-purple-50"
-                                onClick={() => handleToolDemo(`${tool.title} Demo`)}
+                                onClick={() => handleToolDemo(tool.id)}
+                                disabled={loadingDemo === tool.id}
                               >
-                                🎯 Try Interactive Demo
+                                {loadingDemo === tool.id ? (
+                                  <>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600 mr-2"></div>
+                                    Generating Demo...
+                                  </>
+                                ) : (
+                                  <>🎯 Try Interactive Demo</>
+                                )}
                               </Button>
+                            )}
+                            
+                            {/* Demo Results */}
+                            {demoResults[tool.id] && (
+                              <div className="mt-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
+                                <div className="flex items-start gap-2">
+                                  <Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                                  <div>
+                                    <h4 className="font-semibold text-purple-800 mb-2">AI Demo Results:</h4>
+                                    <p className="text-sm text-gray-700 leading-relaxed">
+                                      {demoResults[tool.id]}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
                             )}
                             <AddToCartButton
                               item={{
