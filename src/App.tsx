@@ -11,6 +11,9 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import Portfolio from "./pages/Portfolio";
 import Blog from "./pages/Blog";
+import CommunityBlog from "./pages/CommunityBlog";
+import BlogEditor from "./pages/BlogEditor";
+import BlogPost from "./pages/BlogPost";
 import Podcast from "./pages/Podcast";
 import Contact from "./pages/Contact";
 import AITools from "./pages/AITools";
@@ -80,6 +83,9 @@ const App = () => (
           <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/community" element={<CommunityBlog />} />
+            <Route path="/blog/editor/:postId" element={<BlogEditor />} />
+            <Route path="/blog/post/:slug" element={<BlogPost />} />
             <Route path="/podcast" element={<Podcast />} />
             <Route path="/ai-tools" element={<AITools />} />
             <Route path="/2bewell" element={<TwoBeWell />} />

@@ -2,6 +2,7 @@
 import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const Blog = () => {
   const blogPosts = [
@@ -81,6 +82,14 @@ const Blog = () => {
               Explore our thoughts on conscious content creation, community empowerment, 
               and the stories that inspire positive change across communities.
             </p>
+            <div className="flex gap-4 justify-center">
+              <Button 
+                onClick={() => window.location.href = '/blog/community'}
+                className="bg-rainbow-gradient hover:opacity-90 text-white"
+              >
+                Community Blog
+              </Button>
+            </div>
           </div>
         </section>
 

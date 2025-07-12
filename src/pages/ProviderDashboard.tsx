@@ -400,6 +400,7 @@ const ProviderDashboard = () => {
                 <TabsTrigger value="website">Website</TabsTrigger>
                 <TabsTrigger value="testimonials">Reviews</TabsTrigger>
                 <TabsTrigger value="insights">AI Insights</TabsTrigger>
+                <TabsTrigger value="blog">Community Blog</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="mt-6">
@@ -703,6 +704,66 @@ const ProviderDashboard = () => {
                       <Bot className="h-12 w-12 mx-auto mb-4 opacity-50" />
                       <p>AI insights coming soon</p>
                       <p className="text-sm">Get personalized recommendations based on your performance</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="blog" className="mt-6">
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <div>
+                      <CardTitle>Community Blog</CardTitle>
+                      <CardDescription>Share your wellness insights and connect with the community</CardDescription>
+                    </div>
+                    <Button 
+                      onClick={() => navigate('/blog/editor/new')}
+                      className="bg-rainbow-gradient hover:opacity-90 text-white"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Write New Post
+                    </Button>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Card className="p-4 bg-gradient-to-r from-omni-orange/10 to-omni-red/10">
+                          <div className="flex items-center gap-3">
+                            <Edit className="h-8 w-8 text-omni-orange" />
+                            <div>
+                              <h3 className="font-medium">Write Your Story</h3>
+                              <p className="text-sm text-muted-foreground">Share your wellness journey and insights</p>
+                            </div>
+                          </div>
+                        </Card>
+                        
+                        <Card className="p-4 bg-gradient-to-r from-omni-blue/10 to-omni-indigo/10">
+                          <div className="flex items-center gap-3">
+                            <Heart className="h-8 w-8 text-omni-blue" />
+                            <div>
+                              <h3 className="font-medium">Build Community</h3>
+                              <p className="text-sm text-muted-foreground">Connect with fellow practitioners</p>
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
+                      
+                      <div className="flex gap-4">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => navigate('/blog/community')}
+                        >
+                          <MessageCircle className="h-4 w-4 mr-2" />
+                          Browse Community
+                        </Button>
+                        <Button 
+                          variant="outline"
+                          onClick={() => navigate('/blog/editor/new')}
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          Start Writing
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
