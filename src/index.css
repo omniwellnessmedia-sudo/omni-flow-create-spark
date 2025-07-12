@@ -350,6 +350,15 @@
     transform: scale(1.02);
     box-shadow: 0 0 0 10px hsl(var(--omni-orange) / 0);
   }
+
+  /* 3D Carousel Utilities */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
 }
 
 /* Enhanced button contrast for readability */

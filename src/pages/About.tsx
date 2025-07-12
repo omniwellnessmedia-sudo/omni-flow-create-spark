@@ -3,8 +3,57 @@ import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
+import ImageCarousel3D from "@/components/ui/image-carousel-3d";
 
 const About = () => {
+  const storyImages = [
+    {
+      src: "/lovable-uploads/f82ae266-4067-45f3-be51-c7eb82a086b5.png",
+      alt: "Community wellness activities - yoga session outdoors",
+      caption: "Wellness in Action - Community yoga sessions bringing people together"
+    },
+    {
+      src: "/lovable-uploads/a173755d-1be1-43bf-90cf-73ff1ab97eca.png",
+      alt: "Community outreach with children",
+      caption: "Youth Engagement - Connecting with the next generation"
+    },
+    {
+      src: "/lovable-uploads/5fc374c8-c75f-4568-8d6f-8b6690f60fe8.png",
+      alt: "Community gathering in nature",
+      caption: "Nature Connection - Learning and growing together outdoors"
+    },
+    {
+      src: "/lovable-uploads/ae7dd422-830f-4fc0-bd09-99d59ac3c74d.png",
+      alt: "Team collaboration in nature",
+      caption: "Team Spirit - Our collaborative approach to wellness"
+    },
+    {
+      src: "/lovable-uploads/9541ac9f-baaf-408d-b27b-d51d6b29843c.png",
+      alt: "Animal wellness and connection",
+      caption: "Animal Wellness - Promoting compassionate living"
+    },
+    {
+      src: "/lovable-uploads/3b0dbe5c-71d7-4531-9223-49d482c3cae4.png",
+      alt: "Community group activities",
+      caption: "Community Building - Bringing diverse groups together"
+    },
+    {
+      src: "/lovable-uploads/5fd8d5d0-c500-460f-b154-d7521729dbc7.png",
+      alt: "Outdoor adventure and wellness",
+      caption: "Adventure Wellness - Exploring nature for holistic health"
+    },
+    {
+      src: "/lovable-uploads/c34eeb26-fb7a-4e01-9a3d-be12dced06c5.png",
+      alt: "Panel discussion and community dialogue",
+      caption: "Community Dialogue - Facilitating important conversations"
+    },
+    {
+      src: "/lovable-uploads/8237809d-793d-4524-8c54-a6395a6efe94.png",
+      alt: "Community garden and sustainable development",
+      caption: "Sustainable Development - Growing community resilience"
+    }
+  ];
+
   const team = [
     { 
       name: "Chad Cupido", 
@@ -98,11 +147,10 @@ const About = () => {
                 </div>
               </div>
               <div>
-                <img 
-                  src="/lovable-uploads/0b9c95c5-3439-459b-a4d2-0ca456a0f42e.png"
-                  alt="Team with community project materials"
-                  className="img-card rounded-2xl shadow-2xl"
-                  loading="lazy"
+                <ImageCarousel3D 
+                  images={storyImages}
+                  autoPlay={true}
+                  autoPlayDelay={5000}
                 />
               </div>
             </div>
