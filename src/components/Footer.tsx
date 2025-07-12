@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { ChevronUp } from "lucide-react";
+import { ChevronUp, Mail, Calendar, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Footer = () => {
@@ -9,39 +9,89 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-900 text-white section-large">
+    <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container-width">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Logo and Description */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-3 mb-4">
-              <img 
-                src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
-                alt="Omni Wellness Media" 
-                className="h-8 w-8"
-              />
-              <span className="font-heading font-bold text-lg bg-rainbow-gradient bg-clip-text text-transparent">
-                Omni Wellness Media
-              </span>
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+                  alt="Omni Wellness Media" 
+                  className="h-16 w-16 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105"
+                />
+                <div className="absolute inset-0 rounded-full bg-rainbow-gradient opacity-20 animate-pulse"></div>
+              </div>
+              <div>
+                <span className="font-heading font-bold text-xl bg-rainbow-gradient bg-clip-text text-transparent block">
+                  Omni Wellness Media
+                </span>
+                <span className="text-gray-400 text-sm">Conscious Content Creation</span>
+              </div>
             </div>
-            <p className="text-gray-300 mb-4 max-w-md">
+            <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
               Empowering communities through conscious content creation, business development, 
               and holistic wellness solutions. Creating positive change from South Africa to the world.
             </p>
+
+            {/* Contact Actions */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <Button 
+                size="sm"
+                className="bg-omni-violet hover:bg-omni-violet/90 text-white font-medium"
+                asChild
+              >
+                <a href="mailto:omnimediawellness@gmail.com">
+                  <Mail className="w-4 h-4 mr-2" />
+                  Email Us
+                </a>
+              </Button>
+              <Button 
+                size="sm"
+                variant="outline"
+                className="border-white/30 text-white hover:bg-white/10"
+                asChild
+              >
+                <Link to="/contact">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Book Appointment
+                </Link>
+              </Button>
+            </div>
+
+            {/* Chat/Subscribe Feature */}
+            <div className="bg-gray-800 rounded-lg p-4 mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <MessageCircle className="w-4 h-4 text-omni-blue" />
+                <h4 className="font-semibold text-white">Stay Connected</h4>
+              </div>
+              <p className="text-gray-400 text-sm mb-3">
+                Subscribe for wellness tips and project updates
+              </p>
+              <a 
+                href="mailto:omnimediawellness@gmail.com?subject=Newsletter Subscription"
+                className="text-omni-blue hover:text-omni-blue/80 text-sm font-medium transition-colors"
+              >
+                Subscribe to Newsletter →
+              </a>
+            </div>
+
+            {/* Social Media */}
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
                 <span className="sr-only">Facebook</span>
                 📘
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
                 <span className="sr-only">Instagram</span>
                 📷
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
                 <span className="sr-only">LinkedIn</span>
                 💼
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
                 <span className="sr-only">YouTube</span>
                 📺
               </a>
@@ -50,22 +100,30 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-heading font-semibold text-lg mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors">Services</Link></li>
-              <li><Link to="/portfolio" className="text-gray-300 hover:text-white transition-colors">Portfolio</Link></li>
-              <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors">AI Tools</Link></li>
+            <h3 className="font-heading font-semibold text-lg mb-6 text-white">Quick Links</h3>
+            <ul className="space-y-3">
+              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">About Us</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Services</Link></li>
+              <li><Link to="/portfolio" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Portfolio</Link></li>
+              <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">AI Tools</Link></li>
             </ul>
           </div>
 
-          {/* Content */}
+          {/* Content & Resources */}
           <div>
-            <h3 className="font-heading font-semibold text-lg mb-4">Content</h3>
-            <ul className="space-y-2">
-              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors">Blog</Link></li>
-              <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors">Podcast</Link></li>
-              <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link></li>
+            <h3 className="font-heading font-semibold text-lg mb-6 text-white">Content & Resources</h3>
+            <ul className="space-y-3">
+              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Blog</Link></li>
+              <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Podcast</Link></li>
+              <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Contact</Link></li>
+              <li>
+                <a 
+                  href="mailto:omnimediawellness@gmail.com" 
+                  className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block"
+                >
+                  Direct Email
+                </a>
+              </li>
             </ul>
           </div>
         </div>

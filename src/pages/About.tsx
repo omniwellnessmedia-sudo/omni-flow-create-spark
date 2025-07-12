@@ -1,9 +1,11 @@
 
+import { Link } from "react-router-dom";
 import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import ImageCarousel3D from "@/components/ui/image-carousel-3d";
+import { Button } from "@/components/ui/button";
 
 const About = () => {
   const storyImages = [
@@ -244,27 +246,135 @@ const About = () => {
                 Through our work, we're creating ripples of positive change that extend far beyond individual projects.
               </p>
             </div>
-            <div className="grid-responsive-3">
-              <div className="text-center">
+            
+            {/* Impact Cards with Portrait Images */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className="aspect-[3/4] overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/962ceac6-b494-43d6-b37e-f994560fecab.png"
+                    alt="Environmental wellness and nature conservation"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6 text-center">
+                  <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Environmental Wellness</h3>
+                  <p className="text-gray-600">Promoting sustainable practices and connecting communities with nature for holistic healing and environmental consciousness.</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className="aspect-[3/4] overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/75a97d0a-ea73-42e4-b7b2-a80c52327de4.png"
+                    alt="Youth empowerment and community engagement"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6 text-center">
+                  <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Youth Empowerment</h3>
+                  <p className="text-gray-600">Engaging with the next generation through the BWC Youth Club "Troopers" to build awareness and create future change-makers.</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className="aspect-[3/4] overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/e85ad5c6-1b62-462b-a36e-4d42baf1f960.png"
+                    alt="Animal wellness and compassionate living"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-6 text-center">
+                  <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Animal Wellness</h3>
+                  <p className="text-gray-600">Advocating for animal rights and promoting compassionate living through education and community outreach programs.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Impact Statistics */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+              <div className="p-6">
                 <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">🌍</span>
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Global Reach</h3>
-                <p className="text-gray-600">Our content reaches communities across South Africa and beyond, inspiring change worldwide.</p>
+                <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">1000+</h4>
+                <p className="text-gray-600 font-medium">Lives Touched</p>
               </div>
-              <div className="text-center">
+              <div className="p-6">
                 <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">🤝</span>
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Community Building</h3>
-                <p className="text-gray-600">We foster connections between diverse communities, breaking down barriers and building bridges.</p>
+                <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">15+</h4>
+                <p className="text-gray-600 font-medium">Communities Served</p>
               </div>
-              <div className="text-center">
+              <div className="p-6">
                 <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">💡</span>
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Conscious Content</h3>
-                <p className="text-gray-600">Every piece of content we create is designed to educate, inspire, and empower positive action.</p>
+                <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">50+</h4>
+                <p className="text-gray-600 font-medium">Projects Completed</p>
+              </div>
+              <div className="p-6">
+                <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl font-bold">🎬</span>
+                </div>
+                <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">100+</h4>
+                <p className="text-gray-600 font-medium">Stories Told</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Call to Action Section */}
+        <section className="section-spacing bg-gradient-to-br from-omni-violet via-omni-blue to-omni-teal text-white">
+          <div className="container-width text-center">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="heading-secondary text-white mb-6">
+                Ready to Create <span className="text-yellow-300">Positive Change</span> Together?
+              </h2>
+              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+                Join us in bridging wellness, outreach, and media to empower communities and inspire 
+                conscious living. Let's tell your story and make a meaningful impact.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                <Button 
+                  size="lg" 
+                  className="bg-white text-omni-violet hover:bg-gray-100 font-semibold px-8 py-3"
+                  asChild
+                >
+                  <Link to="/contact">Start Your Project</Link>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-white text-white hover:bg-white/10 font-semibold px-8 py-3"
+                  asChild
+                >
+                  <a href="mailto:omnimediawellness@gmail.com">Email Us</a>
+                </Button>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto">
+                <h3 className="font-heading font-semibold text-lg mb-4 text-white">Get in Touch</h3>
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                  <a 
+                    href="mailto:omnimediawellness@gmail.com" 
+                    className="text-white/90 hover:text-white transition-colors font-medium"
+                  >
+                    📧 omnimediawellness@gmail.com
+                  </a>
+                  <span className="hidden sm:block text-white/60">|</span>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-white/30 text-white hover:bg-white/10"
+                    asChild
+                  >
+                    <Link to="/contact">Book Appointment</Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
