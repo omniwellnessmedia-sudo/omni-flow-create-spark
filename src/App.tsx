@@ -45,6 +45,7 @@ import Resources from "./pages/Resources";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
+import ServiceDetail from "./pages/ServiceDetail";
 
 const queryClient = new QueryClient();
 
@@ -99,7 +100,7 @@ const App = () => (
             <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
             <Route path="/wellness-exchange/provider-signup" element={<WellnessExchangeSignup />} />
             <Route path="/wellness-exchange/consumer-signup" element={<WellnessExchangeSignup />} />
-            <Route path="/wellness-exchange/service/:serviceId" element={<ProductDetail />} />
+            <Route path="/wellness-exchange/service/:serviceId" element={<ServiceDetail />} />
             <Route path="/provider-website/:websiteId" element={<ProviderWebsite />} />
             <Route path="/partners" element={<PartnersDirectory />} />
             <Route path="/partners/:id" element={<PartnerProfile />} />

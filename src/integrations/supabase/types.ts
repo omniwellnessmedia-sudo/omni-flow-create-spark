@@ -81,6 +81,33 @@ export type Database = {
           },
         ]
       }
+      calendly_config: {
+        Row: {
+          client_id: string
+          client_secret: string
+          created_at: string | null
+          id: string
+          updated_at: string | null
+          webhook_signing_key: string
+        }
+        Insert: {
+          client_id: string
+          client_secret: string
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          webhook_signing_key: string
+        }
+        Update: {
+          client_id?: string
+          client_secret?: string
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          webhook_signing_key?: string
+        }
+        Relationships: []
+      }
       community_posts: {
         Row: {
           comments_count: number | null
