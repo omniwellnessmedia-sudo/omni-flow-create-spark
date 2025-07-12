@@ -88,7 +88,7 @@ const BlogPost = () => {
         .from('blog_posts')
         .select(`
           *,
-          profiles!inner(full_name, avatar_url)
+          profiles (full_name, avatar_url)
         `)
         .eq('slug', slug)
         .eq('status', 'published')
@@ -109,7 +109,7 @@ const BlogPost = () => {
         .from('blog_comments')
         .select(`
           *,
-          profiles!inner(full_name, avatar_url)
+          profiles (full_name, avatar_url)
         `)
         .eq('blog_post_id', postData.id)
         .order('created_at', { ascending: false });
@@ -192,7 +192,7 @@ const BlogPost = () => {
         }])
         .select(`
           *,
-          profiles!inner(full_name, avatar_url)
+          profiles (full_name, avatar_url)
         `)
         .single();
 

@@ -70,7 +70,7 @@ const CommunityBlog = () => {
         .from('blog_posts')
         .select(`
           *,
-          profiles!inner(full_name, avatar_url)
+          profiles (full_name, avatar_url)
         `)
         .eq('status', 'published')
         .order('published_at', { ascending: false });
@@ -100,7 +100,7 @@ const CommunityBlog = () => {
         .from('blog_posts')
         .select(`
           *,
-          profiles!inner(full_name, avatar_url)
+          profiles (full_name, avatar_url)
         `)
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
