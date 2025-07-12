@@ -14,58 +14,58 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Description */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="relative">
+            <div className="flex items-center space-x-4 mb-8">
+              <div className="relative flex-shrink-0">
                 <img 
                   src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
                   alt="Omni Wellness Media" 
-                  className="h-16 w-16 rounded-full border-2 border-rainbow-gradient p-1 bg-white"
+                  className="h-20 w-20 rounded-full object-cover border-4 border-white shadow-lg"
                 />
-                <div className="absolute inset-0 rounded-full bg-rainbow-gradient opacity-20 animate-pulse"></div>
+                <div className="absolute inset-0 rounded-full bg-rainbow-gradient opacity-30 animate-pulse"></div>
               </div>
               <div>
-                <span className="font-heading font-bold text-xl bg-rainbow-gradient bg-clip-text text-transparent block">
+                <h3 className="font-heading font-bold text-2xl text-white mb-1">
                   Omni Wellness Media
-                </span>
-                <span className="text-gray-400 text-sm">Conscious Content • Community Impact</span>
+                </h3>
+                <p className="text-gray-300 text-sm font-medium">Conscious Content • Community Impact</p>
               </div>
             </div>
-            <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
+            <p className="text-gray-300 mb-8 max-w-md leading-relaxed text-base">
               Empowering communities through conscious content creation, business development, 
               and holistic wellness solutions. Creating positive change from South Africa to the world.
             </p>
             
             {/* Contact Actions */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <a 
                 href="mailto:omnimediawellness@gmail.com" 
-                className="bg-rainbow-gradient text-white px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity duration-300 text-center text-sm"
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-full font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 text-center shadow-lg"
               >
-                📧 Email Us
+                ✉️ Email Us
               </a>
               <a 
                 href="/contact" 
-                className="border border-gray-600 text-gray-300 px-6 py-3 rounded-full font-semibold hover:bg-gray-800 hover:text-white transition-all duration-300 text-center text-sm"
+                className="border-2 border-gray-400 text-gray-300 px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-gray-900 transition-all duration-300 text-center"
               >
                 📅 Book Consultation
               </a>
             </div>
             
             {/* Social Links */}
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+            <div className="flex space-x-3">
+              <a href="#" className="bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-300 p-3 rounded-full text-lg">
                 <span className="sr-only">Facebook</span>
                 📘
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+              <a href="#" className="bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-300 p-3 rounded-full text-lg">
                 <span className="sr-only">Instagram</span>
                 📷
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+              <a href="#" className="bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-300 p-3 rounded-full text-lg">
                 <span className="sr-only">LinkedIn</span>
                 💼
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+              <a href="#" className="bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-300 p-3 rounded-full text-lg">
                 <span className="sr-only">YouTube</span>
                 📺
               </a>

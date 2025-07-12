@@ -244,41 +244,47 @@ const About = () => {
                 Through our work, we're creating ripples of positive change that extend far beyond individual projects.
               </p>
             </div>
-            <div className="grid-responsive-3">
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group">
-                <div className="mb-6 overflow-hidden rounded-xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div className="overflow-hidden">
                   <img 
                     src="/lovable-uploads/c3b54db5-586f-41da-a939-1d8c70333591.png"
                     alt="Community gathering and traditional healing practices"
-                    className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Community Connection</h3>
-                <p className="text-gray-600">Building authentic relationships and fostering healing traditions that bring communities together in meaningful ways.</p>
+                <div className="p-6">
+                  <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Community Connection</h3>
+                  <p className="text-gray-600 leading-relaxed">Building authentic relationships and fostering healing traditions that bring communities together in meaningful ways.</p>
+                </div>
               </div>
               
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group">
-                <div className="mb-6 overflow-hidden rounded-xl">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div className="overflow-hidden">
                   <img 
                     src="/lovable-uploads/3e8c2291-8f3c-4b41-95ee-795689efbdac.png"
                     alt="Youth engagement and activism - BWC Youth Club Troopers"
-                    className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Youth Empowerment</h3>
-                <p className="text-gray-600">Inspiring the next generation through activism, education, and community leadership programs that create lasting change.</p>
+                <div className="p-6">
+                  <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Youth Empowerment</h3>
+                  <p className="text-gray-600 leading-relaxed">Inspiring the next generation through activism, education, and community leadership programs that create lasting change.</p>
+                </div>
               </div>
               
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group">
-                <div className="mb-6 overflow-hidden rounded-xl">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div className="overflow-hidden">
                   <img 
                     src="/lovable-uploads/b02b5fca-2b89-40fa-ac36-acc1a68260fd.png"
                     alt="Animal wellness and compassionate living"
-                    className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Animal Wellness</h3>
-                <p className="text-gray-600">Promoting compassionate living and advocating for animal rights through education and community awareness programs.</p>
+                <div className="p-6">
+                  <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Animal Wellness</h3>
+                  <p className="text-gray-600 leading-relaxed">Promoting compassionate living and advocating for animal rights through education and community awareness programs.</p>
+                </div>
               </div>
             </div>
           </div>
