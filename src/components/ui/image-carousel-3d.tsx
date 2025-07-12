@@ -45,7 +45,7 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
   };
 
   return (
-    <div className="relative w-full h-96 md:h-[500px] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 perspective-1000">
+    <div className="relative w-full max-w-6xl mx-auto h-96 md:h-[600px] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 perspective-1000">
       {/* 3D Carousel Container */}
       <div className="relative w-full h-full preserve-3d">
         {images.map((image, index) => {
@@ -118,7 +118,7 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
       {/* Navigation Buttons */}
       <button
         onClick={goToPrevious}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-30 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
         aria-label="Previous image"
       >
         <ChevronLeft size={24} />
@@ -126,22 +126,22 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
       
       <button
         onClick={goToNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-30 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
         aria-label="Next image"
       >
         <ChevronRight size={24} />
       </button>
 
       {/* Dot Indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
         {images.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+            className={`w-3 h-3 rounded-full transition-all duration-300 shadow-md ${
               index === currentIndex
                 ? 'bg-white scale-125'
-                : 'bg-white/50 hover:bg-white/75'
+                : 'bg-white/60 hover:bg-white/80'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
