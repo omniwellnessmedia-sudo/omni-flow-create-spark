@@ -639,21 +639,20 @@ img {
 /* ===== BUTTON ENHANCEMENTS ===== */
 
 .btn-standard {
-  @apply rounded-xl border-2 transition-all duration-200;
+  @apply rounded-xl border-2 transition-colors duration-200;
   min-height: 44px !important;
   overflow: visible !important;
   transform: none !important;
 }
 
 .btn-primary {
-  @apply bg-rainbow-enhanced text-white border-transparent;
+  @apply text-white border-transparent;
   background: linear-gradient(135deg, hsl(var(--omni-violet)) 0%, hsl(var(--omni-orange)) 100%);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary {
@@ -663,7 +662,6 @@ img {
 
 .btn-secondary:hover {
   @apply bg-gray-50 border-gray-300;
-  transform: translateY(-1px) !important;
 }
 
 .btn-responsive {
@@ -729,4 +727,27 @@ img {
 .flex-shrink {
   flex-shrink: 1 !important;
   min-width: 0 !important;
+}
+
+/* ===== GRID LAYOUTS ===== */
+
+/* Card grid layouts */
+.grid-cards {
+  @apply grid gap-6 grid-cols-1 md:grid-cols-2;
+}
+
+.grid-services {
+  @apply grid gap-8 grid-cols-1 md:grid-cols-2;
+}
+
+.grid-testimonials {
+  @apply grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.grid-auto-fit {
+  @apply grid gap-6 grid-cols-1 md:grid-cols-2;
+}
+
+.grid-marketplace {
+  @apply grid gap-6 grid-cols-1 md:grid-cols-2;
 }

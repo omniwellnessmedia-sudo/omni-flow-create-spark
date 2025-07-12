@@ -341,7 +341,7 @@ const WellnessMarketplace = () => {
             </div>
           ) : (
             <>
-              <div className="grid-responsive-3">
+              <div className="grid-marketplace">
                 {filteredServices.map((service) => (
                 <Card key={service.id} className="card-service hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
                     {/* Service Image */}
