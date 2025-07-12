@@ -1,26 +1,21 @@
-
 import { Link } from "react-router-dom";
 import { ChevronUp, Mail, Calendar, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 const Footer = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
-
-  return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8">
+  return <footer className="text-white pt-16 pb-8 bg-teal-700">
       <div className="container-width">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Logo and Description */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative">
-                <img 
-                  src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
-                  alt="Omni Wellness Media" 
-                  className="h-16 w-16 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105"
-                />
+                <img src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" alt="Omni Wellness Media" className="h-16 w-16 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
                 <div className="absolute inset-0 rounded-full bg-rainbow-gradient opacity-20 animate-pulse"></div>
               </div>
               <div>
@@ -37,23 +32,14 @@ const Footer = () => {
 
             {/* Contact Actions */}
             <div className="flex flex-col sm:flex-row gap-3 mb-6">
-              <Button 
-                size="sm"
-                className="bg-omni-violet hover:bg-omni-violet/90 text-white font-medium"
-                asChild
-              >
+              <Button size="sm" className="bg-omni-violet hover:bg-omni-violet/90 text-white font-medium" asChild>
                 <a href="mailto:omnimediawellness@gmail.com">
                   <Mail className="w-4 h-4 mr-2" />
                   Email Us
                 </a>
               </Button>
-              <Button 
-                size="sm"
-                variant="outline"
-                className="border-white/30 text-white hover:bg-white/10"
-                asChild
-              >
-                <Link to="/contact">
+              <Button size="sm" variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
+                <Link to="/contact" className="text-zinc-100">
                   <Calendar className="w-4 h-4 mr-2" />
                   Book Appointment
                 </Link>
@@ -61,18 +47,15 @@ const Footer = () => {
             </div>
 
             {/* Chat/Subscribe Feature */}
-            <div className="bg-gray-800 rounded-lg p-4 mb-6">
+            <div className="rounded-lg p-4 mb-6 bg-teal-800">
               <div className="flex items-center gap-2 mb-2">
                 <MessageCircle className="w-4 h-4 text-omni-blue" />
-                <h4 className="font-bold text-white">Stay Connected</h4>
+                <h4 className="font-bold text-zinc-100">Stay Connected</h4>
               </div>
               <p className="text-gray-300 text-sm mb-3">
                 Subscribe for wellness tips and project updates
               </p>
-              <a 
-                href="mailto:omnimediawellness@gmail.com?subject=Newsletter Subscription"
-                className="text-omni-blue hover:text-omni-blue/80 text-sm font-medium transition-colors"
-              >
+              <a href="mailto:omnimediawellness@gmail.com?subject=Newsletter Subscription" className="text-omni-blue hover:text-omni-blue/80 text-sm font-medium transition-colors">
                 Subscribe to Newsletter →
               </a>
             </div>
@@ -100,7 +83,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-heading font-bold text-lg mb-6 text-white">Quick Links</h3>
+            <h3 className="font-heading font-bold text-lg mb-6 text-white ">Quick Links</h3>
             <ul className="space-y-3">
               <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">About Us</Link></li>
               <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Services</Link></li>
@@ -110,17 +93,14 @@ const Footer = () => {
           </div>
 
           {/* Content & Resources */}
-          <div>
-            <h3 className="font-heading font-bold text-lg mb-6 text-white">Content & Resources</h3>
+          <div className="bg-transparent">
+            <h3 className="font-heading mb-6 text-lg font-bold text-zinc-100">Content & Resources</h3>
             <ul className="space-y-3">
               <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Blog</Link></li>
               <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Podcast</Link></li>
               <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Contact</Link></li>
               <li>
-                <a 
-                  href="mailto:omnimediawellness@gmail.com" 
-                  className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block"
-                >
+                <a href="mailto:omnimediawellness@gmail.com" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                   Direct Email
                 </a>
               </li>
@@ -145,20 +125,13 @@ const Footer = () => {
 
           {/* Back to Top - Mobile Only */}
           <div className="flex justify-center mt-8 md:hidden">
-            <Button
-              onClick={scrollToTop}
-              variant="outline"
-              size="sm"
-              className="bg-transparent border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white card-button-standard"
-            >
+            <Button onClick={scrollToTop} variant="outline" size="sm" className="bg-transparent border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white card-button-standard">
               <ChevronUp className="w-4 h-4 mr-2" />
               Back to Top
             </Button>
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
