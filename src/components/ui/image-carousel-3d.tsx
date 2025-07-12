@@ -45,7 +45,7 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto h-96 md:h-[600px] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 perspective-1000">
+    <div className="relative w-full max-w-7xl mx-auto h-96 md:h-[700px] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 perspective-1000">
       {/* 3D Carousel Container */}
       <div className="relative w-full h-full preserve-3d">
         {images.map((image, index) => {
@@ -97,11 +97,11 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
               }}
               onClick={() => goToSlide(index)}
             >
-              <div className="w-full h-full rounded-xl overflow-hidden shadow-2xl bg-white">
+              <div className="w-full h-full rounded-xl overflow-hidden shadow-2xl bg-white p-2">
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain rounded-lg"
                   loading="lazy"
                 />
                 {image.caption && (

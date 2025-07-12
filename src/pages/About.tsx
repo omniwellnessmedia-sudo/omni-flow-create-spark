@@ -119,39 +119,47 @@ const About = () => {
       
       <main>
 
-        {/* Our Story */}
+        {/* Our Story - Redesigned for better image showcase */}
         <section className="section-spacing bg-white">
           <div className="container-width">
-            <div className="grid-responsive-2 items-center">
-              <div>
-                <h2 className="heading-secondary no-faded-text">Our Story</h2>
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                  Omni Wellness Media was born from a vision to create authentic content that showcases 
-                  the real stories behind the brands we work with. We believe in breaking stereotypes 
-                  and showing the heart of every project we touch.
-                </p>
-                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                  Our approach focuses on understanding someone's journey, bringing people into their 
-                  life, and fueling passion to help. We specialize in telling the difference between 
-                  privilege and poverty to spark awareness and shake people up in the most positive way.
-                </p>
+            <div className="text-center mb-12">
+              <h2 className="heading-secondary no-faded-text">Our Story</h2>
+              <p className="text-lg text-gray-600 max-w-4xl mx-auto mb-8 leading-relaxed">
+                Omni Wellness Media was born from a vision to create authentic content that showcases 
+                the real stories behind the brands we work with. We believe in breaking stereotypes 
+                and showing the heart of every project we touch.
+              </p>
+            </div>
+
+            {/* Main Image Carousel - Full Width */}
+            <div className="mb-12">
+              <ImageCarousel3D 
+                images={storyImages}
+                autoPlay={true}
+                autoPlayDelay={5000}
+              />
+            </div>
+
+            {/* Story Content Below Carousel */}
+            <div className="max-w-4xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
+                <div>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    Our approach focuses on understanding someone's journey, bringing people into their 
+                    life, and fueling passion to help. We specialize in telling the difference between 
+                    privilege and poverty to spark awareness and shake people up in the most positive way.
+                  </p>
+                </div>
                 <div className="grid grid-cols-2 gap-4 text-center">
-                  <div className="p-4 bg-rainbow-subtle rounded-lg">
-                    <h3 className="font-heading font-semibold text-2xl text-gray-800 mb-2">50+</h3>
-                    <p className="text-gray-600">Projects Completed</p>
+                  <div className="p-6 bg-rainbow-subtle rounded-lg">
+                    <h3 className="font-heading font-semibold text-3xl text-gray-800 mb-2">50+</h3>
+                    <p className="text-gray-600 font-medium">Projects Completed</p>
                   </div>
-                  <div className="p-4 bg-rainbow-subtle rounded-lg">
-                    <h3 className="font-heading font-semibold text-2xl text-gray-800 mb-2">5+</h3>
-                    <p className="text-gray-600">Years Experience</p>
+                  <div className="p-6 bg-rainbow-subtle rounded-lg">
+                    <h3 className="font-heading font-semibold text-3xl text-gray-800 mb-2">5+</h3>
+                    <p className="text-gray-600 font-medium">Years Experience</p>
                   </div>
                 </div>
-              </div>
-              <div>
-                <ImageCarousel3D 
-                  images={storyImages}
-                  autoPlay={true}
-                  autoPlayDelay={5000}
-                />
               </div>
             </div>
           </div>
