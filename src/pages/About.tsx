@@ -1,5 +1,6 @@
 
 import { Link } from "react-router-dom";
+import { Mail, Calendar } from "lucide-react";
 import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
@@ -327,21 +328,39 @@ const About = () => {
         </section>
 
         {/* Call to Action Section */}
-        <section className="section-spacing bg-gradient-to-br from-omni-violet via-omni-blue to-omni-teal text-white">
-          <div className="container-width text-center">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="heading-secondary text-white mb-6 drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-                Ready to Create <span className="text-yellow-300 drop-shadow-lg font-bold">Positive Change</span> Together?
+        <section className="section-spacing bg-white relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-omni-violet/20"></div>
+            <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-omni-blue/20"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-omni-teal/10"></div>
+          </div>
+          
+          <div className="container-width relative z-10">
+            <div className="max-w-4xl mx-auto text-center">
+              {/* Main Heading with Better Contrast */}
+              <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-6 leading-tight">
+                Ready to Create 
+                <br />
+                <span className="bg-rainbow-gradient bg-clip-text text-transparent">
+                  Positive Change
+                </span> 
+                <br />
+                Together?
               </h2>
-              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+              
+              {/* Description */}
+              <p className="text-xl text-gray-700 mb-12 leading-relaxed max-w-3xl mx-auto">
                 Join us in bridging wellness, outreach, and media to empower communities and inspire 
-                conscious living. Let's tell your story and make a meaningful impact.
+                conscious living. Let&apos;s tell your story and make a meaningful impact.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+              {/* Main Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
                 <Button 
                   size="lg" 
-                  className="bg-white text-omni-violet hover:bg-gray-100 font-semibold px-8 py-3"
+                  className="bg-omni-violet hover:bg-omni-violet/90 text-white font-semibold px-12 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                   asChild
                 >
                   <Link to="/contact">Start Your Project</Link>
@@ -349,31 +368,57 @@ const About = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="border-white text-white hover:bg-white/10 font-semibold px-8 py-3"
+                  className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 font-semibold px-12 py-4 text-lg rounded-full transition-all duration-300"
                   asChild
                 >
-                  <a href="mailto:omnimediawellness@gmail.com">Email Us</a>
+                  <Link to="/services">View Our Services</Link>
                 </Button>
               </div>
 
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto">
-                <h3 className="font-heading font-semibold text-lg mb-4 text-white">Get in Touch</h3>
-                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                  <a 
-                    href="mailto:omnimediawellness@gmail.com" 
-                    className="text-white/90 hover:text-white transition-colors font-medium"
-                  >
-                    📧 omnimediawellness@gmail.com
-                  </a>
-                  <span className="hidden sm:block text-white/60">|</span>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="border-white/30 text-white hover:bg-white/10"
-                    asChild
-                  >
-                    <Link to="/contact">Book Appointment</Link>
-                  </Button>
+              {/* Contact Information Card */}
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-8 max-w-2xl mx-auto">
+                <div className="flex items-center justify-center mb-6">
+                  <div className="w-16 h-16 rounded-full bg-omni-violet/10 flex items-center justify-center mr-4">
+                    <img 
+                      src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+                      alt="Omni Wellness Media" 
+                      className="h-10 w-10 rounded-full"
+                    />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-heading font-bold text-xl text-gray-900">Get in Touch</h3>
+                    <p className="text-gray-600">We&apos;re here to help bring your vision to life</p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start mb-2">
+                      <Mail className="w-5 h-5 text-omni-violet mr-2" />
+                      <span className="font-semibold text-gray-900">Email Us</span>
+                    </div>
+                    <a 
+                      href="mailto:omnimediawellness@gmail.com" 
+                      className="text-omni-violet hover:text-omni-violet/80 font-medium transition-colors block"
+                    >
+                      omnimediawellness@gmail.com
+                    </a>
+                  </div>
+                  
+                  <div className="text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start mb-2">
+                      <Calendar className="w-5 h-5 text-omni-violet mr-2" />
+                      <span className="font-semibold text-gray-900">Book Meeting</span>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="border-omni-violet/30 text-omni-violet hover:bg-omni-violet/5 rounded-full"
+                      asChild
+                    >
+                      <Link to="/contact">Schedule Consultation</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
