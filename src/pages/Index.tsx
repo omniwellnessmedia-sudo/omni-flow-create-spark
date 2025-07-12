@@ -13,35 +13,51 @@ import { Section } from "@/components/ui/section";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full overflow-x-hidden">
       <MegaNavigation />
-      <main>
+      <main className="w-full">
         <Section id="hero" size="breathable" background="gradient">
           <HeroSection />
         </Section>
-        <section className="section-spacing bg-white">
-          <WellnessHumansSection />
+        <section className="section-spacing bg-white w-full">
+          <div className="container-width">
+            <WellnessHumansSection />
+          </div>
         </section>
-        <section className="section-spacing bg-gray-50">
-          <MissionSection />
+        <section className="section-spacing bg-gray-50 w-full">
+          <div className="container-width">
+            <MissionSection />
+          </div>
         </section>
-        <section className="section-spacing bg-white">
-          <ServicesSection />
+        <section className="section-spacing bg-white w-full">
+          <div className="container-width">
+            <ServicesSection />
+          </div>
         </section>
-        <section className="section-spacing bg-gray-50">
-          <VideoShowcaseSection />
+        <section className="section-spacing bg-gray-50 w-full">
+          <div className="container-width">
+            <VideoShowcaseSection />
+          </div>
         </section>
-        <section className="section-spacing bg-white">
-          <AIToolsPreview />
+        <section className="section-spacing bg-white w-full">
+          <div className="container-width">
+            <AIToolsPreview />
+          </div>
         </section>
-        <section className="section-spacing bg-gray-50">
-          <FeaturedProjectsSection />
+        <section className="section-spacing bg-gray-50 w-full">
+          <div className="container-width">
+            <FeaturedProjectsSection />
+          </div>
         </section>
-        <section className="section-spacing bg-white">
-          <PartnersSection />
+        <section className="section-spacing bg-white w-full">
+          <div className="container-width">
+            <PartnersSection />
+          </div>
         </section>
-        <section className="section-spacing bg-gray-50">
-          <TestimonialsSection />
+        <section className="section-spacing bg-gray-50 w-full">
+          <div className="container-width">
+            <TestimonialsSection />
+          </div>
         </section>
       </main>
       <Footer />

@@ -153,7 +153,7 @@ const MegaNavigation = () => {
   return (
     <nav className="nav-sticky w-full glass shadow-lg border-b border-white/20">
       <div className="container-width">
-        <div className="flex justify-between items-center h-28">
+        <div className="flex justify-between items-center h-16 md:h-20 lg:h-24">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
@@ -244,8 +244,9 @@ const MegaNavigation = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="lg:hidden">
+          {/* Mobile menu button and Cart */}
+          <div className="lg:hidden flex items-center space-x-2">
+            <CartIcon />
             <Button
               variant="ghost"
               size="sm"
