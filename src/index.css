@@ -605,31 +605,10 @@ img {
 }
 
 .nav-dropdown {
-  @apply bg-white/95 backdrop-blur-lg border border-white/20;
-  position: absolute;
-  z-index: 50;
+  @apply bg-white;
   max-width: 100vw !important;
   overflow-x: hidden !important;
   box-sizing: border-box !important;
-}
-
-/* Fix text shadow and color contrast issues */
-h1, h2, h3, h4, h5, h6 {
-  text-shadow: none !important;
-}
-
-/* Ensure readable text on light backgrounds */
-.text-white {
-  color: hsl(var(--foreground)) !important;
-}
-
-/* Button text fixes */
-.btn-primary {
-  color: white !important;
-}
-
-.btn-secondary {
-  color: hsl(var(--secondary-foreground)) !important;
 }
 
 /* ===== BUTTON ENHANCEMENTS ===== */
