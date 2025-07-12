@@ -245,27 +245,73 @@ const About = () => {
               </p>
             </div>
             <div className="grid-responsive-3">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl font-bold">🌍</span>
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div className="mb-6 overflow-hidden rounded-xl">
+                  <img 
+                    src="/lovable-uploads/c3b54db5-586f-41da-a939-1d8c70333591.png"
+                    alt="Community gathering and traditional healing practices"
+                    className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Global Reach</h3>
-                <p className="text-gray-600">Our content reaches communities across South Africa and beyond, inspiring change worldwide.</p>
+                <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Community Connection</h3>
+                <p className="text-gray-600">Building authentic relationships and fostering healing traditions that bring communities together in meaningful ways.</p>
               </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl font-bold">🤝</span>
+              
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div className="mb-6 overflow-hidden rounded-xl">
+                  <img 
+                    src="/lovable-uploads/3e8c2291-8f3c-4b41-95ee-795689efbdac.png"
+                    alt="Youth engagement and activism - BWC Youth Club Troopers"
+                    className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Community Building</h3>
-                <p className="text-gray-600">We foster connections between diverse communities, breaking down barriers and building bridges.</p>
+                <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Youth Empowerment</h3>
+                <p className="text-gray-600">Inspiring the next generation through activism, education, and community leadership programs that create lasting change.</p>
               </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl font-bold">💡</span>
+              
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 group">
+                <div className="mb-6 overflow-hidden rounded-xl">
+                  <img 
+                    src="/lovable-uploads/b02b5fca-2b89-40fa-ac36-acc1a68260fd.png"
+                    alt="Animal wellness and compassionate living"
+                    className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-                <h3 className="font-heading font-semibold text-xl mb-3">Conscious Content</h3>
-                <p className="text-gray-600">Every piece of content we create is designed to educate, inspire, and empower positive action.</p>
+                <h3 className="font-heading font-semibold text-xl mb-3 text-gray-800">Animal Wellness</h3>
+                <p className="text-gray-600">Promoting compassionate living and advocating for animal rights through education and community awareness programs.</p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Call to Action */}
+        <section className="section-spacing bg-white">
+          <div className="container-width">
+            <div className="text-center bg-rainbow-gradient rounded-3xl p-12 md:p-16 text-white">
+              <h2 className="heading-secondary text-white mb-6">
+                Ready to Create Change Together?
+              </h2>
+              <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+                Whether you need conscious content creation, business development, or want to join our mission 
+                of empowering communities, we're here to help you make a meaningful impact.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a 
+                  href="/contact" 
+                  className="bg-white text-gray-800 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-300 inline-flex items-center"
+                >
+                  Start Your Project
+                </a>
+                <a 
+                  href="mailto:omnimediawellness@gmail.com" 
+                  className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-gray-800 transition-all duration-300 inline-flex items-center"
+                >
+                  Email Us Directly
+                </a>
+              </div>
+              <p className="mt-6 opacity-80">
+                Or book a consultation to discuss your vision
+              </p>
             </div>
           </div>
         </section>
