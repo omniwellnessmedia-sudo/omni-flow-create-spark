@@ -448,10 +448,15 @@ nav *:not(.mega-menu-container):not(.mega-menu-container *) {
   z-index: 9999;
 }
 
-.nav-dropdown * {
+.nav-dropdown *,
+.mega-menu-container *,
+nav *,
+* {
   overflow: visible !important;
   max-height: none !important;
   transform: none !important;
+  scroll-snap-type: none !important;
+  scroll-snap-align: none !important;
 }
 
 /* Critical responsive fixes */
@@ -609,7 +614,7 @@ img {
   max-width: 100% !important;
 }
 
-/* Logo classes */
+/* Logo classes - Fixed tablet sizing */
 .logo-header {
   height: 40px;
   width: auto;
@@ -619,7 +624,7 @@ img {
 
 @media (min-width: 768px) {
   .logo-header {
-    height: 48px;
+    height: 42px; /* Reduced from 48px for tablet */
   }
 }
 
