@@ -260,6 +260,7 @@ const MegaNavigation = () => {
         {activeDropdown && (
           <div 
             className="absolute left-0 right-0 top-full bg-white shadow-2xl border-t border-gray-100 z-50 nav-dropdown"
+            style={{ position: 'absolute', overflow: 'visible', maxHeight: 'none' }}
             onMouseLeave={() => setActiveDropdown(null)}
           >
             {mainNavItems.map((item) => {

@@ -405,6 +405,14 @@
 .nav-dropdown {
   max-height: none;
   overflow: visible;
+  position: absolute;
+  z-index: 9999;
+}
+
+/* Remove ALL scrolling effects from mega menu contents */
+.nav-dropdown * {
+  overflow: visible !important;
+  max-height: none !important;
 }
 
 /* Critical responsive fixes */
