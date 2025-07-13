@@ -409,10 +409,11 @@
   z-index: 9999;
 }
 
-/* Remove ALL scrolling effects from mega menu contents */
+/* Remove ALL scrolling effects from mega menu contents and force cache refresh */
 .nav-dropdown * {
   overflow: visible !important;
   max-height: none !important;
+  transform: none !important;
 }
 
 /* Critical responsive fixes */
