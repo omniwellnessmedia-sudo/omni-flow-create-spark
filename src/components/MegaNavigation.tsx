@@ -36,8 +36,6 @@ const MegaNavigation = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
   const { user, signOut } = useAuth();
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const megaMenuRef = useRef<HTMLDivElement>(null);
 
   const mainNavItems = [
     { 
@@ -148,10 +146,6 @@ const MegaNavigation = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  const handleDropdownToggle = (name: string) => {
-    setActiveDropdown(activeDropdown === name ? null : name);
-  };
-
   const handleMouseEnter = (name: string) => {
     setActiveDropdown(name);
   };
@@ -181,7 +175,6 @@ const MegaNavigation = () => {
                 <div key={item.name} className="relative">
                   {item.hasDropdown ? (
                     <button
-                      onClick={() => handleDropdownToggle(item.name)}
                       onMouseEnter={() => handleMouseEnter(item.name)}
                       onMouseLeave={handleMouseLeave}
                       className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 hover:bg-rainbow-subtle group ${
@@ -270,7 +263,7 @@ const MegaNavigation = () => {
         {/* Mega Menu Dropdown */}
         {activeDropdown && (
           <div 
-            className="absolute top-full left-0 w-full bg-white border-t border-gray-200 shadow-xl z-50"
+            className="absolute top-full left-0 z-50 w-full bg-white rounded-lg shadow-xl border border-gray-200"
             onMouseEnter={() => handleMouseEnter(activeDropdown)}
             onMouseLeave={handleMouseLeave}
           >
