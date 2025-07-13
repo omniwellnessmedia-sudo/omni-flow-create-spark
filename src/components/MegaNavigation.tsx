@@ -182,7 +182,7 @@ const MegaNavigation = () => {
             <img 
               src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
               alt="Omni Wellness Media" 
-              className="logo-header"
+              className="h-8 w-auto"
             />
           </Link>
 
