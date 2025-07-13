@@ -390,69 +390,57 @@
 
 /* ===== NAVIGATION AND LAYOUT FIXES ===== */
 
-/* Remove all transform and scrolling effects from navigation */
+/* Simple fixed navigation */
 .nav-sticky {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 50;
-  width: 100%;
-  overflow: visible;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-/* Mega Menu Container - Critical positioning fixes */
+/* Logo sizing - responsive */
+.logo-header {
+  height: 32px;
+  width: auto;
+}
+
+@media (min-width: 640px) {
+  .logo-header {
+    height: 36px;
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-header {
+    height: 42px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo-header {
+    height: 48px;
+  }
+}
+
+/* Simple mega menu positioning */
 .mega-menu-container {
-  position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 9999 !important;
-  overflow: visible !important;
-  max-height: none !important;
-  height: auto !important;
-  background: white !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
-  border-top: 1px solid #e5e7eb !important;
-}
-
-/* Remove ALL conflicting styles from mega menu and children */
-.mega-menu-container,
-.mega-menu-container * {
-  overflow: visible !important;
-  max-height: none !important;
-  transform: none !important;
-  clip: none !important;
-  clip-path: none !important;
-}
-
-/* Ensure navigation container doesn't clip mega menu */
-nav,
-nav *:not(.mega-menu-container):not(.mega-menu-container *) {
-  overflow: visible !important;
-}
-
-/* Remove ANY height restrictions from parent containers */
-.nav-sticky {
-  overflow: visible !important;
-  height: auto !important;
-  min-height: auto !important;
-  max-height: none !important;
-}
-
-/* Legacy nav-dropdown support */
-.nav-dropdown {
-  max-height: none;
-  overflow: visible;
   position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   z-index: 9999;
 }
 
-/* Target only navigation elements - no universal selector */
-.nav-dropdown *,
-.mega-menu-container *,
-nav * {
-  overflow: visible !important;
-  max-height: none !important;
-  transform: none !important;
+/* Navigation dropdown styling */
+.nav-dropdown {
+  background: white;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
 }
 
 /* Critical responsive fixes */

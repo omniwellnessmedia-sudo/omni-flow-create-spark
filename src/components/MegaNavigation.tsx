@@ -284,15 +284,7 @@ const MegaNavigation = () => {
         {activeDropdown && (
           <div 
             ref={megaMenuRef}
-            className="fixed left-0 right-0 bg-white shadow-2xl border-t border-gray-100 mega-menu-container"
-            style={{ 
-              top: '100%', 
-              zIndex: 9999,
-              position: 'absolute',
-              overflow: 'visible',
-              maxHeight: 'none',
-              height: 'auto'
-            }}
+            className="absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 mega-menu-container"
             onMouseEnter={cancelClose}
             onMouseLeave={handleMouseLeave}
           >
