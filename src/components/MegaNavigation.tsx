@@ -284,7 +284,11 @@ const MegaNavigation = () => {
         {activeDropdown && (
           <div 
             ref={megaMenuRef}
-            className="absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 mega-menu-container"
+            className="fixed left-0 right-0 bg-white shadow-2xl border-t border-gray-100 mega-menu-container"
+            style={{ 
+              top: '60px',  // Start overlapping the header
+              zIndex: 10000  // Ensure it's above everything
+            }}
             onMouseEnter={cancelClose}
             onMouseLeave={handleMouseLeave}
           >
