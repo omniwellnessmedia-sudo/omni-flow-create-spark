@@ -151,19 +151,16 @@ const MegaNavigation = () => {
   };
 
   return (
-    <nav className="nav-sticky glass shadow-lg border-b border-white/20 overflow-safe">
+    <nav className="nav-sticky glass shadow-lg border-b border-white/20">
       <div className="container-width">
         <div className="flex justify-between items-center h-14 sm:h-16 md:h-20 lg:h-24 min-w-0">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="relative">
-              <img 
-                src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
-                alt="Omni Wellness Media" 
-                className="logo-header transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 drop-shadow-lg"
-              />
-              <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-lg scale-110"></div>
-            </div>
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+              alt="Omni Wellness Media" 
+              className="logo-header"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -262,7 +259,7 @@ const MegaNavigation = () => {
         {/* Mega Menu Dropdown */}
         {activeDropdown && (
           <div 
-            className="absolute left-0 right-0 top-full bg-white shadow-2xl border-t border-gray-100 z-50"
+            className="absolute left-0 right-0 top-full bg-white shadow-2xl border-t border-gray-100 z-50 nav-dropdown"
             onMouseLeave={() => setActiveDropdown(null)}
           >
             {mainNavItems.map((item) => {

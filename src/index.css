@@ -122,15 +122,10 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
-    width: 100% !important;
   }
 
   #root {
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
-    width: 100% !important;
+    min-height: 100vh;
   }
 }
 
@@ -376,14 +371,12 @@
 .bg-rainbow-enhanced,
 .bg-rainbow-gradient {
   color: white !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .bg-wellhub-gradient *,
 .bg-rainbow-enhanced *,
 .bg-rainbow-gradient * {
   color: white !important;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* High contrast text utilities */
@@ -397,17 +390,21 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* ===== EMERGENCY OVERFLOW FIXES ===== */
+/* ===== NAVIGATION AND LAYOUT FIXES ===== */
 
-/* Global overflow prevention */
-.container,
-.section,
-.hero,
-.header,
-main,
-div {
-  max-width: 100vw !important;
-  overflow-x: hidden !important;
+/* Remove all transform and scrolling effects from navigation */
+.nav-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  overflow: visible;
+}
+
+/* Ensure mega menu doesn't cause scrolling */
+.nav-dropdown {
+  max-height: none;
+  overflow: visible;
 }
 
 /* Critical responsive fixes */
@@ -428,23 +425,17 @@ div {
 
 /* ===== GLOBAL DESIGN SYSTEM ===== */
 
-/* Standardized Spacing System - Emergency overflow prevention */
+/* Standardized Spacing System */
 .section-spacing {
   @apply py-8 sm:py-12 lg:py-16;
-  max-width: 100vw !important;
-  overflow-x: hidden !important;
 }
 
 .section-spacing-large {
   @apply py-10 sm:py-16 lg:py-20;
-  max-width: 100vw !important;
-  overflow-x: hidden !important;
 }
 
 .section-spacing-small {
   @apply py-6 sm:py-8 lg:py-12;
-  max-width: 100vw !important;
-  overflow-x: hidden !important;
 }
 
 /* Mobile responsive spacing - optimized for 100% zoom */
@@ -454,12 +445,9 @@ div {
   .section-spacing-small { @apply py-6; }
 }
 
-/* Container Standards - Emergency width constraints */
+/* Container Standards */
 .container-width {
   @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  max-width: 100vw !important;
-  overflow-x: hidden !important;
-  box-sizing: border-box !important;
 }
 
 /* ===== TYPOGRAPHY SYSTEM ===== */
@@ -574,13 +562,24 @@ img {
   max-width: 100% !important;
 }
 
-/* Logo Standards - Emergency responsive fix */
+/* Logo classes */
 .logo-header {
-  @apply h-12 sm:h-16 md:h-20 w-auto;
-  min-width: 80px;
-  max-width: 160px;
+  height: 40px;
+  width: auto;
   object-fit: contain;
-  max-height: 80px !important;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+@media (min-width: 768px) {
+  .logo-header {
+    height: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo-header {
+    height: 56px;
+  }
 }
 
 /* ===== CARD SYSTEM ===== */
