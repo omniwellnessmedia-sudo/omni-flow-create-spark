@@ -401,7 +401,46 @@
   overflow: visible;
 }
 
-/* Ensure mega menu doesn't cause scrolling */
+/* Mega Menu Container - Critical positioning fixes */
+.mega-menu-container {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  background: white !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  border-top: 1px solid #e5e7eb !important;
+}
+
+/* Remove ALL conflicting styles from mega menu and children */
+.mega-menu-container,
+.mega-menu-container * {
+  overflow: visible !important;
+  max-height: none !important;
+  transform: none !important;
+  clip: none !important;
+  clip-path: none !important;
+}
+
+/* Ensure navigation container doesn't clip mega menu */
+nav,
+nav *:not(.mega-menu-container):not(.mega-menu-container *) {
+  overflow: visible !important;
+}
+
+/* Remove ANY height restrictions from parent containers */
+.nav-sticky {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* Legacy nav-dropdown support */
 .nav-dropdown {
   max-height: none;
   overflow: visible;
@@ -409,7 +448,6 @@
   z-index: 9999;
 }
 
-/* Remove ALL scrolling effects from mega menu contents and force cache refresh */
 .nav-dropdown * {
   overflow: visible !important;
   max-height: none !important;

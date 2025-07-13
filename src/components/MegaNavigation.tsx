@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/AuthProvider";
@@ -36,6 +36,8 @@ const MegaNavigation = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const megaMenuRef = useRef<HTMLDivElement>(null);
 
   const mainNavItems = [
     { 
@@ -150,6 +152,27 @@ const MegaNavigation = () => {
     setActiveDropdown(activeDropdown === name ? null : name);
   };
 
+  const handleMouseEnter = useCallback((name: string) => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setActiveDropdown(name);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 150); // Small delay to prevent premature closing
+  }, []);
+
+  const cancelClose = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  }, []);
+
   return (
     <nav className="nav-sticky glass shadow-lg border-b border-white/20">
       <div className="container-width">
@@ -172,7 +195,8 @@ const MegaNavigation = () => {
                   {item.hasDropdown ? (
                     <button
                       onClick={() => handleDropdownToggle(item.name)}
-                      onMouseEnter={() => setActiveDropdown(item.name)}
+                      onMouseEnter={() => handleMouseEnter(item.name)}
+                      onMouseLeave={handleMouseLeave}
                       className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-rainbow-subtle group ${
                         activeDropdown === item.name || item.megaContent?.sections.some(section => 
                           section.items.some(subItem => isActive(subItem.path))
@@ -259,9 +283,18 @@ const MegaNavigation = () => {
         {/* Mega Menu Dropdown */}
         {activeDropdown && (
           <div 
-            className="absolute left-0 right-0 top-full bg-white shadow-2xl border-t border-gray-100 z-50 nav-dropdown"
-            style={{ position: 'absolute', overflow: 'visible', maxHeight: 'none' }}
-            onMouseLeave={() => setActiveDropdown(null)}
+            ref={megaMenuRef}
+            className="fixed left-0 right-0 bg-white shadow-2xl border-t border-gray-100 mega-menu-container"
+            style={{ 
+              top: '100%', 
+              zIndex: 9999,
+              position: 'absolute',
+              overflow: 'visible',
+              maxHeight: 'none',
+              height: 'auto'
+            }}
+            onMouseEnter={cancelClose}
+            onMouseLeave={handleMouseLeave}
           >
             {mainNavItems.map((item) => {
               if (item.name === activeDropdown && item.megaContent) {
