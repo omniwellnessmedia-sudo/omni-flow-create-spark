@@ -152,26 +152,13 @@ const MegaNavigation = () => {
     setActiveDropdown(activeDropdown === name ? null : name);
   };
 
-  const handleMouseEnter = useCallback((name: string) => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
+  const handleMouseEnter = (name: string) => {
     setActiveDropdown(name);
-  }, []);
+  };
 
-  const handleMouseLeave = useCallback(() => {
-    closeTimeoutRef.current = setTimeout(() => {
-      setActiveDropdown(null);
-    }, 150); // Small delay to prevent premature closing
-  }, []);
-
-  const cancelClose = useCallback(() => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-  }, []);
+  const handleMouseLeave = () => {
+    setActiveDropdown(null);
+  };
 
   return (
     <nav className="nav-sticky glass shadow-lg border-b border-white/20">
@@ -182,7 +169,7 @@ const MegaNavigation = () => {
             <img 
               src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
               alt="Omni Wellness Media" 
-              className="h-8 w-auto"
+              className="h-8 md:h-10 lg:h-12 w-auto"
             />
           </Link>
 
@@ -197,7 +184,7 @@ const MegaNavigation = () => {
                       onClick={() => handleDropdownToggle(item.name)}
                       onMouseEnter={() => handleMouseEnter(item.name)}
                       onMouseLeave={handleMouseLeave}
-                      className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-rainbow-subtle group ${
+                      className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 hover:bg-rainbow-subtle group ${
                         activeDropdown === item.name || item.megaContent?.sections.some(section => 
                           section.items.some(subItem => isActive(subItem.path))
                         ) ? "bg-rainbow-subtle text-omni-indigo" : "text-gray-700 hover:text-omni-indigo"
@@ -210,7 +197,7 @@ const MegaNavigation = () => {
                   ) : (
                     <Link
                       to={item.path}
-                      className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-rainbow-subtle ${
+                      className={`flex items-center space-x-2 px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 hover:bg-rainbow-subtle ${
                         isActive(item.path) ? "bg-rainbow-subtle text-omni-indigo" : "text-gray-700 hover:text-omni-indigo"
                       }`}
                     >
@@ -229,7 +216,7 @@ const MegaNavigation = () => {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="lg" className="hover:bg-rainbow-subtle">
+                    <Button variant="ghost" size="lg" className="transition-colors duration-200 hover:bg-rainbow-subtle">
                       <User className="h-5 w-5 mr-2" />
                       <span className="max-w-32 truncate">
                         {user.user_metadata?.full_name || user.email}
@@ -283,13 +270,8 @@ const MegaNavigation = () => {
         {/* Mega Menu Dropdown */}
         {activeDropdown && (
           <div 
-            ref={megaMenuRef}
-            className="fixed left-0 right-0 bg-white shadow-2xl border-t border-gray-100 mega-menu-container"
-            style={{ 
-              top: '60px',  // Start overlapping the header
-              zIndex: 10000  // Ensure it's above everything
-            }}
-            onMouseEnter={cancelClose}
+            className="absolute top-full left-0 w-full bg-white border-t border-gray-200 shadow-xl z-50"
+            onMouseEnter={() => handleMouseEnter(activeDropdown)}
             onMouseLeave={handleMouseLeave}
           >
             {mainNavItems.map((item) => {
@@ -315,7 +297,7 @@ const MegaNavigation = () => {
                                   key={subItem.name}
                                   to={subItem.path}
                                   onClick={() => setActiveDropdown(null)}
-                                  className="group block p-3 rounded-lg hover:bg-rainbow-subtle transition-all duration-200"
+                                  className="group block p-3 rounded-lg hover:bg-rainbow-subtle transition-colors duration-200"
                                 >
                                   <div className="flex items-center space-x-3">
                                     {SubIcon && <SubIcon className="h-5 w-5 text-omni-orange" />}
