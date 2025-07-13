@@ -326,7 +326,7 @@ const WellnessWants = () => {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="grid-marketplace">
                 {wants.map((want) => (
                   <Card key={want.id} className="hover:shadow-lg transition-shadow">
                     <CardHeader>
