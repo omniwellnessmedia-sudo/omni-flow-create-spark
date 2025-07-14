@@ -104,6 +104,16 @@ const MegaNavigation = () => {
           path: "/tours-retreats/educational",
           description: "Study abroad and learning journeys",
           icon: BookOpen
+        }, {
+          name: "Winter Wellness",
+          path: "/tours-retreats/winter-wellness",
+          description: "Seasonal wellness experiences",
+          icon: Activity
+        }, {
+          name: "Custom Retreats",
+          path: "/tours-retreats/custom",
+          description: "Tailored retreat experiences",
+          icon: Heart
         }]
       }, {
         title: "Featured Experiences",

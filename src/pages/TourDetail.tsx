@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Calendar, Users, MapPin, Clock, Star, Check, ChevronRight, Heart, Share2, Camera, Award, Shield, Globe, Compass, Mountain } from 'lucide-react';
+import { Calendar, Users, MapPin, Clock, Star, Check, ChevronRight, Heart, Share2, Camera, Award, Shield, Globe, Compass, Mountain, ArrowLeft, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import TourBookingSidebar from '@/components/tours/TourBookingSidebar';
+import MegaNavigation from '@/components/MegaNavigation';
+import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
+import { Link } from 'react-router-dom';
 
 interface Tour {
   id: string;
@@ -128,6 +131,16 @@ const TourDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <MegaNavigation />
+      <BreadcrumbNav 
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Tours & Retreats', href: '/tours-retreats' },
+          { label: tour?.category?.name || 'Category', href: `/tours-retreats/${tour?.category?.slug}` },
+          { label: tour?.title || 'Tour', current: true }
+        ]}
+      />
+      
       {/* Immersive Hero Section - National Geographic Style */}
       <section className="relative h-screen bg-cover bg-center overflow-hidden">
         <img 
@@ -137,8 +150,19 @@ const TourDetail = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         
+        {/* Back button */}
+        <div className="absolute top-6 left-6 z-20">
+          <Link 
+            to={`/tours-retreats/${tour?.category?.slug || 'indigenous-wisdom'}`} 
+            className="inline-flex items-center text-white/80 hover:text-white bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to {tour?.category?.name || 'Tours'}
+          </Link>
+        </div>
+        
         {/* Expedition Badge */}
-        <div className="absolute top-8 left-8 z-20">
+        <div className="absolute top-20 left-8 z-20">
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2">
             <div className="flex items-center gap-2 text-white text-sm font-medium">
               <Compass className="h-4 w-4" />
@@ -264,7 +288,7 @@ const TourDetail = () => {
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
                   <TabsTrigger value="inclusions">Inclusions</TabsTrigger>
-                  <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                  <TabsTrigger value="wellness">Wellness Highlights</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-6">
@@ -380,46 +404,103 @@ const TourDetail = () => {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="reviews" className="space-y-6">
-                  {testimonials.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {testimonials.map((testimonial, index) => (
-                        <Card key={index}>
-                          <CardContent className="p-6">
-                            <div className="flex items-center space-x-3 mb-4">
-                              <Avatar>
-                                <AvatarImage src={testimonial.image_url} />
-                                <AvatarFallback>{testimonial.name[0]}</AvatarFallback>
-                              </Avatar>
-                              <div>
-                                <h4 className="font-semibold">{testimonial.name}</h4>
-                                {testimonial.title && (
-                                  <p className="text-sm text-muted-foreground">{testimonial.title}</p>
-                                )}
-                              </div>
-                              <div className="ml-auto flex">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star 
-                                    key={i} 
-                                    className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
-                                  />
-                                ))}
-                              </div>
+                <TabsContent value="wellness" className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Heart className="h-5 w-5 text-red-500" />
+                        Wellness Benefits & Earning Opportunities
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <h4 className="font-semibold mb-3 text-primary">Wellness Highlights</h4>
+                          <ul className="space-y-2">
+                            <li className="flex items-start space-x-2">
+                              <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-sm">Deep healing through ancestral wisdom</span>
+                            </li>
+                            <li className="flex items-start space-x-2">
+                              <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-sm">Stress reduction and mental clarity</span>
+                            </li>
+                            <li className="flex items-start space-x-2">
+                              <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-sm">Community connection and support</span>
+                            </li>
+                            <li className="flex items-start space-x-2">
+                              <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-sm">Personal transformation and growth</span>
+                            </li>
+                            <li className="flex items-start space-x-2">
+                              <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-sm">Mindfulness and meditation practices</span>
+                            </li>
+                            <li className="flex items-start space-x-2">
+                              <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-sm">Cultural immersion and learning</span>
+                            </li>
+                          </ul>
+                        </div>
+                        
+                        <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border border-yellow-200">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Coins className="h-5 w-5 text-yellow-600" />
+                            <h4 className="font-semibold text-yellow-800">Earn WellCoins</h4>
+                          </div>
+                          <p className="text-sm text-yellow-700 mb-4">
+                            Complete this transformative journey and earn WellCoins - our wellness currency that rewards your commitment to personal growth.
+                          </p>
+                          <div className="space-y-2 text-sm text-yellow-700">
+                            <div className="flex justify-between">
+                              <span>Journey Completion:</span>
+                              <span className="font-semibold">+250 WellCoins</span>
                             </div>
-                            <p className="text-muted-foreground text-sm italic">
-                              "{testimonial.testimonial_text}"
-                            </p>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : (
-                    <Card>
-                      <CardContent className="p-8 text-center">
-                        <p className="text-muted-foreground">No reviews yet. Be the first to share your experience!</p>
-                      </CardContent>
-                    </Card>
-                  )}
+                            <div className="flex justify-between">
+                              <span>Community Sharing:</span>
+                              <span className="font-semibold">+50 WellCoins</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Wellness Goals Met:</span>
+                              <span className="font-semibold">+100 WellCoins</span>
+                            </div>
+                            <hr className="border-yellow-300" />
+                            <div className="flex justify-between font-bold">
+                              <span>Total Potential:</span>
+                              <span>400 WellCoins</span>
+                            </div>
+                          </div>
+                          <Link to="/wellness-exchange" className="block mt-4">
+                            <Button size="sm" className="w-full bg-yellow-600 hover:bg-yellow-700">
+                              Learn About WellCoins
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-4 border-t">
+                        <h4 className="font-semibold mb-3">Why Choose Omni Wellness Journeys?</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="text-center p-4 bg-blue-50 rounded-lg">
+                            <Shield className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                            <h5 className="font-medium text-blue-800">Expert Guidance</h5>
+                            <p className="text-sm text-blue-600">Led by certified wellness practitioners</p>
+                          </div>
+                          <div className="text-center p-4 bg-green-50 rounded-lg">
+                            <Globe className="h-8 w-8 mx-auto mb-2 text-green-600" />
+                            <h5 className="font-medium text-green-800">Authentic Experiences</h5>
+                            <p className="text-sm text-green-600">Real cultural immersion with local communities</p>
+                          </div>
+                          <div className="text-center p-4 bg-purple-50 rounded-lg">
+                            <Heart className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+                            <h5 className="font-medium text-purple-800">Lasting Impact</h5>
+                            <p className="text-sm text-purple-600">Tools and practices for lifelong wellness</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
               </Tabs>
             </div>
