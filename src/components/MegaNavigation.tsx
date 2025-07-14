@@ -180,7 +180,7 @@ const MegaNavigation = () => {
           <div className="flex justify-between items-center h-12 sm:h-14 md:h-16 lg:h-18 min-w-0">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3">
-              <img alt="Omni Wellness Media" src="/lovable-uploads/a22bfb50-51c9-47fe-a2b2-9c961151f76f.png" className="h-2 w-auto sm:h-2 md:h-3 lg:h-4 xl:h-5 object-scale-down" />
+              <img alt="Omni Wellness Media" src="/lovable-uploads/a22bfb50-51c9-47fe-a2b2-9c961151f76f.png" className="h-1 w-auto sm:h-1 md:h-2 lg:h-3 xl:h-4 object-scale-down" />
             </Link>
 
           {/* Desktop Navigation */}
