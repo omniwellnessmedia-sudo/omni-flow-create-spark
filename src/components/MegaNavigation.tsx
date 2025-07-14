@@ -158,15 +158,15 @@ const MegaNavigation = () => {
   return (
     <header className="sticky top-0 z-40 bg-white border-b header-container">
       <div className="container-width">
-        <div className="flex justify-between items-center h-14 sm:h-16 md:h-20 lg:h-24 min-w-0">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
-            <img 
-              src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
-              alt="Omni Wellness Media" 
-              className="h-6 w-auto md:h-8 lg:h-10 xl:h-12"
-            />
-          </Link>
+          <div className="flex justify-between items-center h-12 sm:h-14 md:h-16 lg:h-18 min-w-0">
+            {/* Logo */}
+            <Link to="/" className="flex items-center space-x-3">
+              <img 
+                src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+                alt="Omni Wellness Media" 
+                className="h-4 w-auto sm:h-5 md:h-6 lg:h-8 xl:h-10"
+              />
+            </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
@@ -334,9 +334,17 @@ const MegaNavigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="lg:hidden border-t bg-white">
-            <div className="px-2 pt-4 pb-4 space-y-4">
-              {mainNavItems.map((item) => {
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div className="fixed inset-0 bg-black bg-opacity-50" />
+            <div className="fixed top-0 right-0 w-64 h-full bg-white shadow-xl">
+              <div className="flex items-center justify-between h-12 px-4 border-b">
+                <img className="h-6 w-auto" src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" alt="Logo" />
+                <button onClick={() => setIsOpen(false)} className="p-2">
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              <nav className="p-4 space-y-4">
+                {mainNavItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <div key={item.name}>
@@ -390,6 +398,7 @@ const MegaNavigation = () => {
                   </Link>
                 )}
               </div>
+              </nav>
             </div>
           </div>
         )}

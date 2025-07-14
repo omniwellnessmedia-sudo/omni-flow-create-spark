@@ -839,3 +839,50 @@ img {
     height: 3rem; /* 48px large */
   }
 }
+
+/* Dashboard improvements */
+.dashboard-card {
+  @apply bg-white rounded-lg p-4 shadow-sm border;
+  min-height: 120px;
+}
+
+.dashboard-stat-number {
+  @apply text-2xl sm:text-3xl font-bold;
+  line-height: 1.2;
+}
+
+.dashboard-stat-label {
+  @apply text-sm text-gray-600;
+  font-size: 0.875rem;
+}
+
+.dashboard-grid {
+  @apply grid gap-4;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Text overflow prevention */
+.dashboard-text {
+  @apply truncate;
+  max-width: 100%;
+}
+
+.dashboard-description {
+  @apply text-sm text-gray-600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
