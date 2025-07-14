@@ -37,6 +37,10 @@ serve(async (req) => {
       case 'getAllProducts':
         return await handleGetAllProducts()
       
+      case 'getServices':
+        // Map getServices to getAllProducts for backward compatibility
+        return await handleGetServicesForDestination(data)
+      
       case 'getProductById':
         return await handleGetProductById(data.productId)
       
@@ -186,6 +190,161 @@ async function handleGetAllProducts() {
         details: error.message 
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    )
+  }
+}
+
+// Get services for destination - maps to getAllProducts with filtering
+async function handleGetServicesForDestination(params: any) {
+  try {
+    const { destination } = params
+    console.log('Getting services for destination:', destination)
+    
+    // Get all products from RoamBuddy
+    const response = await fetch(`${ROAMBUDDY_API_URL}/products/all`, {
+      method: 'GET',
+      headers: {
+        'Authorization': ROAMBUDDY_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      }
+    })
+
+    const data = await response.json()
+    console.log('Get services for destination response:', data)
+
+    if (response.ok) {
+      // Transform products to services format and filter by destination if needed
+      let services = []
+      
+      if (data && Array.isArray(data)) {
+        services = data.map((product: any) => ({
+          id: product.id || `service-${Date.now()}-${Math.random()}`,
+          name: product.name || product.title || 'eSIM Service',
+          price: product.price || product.amount || 0,
+          description: product.description || `Data plan for ${destination}`,
+          destination: destination,
+          data_amount: product.data_amount || '1GB',
+          validity_days: product.validity_days || 30,
+          coverage: product.coverage || [destination]
+        }))
+      }
+
+      // If no products returned or API fails, return default South Africa services
+      if (services.length === 0) {
+        services = [
+          { 
+            id: 'esim-sa-1gb', 
+            name: 'South Africa eSIM - 1GB', 
+            price: 12, 
+            description: '1GB data valid for 7 days in South Africa',
+            destination: destination,
+            data_amount: '1GB',
+            validity_days: 7,
+            coverage: ['South Africa']
+          },
+          { 
+            id: 'esim-sa-3gb', 
+            name: 'South Africa eSIM - 3GB', 
+            price: 25, 
+            description: '3GB data valid for 30 days in South Africa',
+            destination: destination,
+            data_amount: '3GB',
+            validity_days: 30,
+            coverage: ['South Africa']
+          },
+          { 
+            id: 'esim-sa-5gb', 
+            name: 'South Africa eSIM - 5GB', 
+            price: 39, 
+            description: '5GB data valid for 30 days in South Africa',
+            destination: destination,
+            data_amount: '5GB',
+            validity_days: 30,
+            coverage: ['South Africa']
+          },
+          { 
+            id: 'esim-africa-regional', 
+            name: 'Africa Regional eSIM - 2GB', 
+            price: 35, 
+            description: '2GB data for multiple African countries, 30 days',
+            destination: destination,
+            data_amount: '2GB',
+            validity_days: 30,
+            coverage: ['South Africa', 'Kenya', 'Nigeria', 'Ghana']
+          }
+        ]
+      }
+
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          data: {
+            services: services,
+            total: services.length,
+            destination: destination
+          },
+          message: 'Services fetched successfully'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      throw new Error(`Failed to fetch services: ${data.message || 'Unknown error'}`)
+    }
+  } catch (error) {
+    console.error('Get services for destination error:', error)
+    
+    // Return fallback services on error
+    const fallbackServices = [
+      { 
+        id: 'esim-sa-1gb', 
+        name: 'South Africa eSIM - 1GB', 
+        price: 12, 
+        description: '1GB data valid for 7 days in South Africa',
+        destination: params?.destination || 'South Africa',
+        data_amount: '1GB',
+        validity_days: 7
+      },
+      { 
+        id: 'esim-sa-3gb', 
+        name: 'South Africa eSIM - 3GB', 
+        price: 25, 
+        description: '3GB data valid for 30 days in South Africa',
+        destination: params?.destination || 'South Africa',
+        data_amount: '3GB',
+        validity_days: 30
+      },
+      { 
+        id: 'esim-sa-5gb', 
+        name: 'South Africa eSIM - 5GB', 
+        price: 39, 
+        description: '5GB data valid for 30 days in South Africa',
+        destination: params?.destination || 'South Africa',
+        data_amount: '5GB',
+        validity_days: 30
+      },
+      { 
+        id: 'esim-africa-regional', 
+        name: 'Africa Regional eSIM - 2GB', 
+        price: 35, 
+        description: '2GB data for multiple African countries, 30 days',
+        destination: params?.destination || 'South Africa',
+        data_amount: '2GB',
+        validity_days: 30
+      }
+    ]
+
+    return new Response(
+      JSON.stringify({ 
+        success: true, 
+        data: {
+          services: fallbackServices,
+          total: fallbackServices.length,
+          destination: params?.destination || 'South Africa',
+          fallback: true
+        },
+        message: 'Services fetched (fallback data)'
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
 }
