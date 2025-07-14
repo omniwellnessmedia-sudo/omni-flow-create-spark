@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, MapPin, Star, Clock, Users, Wifi, Car, Plane, Camera, Shield, Phone, Filter, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ShoppingCart, MapPin, Star, Clock, Users, Wifi, Car, Plane, Camera, Shield, Phone, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -386,19 +385,6 @@ const WellnessRoamingPackages = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Breadcrumb Navigation */}
-      <div className="bg-background border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link 
-            to="/" 
-            className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Home
-          </Link>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <section className="py-16 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
         <div className="container mx-auto px-4 text-center">
