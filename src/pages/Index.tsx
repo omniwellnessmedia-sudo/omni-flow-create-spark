@@ -5,7 +5,7 @@ import WellnessHumansSection from "@/components/sections/WellnessHumansSection";
 import MissionSection from "@/components/sections/MissionSection";
 import ServicesSection from "@/components/sections/ServicesSection";
 import FeaturedProjectsSection from "@/components/sections/FeaturedProjectsSection";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import FacebookFeedSection from "@/components/sections/FacebookFeedSection";
 import AIToolsPreview from "@/components/sections/AIToolsPreview";
 import PartnersSection from "@/components/sections/PartnersSection";
 import VideoShowcaseSection from "@/components/sections/VideoShowcaseSection";
@@ -170,11 +170,7 @@ const Index = () => {
             <PartnersSection />
           </div>
         </section>
-        <section className="section-spacing bg-gray-50 overflow-safe">
-          <div className="container-width">
-            <TestimonialsSection />
-          </div>
-        </section>
+        <FacebookFeedSection />
       </main>
       <Footer />
     </div>;
