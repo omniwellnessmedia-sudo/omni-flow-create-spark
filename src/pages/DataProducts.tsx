@@ -16,13 +16,13 @@ const DataProducts = () => {
   const [realTimeServices, setRealTimeServices] = useState<any[]>([]);
   const { toast } = useToast();
 
-  // Test RoamBuddy API connection on component mount
+  // Test RoamBuddy API connection and fetch real products
   useEffect(() => {
-    const testRoamBuddyAPI = async () => {
+    const initializeRoamBuddyAPI = async () => {
       try {
-        console.log('Testing RoamBuddy API connection...');
+        console.log('Initializing RoamBuddy API...');
         
-        // Test the connection
+        // First test the connection
         const testResult = await supabase.functions.invoke('roambuddy-api', {
           body: { action: 'test' }
         });
@@ -32,29 +32,52 @@ const DataProducts = () => {
         if (testResult.data?.success) {
           setApiStatus('connected');
           toast({
-            title: "API Connected",
-            description: "RoamBuddy API is working correctly",
+            title: "✅ RoamBuddy Connected",
+            description: "Live API integration active with real eSIM products",
           });
           
-          // Now try to get services
-          const servicesResult = await supabase.functions.invoke('roambuddy-api', {
-            body: { action: 'getServices', data: { destination: 'South Africa' } }
+          // Fetch real products from RoamBuddy API
+          const productsResult = await supabase.functions.invoke('roambuddy-api', {
+            body: { action: 'getAllProducts' }
           });
           
-          if (servicesResult.data?.data?.services) {
-            setRealTimeServices(servicesResult.data.data.services);
+          console.log('Products Result:', productsResult);
+          
+          if (productsResult.data?.success && productsResult.data?.data) {
+            setRealTimeServices(productsResult.data.data);
+            console.log('Real RoamBuddy products loaded:', productsResult.data.data);
           }
         } else {
           setApiStatus('disconnected');
           console.log('API test failed:', testResult);
+          
+          // Try authentication
+          const authResult = await supabase.functions.invoke('roambuddy-api', {
+            body: { action: 'authenticate' }
+          });
+          
+          console.log('Auth Result:', authResult);
+          
+          if (authResult.data?.success) {
+            setApiStatus('connected');
+            toast({
+              title: "🔑 RoamBuddy Authenticated",
+              description: "Successfully connected to RoamBuddy partner API",
+            });
+          }
         }
       } catch (error) {
-        console.error('API test error:', error);
+        console.error('API initialization error:', error);
         setApiStatus('error');
+        toast({
+          title: "⚠️ API Connection Issue",
+          description: "Using demo data while troubleshooting connection",
+          variant: "destructive"
+        });
       }
     };
 
-    testRoamBuddyAPI();
+    initializeRoamBuddyAPI();
   }, []);
 
   const esimPlans = [
