@@ -61,20 +61,22 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
       if (data?.success && data?.data?.services) {
         setRoamBuddyServices(data.data.services);
       } else {
-        // Mock services for demo
+        // RoamBuddy eSIM services for South Africa
         setRoamBuddyServices([
-          { id: '1', name: 'Airport Transfer', price: 45, description: 'Private airport pickup and drop-off' },
-          { id: '2', name: 'Travel Insurance', price: 89, description: 'Comprehensive travel coverage' },
-          { id: '3', name: 'Local SIM Card', price: 25, description: 'Stay connected with local data plan' },
+          { id: 'esim-sa-1gb', name: 'South Africa eSIM - 1GB', price: 12, description: '1GB data valid for 7 days in South Africa' },
+          { id: 'esim-sa-3gb', name: 'South Africa eSIM - 3GB', price: 25, description: '3GB data valid for 30 days in South Africa' },
+          { id: 'esim-sa-5gb', name: 'South Africa eSIM - 5GB', price: 39, description: '5GB data valid for 30 days in South Africa' },
+          { id: 'esim-africa-regional', name: 'Africa Regional eSIM - 2GB', price: 35, description: '2GB data for multiple African countries, 30 days' },
         ]);
       }
     } catch (error) {
       console.error('Error fetching RoamBuddy services:', error);
-      // Show mock services on error
+      // Show RoamBuddy eSIM services on error
       setRoamBuddyServices([
-        { id: '1', name: 'Airport Transfer', price: 45, description: 'Private airport pickup and drop-off' },
-        { id: '2', name: 'Travel Insurance', price: 89, description: 'Comprehensive travel coverage' },
-        { id: '3', name: 'Local SIM Card', price: 25, description: 'Stay connected with local data plan' },
+        { id: 'esim-sa-1gb', name: 'South Africa eSIM - 1GB', price: 12, description: '1GB data valid for 7 days in South Africa' },
+        { id: 'esim-sa-3gb', name: 'South Africa eSIM - 3GB', price: 25, description: '3GB data valid for 30 days in South Africa' },
+        { id: 'esim-sa-5gb', name: 'South Africa eSIM - 5GB', price: 39, description: '5GB data valid for 30 days in South Africa' },
+        { id: 'esim-africa-regional', name: 'Africa Regional eSIM - 2GB', price: 35, description: '2GB data for multiple African countries, 30 days' },
       ]);
     } finally {
       setServicesLoading(false);
@@ -263,7 +265,8 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
 
         {/* RoamBuddy Services */}
         <div className="border-t pt-4">
-          <h4 className="font-semibold mb-3">Add Travel Services</h4>
+          <h4 className="font-semibold mb-3">Stay Connected - RoamBuddy eSIM</h4>
+          <p className="text-xs text-muted-foreground mb-3">Add eSIM data plans to stay connected during your journey</p>
           {servicesLoading ? (
             <div className="space-y-2">
               <div className="h-4 bg-muted rounded animate-pulse"></div>
