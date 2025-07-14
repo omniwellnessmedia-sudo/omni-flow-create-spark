@@ -14,7 +14,7 @@ const ToursRetreatsPreview = () => {
     subtitle: 'Ancient traditions for personal transformation',
     duration: '8 days / 7 nights',
     maxParticipants: 12,
-    priceFrom: 3999,
+    priceFrom: 75000,
     destination: 'Cape Town, South Africa',
     category: 'Indigenous Wisdom',
     slug: 'conscious-connections-indigenous-wisdom-healing',
@@ -27,7 +27,7 @@ const ToursRetreatsPreview = () => {
     subtitle: 'Innovative blend of in-person and virtual wellness',
     duration: '3-7 days',
     maxParticipants: 16,
-    priceFrom: 1299,
+    priceFrom: 24500,
     destination: 'Muizenberg, Cape Town',
     category: 'Wellness Programs',
     slug: 'fact-wellness-hybrid-retreat',
@@ -40,7 +40,7 @@ const ToursRetreatsPreview = () => {
     subtitle: 'Deep cultural immersion in African philosophy',
     duration: '10 days',
     maxParticipants: 8,
-    priceFrom: 4599,
+    priceFrom: 86500,
     destination: 'Eastern Cape, South Africa',
     category: 'Indigenous Wisdom',
     slug: 'ubuntu-immersion-journey',
@@ -88,7 +88,7 @@ const ToursRetreatsPreview = () => {
               </div>
               <div className="absolute top-4 right-4">
                 <Badge className="bg-primary text-primary-foreground">
-                  From ${tour.priceFrom.toLocaleString()}
+                  From R{tour.priceFrom.toLocaleString()}
                 </Badge>
               </div>
             </div>

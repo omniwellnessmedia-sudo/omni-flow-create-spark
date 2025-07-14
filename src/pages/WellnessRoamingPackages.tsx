@@ -9,6 +9,20 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
+// Import images
+import premiumTransferImage from '@/assets/premium-airport-transfer.jpg';
+import safariVehicleImage from '@/assets/safari-vehicle-rental.jpg';
+import ecoLodgeImage from '@/assets/eco-lodge-accommodation.jpg';
+import wellnessRetreatImage from '@/assets/wellness-retreat-center.jpg';
+import wineTourImage from '@/assets/premium-wine-tour.jpg';
+import hikingImage from '@/assets/table-mountain-hiking.jpg';
+import appTechImage from '@/assets/wellness-app-technology.jpg';
+import simCardImage from '@/assets/unlimited-data-sim.jpg';
+import insuranceImage from '@/assets/wellness-travel-insurance.jpg';
+import safetyTrackerImage from '@/assets/personal-safety-tracker.jpg';
+import healingImage from '@/assets/traditional-healing-experience.jpg';
+import soundHealingImage from '@/assets/sound-healing-retreat.jpg';
+
 interface RoamBuddyService {
   id: string;
   service_id: string;
@@ -66,27 +80,28 @@ const WellnessRoamingPackages = () => {
             service_id: 'airport-transfer-premium',
             name: 'Premium Airport Transfer',
             description: 'Luxury vehicle pickup and drop-off with professional driver',
-            price: 75,
+            price: 1400,
             category: 'Transportation',
             destination: 'Cape Town',
             features: ['Luxury vehicle', 'Professional driver', 'Meet & greet', 'Flight tracking'],
             rating: 4.9,
             duration: '1 hour',
             includes: ['Door-to-door service', 'Complimentary water', 'Wi-Fi'],
-            image_url: '/placeholder-transport.jpg'
+            image_url: premiumTransferImage
           },
           {
             id: '2',
             service_id: 'car-rental-4x4',
             name: '4x4 Safari Vehicle Rental',
             description: 'Fully equipped 4x4 vehicle for adventure tours and safaris',
-            price: 120,
+            price: 2250,
             category: 'Transportation',
             destination: 'Cape Town',
             features: ['4WD capability', 'GPS navigation', 'Camping equipment', 'Emergency kit'],
             rating: 4.7,
             duration: 'Per day',
-            includes: ['Insurance', 'Unlimited mileage', 'Roadside assistance']
+            includes: ['Insurance', 'Unlimited mileage', 'Roadside assistance'],
+            image_url: safariVehicleImage
           },
           
           // Accommodation Services
@@ -95,26 +110,28 @@ const WellnessRoamingPackages = () => {
             service_id: 'eco-lodge-booking',
             name: 'Sustainable Eco-Lodge Stay',
             description: 'Environmentally conscious accommodation with wellness focus',
-            price: 180,
+            price: 3400,
             category: 'Accommodation',
             destination: 'Cape Town',
             features: ['Solar powered', 'Organic meals', 'Spa services', 'Yoga classes'],
             rating: 4.8,
             duration: 'Per night',
-            includes: ['Breakfast', 'Wi-Fi', 'Airport shuttle']
+            includes: ['Breakfast', 'Wi-Fi', 'Airport shuttle'],
+            image_url: ecoLodgeImage
           },
           {
             id: '4',
             service_id: 'wellness-retreat-center',
             name: 'Holistic Wellness Retreat Center',
             description: 'Complete wellness facility with healing and meditation spaces',
-            price: 250,
+            price: 4700,
             category: 'Accommodation',
             destination: 'Cape Town',
             features: ['Meditation halls', 'Healing gardens', 'Spa treatments', 'Healthy cuisine'],
             rating: 5.0,
             duration: 'Per night',
-            includes: ['All meals', 'Daily yoga', 'Spa access', 'Healing sessions']
+            includes: ['All meals', 'Daily yoga', 'Spa access', 'Healing sessions'],
+            image_url: wellnessRetreatImage
           },
 
           // Experience Services
@@ -123,26 +140,28 @@ const WellnessRoamingPackages = () => {
             service_id: 'wine-tour-premium',
             name: 'Premium Wine & Wellness Tour',
             description: 'Curated wine tasting experience with wellness elements',
-            price: 95,
+            price: 1780,
             category: 'Experiences',
             destination: 'Cape Town',
             features: ['Private guide', 'Organic wineries', 'Healthy lunch', 'Transportation'],
             rating: 4.6,
             duration: '6 hours',
-            includes: ['Wine tastings', 'Gourmet lunch', 'Transportation', 'Guide']
+            includes: ['Wine tastings', 'Gourmet lunch', 'Transportation', 'Guide'],
+            image_url: wineTourImage
           },
           {
             id: '6',
             service_id: 'table-mountain-hiking',
             name: 'Guided Table Mountain Wellness Hike',
             description: 'Mindful hiking experience with meditation and breathwork',
-            price: 65,
+            price: 1220,
             category: 'Experiences',
             destination: 'Cape Town',
             features: ['Certified guide', 'Meditation session', 'Healthy snacks', 'Photography'],
             rating: 4.8,
             duration: '4 hours',
-            includes: ['Professional guide', 'Snacks', 'Water', 'First aid']
+            includes: ['Professional guide', 'Snacks', 'Water', 'First aid'],
+            image_url: hikingImage
           },
 
           // Technology Services
@@ -151,26 +170,28 @@ const WellnessRoamingPackages = () => {
             service_id: 'wellness-app-package',
             name: 'Digital Wellness Travel Companion',
             description: 'Comprehensive app with local wellness guides and booking',
-            price: 25,
+            price: 470,
             category: 'Technology',
             destination: 'Cape Town',
             features: ['Offline maps', 'Wellness directory', 'Booking system', 'Emergency contacts'],
             rating: 4.5,
             duration: '30 days access',
-            includes: ['App license', 'Premium features', 'Customer support']
+            includes: ['App license', 'Premium features', 'Customer support'],
+            image_url: appTechImage
           },
           {
             id: '8',
             service_id: 'local-sim-unlimited',
             name: 'Unlimited Data SIM Card',
             description: 'High-speed internet access for wellness app and navigation',
-            price: 35,
+            price: 660,
             category: 'Technology',
             destination: 'Cape Town',
             features: ['Unlimited data', '5G network', 'Hotspot capable', 'International calls'],
             rating: 4.3,
             duration: '30 days',
-            includes: ['SIM card', 'Activation', 'Customer support']
+            includes: ['SIM card', 'Activation', 'Customer support'],
+            image_url: simCardImage
           },
 
           // Insurance & Safety
@@ -179,26 +200,28 @@ const WellnessRoamingPackages = () => {
             service_id: 'comprehensive-travel-insurance',
             name: 'Wellness Travel Insurance',
             description: 'Comprehensive coverage including adventure activities and wellness treatments',
-            price: 85,
+            price: 1600,
             category: 'Insurance',
             destination: 'Cape Town',
             features: ['Adventure coverage', 'Medical expenses', 'Trip cancellation', 'Equipment protection'],
             rating: 4.9,
             duration: 'Trip duration',
-            includes: ['24/7 support', 'Emergency evacuation', 'Pre-existing conditions']
+            includes: ['24/7 support', 'Emergency evacuation', 'Pre-existing conditions'],
+            image_url: insuranceImage
           },
           {
             id: '10',
             service_id: 'personal-safety-device',
             name: 'Personal Safety & Wellness Tracker',
             description: 'GPS tracking device with emergency features and wellness monitoring',
-            price: 45,
+            price: 850,
             category: 'Safety',
             destination: 'Cape Town',
             features: ['GPS tracking', 'Emergency button', 'Health monitoring', 'Weather alerts'],
             rating: 4.4,
             duration: 'Trip duration',
-            includes: ['Device rental', 'Emergency monitoring', 'Mobile app']
+            includes: ['Device rental', 'Emergency monitoring', 'Mobile app'],
+            image_url: safetyTrackerImage
           },
 
           // Wellness Specific Services
@@ -207,26 +230,28 @@ const WellnessRoamingPackages = () => {
             service_id: 'traditional-healing-session',
             name: 'Traditional African Healing Experience',
             description: 'Authentic healing session with certified traditional healers',
-            price: 150,
+            price: 2800,
             category: 'Wellness',
             destination: 'Cape Town',
             features: ['Certified healer', 'Sacred ceremony', 'Herbal remedies', 'Cultural education'],
             rating: 5.0,
             duration: '3 hours',
-            includes: ['Healing session', 'Herbal kit', 'Cultural guide', 'Certificate']
+            includes: ['Healing session', 'Herbal kit', 'Cultural guide', 'Certificate'],
+            image_url: healingImage
           },
           {
             id: '12',
             service_id: 'sound-healing-retreat',
             name: 'Sound Healing & Meditation Retreat',
             description: 'Transformative sound healing experience in natural settings',
-            price: 120,
+            price: 2250,
             category: 'Wellness',
             destination: 'Cape Town',
             features: ['Crystal bowls', 'Nature setting', 'Guided meditation', 'Energy work'],
             rating: 4.9,
             duration: '2 hours',
-            includes: ['Sound session', 'Meditation guide', 'Herbal tea', 'Take-home audio']
+            includes: ['Sound session', 'Meditation guide', 'Herbal tea', 'Take-home audio'],
+            image_url: soundHealingImage
           }
         ];
 
@@ -262,13 +287,13 @@ const WellnessRoamingPackages = () => {
     if (priceFilter !== 'all') {
       switch (priceFilter) {
         case 'under-50':
-          filtered = filtered.filter(service => service.price < 50);
+          filtered = filtered.filter(service => service.price < 950);
           break;
         case '50-100':
-          filtered = filtered.filter(service => service.price >= 50 && service.price <= 100);
+          filtered = filtered.filter(service => service.price >= 950 && service.price <= 1900);
           break;
         case 'over-100':
-          filtered = filtered.filter(service => service.price > 100);
+          filtered = filtered.filter(service => service.price > 1900);
           break;
       }
     }
@@ -428,9 +453,9 @@ const WellnessRoamingPackages = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Prices</SelectItem>
-                      <SelectItem value="under-50">Under $50</SelectItem>
-                      <SelectItem value="50-100">$50 - $100</SelectItem>
-                      <SelectItem value="over-100">Over $100</SelectItem>
+                      <SelectItem value="under-50">Under R950</SelectItem>
+                      <SelectItem value="50-100">R950 - R1,900</SelectItem>
+                      <SelectItem value="over-100">Over R1,900</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -461,7 +486,7 @@ const WellnessRoamingPackages = () => {
                         <div key={item.id} className="flex justify-between text-sm">
                           <span className="truncate mr-2">{item.name}</span>
                           <div className="flex items-center">
-                            <span>${item.price}</span>
+                            <span>R{item.price}</span>
                             <Button
                               size="sm"
                               variant="ghost"
@@ -477,7 +502,7 @@ const WellnessRoamingPackages = () => {
                     <div className="border-t pt-2 mb-4">
                       <div className="flex justify-between font-semibold">
                         <span>Total:</span>
-                        <span>${getCartTotal()}</span>
+                        <span>R{getCartTotal()}</span>
                       </div>
                     </div>
                     <Button onClick={handleCheckout} className="w-full">
@@ -588,7 +613,7 @@ const ServiceCard = ({
           <h3 className="text-lg font-semibold text-foreground leading-tight">{service.name}</h3>
           <div className="text-right">
             <div className="text-2xl font-bold text-primary">
-              ${service.price}
+              R{service.price}
             </div>
             {service.duration && (
               <div className="text-xs text-muted-foreground">{service.duration}</div>
