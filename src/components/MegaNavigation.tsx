@@ -164,7 +164,7 @@ const MegaNavigation = () => {
               <img 
                 src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
                 alt="Omni Wellness Media" 
-                className="h-4 w-auto sm:h-5 md:h-6 lg:h-8 xl:h-10"
+                className="h-3 w-auto sm:h-4 md:h-5 lg:h-6 xl:h-8"
               />
             </Link>
 
@@ -338,7 +338,7 @@ const MegaNavigation = () => {
             <div className="fixed inset-0 bg-black bg-opacity-50" />
             <div className="fixed top-0 right-0 w-64 h-full bg-white shadow-xl">
               <div className="flex items-center justify-between h-12 px-4 border-b">
-                <img className="h-6 w-auto" src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" alt="Logo" />
+                <img className="h-4 w-auto" src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" alt="Logo" />
                 <button onClick={() => setIsOpen(false)} className="p-2">
                   <X className="h-6 w-6" />
                 </button>

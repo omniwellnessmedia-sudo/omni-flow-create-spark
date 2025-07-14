@@ -256,8 +256,8 @@ const ProviderDashboard = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div>
-                <h1 className="heading-secondary no-faded-text text-center">
-                  Provider <span className="bg-rainbow-gradient bg-clip-text text-transparent">Dashboard</span>
+                <h1 className="text-3xl font-bold text-gray-900 text-center">
+                  Provider <span className="text-gray-900 font-semibold">Dashboard</span>
                 </h1>
                 <p className="text-muted-foreground">Welcome back, {providerProfile?.business_name || user?.email}</p>
               </div>

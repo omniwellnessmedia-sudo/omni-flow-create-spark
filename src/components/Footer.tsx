@@ -19,7 +19,7 @@ const Footer = () => {
                 <div className="absolute inset-0 rounded-full bg-rainbow-gradient opacity-20 animate-pulse"></div>
               </div>
               <div>
-                <span className="font-heading font-bold text-xl bg-rainbow-gradient bg-clip-text text-transparent block">
+                <span className="font-heading font-bold text-xl text-white block">
                   Omni Wellness Media
                 </span>
                 <span className="text-gray-300 text-sm">Conscious Content Creation</span>
