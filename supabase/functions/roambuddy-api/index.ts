@@ -73,21 +73,53 @@ const handler = async (req: Request): Promise<Response> => {
 
 async function testConnection() {
   try {
-    const response = await fetch(`${ROAMBUDDY_CONFIG.baseURL}/test`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_CONFIG.token}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    // Test multiple potential endpoints to find the working one
+    const testEndpoints = [
+      '/test',
+      '/ping', 
+      '/health',
+      '/status',
+      '/products', // Try products endpoint
+      '/services' // Try services endpoint
+    ];
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    console.log('Testing RoamBuddy API connection...');
+    
+    for (const endpoint of testEndpoints) {
+      try {
+        const response = await fetch(`${ROAMBUDDY_CONFIG.baseURL}${endpoint}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${ROAMBUDDY_CONFIG.token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log(`Testing endpoint ${endpoint}: Status ${response.status}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log(`Success with endpoint ${endpoint}:`, data);
+          return { 
+            success: true, 
+            endpoint: endpoint, 
+            data: data,
+            status: 'online'
+          };
+        }
+      } catch (endpointError) {
+        console.log(`Endpoint ${endpoint} failed:`, endpointError.message);
+        continue;
+      }
     }
 
-    const data = await response.json();
-    console.log('RoamBuddy Connection Test Result:', data);
-    return data;
+    // If no endpoints work, return error info
+    return { 
+      error: 'No working endpoints found', 
+      message: 'Tested multiple endpoints but none responded successfully',
+      status: 'offline',
+      testedEndpoints: testEndpoints
+    };
   } catch (error) {
     console.error('RoamBuddy Connection Test Failed:', error);
     return { 
@@ -100,31 +132,74 @@ async function testConnection() {
 
 async function getServices(destination?: string) {
   try {
-    const url = destination 
-      ? `${ROAMBUDDY_CONFIG.baseURL}/services?destination=${encodeURIComponent(destination)}`
-      : `${ROAMBUDDY_CONFIG.baseURL}/services`;
+    // Try multiple potential service endpoints
+    const serviceEndpoints = [
+      '/services',
+      '/products', 
+      '/packages',
+      '/esim-packages',
+      '/data-packages'
+    ];
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_CONFIG.token}`,
-        'Content-Type': 'application/json'
+    console.log('Fetching RoamBuddy services for destination:', destination);
+
+    for (const endpoint of serviceEndpoints) {
+      try {
+        const url = destination 
+          ? `${ROAMBUDDY_CONFIG.baseURL}${endpoint}?destination=${encodeURIComponent(destination)}`
+          : `${ROAMBUDDY_CONFIG.baseURL}${endpoint}`;
+
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${ROAMBUDDY_CONFIG.token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log(`Testing services endpoint ${endpoint}: Status ${response.status}`);
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(`Services success with endpoint ${endpoint}:`, data);
+          
+          // Return the services data in a consistent format
+          return {
+            success: true,
+            endpoint: endpoint,
+            services: data.services || data.products || data.packages || data || [],
+            data: data
+          };
+        }
+      } catch (endpointError) {
+        console.log(`Services endpoint ${endpoint} failed:`, endpointError.message);
+        continue;
       }
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    console.log('RoamBuddy Services Result:', data);
-    return data;
+    // If no endpoints work, return our mock eSIM data
+    console.log('No working service endpoints found, returning mock eSIM data');
+    return { 
+      error: 'No working service endpoints found',
+      message: 'API endpoints not responding, using fallback data',
+      services: [
+        { id: 'esim-sa-1gb', name: 'South Africa eSIM - 1GB', price: 12, description: '1GB data valid for 7 days in South Africa' },
+        { id: 'esim-sa-3gb', name: 'South Africa eSIM - 3GB', price: 25, description: '3GB data valid for 30 days in South Africa' },
+        { id: 'esim-sa-5gb', name: 'South Africa eSIM - 5GB', price: 39, description: '5GB data valid for 30 days in South Africa' },
+        { id: 'esim-africa-regional', name: 'Africa Regional eSIM - 2GB', price: 35, description: '2GB data for multiple African countries, 30 days' },
+      ]
+    };
   } catch (error) {
     console.error('Failed to fetch services:', error);
     return { 
       error: 'Failed to fetch services',
       message: error.message,
-      services: []
+      services: [
+        { id: 'esim-sa-1gb', name: 'South Africa eSIM - 1GB', price: 12, description: '1GB data valid for 7 days in South Africa' },
+        { id: 'esim-sa-3gb', name: 'South Africa eSIM - 3GB', price: 25, description: '3GB data valid for 30 days in South Africa' },
+        { id: 'esim-sa-5gb', name: 'South Africa eSIM - 5GB', price: 39, description: '5GB data valid for 30 days in South Africa' },
+        { id: 'esim-africa-regional', name: 'Africa Regional eSIM - 2GB', price: 35, description: '2GB data for multiple African countries, 30 days' },
+      ]
     };
   }
 }

@@ -1,14 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
 import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const DataProducts = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [apiStatus, setApiStatus] = useState<string>('checking');
+  const [realTimeServices, setRealTimeServices] = useState<any[]>([]);
   const { toast } = useToast();
+
+  // Test RoamBuddy API connection on component mount
+  useEffect(() => {
+    const testRoamBuddyAPI = async () => {
+      try {
+        console.log('Testing RoamBuddy API connection...');
+        
+        // Test the connection
+        const testResult = await supabase.functions.invoke('roambuddy-api', {
+          body: { action: 'test' }
+        });
+        
+        console.log('API Test Result:', testResult);
+        
+        if (testResult.data?.success) {
+          setApiStatus('connected');
+          toast({
+            title: "API Connected",
+            description: "RoamBuddy API is working correctly",
+          });
+          
+          // Now try to get services
+          const servicesResult = await supabase.functions.invoke('roambuddy-api', {
+            body: { action: 'getServices', data: { destination: 'South Africa' } }
+          });
+          
+          if (servicesResult.data?.data?.services) {
+            setRealTimeServices(servicesResult.data.data.services);
+          }
+        } else {
+          setApiStatus('disconnected');
+          console.log('API test failed:', testResult);
+        }
+      } catch (error) {
+        console.error('API test error:', error);
+        setApiStatus('error');
+      }
+    };
+
+    testRoamBuddyAPI();
+  }, []);
 
   const esimPlans = [
     {
@@ -166,9 +210,17 @@ const DataProducts = () => {
       {/* Hero Section */}
       <section className="relative py-20 px-4">
         <div className="container mx-auto text-center">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary mb-6">
+          <div className={`inline-flex items-center px-4 py-2 rounded-full mb-6 ${
+            apiStatus === 'connected' ? 'bg-green-100 text-green-700' : 
+            apiStatus === 'checking' ? 'bg-yellow-100 text-yellow-700' : 
+            'bg-red-100 text-red-700'
+          }`}>
             <Globe className="w-4 h-4 mr-2" />
-            <span className="text-sm font-medium">Powered by Omni Wellness Media</span>
+            <span className="text-sm font-medium">
+              {apiStatus === 'connected' ? 'RoamBuddy API Connected ✓' : 
+               apiStatus === 'checking' ? 'Checking RoamBuddy API...' : 
+               'API Connection Failed - Using Demo Data'}
+            </span>
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
