@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
-import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap, ArrowLeft } from "lucide-react";
+import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap, ArrowLeft, Search, Shield, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 
@@ -218,168 +219,270 @@ const DataProducts = () => {
   };
 
   const PlanCard = ({ plan, isGlobal = false }: { plan: any, isGlobal?: boolean }) => (
-    <Card className={`relative transition-all duration-300 hover:shadow-lg ${plan.popular ? 'ring-2 ring-primary scale-105' : ''}`}>
+    <Card className={`relative transition-all duration-300 hover:shadow-xl hover:scale-105 ${
+      plan.popular ? 'ring-2 ring-blue-500 shadow-xl scale-105' : 'hover:shadow-lg'
+    } bg-white overflow-hidden group`}>
       {plan.popular && (
-        <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-gradient-primary text-white">
-          <Star className="w-3 h-3 mr-1" />
-          Most Popular
-        </Badge>
+        <div className="absolute -top-1 left-0 right-0">
+          <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-center py-2 text-sm font-medium">
+            ⭐ Most Popular Choice
+          </div>
+        </div>
       )}
       
-      <CardHeader className="text-center pb-4">
-        <div className="text-2xl mb-2">{plan.flag}</div>
-        <CardTitle className="text-xl">{plan.name}</CardTitle>
-        <CardDescription className="text-sm text-muted-foreground">
+      <CardHeader className="text-center pb-4 pt-6">
+        <div className="text-4xl mb-4">{plan.flag}</div>
+        <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+        <CardDescription className="text-muted-foreground">
           {plan.subtitle}
         </CardDescription>
         
-        <div className="flex items-center justify-center space-x-2 mt-4">
-          <span className="text-3xl font-bold text-primary">${plan.price}</span>
+        <div className="flex items-baseline justify-center space-x-2 mt-6">
+          <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
           {plan.originalPrice && (
-            <span className="text-lg text-muted-foreground line-through">
-              ${plan.originalPrice}
-            </span>
+            <div className="space-y-1">
+              <span className="text-lg text-muted-foreground line-through">
+                ${plan.originalPrice}
+              </span>
+              <div className="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-medium">
+                Save ${plan.originalPrice - plan.price}
+              </div>
+            </div>
           )}
         </div>
         
-        <div className="flex items-center justify-center space-x-4 mt-2 text-sm text-muted-foreground">
-          <div className="flex items-center">
+        <div className="flex items-center justify-center space-x-6 mt-4 text-sm">
+          <div className="flex items-center text-blue-600">
             <Wifi className="w-4 h-4 mr-1" />
-            {plan.data}
+            <span className="font-medium">{plan.data}</span>
           </div>
-          <div className="flex items-center">
+          <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+          <div className="flex items-center text-blue-600">
             <Clock className="w-4 h-4 mr-1" />
-            {plan.duration}
+            <span className="font-medium">{plan.duration}</span>
           </div>
         </div>
       </CardHeader>
       
-      <CardContent className="pt-0">
-        <ul className="space-y-2 mb-6">
+      <CardContent className="pt-0 px-6 pb-6">
+        <ul className="space-y-3 mb-8">
           {plan.features.map((feature: string, index: number) => (
-            <li key={index} className="flex items-center text-sm">
-              <Check className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
-              {feature}
+            <li key={index} className="flex items-start text-sm">
+              <Check className="w-4 h-4 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
+              <span className="text-gray-700">{feature}</span>
             </li>
           ))}
         </ul>
         
         <Button 
-          className="w-full bg-gradient-primary hover:bg-gradient-primary/90"
+          className={`w-full h-12 text-base font-medium transition-all duration-200 ${
+            plan.popular 
+              ? 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 shadow-lg' 
+              : 'bg-gray-900 hover:bg-gray-800 text-white'
+          }`}
           onClick={() => handlePurchase(plan.id, plan.name, plan.price)}
           disabled={selectedPlan === plan.id}
         >
           {selectedPlan === plan.id ? (
             <div className="flex items-center">
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-              Processing...
+              Processing order...
             </div>
           ) : (
             <>
-              <Zap className="w-4 h-4 mr-2" />
-              Get Instant eSIM
+              <Zap className="w-5 h-5 mr-2" />
+              Get instant eSIM
             </>
           )}
         </Button>
+        
+        <div className="flex items-center justify-center mt-3 space-x-4 text-xs text-muted-foreground">
+          <div className="flex items-center">
+            <Shield className="w-3 h-3 mr-1" />
+            Secure
+          </div>
+          <div className="flex items-center">
+            <CreditCard className="w-3 h-3 mr-1" />
+            Instant
+          </div>
+          <div className="flex items-center">
+            <Check className="w-3 h-3 mr-1" />
+            No commitment
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5">
-      {/* Back Navigation */}
-      <div className="px-4 pt-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100/50">
+      {/* Header with Navigation */}
+      <header className="relative z-10 flex items-center justify-between p-4 lg:p-6">
         <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Home
         </Link>
-      </div>
-      
-      {/* Hero Section */}
-      <section className="relative py-20 px-4">
-        <div className="container mx-auto text-center">
-          <div className={`inline-flex items-center px-4 py-2 rounded-full mb-6 ${
-            apiStatus === 'connected' ? 'bg-green-100 text-green-700' : 
-            apiStatus === 'checking' ? 'bg-yellow-100 text-yellow-700' : 
-            'bg-red-100 text-red-700'
-          }`}>
-            <Globe className="w-4 h-4 mr-2" />
-            <span className="text-sm font-medium">
-              {apiStatus === 'connected' ? 'RoamBuddy API Connected ✓' : 
-               apiStatus === 'checking' ? 'Checking RoamBuddy API...' : 
-               'API Connection Failed - Using Demo Data'}
-            </span>
+        <div className="text-sm text-muted-foreground">
+          By the creators of <span className="font-semibold text-primary">Omni Wellness Media</span>
+        </div>
+      </header>
+
+      {/* Hero Section - Saily-inspired */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-400 via-blue-500 to-cyan-400 min-h-[80vh] flex items-center">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-white/5 rounded-lg"></div>
+        </div>
+        
+        {/* Hero Content */}
+        <div className="relative z-10 container mx-auto px-4 lg:px-6 grid lg:grid-cols-2 gap-12 items-center">
+          <div className="text-white space-y-8">
+            {/* Special Offer Badge */}
+            <div className="inline-flex items-center bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full text-sm font-medium">
+              ⚡ Special Launch Deal
+            </div>
+            
+            <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
+              Affordable eSIM data for 
+              <span className="block">wellness travel</span>
+            </h1>
+            
+            <div className="space-y-4">
+              <div className="flex items-center text-lg">
+                <Check className="w-5 h-5 mr-3 text-yellow-300" />
+                Get <strong>20% off</strong> 10GB+ data plans
+              </div>
+              <div className="flex items-center text-lg">
+                <Check className="w-5 h-5 mr-3 text-yellow-300" />
+                Plus, up to <strong>10%</strong> cashback in wellness credits!
+              </div>
+            </div>
+            
+            {/* Destination Search */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-medium">Where do you need data?</h3>
+              <div className="flex max-w-md">
+                <div className="relative flex-1">
+                  <Input 
+                    placeholder="Search for destination"
+                    className="bg-white text-gray-900 pr-12 h-14 text-lg"
+                  />
+                  <Button 
+                    size="sm"
+                    className="absolute right-1 top-1 h-12 w-12 bg-yellow-400 hover:bg-yellow-500 text-yellow-900"
+                  >
+                    <Search className="w-5 h-5" />
+                  </Button>
+                </div>
+              </div>
+              <p className="text-sm opacity-90">
+                Take a look at our <Link to="#terms" className="underline">terms and conditions</Link>
+              </p>
+            </div>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
-            Stay Connected on Your
-            <br />
-            Wellness Journey
-          </h1>
-          
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Premium eSIM data plans designed for conscious travelers. Instant activation, 
-            global coverage, and seamless connectivity for your transformative experiences.
-          </p>
-          
-          <div className="flex items-center justify-center space-x-8 text-sm text-muted-foreground">
-            <div className="flex items-center">
-              <Smartphone className="w-5 h-5 mr-2 text-primary" />
-              Instant Activation
+          {/* Hero Image Area */}
+          <div className="relative">
+            <div className="relative z-10 bg-yellow-400 rounded-3xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+              <div className="bg-white rounded-2xl p-6 text-center space-y-4">
+                <div className="w-16 h-24 bg-gradient-to-b from-purple-600 to-purple-800 rounded-lg mx-auto flex items-center justify-center">
+                  <Smartphone className="w-8 h-8 text-white" />
+                </div>
+                <div className="space-y-2">
+                  <div className="text-sm font-medium text-gray-600">Get 20% off + up to 10% in</div>
+                  <div className="text-lg font-bold text-primary">Wellness credits!</div>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center">
-              <MapPin className="w-5 h-5 mr-2 text-primary" />
-              200+ Countries
-            </div>
-            <div className="flex items-center">
-              <Wifi className="w-5 h-5 mr-2 text-primary" />
-              5G Speeds
-            </div>
+            
+            {/* Floating elements */}
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/20 rounded-full animate-pulse"></div>
+            <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-yellow-300/30 rounded-full animate-bounce"></div>
+          </div>
+        </div>
+        
+        {/* API Status Indicator */}
+        <div className="absolute top-4 right-4 lg:top-6 lg:right-6">
+          <div className={`flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+            apiStatus === 'connected' ? 'bg-green-500/20 text-green-100' : 
+            apiStatus === 'checking' ? 'bg-yellow-500/20 text-yellow-100' : 
+            'bg-red-500/20 text-red-100'
+          }`}>
+            <div className={`w-2 h-2 rounded-full mr-2 ${
+              apiStatus === 'connected' ? 'bg-green-300' : 
+              apiStatus === 'checking' ? 'bg-yellow-300' : 
+              'bg-red-300'
+            }`}></div>
+            {apiStatus === 'connected' ? 'Live Data' : 
+             apiStatus === 'checking' ? 'Connecting...' : 
+             'Demo Mode'}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Indicators */}
+      <section className="py-8 px-4 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-sm text-muted-foreground font-medium">They talk about us</p>
+          </div>
+          <div className="flex items-center justify-center space-x-8 opacity-50">
+            <div className="text-2xl font-bold text-gray-400">CNN</div>
+            <div className="text-2xl font-bold text-gray-400">Forbes</div>
+            <div className="text-2xl font-bold text-gray-400">TechCrunch</div>
+            <div className="text-2xl font-bold text-gray-400">Lonely Planet</div>
           </div>
         </div>
       </section>
 
       {/* Plans Section */}
-      <section className="py-16 px-4">
+      <section className="py-20 px-4 bg-gray-50">
         <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Choose your perfect data plan</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Transparent pricing, instant activation, and coverage that works wherever your wellness journey takes you.
+            </p>
+          </div>
+
           <Tabs defaultValue="regional" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12">
-              <TabsTrigger value="regional" className="flex items-center">
+            <TabsList className="grid w-full max-w-lg mx-auto grid-cols-2 mb-16 h-14">
+              <TabsTrigger value="regional" className="flex items-center text-lg">
                 <span className="mr-2">🇿🇦</span>
                 South Africa & Regional
               </TabsTrigger>
-              <TabsTrigger value="global" className="flex items-center">
+              <TabsTrigger value="global" className="flex items-center text-lg">
                 <span className="mr-2">🌍</span>
                 Global Plans
               </TabsTrigger>
             </TabsList>
             
-            <TabsContent value="regional" className="space-y-8">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-4">South Africa & Africa Regional</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
+            <TabsContent value="regional" className="space-y-12">
+              <div className="text-center mb-12">
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">South Africa & Africa Regional</h3>
+                <p className="text-gray-600 max-w-2xl mx-auto text-lg">
                   Perfect for wellness retreats, safari adventures, and cultural immersions 
                   across the rainbow nation and neighboring countries.
                 </p>
               </div>
               
-              <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
                 {esimPlans.map((plan) => (
                   <PlanCard key={plan.id} plan={plan} />
                 ))}
               </div>
             </TabsContent>
             
-            <TabsContent value="global" className="space-y-8">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-4">Global Wellness Plans</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
+            <TabsContent value="global" className="space-y-12">
+              <div className="text-center mb-12">
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">Global Wellness Plans</h3>
+                <p className="text-gray-600 max-w-2xl mx-auto text-lg">
                   For the conscious nomad exploring spiritual destinations worldwide. 
                   Stay connected across continents on your transformative journey.
                 </p>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
                 {globalPlans.map((plan) => (
                   <PlanCard key={plan.id} plan={plan} isGlobal />
                 ))}
