@@ -294,6 +294,7 @@ const CommunityBlog = () => {
   );
 
   if (loading) {
+    console.log("CommunityBlog: Loading state");
     return (
       <div className="min-h-screen bg-background">
         <MegaNavigation />
@@ -307,6 +308,8 @@ const CommunityBlog = () => {
       </div>
     );
   }
+
+  console.log("CommunityBlog: Rendering main content, posts:", posts.length);
 
   return (
     <div className="min-h-screen bg-background">
