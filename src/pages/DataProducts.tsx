@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
-import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap } from "lucide-react";
+import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 const DataProducts = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -207,6 +208,14 @@ const DataProducts = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5">
+      {/* Back Navigation */}
+      <div className="px-4 pt-6">
+        <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Link>
+      </div>
+      
       {/* Hero Section */}
       <section className="relative py-20 px-4">
         <div className="container mx-auto text-center">

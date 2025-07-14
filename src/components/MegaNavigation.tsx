@@ -139,6 +139,11 @@ const MegaNavigation = () => {
     icon: Activity,
     hasDropdown: false
   }, {
+    name: "Technical Overview",
+    path: "/technical-overview", 
+    icon: Activity,
+    hasDropdown: false
+  }, {
     name: "Platforms",
     path: "/platforms",
     icon: Activity,

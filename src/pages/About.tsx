@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Mail, Calendar } from "lucide-react";
+import { Mail, Calendar, ArrowLeft } from "lucide-react";
 import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
@@ -93,6 +93,12 @@ const About = () => {
   return (
     <div className="min-h-screen">
       <MegaNavigation />
+      <div className="px-4 pt-6">
+        <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Link>
+      </div>
       <BreadcrumbNav />
       
       <Hero

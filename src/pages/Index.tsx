@@ -11,6 +11,10 @@ import PartnersSection from "@/components/sections/PartnersSection";
 import VideoShowcaseSection from "@/components/sections/VideoShowcaseSection";
 import ToursRetreatsPreview from "@/components/sections/ToursRetreatsPreview";
 import { Section } from "@/components/ui/section";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Globe, Smartphone, ShoppingCart, Calendar, MapPin, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -48,6 +52,99 @@ const Index = () => {
         <section className="section-spacing bg-gray-50 overflow-safe">
           <div className="container-width">
             <AIToolsPreview />
+          </div>
+        </section>
+        <section className="section-spacing bg-white overflow-safe">
+          <div className="container-width">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Omni Wellness Ecosystem</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                A comprehensive platform for wellness, travel, and conscious living
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <CardHeader className="text-center">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Globe className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle>Premium eSIM Data</CardTitle>
+                  <CardDescription>
+                    Stay connected worldwide with instant activation eSIM plans
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div className="space-y-2 mb-6">
+                    <div className="flex items-center justify-center text-sm text-muted-foreground">
+                      <MapPin className="w-4 h-4 mr-2" />
+                      200+ Countries
+                    </div>
+                    <div className="flex items-center justify-center text-sm text-muted-foreground">
+                      <Smartphone className="w-4 h-4 mr-2" />
+                      5G Speeds
+                    </div>
+                  </div>
+                  <Button asChild className="w-full bg-gradient-primary hover:bg-gradient-primary/90">
+                    <Link to="/data-products">Explore eSIM Plans</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <CardHeader className="text-center">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <ShoppingCart className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle>RoamBuddy Store</CardTitle>
+                  <CardDescription>
+                    Complete travel solutions with eSIM, WiFi devices & accessories
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div className="space-y-2 mb-6">
+                    <div className="flex items-center justify-center text-sm text-muted-foreground">
+                      <Globe className="w-4 h-4 mr-2" />
+                      Global Network
+                    </div>
+                    <div className="flex items-center justify-center text-sm text-muted-foreground">
+                      <Users className="w-4 h-4 mr-2" />
+                      Trusted Partner
+                    </div>
+                  </div>
+                  <Button asChild className="w-full bg-gradient-primary hover:bg-gradient-primary/90">
+                    <Link to="/roambuddy-store">Shop Now</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <CardHeader className="text-center">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Calendar className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle>Wellness Tours</CardTitle>
+                  <CardDescription>
+                    Transformative travel experiences in South Africa's most beautiful locations
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div className="space-y-2 mb-6">
+                    <div className="flex items-center justify-center text-sm text-muted-foreground">
+                      <MapPin className="w-4 h-4 mr-2" />
+                      Cape Town
+                    </div>
+                    <div className="flex items-center justify-center text-sm text-muted-foreground">
+                      <Users className="w-4 h-4 mr-2" />
+                      Small Groups
+                    </div>
+                  </div>
+                  <Button asChild className="w-full bg-gradient-primary hover:bg-gradient-primary/90">
+                    <Link to="/tours-retreats">Discover Tours</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </section>
         <section className="section-spacing bg-gray-50 overflow-safe">

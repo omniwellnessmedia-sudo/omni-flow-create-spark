@@ -24,8 +24,10 @@ import {
   Filter,
   Loader2,
   CreditCard,
-  Download
+  Download,
+  ArrowLeft
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface RoamBuddyProduct {
   id: string;
@@ -366,6 +368,14 @@ const RoamBuddyStore = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5">
+      {/* Back Navigation */}
+      <div className="px-4 pt-6">
+        <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Link>
+      </div>
+      
       {/* Header */}
       <section className="relative py-12 px-4">
         <div className="container mx-auto">
