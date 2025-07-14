@@ -5,9 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
-import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap, ArrowLeft, Search, Shield, CreditCard } from "lucide-react";
+import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap, ArrowLeft, Search, Shield, CreditCard, Lock, Users, Headphones } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import heroImage from "@/assets/esim-hero-wellness.jpg";
 
 const DataProducts = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -315,89 +316,100 @@ const DataProducts = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100/50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       {/* Header with Navigation */}
-      <header className="relative z-10 flex items-center justify-between p-4 lg:p-6">
-        <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
+      <header className="relative z-10 flex items-center justify-between p-4 lg:p-6 bg-white/80 backdrop-blur-sm">
+        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Home
         </Link>
-        <div className="text-sm text-muted-foreground">
-          By the creators of <span className="font-semibold text-primary">Omni Wellness Media</span>
+        <div className="text-sm text-gray-500">
+          By the creators of <span className="font-semibold text-blue-600">Omni Wellness Media</span>
         </div>
       </header>
 
-      {/* Hero Section - Saily-inspired */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-400 via-blue-500 to-cyan-400 min-h-[80vh] flex items-center">
+      {/* Hero Section - Saily-inspired with Omni branding */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-teal-500 to-cyan-400 min-h-[85vh] flex items-center">
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-white/5 rounded-lg"></div>
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 bg-white/10 rounded-lg"></div>
         </div>
         
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 lg:px-6 grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-white space-y-8">
             {/* Special Offer Badge */}
-            <div className="inline-flex items-center bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full text-sm font-medium">
-              ⚡ Special Launch Deal
+            <div className="inline-flex items-center bg-orange-400 text-orange-900 px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+              ⚡ Wellness Traveler Special: 25% OFF
             </div>
             
             <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-              Affordable eSIM data for 
-              <span className="block">wellness travel</span>
+              Stay connected on your 
+              <span className="block text-yellow-300">wellness journey</span>
             </h1>
             
             <div className="space-y-4">
               <div className="flex items-center text-lg">
-                <Check className="w-5 h-5 mr-3 text-yellow-300" />
-                Get <strong>20% off</strong> 10GB+ data plans
+                <Check className="w-6 h-6 mr-3 text-green-300 bg-green-600/20 rounded-full p-1" />
+                Get <strong className="text-yellow-300">25% off</strong> all wellness eSIM plans
               </div>
               <div className="flex items-center text-lg">
-                <Check className="w-5 h-5 mr-3 text-yellow-300" />
-                Plus, up to <strong>10%</strong> cashback in wellness credits!
+                <Check className="w-6 h-6 mr-3 text-green-300 bg-green-600/20 rounded-full p-1" />
+                Plus earn <strong className="text-yellow-300">wellness credits</strong> for future bookings!
               </div>
             </div>
             
             {/* Destination Search */}
             <div className="space-y-4">
-              <h3 className="text-xl font-medium">Where do you need data?</h3>
+              <h3 className="text-xl font-medium">Where are you traveling for wellness?</h3>
               <div className="flex max-w-md">
                 <div className="relative flex-1">
                   <Input 
-                    placeholder="Search for destination"
-                    className="bg-white text-gray-900 pr-12 h-14 text-lg"
+                    placeholder="Search destination (e.g., Cape Town, Bali)"
+                    className="bg-white text-gray-900 pr-12 h-14 text-lg border-0 shadow-xl"
                   />
                   <Button 
                     size="sm"
-                    className="absolute right-1 top-1 h-12 w-12 bg-yellow-400 hover:bg-yellow-500 text-yellow-900"
+                    className="absolute right-1 top-1 h-12 w-12 bg-orange-400 hover:bg-orange-500 text-orange-900 shadow-lg"
                   >
                     <Search className="w-5 h-5" />
                   </Button>
                 </div>
               </div>
               <p className="text-sm opacity-90">
-                Take a look at our <Link to="#terms" className="underline">terms and conditions</Link>
+                Instant activation • No roaming fees • 24/7 wellness support
               </p>
             </div>
           </div>
           
-          {/* Hero Image Area */}
+          {/* Hero Image */}
           <div className="relative">
-            <div className="relative z-10 bg-yellow-400 rounded-3xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-300">
-              <div className="bg-white rounded-2xl p-6 text-center space-y-4">
-                <div className="w-16 h-24 bg-gradient-to-b from-purple-600 to-purple-800 rounded-lg mx-auto flex items-center justify-center">
-                  <Smartphone className="w-8 h-8 text-white" />
+            <div className="relative z-10 overflow-hidden rounded-3xl shadow-2xl">
+              <img 
+                src={heroImage} 
+                alt="Wellness traveler staying connected with eSIM"
+                className="w-full h-auto object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              
+              {/* Floating UI Elements */}
+              <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                <div className="flex items-center space-x-2 text-sm text-gray-700">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="font-medium">Connected</span>
                 </div>
-                <div className="space-y-2">
-                  <div className="text-sm font-medium text-gray-600">Get 20% off + up to 10% in</div>
-                  <div className="text-lg font-bold text-primary">Wellness credits!</div>
-                </div>
+                <div className="text-xs text-gray-500 mt-1">5G • 45ms ping</div>
+              </div>
+              
+              <div className="absolute bottom-6 left-6 bg-orange-400 text-orange-900 rounded-xl p-4 shadow-lg">
+                <div className="text-sm font-medium">Save 75% vs roaming</div>
+                <div className="text-xs opacity-80">No bill shock • Instant setup</div>
               </div>
             </div>
             
             {/* Floating elements */}
-            <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/20 rounded-full animate-pulse"></div>
-            <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-yellow-300/30 rounded-full animate-bounce"></div>
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-yellow-400/30 rounded-full animate-pulse"></div>
+            <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-orange-300/40 rounded-full animate-bounce"></div>
           </div>
         </div>
         
@@ -416,21 +428,6 @@ const DataProducts = () => {
             {apiStatus === 'connected' ? 'Live Data' : 
              apiStatus === 'checking' ? 'Connecting...' : 
              'Demo Mode'}
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Indicators */}
-      <section className="py-8 px-4 bg-white">
-        <div className="container mx-auto">
-          <div className="text-center mb-8">
-            <p className="text-sm text-muted-foreground font-medium">They talk about us</p>
-          </div>
-          <div className="flex items-center justify-center space-x-8 opacity-50">
-            <div className="text-2xl font-bold text-gray-400">CNN</div>
-            <div className="text-2xl font-bold text-gray-400">Forbes</div>
-            <div className="text-2xl font-bold text-gray-400">TechCrunch</div>
-            <div className="text-2xl font-bold text-gray-400">Lonely Planet</div>
           </div>
         </div>
       </section>
@@ -492,114 +489,140 @@ const DataProducts = () => {
         </div>
       </section>
 
-      {/* eSIM Benefits Section - Comprehensive */}
-      <section className="py-16 px-4 bg-muted/50">
+      {/* Why eSIM Benefits Section - Redesigned */}
+      <section className="py-20 px-4 bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 text-white">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why eSIM is the Future of Travel</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Why eSIM is the Future of Travel</h2>
+            <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
               Avoid roaming bill shock and save over 75% with our premium eSIM solutions. 
               Join millions of smart travelers who've switched to instant, affordable connectivity.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            <div className="space-y-4 text-center">
-              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
-                <Zap className="w-8 h-8 text-white" />
+          <div className="grid lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-16">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Zap className="w-10 h-10 text-white" />
               </div>
-              <h3 className="font-bold text-lg">Instant Activation</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-bold text-xl mb-4 text-green-300">Instant Activation</h3>
+              <p className="text-blue-100 leading-relaxed">
                 Get connected in seconds. QR code delivered to your email immediately after purchase. 
                 No physical SIM cards, no shipping delays, no waiting.
               </p>
             </div>
             
-            <div className="space-y-4 text-center">
-              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
-                <Globe className="w-8 h-8 text-white" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Globe className="w-10 h-10 text-white" />
               </div>
-              <h3 className="font-bold text-lg">200+ Countries</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-bold text-xl mb-4 text-blue-300">200+ Countries</h3>
+              <p className="text-blue-100 leading-relaxed">
                 Seamless coverage across 6 continents. Premium partnerships with local carriers 
                 ensure reliable, high-speed connectivity wherever your journey takes you.
               </p>
             </div>
             
-            <div className="space-y-4 text-center">
-              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
-                <Wifi className="w-8 h-8 text-white" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Wifi className="w-10 h-10 text-white" />
               </div>
-              <h3 className="font-bold text-lg">5G Premium Speeds</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-bold text-xl mb-4 text-purple-300">5G Premium Speeds</h3>
+              <p className="text-blue-100 leading-relaxed">
                 Access the fastest networks available. Stream 4K videos, video call family, 
                 share memories instantly, and stay productive on the go.
               </p>
             </div>
             
-            <div className="space-y-4 text-center">
-              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
-                <Check className="w-8 h-8 text-white" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center border border-white/20 hover:bg-white/15 transition-all duration-300">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <Shield className="w-10 h-10 text-white" />
               </div>
-              <h3 className="font-bold text-lg">Save Up to 75%</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-bold text-xl mb-4 text-orange-300">Save Up to 75%</h3>
+              <p className="text-blue-100 leading-relaxed">
                 Eliminate expensive roaming charges. Pay only for what you need with transparent, 
                 upfront pricing. No hidden fees, no bill shock surprises.
               </p>
             </div>
           </div>
 
-          {/* Additional Benefits */}
-          <div className="bg-card rounded-lg p-8">
-            <h3 className="text-2xl font-bold mb-6 text-center">Complete Travel Connectivity Solution</h3>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="space-y-3">
-                <h4 className="font-semibold text-primary">🔒 Secure & Private</h4>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• End-to-end encrypted connections</li>
-                  <li>• No public WiFi security risks</li>
-                  <li>• Your data stays protected</li>
-                </ul>
+          {/* Complete Solution Cards */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-2xl p-8 border border-green-400/30">
+              <div className="flex items-center mb-6">
+                <Lock className="w-8 h-8 text-green-400 mr-3" />
+                <h3 className="text-2xl font-bold text-green-300">🔒 Secure & Private</h3>
               </div>
-              
-              <div className="space-y-3">
-                <h4 className="font-semibold text-primary">📱 Easy Setup</h4>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• Scan QR code to install</li>
-                  <li>• Works with all eSIM devices</li>
-                  <li>• Keep your regular number active</li>
-                </ul>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-green-100">End-to-end encrypted connections</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-green-100">No public WiFi security risks</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-green-100">Your data stays protected</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-2xl p-8 border border-blue-400/30">
+              <div className="flex items-center mb-6">
+                <Smartphone className="w-8 h-8 text-blue-400 mr-3" />
+                <h3 className="text-2xl font-bold text-blue-300">📱 Easy Setup</h3>
               </div>
-              
-              <div className="space-y-3">
-                <h4 className="font-semibold text-primary">🌟 Premium Support</h4>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li>• 24/7 multilingual support</li>
-                  <li>• Real-time usage monitoring</li>
-                  <li>• Easy top-up options</li>
-                </ul>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-blue-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-blue-100">Scan QR code to install</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-blue-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-blue-100">Works with all eSIM devices</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-blue-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-blue-100">Keep your regular number active</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-2xl p-8 border border-purple-400/30">
+              <div className="flex items-center mb-6">
+                <Headphones className="w-8 h-8 text-purple-400 mr-3" />
+                <h3 className="text-2xl font-bold text-purple-300">🌟 Premium Support</h3>
               </div>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-purple-100">24/7 multilingual support</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-purple-100">Real-time usage monitoring</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0" />
+                  <span className="text-purple-100">Easy top-up options</span>
+                </li>
+              </ul>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto text-center">
-          <div className="max-w-2xl mx-auto space-y-6">
-            <h2 className="text-3xl font-bold">Ready to Stay Connected?</h2>
-            <p className="text-muted-foreground">
-              Join thousands of conscious travelers who trust our eSIM solutions 
-              for their wellness journeys worldwide.
+          
+          {/* CTA Section */}
+          <div className="text-center mt-16">
+            <h3 className="text-3xl font-bold mb-6 text-white">Ready to Stay Connected?</h3>
+            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+              Join thousands of conscious travelers who trust our eSIM solutions for their wellness journeys worldwide.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-gradient-primary hover:bg-gradient-primary/90">
-                <Globe className="w-5 h-5 mr-2" />
+              <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-4 text-lg font-medium shadow-xl">
                 Browse All Plans
               </Button>
-              <Button size="lg" variant="outline">
-                <Smartphone className="w-5 h-5 mr-2" />
+              <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-medium">
                 Check Compatibility
               </Button>
             </div>
