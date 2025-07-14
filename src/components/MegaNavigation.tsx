@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/AuthProvider";
@@ -155,7 +156,7 @@ const MegaNavigation = () => {
   };
 
   return (
-    <nav className="nav-sticky glass shadow-lg border-b border-white/20">
+    <header className="sticky top-0 z-40 bg-white border-b header-container">
       <div className="container-width">
         <div className="flex justify-between items-center h-14 sm:h-16 md:h-20 lg:h-24 min-w-0">
           {/* Logo */}
@@ -163,7 +164,7 @@ const MegaNavigation = () => {
             <img 
               src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
               alt="Omni Wellness Media" 
-              className="h-8 md:h-10 lg:h-12 w-auto"
+              className="h-6 w-auto md:h-8 lg:h-10 xl:h-12"
             />
           </Link>
 
@@ -261,62 +262,74 @@ const MegaNavigation = () => {
         </div>
 
         {/* Mega Menu Dropdown */}
-        {activeDropdown && (
+        {activeDropdown && createPortal(
           <div 
-            className="absolute top-full left-0 z-50 w-full bg-white rounded-lg shadow-xl border border-gray-200"
+            className="fixed top-16 left-0 right-0 z-50 bg-white shadow-2xl border-t"
+            style={{
+              position: 'fixed',
+              top: '64px',
+              left: 0,
+              right: 0,
+              zIndex: 9999,
+              maxHeight: '80vh',
+              overflowY: 'auto'
+            }}
             onMouseEnter={() => handleMouseEnter(activeDropdown)}
             onMouseLeave={handleMouseLeave}
           >
-            {mainNavItems.map((item) => {
-              if (item.name === activeDropdown && item.megaContent) {
-                return (
-                  <div key={item.name} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                    <div className="mb-8">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{item.megaContent.title}</h3>
-                      <p className="text-gray-600 text-lg">{item.megaContent.description}</p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {item.megaContent.sections.map((section) => (
-                        <div key={section.title} className="space-y-4">
-                          <h4 className="font-semibold text-lg text-omni-indigo border-b border-gray-200 pb-2">
-                            {section.title}
-                          </h4>
-                          <div className="space-y-3">
-                            {section.items.map((subItem) => {
-                              const SubIcon = subItem.icon;
-                              return (
-                                <Link
-                                  key={subItem.name}
-                                  to={subItem.path}
-                                  onClick={() => setActiveDropdown(null)}
-                                  className="group block p-3 rounded-lg hover:bg-rainbow-subtle transition-colors duration-200"
-                                >
-                                  <div className="flex items-center space-x-3">
-                                    {SubIcon && <SubIcon className="h-5 w-5 text-omni-orange" />}
-                                    <div className="flex-1">
-                                      <div className="flex items-center space-x-2">
-                                        <span className="font-medium text-gray-900 group-hover:text-omni-indigo">
-                                          {subItem.name}
-                                        </span>
-                                        <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-omni-indigo opacity-0 group-hover:opacity-100 transition-all" />
+            <div className="container mx-auto px-4 py-8">
+              {mainNavItems.map((item) => {
+                if (item.name === activeDropdown && item.megaContent) {
+                  return (
+                    <div key={item.name}>
+                      <div className="mb-8">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">{item.megaContent.title}</h3>
+                        <p className="text-gray-600 text-lg">{item.megaContent.description}</p>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {item.megaContent.sections.map((section) => (
+                          <div key={section.title} className="space-y-4">
+                            <h4 className="font-semibold text-lg text-omni-indigo border-b border-gray-200 pb-2">
+                              {section.title}
+                            </h4>
+                            <div className="space-y-3">
+                              {section.items.map((subItem) => {
+                                const SubIcon = subItem.icon;
+                                return (
+                                  <Link
+                                    key={subItem.name}
+                                    to={subItem.path}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className="group block p-3 rounded-lg hover:bg-rainbow-subtle transition-colors duration-200"
+                                  >
+                                    <div className="flex items-center space-x-3">
+                                      {SubIcon && <SubIcon className="h-5 w-5 text-omni-orange" />}
+                                      <div className="flex-1">
+                                        <div className="flex items-center space-x-2">
+                                          <span className="font-medium text-gray-900 group-hover:text-omni-indigo">
+                                            {subItem.name}
+                                          </span>
+                                          <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-omni-indigo opacity-0 group-hover:opacity-100 transition-all" />
+                                        </div>
+                                        <p className="text-sm text-gray-600 mt-1">{subItem.description}</p>
                                       </div>
-                                      <p className="text-sm text-gray-600 mt-1">{subItem.description}</p>
                                     </div>
-                                  </div>
-                                </Link>
-                              );
-                            })}
+                                  </Link>
+                                );
+                              })}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              }
-              return null;
-            })}
-          </div>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          </div>,
+          document.body
         )}
 
         {/* Mobile Navigation */}
@@ -381,7 +394,7 @@ const MegaNavigation = () => {
           </div>
         )}
       </div>
-    </nav>
+    </header>
   );
 };
 
