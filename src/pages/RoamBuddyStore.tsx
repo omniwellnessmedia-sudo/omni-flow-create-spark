@@ -28,6 +28,7 @@ import {
   ArrowLeft
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PriceDisplay } from "@/components/ui/price-display";
 
 interface RoamBuddyProduct {
   id: string;
@@ -318,10 +319,13 @@ const RoamBuddyStore = () => {
         </CardDescription>
         
         <div className="flex items-center justify-center space-x-2 mt-4">
-          <span className="text-3xl font-bold text-primary">
-            ${product.price}
-          </span>
-          <span className="text-sm text-muted-foreground">{product.currency}</span>
+          <PriceDisplay 
+            amount={product.price} 
+            currency={product.currency}
+            size="lg"
+            showOriginal={true}
+            className="text-3xl"
+          />
         </div>
         
         {product.data_amount && product.validity_days && (

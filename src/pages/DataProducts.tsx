@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap, ArrowLeft, Search, Shield, CreditCard, Lock, Users, Headphones } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { PriceDisplay } from "@/components/ui/price-display";
 import heroImage from "@/assets/esim-hero-wellness.jpg";
 
 const DataProducts = () => {
@@ -283,14 +284,28 @@ const DataProducts = () => {
         </CardDescription>
         
         <div className="flex items-baseline justify-center space-x-2 mt-6">
-          <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
+          <PriceDisplay 
+            amount={plan.price} 
+            currency="USD"
+            size="lg"
+            showOriginal={true}
+            className="text-4xl font-bold"
+          />
           {plan.originalPrice && (
             <div className="space-y-1">
               <span className="text-lg text-muted-foreground line-through">
-                ${plan.originalPrice}
+                <PriceDisplay 
+                  amount={plan.originalPrice} 
+                  currency="USD"
+                  className="text-lg line-through"
+                />
               </span>
               <div className="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-medium">
-                Save ${plan.originalPrice - plan.price}
+                Save <PriceDisplay 
+                  amount={plan.originalPrice - plan.price} 
+                  currency="USD"
+                  className="text-xs font-medium"
+                />
               </div>
             </div>
           )}
