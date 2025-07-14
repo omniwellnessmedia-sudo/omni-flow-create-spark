@@ -56,7 +56,7 @@ const Index = () => {
         </section>
         <section className="section-spacing bg-white overflow-safe">
           <div className="container-width">
-            <div className="text-center mb-12">
+            <div className="text-center mb-12" data-tour="community">
               <h2 className="text-3xl font-bold mb-4">Omni Wellness Ecosystem</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 A comprehensive platform for wellness, travel, and conscious living

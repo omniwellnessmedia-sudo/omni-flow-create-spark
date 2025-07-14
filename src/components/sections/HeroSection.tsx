@@ -47,7 +47,7 @@ const HeroSection = () => {
         </div>
 
         {/* Content Pillars */}
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:gap-6 mb-12 sm:mb-16 relative z-10 overflow-safe px-4">
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:gap-6 mb-12 sm:mb-16 relative z-10 overflow-safe px-4" data-tour="mission">
           {[
             { name: 'Inspiration', color: 'from-purple-500 to-pink-500', icon: '✨' },
             { name: 'Education', color: 'from-blue-500 to-cyan-500', icon: '📚' },

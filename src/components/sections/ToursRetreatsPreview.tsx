@@ -53,7 +53,7 @@ const ToursRetreatsPreview = () => {
 
   return (
     <div className="py-16">
-      <div className="text-center mb-12">
+      <div className="text-center mb-12" data-tour="tours">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
           Transformative Wellness Journeys
         </h2>

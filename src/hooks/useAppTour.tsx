@@ -7,7 +7,10 @@ interface TourStep {
   content: string;
   target?: string;
   position?: 'top' | 'bottom' | 'left' | 'right' | 'center';
-  action?: () => void;
+  action?: {
+    label: string;
+    link: string;
+  };
 }
 
 interface TourConfig {
@@ -18,37 +21,70 @@ const tourSteps: TourConfig = {
   '/': [
     {
       id: 'welcome',
-      title: 'Welcome to Omni Wellness Media',
-      content: 'Let us show you around! This tour will help you discover all the amazing features we have to offer.',
+      title: 'Welcome to Omni Wellness Media!',
+      content: 'Your gateway to conscious wellness experiences across South Africa. Let\'s explore how our platform can transform your wellness journey and connect you with our thriving community.',
       position: 'center'
     },
     {
-      id: 'logo',
-      title: 'Our Brand',
-      content: 'This is our logo and brand identity. We\'re all about conscious content creation and positive change.',
-      target: 'nav img',
+      id: 'mission',
+      title: 'Our Mission & Vision',
+      content: 'We\'re bridging wellness, outreach, and media to empower South Africa\'s journey to health and consciousness. Discover our four content pillars: Inspiration, Education, Empowerment, and Wellness.',
+      target: '[data-tour="mission"]',
       position: 'bottom'
     },
     {
-      id: 'navigation',
-      title: 'Main Navigation',
-      content: 'Use these links to explore our services, read our blog, listen to our podcast, and more.',
-      target: 'nav [role="navigation"]',
-      position: 'bottom'
+      id: 'services',
+      title: 'Wellness Services & Exchange',
+      content: 'Discover our revolutionary wellness marketplace where you can find authentic practitioners, book services, and earn WellCoins. Connect with verified wellness professionals across South Africa.',
+      target: '[data-tour="services"]',
+      position: 'top',
+      action: {
+        label: 'Browse Services',
+        link: '/wellness-exchange'
+      }
     },
     {
-      id: 'platforms',
-      title: 'Wellness Platforms',
-      content: 'Click on "Platforms" to discover our wellness ecosystem including 2BeWell and Wellness Exchange.',
-      target: '[data-tour="platforms"]',
-      position: 'bottom'
+      id: 'tours',
+      title: 'Immersive Wellness Journeys',
+      content: 'Join curated wellness retreats and adventures across Cape Town, wine country, and beyond. Each experience includes seamless eSIM connectivity for worry-free travel.',
+      target: '[data-tour="tours"]',
+      position: 'top',
+      action: {
+        label: 'Explore Tours',
+        link: '/tours-retreats'
+      }
     },
     {
-      id: 'cta',
-      title: 'Get Started',
-      content: 'Ready to begin your wellness journey? Click here to explore our services or try our AI tools.',
-      target: '[data-tour="hero-cta"]',
-      position: 'top'
+      id: 'ai-tools',
+      title: 'AI-Powered Wellness Tools',
+      content: 'Access cutting-edge AI tools designed for wellness practitioners and conscious businesses. Create content, analyze impact, and optimize your wellness offerings.',
+      target: '[data-tour="ai-tools"]',
+      position: 'top',
+      action: {
+        label: 'Try AI Tools',
+        link: '/ai-tools'
+      }
+    },
+    {
+      id: 'community',
+      title: 'Join Our Conscious Community',
+      content: 'Connect with like-minded individuals, share insights, and contribute to our growing wellness community. Explore our blog, participate in discussions, and build meaningful connections.',
+      target: '[data-tour="community"]',
+      position: 'top',
+      action: {
+        label: 'Join Community',
+        link: '/wellness-community'
+      }
+    },
+    {
+      id: 'complete',
+      title: 'Ready to Begin Your Journey?',
+      content: 'You\'re all set to explore the Omni Wellness ecosystem! Start by browsing our wellness exchange, booking a transformative tour, or trying our AI tools. Your conscious wellness journey awaits.',
+      position: 'center',
+      action: {
+        label: 'Get Started',
+        link: '/wellness-exchange'
+      }
     }
   ],
   '/services': [

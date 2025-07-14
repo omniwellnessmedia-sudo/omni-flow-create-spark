@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { X, ArrowRight, ArrowLeft, Target } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
+import { X, ArrowRight, ArrowLeft, Heart, Users, MapPin, Zap, Sparkles, Target } from 'lucide-react';
+import { useLocation, Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 interface TourStep {
@@ -11,8 +12,32 @@ interface TourStep {
   content: string;
   target?: string; // CSS selector
   position?: 'top' | 'bottom' | 'left' | 'right' | 'center';
-  action?: () => void;
+  action?: {
+    label: string;
+    link: string;
+  };
 }
+
+const getStepIcon = (stepId: string) => {
+  switch (stepId) {
+    case 'welcome':
+      return <Heart className="w-5 h-5 text-primary" />;
+    case 'mission':
+      return <Target className="w-5 h-5 text-primary" />;
+    case 'services':
+      return <Users className="w-5 h-5 text-primary" />;
+    case 'tours':
+      return <MapPin className="w-5 h-5 text-primary" />;
+    case 'ai-tools':
+      return <Zap className="w-5 h-5 text-primary" />;
+    case 'community':
+      return <Users className="w-5 h-5 text-primary" />;
+    case 'complete':
+      return <Sparkles className="w-5 h-5 text-primary" />;
+    default:
+      return <Sparkles className="w-5 h-5 text-primary" />;
+  }
+};
 
 interface AppTourProps {
   steps: TourStep[];
@@ -82,83 +107,100 @@ const AppTour = ({
 
   const currentStepData = steps[currentStep];
 
+  const isFirstStep = currentStep === 0;
+  const isLastStep = currentStep === steps.length - 1;
+
   return (
     <>
-      {/* Overlay */}
-      <div className="fixed inset-0 bg-black/50 z-50 pointer-events-none" />
+      {/* Enhanced Overlay with subtle backdrop blur */}
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 pointer-events-none animate-fade-in" />
       
       {/* Tour Dialog */}
       <Dialog open={isOpen} onOpenChange={handleSkip}>
-        <DialogContent className="sm:max-w-md z-[60] pointer-events-auto">
-          <DialogHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-omni-orange" />
-                <DialogTitle className="text-lg font-semibold">
-                  {currentStepData.title}
-                </DialogTitle>
+        <DialogContent className="sm:max-w-lg z-[60] pointer-events-auto bg-white/95 backdrop-blur-sm border-0 shadow-2xl animate-scale-in">
+          <DialogHeader className="pb-4">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                {getStepIcon(currentStepData.id)}
+                <div>
+                  <DialogTitle className="text-xl font-semibold text-gray-900 mb-1">
+                    {currentStepData.title}
+                  </DialogTitle>
+                  <Badge variant="secondary" className="text-xs">
+                    Step {currentStep + 1} of {steps.length}
+                  </Badge>
+                </div>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
+              <Button 
+                variant="ghost" 
+                size="sm" 
                 onClick={handleSkip}
-                className="h-6 w-6 p-0"
+                className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full w-8 h-8 p-0"
               >
-                <X className="h-4 w-4" />
+                <X className="w-4 h-4" />
               </Button>
             </div>
           </DialogHeader>
 
-          <div className="space-y-4">
-            {/* Progress bar */}
-            <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="space-y-6">
+            {/* Enhanced Progress Bar */}
+            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
               <div 
-                className="bg-omni-orange h-2 rounded-full transition-all duration-300"
+                className="bg-gradient-to-r from-primary to-secondary h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
                 style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
               />
             </div>
 
-            {/* Step counter */}
-            <p className="text-sm text-gray-500">
-              Step {currentStep + 1} of {steps.length}
-            </p>
-
-            {/* Content */}
-            <p className="text-gray-700 leading-relaxed">
+            {/* Content with better typography */}
+            <p className="text-gray-700 leading-relaxed text-base">
               {currentStepData.content}
             </p>
 
-            {/* Action buttons */}
-            <div className="flex justify-between pt-4">
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={prevStep}
-                  disabled={currentStep === 0}
-                  className="flex items-center gap-1"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  Previous
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleSkip}
-                  className="text-gray-500"
-                >
-                  Skip Tour
-                </Button>
+            {/* Call-to-Action for specific steps */}
+            {currentStepData.action && (
+              <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg p-4 border border-primary/20">
+                <Link to={currentStepData.action.link}>
+                  <Button 
+                    className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-medium shadow-lg"
+                    onClick={handleComplete}
+                  >
+                    {currentStepData.action.label}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
               </div>
+            )}
 
+            {/* Enhanced Navigation */}
+            <div className="flex justify-between items-center pt-2">
               <Button
-                onClick={nextStep}
-                size="sm"
-                className="bg-omni-orange hover:bg-omni-orange/90 text-white flex items-center gap-1"
+                variant="outline"
+                onClick={prevStep}
+                disabled={isFirstStep}
+                className="px-6 disabled:opacity-50"
               >
-                {currentStep === steps.length - 1 ? 'Complete' : 'Next'}
-                <ArrowRight className="w-4 h-4" />
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                {isFirstStep ? 'Start' : 'Previous'}
+              </Button>
+              
+              {/* Visual step indicators */}
+              <div className="flex gap-1">
+                {Array.from({ length: steps.length }, (_, i) => (
+                  <div
+                    key={i}
+                    className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                      i === currentStep ? 'bg-primary' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+              
+              <Button 
+                onClick={isLastStep ? handleComplete : nextStep}
+                className="px-6 bg-primary hover:bg-primary/90"
+              >
+                {isLastStep ? 'Finish' : 'Next'}
+                {!isLastStep && <ArrowRight className="w-4 h-4 ml-2" />}
               </Button>
             </div>
           </div>
