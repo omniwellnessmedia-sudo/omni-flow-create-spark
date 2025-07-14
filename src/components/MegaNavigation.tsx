@@ -80,6 +80,45 @@ const MegaNavigation = () => {
       }]
     }
   }, {
+    name: "Tours & Retreats",
+    path: "/tours-retreats",
+    icon: Activity,
+    hasDropdown: true,
+    megaContent: {
+      title: "Transformative Journeys",
+      description: "Conscious travel experiences for wellness and growth",
+      sections: [{
+        title: "Journey Categories",
+        items: [{
+          name: "Indigenous Wisdom & Healing",
+          path: "/tours-retreats/indigenous-wisdom",
+          description: "Connect with ancient healing traditions",
+          icon: Heart
+        }, {
+          name: "Wellness & Mindfulness",
+          path: "/tours-retreats/wellness-programs", 
+          description: "Holistic wellness experiences",
+          icon: Activity
+        }, {
+          name: "Educational Programs",
+          path: "/tours-retreats/educational",
+          description: "Study abroad and learning journeys",
+          icon: BookOpen
+        }]
+      }, {
+        title: "Featured Experiences",
+        items: [{
+          name: "Browse All Tours",
+          path: "/tours-retreats",
+          description: "Explore all transformative journeys"
+        }, {
+          name: "Custom Planning",
+          path: "/contact",
+          description: "Design your perfect retreat"
+        }]
+      }]
+    }
+  }, {
     name: "Platforms",
     path: "/platforms",
     icon: Activity,
