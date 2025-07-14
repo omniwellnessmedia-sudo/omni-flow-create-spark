@@ -4,6 +4,9 @@ import { ArrowRight, MapPin, Clock, Users, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import consciousConnectionsImage from '@/assets/conscious-connections-healer.jpg';
+import factWellnessImage from '@/assets/fact-wellness-hybrid.jpg';
+import ubuntuCommunityImage from '@/assets/ubuntu-community-gathering.jpg';
 const ToursRetreatsPreview = () => {
   const featuredTours = [{
     id: '1',
@@ -16,7 +19,7 @@ const ToursRetreatsPreview = () => {
     category: 'Indigenous Wisdom',
     slug: 'conscious-connections-indigenous-wisdom-healing',
     categorySlug: 'indigenous-wisdom',
-    image: '/placeholder-tour-1.jpg',
+    image: consciousConnectionsImage,
     highlights: ['Traditional healing workshops', 'Sacred site visits', 'Plant medicine introduction']
   }, {
     id: '2',
@@ -29,7 +32,7 @@ const ToursRetreatsPreview = () => {
     category: 'Wellness Programs',
     slug: 'fact-wellness-hybrid-retreat',
     categorySlug: 'wellness-programs',
-    image: '/placeholder-tour-2.jpg',
+    image: factWellnessImage,
     highlights: ['Hybrid experiences', 'Mindfulness practices', 'Ocean-based wellness']
   }, {
     id: '3',
@@ -42,7 +45,7 @@ const ToursRetreatsPreview = () => {
     category: 'Indigenous Wisdom',
     slug: 'ubuntu-immersion-journey',
     categorySlug: 'indigenous-wisdom',
-    image: '/placeholder-tour-3.jpg',
+    image: ubuntuCommunityImage,
     highlights: ['Ubuntu philosophy', 'Community projects', 'Traditional ceremonies']
   }];
   return <div className="py-16">
@@ -73,13 +76,15 @@ const ToursRetreatsPreview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
         {featuredTours.map(tour => <Card key={tour.id} className="group hover:shadow-xl transition-all duration-300">
             <div className="relative overflow-hidden rounded-t-lg h-64">
-              <div className="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center bg-slate-200">
-                <div className="text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Star className="h-10 w-10 text-primary" />
-                  </div>
-                  <Badge variant="secondary">{tour.category}</Badge>
-                </div>
+              <img 
+                src={tour.image} 
+                alt={tour.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute top-4 left-4">
+                <Badge variant="secondary" className="bg-white/90 text-primary">
+                  {tour.category}
+                </Badge>
               </div>
               <div className="absolute top-4 right-4">
                 <Badge className="bg-primary text-primary-foreground">
