@@ -9,6 +9,7 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import AIToolsPreview from "@/components/sections/AIToolsPreview";
 import PartnersSection from "@/components/sections/PartnersSection";
 import VideoShowcaseSection from "@/components/sections/VideoShowcaseSection";
+import ToursRetreatsPreview from "@/components/sections/ToursRetreatsPreview";
 import { Section } from "@/components/ui/section";
 
 const Index = () => {
@@ -40,6 +41,11 @@ const Index = () => {
           </div>
         </section>
         <section className="section-spacing bg-white overflow-safe">
+          <div className="container-width">
+            <ToursRetreatsPreview />
+          </div>
+        </section>
+        <section className="section-spacing bg-gray-50 overflow-safe">
           <div className="container-width">
             <AIToolsPreview />
           </div>

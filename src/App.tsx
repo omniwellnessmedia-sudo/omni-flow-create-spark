@@ -51,6 +51,8 @@ import ProductDetail from "./pages/ProductDetail";
 import ServiceDetail from "./pages/ServiceDetail";
 import ToursRetreats from "./pages/ToursRetreats";
 import TourDetail from "./pages/TourDetail";
+import TourCategory from "./pages/TourCategory";
+import WellnessRoamingPackages from "./pages/WellnessRoamingPackages";
 
 const queryClient = new QueryClient();
 
@@ -115,7 +117,9 @@ const App = () => (
             <Route path="/platforms" element={<PartnersDirectory />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/tours-retreats" element={<ToursRetreats />} />
+            <Route path="/tours-retreats/:category" element={<TourCategory />} />
             <Route path="/tours-retreats/:category/:slug" element={<TourDetail />} />
+            <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
