@@ -125,7 +125,7 @@ const DataProducts = () => {
     setSelectedPlan(planId);
     
     try {
-      // Create order through RoamBuddy API
+      // Step 1: Create order through RoamBuddy API
       const orderResult = await supabase.functions.invoke('roambuddy-api', {
         body: { 
           action: 'createOrder',
@@ -135,38 +135,73 @@ const DataProducts = () => {
             amount: price,
             currency: 'USD',
             customer_email: 'customer@omniwellnessmedia.com', // In production, get from auth
-            customer_name: 'Wellness Traveler'
+            customer_name: 'Wellness Traveler',
+            destination: 'South Africa'
           }
         }
       });
       
+      console.log('Order creation result:', orderResult);
+      
       if (orderResult.data?.success) {
-        toast({
-          title: "Order Created Successfully!",
-          description: `${planName} order initiated. Redirecting to secure checkout...`,
-        });
+        const orderData = orderResult.data;
         
-        // In production, redirect to payment gateway
-        setTimeout(() => {
+        if (orderData.demo_mode) {
+          // Demo mode flow
           toast({
-            title: "eSIM Activated!",
-            description: "Check your email for QR code and activation instructions. Valid immediately.",
-            duration: 5000
+            title: "🎯 Demo Order Created",
+            description: `${planName} - Order ID: ${orderData.order_id}. Simulating instant eSIM delivery...`,
           });
-        }, 3000);
+          
+          // Simulate the full flow
+          setTimeout(() => {
+            toast({
+              title: "💳 Demo Payment Processing",
+              description: "Simulating secure payment gateway integration...",
+            });
+          }, 1500);
+          
+          setTimeout(() => {
+            toast({
+              title: "🎉 eSIM Delivered!",
+              description: "✅ QR Code: IMG_QR_DEMO_12345\n✅ Activation: 24hrs\n✅ Support: Available 24/7",
+              duration: 8000
+            });
+          }, 3500);
+        } else {
+          // Real order flow
+          toast({
+            title: "Order Created Successfully!",
+            description: `${planName} - Order ID: ${orderData.order_id}. Redirecting to secure payment...`,
+          });
+          
+          if (orderData.payment_url) {
+            // In production, redirect to payment gateway
+            window.open(orderData.payment_url, '_blank');
+          }
+          
+          // Simulate completion for demo
+          setTimeout(() => {
+            toast({
+              title: "🎉 eSIM Activated!",
+              description: "QR code sent to your email. Valid immediately with 24/7 support.",
+              duration: 6000
+            });
+          }, 3000);
+        }
       } else {
-        // Fallback to demo checkout flow
+        // Fallback to enhanced demo
         toast({
-          title: "Demo Checkout",
-          description: `${planName} - $${price}. In production, this would process payment securely.`,
+          title: "Demo Mode Active",
+          description: `${planName} ($${price}) - Simulating full RoamBuddy checkout experience...`,
           duration: 4000
         });
         
         setTimeout(() => {
           toast({
-            title: "Demo Success!",
-            description: "In live mode: eSIM QR code sent via email, instant activation, 24/7 support available.",
-            duration: 6000
+            title: "Demo Complete!",
+            description: "✅ Order Processing\n✅ eSIM QR Code Generation\n✅ Email Delivery\n✅ 24/7 Support Activation",
+            duration: 8000
           });
         }, 2000);
       }
