@@ -134,6 +134,11 @@ const MegaNavigation = () => {
     icon: Activity,
     hasDropdown: false
   }, {
+    name: "RoamBuddy Store",
+    path: "/roambuddy-store", 
+    icon: Activity,
+    hasDropdown: false
+  }, {
     name: "Platforms",
     path: "/platforms",
     icon: Activity,

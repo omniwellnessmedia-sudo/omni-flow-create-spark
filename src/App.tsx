@@ -54,6 +54,7 @@ import TourDetail from "./pages/TourDetail";
 import TourCategory from "./pages/TourCategory";
 import WellnessRoamingPackages from "./pages/WellnessRoamingPackages";
 import DataProducts from "./pages/DataProducts";
+import RoamBuddyStore from "./pages/RoamBuddyStore";
 
 const queryClient = new QueryClient();
 
@@ -122,6 +123,7 @@ const App = () => (
             <Route path="/tours-retreats/:category/:slug" element={<TourDetail />} />
             <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
             <Route path="/data-products" element={<DataProducts />} />
+            <Route path="/roambuddy-store" element={<RoamBuddyStore />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
