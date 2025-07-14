@@ -14,6 +14,7 @@ const DataProducts = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [apiStatus, setApiStatus] = useState<string>('checking');
   const [realTimeServices, setRealTimeServices] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
 
   // Test RoamBuddy API connection and fetch real products
@@ -242,6 +243,26 @@ const DataProducts = () => {
     }
   };
 
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      toast({
+        title: "🔍 Searching destinations...",
+        description: `Looking for eSIM plans for "${searchQuery}". Redirecting to browse all plans.`,
+      });
+      
+      // Redirect to the browse all plans page with search query
+      setTimeout(() => {
+        window.location.href = `/roambuddy-store?search=${encodeURIComponent(searchQuery)}`;
+      }, 1500);
+    } else {
+      toast({
+        title: "Enter a destination",
+        description: "Please enter a destination to search for eSIM plans.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const PlanCard = ({ plan, isGlobal = false }: { plan: any, isGlobal?: boolean }) => (
     <Card className={`relative transition-all duration-300 hover:shadow-xl hover:scale-105 ${
       plan.popular ? 'ring-2 ring-blue-500 shadow-xl scale-105' : 'hover:shadow-lg'
@@ -390,10 +411,14 @@ const DataProducts = () => {
                   <Input 
                     placeholder="Search destination (e.g., Cape Town, Bali)"
                     className="bg-white text-gray-900 pr-12 h-14 text-lg border-0 shadow-xl"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                   />
                   <Button 
                     size="sm"
                     className="absolute right-1 top-1 h-12 w-12 bg-orange-400 hover:bg-orange-500 text-orange-900 shadow-lg"
+                    onClick={handleSearch}
                   >
                     <Search className="w-5 h-5" />
                   </Button>

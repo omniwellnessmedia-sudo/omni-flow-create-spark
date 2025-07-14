@@ -74,6 +74,19 @@ const RoamBuddyStore = () => {
     { value: "americas", label: "Americas" }
   ];
 
+  // Handle URL search parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
+    if (searchParam) {
+      setSearchTerm(searchParam);
+      toast({
+        title: "🔍 Search Applied",
+        description: `Showing results for "${searchParam}"`,
+      });
+    }
+  }, []);
+
   // Fetch products from RoamBuddy API
   useEffect(() => {
     const fetchProducts = async () => {
