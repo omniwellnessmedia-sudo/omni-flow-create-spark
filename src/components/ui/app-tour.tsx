@@ -159,10 +159,18 @@ const AppTour = ({
             {/* Call-to-Action for specific steps */}
             {currentStepData.action && (
               <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg p-4 border border-primary/20">
-                <Link to={currentStepData.action.link}>
+                <Link 
+                  to={currentStepData.action.link}
+                  onClick={() => {
+                    handleComplete();
+                    // Ensure page scrolls to top
+                    setTimeout(() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 100);
+                  }}
+                >
                   <Button 
                     className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-medium shadow-lg"
-                    onClick={handleComplete}
                   >
                     {currentStepData.action.label}
                     <ArrowRight className="w-4 h-4 ml-2" />

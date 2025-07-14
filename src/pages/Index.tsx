@@ -86,7 +86,12 @@ const Index = () => {
                     </div>
                   </div>
                   <Button asChild className="w-full bg-gradient-primary hover:bg-gradient-primary/90">
-                    <Link to="/data-products">Explore eSIM Plans</Link>
+                    <Link 
+                      to="/data-products"
+                      onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)}
+                    >
+                      Explore eSIM Plans
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -113,7 +118,12 @@ const Index = () => {
                     </div>
                   </div>
                   <Button asChild className="w-full bg-gradient-primary hover:bg-gradient-primary/90">
-                    <Link to="/roambuddy-store">Shop Now</Link>
+                    <Link 
+                      to="/roambuddy-store"
+                      onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)}
+                    >
+                      Shop Now
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -140,7 +150,12 @@ const Index = () => {
                     </div>
                   </div>
                   <Button asChild className="w-full bg-gradient-primary hover:bg-gradient-primary/90">
-                    <Link to="/tours-retreats">Discover Tours</Link>
+                    <Link 
+                      to="/tours-retreats"
+                      onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)}
+                    >
+                      Discover Tours
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
