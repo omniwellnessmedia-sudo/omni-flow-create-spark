@@ -642,12 +642,16 @@ const DataProducts = () => {
               Join thousands of conscious travelers who trust our eSIM solutions for their wellness journeys worldwide.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-4 text-lg font-medium shadow-xl">
-                Browse All Plans
-              </Button>
-              <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-medium">
-                Check Compatibility
-              </Button>
+              <Link to="/roambuddy-store">
+                <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-4 text-lg font-medium shadow-xl">
+                  Browse All Plans
+                </Button>
+              </Link>
+              <Link to="/device-compatibility">
+                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 text-lg font-medium">
+                  Check Compatibility
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

@@ -45,6 +45,9 @@ import WellnessExchangeSignup from "./pages/WellnessExchangeSignup";
 import PartnersDirectory from "./pages/PartnersDirectory";
 import PartnerProfile from "./pages/PartnerProfile";
 import Resources from "./pages/Resources";
+import DataProducts from "./pages/DataProducts";
+import RoamBuddyStore from "./pages/RoamBuddyStore";
+import DeviceCompatibility from "./pages/DeviceCompatibility";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
@@ -53,8 +56,6 @@ import ToursRetreats from "./pages/ToursRetreats";
 import TourDetail from "./pages/TourDetail";
 import TourCategory from "./pages/TourCategory";
 import WellnessRoamingPackages from "./pages/WellnessRoamingPackages";
-import DataProducts from "./pages/DataProducts";
-import RoamBuddyStore from "./pages/RoamBuddyStore";
 import TechnicalOverview from "./pages/TechnicalOverview";
 
 const queryClient = new QueryClient();
@@ -125,6 +126,7 @@ const App = () => (
             <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
             <Route path="/data-products" element={<DataProducts />} />
             <Route path="/roambuddy-store" element={<RoamBuddyStore />} />
+            <Route path="/device-compatibility" element={<DeviceCompatibility />} />
             <Route path="/technical-overview" element={<TechnicalOverview />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/checkout" element={<Checkout />} />

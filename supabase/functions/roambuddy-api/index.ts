@@ -49,6 +49,24 @@ serve(async (req) => {
       case 'createOrder':
         return await handleCreateOrder(data, supabase)
       
+      case 'getCountries':
+        return await handleGetCountries()
+      
+      case 'getPlanStatics':
+        return await handleGetPlanStatics()
+      
+      case 'getOrderedEsims':
+        return await handleGetOrderedEsims()
+      
+      case 'getEsimDetails':
+        return await handleGetEsimDetails(data.iccid)
+      
+      case 'activateEsim':
+        return await handleActivateEsim(data)
+      
+      case 'validateEsim':
+        return await handleValidateEsim(data.iccid)
+      
       default:
         return new Response(
           JSON.stringify({ success: false, error: 'Unknown action' }),
@@ -374,6 +392,243 @@ async function handleCreateOrder(orderData: any, supabase: any) {
       JSON.stringify({ 
         success: false, 
         error: 'Failed to create order', 
+        details: error.message 
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    )
+  }
+}
+
+// Get countries list
+async function handleGetCountries() {
+  try {
+    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/countries`, {
+      method: 'GET',
+      headers: {
+        'Authorization': ROAMBUDDY_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      }
+    })
+
+    const data = await response.json()
+    console.log('Get countries response:', data)
+
+    if (response.ok) {
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          data: data,
+          message: 'Countries fetched successfully'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      throw new Error(`Failed to fetch countries: ${data.message || 'Unknown error'}`)
+    }
+  } catch (error) {
+    console.error('Get countries error:', error)
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Failed to fetch countries', 
+        details: error.message 
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    )
+  }
+}
+
+// Get plan statistics
+async function handleGetPlanStatics() {
+  try {
+    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/plan/statics`, {
+      method: 'GET',
+      headers: {
+        'Authorization': ROAMBUDDY_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      }
+    })
+
+    const data = await response.json()
+    console.log('Get plan statics response:', data)
+
+    if (response.ok) {
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          data: data,
+          message: 'Plan statistics fetched successfully'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      throw new Error(`Failed to fetch plan statistics: ${data.message || 'Unknown error'}`)
+    }
+  } catch (error) {
+    console.error('Get plan statics error:', error)
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Failed to fetch plan statistics', 
+        details: error.message 
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    )
+  }
+}
+
+// Get ordered eSIMs
+async function handleGetOrderedEsims() {
+  try {
+    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/esims`, {
+      method: 'GET',
+      headers: {
+        'Authorization': ROAMBUDDY_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      }
+    })
+
+    const data = await response.json()
+    console.log('Get ordered eSIMs response:', data)
+
+    if (response.ok) {
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          data: data,
+          message: 'Ordered eSIMs fetched successfully'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      throw new Error(`Failed to fetch ordered eSIMs: ${data.message || 'Unknown error'}`)
+    }
+  } catch (error) {
+    console.error('Get ordered eSIMs error:', error)
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Failed to fetch ordered eSIMs', 
+        details: error.message 
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    )
+  }
+}
+
+// Get eSIM details
+async function handleGetEsimDetails(iccid: string) {
+  try {
+    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/esims/details/${iccid}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': ROAMBUDDY_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      }
+    })
+
+    const data = await response.json()
+    console.log('Get eSIM details response:', data)
+
+    if (response.ok) {
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          data: data,
+          message: 'eSIM details fetched successfully'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      throw new Error(`Failed to fetch eSIM details: ${data.message || 'Unknown error'}`)
+    }
+  } catch (error) {
+    console.error('Get eSIM details error:', error)
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Failed to fetch eSIM details', 
+        details: error.message 
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    )
+  }
+}
+
+// Activate eSIM
+async function handleActivateEsim(params: any) {
+  try {
+    const { iccid } = params
+    
+    const response = await fetch(`${ROAMBUDDY_API_URL}/products/esim/activate`, {
+      method: 'POST',
+      headers: {
+        'Authorization': ROAMBUDDY_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ iccid })
+    })
+
+    const data = await response.json()
+    console.log('Activate eSIM response:', data)
+
+    if (response.ok) {
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          data: data,
+          message: 'eSIM activated successfully'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      throw new Error(`Failed to activate eSIM: ${data.message || 'Unknown error'}`)
+    }
+  } catch (error) {
+    console.error('Activate eSIM error:', error)
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Failed to activate eSIM', 
+        details: error.message 
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+    )
+  }
+}
+
+// Validate eSIM
+async function handleValidateEsim(iccid: string) {
+  try {
+    const response = await fetch(`${ROAMBUDDY_API_URL}/products/esim/validate/${iccid}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': ROAMBUDDY_ACCESS_TOKEN,
+        'Content-Type': 'application/json',
+      }
+    })
+
+    const data = await response.json()
+    console.log('Validate eSIM response:', data)
+
+    if (response.ok) {
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          data: data,
+          message: 'eSIM validation completed'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } else {
+      throw new Error(`Failed to validate eSIM: ${data.message || 'Unknown error'}`)
+    }
+  } catch (error) {
+    console.error('Validate eSIM error:', error)
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Failed to validate eSIM', 
         details: error.message 
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
