@@ -11,42 +11,42 @@ const ToursRetreatsPreview = () => {
   const featuredTours = [{
     id: '1',
     title: 'Conscious Connections: Indigenous Wisdom + Healing',
-    subtitle: 'Ancient traditions for personal transformation',
-    duration: '8 days / 7 nights',
-    maxParticipants: 12,
-    priceFrom: 75000,
-    destination: 'Cape Town, South Africa',
+    subtitle: 'A transformative 10-day journey blending ancient wisdom with modern wellness',
+    duration: '10 days / 9 nights',
+    maxParticipants: 16,
+    priceFrom: 6500,
+    destination: 'Cape Town & Western Cape, South Africa',
     category: 'Indigenous Wisdom',
     slug: 'conscious-connections-indigenous-wisdom-healing',
     categorySlug: 'indigenous-wisdom',
     image: consciousConnectionsImage,
-    highlights: ['Traditional healing workshops', 'Sacred site visits', 'Plant medicine introduction']
+    highlights: ['Learn from authentic Khoisan knowledge keepers', 'Traditional fynbos medicine', 'Ancient rock art sites']
   }, {
     id: '2',
-    title: 'FACT Wellness Hybrid Experience',
-    subtitle: 'Innovative blend of in-person and virtual wellness',
-    duration: '3-7 days',
-    maxParticipants: 16,
-    priceFrom: 24500,
+    title: 'FACT Wellness Hybrid Classes',
+    subtitle: 'Innovative yoga, QiGong, Pilates, and meditation experiences',
+    duration: 'Ongoing weekly classes',
+    maxParticipants: 20,
+    priceFrom: 75,
     destination: 'Muizenberg, Cape Town',
-    category: 'Wellness Programs',
-    slug: 'fact-wellness-hybrid-retreat',
-    categorySlug: 'wellness-programs',
+    category: 'Wellness Retreats',
+    slug: 'fact-wellness-hybrid-classes',
+    categorySlug: 'wellness-retreats',
     image: factWellnessImage,
-    highlights: ['Hybrid experiences', 'Mindfulness practices', 'Ocean-based wellness']
+    highlights: ['Hybrid technology', 'Muizenberg beach location', 'Community-focused approach']
   }, {
     id: '3',
-    title: 'Ubuntu Immersion Journey',
-    subtitle: 'Deep cultural immersion in African philosophy',
-    duration: '10 days',
+    title: 'Winter Wine Country Wellness Weekend',
+    subtitle: 'Luxury weekend retreat in Stellenbosch with spa treatments, yoga, and wine tastings',
+    duration: '2 days / 1 night',
     maxParticipants: 8,
-    priceFrom: 86500,
-    destination: 'Eastern Cape, South Africa',
-    category: 'Indigenous Wisdom',
-    slug: 'ubuntu-immersion-journey',
-    categorySlug: 'indigenous-wisdom',
+    priceFrom: 2850,
+    destination: 'Stellenbosch Wine Country, Western Cape',
+    category: 'Weekend Retreats',
+    slug: 'winter-wine-country-wellness',
+    categorySlug: 'weekend-retreats',
     image: ubuntuCommunityImage,
-    highlights: ['Ubuntu philosophy', 'Community projects', 'Traditional ceremonies']
+    highlights: ['Luxury wine estate accommodation', 'Private wine tastings', 'Professional photography included']
   }];
   return <div className="py-16">
       <div className="text-center mb-12" data-tour="tours">
@@ -140,17 +140,17 @@ const ToursRetreatsPreview = () => {
         slug: 'indigenous-wisdom',
         icon: '🌿'
       }, {
-        name: 'Wellness & Mindfulness',
-        slug: 'wellness-programs',
+        name: 'Wellness Retreats',
+        slug: 'wellness-retreats',
         icon: '🧘'
       }, {
-        name: 'Educational Programs',
-        slug: 'educational',
+        name: 'Study Abroad',
+        slug: 'study-abroad',
         icon: '📚'
       }, {
-        name: 'Custom Retreats',
-        slug: 'custom',
-        icon: '✨'
+        name: 'Winter Wellness',
+        slug: 'winter-wellness',
+        icon: '❄️'
       }].map(category => <Link key={category.slug} to={`/tours-retreats/${category.slug}`}>
             <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
               <CardContent className="p-4 text-center">
