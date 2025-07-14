@@ -1,0 +1,347 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Calendar, Users, MapPin, Star, Clock, ArrowRight, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/integrations/supabase/client';
+
+interface TourCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image_url: string;
+  display_order: number;
+}
+
+interface Tour {
+  id: string;
+  title: string;
+  slug: string;
+  subtitle: string;
+  duration: string;
+  max_participants: number;
+  price_from: number;
+  destination: string;
+  hero_image_url: string;
+  difficulty_level: string;
+  featured: boolean;
+  category: TourCategory;
+}
+
+const ToursRetreats = () => {
+  const [categories, setCategories] = useState<TourCategory[]>([]);
+  const [featuredTours, setFeaturedTours] = useState<Tour[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      // Fetch categories
+      const { data: categoriesData } = await supabase
+        .from('tour_categories')
+        .select('*')
+        .eq('active', true)
+        .order('display_order');
+
+      // Fetch featured tours
+      const { data: toursData } = await supabase
+        .from('tours')
+        .select(`
+          *,
+          category:tour_categories(*)
+        `)
+        .eq('active', true)
+        .eq('featured', true)
+        .limit(6);
+
+      setCategories(categoriesData || []);
+      setFeaturedTours(toursData || []);
+    } catch (error) {
+      console.error('Error fetching tours data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="relative py-20 lg:py-32 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+            Transformative Wellness Journeys
+          </h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            Discover conscious travel experiences that heal, inspire, and connect you 
+            with ancient wisdom and modern wellness practices.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-gradient-to-r from-primary to-secondary text-primary-foreground">
+              Explore Our Journeys
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+            <Button variant="outline" size="lg">
+              <Download className="mr-2 h-5 w-5" />
+              Download Brochure
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Tour Categories Grid */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
+            Journey Categories
+          </h2>
+          {categories.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {categories.map(category => (
+                <TourCategoryCard key={category.id} category={category} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <PlaceholderCategoryCard 
+                title="Indigenous Wisdom & Healing"
+                description="Connect with ancient healing traditions and sacred practices"
+                slug="indigenous-wisdom"
+              />
+              <PlaceholderCategoryCard 
+                title="Wellness & Mindfulness"
+                description="Holistic wellness experiences combining ancient wisdom with modern practices"
+                slug="wellness-programs"
+              />
+              <PlaceholderCategoryCard 
+                title="Educational Programs"
+                description="Study abroad and learning journeys for personal growth"
+                slug="educational"
+              />
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Featured Tours */}
+      <section className="py-16 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-foreground mb-12">
+            Featured Experiences
+          </h2>
+          {featuredTours.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+              {featuredTours.map(tour => (
+                <FeaturedTourCard key={tour.id} tour={tour} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+              <PlaceholderTourCard 
+                title="Conscious Connections: Indigenous Wisdom + Healing"
+                duration="8 days / 7 nights"
+                priceFrom={3999}
+                destination="Cape Town, South Africa"
+                category="Indigenous Wisdom"
+              />
+              <PlaceholderTourCard 
+                title="FACT Wellness Hybrid Experience"
+                duration="3-7 days"
+                priceFrom={1299}
+                destination="Muizenberg, Cape Town"
+                category="Wellness Programs"
+              />
+              <PlaceholderTourCard 
+                title="Ubuntu Immersion Journey"
+                duration="10 days"
+                priceFrom={4599}
+                destination="Eastern Cape, South Africa"
+                category="Indigenous Wisdom"
+              />
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 bg-primary/5">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-4">
+            Ready to Begin Your Journey?
+          </h2>
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Connect with our wellness travel specialists to design your perfect transformative experience.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg">
+              <Calendar className="mr-2 h-5 w-5" />
+              Schedule Consultation
+            </Button>
+            <Button variant="outline" size="lg">
+              View All Tours
+            </Button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+const TourCategoryCard = ({ category }: { category: TourCategory }) => (
+  <Card className="group hover:shadow-lg transition-all duration-300 border-border">
+    <div className="relative overflow-hidden rounded-t-lg h-48">
+      <img 
+        src={category.image_url || '/placeholder-category.jpg'} 
+        alt={category.name}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+    </div>
+    <CardContent className="p-6">
+      <h3 className="text-xl font-semibold text-foreground mb-2">{category.name}</h3>
+      <p className="text-muted-foreground mb-4">{category.description}</p>
+      <Link to={`/tours-retreats/${category.slug}`}>
+        <Button variant="outline" className="w-full">
+          Explore Category
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </Link>
+    </CardContent>
+  </Card>
+);
+
+const PlaceholderCategoryCard = ({ title, description, slug }: { title: string; description: string; slug: string }) => (
+  <Card className="group hover:shadow-lg transition-all duration-300">
+    <div className="relative overflow-hidden rounded-t-lg h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
+          <MapPin className="h-8 w-8 text-primary" />
+        </div>
+      </div>
+    </div>
+    <CardContent className="p-6">
+      <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
+      <p className="text-muted-foreground mb-4">{description}</p>
+      <Link to={`/tours-retreats/${slug}`}>
+        <Button variant="outline" className="w-full">
+          Explore Category
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </Link>
+    </CardContent>
+  </Card>
+);
+
+const FeaturedTourCard = ({ tour }: { tour: Tour }) => (
+  <Card className="group hover:shadow-xl transition-all duration-300 border-border">
+    <div className="relative overflow-hidden rounded-t-lg h-64">
+      <img 
+        src={tour.hero_image_url || '/placeholder-tour.jpg'} 
+        alt={tour.title}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+      <div className="absolute top-4 left-4">
+        <Badge variant="secondary" className="bg-background/90">
+          {tour.category?.name || 'Featured'}
+        </Badge>
+      </div>
+      <div className="absolute top-4 right-4">
+        <Badge className="bg-primary text-primary-foreground">
+          From ${tour.price_from}
+        </Badge>
+      </div>
+    </div>
+    <CardContent className="p-6">
+      <h3 className="text-xl font-semibold text-foreground mb-2">{tour.title}</h3>
+      <p className="text-muted-foreground mb-4">{tour.subtitle}</p>
+      
+      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-4">
+        <div className="flex items-center">
+          <Clock className="h-4 w-4 mr-1" />
+          {tour.duration}
+        </div>
+        <div className="flex items-center">
+          <Users className="h-4 w-4 mr-1" />
+          Max {tour.max_participants}
+        </div>
+        <div className="flex items-center">
+          <MapPin className="h-4 w-4 mr-1" />
+          {tour.destination}
+        </div>
+      </div>
+
+      <Link to={`/tours-retreats/${tour.category?.slug || 'tours'}/${tour.slug}`}>
+        <Button className="w-full">
+          View Details
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </Link>
+    </CardContent>
+  </Card>
+);
+
+const PlaceholderTourCard = ({ title, duration, priceFrom, destination, category }: {
+  title: string;
+  duration: string;
+  priceFrom: number;
+  destination: string;
+  category: string;
+}) => (
+  <Card className="group hover:shadow-xl transition-all duration-300">
+    <div className="relative overflow-hidden rounded-t-lg h-64 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
+          <Star className="h-10 w-10 text-primary" />
+        </div>
+      </div>
+      <div className="absolute top-4 left-4">
+        <Badge variant="secondary" className="bg-background/90">
+          {category}
+        </Badge>
+      </div>
+      <div className="absolute top-4 right-4">
+        <Badge className="bg-primary text-primary-foreground">
+          From ${priceFrom}
+        </Badge>
+      </div>
+    </div>
+    <CardContent className="p-6">
+      <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
+      <p className="text-muted-foreground mb-4">An transformative journey awaits you.</p>
+      
+      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-4">
+        <div className="flex items-center">
+          <Clock className="h-4 w-4 mr-1" />
+          {duration}
+        </div>
+        <div className="flex items-center">
+          <Users className="h-4 w-4 mr-1" />
+          Max 12
+        </div>
+        <div className="flex items-center">
+          <MapPin className="h-4 w-4 mr-1" />
+          {destination}
+        </div>
+      </div>
+
+      <Button className="w-full">
+        View Details
+        <ArrowRight className="ml-2 h-4 w-4" />
+      </Button>
+    </CardContent>
+  </Card>
+);
+
+export default ToursRetreats;

@@ -821,6 +821,48 @@ export type Database = {
           },
         ]
       }
+      roambuddy_services: {
+        Row: {
+          active: boolean | null
+          category: string | null
+          created_at: string
+          description: string | null
+          destination: string | null
+          id: string
+          last_synced: string | null
+          name: string
+          price: number
+          service_id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          destination?: string | null
+          id?: string
+          last_synced?: string | null
+          name: string
+          price: number
+          service_id: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          destination?: string | null
+          id?: string
+          last_synced?: string | null
+          name?: string
+          price?: number
+          service_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       service_quotes: {
         Row: {
           budget_range: string | null
@@ -918,6 +960,281 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tour_bookings: {
+        Row: {
+          booking_date: string
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string
+          id: string
+          participants: number
+          payment_status: string | null
+          roambuddy_booking_id: string | null
+          roambuddy_services: Json | null
+          special_requirements: string | null
+          status: string
+          total_price: number
+          tour_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          booking_date: string
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          participants?: number
+          payment_status?: string | null
+          roambuddy_booking_id?: string | null
+          roambuddy_services?: Json | null
+          special_requirements?: string | null
+          status?: string
+          total_price: number
+          tour_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          participants?: number
+          payment_status?: string | null
+          roambuddy_booking_id?: string | null
+          roambuddy_services?: Json | null
+          special_requirements?: string | null
+          status?: string
+          total_price?: number
+          tour_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tour_bookings_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tour_categories: {
+        Row: {
+          active: boolean | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tour_itineraries: {
+        Row: {
+          accommodation: string | null
+          activities: string[] | null
+          created_at: string
+          day_number: number
+          description: string
+          id: string
+          location: string | null
+          meals_included: string[] | null
+          title: string
+          tour_id: string
+        }
+        Insert: {
+          accommodation?: string | null
+          activities?: string[] | null
+          created_at?: string
+          day_number: number
+          description: string
+          id?: string
+          location?: string | null
+          meals_included?: string[] | null
+          title: string
+          tour_id: string
+        }
+        Update: {
+          accommodation?: string | null
+          activities?: string[] | null
+          created_at?: string
+          day_number?: number
+          description?: string
+          id?: string
+          location?: string | null
+          meals_included?: string[] | null
+          title?: string
+          tour_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tour_itineraries_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tour_testimonials: {
+        Row: {
+          approved: boolean | null
+          created_at: string
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          name: string
+          rating: number | null
+          testimonial_text: string
+          title: string | null
+          tour_id: string
+          updated_at: string
+        }
+        Insert: {
+          approved?: boolean | null
+          created_at?: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          name: string
+          rating?: number | null
+          testimonial_text: string
+          title?: string | null
+          tour_id: string
+          updated_at?: string
+        }
+        Update: {
+          approved?: boolean | null
+          created_at?: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          rating?: number | null
+          testimonial_text?: string
+          title?: string | null
+          tour_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tour_testimonials_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tours: {
+        Row: {
+          active: boolean | null
+          category_id: string
+          created_at: string
+          destination: string
+          difficulty_level: string | null
+          duration: string
+          exclusions: string[] | null
+          featured: boolean | null
+          hero_image_url: string | null
+          highlights: string[] | null
+          id: string
+          image_gallery: string[] | null
+          inclusions: string[] | null
+          max_participants: number
+          overview: string | null
+          price_from: number
+          slug: string
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean | null
+          category_id: string
+          created_at?: string
+          destination: string
+          difficulty_level?: string | null
+          duration: string
+          exclusions?: string[] | null
+          featured?: boolean | null
+          hero_image_url?: string | null
+          highlights?: string[] | null
+          id?: string
+          image_gallery?: string[] | null
+          inclusions?: string[] | null
+          max_participants?: number
+          overview?: string | null
+          price_from: number
+          slug: string
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean | null
+          category_id?: string
+          created_at?: string
+          destination?: string
+          difficulty_level?: string | null
+          duration?: string
+          exclusions?: string[] | null
+          featured?: boolean | null
+          hero_image_url?: string | null
+          highlights?: string[] | null
+          id?: string
+          image_gallery?: string[] | null
+          inclusions?: string[] | null
+          max_participants?: number
+          overview?: string | null
+          price_from?: number
+          slug?: string
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tours_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "tour_categories"
             referencedColumns: ["id"]
           },
         ]
