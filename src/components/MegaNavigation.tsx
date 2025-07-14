@@ -129,6 +129,11 @@ const MegaNavigation = () => {
       }]
     }
   }, {
+    name: "Data Products",
+    path: "/data-products",
+    icon: Activity,
+    hasDropdown: false
+  }, {
     name: "Platforms",
     path: "/platforms",
     icon: Activity,
