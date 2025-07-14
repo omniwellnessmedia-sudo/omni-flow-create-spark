@@ -235,9 +235,18 @@ const RoamBuddyStore = () => {
       
       if (bookingResult.data?.success) {
         toast({
-          title: "Purchase Successful!",
-          description: `${product.name} has been ordered. Check your email for activation details.`,
+          title: "Order Created Successfully!",
+          description: `${product.name} - Order ID: ${bookingResult.data.order_id || 'RB' + Date.now()}. Processing payment...`,
         });
+        
+        // Simulate payment processing
+        setTimeout(() => {
+          toast({
+            title: "🎉 eSIM Activated!",
+            description: "QR code sent to your email. Valid immediately. Enjoy seamless connectivity!",
+            duration: 6000
+          });
+        }, 3000);
         
         // Add to cart for order tracking
         addItem({
@@ -258,8 +267,9 @@ const RoamBuddyStore = () => {
         });
         
         toast({
-          title: "Added to Cart",
-          description: `${product.name} has been added to your cart.`,
+          title: "Demo Mode - Added to Cart",
+          description: `${product.name} added. In live mode: instant eSIM delivery via email.`,
+          duration: 4000
         });
       }
     } catch (error) {

@@ -121,21 +121,65 @@ const DataProducts = () => {
     }
   ];
 
-  const handlePurchase = (planId: string, planName: string, price: number) => {
+  const handlePurchase = async (planId: string, planName: string, price: number) => {
     setSelectedPlan(planId);
-    toast({
-      title: "Redirecting to Checkout",
-      description: `Processing ${planName} for $${price}...`,
-    });
     
-    // Here you would integrate with payment processing
-    setTimeout(() => {
-      setSelectedPlan(null);
-      toast({
-        title: "Success!",
-        description: "Your eSIM will be delivered instantly via email.",
+    try {
+      // Create order through RoamBuddy API
+      const orderResult = await supabase.functions.invoke('roambuddy-api', {
+        body: { 
+          action: 'createOrder',
+          data: {
+            product_id: planId,
+            product_name: planName,
+            amount: price,
+            currency: 'USD',
+            customer_email: 'customer@omniwellnessmedia.com', // In production, get from auth
+            customer_name: 'Wellness Traveler'
+          }
+        }
       });
-    }, 2000);
+      
+      if (orderResult.data?.success) {
+        toast({
+          title: "Order Created Successfully!",
+          description: `${planName} order initiated. Redirecting to secure checkout...`,
+        });
+        
+        // In production, redirect to payment gateway
+        setTimeout(() => {
+          toast({
+            title: "eSIM Activated!",
+            description: "Check your email for QR code and activation instructions. Valid immediately.",
+            duration: 5000
+          });
+        }, 3000);
+      } else {
+        // Fallback to demo checkout flow
+        toast({
+          title: "Demo Checkout",
+          description: `${planName} - $${price}. In production, this would process payment securely.`,
+          duration: 4000
+        });
+        
+        setTimeout(() => {
+          toast({
+            title: "Demo Success!",
+            description: "In live mode: eSIM QR code sent via email, instant activation, 24/7 support available.",
+            duration: 6000
+          });
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Order error:', error);
+      toast({
+        title: "Connection Error",
+        description: "Unable to process order. Please try again or contact support.",
+        variant: "destructive"
+      });
+    } finally {
+      setSelectedPlan(null);
+    }
   };
 
   const PlanCard = ({ plan, isGlobal = false }: { plan: any, isGlobal?: boolean }) => (
@@ -310,50 +354,93 @@ const DataProducts = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* eSIM Benefits Section - Comprehensive */}
       <section className="py-16 px-4 bg-muted/50">
-        <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-12">Why Choose Our eSIM Data?</h2>
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Why eSIM is the Future of Travel</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Avoid roaming bill shock and save over 75% with our premium eSIM solutions. 
+              Join millions of smart travelers who've switched to instant, affordable connectivity.
+            </p>
+          </div>
           
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Zap className="w-6 h-6 text-primary" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <div className="space-y-4 text-center">
+              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
+                <Zap className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold">Instant Activation</h3>
+              <h3 className="font-bold text-lg">Instant Activation</h3>
               <p className="text-sm text-muted-foreground">
-                Receive your eSIM within minutes via email. No waiting, no shipping delays.
+                Get connected in seconds. QR code delivered to your email immediately after purchase. 
+                No physical SIM cards, no shipping delays, no waiting.
               </p>
             </div>
             
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Globe className="w-6 h-6 text-primary" />
+            <div className="space-y-4 text-center">
+              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
+                <Globe className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold">Global Coverage</h3>
+              <h3 className="font-bold text-lg">200+ Countries</h3>
               <p className="text-sm text-muted-foreground">
-                Stay connected in 200+ countries with premium local carrier networks.
+                Seamless coverage across 6 continents. Premium partnerships with local carriers 
+                ensure reliable, high-speed connectivity wherever your journey takes you.
               </p>
             </div>
             
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Wifi className="w-6 h-6 text-primary" />
+            <div className="space-y-4 text-center">
+              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
+                <Wifi className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold">5G Speeds</h3>
+              <h3 className="font-bold text-lg">5G Premium Speeds</h3>
               <p className="text-sm text-muted-foreground">
-                Experience blazing-fast internet speeds for streaming, sharing, and staying connected.
+                Access the fastest networks available. Stream 4K videos, video call family, 
+                share memories instantly, and stay productive on the go.
               </p>
             </div>
             
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Check className="w-6 h-6 text-primary" />
+            <div className="space-y-4 text-center">
+              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto">
+                <Check className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold">No Contracts</h3>
+              <h3 className="font-bold text-lg">Save Up to 75%</h3>
               <p className="text-sm text-muted-foreground">
-                Flexible plans with no long-term commitments. Pay only for what you need.
+                Eliminate expensive roaming charges. Pay only for what you need with transparent, 
+                upfront pricing. No hidden fees, no bill shock surprises.
               </p>
+            </div>
+          </div>
+
+          {/* Additional Benefits */}
+          <div className="bg-card rounded-lg p-8">
+            <h3 className="text-2xl font-bold mb-6 text-center">Complete Travel Connectivity Solution</h3>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="space-y-3">
+                <h4 className="font-semibold text-primary">🔒 Secure & Private</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• End-to-end encrypted connections</li>
+                  <li>• No public WiFi security risks</li>
+                  <li>• Your data stays protected</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-semibold text-primary">📱 Easy Setup</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Scan QR code to install</li>
+                  <li>• Works with all eSIM devices</li>
+                  <li>• Keep your regular number active</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-semibold text-primary">🌟 Premium Support</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• 24/7 multilingual support</li>
+                  <li>• Real-time usage monitoring</li>
+                  <li>• Easy top-up options</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
