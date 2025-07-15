@@ -152,91 +152,53 @@ const DataProducts = () => {
     setSelectedPlan(planId);
     
     try {
-      // Step 1: Create order through RoamBuddy API
-      const orderResult = await supabase.functions.invoke('roambuddy-api', {
-        body: { 
-          action: 'createOrder',
-          data: {
-            product_id: planId,
-            product_name: planName,
-            amount: price,
+      // Find the plan details
+      const allPlans = [...esimPlans, ...globalPlans];
+      const plan = allPlans.find(p => p.id === planId);
+      
+      if (!plan) {
+        throw new Error('Plan not found');
+      }
+
+      // Create Stripe payment session
+      const paymentResult = await supabase.functions.invoke('create-payment', {
+        body: {
+          productData: {
+            id: planId,
+            name: planName,
+            price: price,
             currency: 'USD',
-            customer_email: 'customer@omniwellnessmedia.com', // In production, get from auth
-            customer_name: 'Wellness Traveler',
-            destination: 'South Africa'
-          }
+            category: 'esim',
+            data_amount: plan.data,
+            validity_days: parseInt(plan.duration.split(' ')[0]),
+            coverage: plan.flag === '🇿🇦' ? ['South Africa'] : plan.flag === '🌍' ? ['Africa Multi-Country'] : ['Global'],
+            destination: plan.flag === '🇿🇦' ? 'South Africa' : plan.flag === '🌍' ? 'Africa' : 'Global'
+          },
+          customerData: {
+            email: 'customer@omniwellnessmedia.com', // In production, get from auth
+            name: 'Wellness Traveler'
+          },
+          successUrl: `${window.location.origin}/payment-success`,
+          cancelUrl: `${window.location.origin}/data-products`
         }
       });
       
-      console.log('Order creation result:', orderResult);
-      
-      if (orderResult.data?.success) {
-        const orderData = orderResult.data;
-        
-        if (orderData.demo_mode) {
-          // Demo mode flow
-          toast({
-            title: "🎯 Demo Order Created",
-            description: `${planName} - Order ID: ${orderData.order_id}. Simulating instant eSIM delivery...`,
-          });
-          
-          // Simulate the full flow
-          setTimeout(() => {
-            toast({
-              title: "💳 Demo Payment Processing",
-              description: "Simulating secure payment gateway integration...",
-            });
-          }, 1500);
-          
-          setTimeout(() => {
-            toast({
-              title: "🎉 eSIM Delivered!",
-              description: "✅ QR Code: IMG_QR_DEMO_12345\n✅ Activation: 24hrs\n✅ Support: Available 24/7",
-              duration: 8000
-            });
-          }, 3500);
-        } else {
-          // Real order flow
-          toast({
-            title: "Order Created Successfully!",
-            description: `${planName} - Order ID: ${orderData.order_id}. Redirecting to secure payment...`,
-          });
-          
-          if (orderData.payment_url) {
-            // In production, redirect to payment gateway
-            window.open(orderData.payment_url, '_blank');
-          }
-          
-          // Simulate completion for demo
-          setTimeout(() => {
-            toast({
-              title: "🎉 eSIM Activated!",
-              description: "QR code sent to your email. Valid immediately with 24/7 support.",
-              duration: 6000
-            });
-          }, 3000);
-        }
-      } else {
-        // Fallback to enhanced demo
+      if (paymentResult.data?.url) {
         toast({
-          title: "Demo Mode Active",
-          description: `${planName} ($${price}) - Simulating full RoamBuddy checkout experience...`,
-          duration: 4000
+          title: "🔒 Secure Checkout",
+          description: `Redirecting to secure payment for ${planName}...`,
         });
         
-        setTimeout(() => {
-          toast({
-            title: "Demo Complete!",
-            description: "✅ Order Processing\n✅ eSIM QR Code Generation\n✅ Email Delivery\n✅ 24/7 Support Activation",
-            duration: 8000
-          });
-        }, 2000);
+        // Open Stripe checkout in a new tab
+        window.open(paymentResult.data.url, '_blank');
+      } else {
+        throw new Error('Failed to create payment session');
       }
     } catch (error) {
-      console.error('Order error:', error);
+      console.error('Purchase error:', error);
       toast({
-        title: "Connection Error",
-        description: "Unable to process order. Please try again or contact support.",
+        title: "Purchase Error", 
+        description: "Failed to create payment session. Please try again.",
         variant: "destructive"
       });
     } finally {

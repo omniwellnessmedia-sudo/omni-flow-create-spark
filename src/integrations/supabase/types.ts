@@ -423,6 +423,84 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          amount: number
+          coverage: string[] | null
+          created_at: string
+          currency: string
+          customer_email: string
+          customer_name: string
+          data_amount: string | null
+          destination: string | null
+          esim_activation_code: string | null
+          esim_qr_code: string | null
+          id: string
+          notes: string | null
+          order_number: string
+          product_id: string
+          product_name: string
+          product_type: string
+          roambuddy_order_id: string | null
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          updated_at: string
+          user_id: string | null
+          validity_days: number | null
+        }
+        Insert: {
+          amount: number
+          coverage?: string[] | null
+          created_at?: string
+          currency?: string
+          customer_email: string
+          customer_name: string
+          data_amount?: string | null
+          destination?: string | null
+          esim_activation_code?: string | null
+          esim_qr_code?: string | null
+          id?: string
+          notes?: string | null
+          order_number: string
+          product_id: string
+          product_name: string
+          product_type?: string
+          roambuddy_order_id?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          validity_days?: number | null
+        }
+        Update: {
+          amount?: number
+          coverage?: string[] | null
+          created_at?: string
+          currency?: string
+          customer_email?: string
+          customer_name?: string
+          data_amount?: string | null
+          destination?: string | null
+          esim_activation_code?: string | null
+          esim_qr_code?: string | null
+          id?: string
+          notes?: string | null
+          order_number?: string
+          product_id?: string
+          product_name?: string
+          product_type?: string
+          roambuddy_order_id?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          validity_days?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1415,6 +1493,10 @@ export type Database = {
       ensure_provider_profile: {
         Args: { user_id: string }
         Returns: undefined
+      }
+      generate_order_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
     }
     Enums: {

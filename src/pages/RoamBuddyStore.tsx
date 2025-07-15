@@ -232,37 +232,39 @@ const RoamBuddyStore = () => {
     try {
       setPurchaseLoading(product.id);
       
-      // Try to create booking through RoamBuddy API
-      const bookingResult = await supabase.functions.invoke('roambuddy-api', {
-        body: { 
-          action: 'createBooking',
-          data: {
-            product_id: product.id,
-            product_name: product.name,
+      // Create Stripe payment session
+      const paymentResult = await supabase.functions.invoke('create-payment', {
+        body: {
+          productData: {
+            id: product.id,
+            name: product.name,
             price: product.price,
             currency: product.currency,
-            customer_email: 'customer@example.com', // In real app, get from user
-            customer_name: 'Customer Name' // In real app, get from user
-          }
+            category: product.category,
+            data_amount: product.data_amount,
+            validity_days: product.validity_days,
+            coverage: product.coverage,
+            destination: product.coverage?.[0] || 'Global'
+          },
+          customerData: {
+            email: 'customer@omniwellnessmedia.com', // In production, get from auth
+            name: 'Wellness Traveler'
+          },
+          successUrl: `${window.location.origin}/payment-success`,
+          cancelUrl: `${window.location.origin}/roambuddy-store`
         }
       });
       
-      if (bookingResult.data?.success) {
+      if (paymentResult.data?.url) {
         toast({
-          title: "Order Created Successfully!",
-          description: `${product.name} - Order ID: ${bookingResult.data.order_id || 'RB' + Date.now()}. Processing payment...`,
+          title: "🔒 Secure Checkout",
+          description: `Redirecting to secure payment for ${product.name}...`,
         });
         
-        // Simulate payment processing
-        setTimeout(() => {
-          toast({
-            title: "🎉 eSIM Activated!",
-            description: "QR code sent to your email. Valid immediately. Enjoy seamless connectivity!",
-            duration: 6000
-          });
-        }, 3000);
+        // Open Stripe checkout in a new tab
+        window.open(paymentResult.data.url, '_blank');
         
-        // Add to cart for order tracking
+        // Add to cart for tracking
         addItem({
           id: product.id,
           title: product.name,
@@ -271,26 +273,13 @@ const RoamBuddyStore = () => {
           category: 'roambuddy'
         });
       } else {
-        // Fallback to local cart system
-        addItem({
-          id: product.id,
-          title: product.name,
-          price_zar: product.price,
-          image: '/lovable-uploads/esim-product-image.png',
-          category: 'roambuddy'
-        });
-        
-        toast({
-          title: "Demo Mode - Added to Cart",
-          description: `${product.name} added. In live mode: instant eSIM delivery via email.`,
-          duration: 4000
-        });
+        throw new Error('Failed to create payment session');
       }
     } catch (error) {
       console.error('Purchase error:', error);
       toast({
         title: "Purchase Error",
-        description: "Something went wrong. Please try again.",
+        description: "Failed to create payment session. Please try again.",
         variant: "destructive"
       });
     } finally {
