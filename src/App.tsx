@@ -59,6 +59,7 @@ import WellnessRoamingPackages from "./pages/WellnessRoamingPackages";
 import TechnicalOverview from "./pages/TechnicalOverview";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancelled from "./pages/PaymentCancelled";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -130,10 +131,10 @@ const App = () => (
             <Route path="/roambuddy-store" element={<RoamBuddyStore />} />
             <Route path="/device-compatibility" element={<DeviceCompatibility />} />
             <Route path="/technical-overview" element={<TechnicalOverview />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/payment-cancelled" element={<PaymentCancelled />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-cancelled" element={<PaymentCancelled />} />
+          <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

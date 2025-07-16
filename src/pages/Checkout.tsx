@@ -12,12 +12,13 @@ import { useState } from "react";
 import { ArrowLeft, CreditCard, Coins } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Checkout = () => {
   const { state, clearCart } = useCart();
   const { toast } = useToast();
   
-  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [paymentMethod, setPaymentMethod] = useState("paypal");
   const [billingInfo, setBillingInfo] = useState({
     firstName: "",
     lastName: "",
@@ -33,15 +34,46 @@ const Checkout = () => {
     setBillingInfo(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmitOrder = () => {
-    // Simulate order processing
-    toast({
-      title: "Order Placed Successfully!",
-      description: "Thank you for your purchase. You'll receive a confirmation email shortly.",
-    });
-    
-    clearCart();
-    // In a real app, you would redirect to a success page or process payment
+  const handleSubmitOrder = async () => {
+    if (paymentMethod === "paypal") {
+      try {
+        // Create PayPal order
+        const { data } = await supabase.functions.invoke('paypal-payment', {
+          body: {
+            action: 'create_order',
+            amount: state.total * 1.15, // Include tax
+            customerName: `${billingInfo.firstName} ${billingInfo.lastName}`,
+            customerEmail: billingInfo.email,
+            productId: 'cart-items',
+            productName: `Cart Items (${state.items.length} items)`,
+            productType: 'mixed',
+            returnUrl: `${window.location.origin}/payment-success`
+          }
+        });
+
+        if (data.success && data.approveUrl) {
+          // Redirect to PayPal for payment approval
+          window.location.href = data.approveUrl;
+        } else {
+          throw new Error('Failed to create PayPal order');
+        }
+      } catch (error) {
+        console.error('PayPal payment error:', error);
+        toast({
+          title: "Payment Error",
+          description: "Failed to process PayPal payment. Please try again.",
+          variant: "destructive"
+        });
+      }
+    } else {
+      // Handle WellCoins or other payment methods
+      toast({
+        title: "Order Placed Successfully!",
+        description: "Thank you for your purchase. You'll receive a confirmation email shortly.",
+      });
+      
+      clearCart();
+    }
   };
 
   if (state.items.length === 0) {
@@ -189,10 +221,10 @@ const Checkout = () => {
                 <CardContent>
                   <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="card" id="card" />
-                      <Label htmlFor="card" className="flex items-center cursor-pointer">
+                      <RadioGroupItem value="paypal" id="paypal" />
+                      <Label htmlFor="paypal" className="flex items-center cursor-pointer">
                         <CreditCard className="w-4 h-4 mr-2" />
-                        Credit/Debit Card
+                        PayPal
                       </Label>
                     </div>
                     {state.wellcoinTotal > 0 && (
@@ -206,10 +238,10 @@ const Checkout = () => {
                     )}
                   </RadioGroup>
                   
-                  {paymentMethod === "card" && (
-                    <div className="mt-4 p-4 border rounded-lg bg-gray-50">
-                      <p className="text-sm text-gray-600">
-                        You will be redirected to a secure payment processor to complete your transaction.
+                  {paymentMethod === "paypal" && (
+                    <div className="mt-4 p-4 border rounded-lg bg-blue-50">
+                      <p className="text-sm text-blue-700">
+                        You will be redirected to PayPal to complete your secure payment.
                       </p>
                     </div>
                   )}
