@@ -362,9 +362,13 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
         <div className="flex flex-col md:flex-row">
           <div className="md:w-80 h-48 md:h-auto relative overflow-hidden">
             <img 
-              src={tour.hero_image_url} 
+              src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
               alt={tour.title}
               className="w-full h-full object-cover"
+              loading="lazy"
+              onError={(e) => {
+                e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+              }}
             />
             <div className="absolute top-4 left-4">
               <Badge variant="secondary">{tour.difficulty_level}</Badge>
@@ -437,9 +441,13 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
     <Card className="group hover:shadow-xl transition-all duration-300">
       <div className="relative overflow-hidden rounded-t-lg h-64">
         <img 
-          src={tour.hero_image_url} 
+          src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
           alt={tour.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+          }}
         />
         <div className="absolute top-4 left-4">
           <Badge variant="secondary">{tour.difficulty_level}</Badge>

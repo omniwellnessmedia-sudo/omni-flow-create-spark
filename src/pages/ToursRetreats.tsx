@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PriceDisplay } from '@/components/ui/price-display';
+import { ImagePreloader } from '@/components/ui/image-preloader';
 import { supabase } from '@/integrations/supabase/client';
 
 interface TourCategory {
@@ -79,6 +80,13 @@ const ToursRetreats = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Preload critical images */}
+      <ImagePreloader images={[
+        '/lovable-uploads/wellness-humans.png',
+        ...featuredTours.map(tour => tour.hero_image_url).filter(Boolean),
+        ...categories.map(cat => cat.image_url).filter(Boolean)
+      ]} />
+      
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
         <div className="container mx-auto px-4 text-center">
@@ -204,9 +212,13 @@ const TourCategoryCard = ({ category }: { category: TourCategory }) => (
   <Card className="group hover:shadow-lg transition-all duration-300 border-border">
     <div className="relative overflow-hidden rounded-t-lg h-48">
       <img 
-        src={category.image_url || '/placeholder-category.jpg'} 
+        src={category.image_url || '/lovable-uploads/wellness-humans.png'} 
         alt={category.name}
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+        onError={(e) => {
+          e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+        }}
       />
       <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
     </div>
@@ -249,9 +261,13 @@ const FeaturedTourCard = ({ tour }: { tour: Tour }) => (
   <Card className="group hover:shadow-xl transition-all duration-300 border-border">
     <div className="relative overflow-hidden rounded-t-lg h-64">
       <img 
-        src={tour.hero_image_url || '/placeholder-tour.jpg'} 
+        src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
         alt={tour.title}
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        loading="lazy"
+        onError={(e) => {
+          e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+        }}
       />
       <div className="absolute top-4 left-4">
         <Badge variant="secondary" className="bg-background/90">
@@ -316,9 +332,12 @@ const PlaceholderTourCard = ({ title, duration, priceFrom, destination, category
         </Badge>
       </div>
       <div className="absolute top-4 right-4">
-        <div className="bg-primary/90 text-white px-2 py-1 rounded text-xs font-semibold">
-          From ${Math.round(priceFrom / 18.5)} <span className="text-xs opacity-75">(R{priceFrom})</span>
-        </div>
+        <PriceDisplay 
+          price={priceFrom} 
+          primaryCurrency="USD"
+          showBothCurrencies={false}
+          className="bg-primary/90 text-white px-2 py-1 rounded text-xs font-semibold"
+        />
       </div>
     </div>
     <CardContent className="p-6">

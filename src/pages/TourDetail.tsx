@@ -169,9 +169,13 @@ const TourDetail = () => {
       {/* Immersive Hero Section - National Geographic Style */}
       <section className="relative h-screen bg-cover bg-center overflow-hidden">
         <img 
-          src={images[selectedImage] || '/placeholder-tour.jpg'} 
+          src={images[selectedImage] || '/lovable-uploads/wellness-humans.png'} 
           alt={tour.title}
           className="w-full h-full object-cover scale-105 transition-transform duration-[20s] ease-out"
+          loading="eager"
+          onError={(e) => {
+            e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         
