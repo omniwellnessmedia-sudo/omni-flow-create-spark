@@ -82,7 +82,11 @@ const ToursRetreats = () => {
     <div className="min-h-screen bg-background">
       {/* Preload critical images */}
       <ImagePreloader images={[
+        '/lovable-uploads/omni-wellness-hero.jpg',
         '/lovable-uploads/wellness-humans.png',
+        '/lovable-uploads/conscious-connections-hero.jpg',
+        '/lovable-uploads/fact-wellness-hero.jpg',
+        '/lovable-uploads/service-learning-hero.jpg',
         ...featuredTours.map(tour => tour.hero_image_url).filter(Boolean),
         ...categories.map(cat => cat.image_url).filter(Boolean)
       ]} />
@@ -212,12 +216,12 @@ const TourCategoryCard = ({ category }: { category: TourCategory }) => (
   <Card className="group hover:shadow-lg transition-all duration-300 border-border">
     <div className="relative overflow-hidden rounded-t-lg h-48">
       <img 
-        src={category.image_url || '/lovable-uploads/wellness-humans.png'} 
+        src={category.image_url || '/lovable-uploads/omni-wellness-hero.jpg'} 
         alt={category.name}
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        loading="lazy"
+        loading="eager"
         onError={(e) => {
-          e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+          e.currentTarget.src = '/lovable-uploads/omni-wellness-hero.jpg';
         }}
       />
       <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
@@ -261,12 +265,12 @@ const FeaturedTourCard = ({ tour }: { tour: Tour }) => (
   <Card className="group hover:shadow-xl transition-all duration-300 border-border">
     <div className="relative overflow-hidden rounded-t-lg h-64">
       <img 
-        src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
+        src={tour.hero_image_url || '/lovable-uploads/conscious-connections-hero.jpg'} 
         alt={tour.title}
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        loading="lazy"
+        loading="eager"
         onError={(e) => {
-          e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+          e.currentTarget.src = '/lovable-uploads/conscious-connections-hero.jpg';
         }}
       />
       <div className="absolute top-4 left-4">
