@@ -308,13 +308,10 @@ const RoamBuddyStore = () => {
         </CardDescription>
         
         <div className="flex items-center justify-center space-x-2 mt-4">
-          <PriceDisplay 
-            amount={product.price} 
-            currency={product.currency}
-            size="lg"
-            showOriginal={true}
-            className="text-3xl"
-          />
+          <div className="text-3xl font-bold text-center">
+            ${product.price}
+            <span className="text-sm text-muted-foreground">/{product.currency}</span>
+          </div>
         </div>
         
         {product.data_amount && product.validity_days && (

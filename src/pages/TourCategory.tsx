@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PriceDisplay } from '@/components/ui/price-display';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Tour {
@@ -381,9 +382,11 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
             <div className="flex justify-between items-start mb-3">
               <h3 className="text-xl font-semibold text-foreground">{tour.title}</h3>
               <div className="text-right">
-                <div className="text-2xl font-bold text-primary">
-                  ${tour.price_from.toLocaleString()}
-                </div>
+                <PriceDisplay 
+                  price={tour.price_from} 
+                  primaryCurrency="USD"
+                  size="lg"
+                />
                 <div className="text-sm text-muted-foreground">per person</div>
               </div>
             </div>
@@ -442,9 +445,9 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
           <Badge variant="secondary">{tour.difficulty_level}</Badge>
         </div>
         <div className="absolute top-4 right-4">
-          <Badge className="bg-primary text-primary-foreground">
-            From ${tour.price_from.toLocaleString()}
-          </Badge>
+          <div className="bg-primary/90 text-white px-2 py-1 rounded text-xs font-semibold">
+            From ${Math.round(tour.price_from / 18.5)} <span className="text-xs opacity-75">(R{tour.price_from})</span>
+          </div>
         </div>
         <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm">

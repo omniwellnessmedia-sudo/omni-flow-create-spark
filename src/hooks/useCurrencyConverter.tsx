@@ -9,7 +9,10 @@ interface ExchangeRates {
 
 interface CurrencyHook {
   convertToZAR: (amount: number, fromCurrency: string) => number;
+  convertZARToUSD: (zarAmount: number) => number;
   formatZAR: (amount: number) => string;
+  formatUSD: (amount: number) => string;
+  formatCurrency: (amount: number, currency: string) => string;
   exchangeRates: ExchangeRates | null;
   isLoading: boolean;
   lastUpdated: Date | null;
@@ -139,9 +142,31 @@ export const useCurrencyConverter = (): CurrencyHook => {
     }).format(amount).replace('ZAR', 'R');
   };
 
+  const convertZARToUSD = (zarAmount: number): number => {
+    if (!exchangeRates || !zarAmount) return 0;
+    return zarAmount / exchangeRates.USD;
+  };
+
+  const formatUSD = (amount: number): string => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    }).format(amount);
+  };
+
+  const formatCurrency = (amount: number, currency: string): string => {
+    if (currency === 'USD') return formatUSD(amount);
+    return formatZAR(amount);
+  };
+
   return {
     convertToZAR,
+    convertZARToUSD,
     formatZAR,
+    formatUSD,
+    formatCurrency,
     exchangeRates,
     isLoading,
     lastUpdated

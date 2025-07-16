@@ -8,6 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useCurrencyConverter } from '@/hooks/useCurrencyConverter';
+import { PriceDisplay } from '@/components/ui/price-display';
 
 interface Tour {
   id: string;
@@ -41,6 +43,7 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
   const [loading, setLoading] = useState(false);
   const [servicesLoading, setServicesLoading] = useState(false);
   const { toast } = useToast();
+  const { formatUSD, formatZAR, convertZARToUSD } = useCurrencyConverter();
 
   useEffect(() => {
     fetchRoamBuddyServices();
@@ -178,9 +181,13 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
     <Card className="sticky top-6 shadow-lg">
       <CardHeader>
         <CardTitle className="text-2xl">Book Your Journey</CardTitle>
-        <div className="text-3xl font-bold text-primary">
-          ${tour.price_from}
-          <span className="text-lg font-normal text-muted-foreground">per person</span>
+        <div className="space-y-1">
+          <PriceDisplay 
+            price={tour.price_from} 
+            size="lg" 
+            primaryCurrency="USD"
+          />
+          <span className="text-sm text-muted-foreground">per person</span>
         </div>
       </CardHeader>
 
@@ -290,7 +297,7 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
                       {service.name}
                     </label>
                     <p className="text-xs text-muted-foreground">{service.description}</p>
-                    <p className="text-sm font-semibold text-primary">${service.price}</p>
+                    <p className="text-sm font-semibold text-primary">{formatUSD(service.price)}</p>
                   </div>
                 </div>
               ))}
@@ -312,22 +319,33 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
 
         {/* Price Summary */}
         <div className="border-t pt-4 space-y-2">
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between items-center text-sm">
             <span>Base price ({participants} {participants === 1 ? 'person' : 'people'})</span>
-            <span>${(tour.price_from * participants).toLocaleString()}</span>
+            <PriceDisplay 
+              price={tour.price_from * participants} 
+              size="sm" 
+              primaryCurrency="USD"
+              showBothCurrencies={false}
+            />
           </div>
           {selectedServices.length > 0 && (
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between items-center text-sm">
               <span>Additional services</span>
-              <span>${selectedServices.reduce((total, serviceId) => {
-                const service = roamBuddyServices.find(s => s.id === serviceId);
-                return total + (service?.price || 0);
-              }, 0)}</span>
+              <span className="font-medium">
+                {formatUSD(selectedServices.reduce((total, serviceId) => {
+                  const service = roamBuddyServices.find(s => s.id === serviceId);
+                  return total + (service?.price || 0);
+                }, 0))}
+              </span>
             </div>
           )}
-          <div className="flex justify-between font-semibold text-lg border-t pt-2">
+          <div className="flex justify-between items-center font-semibold text-lg border-t pt-2">
             <span>Total</span>
-            <span className="text-primary">${calculateTotal().toLocaleString()}</span>
+            <PriceDisplay 
+              price={calculateTotal()} 
+              size="lg" 
+              primaryCurrency="USD"
+            />
           </div>
         </div>
 

@@ -10,6 +10,7 @@ import { supabase } from '@/integrations/supabase/client';
 import TourBookingSidebar from '@/components/tours/TourBookingSidebar';
 import MegaNavigation from '@/components/MegaNavigation';
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
+import { PriceDisplay } from '@/components/ui/price-display';
 import { Link } from 'react-router-dom';
 
 interface Tour {
@@ -258,8 +259,9 @@ const TourDetail = () => {
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 text-center">
                   <span className="text-2xl font-bold text-white">$</span>
-                  <div className="text-white font-semibold">{tour.price_from}</div>
-                  <div className="text-white/70 text-sm">From</div>
+                  <div className="text-white font-semibold">{Math.round(tour.price_from / 18.5)}</div>
+                  <div className="text-white/70 text-sm">From USD</div>
+                  <div className="text-white/50 text-xs">R{tour.price_from}</div>
                 </div>
               </div>
 

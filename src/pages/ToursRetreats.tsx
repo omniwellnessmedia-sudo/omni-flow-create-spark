@@ -4,6 +4,7 @@ import { Calendar, Users, MapPin, Star, Clock, ArrowRight, Download } from 'luci
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { PriceDisplay } from '@/components/ui/price-display';
 import { supabase } from '@/integrations/supabase/client';
 
 interface TourCategory {
@@ -258,9 +259,12 @@ const FeaturedTourCard = ({ tour }: { tour: Tour }) => (
         </Badge>
       </div>
       <div className="absolute top-4 right-4">
-        <Badge className="bg-primary text-primary-foreground">
-          From ${tour.price_from}
-        </Badge>
+        <PriceDisplay 
+          price={tour.price_from} 
+          primaryCurrency="USD"
+          showBothCurrencies={false}
+          className="bg-primary/90 text-white px-2 py-1 rounded text-xs font-semibold"
+        />
       </div>
     </div>
     <CardContent className="p-6">
@@ -312,9 +316,9 @@ const PlaceholderTourCard = ({ title, duration, priceFrom, destination, category
         </Badge>
       </div>
       <div className="absolute top-4 right-4">
-        <Badge className="bg-primary text-primary-foreground">
-          From ${priceFrom}
-        </Badge>
+        <div className="bg-primary/90 text-white px-2 py-1 rounded text-xs font-semibold">
+          From ${Math.round(priceFrom / 18.5)} <span className="text-xs opacity-75">(R{priceFrom})</span>
+        </div>
       </div>
     </div>
     <CardContent className="p-6">

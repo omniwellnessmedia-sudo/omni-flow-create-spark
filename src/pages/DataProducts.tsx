@@ -246,28 +246,17 @@ const DataProducts = () => {
         </CardDescription>
         
         <div className="flex items-baseline justify-center space-x-2 mt-6">
-          <PriceDisplay 
-            amount={plan.price} 
-            currency="USD"
-            size="lg"
-            showOriginal={true}
-            className="text-4xl font-bold"
-          />
+          <div className="text-4xl font-bold text-center">
+            ${plan.price.toLocaleString()}
+            <span className="text-lg text-muted-foreground">/month</span>
+          </div>
           {plan.originalPrice && (
             <div className="space-y-1">
               <span className="text-lg text-muted-foreground line-through">
-                <PriceDisplay 
-                  amount={plan.originalPrice} 
-                  currency="USD"
-                  className="text-lg line-through"
-                />
+                ${plan.originalPrice.toLocaleString()}
               </span>
               <div className="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-medium">
-                Save <PriceDisplay 
-                  amount={plan.originalPrice - plan.price} 
-                  currency="USD"
-                  className="text-xs font-medium"
-                />
+                Save ${(plan.originalPrice - plan.price).toLocaleString()}
               </div>
             </div>
           )}
