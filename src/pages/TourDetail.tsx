@@ -67,8 +67,10 @@ const TourDetail = () => {
 
   const fetchTourData = async () => {
     try {
+      console.log('Fetching tour with slug:', slug, 'in category:', category);
+      
       // Fetch tour details
-      const { data: tourData } = await supabase
+      const { data: tourData, error: tourError } = await supabase
         .from('tours')
         .select(`
           *,
@@ -76,7 +78,13 @@ const TourDetail = () => {
         `)
         .eq('slug', slug)
         .eq('active', true)
-        .single();
+        .maybeSingle();
+
+      if (tourError) {
+        console.error('Error fetching tour:', tourError);
+        setLoading(false);
+        return;
+      }
 
       if (tourData) {
         setTour(tourData);
@@ -98,6 +106,22 @@ const TourDetail = () => {
 
         setItinerary(itineraryData || []);
         setTestimonials(testimonialsData || []);
+      } else {
+        console.log('No tour found with slug:', slug);
+        // If no tour found, maybe the user is trying to access a category
+        // Let's check if this slug is actually a category
+        const { data: categoryData } = await supabase
+          .from('tour_categories')
+          .select('slug')
+          .eq('slug', slug)
+          .eq('active', true)
+          .maybeSingle();
+          
+        if (categoryData) {
+          // Redirect to category page
+          window.location.href = `/tours-retreats/${slug}`;
+          return;
+        }
       }
     } catch (error) {
       console.error('Error fetching tour data:', error);
