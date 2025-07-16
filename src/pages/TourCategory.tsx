@@ -79,29 +79,43 @@ const TourCategory = () => {
             id: '1',
             name: 'Indigenous Wisdom & Healing',
             slug: 'indigenous-wisdom',
-            description: 'Connect with ancient healing traditions and sacred practices that have been passed down through generations.',
-            image_url: '/placeholder-indigenous.jpg'
+            description: 'Connect with ancient healing traditions and indigenous knowledge systems',
+            image_url: '/src/assets/conscious-connections-hero.jpg'
           },
-          'wellness-programs': {
+          'wellness-retreats': {
             id: '2',
-            name: 'Wellness & Mindfulness',
-            slug: 'wellness-programs',
-            description: 'Holistic wellness experiences combining ancient wisdom with modern practices for complete well-being.',
-            image_url: '/placeholder-wellness.jpg'
+            name: 'Wellness Retreats',
+            slug: 'wellness-retreats',
+            description: 'Transformative wellness journeys combining modern and traditional healing',
+            image_url: '/src/assets/fact-wellness-hero.jpg'
           },
-          'educational': {
+          'conscious-living': {
             id: '3',
-            name: 'Educational Programs',
-            slug: 'educational',
-            description: 'Study abroad and learning journeys designed for personal and academic growth.',
-            image_url: '/placeholder-education.jpg'
+            name: 'Conscious Living',
+            slug: 'conscious-living',
+            description: 'Immersive experiences in sustainable and mindful living practices',
+            image_url: '/src/assets/wellness-humans.png'
           },
-          'custom': {
+          'study-abroad': {
             id: '4',
-            name: 'Custom Retreats',
-            slug: 'custom',
-            description: 'Tailored retreat experiences designed specifically for your unique needs and goals.',
-            image_url: '/placeholder-custom.jpg'
+            name: 'Study Abroad',
+            slug: 'study-abroad',
+            description: 'Educational service-learning programs in Cape Town',
+            image_url: '/src/assets/service-learning-hero.jpg'
+          },
+          'winter-wellness': {
+            id: '5',
+            name: 'Winter Wellness',
+            slug: 'winter-wellness',
+            description: 'Embrace Cape Town\'s beautiful winter season with warming wellness experiences',
+            image_url: '/src/assets/winter-wellness-category.jpg'
+          },
+          'weekend-retreats': {
+            id: '6',
+            name: 'Weekend Retreats',
+            slug: 'weekend-retreats',
+            description: 'Perfect short getaways for busy schedules',
+            image_url: '/src/assets/weekend-retreats-category.jpg'
           }
         };
 
@@ -115,17 +129,19 @@ const TourCategory = () => {
             title: 'Conscious Connections: Indigenous Wisdom + Healing',
             slug: 'conscious-connections-indigenous-wisdom-healing',
             subtitle: 'Ancient traditions for personal and collective transformation',
-            duration: '8 days / 7 nights',
-            max_participants: 12,
-            price_from: 3999,
-            destination: 'Cape Town, South Africa',
-            hero_image_url: '/placeholder-tour-1.jpg',
+            duration: '10 days / 9 nights',
+            max_participants: 16,
+            price_from: 3850,
+            destination: 'Cape Town & Western Cape, South Africa',
+            hero_image_url: '/src/assets/conscious-connections-hero.jpg',
             difficulty_level: 'moderate',
             highlights: [
-              'Traditional healing workshops',
-              'Sacred site visits',
-              'Plant medicine introduction',
-              'Community homestays'
+              'Learn from authentic Khoisan knowledge keepers',
+              'Traditional fynbos medicine harvesting',
+              'Ancient rock art sites in Cederberg',
+              'Ocean therapy and coastal healing',
+              'Small group experience (max 16)',
+              'Take home custom herbal remedies'
             ],
             category: {
               name: placeholderCategory.name,
@@ -134,20 +150,22 @@ const TourCategory = () => {
           },
           {
             id: '2',
-            title: 'Ubuntu Immersion Journey',
-            slug: 'ubuntu-immersion-journey',
-            subtitle: 'Deep cultural immersion in African philosophy',
-            duration: '10 days',
+            title: 'Winter Wine Country Wellness Weekend',
+            slug: 'winter-wine-country-wellness',
+            subtitle: 'Luxury weekend retreat in Stellenbosch with spa, yoga, and wine',
+            duration: '2 days / 1 night',
             max_participants: 8,
-            price_from: 4599,
-            destination: 'Eastern Cape, South Africa',
-            hero_image_url: '/placeholder-tour-2.jpg',
-            difficulty_level: 'challenging',
+            price_from: 1850,
+            destination: 'Stellenbosch Wine Country, Western Cape',
+            hero_image_url: '/src/assets/wine-country-yoga-hero.jpg',
+            difficulty_level: 'beginner',
             highlights: [
-              'Ubuntu philosophy workshops',
-              'Community service projects',
-              'Traditional ceremonies',
-              'Storytelling sessions'
+              'Luxury wine estate accommodation',
+              'Daily yoga with Chad in vineyard settings',
+              'Private wine tastings with sommelier',
+              'Spa treatments with local botanicals',
+              'Farm-to-table gourmet meals',
+              'Professional photography included'
             ],
             category: {
               name: placeholderCategory.name,

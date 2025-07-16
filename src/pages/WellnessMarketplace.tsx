@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,7 @@ interface Service {
 
 const WellnessMarketplace = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -165,11 +167,11 @@ const WellnessMarketplace = () => {
     }
     
     // Navigate to service detail page
-    window.location.href = `/wellness-exchange/service/${serviceId}`;
+    navigate(`/wellness-exchange/service/${serviceId}`);
   };
 
   const handleViewService = (serviceId: string) => {
-    window.location.href = `/wellness-exchange/service/${serviceId}`;
+    navigate(`/wellness-exchange/service/${serviceId}`);
   };
 
   if (loading) {
@@ -265,7 +267,7 @@ const WellnessMarketplace = () => {
                 <Button 
                   size="lg" 
                   className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 whitespace-nowrap"
-                  onClick={() => window.location.href = '/wellness-exchange/provider-signup'}
+                  onClick={() => navigate('/wellness-exchange/provider-signup')}
                 >
                   Become a Partner
                 </Button>
@@ -276,33 +278,33 @@ const WellnessMarketplace = () => {
           {/* Quick Actions */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
             <Button 
-              variant="outline" 
+              variant="outline"
               className="h-16 flex-col"
-              onClick={() => window.location.href = '/wellness-exchange/provider-signup'}
+              onClick={() => navigate('/wellness-exchange/provider-signup')}
             >
               <Plus className="h-5 w-5 mb-1" />
               <span className="text-xs">Become Partner</span>
             </Button>
             <Button 
-              variant="outline" 
+              variant="outline"
               className="h-16 flex-col"
-              onClick={() => window.location.href = '/wellness-exchange/wants'}
+              onClick={() => navigate('/wellness-exchange/wants')}
             >
               <Heart className="h-5 w-5 mb-1" />
               <span className="text-xs">Browse Wants</span>
             </Button>
             <Button 
-              variant="outline" 
+              variant="outline"
               className="h-16 flex-col"
-              onClick={() => window.location.href = '/wellness-exchange/directory'}
+              onClick={() => navigate('/wellness-exchange/directory')}
             >
               <Search className="h-5 w-5 mb-1" />
               <span className="text-xs">Find Partners</span>
             </Button>
             <Button 
-              variant="outline" 
+              variant="outline"
               className="h-16 flex-col"
-              onClick={() => window.location.href = '/wellness-exchange/community'}
+              onClick={() => navigate('/wellness-exchange/community')}
             >
               <Coins className="h-5 w-5 mb-1" />
               <span className="text-xs">Community</span>
@@ -324,7 +326,7 @@ const WellnessMarketplace = () => {
                   <Button 
                     size="lg"
                     className="bg-rainbow-gradient hover:opacity-90 text-white w-full"
-                    onClick={() => window.location.href = '/wellness-exchange/provider-signup'}
+                    onClick={() => navigate('/wellness-exchange/provider-signup')}
                   >
                     Become a Wellness Partner
                   </Button>
@@ -332,7 +334,7 @@ const WellnessMarketplace = () => {
                     variant="outline" 
                     size="lg"
                     className="w-full"
-                    onClick={() => window.location.href = '/wellness-exchange/wants'}
+                    onClick={() => navigate('/wellness-exchange/wants')}
                   >
                     Browse Community Wants
                   </Button>
