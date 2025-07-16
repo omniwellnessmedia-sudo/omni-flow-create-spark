@@ -8,6 +8,12 @@ import { PriceDisplay } from '@/components/ui/price-display';
 import { ImagePreloader } from '@/components/ui/image-preloader';
 import { supabase } from '@/integrations/supabase/client';
 
+// Import category images
+import indigenousWisdomImg from '@/assets/indigenous-wisdom-category.jpg';
+import wellnessRetreatsImg from '@/assets/wellness-retreats-category.jpg';
+import consciousLivingImg from '@/assets/conscious-living-category.jpg';
+import studyAbroadImg from '@/assets/study-abroad-category.jpg';
+
 interface TourCategory {
   id: string;
   name: string;
@@ -129,19 +135,28 @@ const ToursRetreats = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <PlaceholderCategoryCard 
-                title="Indigenous Wisdom & Healing"
-                description="Connect with ancient healing traditions and sacred practices"
+                title="Indigenous Wisdom"
+                description="Connect with ancient healing traditions and indigenous knowledge systems"
                 slug="indigenous-wisdom"
+                image={indigenousWisdomImg}
               />
               <PlaceholderCategoryCard 
-                title="Wellness & Mindfulness"
-                description="Holistic wellness experiences combining ancient wisdom with modern practices"
-                slug="wellness-programs"
+                title="Wellness Retreats"
+                description="Transformative wellness journeys combining modern and traditional healing"
+                slug="wellness-retreats"
+                image={wellnessRetreatsImg}
               />
               <PlaceholderCategoryCard 
-                title="Educational Programs"
-                description="Study abroad and learning journeys for personal growth"
-                slug="educational"
+                title="Conscious Living"
+                description="Immersive experiences in sustainable and mindful living practices"
+                slug="conscious-living"
+                image={consciousLivingImg}
+              />
+              <PlaceholderCategoryCard 
+                title="Study Abroad"
+                description="Educational service-learning programs in Cape Town"
+                slug="study-abroad"
+                image={studyAbroadImg}
               />
             </div>
           )}
@@ -239,14 +254,16 @@ const TourCategoryCard = ({ category }: { category: TourCategory }) => (
   </Card>
 );
 
-const PlaceholderCategoryCard = ({ title, description, slug }: { title: string; description: string; slug: string }) => (
+const PlaceholderCategoryCard = ({ title, description, slug, image }: { title: string; description: string; slug: string; image: string }) => (
   <Card className="group hover:shadow-lg transition-all duration-300">
-    <div className="relative overflow-hidden rounded-t-lg h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
-          <MapPin className="h-8 w-8 text-primary" />
-        </div>
-      </div>
+    <div className="relative overflow-hidden rounded-t-lg h-48">
+      <img 
+        src={image} 
+        alt={title}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        loading="eager"
+      />
+      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
     </div>
     <CardContent className="p-6">
       <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
