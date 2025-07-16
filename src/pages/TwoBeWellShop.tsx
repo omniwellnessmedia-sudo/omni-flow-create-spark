@@ -108,79 +108,155 @@ const TwoBeWellShop = () => {
       <MegaNavigation />
       <main className="pt-16">
         {/* Hero Section */}
-        <section className="relative py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-primary opacity-10"></div>
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50"></div>
+          <div className="absolute inset-0 opacity-30" style={{backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23000000\" fill-opacity=\"0.02\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"}}></div>
+          
+          {/* Floating Elements */}
+          <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-emerald-300 to-emerald-500 rounded-full opacity-20 animate-bounce" style={{animationDelay: '0s', animationDuration: '6s'}}></div>
+          <div className="absolute top-40 right-20 w-16 h-16 bg-gradient-to-br from-blue-300 to-blue-500 rounded-full opacity-20 animate-bounce" style={{animationDelay: '2s', animationDuration: '8s'}}></div>
+          <div className="absolute bottom-40 left-20 w-12 h-12 bg-gradient-to-br from-purple-300 to-purple-500 rounded-full opacity-20 animate-bounce" style={{animationDelay: '4s', animationDuration: '7s'}}></div>
+          
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <div className="flex justify-center mb-6">
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-primary rounded-full blur-xl opacity-20 animate-pulse"></div>
-                  <div className="relative bg-white p-6 rounded-full shadow-elegant">
-                    <Sparkles className="w-12 h-12 text-primary" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              
+              {/* Left Content */}
+              <div className="text-left space-y-8">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-white/20">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium text-emerald-700">Premium Natural Products</span>
+                </div>
+
+                {/* Main Heading */}
+                <div>
+                  <h1 className="font-heading font-bold text-5xl sm:text-7xl leading-tight mb-6">
+                    <span className="block text-foreground">2BeWell</span>
+                    <span className="block bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+                      Natural Beauty
+                    </span>
+                    <span className="block text-foreground text-4xl sm:text-5xl font-medium">for Every Body</span>
+                  </h1>
+                  
+                  <p className="text-xl text-muted-foreground max-w-lg leading-relaxed mb-8">
+                    Handcrafted with love in South Africa. Our premium wellness products are made from 100% natural ingredients, 
+                    supporting your journey to radiant health and sustainable living.
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button 
+                    size="lg" 
+                    className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl rounded-full px-8 py-4 font-semibold text-lg transition-all duration-300"
+                    onClick={() => setActiveTab("products")}
+                  >
+                    Shop Natural Products
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 rounded-full px-8 py-4 font-semibold text-lg backdrop-blur-sm bg-white/80"
+                    onClick={() => setActiveTab("wellcoins")}
+                  >
+                    <Coins className="mr-2 w-5 h-5" />
+                    Earn WellCoins
+                  </Button>
+                </div>
+
+                {/* Trust Indicators */}
+                <div className="flex flex-wrap gap-6 pt-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Shield className="w-5 h-5 text-emerald-600" />
+                    <span className="text-sm font-medium">100% Natural</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Leaf className="w-5 h-5 text-emerald-600" />
+                    <span className="text-sm font-medium">Eco-Friendly</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Heart className="w-5 h-5 text-emerald-600" />
+                    <span className="text-sm font-medium">Cruelty-Free</span>
                   </div>
                 </div>
               </div>
-              <h1 className="font-heading font-bold text-4xl sm:text-6xl mb-6">
-                <span className="text-foreground">2BeWell</span>{" "}
-                <span className="bg-gradient-primary bg-clip-text text-transparent">Community Shop</span>
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-                Discover premium natural wellness products crafted with love. 
-                Shop with traditional currency or earn WellCoins through community participation.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-gradient-primary hover:shadow-glow rounded-full px-8">
-                  Shop Now <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-                <Button size="lg" variant="outline" className="rounded-full px-8">
-                  Learn About WellCoins <Coins className="ml-2 w-5 h-5" />
-                </Button>
+
+              {/* Right Content - Product Showcase */}
+              <div className="relative">
+                {/* Background Glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-200 via-blue-200 to-purple-200 rounded-3xl blur-3xl opacity-30 scale-110"></div>
+                
+                {/* Product Grid */}
+                <div className="relative grid grid-cols-2 gap-4">
+                  {products.slice(0, 4).map((product, index) => (
+                    <div 
+                      key={product.id}
+                      className={`group relative ${index === 0 ? 'col-span-2' : ''}`}
+                      style={{
+                        animation: `float ${4 + index}s ease-in-out infinite`,
+                        animationDelay: `${index * 0.5}s`
+                      }}
+                    >
+                      <Card className="overflow-hidden border-none shadow-xl bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-500 transform group-hover:scale-105">
+                        <div className="relative">
+                          <img 
+                            src={product.image} 
+                            alt={product.title}
+                            className={`w-full object-cover ${index === 0 ? 'h-48' : 'h-32'} group-hover:scale-110 transition-transform duration-700`}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <Badge className="absolute top-2 right-2 bg-emerald-600 text-white shadow-lg">
+                            R{product.price_zar}
+                          </Badge>
+                        </div>
+                        <div className="p-3">
+                          <h3 className="font-semibold text-sm line-clamp-1">{product.title}</h3>
+                          <p className="text-xs text-muted-foreground line-clamp-1 mt-1">{product.description}</p>
+                        </div>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Floating Stats */}
+                <div className="absolute -bottom-6 -left-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/20">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-emerald-100 rounded-full">
+                      <Coins className="w-6 h-6 text-emerald-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Your WellCoins</p>
+                      <p className="text-2xl font-bold text-emerald-600">{wellCoins}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/20">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-100 rounded-full">
+                      <Users className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Community</p>
+                      <p className="text-2xl font-bold text-blue-600">2,547</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <Card className="card-standard text-center border-none shadow-elegant">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="p-3 bg-primary/10 rounded-full">
-                      <Coins className="w-8 h-8 text-primary" />
-                    </div>
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Your WellCoins</h3>
-                  <p className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">{wellCoins}</p>
-                  <p className="text-muted-foreground text-sm">Earned through participation</p>
-                </CardContent>
-              </Card>
-
-              <Card className="card-standard text-center border-none shadow-elegant">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="p-3 bg-secondary/10 rounded-full">
-                      <ShoppingCart className="w-8 h-8 text-secondary" />
-                    </div>
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Cart Items</h3>
-                  <p className="text-3xl font-bold text-secondary">{state.itemCount}</p>
-                  <p className="text-muted-foreground text-sm">Ready for checkout</p>
-                </CardContent>
-              </Card>
-
-              <Card className="card-standard text-center border-none shadow-elegant">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="p-3 bg-accent/10 rounded-full">
-                      <Users className="w-8 h-8 text-accent" />
-                    </div>
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Community</h3>
-                  <p className="text-3xl font-bold text-accent">2,547</p>
-                  <p className="text-muted-foreground text-sm">Active members</p>
-                </CardContent>
-              </Card>
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+            <div className="flex flex-col items-center gap-2 text-muted-foreground animate-bounce">
+              <span className="text-sm font-medium">Explore Products</span>
+              <ArrowRight className="w-5 h-5 rotate-90" />
             </div>
           </div>
         </section>
+
 
         {/* Trust Indicators */}
         <section className="py-8 border-b">
