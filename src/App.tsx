@@ -1,7 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { SiteHeader } from '@/components/SiteHeader';
-import { SiteFooter } from '@/components/SiteFooter';
 import Index from '@/pages/Index';
 import About from '@/pages/About';
 import Services from '@/pages/Services';
@@ -28,7 +26,7 @@ import ServiceDetail from '@/pages/ServiceDetail';
 import AddService from '@/pages/AddService';
 import AddWant from '@/pages/AddWant';
 import CommunityBlog from '@/pages/CommunityBlog';
-import ProviderPortal from '@/pages/ProviderPortal';
+
 import ProviderDashboard from '@/pages/ProviderDashboard';
 import ProviderWebsite from '@/pages/ProviderWebsite';
 import ProviderLandingPage from '@/pages/ProviderLandingPage';
@@ -52,10 +50,6 @@ import PaymentCancelled from '@/pages/PaymentCancelled';
 import TransactionPage from '@/pages/TransactionPage';
 import Resources from '@/pages/Resources';
 import AdminDashboard from '@/pages/AdminDashboard';
-import Videography from '@/pages/Videography';
-import DocumentaryProduction from '@/pages/DocumentaryProduction';
-import CustomArt from '@/pages/CustomArt';
-import Consultation from '@/pages/Consultation';
 import NotFound from '@/pages/NotFound';
 import TravelWellConnectedStore from '@/pages/TravelWellConnectedStore';
 
@@ -63,8 +57,6 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen flex flex-col">
-        <SiteHeader />
-        
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Index />} />
@@ -93,7 +85,7 @@ function App() {
             <Route path="/add-service" element={<AddService />} />
             <Route path="/add-want" element={<AddWant />} />
             <Route path="/community-blog" element={<CommunityBlog />} />
-            <Route path="/provider-portal" element={<ProviderPortal />} />
+            
             <Route path="/provider-dashboard" element={<ProviderDashboard />} />
             <Route path="/provider-website/:providerId" element={<ProviderWebsite />} />
             <Route path="/provider-landing/:providerId" element={<ProviderLandingPage />} />
@@ -117,15 +109,9 @@ function App() {
             <Route path="/transaction" element={<TransactionPage />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/services/videography" element={<Videography />} />
-            <Route path="/services/documentary-production" element={<DocumentaryProduction />} />
-            <Route path="/services/custom-art" element={<CustomArt />} />
-            <Route path="/services/consultation" element={<Consultation />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-
-        <SiteFooter />
       </div>
     </Router>
   );
