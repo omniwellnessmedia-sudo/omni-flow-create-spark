@@ -50,18 +50,18 @@ const WellnessRoamingPackages = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchRoamBuddyServices();
+    fetchTravelWellConnectedServices();
   }, []);
 
   useEffect(() => {
     filterServices();
   }, [services, searchTerm, categoryFilter, priceFilter, destinationFilter]);
 
-  const fetchRoamBuddyServices = async () => {
+  const fetchTravelWellConnectedServices = async () => {
     try {
       setLoading(true);
       
-      // Try to fetch from RoamBuddy API
+      // Try to fetch from Travel Well Connected API
       const { data, error } = await supabase.functions.invoke('roambuddy-api', {
         body: {
           action: 'getServices',
@@ -72,21 +72,21 @@ const WellnessRoamingPackages = () => {
       if (data?.success && data?.data?.services) {
         setServices(data.data.services);
       } else {
-        // Fallback to comprehensive mock data showcasing all service types
+        // Fallback to comprehensive mock data showcasing Travel Well Connected services
         const mockServices: RoamBuddyService[] = [
-          // Transportation Services
+          // Transportation Services with Wellness Focus
           {
             id: '1',
-            service_id: 'airport-transfer-premium',
-            name: 'Premium Airport Transfer',
-            description: 'Luxury vehicle pickup and drop-off with professional driver',
+            service_id: 'wellness-airport-transfer',
+            name: 'Mindful Airport Transfer',
+            description: 'Peaceful luxury transfer with meditation music and wellness amenities',
             price: 1400,
             category: 'Transportation',
             destination: 'Cape Town',
-            features: ['Luxury vehicle', 'Professional driver', 'Meet & greet', 'Flight tracking'],
+            features: ['Meditation music', 'Aromatherapy', 'Healthy refreshments', 'Mindful driver'],
             rating: 4.9,
             duration: '1 hour',
-            includes: ['Door-to-door service', 'Complimentary water', 'Wi-Fi'],
+            includes: ['Door-to-door service', 'Wellness kit', 'Peace of mind guarantee'],
             image_url: premiumTransferImage
           },
           {
@@ -258,11 +258,10 @@ const WellnessRoamingPackages = () => {
         setServices(mockServices);
       }
     } catch (error) {
-      console.error('Error fetching RoamBuddy services:', error);
+      console.error('Error fetching Travel Well Connected services:', error);
       toast({
-        title: "Connection Error",
-        description: "Unable to load services. Please try again later.",
-        variant: "destructive",
+        title: "Connection Info",
+        description: "Showing Travel Well Connected demo services.",
       });
     } finally {
       setLoading(false);
@@ -389,18 +388,18 @@ const WellnessRoamingPackages = () => {
       <section className="py-16 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Wellness Roaming Packages
+            Travel Well Connected Services
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Comprehensive travel services curated for your wellness journey. 
-            From transportation to transformative experiences.
+            Comprehensive wellness travel services curated for your mindful journey. 
+            From peaceful transportation to transformative experiences - all with peace of mind.
           </p>
           <div className="flex justify-center gap-4">
             <Badge variant="secondary" className="text-sm px-4 py-2">
-              White-labeled by RoamBuddy
+              Wellness-Optimized Services
             </Badge>
             <Badge variant="outline" className="text-sm px-4 py-2">
-              Instant Booking
+              Peace of Mind Guaranteed
             </Badge>
           </div>
         </div>
