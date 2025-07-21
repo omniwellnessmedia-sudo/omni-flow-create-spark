@@ -37,7 +37,8 @@ import TourDetail from '@/pages/TourDetail';
 import TourCategory from '@/pages/TourCategory';
 import TwoBeWell from '@/pages/TwoBeWell';
 import TwoBeWellShop from '@/pages/TwoBeWellShop';
-import RoamBuddyStore from '@/pages/RoamBuddyStore';
+// Deprecated: RoamBuddy has been rebranded to Travel Well Connected
+// import RoamBuddyStore from '@/pages/RoamBuddyStore';
 import WellnessRoamingPackages from '@/pages/WellnessRoamingPackages';
 import AITools from '@/pages/AITools';
 import DataProducts from '@/pages/DataProducts';
