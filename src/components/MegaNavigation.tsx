@@ -8,7 +8,7 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu"
 import { cn } from '@/lib/utils';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface MegaMenuItem {
   title: string;
@@ -95,17 +95,15 @@ const MegaNavigation = () => {
               <ul className="grid gap-3 p-6 md:w-[400px] md:grid-cols-2 lg:w-[500px]">
                 {menuItem.items.map((item, i) => (
                   <li key={i}>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        to={item.href}
-                        className={cn(
-                          "group flex h-12 items-center justify-start rounded-md bg-transparent px-3 font-medium outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground sm:text-sm",
-                          location.pathname === item.href ? "text-primary" : ""
-                        )}
-                      >
-                        <span className="mr-2">{item.icon}</span>
-                        {item.name}
-                      </Link>
+                    <NavigationMenuLink
+                      className={cn(
+                        "group flex h-12 items-center justify-start rounded-md bg-transparent px-3 font-medium outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground sm:text-sm",
+                        location.pathname === item.href ? "text-primary" : ""
+                      )}
+                      href={item.href}
+                    >
+                      <span className="mr-2">{item.icon}</span>
+                      {item.name}
                     </NavigationMenuLink>
                   </li>
                 ))}
