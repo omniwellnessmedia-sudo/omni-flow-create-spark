@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PriceDisplay } from '@/components/ui/price-display';
 import { supabase } from '@/integrations/supabase/client';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface Tour {
   id: string;
@@ -44,12 +46,16 @@ const TourCategory = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('featured');
   const [priceFilter, setPriceFilter] = useState('all');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCategoryData();
   }, [category]);
 
   const fetchCategoryData = async () => {
+    setLoading(true);
+    setError(null);
+    
     try {
       // Fetch category info
       const { data: categoryData } = await supabase
@@ -179,6 +185,7 @@ const TourCategory = () => {
       }
     } catch (error) {
       console.error('Error fetching category data:', error);
+      setError('Failed to load tour category. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -208,7 +215,20 @@ const TourCategory = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <LoadingSpinner size="lg" text="Loading tour category..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="max-w-md w-full">
+          <CardContent className="pt-6 text-center">
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button onClick={() => fetchCategoryData()}>Try Again</Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -228,7 +248,8 @@ const TourCategory = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-background">
       {/* Category Hero */}
       <section className="relative h-80 bg-cover bg-center" style={{
         backgroundImage: `url(${categoryInfo.image_url})`,
@@ -352,6 +373,7 @@ const TourCategory = () => {
         </div>
       </section>
     </div>
+    </ErrorBoundary>
   );
 };
 

@@ -486,23 +486,17 @@
 
 /* ===== TYPOGRAPHY SYSTEM ===== */
 
-/* Gradient Heading System - Black to purple/orange blend */
+/* Gradient Heading System - High contrast for readability */
 .heading-primary {
   @apply font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-center leading-tight;
-  background: linear-gradient(135deg, hsl(20 14.3% 4.1%) 0%, hsl(var(--omni-violet)) 50%, hsl(var(--omni-orange)) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none !important;
+  /* Use solid color on light backgrounds for better readability */
+  color: hsl(20 14.3% 4.1%);
 }
 
 .heading-secondary {
   @apply font-heading font-bold text-2xl sm:text-3xl lg:text-4xl text-center leading-tight;
-  background: linear-gradient(135deg, hsl(20 14.3% 4.1%) 0%, hsl(var(--omni-violet)) 50%, hsl(var(--omni-orange)) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none !important;
+  /* Use solid color on light backgrounds for better readability */
+  color: hsl(20 14.3% 4.1%);
 }
 
 .heading-tertiary {
@@ -514,7 +508,7 @@
   text-shadow: none !important;
 }
 
-/* Rainbow gradient backgrounds */
+/* Rainbow gradient backgrounds with proper text contrast */
 .bg-rainbow-gradient {
   background: linear-gradient(135deg, 
     hsl(var(--omni-red)) 0%, 
@@ -525,6 +519,11 @@
     hsl(var(--omni-indigo)) 83.33%, 
     hsl(var(--omni-violet)) 100%
   );
+  color: white !important;
+}
+
+.bg-rainbow-gradient * {
+  color: white !important;
 }
 
 .bg-rainbow-subtle {

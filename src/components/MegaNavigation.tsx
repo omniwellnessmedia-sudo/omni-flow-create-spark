@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -8,7 +9,6 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu"
 import { cn } from '@/lib/utils';
-import { useLocation } from 'react-router-dom';
 
 interface MegaMenuItem {
   title: string;
@@ -100,10 +100,12 @@ const MegaNavigation = () => {
                         "group flex h-12 items-center justify-start rounded-md bg-transparent px-3 font-medium outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground sm:text-sm",
                         location.pathname === item.href ? "text-primary" : ""
                       )}
-                      href={item.href}
+                      asChild
                     >
-                      <span className="mr-2">{item.icon}</span>
-                      {item.name}
+                      <Link to={item.href}>
+                        <span className="mr-2">{item.icon}</span>
+                        {item.name}
+                      </Link>
                     </NavigationMenuLink>
                   </li>
                 ))}

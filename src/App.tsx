@@ -1,5 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SiteHeader from '@/components/SiteHeader';
+import Footer from '@/components/Footer';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import Index from '@/pages/Index';
 import About from '@/pages/About';
 import Services from '@/pages/Services';
@@ -56,9 +59,11 @@ import TravelWellConnectedStore from '@/pages/TravelWellConnectedStore';
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-grow">
+    <ErrorBoundary>
+      <Router>
+        <div className="min-h-screen flex flex-col">
+          <SiteHeader />
+          <main className="flex-grow pt-16 lg:pt-20">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
@@ -113,8 +118,10 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </Router>
+    </ErrorBoundary>
   );
 }
 
