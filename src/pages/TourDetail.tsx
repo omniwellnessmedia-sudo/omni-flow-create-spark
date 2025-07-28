@@ -219,7 +219,7 @@ const TourDetail = () => {
         {/* Main Content */}
         <div className="absolute inset-0 flex items-end">
           <div className="container mx-auto px-4 pb-8 sm:pb-12 lg:pb-16 z-10">
-            <div className="max-w-4xl bg-black/40 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none rounded-t-xl sm:rounded-none p-4 sm:p-0 mx-2 sm:mx-0">
+            <div className="max-w-4xl">
               {/* Journey Classification */}
               <div className="flex flex-wrap items-center gap-2 mb-4">
                 <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm text-xs">
