@@ -9,10 +9,10 @@ import { ImagePreloader } from '@/components/ui/image-preloader';
 import { supabase } from '@/integrations/supabase/client';
 
 // Category images from uploads
-const indigenousWisdomImg = '/lovable-uploads/indigenous-wisdom-category.jpg';
-const wellnessRetreatsImg = '/lovable-uploads/wellness-retreats-category.jpg';
-const consciousLivingImg = '/lovable-uploads/conscious-living-category.jpg';
-const studyAbroadImg = '/lovable-uploads/study-abroad-category.jpg';
+const indigenousWisdomImg = '/lovable-uploads/0b9c95c5-3439-459b-a4d2-0ca456a0f42e.png';
+const wellnessRetreatsImg = '/lovable-uploads/2cf2a37d-a993-44f1-9751-330306a03454.png';
+const consciousLivingImg = '/lovable-uploads/3371c506-44f8-42f6-94f9-5daed6741c0a.png';
+const studyAbroadImg = '/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png';
 
 // Generated wellness journey images
 import consciousConnectionsMeditation from '@/assets/conscious-connections-meditation.jpg';
