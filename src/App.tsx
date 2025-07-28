@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from '@/components/AuthProvider';
+import SiteHeader from '@/components/SiteHeader';
 import Index from '@/pages/Index';
 import About from '@/pages/About';
 import Services from '@/pages/Services';
@@ -56,9 +58,11 @@ import TravelWellConnectedStore from '@/pages/TravelWellConnectedStore';
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col">
-        <main className="flex-grow">
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen flex flex-col">
+          <SiteHeader />
+          <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
@@ -113,8 +117,9 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

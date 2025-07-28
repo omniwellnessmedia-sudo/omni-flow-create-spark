@@ -1,4 +1,3 @@
-import MegaNavigation from "@/components/MegaNavigation";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/sections/HeroSection";
 import WellnessHumansSection from "@/components/sections/WellnessHumansSection";
@@ -15,9 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Smartphone, ShoppingCart, Calendar, MapPin, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+
 const Index = () => {
   return <div className="min-h-screen overflow-safe">
-      <MegaNavigation />
       <main className="overflow-safe">
         <Section id="hero" size="breathable" background="gradient">
           <HeroSection />
