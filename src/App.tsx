@@ -59,12 +59,12 @@ import TravelWellConnectedStore from '@/pages/TravelWellConnectedStore';
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
+    <CartProvider>
+      <AuthProvider>
         <Router>
-        <div className="min-h-screen flex flex-col">
-          <SiteHeader />
-          <main className="flex-grow">
+          <div className="min-h-screen flex flex-col">
+            <SiteHeader />
+            <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
@@ -119,10 +119,10 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-        </div>
-      </Router>
-      </CartProvider>
-    </AuthProvider>
+          </div>
+        </Router>
+      </AuthProvider>
+    </CartProvider>
   );
 }
 
