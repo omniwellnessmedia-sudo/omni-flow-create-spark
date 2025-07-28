@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/components/AuthProvider';
+import { CartProvider } from '@/contexts/CartContext';
 import SiteHeader from '@/components/SiteHeader';
 import Index from '@/pages/Index';
 import About from '@/pages/About';
@@ -59,7 +60,8 @@ import TravelWellConnectedStore from '@/pages/TravelWellConnectedStore';
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <CartProvider>
+        <Router>
         <div className="min-h-screen flex flex-col">
           <SiteHeader />
           <main className="flex-grow">
@@ -119,6 +121,7 @@ function App() {
         </main>
         </div>
       </Router>
+      </CartProvider>
     </AuthProvider>
   );
 }
