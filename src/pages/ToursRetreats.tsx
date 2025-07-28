@@ -14,6 +14,14 @@ const wellnessRetreatsImg = '/lovable-uploads/wellness-retreats-category.jpg';
 const consciousLivingImg = '/lovable-uploads/conscious-living-category.jpg';
 const studyAbroadImg = '/lovable-uploads/study-abroad-category.jpg';
 
+// Generated wellness journey images
+import consciousConnectionsMeditation from '@/assets/conscious-connections-meditation.jpg';
+import ubuntuHealingCircle from '@/assets/ubuntu-healing-circle.jpg';
+import mountainWellnessRetreat from '@/assets/mountain-wellness-retreat.jpg';
+import indigenousHealingCeremony from '@/assets/indigenous-healing-ceremony.jpg';
+import sustainableLivingCommunity from '@/assets/sustainable-living-community.jpg';
+import serviceLearningStudents from '@/assets/service-learning-students.jpg';
+
 interface TourCategory {
   id: string;
   name: string;
@@ -183,6 +191,7 @@ const ToursRetreats = () => {
                 priceFrom={3999}
                 destination="Cape Town, South Africa"
                 category="Indigenous Wisdom"
+                image={consciousConnectionsMeditation}
               />
               <PlaceholderTourCard 
                 title="FACT Wellness Hybrid Experience"
@@ -190,6 +199,7 @@ const ToursRetreats = () => {
                 priceFrom={1299}
                 destination="Muizenberg, Cape Town"
                 category="Wellness Programs"
+                image={mountainWellnessRetreat}
               />
               <PlaceholderTourCard 
                 title="Ubuntu Immersion Journey"
@@ -197,6 +207,31 @@ const ToursRetreats = () => {
                 priceFrom={4599}
                 destination="Eastern Cape, South Africa"
                 category="Indigenous Wisdom"
+                image={ubuntuHealingCircle}
+              />
+              <PlaceholderTourCard 
+                title="Sustainable Living Immersion"
+                duration="5 days"
+                priceFrom={1899}
+                destination="Cape Town, South Africa"
+                category="Conscious Living"
+                image={sustainableLivingCommunity}
+              />
+              <PlaceholderTourCard 
+                title="Indigenous Healing Traditions"
+                duration="7 days"
+                priceFrom={2799}
+                destination="Eastern Cape, South Africa"
+                category="Indigenous Wisdom"
+                image={indigenousHealingCeremony}
+              />
+              <PlaceholderTourCard 
+                title="Service Learning Adventure"
+                duration="14 days"
+                priceFrom={3299}
+                destination="Cape Town, South Africa"
+                category="Study Abroad"
+                image={serviceLearningStudents}
               />
             </div>
           )}
@@ -333,20 +368,32 @@ const FeaturedTourCard = ({ tour }: { tour: Tour }) => (
   </Card>
 );
 
-const PlaceholderTourCard = ({ title, duration, priceFrom, destination, category }: {
+const PlaceholderTourCard = ({ title, duration, priceFrom, destination, category, image }: {
   title: string;
   duration: string;
   priceFrom: number;
   destination: string;
   category: string;
+  image?: string;
 }) => (
   <Card className="group hover:shadow-xl transition-all duration-300">
-    <div className="relative overflow-hidden rounded-t-lg h-64 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
-          <Star className="h-10 w-10 text-primary" />
+    <div className="relative overflow-hidden rounded-t-lg h-64 sm:h-72">
+      {image ? (
+        <img 
+          src={image} 
+          alt={title}
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
+      ) : (
+        <div className="bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center h-full">
+          <div className="text-center">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
+              <Star className="h-10 w-10 text-primary" />
+            </div>
+          </div>
         </div>
-      </div>
+      )}
       <div className="absolute top-4 left-4">
         <Badge variant="secondary" className="bg-background/90">
           {category}
