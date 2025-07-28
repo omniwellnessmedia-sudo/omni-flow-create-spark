@@ -81,42 +81,42 @@ const TourCategory = () => {
             name: 'Indigenous Wisdom & Healing',
             slug: 'indigenous-wisdom',
             description: 'Connect with ancient healing traditions and indigenous knowledge systems',
-            image_url: '/src/assets/conscious-connections-hero.jpg'
+            image_url: '/lovable-uploads/conscious-connections-hero.jpg'
           },
           'wellness-retreats': {
             id: '2',
             name: 'Wellness Retreats',
             slug: 'wellness-retreats',
             description: 'Transformative wellness journeys combining modern and traditional healing',
-            image_url: '/src/assets/fact-wellness-hero.jpg'
+            image_url: '/lovable-uploads/fact-wellness-hero.jpg'
           },
           'conscious-living': {
             id: '3',
             name: 'Conscious Living',
             slug: 'conscious-living',
             description: 'Immersive experiences in sustainable and mindful living practices',
-            image_url: '/src/assets/wellness-humans.png'
+            image_url: '/lovable-uploads/wellness-humans.png'
           },
           'study-abroad': {
             id: '4',
             name: 'Study Abroad',
             slug: 'study-abroad',
             description: 'Educational service-learning programs in Cape Town',
-            image_url: '/src/assets/service-learning-hero.jpg'
+            image_url: '/lovable-uploads/service-learning-hero.jpg'
           },
           'winter-wellness': {
             id: '5',
             name: 'Winter Wellness',
             slug: 'winter-wellness',
             description: 'Embrace Cape Town\'s beautiful winter season with warming wellness experiences',
-            image_url: '/src/assets/winter-wellness-category.jpg'
+            image_url: '/lovable-uploads/winter-wellness-category.jpg'
           },
           'weekend-retreats': {
             id: '6',
             name: 'Weekend Retreats',
             slug: 'weekend-retreats',
             description: 'Perfect short getaways for busy schedules',
-            image_url: '/src/assets/weekend-retreats-category.jpg'
+            image_url: '/lovable-uploads/weekend-retreats-category.jpg'
           }
         };
 
@@ -134,7 +134,7 @@ const TourCategory = () => {
             max_participants: 16,
             price_from: 3850,
             destination: 'Cape Town & Western Cape, South Africa',
-            hero_image_url: '/src/assets/conscious-connections-hero.jpg',
+            hero_image_url: '/lovable-uploads/conscious-connections-hero.jpg',
             difficulty_level: 'moderate',
             highlights: [
               'Learn from authentic Khoisan knowledge keepers',
@@ -158,7 +158,7 @@ const TourCategory = () => {
             max_participants: 8,
             price_from: 1850,
             destination: 'Stellenbosch Wine Country, Western Cape',
-            hero_image_url: '/src/assets/wine-country-yoga-hero.jpg',
+            hero_image_url: '/lovable-uploads/wine-country-yoga-hero.jpg',
             difficulty_level: 'beginner',
             highlights: [
               'Luxury wine estate accommodation',

@@ -8,11 +8,11 @@ import { PriceDisplay } from '@/components/ui/price-display';
 import { ImagePreloader } from '@/components/ui/image-preloader';
 import { supabase } from '@/integrations/supabase/client';
 
-// Import category images
-import indigenousWisdomImg from '@/assets/indigenous-wisdom-category.jpg';
-import wellnessRetreatsImg from '@/assets/wellness-retreats-category.jpg';
-import consciousLivingImg from '@/assets/conscious-living-category.jpg';
-import studyAbroadImg from '@/assets/study-abroad-category.jpg';
+// Category images from uploads
+const indigenousWisdomImg = '/lovable-uploads/indigenous-wisdom-category.jpg';
+const wellnessRetreatsImg = '/lovable-uploads/wellness-retreats-category.jpg';
+const consciousLivingImg = '/lovable-uploads/conscious-living-category.jpg';
+const studyAbroadImg = '/lovable-uploads/study-abroad-category.jpg';
 
 interface TourCategory {
   id: string;
