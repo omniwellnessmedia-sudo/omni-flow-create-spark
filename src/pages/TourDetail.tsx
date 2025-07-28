@@ -166,147 +166,132 @@ const TourDetail = () => {
         ]}
       />
       
-      {/* Immersive Hero Section - National Geographic Style */}
-      <section className="relative h-[80vh] sm:h-[90vh] lg:h-screen bg-cover bg-center overflow-hidden">
-        <img 
-          src={images[selectedImage] || '/lovable-uploads/wellness-humans.png'} 
-          alt={tour.title}
-          className="w-full h-full object-cover scale-105 transition-transform duration-[20s] ease-out"
-          loading="eager"
-          onError={(e) => {
-            e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        
-        {/* Back button */}
-        <div className="absolute top-4 left-4 z-20">
-          <Link 
-            to={`/tours-retreats/${tour?.category?.slug || 'indigenous-wisdom'}`} 
-            className="inline-flex items-center text-white/80 hover:text-white bg-black/20 backdrop-blur-sm px-3 py-2 rounded-lg transition-colors text-sm"
-          >
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Back to {tour?.category?.name || 'Tours'}</span>
-            <span className="sm:hidden">Back</span>
-          </Link>
+      {/* Immersive Hero Section - Mobile Optimized */}
+      <section className="relative">
+        {/* Hero Image Container */}
+        <div className="relative h-[60vh] sm:h-[80vh] lg:h-screen overflow-hidden">
+          <img 
+            src={images[selectedImage] || '/lovable-uploads/wellness-humans.png'} 
+            alt={tour.title}
+            className="w-full h-full object-cover"
+            loading="eager"
+            onError={(e) => {
+              e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+          
+          {/* Back button */}
+          <div className="absolute top-4 left-4 z-20">
+            <Link 
+              to={`/tours-retreats/${tour?.category?.slug || 'indigenous-wisdom'}`} 
+              className="inline-flex items-center text-white/80 hover:text-white bg-black/20 backdrop-blur-sm px-3 py-2 rounded-lg transition-colors text-sm"
+            >
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              <span className="hidden sm:inline">Back to {tour?.category?.name || 'Tours'}</span>
+              <span className="sm:hidden">Back</span>
+            </Link>
+          </div>
+          
+          {/* Top badges and actions */}
+          <div className="absolute top-4 right-4 z-20 flex gap-1">
+            <Badge className="bg-yellow-500/90 text-black border-0 font-bold text-xs px-2 py-1">
+              <Award className="h-3 w-3 mr-1" />
+              <span className="hidden sm:inline">EXCLUSIVE</span>
+              <span className="sm:hidden">EXC</span>
+            </Badge>
+            <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0">
+              <Heart className="h-3 w-3" />
+            </Button>
+            <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0">
+              <Share2 className="h-3 w-3" />
+            </Button>
+          </div>
+
+          {/* Image Gallery Navigation */}
+          {images.length > 1 && (
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 border ${
+                    selectedImage === index 
+                      ? 'bg-white border-white' 
+                      : 'bg-transparent border-white/50 hover:border-white'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
-        
-        {/* Expedition Badge */}
-        <div className="absolute top-16 left-4 z-20 hidden sm:block">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 py-1">
-            <div className="flex items-center gap-2 text-white text-xs font-medium">
-              <Compass className="h-3 w-3" />
-              <span>OMNI WELLNESS</span>
+
+        {/* Content Overlay - Mobile Optimized */}
+        <div className="relative -mt-32 sm:-mt-40 lg:-mt-48 z-10">
+          <div className="bg-gradient-to-t from-background via-background/95 to-transparent backdrop-blur-sm">
+            <div className="container mx-auto px-4 pt-20 sm:pt-24 lg:pt-32 pb-8">
+              <div className="max-w-4xl">
+                {/* Journey Classification */}
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
+                    <Mountain className="h-3 w-3 mr-1" />
+                    <span className="hidden sm:inline">{tour.category?.name}</span>
+                    <span className="sm:hidden">{tour.category?.name?.split(' ')[0]}</span>
+                  </Badge>
+                  <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
+                    <Shield className="h-3 w-3 mr-1" />
+                    <span className="hidden sm:inline">{tour.difficulty_level.toUpperCase()}</span>
+                    <span className="sm:hidden">{tour.difficulty_level.toUpperCase()}</span>
+                  </Badge>
+                </div>
+
+                {/* Title */}
+                <h1 className="text-2xl sm:text-4xl lg:text-6xl font-bold text-foreground mb-3 sm:mb-4 leading-tight">
+                  {tour.title}
+                </h1>
+                
+                {/* Subtitle */}
+                <p className="text-base sm:text-xl text-muted-foreground mb-6 leading-relaxed">
+                  {tour.subtitle}
+                </p>
+
+                {/* Expedition Details */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                  <div className="bg-card border rounded-lg p-3 text-center">
+                    <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary mx-auto mb-1" />
+                    <div className="font-semibold text-xs sm:text-sm">{tour.duration}</div>
+                    <div className="text-muted-foreground text-xs">Duration</div>
+                  </div>
+                  <div className="bg-card border rounded-lg p-3 text-center">
+                    <Users className="h-4 w-4 sm:h-5 sm:w-5 text-primary mx-auto mb-1" />
+                    <div className="font-semibold text-xs sm:text-sm">{tour.max_participants}</div>
+                    <div className="text-muted-foreground text-xs">Max Guests</div>
+                  </div>
+                  <div className="bg-card border rounded-lg p-3 text-center">
+                    <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-primary mx-auto mb-1" />
+                    <div className="font-semibold text-xs sm:text-sm">Western Cape</div>
+                    <div className="text-muted-foreground text-xs">Destination</div>
+                  </div>
+                  <div className="bg-card border rounded-lg p-3 text-center">
+                    <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-primary mx-auto mb-1" />
+                    <div className="font-semibold text-xs sm:text-sm">${Math.round(tour.price_from / 18.5)}</div>
+                    <div className="text-muted-foreground text-xs">From USD</div>
+                  </div>
+                </div>
+
+                {/* Call to Action */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button size="lg" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold px-6 py-3 text-base">
+                    Reserve Your Spot
+                  </Button>
+                  <Button size="lg" variant="outline" className="px-6 py-3 text-base">
+                    <Camera className="h-4 w-4 mr-2" />
+                    View Gallery
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* National Geographic style categorization */}
-        <div className="absolute top-4 right-4 z-20 flex gap-1">
-          <Badge className="bg-yellow-500/90 text-black border-0 font-bold text-xs px-2 py-1">
-            <Award className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">EXCLUSIVE</span>
-            <span className="sm:hidden">EXC</span>
-          </Badge>
-          <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0">
-            <Heart className="h-3 w-3" />
-          </Button>
-          <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0">
-            <Share2 className="h-3 w-3" />
-          </Button>
-        </div>
-
-        {/* Main Content */}
-        <div className="absolute inset-0 flex items-end">
-          <div className="container mx-auto px-4 pb-8 sm:pb-12 lg:pb-16 z-10">
-            <div className="max-w-4xl">
-              {/* Journey Classification */}
-              <div className="flex flex-wrap items-center gap-2 mb-4">
-                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm text-xs">
-                  <Mountain className="h-3 w-3 mr-1" />
-                  <span className="hidden sm:inline">{tour.category?.name}</span>
-                  <span className="sm:hidden">{tour.category?.name?.split(' ')[0]}</span>
-                </Badge>
-                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm text-xs">
-                  <Shield className="h-3 w-3 mr-1" />
-                  <span className="hidden sm:inline">{tour.difficulty_level.toUpperCase()} DIFFICULTY</span>
-                  <span className="sm:hidden">{tour.difficulty_level.toUpperCase()}</span>
-                </Badge>
-                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm text-xs hidden sm:flex">
-                  <Globe className="h-3 w-3 mr-1" />
-                  CULTURAL
-                </Badge>
-              </div>
-
-              {/* Title */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight tracking-tight">
-                {tour.title}
-              </h1>
-              
-              {/* Subtitle */}
-              <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 sm:mb-8 max-w-3xl leading-relaxed">
-                {tour.subtitle}
-              </p>
-
-              {/* Expedition Details */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8">
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 sm:p-4 text-center">
-                  <Clock className="h-4 w-4 sm:h-6 sm:w-6 text-white mx-auto mb-1 sm:mb-2" />
-                  <div className="text-white font-semibold text-xs sm:text-sm">{tour.duration}</div>
-                  <div className="text-white/70 text-xs">Duration</div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 sm:p-4 text-center">
-                  <Users className="h-4 w-4 sm:h-6 sm:w-6 text-white mx-auto mb-1 sm:mb-2" />
-                  <div className="text-white font-semibold text-xs sm:text-sm">{tour.max_participants}</div>
-                  <div className="text-white/70 text-xs">Max Guests</div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 sm:p-4 text-center">
-                  <MapPin className="h-4 w-4 sm:h-6 sm:w-6 text-white mx-auto mb-1 sm:mb-2" />
-                  <div className="text-white font-semibold text-xs sm:text-sm">Western Cape</div>
-                  <div className="text-white/70 text-xs">Destination</div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 sm:p-4 text-center">
-                  <span className="text-lg sm:text-2xl font-bold text-white">$</span>
-                  <div className="text-white font-semibold text-xs sm:text-sm">{Math.round(tour.price_from / 18.5)}</div>
-                  <div className="text-white/70 text-xs">From USD</div>
-                  <div className="text-white/50 text-xs hidden sm:block">R{tour.price_from}</div>
-                </div>
-              </div>
-
-              {/* Call to Action */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg">
-                  Reserve Your Spot
-                </Button>
-                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg">
-                  <Camera className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-                  View Gallery
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Image Gallery Navigation */}
-        {images.length > 1 && (
-          <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 sm:gap-3 z-20">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedImage(index)}
-                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 border-2 ${
-                  selectedImage === index 
-                    ? 'bg-white border-white scale-110' 
-                    : 'bg-transparent border-white/50 hover:border-white'
-                }`}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 text-white animate-bounce">
-          <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 rotate-90" />
         </div>
       </section>
 
