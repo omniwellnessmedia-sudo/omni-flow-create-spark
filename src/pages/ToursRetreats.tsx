@@ -279,7 +279,7 @@ const TourCategoryCard = ({ category }: { category: TourCategory }) => (
     <CardContent className="p-6">
       <h3 className="text-xl font-semibold text-foreground mb-2">{category.name}</h3>
       <p className="text-muted-foreground mb-4">{category.description}</p>
-      <Link to={`/tours-retreats/${category.slug}`}>
+      <Link to={`/tour-category/${category.slug}`}>
         <Button variant="outline" className="w-full">
           Explore Category
           <ArrowRight className="ml-2 h-4 w-4" />
@@ -303,7 +303,7 @@ const PlaceholderCategoryCard = ({ title, description, slug, image }: { title: s
     <CardContent className="p-6">
       <h3 className="text-xl font-semibold text-foreground mb-2">{title}</h3>
       <p className="text-muted-foreground mb-4">{description}</p>
-      <Link to={`/tours-retreats/${slug}`}>
+      <Link to={`/tour-category/${slug}`}>
         <Button variant="outline" className="w-full">
           Explore Category
           <ArrowRight className="ml-2 h-4 w-4" />
@@ -358,7 +358,7 @@ const FeaturedTourCard = ({ tour }: { tour: Tour }) => (
         </div>
       </div>
 
-      <Link to={`/tours-retreats/${tour.category?.slug || 'tours'}/${tour.slug}`}>
+      <Link to={`/tour-category/${tour.category?.slug || 'tours'}/${tour.slug}`}>
         <Button className="w-full">
           View Details
           <ArrowRight className="ml-2 h-4 w-4" />
