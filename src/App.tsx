@@ -99,8 +99,8 @@ function App() {
             <Route path="/partner-profile/:id" element={<PartnerProfile />} />
             <Route path="/partners-directory" element={<PartnersDirectory />} />
             <Route path="/tours-retreats" element={<ToursRetreats />} />
-            <Route path="/tours-retreats/:category" element={<TourCategory />} />
-            <Route path="/tours-retreats/:category/:slug" element={<TourDetail />} />
+            <Route path="/tour-category/:category" element={<TourCategory />} />
+            <Route path="/tour-category/:category/:slug" element={<TourDetail />} />
             <Route path="/two-be-well" element={<TwoBeWell />} />
             <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
             <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
