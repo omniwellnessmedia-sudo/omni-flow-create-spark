@@ -230,7 +230,7 @@ const TourCategory = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Category Hero */}
-      <section className="relative h-80 bg-cover bg-center" style={{
+      <section className="relative h-64 sm:h-80 lg:h-96 bg-cover bg-center" style={{
         backgroundImage: `url(${categoryInfo.image_url})`,
         backgroundColor: '#f0f9ff'
       }}>
@@ -238,29 +238,29 @@ const TourCategory = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
         <div className="relative container mx-auto px-4 h-full flex items-center">
           <div className="max-w-3xl text-white">
-            <Link to="/tours-retreats" className="inline-flex items-center text-white/80 hover:text-white mb-4">
+            <Link to="/tours-retreats" className="inline-flex items-center text-white/80 hover:text-white mb-3 sm:mb-4 text-sm sm:text-base">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to All Tours
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{categoryInfo.name}</h1>
-            <p className="text-xl opacity-90">{categoryInfo.description}</p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">{categoryInfo.name}</h1>
+            <p className="text-base sm:text-lg lg:text-xl opacity-90">{categoryInfo.description}</p>
           </div>
         </div>
       </section>
 
       {/* Filters and Search */}
-      <section className="py-8 border-b">
+      <section className="py-4 sm:py-6 lg:py-8 border-b">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-            <div className="flex flex-col sm:flex-row gap-4 flex-1">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Input
                 placeholder="Search tours..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-sm"
+                className="w-full sm:max-w-sm"
               />
               <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="Price Range" />
                 </SelectTrigger>
                 <SelectContent>
@@ -271,7 +271,7 @@ const TourCategory = () => {
                 </SelectContent>
               </Select>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="Sort By" />
                 </SelectTrigger>
                 <SelectContent>
@@ -282,7 +282,7 @@ const TourCategory = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-end gap-2">
               <Button
                 variant={viewMode === 'grid' ? 'default' : 'outline'}
                 size="sm"
@@ -317,8 +317,8 @@ const TourCategory = () => {
           {filteredAndSortedTours.length > 0 ? (
             <div className={
               viewMode === 'grid' 
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                : "space-y-6"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+                : "space-y-4 sm:space-y-6"
             }>
               {filteredAndSortedTours.map(tour => (
                 <TourCard key={tour.id} tour={tour} viewMode={viewMode} />
@@ -359,8 +359,8 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
   if (viewMode === 'list') {
     return (
       <Card className="hover:shadow-lg transition-shadow">
-        <div className="flex flex-col md:flex-row">
-          <div className="md:w-80 h-48 md:h-auto relative overflow-hidden">
+        <div className="flex flex-col lg:flex-row">
+          <div className="lg:w-80 h-48 lg:h-auto relative overflow-hidden">
             <img 
               src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
               alt={tour.title}
@@ -370,22 +370,22 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
                 e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
               }}
             />
-            <div className="absolute top-4 left-4">
-              <Badge variant="secondary">{tour.difficulty_level}</Badge>
+            <div className="absolute top-3 left-3">
+              <Badge variant="secondary" className="text-xs">{tour.difficulty_level}</Badge>
             </div>
-            <div className="absolute top-4 right-4 flex gap-2">
-              <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm">
-                <Heart className="h-4 w-4" />
+            <div className="absolute top-3 right-3 flex gap-1">
+              <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm h-8 w-8 p-0">
+                <Heart className="h-3 w-3" />
               </Button>
-              <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm">
-                <Share2 className="h-4 w-4" />
+              <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm h-8 w-8 p-0">
+                <Share2 className="h-3 w-3" />
               </Button>
             </div>
           </div>
-          <CardContent className="flex-1 p-6">
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="text-xl font-semibold text-foreground">{tour.title}</h3>
-              <div className="text-right">
+          <CardContent className="flex-1 p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-foreground">{tour.title}</h3>
+              <div className="text-left sm:text-right">
                 <PriceDisplay 
                   price={tour.price_from} 
                   primaryCurrency="USD"
@@ -394,9 +394,9 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
                 <div className="text-sm text-muted-foreground">per person</div>
               </div>
             </div>
-            <p className="text-muted-foreground mb-4">{tour.subtitle}</p>
+            <p className="text-muted-foreground mb-4 text-sm sm:text-base">{tour.subtitle}</p>
             
-            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
+            <div className="flex flex-wrap gap-3 sm:gap-4 text-sm text-muted-foreground mb-4">
               <div className="flex items-center">
                 <Clock className="h-4 w-4 mr-1" />
                 {tour.duration}
@@ -407,21 +407,21 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
               </div>
               <div className="flex items-center">
                 <MapPin className="h-4 w-4 mr-1" />
-                {tour.destination}
+                <span className="truncate">{tour.destination}</span>
               </div>
             </div>
 
             {tour.highlights && (
               <div className="mb-4">
-                <div className="flex flex-wrap gap-2">
-                  {tour.highlights.slice(0, 3).map((highlight, index) => (
+                <div className="flex flex-wrap gap-1 sm:gap-2">
+                  {tour.highlights.slice(0, 2).map((highlight, index) => (
                     <Badge key={index} variant="outline" className="text-xs">
                       {highlight}
                     </Badge>
                   ))}
-                  {tour.highlights.length > 3 && (
+                  {tour.highlights.length > 2 && (
                     <Badge variant="outline" className="text-xs">
-                      +{tour.highlights.length - 3} more
+                      +{tour.highlights.length - 2} more
                     </Badge>
                   )}
                 </div>
@@ -429,7 +429,7 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
             )}
 
             <Link to={`/tours-retreats/${tour.category.slug}/${tour.slug}`}>
-              <Button className="w-full md:w-auto">View Details</Button>
+              <Button className="w-full sm:w-auto">View Details</Button>
             </Link>
           </CardContent>
         </div>
@@ -439,7 +439,7 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
 
   return (
     <Card className="group hover:shadow-xl transition-all duration-300">
-      <div className="relative overflow-hidden rounded-t-lg h-64">
+      <div className="relative overflow-hidden rounded-t-lg h-48 sm:h-56 lg:h-64">
         <img 
           src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
           alt={tour.title}
@@ -449,44 +449,45 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
             e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
           }}
         />
-        <div className="absolute top-4 left-4">
-          <Badge variant="secondary">{tour.difficulty_level}</Badge>
+        <div className="absolute top-3 left-3">
+          <Badge variant="secondary" className="text-xs">{tour.difficulty_level}</Badge>
         </div>
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-3 right-3">
           <div className="bg-primary/90 text-white px-2 py-1 rounded text-xs font-semibold">
-            From ${Math.round(tour.price_from / 18.5)} <span className="text-xs opacity-75">(R{tour.price_from})</span>
+            From ${Math.round(tour.price_from / 18.5)}
+            <span className="text-xs opacity-75 hidden sm:inline"> (R{tour.price_from})</span>
           </div>
         </div>
-        <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm">
-            <Heart className="h-4 w-4" />
+        <div className="absolute bottom-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm h-8 w-8 p-0">
+            <Heart className="h-3 w-3" />
           </Button>
-          <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm">
-            <Share2 className="h-4 w-4" />
+          <Button size="sm" variant="secondary" className="bg-white/20 backdrop-blur-sm h-8 w-8 p-0">
+            <Share2 className="h-3 w-3" />
           </Button>
         </div>
       </div>
-      <CardContent className="p-6">
-        <h3 className="text-xl font-semibold text-foreground mb-2">{tour.title}</h3>
-        <p className="text-muted-foreground mb-4">{tour.subtitle}</p>
+      <CardContent className="p-4 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">{tour.title}</h3>
+        <p className="text-muted-foreground mb-4 text-sm sm:text-base line-clamp-2">{tour.subtitle}</p>
         
-        <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-4">
+        <div className="flex flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground mb-4">
           <div className="flex items-center">
-            <Clock className="h-4 w-4 mr-1" />
+            <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
             {tour.duration}
           </div>
           <div className="flex items-center">
-            <Users className="h-4 w-4 mr-1" />
+            <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
             Max {tour.max_participants}
           </div>
           <div className="flex items-center">
-            <MapPin className="h-4 w-4 mr-1" />
-            {tour.destination}
+            <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+            <span className="truncate">{tour.destination}</span>
           </div>
         </div>
 
         <Link to={`/tours-retreats/${tour.category.slug}/${tour.slug}`}>
-          <Button className="w-full">View Details</Button>
+          <Button className="w-full text-sm sm:text-base">View Details</Button>
         </Link>
       </CardContent>
     </Card>

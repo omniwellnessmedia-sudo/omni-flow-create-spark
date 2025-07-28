@@ -167,7 +167,7 @@ const TourDetail = () => {
       />
       
       {/* Immersive Hero Section - National Geographic Style */}
-      <section className="relative h-screen bg-cover bg-center overflow-hidden">
+      <section className="relative h-[80vh] sm:h-[90vh] lg:h-screen bg-cover bg-center overflow-hidden">
         <img 
           src={images[selectedImage] || '/lovable-uploads/wellness-humans.png'} 
           alt={tour.title}
@@ -180,102 +180,106 @@ const TourDetail = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         
         {/* Back button */}
-        <div className="absolute top-6 left-6 z-20">
+        <div className="absolute top-4 left-4 z-20">
           <Link 
             to={`/tours-retreats/${tour?.category?.slug || 'indigenous-wisdom'}`} 
-            className="inline-flex items-center text-white/80 hover:text-white bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg transition-colors"
+            className="inline-flex items-center text-white/80 hover:text-white bg-black/20 backdrop-blur-sm px-3 py-2 rounded-lg transition-colors text-sm"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to {tour?.category?.name || 'Tours'}
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            <span className="hidden sm:inline">Back to {tour?.category?.name || 'Tours'}</span>
+            <span className="sm:hidden">Back</span>
           </Link>
         </div>
         
         {/* Expedition Badge */}
-        <div className="absolute top-20 left-8 z-20">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2">
-            <div className="flex items-center gap-2 text-white text-sm font-medium">
-              <Compass className="h-4 w-4" />
-              <span>OMNI WELLNESS EXPEDITION</span>
+        <div className="absolute top-16 left-4 z-20 hidden sm:block">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 py-1">
+            <div className="flex items-center gap-2 text-white text-xs font-medium">
+              <Compass className="h-3 w-3" />
+              <span>OMNI WELLNESS</span>
             </div>
           </div>
         </div>
 
         {/* National Geographic style categorization */}
-        <div className="absolute top-8 right-8 z-20 flex gap-2">
-          <Badge className="bg-yellow-500/90 text-black border-0 font-bold">
+        <div className="absolute top-4 right-4 z-20 flex gap-1">
+          <Badge className="bg-yellow-500/90 text-black border-0 font-bold text-xs px-2 py-1">
             <Award className="h-3 w-3 mr-1" />
-            EXCLUSIVE
+            <span className="hidden sm:inline">EXCLUSIVE</span>
+            <span className="sm:hidden">EXC</span>
           </Badge>
-          <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20">
-            <Heart className="h-4 w-4" />
+          <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0">
+            <Heart className="h-3 w-3" />
           </Button>
-          <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20">
-            <Share2 className="h-4 w-4" />
+          <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0">
+            <Share2 className="h-3 w-3" />
           </Button>
         </div>
 
         {/* Main Content */}
         <div className="absolute inset-0 flex items-end">
-          <div className="container mx-auto px-8 pb-16 z-10">
+          <div className="container mx-auto px-4 pb-8 sm:pb-12 lg:pb-16 z-10">
             <div className="max-w-4xl">
               {/* Journey Classification */}
-              <div className="flex items-center gap-3 mb-6">
-                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm text-xs">
                   <Mountain className="h-3 w-3 mr-1" />
-                  {tour.category?.name}
+                  <span className="hidden sm:inline">{tour.category?.name}</span>
+                  <span className="sm:hidden">{tour.category?.name?.split(' ')[0]}</span>
                 </Badge>
-                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm">
+                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm text-xs">
                   <Shield className="h-3 w-3 mr-1" />
-                  {tour.difficulty_level.toUpperCase()} DIFFICULTY
+                  <span className="hidden sm:inline">{tour.difficulty_level.toUpperCase()} DIFFICULTY</span>
+                  <span className="sm:hidden">{tour.difficulty_level.toUpperCase()}</span>
                 </Badge>
-                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm">
+                <Badge variant="outline" className="bg-white/10 text-white border-white/30 backdrop-blur-sm text-xs hidden sm:flex">
                   <Globe className="h-3 w-3 mr-1" />
-                  CULTURAL IMMERSION
+                  CULTURAL
                 </Badge>
               </div>
 
               {/* Title */}
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight tracking-tight">
                 {tour.title}
               </h1>
               
               {/* Subtitle */}
-              <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 sm:mb-8 max-w-3xl leading-relaxed">
                 {tour.subtitle}
               </p>
 
               {/* Expedition Details */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 text-center">
-                  <Clock className="h-6 w-6 text-white mx-auto mb-2" />
-                  <div className="text-white font-semibold">{tour.duration}</div>
-                  <div className="text-white/70 text-sm">Duration</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8">
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 sm:p-4 text-center">
+                  <Clock className="h-4 w-4 sm:h-6 sm:w-6 text-white mx-auto mb-1 sm:mb-2" />
+                  <div className="text-white font-semibold text-xs sm:text-sm">{tour.duration}</div>
+                  <div className="text-white/70 text-xs">Duration</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 text-center">
-                  <Users className="h-6 w-6 text-white mx-auto mb-2" />
-                  <div className="text-white font-semibold">{tour.max_participants}</div>
-                  <div className="text-white/70 text-sm">Max Guests</div>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 sm:p-4 text-center">
+                  <Users className="h-4 w-4 sm:h-6 sm:w-6 text-white mx-auto mb-1 sm:mb-2" />
+                  <div className="text-white font-semibold text-xs sm:text-sm">{tour.max_participants}</div>
+                  <div className="text-white/70 text-xs">Max Guests</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 text-center">
-                  <MapPin className="h-6 w-6 text-white mx-auto mb-2" />
-                  <div className="text-white font-semibold">Western Cape</div>
-                  <div className="text-white/70 text-sm">Destination</div>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 sm:p-4 text-center">
+                  <MapPin className="h-4 w-4 sm:h-6 sm:w-6 text-white mx-auto mb-1 sm:mb-2" />
+                  <div className="text-white font-semibold text-xs sm:text-sm">Western Cape</div>
+                  <div className="text-white/70 text-xs">Destination</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 text-center">
-                  <span className="text-2xl font-bold text-white">$</span>
-                  <div className="text-white font-semibold">{Math.round(tour.price_from / 18.5)}</div>
-                  <div className="text-white/70 text-sm">From USD</div>
-                  <div className="text-white/50 text-xs">R{tour.price_from}</div>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-2 sm:p-4 text-center">
+                  <span className="text-lg sm:text-2xl font-bold text-white">$</span>
+                  <div className="text-white font-semibold text-xs sm:text-sm">{Math.round(tour.price_from / 18.5)}</div>
+                  <div className="text-white/70 text-xs">From USD</div>
+                  <div className="text-white/50 text-xs hidden sm:block">R{tour.price_from}</div>
                 </div>
               </div>
 
               {/* Call to Action */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-4 text-lg">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg">
                   Reserve Your Spot
                 </Button>
-                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm px-8 py-4 text-lg">
-                  <Camera className="h-5 w-5 mr-2" />
+                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg">
+                  <Camera className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                   View Gallery
                 </Button>
               </div>
@@ -285,12 +289,12 @@ const TourDetail = () => {
 
         {/* Image Gallery Navigation */}
         {images.length > 1 && (
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
+          <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 sm:gap-3 z-20">
             {images.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
-                className={`w-4 h-4 rounded-full transition-all duration-300 border-2 ${
+                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 border-2 ${
                   selectedImage === index 
                     ? 'bg-white border-white scale-110' 
                     : 'bg-transparent border-white/50 hover:border-white'
@@ -301,24 +305,27 @@ const TourDetail = () => {
         )}
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 right-8 text-white animate-bounce">
-          <ChevronRight className="h-6 w-6 rotate-90" />
+        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 text-white animate-bounce">
+          <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 rotate-90" />
         </div>
       </section>
 
       {/* Tour Content Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">
             
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-6 lg:space-y-8">
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="overview">Overview</TabsTrigger>
-                  <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
-                  <TabsTrigger value="inclusions">Inclusions</TabsTrigger>
-                  <TabsTrigger value="wellness">Wellness Highlights</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+                  <TabsTrigger value="overview" className="text-xs sm:text-sm px-2 py-2">Overview</TabsTrigger>
+                  <TabsTrigger value="itinerary" className="text-xs sm:text-sm px-2 py-2">Itinerary</TabsTrigger>
+                  <TabsTrigger value="inclusions" className="text-xs sm:text-sm px-2 py-2">Inclusions</TabsTrigger>
+                  <TabsTrigger value="wellness" className="text-xs sm:text-sm px-2 py-2">
+                    <span className="hidden sm:inline">Wellness Highlights</span>
+                    <span className="sm:hidden">Wellness</span>
+                  </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-6">
@@ -339,11 +346,11 @@ const TourDetail = () => {
                         <CardTitle>Journey Highlights</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 gap-3">
                           {tour.highlights.map((highlight, index) => (
                             <div key={index} className="flex items-start space-x-3">
-                              <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                              <span className="text-muted-foreground">{highlight}</span>
+                              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-primary mt-0.5 flex-shrink-0" />
+                              <span className="text-muted-foreground text-sm sm:text-base">{highlight}</span>
                             </div>
                           ))}
                         </div>
@@ -395,7 +402,7 @@ const TourDetail = () => {
                 </TabsContent>
 
                 <TabsContent value="inclusions" className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6">
                     {tour.inclusions && tour.inclusions.length > 0 && (
                       <Card>
                         <CardHeader>

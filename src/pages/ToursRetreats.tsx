@@ -98,22 +98,22 @@ const ToursRetreats = () => {
       ]} />
       
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
+      <section className="relative py-12 sm:py-16 lg:py-20 xl:py-32 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6">
             Transformative Wellness Journeys
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-3xl mx-auto">
             Discover conscious travel experiences that heal, inspire, and connect you 
             with ancient wisdom and modern wellness practices.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Button size="lg" className="bg-gradient-to-r from-primary to-secondary text-primary-foreground">
               Explore Our Journeys
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
             <Button variant="outline" size="lg">
-              <Download className="mr-2 h-5 w-5" />
+              <Download className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               Download Brochure
             </Button>
           </div>
@@ -127,13 +127,13 @@ const ToursRetreats = () => {
             Journey Categories
           </h2>
           {categories.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {categories.map(category => (
                 <TourCategoryCard key={category.id} category={category} />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               <PlaceholderCategoryCard 
                 title="Indigenous Wisdom"
                 description="Connect with ancient healing traditions and indigenous knowledge systems"
@@ -170,13 +170,13 @@ const ToursRetreats = () => {
             Featured Experiences
           </h2>
           {featuredTours.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {featuredTours.map(tour => (
                 <FeaturedTourCard key={tour.id} tour={tour} />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               <PlaceholderTourCard 
                 title="Conscious Connections: Indigenous Wisdom + Healing"
                 duration="8 days / 7 nights"
