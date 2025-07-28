@@ -360,11 +360,11 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
     return (
       <Card className="hover:shadow-lg transition-shadow">
         <div className="flex flex-col lg:flex-row">
-          <div className="lg:w-80 h-48 lg:h-auto relative overflow-hidden">
+          <div className="lg:w-80 h-64 sm:h-48 lg:h-auto relative overflow-hidden">
             <img 
               src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
               alt={tour.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
               loading="lazy"
               onError={(e) => {
                 e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
@@ -439,11 +439,11 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
 
   return (
     <Card className="group hover:shadow-xl transition-all duration-300">
-      <div className="relative overflow-hidden rounded-t-lg h-48 sm:h-56 lg:h-64">
+      <div className="relative overflow-hidden rounded-t-lg h-64 sm:h-56 lg:h-64">
         <img 
           src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
           alt={tour.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
           onError={(e) => {
             e.currentTarget.src = '/lovable-uploads/wellness-humans.png';

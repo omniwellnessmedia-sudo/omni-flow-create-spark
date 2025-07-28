@@ -229,11 +229,11 @@ const ToursRetreats = () => {
 
 const TourCategoryCard = ({ category }: { category: TourCategory }) => (
   <Card className="group hover:shadow-lg transition-all duration-300 border-border">
-    <div className="relative overflow-hidden rounded-t-lg h-48">
+    <div className="relative overflow-hidden rounded-t-lg h-48 sm:h-64">
       <img 
         src={category.image_url || '/lovable-uploads/omni-wellness-hero.jpg'} 
         alt={category.name}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
         loading="eager"
         onError={(e) => {
           e.currentTarget.src = '/lovable-uploads/omni-wellness-hero.jpg';
@@ -256,11 +256,11 @@ const TourCategoryCard = ({ category }: { category: TourCategory }) => (
 
 const PlaceholderCategoryCard = ({ title, description, slug, image }: { title: string; description: string; slug: string; image: string }) => (
   <Card className="group hover:shadow-lg transition-all duration-300">
-    <div className="relative overflow-hidden rounded-t-lg h-48">
+    <div className="relative overflow-hidden rounded-t-lg h-48 sm:h-64">
       <img 
         src={image} 
         alt={title}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
         loading="eager"
       />
       <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
@@ -280,11 +280,11 @@ const PlaceholderCategoryCard = ({ title, description, slug, image }: { title: s
 
 const FeaturedTourCard = ({ tour }: { tour: Tour }) => (
   <Card className="group hover:shadow-xl transition-all duration-300 border-border">
-    <div className="relative overflow-hidden rounded-t-lg h-64">
+    <div className="relative overflow-hidden rounded-t-lg h-64 sm:h-72">
       <img 
         src={tour.hero_image_url || '/lovable-uploads/conscious-connections-hero.jpg'} 
         alt={tour.title}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
         loading="eager"
         onError={(e) => {
           e.currentTarget.src = '/lovable-uploads/conscious-connections-hero.jpg';
