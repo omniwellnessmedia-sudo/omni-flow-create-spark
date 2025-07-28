@@ -1,18 +1,9 @@
 
+import MegaNavigation from "@/components/MegaNavigation";
+import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import ImagePreloader from "@/components/ImagePreloader";
 
 const Portfolio = () => {
-  // Extract images for preloading
-  const projectImages = [
-    "/lovable-uploads/9d51151d-b05c-4392-9f83-9e301a4f790d.png",
-    "/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png",
-    "/lovable-uploads/965c3c16-d837-4f01-8f8a-220d4a14a83b.png",
-    "/lovable-uploads/00bcae7d-32b7-4512-ba26-c767559ee023.png",
-    "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png",
-    "/lovable-uploads/83be8984-2c43-478e-ba25-b848902c104f.png"
-  ];
-
   const projects = [
     {
       title: "Community Garden Initiative",
@@ -66,13 +57,13 @@ const Portfolio = () => {
 
   return (
     <div className="min-h-screen">
-      <ImagePreloader images={projectImages} priority />
-      <main>
+      <MegaNavigation />
+      <main className="pt-16">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="heading-primary">
-              Our <span className="text-omni-violet">Portfolio</span>
+            <h1 className="heading-secondary no-faded-text">
+              Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Portfolio</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
               Real stories, authentic impact. Explore how we've partnered with communities and organizations 
@@ -140,8 +131,8 @@ const Portfolio = () => {
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="heading-secondary">
-                Our <span className="text-omni-orange">Impact</span>
+              <h2 className="heading-secondary no-faded-text">
+                Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Impact</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Numbers that matter - real impact in communities across South Africa.
@@ -160,7 +151,7 @@ const Portfolio = () => {
                   className="text-center animate-fade-in-up"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <div className="text-4xl sm:text-5xl font-bold text-omni-indigo mb-2">
+                  <div className="text-4xl sm:text-5xl font-bold bg-rainbow-gradient bg-clip-text text-transparent mb-2">
                     {stat.number}
                   </div>
                   <div className="text-gray-600 font-medium">{stat.label}</div>
@@ -170,6 +161,7 @@ const Portfolio = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 };

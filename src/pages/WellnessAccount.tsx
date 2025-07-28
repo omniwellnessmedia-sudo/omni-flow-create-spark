@@ -5,11 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import MegaNavigation from "@/components/MegaNavigation";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
+import Footer from "@/components/Footer";
 import { User, Settings, Heart, Star, Calendar, Coins, Gift } from "lucide-react";
 import { toast } from "sonner";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import ErrorBoundary from "@/components/ErrorBoundary";
 
 const WellnessAccount = () => {
   const { user, signOut } = useAuth();
@@ -17,7 +17,6 @@ const WellnessAccount = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [wellCoinBalance, setWellCoinBalance] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -27,9 +26,6 @@ const WellnessAccount = () => {
 
   const fetchUserData = async () => {
     if (!user) return;
-    
-    setLoading(true);
-    setError(null);
     
     try {
       // Fetch user profile
@@ -61,7 +57,6 @@ const WellnessAccount = () => {
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
-      setError('Failed to load account data. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -74,28 +69,18 @@ const WellnessAccount = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <LoadingSpinner size="lg" text="Loading your account..." />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <Card className="max-w-md w-full">
-          <CardContent className="pt-6 text-center">
-            <p className="text-red-600 mb-4">{error}</p>
-            <Button onClick={() => fetchUserData()}>Try Again</Button>
-          </CardContent>
-        </Card>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-omni-blue mx-auto mb-4"></div>
+          <p>Loading your account...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <ErrorBoundary>
-      <div className="min-h-screen bg-gray-50">
-        <WellnessExchangeNavigation />
+    <div className="min-h-screen bg-gray-50">
+      <MegaNavigation />
+      <WellnessExchangeNavigation />
       
       <main className="pt-8 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -272,8 +257,8 @@ const WellnessAccount = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
-    </ErrorBoundary>
   );
 };
 
