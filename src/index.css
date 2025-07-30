@@ -357,15 +357,16 @@
 }
 
 /* Enhanced button contrast for readability */
-.bg-wellhub-gradient,
-.bg-rainbow-enhanced,
-.bg-rainbow-gradient {
+/* Button and solid background gradients should have white text */
+.bg-wellhub-gradient:not(.bg-clip-text),
+.bg-rainbow-enhanced:not(.bg-clip-text),
+.bg-rainbow-gradient:not(.bg-clip-text) {
   color: white !important;
 }
 
-.bg-wellhub-gradient *,
-.bg-rainbow-enhanced *,
-.bg-rainbow-gradient * {
+.bg-wellhub-gradient:not(.bg-clip-text) *,
+.bg-rainbow-enhanced:not(.bg-clip-text) *,
+.bg-rainbow-gradient:not(.bg-clip-text) * {
   color: white !important;
 }
 
