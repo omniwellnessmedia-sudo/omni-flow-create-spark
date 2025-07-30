@@ -8,8 +8,7 @@ const Footer = () => {
       behavior: 'smooth'
     });
   };
-  return (
-    <footer className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white mt-16 overflow-hidden">
+  return <footer className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white mt-16 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 opacity-30"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1),transparent_70%)]"></div>
@@ -53,11 +52,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative">
-                <img 
-                  src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
-                  alt="Omni Wellness Media" 
-                  className="h-20 w-20 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" 
-                />
+                <img src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" alt="Omni Wellness Media" className="h-20 w-20 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-accent opacity-20 animate-pulse"></div>
               </div>
               <div>
@@ -77,7 +72,7 @@ const Footer = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/20 rounded-lg">
-                  <Lightbulb className="w-4 h-4 text-primary" />
+                  <Lightbulb className="w-4 h-4 text-primary bg-white" />
                 </div>
                 <span className="text-sm text-gray-300">Conscious Content</span>
               </div>
@@ -167,9 +162,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-300 text-sm">
-              © 2024 Omni Wellness Media. All rights reserved.
-            </p>
+            <p className="text-gray-300 text-sm">© 2025 Omni Wellness Media. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors">
                 Privacy Policy
@@ -189,7 +182,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
 export default Footer;
