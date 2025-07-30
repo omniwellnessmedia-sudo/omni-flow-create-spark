@@ -13,7 +13,7 @@ import {
 import { User, Settings, LogOut, LogIn, Menu, X } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import MegaNavigation from '@/components/MegaNavigation';
-import omniLogo from '@/assets/omni-logo.png';
+import omniLogo from '/lovable-uploads/35aeb178-5b75-48ed-8192-1ac1ba363620.png';
 import { useState } from 'react';
 
 const SiteHeader = () => {
@@ -38,7 +38,7 @@ const SiteHeader = () => {
               <img 
                 src={omniLogo} 
                 alt="Omni Wellness Media" 
-                className="h-10 w-10 object-contain"
+                className="h-12 w-12 object-contain rounded-full border-2 border-primary/20 bg-white/10 backdrop-blur-sm p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
               />
               <span className="hidden font-bold text-lg sm:inline-block">
                 Omni Wellness Media
