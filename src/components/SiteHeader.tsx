@@ -38,7 +38,7 @@ const SiteHeader = () => {
               <img 
                 src={omniLogo} 
                 alt="Omni Wellness Media" 
-                className="h-12 w-12 object-contain rounded-full border-2 border-primary/20 bg-white/10 backdrop-blur-sm p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
+                className="h-24 w-24 object-contain rounded-full border-2 border-primary/20 bg-white/10 backdrop-blur-sm p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
               />
               <span className="hidden font-bold text-lg sm:inline-block">
                 Omni Wellness Media
