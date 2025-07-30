@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ChevronUp, Mail, Calendar, MessageCircle } from "lucide-react";
+import { ChevronUp, Mail, Calendar, MessageCircle, Facebook, Instagram, Linkedin, Youtube, Heart, Lightbulb, BookOpen, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 const Footer = () => {
   const scrollToTop = () => {
@@ -8,102 +8,159 @@ const Footer = () => {
       behavior: 'smooth'
     });
   };
-  return <footer className="text-white w-full bg-teal-700 mt-16">
-      <div className="container-width section-spacing">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-          {/* Logo and Description */}
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="relative">
-                <img src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" alt="Omni Wellness Media" className="h-16 w-16 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
-                <div className="absolute inset-0 rounded-full bg-rainbow-gradient opacity-20 animate-pulse"></div>
-              </div>
-              <div>
-                <span className="font-heading font-bold text-xl text-white block">
-                  Omni Wellness Media
-                </span>
-                <span className="text-gray-300 text-sm">Conscious Content Creation</span>
+  return (
+    <footer className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white mt-16 overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 opacity-30"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1),transparent_70%)]"></div>
+      
+      <div className="relative container-width py-16">
+        {/* Newsletter Spotlight */}
+        <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl p-8 mb-16 border border-white/10 backdrop-blur-sm">
+          <div className="text-center max-w-2xl mx-auto">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-gradient-to-r from-primary to-secondary rounded-full">
+                <Heart className="w-6 h-6 text-white" />
               </div>
             </div>
-            <p className="text-gray-300 mb-6 max-w-md leading-relaxed">
-              Empowering communities through conscious content creation, business development, 
-              and holistic wellness solutions. Creating positive change from South Africa to the world.
+            <h3 className="font-heading text-2xl font-bold mb-3">
+              Join Our <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Wellness Community</span>
+            </h3>
+            <p className="text-gray-300 mb-6">
+              Get weekly wellness tips, conscious content insights, and be the first to know about our transformative projects.
             </p>
-
-            {/* Contact Actions */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-6">
-              <Button size="sm" className="bg-omni-violet hover:bg-omni-violet/90 text-white font-medium" asChild>
-                <a href="mailto:omnimediawellness@gmail.com">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button size="lg" className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-medium" asChild>
+                <a href="mailto:omnimediawellness@gmail.com?subject=Newsletter Subscription">
                   <Mail className="w-4 h-4 mr-2" />
-                  Email Us
+                  Subscribe to Newsletter
                 </a>
               </Button>
-              <Button size="sm" variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
-                <Link to="/contact" className="text-zinc-100">
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
+                <Link to="/contact">
                   <Calendar className="w-4 h-4 mr-2" />
-                  Book Appointment
+                  Book Consultation
                 </Link>
               </Button>
             </div>
+          </div>
+        </div>
 
-            {/* Chat/Subscribe Feature */}
-            <div className="rounded-lg p-4 mb-6 bg-teal-800">
-              <div className="flex items-center gap-2 mb-2">
-                <MessageCircle className="w-4 h-4 text-omni-blue" />
-                <h4 className="font-bold text-zinc-100">Stay Connected</h4>
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          
+          {/* Brand Section */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+                  alt="Omni Wellness Media" 
+                  className="h-20 w-20 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" 
+                />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-accent opacity-20 animate-pulse"></div>
               </div>
-              <p className="text-gray-300 text-sm mb-3">
-                Subscribe for wellness tips and project updates
-              </p>
-              <a href="mailto:omnimediawellness@gmail.com?subject=Newsletter Subscription" className="text-omni-blue hover:text-omni-blue/80 text-sm font-medium transition-colors">
-                Subscribe to Newsletter →
-              </a>
+              <div>
+                <h3 className="font-heading font-bold text-2xl text-white mb-1">
+                  Omni Wellness Media
+                </h3>
+                <p className="text-primary font-medium">Conscious Content Creation</p>
+              </div>
+            </div>
+            
+            <p className="text-gray-300 mb-8 max-w-md leading-relaxed text-lg">
+              Bridging wellness, outreach & media to empower South Africa's journey to health & consciousness. 
+              Creating positive change through conscious content and sustainable solutions.
+            </p>
+
+            {/* Wellness Mission Highlights */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/20 rounded-lg">
+                  <Lightbulb className="w-4 h-4 text-primary" />
+                </div>
+                <span className="text-sm text-gray-300">Conscious Content</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-secondary/20 rounded-lg">
+                  <Users className="w-4 h-4 text-secondary" />
+                </div>
+                <span className="text-sm text-gray-300">Community Empowerment</span>
+              </div>
             </div>
 
-            {/* Social Media */}
+            {/* Social Media with proper icons */}
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+              <a href="#" className="group p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110">
+                <Facebook className="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors" />
                 <span className="sr-only">Facebook</span>
-                📘
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+              <a href="#" className="group p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110">
+                <Instagram className="w-5 h-5 text-gray-400 group-hover:text-pink-400 transition-colors" />
                 <span className="sr-only">Instagram</span>
-                📷
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+              <a href="#" className="group p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110">
+                <Linkedin className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
                 <span className="sr-only">LinkedIn</span>
-                💼
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-gray-800">
+              <a href="#" className="group p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110">
+                <Youtube className="w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
                 <span className="sr-only">YouTube</span>
-                📺
               </a>
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Services & Solutions */}
           <div>
-            <h3 className="font-heading font-bold text-lg mb-6 text-white ">Quick Links</h3>
+            <h3 className="font-heading font-bold text-lg mb-6 text-white flex items-center gap-2">
+              <div className="w-2 h-2 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+              Services & Solutions
+            </h3>
             <ul className="space-y-3">
-              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">About Us</Link></li>
-              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Services</Link></li>
-              <li><Link to="/portfolio" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Portfolio</Link></li>
-              <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">AI Tools</Link></li>
+              <li><Link to="/services/business-consulting" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
+                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">Business Development</span>
+              </Link></li>
+              <li><Link to="/services/media-production" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
+                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">Media Production</span>
+              </Link></li>
+              <li><Link to="/services/social-media-strategy" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
+                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">Social Media Strategy</span>
+              </Link></li>
+              <li><Link to="/services/web-development" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
+                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">Web Development</span>
+              </Link></li>
+              <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
+                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">AI Wellness Tools</span>
+              </Link></li>
             </ul>
           </div>
 
-          {/* Content & Resources */}
-          <div className="bg-transparent">
-            <h3 className="font-heading mb-6 text-lg font-bold text-zinc-100">Content & Resources</h3>
+          {/* Wellness Resources */}
+          <div>
+            <h3 className="font-heading font-bold text-lg mb-6 text-white flex items-center gap-2">
+              <div className="w-2 h-2 bg-gradient-to-r from-secondary to-accent rounded-full"></div>
+              Wellness Resources
+            </h3>
             <ul className="space-y-3">
-              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Blog</Link></li>
-              <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Podcast</Link></li>
-              <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">Contact</Link></li>
-              <li>
-                <a href="mailto:omnimediawellness@gmail.com" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
-                  Direct Email
-                </a>
-              </li>
+              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Wellness Blog</span>
+              </Link></li>
+              <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 text-gray-400 group-hover:text-secondary transition-colors" />
+                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Wellness Podcast</span>
+              </Link></li>
+              <li><Link to="/wellness-community" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group flex items-center gap-2">
+                <Users className="w-4 h-4 text-gray-400 group-hover:text-accent transition-colors" />
+                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Community</span>
+              </Link></li>
+              <li><Link to="/tours-retreats" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group flex items-center gap-2">
+                <Heart className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Tours & Retreats</span>
+              </Link></li>
+              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
+                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Our Story</span>
+              </Link></li>
             </ul>
           </div>
         </div>
@@ -132,6 +189,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
 export default Footer;
