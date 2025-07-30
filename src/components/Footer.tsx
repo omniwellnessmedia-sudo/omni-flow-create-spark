@@ -90,21 +90,21 @@ const Footer = () => {
             </div>
 
             {/* Social Media with proper icons */}
-            <div className="flex space-x-4">
-              <a href="#" className="group p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110">
-                <Facebook className="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors" />
+            <div className="flex justify-center space-x-4">
+              <a href="#" className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20">
+                <Facebook className="w-5 h-5 text-white group-hover:text-blue-300 transition-colors" />
                 <span className="sr-only">Facebook</span>
               </a>
-              <a href="#" className="group p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110">
-                <Instagram className="w-5 h-5 text-gray-400 group-hover:text-pink-400 transition-colors" />
+              <a href="#" className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20">
+                <Instagram className="w-5 h-5 text-white group-hover:text-pink-300 transition-colors" />
                 <span className="sr-only">Instagram</span>
               </a>
-              <a href="#" className="group p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110">
-                <Linkedin className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+              <a href="#" className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20">
+                <Linkedin className="w-5 h-5 text-white group-hover:text-blue-300 transition-colors" />
                 <span className="sr-only">LinkedIn</span>
               </a>
-              <a href="#" className="group p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all duration-300 hover:scale-110">
-                <Youtube className="w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
+              <a href="#" className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20">
+                <Youtube className="w-5 h-5 text-white group-hover:text-red-300 transition-colors" />
                 <span className="sr-only">YouTube</span>
               </a>
             </div>
@@ -117,20 +117,20 @@ const Footer = () => {
               Services & Solutions
             </h3>
             <ul className="space-y-3">
-              <li><Link to="/services/business-consulting" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
-                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">Business Development</span>
+              <li><Link to="/services/business-consulting" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+                Business Development
               </Link></li>
-              <li><Link to="/services/media-production" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
-                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">Media Production</span>
+              <li><Link to="/services/media-production" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+                Media Production
               </Link></li>
-              <li><Link to="/services/social-media-strategy" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
-                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">Social Media Strategy</span>
+              <li><Link to="/services/social-media-strategy" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+                Social Media Strategy
               </Link></li>
-              <li><Link to="/services/web-development" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
-                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">Web Development</span>
+              <li><Link to="/services/web-development" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+                Web Development
               </Link></li>
-              <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
-                <span className="group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent">AI Wellness Tools</span>
+              <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+                AI Wellness Tools
               </Link></li>
             </ul>
           </div>
@@ -142,24 +142,24 @@ const Footer = () => {
               Wellness Resources
             </h3>
             <ul className="space-y-3">
-              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
-                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Wellness Blog</span>
+              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                Wellness Blog
               </Link></li>
-              <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-gray-400 group-hover:text-secondary transition-colors" />
-                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Wellness Podcast</span>
+              <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                Wellness Podcast
               </Link></li>
-              <li><Link to="/wellness-community" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group flex items-center gap-2">
-                <Users className="w-4 h-4 text-gray-400 group-hover:text-accent transition-colors" />
-                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Community</span>
+              <li><Link to="/wellness-community" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
+                <Users className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                Community
               </Link></li>
-              <li><Link to="/tours-retreats" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group flex items-center gap-2">
-                <Heart className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
-                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Tours & Retreats</span>
+              <li><Link to="/tours-retreats" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
+                <Heart className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                Tours & Retreats
               </Link></li>
-              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block group">
-                <span className="group-hover:bg-gradient-to-r group-hover:from-secondary group-hover:to-accent group-hover:bg-clip-text group-hover:text-transparent">Our Story</span>
+              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+                Our Story
               </Link></li>
             </ul>
           </div>
