@@ -39,6 +39,7 @@ const MegaNavigation = () => {
         { name: 'Marketplace', href: '/wellness-marketplace', icon: '🛒' },
         { name: 'Service Providers', href: '/wellness-exchange', icon: '🔄' },
         { name: 'Find Services', href: '/search-services', icon: '🔍' },
+        { name: 'Exercise Library', href: '/exercise-library', icon: '💪' },
         { name: 'Community Blog', href: '/community-blog', icon: '✍️' },
         { name: 'My Account', href: '/wellness-account', icon: '👤' },
         { name: 'Add Service', href: '/add-service', icon: '➕' },
