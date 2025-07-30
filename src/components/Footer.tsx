@@ -24,7 +24,7 @@ const Footer = () => {
               </div>
             </div>
             <h3 className="font-heading text-2xl font-bold mb-3">
-              Join Our <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Wellness Community</span>
+              Join Our <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-bold">Wellness Community</span>
             </h3>
             <p className="text-gray-300 mb-6">
               Get weekly wellness tips, conscious content insights, and be the first to know about our transformative projects.
