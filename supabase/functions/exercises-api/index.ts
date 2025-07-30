@@ -41,36 +41,43 @@ serve(async (req) => {
       );
     }
 
-    // Parse query parameters from URL
-    const url = new URL(req.url);
-    const searchParams = new URLSearchParams(url.search);
-    
-    const params: ExerciseParams = {};
-    
-    if (searchParams.get('name')) {
-      params.name = searchParams.get('name')!;
-    }
-    if (searchParams.get('type')) {
-      params.type = searchParams.get('type') as ExerciseParams['type'];
-    }
-    if (searchParams.get('muscle')) {
-      params.muscle = searchParams.get('muscle')!;
-    }
-    if (searchParams.get('difficulty')) {
-      params.difficulty = searchParams.get('difficulty') as ExerciseParams['difficulty'];
+    let params: ExerciseParams = {};
+
+    if (req.method === 'POST') {
+      // Handle POST request with JSON body
+      const body = await req.json();
+      params = body.filters || {};
+    } else {
+      // Handle GET request with query parameters
+      const url = new URL(req.url);
+      const searchParams = new URLSearchParams(url.search);
+      
+      if (searchParams.get('name')) {
+        params.name = searchParams.get('name')!;
+      }
+      if (searchParams.get('type')) {
+        params.type = searchParams.get('type') as ExerciseParams['type'];
+      }
+      if (searchParams.get('muscle')) {
+        params.muscle = searchParams.get('muscle')!;
+      }
+      if (searchParams.get('difficulty')) {
+        params.difficulty = searchParams.get('difficulty') as ExerciseParams['difficulty'];
+      }
     }
 
     // Build query string for API Ninjas
     const queryParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        queryParams.append(key, value);
+      if (value && value.trim()) {
+        queryParams.append(key, value.trim());
       }
     });
 
     const apiUrl = `https://api.api-ninjas.com/v1/exercises${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
     
     console.log('Fetching exercises from:', apiUrl);
+    console.log('Search parameters:', params);
 
     const response = await fetch(apiUrl, {
       method: 'GET',

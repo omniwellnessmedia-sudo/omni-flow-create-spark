@@ -56,6 +56,7 @@ import Resources from '@/pages/Resources';
 import AdminDashboard from '@/pages/AdminDashboard';
 import NotFound from '@/pages/NotFound';
 import TravelWellConnectedStore from '@/pages/TravelWellConnectedStore';
+import ExerciseLibrary from '@/pages/ExerciseLibrary';
 
 function App() {
   return (
@@ -105,6 +106,7 @@ function App() {
             <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
             <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
             <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
+            <Route path="/exercise-library" element={<ExerciseLibrary />} />
             <Route path="/ai-tools" element={<AITools />} />
             <Route path="/data-products" element={<DataProducts />} />
             <Route path="/device-compatibility" element={<DeviceCompatibility />} />

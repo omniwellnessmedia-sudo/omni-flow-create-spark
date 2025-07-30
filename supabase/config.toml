@@ -1,1 +1,4 @@
 project_id = "dtjmhieeywdvhjxqyxad"
+
+[functions.exercises-api]
+verify_jwt = false
