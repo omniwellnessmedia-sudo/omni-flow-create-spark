@@ -47,29 +47,29 @@ const HeroSection = () => {
         </div>
 
         {/* Content Pillars */}
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:gap-6 mb-12 sm:mb-16 relative z-10 overflow-safe px-4" data-tour="mission">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16 relative z-10 max-w-4xl mx-auto px-4" data-tour="mission">
           {[
-            { name: 'Inspiration', color: 'from-purple-500 to-pink-500', icon: '✨' },
-            { name: 'Education', color: 'from-blue-500 to-cyan-500', icon: '📚' },
-            { name: 'Empowerment', color: 'from-green-500 to-emerald-500', icon: '💪' },
-            { name: 'Wellness', color: 'from-orange-500 to-yellow-500', icon: '🧘' }
+            { name: 'Inspiration', color: 'from-purple-500 to-pink-500', icon: '✨', href: '/blog?category=inspiration' },
+            { name: 'Education', color: 'from-blue-500 to-cyan-500', icon: '📚', href: '/blog?category=education' },
+            { name: 'Empowerment', color: 'from-green-500 to-emerald-500', icon: '💪', href: '/blog?category=empowerment' },
+            { name: 'Wellness', color: 'from-orange-500 to-yellow-500', icon: '🧘', href: '/wellness-marketplace' }
           ].map((pillar, index) => (
-            <div 
+            <Link
               key={pillar.name}
-              className={`group relative px-3 sm:px-4 lg:px-6 py-2 sm:py-3 bg-gradient-to-r ${pillar.color} rounded-xl sm:rounded-2xl text-white font-semibold text-xs sm:text-sm shadow-xl cursor-pointer transform transition-all duration-500 hover:scale-110 hover:rotate-1 hover:shadow-2xl animate-fade-in flex-shrink-0 min-w-0 max-w-full`}
-              style={{ animationDelay: `${index * 0.2}s` }}
+              to={pillar.href}
+              className={`group relative p-6 bg-gradient-to-br ${pillar.color} rounded-2xl text-white font-semibold shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl animate-fade-in block text-center`}
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="flex items-center gap-1 sm:gap-2 min-w-0">
-                <span className="text-sm sm:text-lg group-hover:scale-125 transition-transform duration-300 flex-shrink-0">
+              <div className="flex flex-col items-center gap-3">
+                <span className="text-3xl group-hover:scale-110 transition-transform duration-300">
                   {pillar.icon}
                 </span>
-                <span className="group-hover:tracking-wider transition-all duration-300 text-ellipsis overflow-hidden whitespace-nowrap">
+                <span className="text-base font-bold group-hover:tracking-wider transition-all duration-300">
                   {pillar.name}
                 </span>
               </div>
-              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 rounded-xl sm:rounded-2xl transition-opacity duration-300"></div>
-              <div className="absolute -inset-1 bg-gradient-to-r from-white/20 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
-            </div>
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300"></div>
+            </Link>
           ))}
         </div>
 
