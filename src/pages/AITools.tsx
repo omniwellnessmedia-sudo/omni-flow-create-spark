@@ -30,8 +30,10 @@ import {
   Globe,
   Users,
   MessageSquare,
-  Calendar
+  Calendar,
+  Plus
 } from "lucide-react";
+import CanvaDesignStudio from "@/components/CanvaDesignStudio";
 
 const AITools = () => {
   const [userType, setUserType] = useState<'practitioner' | 'enthusiast' | null>(null);
@@ -44,6 +46,32 @@ const AITools = () => {
   const handleToolDemo = async (toolName: string) => {
     console.log("Tool demo activated:", toolName);
     setLoadingDemo(toolName);
+    
+    // Special handling for Canva Design Studio
+    if (toolName === 'canva-design-studio') {
+      setDemoResults(prev => ({
+        ...prev,
+        [toolName]: `🎨 **Canva Design Studio Integration Ready!**
+
+**What you get:**
+• Instant logo generation with your brand colors
+• Professional social media templates 
+• Wellness event flyers and business cards
+• Direct editing in Canva's powerful editor
+• Multi-format export (PNG, PDF, JPG)
+
+**Example:** Input "Zen Yoga Studio" → Get 5 logo variations, Instagram post templates, and business cards in under 30 seconds. Then edit, customize, and download directly from Canva.
+
+*Click "Get Complete Bundle" below to access the full Canva Design Studio!*`
+      }));
+      
+      toast({
+        title: "🎨 Canva Integration Demo!",
+        description: "See how our Canva integration creates professional designs instantly.",
+      });
+      setLoadingDemo(null);
+      return;
+    }
     
     try {
       const response = await fetch(`https://dtjmhieeywdvhjxqyxad.supabase.co/functions/v1/generate-content`, {
@@ -99,6 +127,17 @@ const AITools = () => {
         bundleWellcoins: 250,
         savingsText: "Save R300 vs individual tools",
         tools: [
+          {
+            id: "canva-design-studio",
+            title: "Canva Design Studio Pro",
+            description: "Create professional designs instantly with AI-powered Canva integration",
+            price: 299,
+            wellcoins: 150,
+            icon: Palette,
+            features: ["Instant design generation", "Canva editor integration", "Brand asset library", "Multi-format export"],
+            demoAvailable: true,
+            isNew: true
+          },
           {
             id: "logo-generator",
             title: "Logo & Brand Identity Kit",

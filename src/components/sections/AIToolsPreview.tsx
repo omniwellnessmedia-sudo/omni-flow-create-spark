@@ -6,6 +6,13 @@ import { Link } from "react-router-dom";
 const AIToolsPreview = () => {
   const tools = [
     {
+      title: "Canva Design Studio Pro",
+      description: "Create professional wellness brand designs instantly with AI-powered Canva integration.",
+      icon: "🎨",
+      color: "from-omni-red to-omni-orange",
+      features: ["Instant design generation", "Canva editor integration", "Multi-format export"]
+    },
+    {
       title: "Community Impact Calculator",
       description: "Calculate and visualize the potential impact of your wellness initiatives on communities.",
       icon: "🌍",
@@ -16,7 +23,7 @@ const AIToolsPreview = () => {
       title: "Content Strategy Generator",
       description: "Generate comprehensive content strategies aligned with your brand's wellness mission.",
       icon: "✨",
-      color: "from-omni-red to-omni-orange",
+      color: "from-omni-yellow to-omni-green",
       features: ["Multi-platform planning", "Audience targeting", "Engagement optimization"]
     },
     {
