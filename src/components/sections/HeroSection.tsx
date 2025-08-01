@@ -23,26 +23,44 @@ import {
 const HeroSection = () => {
   const { isOpen, hasSeenTour, steps, startTour, completeTour, skipTour } = useAppTour();
 
+  // Helper function to get images based on category
+  const getImageForCategory = (category: string) => {
+    const imageMap = {
+      'business': 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=300&fit=crop',
+      'media': 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop',
+      'ai-tools': 'https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=400&h=300&fit=crop',
+      'wellness': 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=300&fit=crop',
+      'tours': 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=400&h=300&fit=crop',
+      'inspiration': 'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=400&h=300&fit=crop',
+      'podcast': 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=300&fit=crop',
+      'community': 'https://images.unsplash.com/photo-1517022812141-2362026ba5c23?w=400&h=300&fit=crop',
+    };
+    return imageMap[category] || 'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=400&h=300&fit=crop';
+  };
+
   const workspaceItems = [
     {
       title: "Business Strategy",
       description: "Strategic consulting for conscious growth",
       href: "/business-consulting",
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png",
+      imagePrompt: "Professional business consulting meeting with diverse team around a modern conference table, strategic planning documents, charts and graphs, clean modern office environment",
+      category: "business",
       badge: "Consulting"
     },
     {
       title: "Content Creation",
       description: "Video, podcast & social media production", 
       href: "/media-production",
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png",
+      imagePrompt: "Professional video production studio with cameras, lighting equipment, creative content being filmed, modern media workspace with editing screens",
+      category: "media",
       badge: "Media"
     },
     {
       title: "Wellness AI Tools",
       description: "AI-powered wellness assistants",
       href: "/ai-tools", 
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png",
+      imagePrompt: "Futuristic AI interface with holographic wellness data, brain-computer interface, glowing neural networks, advanced technology for health and wellness",
+      category: "ai-tools",
       badge: "AI Tools"
     }
   ];
@@ -52,7 +70,8 @@ const HeroSection = () => {
       title: "Wellness Marketplace",
       description: "Connect with wellness providers",
       href: "/wellness-marketplace",
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png",
+      imagePrompt: "Beautiful outdoor wellness marketplace with diverse people practicing yoga, meditation, healthy food vendors, natural healing products",
+      category: "wellness",
       author: "Community",
       badge: "Wellness"
     },
@@ -60,7 +79,8 @@ const HeroSection = () => {
       title: "Tours & Retreats", 
       description: "Transformative wellness experiences",
       href: "/tours-retreats",
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png",
+      imagePrompt: "Stunning South African landscape with Table Mountain, people on a wellness retreat doing yoga at sunrise, beautiful Cape Town scenery",
+      category: "tours",
       author: "Experiences",
       badge: "Travel"
     },
@@ -68,7 +88,8 @@ const HeroSection = () => {
       title: "Conscious Blog",
       description: "Inspiration, education & empowerment",
       href: "/blog",
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png", 
+      imagePrompt: "Inspiring blog content creation scene with person writing, surrounded by books, plants, natural light, peaceful creative workspace",
+      category: "inspiration",
       author: "Content",
       badge: "Blog"
     },
@@ -76,7 +97,8 @@ const HeroSection = () => {
       title: "Podcast Platform",
       description: "Conscious conversations & interviews",
       href: "/podcast",
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png",
+      imagePrompt: "Professional podcast studio with high-quality microphones, soundproofing, warm lighting, two people having an engaging conversation",
+      category: "podcast",
       author: "Audio",
       badge: "Podcast"
     },
@@ -84,7 +106,8 @@ const HeroSection = () => {
       title: "Partner Network",
       description: "Collaborate with conscious businesses",
       href: "/partners-directory", 
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png",
+      imagePrompt: "Diverse group of business partners shaking hands, networking event with conscious business leaders, collaborative workspace with sustainable elements",
+      category: "business",
       author: "Network",
       badge: "Partners"
     },
@@ -92,7 +115,8 @@ const HeroSection = () => {
       title: "Community Hub",
       description: "Connect with like-minded souls",
       href: "/wellness-community",
-      image: "/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png",
+      imagePrompt: "Diverse community gathering in a circle, people connecting and sharing, warm inclusive atmosphere, outdoor community space with natural elements",
+      category: "community",
       author: "Social",
       badge: "Community"
     }
@@ -154,7 +178,7 @@ const HeroSection = () => {
                     <Card className="overflow-hidden hover:shadow-md transition-shadow">
                       <div className="aspect-video bg-gradient-to-br from-wellness-light to-wellness-primary/20 relative">
                         <img 
-                          src={item.image} 
+                          src={getImageForCategory(item.category)} 
                           alt={item.title}
                           className="w-full h-full object-cover opacity-80"
                         />
@@ -196,11 +220,11 @@ const HeroSection = () => {
                 <Link key={index} to={item.href} className="group">
                   <Card className="overflow-hidden hover:shadow-md transition-shadow">
                     <div className="aspect-video bg-gradient-to-br from-wellness-light to-wellness-accent/20 relative">
-                      <img 
-                        src={item.image} 
-                        alt={item.title}
-                        className="w-full h-full object-cover opacity-80"
-                      />
+                       <img 
+                         src={getImageForCategory(item.category)} 
+                         alt={item.title}
+                         className="w-full h-full object-cover opacity-80"
+                       />
                       <div className="absolute top-3 right-3">
                         <span className="bg-white text-wellness-primary text-xs px-2 py-1 rounded-full">
                           {item.badge}
