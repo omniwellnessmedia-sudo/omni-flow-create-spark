@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { TourTrigger } from "@/components/ui/app-tour";
 import { useAppTour } from "@/hooks/useAppTour";
@@ -23,20 +24,22 @@ import {
 const HeroSection = () => {
   const { isOpen, hasSeenTour, steps, startTour, completeTour, skipTour } = useAppTour();
 
-  // Helper function to get images based on category
+  // Helper function to get unique images based on category
   const getImageForCategory = (category: string) => {
     const imageMap = {
       'business': 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=300&fit=crop',
-      'media': 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop',
+      'media': 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop', 
       'ai-tools': 'https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=400&h=300&fit=crop',
       'wellness': 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=300&fit=crop',
       'tours': 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=400&h=300&fit=crop',
       'inspiration': 'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=400&h=300&fit=crop',
-      'podcast': 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=300&fit=crop',
+      'podcast': 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=400&h=300&fit=crop',
       'community': 'https://images.unsplash.com/photo-1517022812141-2362026ba5c23?w=400&h=300&fit=crop',
     };
     return imageMap[category] || 'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=400&h=300&fit=crop';
   };
+
+  const [showMoreCommunity, setShowMoreCommunity] = useState(false);
 
   const workspaceItems = [
     {
@@ -137,7 +140,7 @@ const HeroSection = () => {
             </div>
             
             <h1 className="text-4xl lg:text-6xl font-bold mb-4">
-              Build something <span className="text-rainbow-enhanced">🌈 Conscious</span>
+              Build something <span className="bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-clip-text text-transparent">Conscious</span>
             </h1>
             
             <p className="text-lg text-gray-600 mb-8">
@@ -216,7 +219,7 @@ const HeroSection = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {communityItems.map((item, index) => (
+              {communityItems.slice(0, showMoreCommunity ? communityItems.length : 6).map((item, index) => (
                 <Link key={index} to={item.href} className="group">
                   <Card className="overflow-hidden hover:shadow-md transition-shadow">
                     <div className="aspect-video bg-gradient-to-br from-wellness-light to-wellness-accent/20 relative">
@@ -251,7 +254,12 @@ const HeroSection = () => {
             </div>
 
             <div className="text-center mt-8">
-              <Button variant="outline">Show More</Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowMoreCommunity(!showMoreCommunity)}
+              >
+                {showMoreCommunity ? 'Show Less' : 'Show More'}
+              </Button>
             </div>
           </div>
         </div>
