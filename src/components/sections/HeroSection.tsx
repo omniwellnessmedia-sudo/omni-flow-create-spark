@@ -27,19 +27,20 @@ const HeroSection = () => {
   // Helper function to get unique images based on category
   const getImageForCategory = (category: string) => {
     const imageMap = {
-      'business': 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400&h=300&fit=crop',
-      'media': 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop', 
-      'ai-tools': 'https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=400&h=300&fit=crop',
-      'wellness': 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=300&fit=crop',
-      'tours': 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=400&h=300&fit=crop',
-      'inspiration': 'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=400&h=300&fit=crop',
-      'podcast': 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=400&h=300&fit=crop',
-      'community': 'https://images.unsplash.com/photo-1517022812141-2362026ba5c23?w=400&h=300&fit=crop',
+      'business': 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&h=300&fit=crop', // Business meeting
+      'media': 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=300&fit=crop', // Movie production
+      'ai-tools': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop', // AI/Tech
+      'wellness': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop', // Meditation
+      'tours': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', // Mountain landscape
+      'inspiration': 'https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=400&h=300&fit=crop', // Writing/inspiration
+      'podcast': 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=400&h=300&fit=crop', // Podcast setup
+      'community': 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=300&fit=crop', // Community gathering
     };
     return imageMap[category] || 'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=400&h=300&fit=crop';
   };
 
   const [showMoreCommunity, setShowMoreCommunity] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('Popular');
 
   const workspaceItems = [
     {
@@ -208,13 +209,23 @@ const HeroSection = () => {
               <h2 className="text-xl font-semibold text-gray-900">From the Community</h2>
               <div className="flex items-center gap-4">
                 <div className="flex gap-2 text-sm">
-                  <button className="px-3 py-1 bg-gray-100 rounded-full">Popular</button>
-                  <button className="px-3 py-1 hover:bg-gray-100 rounded-full">Discover</button>
-                  <button className="px-3 py-1 hover:bg-gray-100 rounded-full">Wellness</button>
-                  <button className="px-3 py-1 hover:bg-gray-100 rounded-full">Personal</button>
-                  <button className="px-3 py-1 hover:bg-gray-100 rounded-full">Business</button>
+                  {['Popular', 'Discover', 'Wellness', 'Personal', 'Business'].map((filter) => (
+                    <button
+                      key={filter}
+                      onClick={() => setActiveFilter(filter)}
+                      className={`px-3 py-1 rounded-full transition-colors ${
+                        activeFilter === filter 
+                          ? 'bg-wellness-primary text-white' 
+                          : 'hover:bg-gray-100'
+                      }`}
+                    >
+                      {filter}
+                    </button>
+                  ))}
                 </div>
-                <Button variant="ghost" size="sm">View All</Button>
+                <Link to="/home">
+                  <Button variant="ghost" size="sm">View All</Button>
+                </Link>
               </div>
             </div>
 
