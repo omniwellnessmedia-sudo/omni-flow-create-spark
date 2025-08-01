@@ -46,31 +46,36 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Content Pillars */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16 relative z-10 max-w-4xl mx-auto px-4" data-tour="mission">
-          {[
-            { name: 'Inspiration', color: 'from-purple-500 to-pink-500', icon: '✨', href: '/blog?category=inspiration' },
-            { name: 'Education', color: 'from-blue-500 to-cyan-500', icon: '📚', href: '/blog?category=education' },
-            { name: 'Empowerment', color: 'from-green-500 to-emerald-500', icon: '💪', href: '/blog?category=empowerment' },
-            { name: 'Wellness', color: 'from-orange-500 to-yellow-500', icon: '🧘', href: '/wellness-marketplace' }
-          ].map((pillar, index) => (
-            <Link
-              key={pillar.name}
-              to={pillar.href}
-              className={`group relative p-6 bg-gradient-to-br ${pillar.color} rounded-2xl text-white font-semibold shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl animate-fade-in block text-center`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="flex flex-col items-center gap-3">
-                <span className="text-3xl group-hover:scale-110 transition-transform duration-300">
-                  {pillar.icon}
-                </span>
-                <span className="text-base font-bold group-hover:tracking-wider transition-all duration-300">
-                  {pillar.name}
-                </span>
-              </div>
-              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300"></div>
-            </Link>
-          ))}
+        {/* Quick Access Navigation */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8 relative z-10 max-w-2xl mx-auto" data-tour="mission">
+          <Link
+            to="/blog?category=inspiration"
+            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
+          >
+            <span className="text-lg">✨</span>
+            <span>Inspiration</span>
+          </Link>
+          <Link
+            to="/blog?category=education"
+            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
+          >
+            <span className="text-lg">📚</span>
+            <span>Education</span>
+          </Link>
+          <Link
+            to="/blog?category=empowerment"
+            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
+          >
+            <span className="text-lg">💪</span>
+            <span>Empowerment</span>
+          </Link>
+          <Link
+            to="/wellness-marketplace"
+            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
+          >
+            <span className="text-lg">🧘</span>
+            <span>Wellness</span>
+          </Link>
         </div>
 
       </Hero>
