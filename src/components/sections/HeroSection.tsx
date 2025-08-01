@@ -32,52 +32,53 @@ const HeroSection = () => {
             variant: "soft"
           }
         ]}
-        className="relative"
+        className="relative flex flex-col items-center justify-center text-center"
       >
-        {/* Logo Section */}
-        <div className="flex justify-center mb-8 sm:mb-12 mt-4 sm:mt-8 overflow-safe">
-          <div className="relative max-w-full">
-            <img 
-              src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
-              alt="Omni Wellness Media" 
-              className="h-24 w-24 sm:h-32 sm:w-32 lg:h-40 lg:w-40 xl:h-48 xl:w-48 animate-float relative z-10 mx-auto object-contain"
-            />
-            <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-20 animate-pulse-slow blur-2xl max-w-full"></div>
+        <div className="container mx-auto px-4 flex flex-col items-center justify-center min-h-[80vh] space-y-8">
+          {/* Logo Section */}
+          <div className="flex justify-center mb-6">
+            <div className="relative">
+              <img 
+                src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+                alt="Omni Wellness Media" 
+                className="h-32 w-32 lg:h-40 lg:w-40 animate-float relative z-10 object-contain"
+              />
+              <div className="absolute inset-0 bg-rainbow-enhanced rounded-full opacity-20 animate-pulse-slow blur-2xl"></div>
+            </div>
+          </div>
+
+          {/* Quick Access Navigation */}
+          <div className="flex flex-wrap justify-center gap-3 relative z-10" data-tour="mission">
+            <Link
+              to="/blog?category=inspiration"
+              className="group inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20 text-sm"
+            >
+              <span className="text-base">✨</span>
+              <span>Inspiration</span>
+            </Link>
+            <Link
+              to="/blog?category=education"
+              className="group inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20 text-sm"
+            >
+              <span className="text-base">📚</span>
+              <span>Education</span>
+            </Link>
+            <Link
+              to="/blog?category=empowerment"
+              className="group inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20 text-sm"
+            >
+              <span className="text-base">💪</span>
+              <span>Empowerment</span>
+            </Link>
+            <Link
+              to="/wellness-marketplace"
+              className="group inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20 text-sm"
+            >
+              <span className="text-base">🧘</span>
+              <span>Wellness</span>
+            </Link>
           </div>
         </div>
-
-        {/* Quick Access Navigation */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8 relative z-10 max-w-2xl mx-auto" data-tour="mission">
-          <Link
-            to="/blog?category=inspiration"
-            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
-          >
-            <span className="text-lg">✨</span>
-            <span>Inspiration</span>
-          </Link>
-          <Link
-            to="/blog?category=education"
-            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
-          >
-            <span className="text-lg">📚</span>
-            <span>Education</span>
-          </Link>
-          <Link
-            to="/blog?category=empowerment"
-            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
-          >
-            <span className="text-lg">💪</span>
-            <span>Empowerment</span>
-          </Link>
-          <Link
-            to="/wellness-marketplace"
-            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-800 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border border-white/20"
-          >
-            <span className="text-lg">🧘</span>
-            <span>Wellness</span>
-          </Link>
-        </div>
-
       </Hero>
 
       {/* App Tour */}
