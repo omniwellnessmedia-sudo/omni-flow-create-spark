@@ -26,6 +26,7 @@ const MegaNavigation = () => {
         { name: 'Media Production', href: '/media-production', icon: '🎬' },
         { name: 'Social Media Strategy', href: '/social-media-strategy', icon: '📱' },
         { name: 'Web Development', href: '/web-development', icon: '💻' },
+        { name: 'Wellness Deals', href: '/wellness-deals', icon: '💊' },
         { name: 'Documentary Production', href: '/services/documentary-production', icon: '🎥' },
         { name: 'Videography Services', href: '/services/videography', icon: '📹' },
         { name: 'Custom Art & Design', href: '/services/custom-art', icon: '🎨' },

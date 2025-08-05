@@ -5,6 +5,7 @@ import { CartProvider } from '@/contexts/CartContext';
 import SiteHeader from '@/components/SiteHeader';
 import Index from '@/pages/Index';
 import Home from '@/pages/Home';
+import WellnessDeals from '@/pages/WellnessDeals';
 import About from '@/pages/About';
 import Services from '@/pages/Services';
 import BusinessConsulting from '@/pages/BusinessConsulting';
@@ -70,6 +71,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/wellness-deals" element={<WellnessDeals />} />
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/business-consulting" element={<BusinessConsulting />} />
