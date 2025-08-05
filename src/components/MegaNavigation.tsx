@@ -20,13 +20,24 @@ const MegaNavigation = () => {
 
   const megaMenuItems = [
     {
+      title: 'Wellness Deals',
+      items: [
+        { name: 'Browse All Deals', href: '/wellness-deals', icon: '💊' },
+        { name: 'Spa & Beauty', href: '/wellness-deals?category=spa', icon: '🧖‍♀️' },
+        { name: 'Fitness & Movement', href: '/wellness-deals?category=fitness', icon: '🏃‍♀️' },
+        { name: 'Retreats & Getaways', href: '/wellness-deals?category=retreats', icon: '🏞️' },
+        { name: 'Mindfulness & Meditation', href: '/wellness-deals?category=mindfulness', icon: '🧘‍♀️' },
+        { name: 'Nutrition & Cooking', href: '/wellness-deals?category=nutrition', icon: '🥗' },
+        { name: 'Digital Courses', href: '/wellness-deals?category=digital', icon: '💻' }
+      ]
+    },
+    {
       title: 'Services',
       items: [
         { name: 'Business Development', href: '/business-consulting', icon: '💼' },
         { name: 'Media Production', href: '/media-production', icon: '🎬' },
         { name: 'Social Media Strategy', href: '/social-media-strategy', icon: '📱' },
         { name: 'Web Development', href: '/web-development', icon: '💻' },
-        { name: 'Wellness Deals', href: '/wellness-deals', icon: '💊' },
         { name: 'Documentary Production', href: '/services/documentary-production', icon: '🎥' },
         { name: 'Videography Services', href: '/services/videography', icon: '📹' },
         { name: 'Custom Art & Design', href: '/services/custom-art', icon: '🎨' },

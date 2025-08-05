@@ -141,11 +141,11 @@ const HeroSection = () => {
             </div>
             
             <h1 className="text-4xl lg:text-6xl font-bold mb-4">
-              Build something <span className="bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-clip-text text-transparent">Conscious</span>
+              Build something <span className="bg-rainbow-gradient bg-clip-text text-transparent">Conscious</span>
             </h1>
             
             <p className="text-lg text-gray-600 mb-8">
-              Create wellness experiences by chatting with Omni AI
+              Create wellness experiences by chatting with Omni AI or explore our <Link to="/wellness-deals" className="text-wellness-primary underline font-semibold hover:text-wellness-primary/80">wellness deals marketplace</Link>
             </p>
 
             {/* Main Chat Interface */}
