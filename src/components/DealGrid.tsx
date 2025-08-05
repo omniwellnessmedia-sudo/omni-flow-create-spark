@@ -9,93 +9,100 @@ interface DealGridProps {
 export default function DealGrid({ limit }: DealGridProps) {
   const deals = [
     { 
-      title: "Muizenberg Sunrise Yoga", 
-      price: "R99", 
-      originalPrice: "R198",
+      title: "Cape Town Wellness Experiences", 
+      price: "R299", 
+      originalPrice: "R599",
       off: "50%",
       image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop",
-      category: "Yoga & Movement"
+      category: "Spa & Beauty",
+      location: "Cape Town"
     },
     { 
-      title: "Stellenbosch Wine & Wellness Weekend", 
-      price: "R1,999", 
-      originalPrice: "R2,856",
-      off: "30%",
+      title: "Johannesburg Fitness Experiences", 
+      price: "R199", 
+      originalPrice: "R399",
+      off: "50%",
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop",
+      category: "Fitness",
+      location: "Johannesburg"
+    },
+    { 
+      title: "Pretoria Wellness Experiences", 
+      price: "R449", 
+      originalPrice: "R699",
+      off: "36%",
       image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-      category: "Retreats"
+      category: "Retreats",
+      location: "Pretoria"
     },
     { 
-      title: "Kloof Spa Detox Day", 
-      price: "R450", 
-      originalPrice: "R750",
+      title: "Durban Wellness Experiences", 
+      price: "R359", 
+      originalPrice: "R599",
       off: "40%",
       image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&h=300&fit=crop",
-      category: "Spa & Beauty"
+      category: "Spa & Beauty",
+      location: "Durban"
     },
     { 
-      title: "Mindfulness Meditation Workshop", 
+      title: "Wellness Product Shopping", 
       price: "R150", 
       originalPrice: "R300",
       off: "50%",
-      image: "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=400&h=300&fit=crop",
-      category: "Mindfulness"
-    },
-    { 
-      title: "Organic Cooking Class", 
-      price: "R299", 
-      originalPrice: "R499",
-      off: "40%",
       image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
-      category: "Nutrition"
-    },
-    { 
-      title: "Table Mountain Wellness Hike", 
-      price: "R89", 
-      originalPrice: "R149",
-      off: "40%",
-      image: "https://images.unsplash.com/photo-1485833077593-4278bba3f11f?w=400&h=300&fit=crop",
-      category: "Outdoor Wellness"
+      category: "Products",
+      location: "National"
     },
   ];
 
   const displayDeals = limit ? deals.slice(0, limit) : deals;
 
   return (
-    <section className="px-4 py-8">
+    <section className="bg-gray-50 px-4 py-12">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-8 text-wellness-primary">
-          Featured Wellness Deals
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900">
+            What are you Shopping for Today?
+          </h2>
+          <button className="text-cyan-500 hover:text-cyan-600 font-medium">
+            VIEW ALL →
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {displayDeals.map((deal, index) => (
-            <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card key={index} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow border-0">
               <div className="relative">
                 <img 
                   src={deal.image} 
                   alt={deal.title}
                   className="w-full h-48 object-cover"
                 />
-                <Badge className="absolute top-2 right-2 bg-accent text-accent-foreground">
-                  Save {deal.off}
-                </Badge>
-              </div>
-              <CardHeader>
-                <CardTitle className="text-lg text-wellness-primary">
-                  {deal.title}
-                </CardTitle>
-                <p className="text-sm text-muted-foreground">{deal.category}</p>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <span className="text-2xl font-bold text-accent">{deal.price}</span>
-                    <span className="text-sm text-muted-foreground line-through ml-2">
-                      {deal.originalPrice}
-                    </span>
-                  </div>
+                <div className="absolute top-3 left-3">
+                  <span className="bg-pink-500 text-white text-sm font-bold px-2 py-1 rounded">
+                    Save {deal.off}
+                  </span>
                 </div>
-                <Button className="w-full bg-wellness-primary hover:bg-wellness-primary/90 text-white">
-                  Book Now
+              </div>
+              
+              <CardContent className="p-4">
+                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                  {deal.title}
+                </h3>
+                <p className="text-sm text-gray-500 mb-3">{deal.category}</p>
+                
+                <div className="flex items-center gap-1 text-sm text-gray-500 mb-3">
+                  <span>📍</span>
+                  <span>{deal.location}</span>
+                </div>
+                
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-xl font-bold text-gray-900">{deal.price}</span>
+                  <span className="text-sm text-gray-500 line-through">{deal.originalPrice}</span>
+                </div>
+                
+                <Button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2">
+                  View Deal
                 </Button>
               </CardContent>
             </Card>
