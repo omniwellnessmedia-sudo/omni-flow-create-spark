@@ -141,7 +141,7 @@ const HeroSection = () => {
             </div>
             
             <h1 className="text-4xl lg:text-6xl font-bold mb-4">
-              Build something <span className="bg-rainbow-gradient bg-clip-text text-transparent">Conscious</span>
+              Build something <span className="text-wellness-primary">Conscious</span>
             </h1>
             
             <p className="text-lg text-gray-600 mb-8">
