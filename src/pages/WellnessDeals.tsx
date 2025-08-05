@@ -2,12 +2,23 @@ import DealsHero from '@/components/DealsHero';
 import DealGrid from '@/components/DealGrid';
 import LoyaltyStrip from '@/components/LoyaltyStrip';
 import CSRImpact from '@/components/CSRImpact';
+import { CrawlForm } from '@/components/CrawlForm';
 
 export default function WellnessDeals() {
   return (
     <div className="min-h-screen bg-white">
       <DealsHero />
       <DealGrid />
+      
+      {/* Data Scraping Section */}
+      <section className="py-12 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Import Real Wellness Deals</h2>
+          <p className="text-gray-600">Scrape live data from wellness deal websites to populate your marketplace</p>
+        </div>
+        <CrawlForm />
+      </section>
+      
       <LoyaltyStrip />
       <CSRImpact />
       

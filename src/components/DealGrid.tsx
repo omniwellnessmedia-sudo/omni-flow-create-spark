@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 interface DealGridProps {
   limit?: number;
@@ -101,9 +102,11 @@ export default function DealGrid({ limit }: DealGridProps) {
                   <span className="text-sm text-gray-500 line-through">{deal.originalPrice}</span>
                 </div>
                 
-                <Button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2">
-                  View Deal
-                </Button>
+                <Link to={`/wellness-deals/${deal.title.toLowerCase().replace(/\s+/g, '-')}`}>
+                  <Button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-2">
+                    View Deal
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}
