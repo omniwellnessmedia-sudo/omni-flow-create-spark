@@ -31,23 +31,23 @@ const SiteHeader = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
-        <div className="flex h-32 items-center justify-between">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center flex-shrink-0">
             <Link to="/" className="flex items-center space-x-2">
               <img 
                 src={omniLogo} 
                 alt="Omni Wellness Media" 
-                className="h-24 w-24 object-contain rounded-full border-2 border-primary/20 bg-white/10 backdrop-blur-sm p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
+                className="h-12 w-12 object-contain rounded-full border-2 border-primary/20 bg-white/10 backdrop-blur-sm p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
               />
-              <span className="hidden font-bold text-lg sm:inline-block">
-                Omni Wellness Media
+              <span className="hidden font-bold text-sm xl:inline-block">
+                Omni
               </span>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1">
+          <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1 lg:max-w-4xl lg:mx-4">
             <MegaNavigation />
           </div>
 

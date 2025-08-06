@@ -108,24 +108,26 @@ const MegaNavigation = () => {
   ];
 
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
+    <NavigationMenu className="max-w-full">
+      <NavigationMenuList className="flex-wrap gap-1">
         {megaMenuItems.map((menuItem, index) => (
           <NavigationMenuItem key={index}>
-            <NavigationMenuTrigger className="capitalize">{menuItem.title}</NavigationMenuTrigger>
+            <NavigationMenuTrigger className="text-xs xl:text-sm px-2 py-1 h-auto whitespace-nowrap">
+              {menuItem.title.replace('Omni Wellness ', '')}
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid gap-3 p-6 md:w-[400px] md:grid-cols-2 lg:w-[500px]">
+              <ul className="grid gap-2 p-4 w-[350px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
                 {menuItem.items.map((item, i) => (
                   <li key={i}>
                     <NavigationMenuLink asChild>
                       <Link
                         to={item.href}
                         className={cn(
-                          "group flex h-12 items-center justify-start rounded-md bg-transparent px-3 font-medium outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground sm:text-sm",
+                          "group flex h-10 items-center justify-start rounded-md bg-transparent px-3 font-medium outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-sm",
                           location.pathname === item.href ? "text-primary" : ""
                         )}
                       >
-                        <span className="mr-2">{item.icon}</span>
+                        <span className="mr-2 text-sm">{item.icon}</span>
                         {item.name}
                       </Link>
                     </NavigationMenuLink>
