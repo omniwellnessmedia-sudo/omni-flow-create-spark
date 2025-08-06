@@ -113,7 +113,7 @@ const MegaNavigation = () => {
         {megaMenuItems.map((menuItem, index) => (
           <NavigationMenuItem key={index}>
             <NavigationMenuTrigger className="text-xs xl:text-sm px-2 py-1 h-auto whitespace-nowrap">
-              {menuItem.title.replace('Omni Wellness ', '')}
+              OMNI {menuItem.title.replace('Omni Wellness ', '')}
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-2 p-4 w-[350px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
