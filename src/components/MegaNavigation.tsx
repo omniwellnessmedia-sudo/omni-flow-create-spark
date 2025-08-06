@@ -20,7 +20,7 @@ const MegaNavigation = () => {
 
   const megaMenuItems = [
     {
-      title: 'Wellness Deals',
+      title: 'Omni Wellness Store',
       items: [
         { name: 'Browse All Deals', href: '/wellness-deals', icon: '💊' },
         { name: 'Spa & Beauty', href: '/wellness-deals?category=spa', icon: '🧖‍♀️' },
@@ -32,7 +32,7 @@ const MegaNavigation = () => {
       ]
     },
     {
-      title: 'Services',
+      title: 'Omni Wellness Media',
       items: [
         { name: 'Business Development', href: '/business-consulting', icon: '💼' },
         { name: 'Media Production', href: '/media-production', icon: '🎬' },
@@ -45,11 +45,11 @@ const MegaNavigation = () => {
       ]
     },
     {
-      title: 'Wellness Exchange',
+      title: 'Omni Wellness Services',
       items: [
         { name: 'Community Hub', href: '/wellness-community', icon: '🌱' },
         { name: 'Marketplace', href: '/wellness-marketplace', icon: '🛒' },
-        { name: 'Service Providers', href: '/wellness-exchange', icon: '🔄' },
+        { name: 'Service Exchange', href: '/wellness-exchange', icon: '🔄' },
         { name: 'Find Services', href: '/search-services', icon: '🔍' },
         { name: 'Exercise Library', href: '/exercise-library', icon: '💪' },
         { name: 'Community Blog', href: '/community-blog', icon: '✍️' },
@@ -59,7 +59,7 @@ const MegaNavigation = () => {
       ]
     },
     {
-      title: 'Tours & Retreats',
+      title: 'Omni Wellness Travel',
       items: [
         { name: 'All Tours & Retreats', href: '/tours-retreats', icon: '🏞️' },
         { name: 'Wellness Retreats', href: '/tour-category/wellness-retreats', icon: '🧘‍♀️' },
@@ -68,14 +68,9 @@ const MegaNavigation = () => {
         { name: 'Winter Wellness', href: '/tour-category/winter-wellness', icon: '❄️' },
         { name: 'Indigenous Wisdom', href: '/tour-category/indigenous-wisdom', icon: '🏺' },
         { name: 'Study Abroad Programs', href: '/tour-category/study-abroad', icon: '🎓' },
-        { name: '2BeWell Community', href: '/two-be-well', icon: '💝' }
-      ]
-    },
-    {
-      title: 'Travel & Connect',
-      items: [
+        { name: '2BeWell Community', href: '/two-be-well', icon: '💝' },
         { name: 'Travel Well Connected', href: '/travel-well-connected-store', icon: '🌐' },
-        { name: 'Wellness Travel Services', href: '/wellness-roaming-packages', icon: '📱' },
+        { name: 'Travel Services', href: '/wellness-roaming-packages', icon: '📱' },
         { name: 'AI Travel Tools', href: '/ai-tools', icon: '🤖' },
         { name: 'Data Products', href: '/data-products', icon: '📊' },
         { name: 'Device Compatibility', href: '/device-compatibility', icon: '📱' },

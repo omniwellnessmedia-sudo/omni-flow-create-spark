@@ -132,32 +132,32 @@ const SiteHeader = () => {
             <div className="px-2 py-4 space-y-2">
               <div className="flex flex-col space-y-2">
                 <Link 
+                  to="/wellness-deals" 
+                  className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Omni Wellness Store
+                </Link>
+                <Link 
                   to="/services" 
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Services
+                  Omni Wellness Media
                 </Link>
                 <Link 
                   to="/wellness-exchange" 
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Wellness Exchange
+                  Omni Wellness Services
                 </Link>
                 <Link 
                   to="/tours-retreats" 
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Tours & Retreats
-                </Link>
-                <Link 
-                  to="/travel-well-connected-store" 
-                  className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Travel & Connect
+                  Omni Wellness Travel
                 </Link>
                 <Link 
                   to="/blog" 
