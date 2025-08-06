@@ -13,7 +13,7 @@ import {
 import { User, Settings, LogOut, LogIn, Menu, X } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import MegaNavigation from '@/components/MegaNavigation';
-import SunNavWheel from '@/components/SunNavWheel';
+import omniLogo from '/lovable-uploads/35aeb178-5b75-48ed-8192-1ac1ba363620.png';
 import { useState } from 'react';
 
 const SiteHeader = () => {
@@ -34,10 +34,16 @@ const SiteHeader = () => {
         <div className="flex h-32 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <SunNavWheel />
-            <span className="hidden font-bold text-lg sm:inline-block ml-4">
-              Omni Wellness Media
-            </span>
+            <Link to="/" className="flex items-center space-x-2">
+              <img 
+                src={omniLogo} 
+                alt="Omni Wellness Media" 
+                className="h-24 w-24 object-contain rounded-full border-2 border-primary/20 bg-white/10 backdrop-blur-sm p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
+              />
+              <span className="hidden font-bold text-lg sm:inline-block">
+                Omni Wellness Media
+              </span>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
