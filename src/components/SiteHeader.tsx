@@ -132,7 +132,28 @@ const SiteHeader = () => {
             <div className="px-2 py-4 space-y-2">
               <div className="flex flex-col space-y-2">
                 <Link 
+                  to="/" 
+                  className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Omni Wellness Media
+                </Link>
+                <Link 
                   to="/wellness-deals" 
+                  className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Omni Wellness Deals
+                </Link>
+                <Link 
+                  to="/tours-retreats" 
+                  className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Omni Wellness Travel
+                </Link>
+                <Link 
+                  to="/travel-well-connected-store" 
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -143,28 +164,21 @@ const SiteHeader = () => {
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Omni Wellness Media
-                </Link>
-                <Link 
-                  to="/wellness-exchange" 
-                  className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
                   Omni Wellness Services
                 </Link>
                 <Link 
-                  to="/tours-retreats" 
+                  to="/ai-tools" 
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Omni Wellness Travel
+                  Omni Wellness AI
                 </Link>
                 <Link 
-                  to="/blog" 
+                  to="/impact" 
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Resources
+                  Omni Wellness Impact
                 </Link>
               </div>
               
