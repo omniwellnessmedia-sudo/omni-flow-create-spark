@@ -16,7 +16,7 @@ export default function LoyaltyStrip() {
         
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+            <div className="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
               <img 
                 src="https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?w=200&h=200&fit=crop" 
                 alt="Cape Town Wellness" 
@@ -27,7 +27,7 @@ export default function LoyaltyStrip() {
           </div>
           
           <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+            <div className="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
               <img 
                 src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop" 
                 alt="Johannesburg Wellness" 
@@ -38,7 +38,7 @@ export default function LoyaltyStrip() {
           </div>
           
           <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+            <div className="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
               <img 
                 src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200&h=200&fit=crop" 
                 alt="Pretoria Wellness" 
@@ -49,7 +49,7 @@ export default function LoyaltyStrip() {
           </div>
           
           <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+            <div className="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
               <img 
                 src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=200&h=200&fit=crop" 
                 alt="KwaZulu-Natal Wellness" 
@@ -60,7 +60,7 @@ export default function LoyaltyStrip() {
           </div>
           
           <div className="text-center">
-            <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
+            <div className="w-48 h-48 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
               <img 
                 src="https://images.unsplash.com/photo-1485833077593-4278bba3f11f?w=200&h=200&fit=crop" 
                 alt="Western Cape Wellness" 
