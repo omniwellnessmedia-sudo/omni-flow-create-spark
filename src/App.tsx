@@ -48,6 +48,7 @@ import TwoBeWellShop from '@/pages/TwoBeWellShop';
 import WellnessRoamingPackages from '@/pages/WellnessRoamingPackages';
 import AITools from '@/pages/AITools';
 import RoamBuddyAPITest from '@/pages/RoamBuddyAPITest';
+import RoamBuddyIntegrationTest from '@/pages/RoamBuddyIntegrationTest';
 import DataProducts from '@/pages/DataProducts';
 import DeviceCompatibility from '@/pages/DeviceCompatibility';
 import TechnicalOverview from '@/pages/TechnicalOverview';
@@ -116,6 +117,7 @@ function App() {
             <Route path="/exercise-library" element={<ExerciseLibrary />} />
             <Route path="/ai-tools" element={<AITools />} />
             <Route path="/roambuddy-api-test" element={<RoamBuddyAPITest />} />
+            <Route path="/roambuddy-integration-test" element={<RoamBuddyIntegrationTest />} />
             <Route path="/data-products" element={<DataProducts />} />
             <Route path="/device-compatibility" element={<DeviceCompatibility />} />
             <Route path="/technical-overview" element={<TechnicalOverview />} />
