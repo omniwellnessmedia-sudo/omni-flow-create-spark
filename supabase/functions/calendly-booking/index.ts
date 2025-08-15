@@ -20,14 +20,13 @@ serve(async (req) => {
 
     const { serviceId, customerEmail, customerName, selectedTime, selectedDate } = await req.json()
 
-    // Get Calendly credentials
-    const { data: calendlyConfig } = await supabaseClient
-      .from('calendly_config')
-      .select('*')
-      .single()
+    // Get Calendly credentials from secure environment variables
+    const calendlyClientId = Deno.env.get('CALENDLY_CLIENT_ID')
+    const calendlyClientSecret = Deno.env.get('CALENDLY_CLIENT_SECRET')
+    const calendlyWebhookSigningKey = Deno.env.get('CALENDLY_WEBHOOK_SIGNING_KEY')
 
-    if (!calendlyConfig) {
-      throw new Error('Calendly configuration not found')
+    if (!calendlyClientId || !calendlyClientSecret || !calendlyWebhookSigningKey) {
+      throw new Error('Calendly configuration not found in environment variables')
     }
 
     // Create Calendly event (this is a simplified example)
