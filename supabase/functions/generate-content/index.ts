@@ -20,25 +20,49 @@ serve(async (req) => {
 
     const { type, businessName, specialties, experienceYears, location, tool_name } = await req.json();
 
+    // Input sanitization function to prevent XSS and injection attacks
+    const sanitizeInput = (input: string): string => {
+      if (!input) return "";
+      return input
+        .replace(/[<>]/g, "") // Remove potential script tags
+        .replace(/javascript:/gi, "") // Remove javascript: protocols
+        .replace(/on\w+\s*=/gi, "") // Remove event handlers
+        .replace(/\${.*?}/g, "") // Remove template literals
+        .trim()
+        .substring(0, 500); // Limit length
+    };
+
+    // Sanitize inputs
+    const sanitizedBusinessName = businessName ? sanitizeInput(businessName) : "";
+    const sanitizedSpecialties = Array.isArray(specialties) 
+      ? specialties.map(s => sanitizeInput(s)).filter(s => s.length > 0)
+      : [];
+    const sanitizedLocation = location ? sanitizeInput(location) : "";
+    const sanitizedToolName = tool_name ? sanitizeInput(tool_name) : "";
+    
+    // Validate experience years is a reasonable number
+    const validExperienceYears = typeof experienceYears === 'number' && 
+      experienceYears >= 0 && experienceYears <= 50 ? experienceYears : null;
+
     let prompt = '';
     
     switch (type) {
       case 'bio':
         prompt = `Create a professional and engaging bio for a wellness provider with the following details:
-        - Business Name: ${businessName}
-        - Specialties: ${specialties?.join(', ') || 'wellness services'}
-        - Experience: ${experienceYears || 'several'} years
-        - Location: ${location}
+        - Business Name: ${sanitizedBusinessName}
+        - Specialties: ${sanitizedSpecialties.join(', ') || 'wellness services'}
+        - Experience: ${validExperienceYears || 'several'} years
+        - Location: ${sanitizedLocation}
         
         The bio should be warm, authentic, and highlight their passion for wellness. Keep it around 2-3 sentences and make it sound personal and trustworthy.`;
         break;
         
       case 'service_title':
-        prompt = `Generate a compelling service title for a wellness provider who specializes in ${specialties?.[0] || 'wellness'}. The title should be specific, engaging, and clearly communicate the benefit to clients. Keep it under 60 characters.`;
+        prompt = `Generate a compelling service title for a wellness provider who specializes in ${sanitizedSpecialties[0] || 'wellness'}. The title should be specific, engaging, and clearly communicate the benefit to clients. Keep it under 60 characters.`;
         break;
         
       case 'service_description':
-        prompt = `Create a detailed service description for a ${specialties?.[0] || 'wellness'} service. Include:
+        prompt = `Create a detailed service description for a ${sanitizedSpecialties[0] || 'wellness'} service. Include:
         - What clients can expect
         - Benefits they'll receive  
         - Your approach or methodology
@@ -60,7 +84,7 @@ serve(async (req) => {
           'story-creator': 'Wellness Story Framework: Hook: "Two years ago, I couldn\'t climb stairs without getting winded..." Journey: Document struggles with energy, discovery of yoga, gradual transformation. Call-to-action: "What small step will you take today?"'
         };
         
-        const demoContent = toolDemos[tool_name] || `AI tool "${tool_name}" demonstration: This powerful tool uses advanced AI to generate personalized content tailored to your specific wellness goals and business needs.`;
+        const demoContent = toolDemos[sanitizedToolName] || `AI tool "${sanitizedToolName}" demonstration: This powerful tool uses advanced AI to generate personalized content tailored to your specific wellness goals and business needs.`;
         
         return new Response(JSON.stringify({ content: demoContent }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
