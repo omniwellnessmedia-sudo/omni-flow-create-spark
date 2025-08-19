@@ -290,6 +290,24 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: hsl(var(--omni-violet)); /* Fallback for unsupported browsers */
+}
+
+/* Fix for bg-rainbow-gradient with bg-clip-text */
+.bg-rainbow-gradient.bg-clip-text {
+  background: linear-gradient(135deg, 
+    hsl(var(--omni-red)) 0%, 
+    hsl(var(--omni-orange)) 16.66%, 
+    hsl(var(--omni-yellow)) 33.33%, 
+    hsl(var(--omni-green)) 50%, 
+    hsl(var(--omni-blue)) 66.66%, 
+    hsl(var(--omni-indigo)) 83.33%, 
+    hsl(var(--omni-violet)) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: hsl(var(--omni-violet)); /* Fallback for unsupported browsers */
 }
 
 /* Hover Effects */
@@ -487,32 +505,50 @@
 
 /* ===== TYPOGRAPHY SYSTEM ===== */
 
-/* Gradient Heading System - Black to purple/orange blend */
-.heading-primary {
-  @apply font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-center leading-tight;
+/* Standardized Gradient Text System */
+.text-gradient-primary {
+  background: linear-gradient(135deg, hsl(var(--omni-violet)) 0%, hsl(var(--omni-orange)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: hsl(var(--omni-violet)); /* Fallback for unsupported browsers */
+}
+
+.text-gradient-rainbow {
+  background: linear-gradient(135deg, 
+    hsl(var(--omni-red)) 0%, 
+    hsl(var(--omni-orange)) 16.66%, 
+    hsl(var(--omni-yellow)) 33.33%, 
+    hsl(var(--omni-green)) 50%, 
+    hsl(var(--omni-blue)) 66.66%, 
+    hsl(var(--omni-indigo)) 83.33%, 
+    hsl(var(--omni-violet)) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: hsl(var(--omni-violet)); /* Fallback for unsupported browsers */
+}
+
+.text-gradient-hero {
   background: linear-gradient(135deg, hsl(20 14.3% 4.1%) 0%, hsl(var(--omni-violet)) 50%, hsl(var(--omni-orange)) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: none !important;
+  color: hsl(20 14.3% 4.1%); /* Fallback for unsupported browsers */
+}
+
+/* Legacy gradient classes for backwards compatibility */
+.heading-primary {
+  @apply font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-center leading-tight text-gradient-hero;
 }
 
 .heading-secondary {
-  @apply font-heading font-bold text-2xl sm:text-3xl lg:text-4xl text-center leading-tight;
-  background: linear-gradient(135deg, hsl(20 14.3% 4.1%) 0%, hsl(var(--omni-violet)) 50%, hsl(var(--omni-orange)) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none !important;
+  @apply font-heading font-bold text-2xl sm:text-3xl lg:text-4xl text-center leading-tight text-gradient-hero;
 }
 
 .heading-tertiary {
-  @apply font-heading font-semibold text-xl sm:text-2xl text-center leading-tight;
-  background: linear-gradient(135deg, hsl(20 14.3% 4.1%) 0%, hsl(var(--omni-violet)) 50%, hsl(var(--omni-orange)) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none !important;
+  @apply font-heading font-semibold text-xl sm:text-2xl text-center leading-tight text-gradient-hero;
 }
 
 /* Rainbow gradient backgrounds */

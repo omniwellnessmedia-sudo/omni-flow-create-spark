@@ -53,7 +53,7 @@ const MediaProduction = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+              <h1 className="text-5xl md:text-6xl font-bold text-center mb-6 text-gradient-hero">
                 Create Powerful Stories That Inspire
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -142,7 +142,7 @@ const MediaProduction = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-              Project <span className="bg-rainbow-gradient bg-clip-text text-transparent">Cost Calculator</span>
+              Project <span className="text-gradient-rainbow">Cost Calculator</span>
             </h2>
             <p className="text-lg text-gray-600">Get an instant estimate for your video production project</p>
           </div>
@@ -224,7 +224,7 @@ const MediaProduction = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Complete <span className="bg-rainbow-gradient bg-clip-text text-transparent">Production Services</span>
+              Complete <span className="text-gradient-rainbow">Production Services</span>
             </h2>
           </div>
           
@@ -256,7 +256,7 @@ const MediaProduction = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Featured <span className="bg-rainbow-gradient bg-clip-text text-transparent">Work</span>
+              Featured <span className="text-gradient-rainbow">Work</span>
             </h2>
           </div>
           

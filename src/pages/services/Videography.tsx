@@ -92,7 +92,7 @@ const Videography = () => {
               <div>
                 <Badge className="mb-4 bg-rainbow-gradient text-white">Premium Service</Badge>
                 <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                  Professional <span className="bg-rainbow-gradient bg-clip-text text-transparent">Videography</span> Services
+                  Professional <span className="text-gradient-rainbow">Videography</span> Services
                 </h1>
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed">
                   Crafting visual stories that matter through genuine partnerships. We believe in taking time 
@@ -125,7 +125,7 @@ const Videography = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                What We <span className="bg-rainbow-gradient bg-clip-text text-transparent">Create</span>
+                What We <span className="text-gradient-rainbow">Create</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 From non-profit campaigns to corporate documentaries, we create visual content that drives real impact.
@@ -158,7 +158,7 @@ const Videography = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Service <span className="bg-rainbow-gradient bg-clip-text text-transparent">Packages</span>
+                Service <span className="text-gradient-rainbow">Packages</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Choose the package that best fits your project needs and budget.
@@ -205,7 +205,7 @@ const Videography = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Recent <span className="bg-rainbow-gradient bg-clip-text text-transparent">Work</span>
+                Recent <span className="text-gradient-rainbow">Work</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Discover how we've helped other organizations tell their stories and create meaningful impact.
@@ -248,7 +248,7 @@ const Videography = () => {
         <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Ready to Tell Your <span className="bg-rainbow-gradient bg-clip-text text-transparent">Story</span>?
+              Ready to Tell Your <span className="text-gradient-rainbow">Story</span>?
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               Let's create powerful visual content that resonates with your audience and drives meaningful change in your community.
