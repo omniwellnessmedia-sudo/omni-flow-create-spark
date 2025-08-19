@@ -27,7 +27,7 @@ const HeroSection = () => {
   // Helper function to get unique images based on category
   const getImageForCategory = (category: string) => {
     const imageMap = {
-      'business': '/lovable-uploads/3f6b1bc0-88a9-4d94-827d-86f6be786d70.png', // Partnership celebration with certificates
+      'business': '/lovable-uploads/dd3b9532-dbb3-471a-939d-894418e20e0e.png', // Diverse community partnership gathering
       'media': 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=300&fit=crop', // Movie production
       'ai-tools': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop', // AI/Tech
       'wellness': '/lovable-uploads/196dfbe9-53ec-4411-8a03-66d8040a97c0.png', // Diverse wellness community on outdoor adventure
