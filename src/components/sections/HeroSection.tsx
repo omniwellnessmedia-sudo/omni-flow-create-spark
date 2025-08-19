@@ -27,16 +27,16 @@ const HeroSection = () => {
   // Helper function to get unique images based on category
   const getImageForCategory = (category: string) => {
     const imageMap = {
-      'business': 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400&h=300&fit=crop', // Business meeting
+      'business': '/lovable-uploads/8b543d05-352e-44f6-96e4-eebf7233704f.png', // Education & business development
       'media': 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=300&fit=crop', // Movie production
       'ai-tools': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop', // AI/Tech
-      'wellness': 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop', // Meditation
-      'tours': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', // Mountain landscape
-      'inspiration': 'https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=400&h=300&fit=crop', // Writing/inspiration
+      'wellness': '/lovable-uploads/cc0d1dcc-f2af-4610-8cb0-2af781e270a9.png', // Meditation & wellness
+      'tours': '/lovable-uploads/8899b34c-3cb2-4a70-b18f-2a78af5432e7.png', // Mountain landscape with guide
+      'inspiration': '/lovable-uploads/8b543d05-352e-44f6-96e4-eebf7233704f.png', // Knowledge sharing
       'podcast': 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=400&h=300&fit=crop', // Podcast setup
-      'community': 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=300&fit=crop', // Community gathering
+      'community': '/lovable-uploads/f83c6a43-7fb0-45db-8f28-4701fae8f52c.png', // Community gathering
     };
-    return imageMap[category] || 'https://images.unsplash.com/photo-1486718448742-163732cd1544?w=400&h=300&fit=crop';
+    return imageMap[category] || '/lovable-uploads/2cbfba5c-c500-4e2a-bfe4-bea1c9043973.png';
   };
 
   const [showMoreCommunity, setShowMoreCommunity] = useState(false);

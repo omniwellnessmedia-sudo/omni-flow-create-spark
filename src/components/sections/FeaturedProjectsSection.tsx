@@ -5,22 +5,22 @@ import { Button } from "@/components/ui/button";
 const FeaturedProjectsSection = () => {
   const projects = [
     {
-      title: "Community Garden Initiative",
-      description: "Empowering local communities through sustainable gardening practices and food security programs.",
-      image: "/lovable-uploads/9d51151d-b05c-4392-9f83-9e301a4f790d.png",
+      title: "Community Outreach & Support",
+      description: "Providing essential resources and support to families and children in our community.",
+      image: "/lovable-uploads/f83c6a43-7fb0-45db-8f28-4701fae8f52c.png",
       category: "Community Development"
     },
     {
-      title: "Traditional Wisdom Documentation",
-      description: "Preserving and sharing indigenous knowledge through multimedia storytelling.",
-      image: "/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png",
+      title: "Indigenous Wisdom & Healing",
+      description: "Learning from traditional healers and documenting ancient wisdom for future generations.",
+      image: "/lovable-uploads/8899b34c-3cb2-4a70-b18f-2a78af5432e7.png",
       category: "Cultural Heritage"
     },
     {
-      title: "The Valley of Plenty Kids React",
-      description: "Engaging children in discussions about community, wellness, and positive change.",
-      image: "/lovable-uploads/965c3c16-d837-4f01-8f8a-220d4a14a83b.png",
-      category: "Youth Engagement"
+      title: "Wellness Education & Growth",
+      description: "Sharing knowledge and fostering growth through educational programs and community workshops.",
+      image: "/lovable-uploads/8b543d05-352e-44f6-96e4-eebf7233704f.png",
+      category: "Education & Development"
     }
   ];
 

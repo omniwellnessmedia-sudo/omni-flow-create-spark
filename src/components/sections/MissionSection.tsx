@@ -45,8 +45,8 @@ const MissionSection = () => {
           {/* Image */}
           <div className="animate-fade-in">
             <img 
-              src="/lovable-uploads/ae84052e-02fe-4443-9a9f-63f094e6a81e.png" 
-              alt="Community celebrating achievements together"
+              src="/lovable-uploads/2cbfba5c-c500-4e2a-bfe4-bea1c9043973.png" 
+              alt="Community celebrating achievements together with certificates"
               className="w-full h-96 object-cover rounded-2xl shadow-2xl"
             />
           </div>
