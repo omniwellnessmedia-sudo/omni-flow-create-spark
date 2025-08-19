@@ -27,12 +27,12 @@ const HeroSection = () => {
   // Helper function to get unique images based on category
   const getImageForCategory = (category: string) => {
     const imageMap = {
-      'business': '/lovable-uploads/8b543d05-352e-44f6-96e4-eebf7233704f.png', // Education & business development
+      'business': '/lovable-uploads/3f6b1bc0-88a9-4d94-827d-86f6be786d70.png', // Partnership celebration with certificates
       'media': 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=300&fit=crop', // Movie production
       'ai-tools': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop', // AI/Tech
-      'wellness': '/lovable-uploads/cc0d1dcc-f2af-4610-8cb0-2af781e270a9.png', // Meditation & wellness
+      'wellness': '/lovable-uploads/196dfbe9-53ec-4411-8a03-66d8040a97c0.png', // Diverse wellness community on outdoor adventure
       'tours': '/lovable-uploads/8899b34c-3cb2-4a70-b18f-2a78af5432e7.png', // Mountain landscape with guide
-      'inspiration': '/lovable-uploads/8b543d05-352e-44f6-96e4-eebf7233704f.png', // Knowledge sharing
+      'inspiration': '/lovable-uploads/ec1f5bbe-fb2b-47f4-be6f-f8e57e6d5cba.png', // Traditional healer wisdom
       'podcast': 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=400&h=300&fit=crop', // Podcast setup
       'community': '/lovable-uploads/f83c6a43-7fb0-45db-8f28-4701fae8f52c.png', // Community gathering
     };
