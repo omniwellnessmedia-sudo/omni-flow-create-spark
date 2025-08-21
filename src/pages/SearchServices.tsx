@@ -59,7 +59,7 @@ const SearchServices = () => {
     const params = new URLSearchParams();
     if (searchTerm) params.set('search', searchTerm);
     if (location) params.set('location', location);
-    if (category) params.set('category', category);
+    if (category && category !== 'all-categories') params.set('category', category);
     
     window.location.href = `/wellness-exchange/marketplace?${params.toString()}`;
   };
@@ -111,7 +111,7 @@ const SearchServices = () => {
                         <SelectValue placeholder="Category (optional)" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Categories</SelectItem>
+                        <SelectItem value="all-categories">All Categories</SelectItem>
                         {categories.map((cat) => (
                           <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                         ))}
