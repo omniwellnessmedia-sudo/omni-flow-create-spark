@@ -186,8 +186,8 @@ const WellnessWants = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div>
-                <h1 className="heading-secondary no-faded-text text-center">
-                  Community <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wants</span>
+                <h1 className="heading-secondary text-gradient-hero no-faded-text text-center">
+                  Community <span className="text-gradient-rainbow">Wants</span>
                 </h1>
                 <p className="text-lg text-gray-600 max-w-2xl">
                   Post what you're looking for or browse community requests for wellness services

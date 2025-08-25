@@ -138,7 +138,7 @@ const Services = () => {
       <Hero
         title={
           <>
-            Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Services</span>
+            Our <span className="text-gradient-rainbow">Services</span>
           </>
         }
         description="Comprehensive solutions that align with your values and amplify your impact. From strategy to execution, we're your partners in conscious growth."
@@ -164,8 +164,8 @@ const Services = () => {
         <section className="py-20 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="heading-secondary no-faded-text">
-                What We <span className="bg-rainbow-gradient bg-clip-text text-transparent">Create</span>
+              <h2 className="heading-secondary text-gradient-hero no-faded-text">
+                What We <span className="text-gradient-rainbow">Create</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
                 Professional solutions that drive real results for conscious businesses.
@@ -267,7 +267,7 @@ const Services = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Process</span>
+                Our <span className="text-gradient-rainbow">Process</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 We follow a structured yet flexible approach to ensure every project delivers maximum impact.
@@ -286,7 +286,7 @@ const Services = () => {
                   className="text-center animate-fade-in-up"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-white font-bold text-lg">{phase.step}</span>
                   </div>
                   <h3 className="font-heading font-semibold text-xl mb-2">{phase.title}</h3>
@@ -301,12 +301,12 @@ const Services = () => {
         <section className="py-20 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Ready to Create <span className="bg-rainbow-gradient bg-clip-text text-transparent">Positive Change</span>?
+              Ready to Create <span className="text-gradient-rainbow">Positive Change</span>?
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               Let's work together to amplify your impact and create content that inspires meaningful change in your community.
             </p>
-            <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+            <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
               <Link to="/contact">Start Your Project</Link>
             </Button>
           </div>

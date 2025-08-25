@@ -128,7 +128,7 @@ const ExerciseSearch = () => {
       {/* Search Header */}
       <div className="text-center">
         <h2 className="text-3xl font-heading font-bold mb-2">
-          Exercise <span className="bg-rainbow-gradient bg-clip-text text-transparent">Discovery</span>
+          Exercise <span className="text-gradient-rainbow">Discovery</span>
         </h2>
         <p className="text-muted-foreground">
           Find the perfect exercises for your fitness goals with detailed instructions
@@ -207,7 +207,7 @@ const ExerciseSearch = () => {
             <Button 
               onClick={searchExercises} 
               disabled={loading}
-              className="bg-rainbow-gradient hover:opacity-90 text-white"
+              className="bg-gradient-rainbow hover:opacity-90 text-white"
             >
               {loading ? (
                 <>

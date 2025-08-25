@@ -146,8 +146,8 @@ const PartnerPortal = () => {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h1 className="heading-secondary no-faded-text">
-                  Join the <span className="bg-rainbow-gradient bg-clip-text text-transparent">Conscious</span> Partner Network
+                <h1 className="heading-secondary text-gradient-hero no-faded-text">
+                  Join the <span className="text-gradient-rainbow">Conscious</span> Partner Network
                 </h1>
                 <p className="text-xl text-gray-200 mb-8 leading-relaxed">
                   Transform your expertise into sustainable income while making a positive impact. 
@@ -156,7 +156,7 @@ const PartnerPortal = () => {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button 
                     size="lg" 
-                    className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-xl"
+                    className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-xl"
                     asChild
                   >
                     <Link to="/wellness-exchange/provider-signup">
@@ -399,7 +399,7 @@ const PartnerPortal = () => {
                             ))}
                           </div>
                           <Button 
-                            className="w-full mt-6 bg-rainbow-gradient hover:opacity-90 text-white"
+                            className="w-full mt-6 bg-gradient-rainbow hover:opacity-90 text-white"
                             onClick={() => {
                               setSelectedService(category.id);
                               setActiveTab("application");
@@ -480,7 +480,7 @@ const PartnerPortal = () => {
                           <div className="bg-white rounded-2xl p-8 shadow-lg">
                             <h4 className="font-bold text-3xl text-green-600 mb-2">60-85%</h4>
                             <p className="text-gray-600 mb-4">You keep more of what you earn</p>
-                            <Button className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 rounded-full">
+                            <Button className="bg-gradient-rainbow hover:opacity-90 text-white px-8 py-3 rounded-full">
                               Calculate Your Earnings
                             </Button>
                           </div>
@@ -691,7 +691,7 @@ const PartnerPortal = () => {
                           <Button 
                             type="submit" 
                             size="lg" 
-                            className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-4 text-lg rounded-full shadow-lg"
+                            className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-4 text-lg rounded-full shadow-lg"
                           >
                             Submit Application
                             <ArrowRight className="ml-2 w-5 h-5" />

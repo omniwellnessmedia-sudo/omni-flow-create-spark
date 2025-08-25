@@ -17,7 +17,7 @@ const WellnessHumansSection = () => {
           {/* Content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h2 className="heading-primary">
+              <h2 className="heading-primary text-gradient-hero">
                 Join Our Wellness Community
               </h2>
               
@@ -34,7 +34,7 @@ const WellnessHumansSection = () => {
                 <span className="text-lg text-gray-700 font-medium">Diverse wellness practices</span>
               </div>
               <div className="flex items-center space-x-4">
-                <div className="w-3 h-3 bg-wellhub-gradient rounded-full"></div>
+                <div className="w-3 h-3 bg-gradient-primary rounded-full"></div>
                 <span className="text-lg text-gray-700 font-medium">Supportive community</span>
               </div>
               <div className="flex items-center space-x-4">

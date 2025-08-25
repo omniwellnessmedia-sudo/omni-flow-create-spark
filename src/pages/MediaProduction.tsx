@@ -61,7 +61,7 @@ const MediaProduction = () => {
                 educate, and drive meaningful change. Award-winning production quality meets conscious storytelling.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+                <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
                   <Play className="mr-2 w-5 h-5" />
                   View Our Reel
                 </Button>
@@ -127,7 +127,7 @@ const MediaProduction = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 rounded-full">
+                  <Button className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
                     Get My Custom Quote
                   </Button>
                 </div>
@@ -195,7 +195,7 @@ const MediaProduction = () => {
                 </div>
               </div>
               
-              <Button onClick={calculateEstimate} className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 mb-6">
+              <Button onClick={calculateEstimate} className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 mb-6">
                 Calculate Project Cost
               </Button>
               
@@ -279,7 +279,7 @@ const MediaProduction = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-xl">Indigenous Heritage Journey</h3>
-                  <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-gradient-rainbow text-white px-3 py-1 rounded-full text-xs font-semibold">
                     Cultural
                   </span>
                 </div>
@@ -309,7 +309,7 @@ const MediaProduction = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-xl">Uniting for Our Baboons</h3>
-                  <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-gradient-rainbow text-white px-3 py-1 rounded-full text-xs font-semibold">
                     Environmental
                   </span>
                 </div>
@@ -339,7 +339,7 @@ const MediaProduction = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-xl">Transform Your Workout</h3>
-                  <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-gradient-rainbow text-white px-3 py-1 rounded-full text-xs font-semibold">
                     Wellness
                   </span>
                 </div>
@@ -369,7 +369,7 @@ const MediaProduction = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-xl">Muizenberg Electric Conference</h3>
-                  <span className="bg-rainbow-gradient text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-gradient-rainbow text-white px-3 py-1 rounded-full text-xs font-semibold">
                     Interview
                   </span>
                 </div>
@@ -404,7 +404,7 @@ const MediaProduction = () => {
             <div className="bg-gray-100 p-6 rounded-lg mb-6">
               <p className="text-gray-700">Calendly booking widget will be integrated here</p>
             </div>
-            <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+            <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
               <Calendar className="mr-2 w-5 h-5" />
               Book My Creative Session
             </Button>

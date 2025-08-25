@@ -62,8 +62,8 @@ const Portfolio = () => {
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="heading-secondary no-faded-text">
-              Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Portfolio</span>
+            <h1 className="heading-secondary text-gradient-hero no-faded-text">
+              Our <span className="text-gradient-rainbow">Portfolio</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
               Real stories, authentic impact. Explore how we've partnered with communities and organizations 
@@ -131,8 +131,8 @@ const Portfolio = () => {
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="heading-secondary no-faded-text">
-                Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Impact</span>
+              <h2 className="heading-secondary text-gradient-hero no-faded-text">
+                Our <span className="text-gradient-rainbow">Impact</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Numbers that matter - real impact in communities across South Africa.
@@ -151,7 +151,7 @@ const Portfolio = () => {
                   className="text-center animate-fade-in-up"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <div className="text-4xl sm:text-5xl font-bold bg-rainbow-gradient bg-clip-text text-transparent mb-2">
+                  <div className="text-4xl sm:text-5xl font-bold text-gradient-rainbow mb-2">
                     {stat.number}
                   </div>
                   <div className="text-gray-600 font-medium">{stat.label}</div>

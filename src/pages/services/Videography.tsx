@@ -90,7 +90,7 @@ const Videography = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <Badge className="mb-4 bg-rainbow-gradient text-white">Premium Service</Badge>
+                <Badge className="mb-4 bg-gradient-rainbow text-white">Premium Service</Badge>
                 <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
                   Professional <span className="text-gradient-rainbow">Videography</span> Services
                 </h1>
@@ -99,7 +99,7 @@ const Videography = () => {
                   to understand your vision and building extraordinary content together.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+                  <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
                     <Link to="/contact">Get Quote</Link>
                   </Button>
                   <Button variant="outline" size="lg" className="font-semibold px-8 py-3 text-lg rounded-full">
@@ -169,7 +169,7 @@ const Videography = () => {
               {packages.map((pkg, index) => (
                 <Card key={pkg.name} className={`relative hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 ${pkg.popular ? 'ring-2 ring-rainbow-gradient scale-105' : ''}`}>
                   {pkg.popular && (
-                    <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-rainbow-gradient text-white">
+                    <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-rainbow text-white">
                       Most Popular
                     </Badge>
                   )}
@@ -190,7 +190,7 @@ const Videography = () => {
                     <div className="p-4 bg-rainbow-subtle rounded-lg mb-6">
                       <p className="text-sm text-gray-600"><strong>Ideal for:</strong> {pkg.ideal}</p>
                     </div>
-                    <Button asChild className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 rounded-full">
+                    <Button asChild className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
                       <Link to="/contact">Choose Package</Link>
                     </Button>
                   </CardContent>
@@ -224,7 +224,7 @@ const Videography = () => {
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <Play className="w-12 h-12 text-white" />
                     </div>
-                    <Badge className="absolute top-4 right-4 bg-rainbow-gradient text-white">
+                    <Badge className="absolute top-4 right-4 bg-gradient-rainbow text-white">
                       {project.category}
                     </Badge>
                   </div>
@@ -254,7 +254,7 @@ const Videography = () => {
               Let's create powerful visual content that resonates with your audience and drives meaningful change in your community.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+              <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
                 <Link to="/contact">
                   Start Your Project
                   <ArrowRight className="ml-2 w-5 h-5" />

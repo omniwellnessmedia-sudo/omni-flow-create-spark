@@ -6,7 +6,7 @@ const MissionSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
           <div className="animate-fade-in-up">
-            <h2 className="heading-primary mb-6">
+            <h2 className="heading-primary text-gradient-hero mb-6">
               Our Mission
             </h2>
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">

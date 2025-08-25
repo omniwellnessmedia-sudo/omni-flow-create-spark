@@ -60,7 +60,7 @@ const AIToolsPreview = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16" data-tour="ai-tools">
-          <h2 className="heading-primary mb-6">
+          <h2 className="heading-primary text-gradient-hero mb-6">
             AI-Powered Tools
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
@@ -82,7 +82,7 @@ const AIToolsPreview = () => {
               <div className={`h-2 bg-gradient-to-r ${tool.color} group-hover:h-3 transition-all duration-300`}></div>
               <CardHeader className="text-center pb-4">
                 <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">{tool.icon}</div>
-                <CardTitle className="font-heading text-xl mb-3 group-hover:text-transparent group-hover:bg-rainbow-gradient group-hover:bg-clip-text transition-all duration-300">
+                <CardTitle className="font-heading text-xl mb-3 group-hover:text-gradient-rainbow group-hover: transition-all duration-300">
                   {tool.title}
                 </CardTitle>
                 <CardDescription className="text-gray-600 leading-relaxed">{tool.description}</CardDescription>
@@ -93,7 +93,7 @@ const AIToolsPreview = () => {
                   <ul className="space-y-1">
                     {tool.features.map((feature, idx) => (
                       <li key={idx} className="text-sm text-gray-600 flex items-center">
-                        <span className="w-1.5 h-1.5 bg-rainbow-gradient rounded-full mr-2"></span>
+                        <span className="w-1.5 h-1.5 bg-gradient-rainbow rounded-full mr-2"></span>
                         {feature}
                       </li>
                     ))}
@@ -112,7 +112,7 @@ const AIToolsPreview = () => {
         </div>
 
         <div className="text-center space-y-4">
-          <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-12 py-4 text-lg rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
+          <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-12 py-4 text-lg rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
             <Link to="/ai-tools">Explore All AI Tools</Link>
           </Button>
           <p className="text-sm text-gray-500">No signup required • Instant results • Lead generation ready</p>

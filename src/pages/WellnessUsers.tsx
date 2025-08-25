@@ -70,7 +70,7 @@ const WellnessUsers = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="font-heading font-bold text-2xl sm:text-3xl">
-              Find <span className="bg-rainbow-gradient bg-clip-text text-transparent">Users</span>
+              Find <span className="text-gradient-rainbow">Users</span>
             </h1>
             <p className="text-gray-600 mt-1">Connect with wellness providers and community members</p>
           </div>
@@ -174,7 +174,7 @@ const WellnessUsers = () => {
                           <MessageSquare className="h-4 w-4 mr-1" />
                           Message
                         </Button>
-                        <Button size="sm" className="bg-rainbow-gradient hover:opacity-90 text-white">
+                        <Button size="sm" className="bg-gradient-rainbow hover:opacity-90 text-white">
                           Connect
                         </Button>
                       </div>

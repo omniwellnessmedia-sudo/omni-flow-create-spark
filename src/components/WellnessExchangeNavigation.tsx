@@ -75,7 +75,7 @@ const WellnessExchangeNavigation = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-1">
             <h2 className="font-heading font-bold text-xl">
-              <span className="bg-rainbow-gradient bg-clip-text text-transparent">
+              <span className="text-gradient-rainbow">
                 Wellness Exchange
               </span>
             </h2>

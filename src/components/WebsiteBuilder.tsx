@@ -161,8 +161,8 @@ const WebsiteBuilder = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="heading-secondary no-faded-text">
-              Website <span className="bg-rainbow-gradient bg-clip-text text-transparent">Builder</span>
+            <h2 className="heading-secondary text-gradient-hero no-faded-text">
+              Website <span className="text-gradient-rainbow">Builder</span>
             </h2>
             <p className="text-gray-600">Create your high-converting wellness sales page and lead magnet funnel</p>
           </div>

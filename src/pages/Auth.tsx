@@ -132,7 +132,7 @@ const Auth = () => {
             alt="Omni Wellness Media" 
             className="h-16 w-16 mx-auto mb-4"
           />
-          <h1 className="text-2xl font-bold bg-rainbow-gradient bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold text-gradient-rainbow">
             Welcome to Omni Wellness
           </h1>
           <p className="text-gray-600 mt-2">Join our conscious wellness community</p>
@@ -230,7 +230,7 @@ const Auth = () => {
 
                     <Button 
                       type="submit" 
-                      className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold"
+                      className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold"
                       disabled={loading}
                     >
                       {loading ? "Signing In..." : "Sign In"}
@@ -268,7 +268,7 @@ const Auth = () => {
                       </Button>
                       <Button 
                         type="submit" 
-                        className="flex-1 bg-rainbow-gradient hover:opacity-90 text-white font-semibold"
+                        className="flex-1 bg-gradient-rainbow hover:opacity-90 text-white font-semibold"
                         disabled={loading}
                       >
                         {loading ? "Sending..." : "Send Reset Link"}
@@ -366,7 +366,7 @@ const Auth = () => {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold"
+                    className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold"
                     disabled={loading}
                   >
                     {loading ? "Creating Account..." : "Create Account"}

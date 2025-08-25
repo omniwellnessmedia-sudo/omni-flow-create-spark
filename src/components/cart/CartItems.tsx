@@ -95,7 +95,7 @@ export const CartItems = () => {
         </div>
 
         <div className="space-y-2">
-          <Button asChild className="w-full bg-rainbow-gradient hover:opacity-90 text-white">
+          <Button asChild className="w-full bg-gradient-rainbow hover:opacity-90 text-white">
             <Link to="/checkout">Proceed to Checkout</Link>
           </Button>
           <Button 

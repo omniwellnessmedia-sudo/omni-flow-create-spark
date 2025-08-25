@@ -43,7 +43,7 @@ const ServicesSection = () => {
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16" data-tour="services">
-          <h2 className="heading-primary mb-6">
+          <h2 className="heading-primary text-gradient-hero mb-6">
             Our Services
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -94,7 +94,7 @@ const ServicesSection = () => {
             </div>
             <Button 
               asChild 
-              className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-6 py-3 rounded-full shadow-lg group"
+              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-6 py-3 rounded-full shadow-lg group"
             >
               <Link to="/services" className="inline-flex items-center">
                 Learn More
@@ -127,7 +127,7 @@ const ServicesSection = () => {
                 <ul className="space-y-2 mb-6">
                   {service.features.map((feature) => (
                     <li key={feature} className="flex items-center text-sm text-gray-600">
-                      <span className="w-2 h-2 bg-rainbow-gradient rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-gradient-rainbow rounded-full mr-3"></span>
                       {feature}
                     </li>
                   ))}
@@ -148,7 +148,7 @@ const ServicesSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+          <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
             <Link to="/services">View All Services</Link>
           </Button>
         </div>

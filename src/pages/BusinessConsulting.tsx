@@ -96,7 +96,7 @@ const BusinessConsulting = () => {
                 Our proven methodology has helped 200+ businesses achieve sustainable growth while making positive impact.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+                <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
                   <Calendar className="mr-2 w-5 h-5" />
                   Book Free Strategy Call
                 </Button>
@@ -153,7 +153,7 @@ const BusinessConsulting = () => {
                       rows={3}
                     />
                   </div>
-                  <Button type="submit" className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 rounded-full">
+                  <Button type="submit" className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
                     Get My Free Assessment
                   </Button>
                 </form>
@@ -217,7 +217,7 @@ const BusinessConsulting = () => {
                 </div>
               </div>
               
-              <Button onClick={calculateROI} className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 mb-6">
+              <Button onClick={calculateROI} className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 mb-6">
                 Calculate My ROI
               </Button>
               
@@ -290,7 +290,7 @@ const BusinessConsulting = () => {
               <Card key={testimonial.name} className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300">
                 <CardContent className="p-8">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-rainbow-gradient rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 bg-gradient-rainbow rounded-full flex items-center justify-center text-white font-bold">
                       {testimonial.name[0]}
                     </div>
                     <div className="ml-4">
@@ -338,7 +338,7 @@ const BusinessConsulting = () => {
                 });
               }}
             />
-            <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+            <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
               <Calendar className="mr-2 w-5 h-5" />
               Book My Free Session Now
             </Button>

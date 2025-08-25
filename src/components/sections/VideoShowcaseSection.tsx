@@ -38,7 +38,7 @@ const VideoShowcaseSection = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="heading-primary mb-6">
+          <h2 className="heading-primary text-gradient-hero mb-6">
             Our Story in Motion
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
@@ -47,7 +47,7 @@ const VideoShowcaseSection = () => {
           <Button 
             asChild 
             variant="outline" 
-            className="hover:bg-rainbow-gradient hover:text-white transition-all duration-300"
+            className="hover:bg-gradient-rainbow hover:text-white transition-all duration-300"
           >
             <a 
               href="https://www.youtube.com/channel/UC9xAQa9QquyE4Glsy1zmpRQ" 

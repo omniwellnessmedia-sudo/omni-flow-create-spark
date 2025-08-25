@@ -79,14 +79,14 @@ const WebDevelopment = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                Build <span className="bg-rainbow-gradient bg-clip-text text-transparent">Powerful Websites</span> That Convert
+                Build <span className="text-gradient-rainbow">Powerful Websites</span> That Convert
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Custom web solutions that reflect your brand values and drive results. From stunning designs 
                 to robust e-commerce platforms, we create digital experiences that inspire and convert.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+                <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
                   <Globe className="mr-2 w-5 h-5" />
                   View Portfolio
                 </Button>
@@ -148,7 +148,7 @@ const WebDevelopment = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 rounded-full">
+                  <Button className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
                     Get My Custom Quote
                   </Button>
                 </div>
@@ -163,7 +163,7 @@ const WebDevelopment = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-              Website <span className="bg-rainbow-gradient bg-clip-text text-transparent">Cost Calculator</span>
+              Website <span className="text-gradient-rainbow">Cost Calculator</span>
             </h2>
             <p className="text-lg text-gray-600">Get an instant estimate for your web development project</p>
           </div>
@@ -221,7 +221,7 @@ const WebDevelopment = () => {
                 </div>
               </div>
               
-              <Button onClick={calculateEstimate} className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 mb-6">
+              <Button onClick={calculateEstimate} className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 mb-6">
                 Calculate Project Cost
               </Button>
               
@@ -250,7 +250,7 @@ const WebDevelopment = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Complete <span className="bg-rainbow-gradient bg-clip-text text-transparent">Web Solutions</span>
+              Complete <span className="text-gradient-rainbow">Web Solutions</span>
             </h2>
           </div>
           
@@ -282,7 +282,7 @@ const WebDevelopment = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Modern <span className="bg-rainbow-gradient bg-clip-text text-transparent">Technology Stack</span>
+              Modern <span className="text-gradient-rainbow">Technology Stack</span>
             </h2>
             <p className="text-lg text-gray-600">We use cutting-edge technologies to build fast, secure, and scalable websites</p>
           </div>
@@ -300,7 +300,7 @@ const WebDevelopment = () => {
             ].map((tech, index) => (
               <Card key={tech.name} className="text-center bg-white hover:shadow-lg transition-all duration-300 border-0 shadow-md">
                 <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
                     <Code className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="font-bold text-lg mb-2">{tech.name}</h3>
@@ -332,7 +332,7 @@ const WebDevelopment = () => {
             <div className="bg-gray-100 p-6 rounded-lg mb-6">
               <p className="text-gray-700">Calendly booking widget will be integrated here</p>
             </div>
-            <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+            <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
               <Calendar className="mr-2 w-5 h-5" />
               Book My Consultation
             </Button>

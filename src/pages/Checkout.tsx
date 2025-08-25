@@ -307,7 +307,7 @@ const Checkout = () => {
                     
                     <Button 
                       onClick={handleSubmitOrder}
-                      className="w-full bg-rainbow-gradient hover:opacity-90 text-white mt-6"
+                      className="w-full bg-gradient-rainbow hover:opacity-90 text-white mt-6"
                       size="lg"
                     >
                       Complete Order

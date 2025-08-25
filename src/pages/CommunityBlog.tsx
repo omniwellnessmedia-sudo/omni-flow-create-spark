@@ -318,8 +318,8 @@ const CommunityBlog = () => {
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="heading-secondary no-faded-text">
-              Community <span className="bg-rainbow-gradient bg-clip-text text-transparent">Blog</span>
+            <h1 className="heading-secondary text-gradient-hero no-faded-text">
+              Community <span className="text-gradient-rainbow">Blog</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
               Share your wellness journey, insights, and stories with our community. 
@@ -330,7 +330,7 @@ const CommunityBlog = () => {
               <Button 
                 size="lg"
                 onClick={() => navigate("/blog/editor/new")}
-                className="bg-rainbow-gradient hover:opacity-90 text-white"
+                className="bg-gradient-rainbow hover:opacity-90 text-white"
               >
                 <Plus className="h-5 w-5 mr-2" />
                 Write Your Story
@@ -339,7 +339,7 @@ const CommunityBlog = () => {
               <Button 
                 size="lg"
                 onClick={() => navigate("/auth")}
-                className="bg-rainbow-gradient hover:opacity-90 text-white"
+                className="bg-gradient-rainbow hover:opacity-90 text-white"
               >
                 Join the Community
               </Button>
@@ -450,7 +450,7 @@ const CommunityBlog = () => {
                       {user && (
                         <Button 
                           onClick={() => navigate("/blog/editor/new")}
-                          className="bg-rainbow-gradient hover:opacity-90 text-white"
+                          className="bg-gradient-rainbow hover:opacity-90 text-white"
                         >
                           <Plus className="h-4 w-4 mr-2" />
                           Write Your Story
@@ -470,7 +470,7 @@ const CommunityBlog = () => {
                     </div>
                     <Button 
                       onClick={() => navigate("/blog/editor/new")}
-                      className="bg-rainbow-gradient hover:opacity-90 text-white"
+                      className="bg-gradient-rainbow hover:opacity-90 text-white"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       New Story
@@ -493,7 +493,7 @@ const CommunityBlog = () => {
                         </p>
                         <Button 
                           onClick={() => navigate("/blog/editor/new")}
-                          className="bg-rainbow-gradient hover:opacity-90 text-white"
+                          className="bg-gradient-rainbow hover:opacity-90 text-white"
                         >
                           <Plus className="h-4 w-4 mr-2" />
                           Write Your First Story

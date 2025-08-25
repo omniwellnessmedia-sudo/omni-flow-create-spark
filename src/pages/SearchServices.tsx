@@ -74,7 +74,7 @@ const SearchServices = () => {
           {/* Header */}
           <div className="mb-8 text-center">
             <h1 className="font-heading font-bold text-2xl sm:text-3xl mb-2">
-              Find Your Perfect <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Service</span>
+              Find Your Perfect <span className="text-gradient-rainbow">Wellness Service</span>
             </h1>
             <p className="text-gray-600">Discover wellness providers and services that match your needs</p>
           </div>
@@ -121,7 +121,7 @@ const SearchServices = () => {
                 </div>
                 <Button 
                   onClick={handleSearch}
-                  className="w-full bg-rainbow-gradient hover:opacity-90 text-white"
+                  className="w-full bg-gradient-rainbow hover:opacity-90 text-white"
                 >
                   <Search className="h-4 w-4 mr-2" />
                   Search Services

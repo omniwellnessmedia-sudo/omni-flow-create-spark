@@ -59,7 +59,7 @@ const MobileNavigation = () => {
               alt="Omni Wellness" 
               className="h-8 w-8"
             />
-            <span className="ml-2 font-semibold bg-rainbow-gradient bg-clip-text text-transparent">
+            <span className="ml-2 font-semibold text-gradient-rainbow">
               Wellness Exchange
             </span>
           </Link>

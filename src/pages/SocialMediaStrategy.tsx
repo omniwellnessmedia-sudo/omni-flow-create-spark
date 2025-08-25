@@ -74,14 +74,14 @@ const SocialMediaStrategy = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                Build <span className="bg-rainbow-gradient bg-clip-text text-transparent">Engaging Communities</span>
+                Build <span className="text-gradient-rainbow">Engaging Communities</span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Transform your social media presence with strategies that build authentic connections, 
                 drive meaningful engagement, and convert followers into loyal advocates for your mission.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+                <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
                   <TrendingUp className="mr-2 w-5 h-5" />
                   Get Strategy Audit
                 </Button>
@@ -142,7 +142,7 @@ const SocialMediaStrategy = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 rounded-full">
+                  <Button className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
                     Get My Free Audit
                   </Button>
                 </div>
@@ -157,7 +157,7 @@ const SocialMediaStrategy = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-              Social Media <span className="bg-rainbow-gradient bg-clip-text text-transparent">Health Check</span>
+              Social Media <span className="text-gradient-rainbow">Health Check</span>
             </h2>
             <p className="text-lg text-gray-600">Analyze your current social media performance</p>
           </div>
@@ -203,7 +203,7 @@ const SocialMediaStrategy = () => {
                 </div>
               </div>
               
-              <Button onClick={calculateEngagement} className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 mb-6">
+              <Button onClick={calculateEngagement} className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 mb-6">
                 Analyze My Performance
               </Button>
               
@@ -239,7 +239,7 @@ const SocialMediaStrategy = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Premium <span className="bg-rainbow-gradient bg-clip-text text-transparent">Strategy Packages</span>
+              Premium <span className="text-gradient-rainbow">Strategy Packages</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Take your social media to the next level with our professional packages
@@ -371,7 +371,7 @@ const SocialMediaStrategy = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Platform-Specific <span className="bg-rainbow-gradient bg-clip-text text-transparent">Strategies</span>
+              Platform-Specific <span className="text-gradient-rainbow">Strategies</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Tailored approaches for each social media platform to maximize your reach and engagement
@@ -408,7 +408,7 @@ const SocialMediaStrategy = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Complete <span className="bg-rainbow-gradient bg-clip-text text-transparent">Social Media Management</span>
+              Complete <span className="text-gradient-rainbow">Social Media Management</span>
             </h2>
           </div>
           
@@ -455,7 +455,7 @@ const SocialMediaStrategy = () => {
             <div className="bg-gray-100 p-6 rounded-lg mb-6">
               <p className="text-gray-700">Calendly booking widget will be integrated here</p>
             </div>
-            <Button size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+            <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
               <Calendar className="mr-2 w-5 h-5" />
               Book My Strategy Session
             </Button>

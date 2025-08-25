@@ -274,7 +274,7 @@ const ProviderMediaUpload = ({ onMediaUpdate }: ProviderMediaUploadProps) => {
               <Button 
                 onClick={uploadMedia}
                 disabled={uploading || mediaFiles.length === 0}
-                className="bg-rainbow-gradient hover:opacity-90"
+                className="bg-gradient-rainbow hover:opacity-90"
               >
                 {uploading ? "Uploading..." : `Upload ${mediaFiles.length} file${mediaFiles.length !== 1 ? 's' : ''}`}
               </Button>

@@ -104,7 +104,7 @@ const PartnersDirectory = () => {
       <Hero
         title={
           <>
-            Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Partners</span>
+            Our <span className="text-gradient-rainbow">Wellness Partners</span>
           </>
         }
         subtitle="Verified Community"
@@ -274,7 +274,7 @@ const PartnersDirectory = () => {
 
                     {/* Action Buttons */}
                     <div className="flex gap-2 pt-2">
-                      <Button asChild className="flex-1 bg-rainbow-gradient hover:opacity-90 text-white font-medium">
+                      <Button asChild className="flex-1 bg-gradient-rainbow hover:opacity-90 text-white font-medium">
                         <Link to={`/partners/${partner.id}`}>
                           View Profile
                           <ExternalLink className="w-4 h-4 ml-2" />
@@ -299,7 +299,7 @@ const PartnersDirectory = () => {
               </div>
               <h3 className="font-heading font-semibold text-xl mb-2">No Partners Yet</h3>
               <p className="text-gray-600 mb-6">Be among the first to join our conscious wellness community!</p>
-              <Button asChild className="bg-rainbow-gradient hover:opacity-90 text-white font-medium px-8">
+              <Button asChild className="bg-gradient-rainbow hover:opacity-90 text-white font-medium px-8">
                 <Link to="/wellness-exchange/provider-signup">Become a Partner</Link>
               </Button>
             </div>
@@ -314,7 +314,7 @@ const PartnersDirectory = () => {
               Whether you're a practitioner looking to connect or someone seeking wellness services, we're here to support your journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-medium px-8">
+              <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-medium px-8">
                 <Link to="/wellness-exchange/provider-signup">Become a Partner</Link>
               </Button>
               <Button asChild variant="soft" size="lg" className="px-8">

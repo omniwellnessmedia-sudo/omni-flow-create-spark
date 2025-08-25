@@ -203,8 +203,8 @@ const WellnessMarketplace = () => {
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h1 className="heading-secondary no-faded-text text-center">
-                  Wellness <span className="bg-rainbow-gradient bg-clip-text text-transparent">Marketplace</span>
+                <h1 className="heading-secondary text-gradient-hero no-faded-text text-center">
+                  Wellness <span className="text-gradient-rainbow">Marketplace</span>
                 </h1>
                 <p className="text-gray-600 mt-1">Discover and book wellness services</p>
               </div>
@@ -258,7 +258,7 @@ const WellnessMarketplace = () => {
               <div className="flex flex-col md:flex-row items-center justify-between">
                 <div className="text-center md:text-left mb-4 md:mb-0">
                   <h3 className="font-bold text-xl mb-2">
-                    🎯 Welcome to Our <span className="bg-rainbow-gradient bg-clip-text text-transparent">Wellness Marketplace</span>
+                    🎯 Welcome to Our <span className="text-gradient-rainbow">Wellness Marketplace</span>
                   </h3>
                   <p className="text-gray-600 max-w-2xl">
                     Discover verified wellness practitioners and holistic services designed to support your journey to optimal health and consciousness.
@@ -266,7 +266,7 @@ const WellnessMarketplace = () => {
                 </div>
                 <Button 
                   size="lg" 
-                  className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 whitespace-nowrap"
+                  className="bg-gradient-rainbow hover:opacity-90 text-white px-8 py-3 whitespace-nowrap"
                   onClick={() => navigate('/wellness-exchange/provider-signup')}
                 >
                   Become a Partner
@@ -325,7 +325,7 @@ const WellnessMarketplace = () => {
                 <div className="space-y-3">
                   <Button 
                     size="lg"
-                    className="bg-rainbow-gradient hover:opacity-90 text-white w-full"
+                    className="bg-gradient-rainbow hover:opacity-90 text-white w-full"
                     onClick={() => navigate('/wellness-exchange/provider-signup')}
                   >
                     Become a Wellness Partner
@@ -416,7 +416,7 @@ const WellnessMarketplace = () => {
                             </Button>
                             <Button 
                               size="sm"
-                              className="bg-rainbow-gradient hover:opacity-90 text-white"
+                              className="bg-gradient-rainbow hover:opacity-90 text-white"
                               onClick={() => handleBookService(
                                 service.id, 
                                 service.price_zar, 

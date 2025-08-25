@@ -116,7 +116,7 @@ const TransactionPage = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="font-heading font-bold text-2xl sm:text-3xl">
-              Transaction <span className="bg-rainbow-gradient bg-clip-text text-transparent">History</span>
+              Transaction <span className="text-gradient-rainbow">History</span>
             </h1>
             <p className="text-gray-600 mt-1">Your WellCoin and payment history</p>
           </div>

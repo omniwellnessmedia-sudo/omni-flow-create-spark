@@ -103,16 +103,16 @@ const CustomArt = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <Badge className="mb-4 bg-rainbow-gradient text-white">Bespoke Artwork</Badge>
+                <Badge className="mb-4 bg-gradient-rainbow text-white">Bespoke Artwork</Badge>
                 <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                  Custom Art & <span className="bg-rainbow-gradient bg-clip-text text-transparent">Illustration</span>
+                  Custom Art & <span className="text-gradient-rainbow">Illustration</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed">
                   Commissioned artwork that tells your story through bespoke visual experiences. 
                   From illustrations to graffiti murals - we create art that inspires and transforms.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+                  <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
                     <Link to="/contact">Commission Artwork</Link>
                   </Button>
                   <Button variant="outline" size="lg" className="font-semibold px-8 py-3 text-lg rounded-full">
@@ -141,7 +141,7 @@ const CustomArt = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Our Art <span className="bg-rainbow-gradient bg-clip-text text-transparent">Services</span>
+                Our Art <span className="text-gradient-rainbow">Services</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 From intimate illustrations to monumental murals, we create custom artwork that captures your vision and transforms spaces.
@@ -171,12 +171,12 @@ const CustomArt = () => {
                     <div className="grid grid-cols-2 gap-2">
                       {service.features.map((feature) => (
                         <div key={feature} className="flex items-center text-sm text-gray-600">
-                          <span className="w-1.5 h-1.5 bg-rainbow-gradient rounded-full mr-2"></span>
+                          <span className="w-1.5 h-1.5 bg-gradient-rainbow rounded-full mr-2"></span>
                           {feature}
                         </div>
                       ))}
                     </div>
-                    <Button asChild className="w-full mt-4 bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-2 rounded-full">
+                    <Button asChild className="w-full mt-4 bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-2 rounded-full">
                       <Link to="/contact">Get Quote</Link>
                     </Button>
                   </CardContent>
@@ -191,7 +191,7 @@ const CustomArt = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Featured <span className="bg-rainbow-gradient bg-clip-text text-transparent">Artwork</span>
+                Featured <span className="text-gradient-rainbow">Artwork</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Explore some of our most impactful custom artwork and commissioned pieces.
@@ -208,7 +208,7 @@ const CustomArt = () => {
                       className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <Badge className="absolute top-4 right-4 bg-rainbow-gradient text-white">
+                    <Badge className="absolute top-4 right-4 bg-gradient-rainbow text-white">
                       {project.category}
                     </Badge>
                   </div>
@@ -236,7 +236,7 @@ const CustomArt = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Creative <span className="bg-rainbow-gradient bg-clip-text text-transparent">Process</span>
+                Creative <span className="text-gradient-rainbow">Process</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Our collaborative approach ensures your vision is realized through every stage of creation.
@@ -247,7 +247,7 @@ const CustomArt = () => {
               {process.map((step, index) => (
                 <Card key={step.step} className="text-center hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
                   <CardHeader>
-                    <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
                       <span className="text-white font-bold text-lg">{step.step}</span>
                     </div>
                     <step.icon className="w-8 h-8 text-omni-indigo mx-auto mb-2" />
@@ -267,7 +267,7 @@ const CustomArt = () => {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Investment <span className="bg-rainbow-gradient bg-clip-text text-transparent">Guide</span>
+                Investment <span className="text-gradient-rainbow">Guide</span>
               </h2>
               <p className="text-lg text-gray-600">
                 Transparent pricing for custom artwork that fits your budget and vision.
@@ -326,13 +326,13 @@ const CustomArt = () => {
         <section className="py-20 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Ready to Create Something <span className="bg-rainbow-gradient bg-clip-text text-transparent">Extraordinary</span>?
+              Ready to Create Something <span className="text-gradient-rainbow">Extraordinary</span>?
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               Let's bring your vision to life through custom artwork that inspires, transforms, and tells your unique story.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-rainbow-gradient hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+              <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
                 <Link to="/contact">
                   Start Your Commission
                   <ArrowRight className="ml-2 w-5 h-5" />

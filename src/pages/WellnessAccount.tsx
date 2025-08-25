@@ -87,7 +87,7 @@ const WellnessAccount = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="font-heading font-bold text-2xl sm:text-3xl">
-              My <span className="bg-rainbow-gradient bg-clip-text text-transparent">Account</span>
+              My <span className="text-gradient-rainbow">Account</span>
             </h1>
             <p className="text-gray-600 mt-1">Manage your wellness journey</p>
           </div>
@@ -105,7 +105,7 @@ const WellnessAccount = () => {
                 </div>
                 <Button 
                   onClick={handleStartTrial}
-                  className="bg-rainbow-gradient hover:opacity-90 text-white"
+                  className="bg-gradient-rainbow hover:opacity-90 text-white"
                 >
                   Activate Trial
                 </Button>

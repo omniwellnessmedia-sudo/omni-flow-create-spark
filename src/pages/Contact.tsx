@@ -62,8 +62,8 @@ const Contact = () => {
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="heading-secondary no-faded-text">
-              Let's Create <span className="bg-rainbow-gradient bg-clip-text text-transparent">Together</span>
+            <h1 className="heading-secondary text-gradient-hero no-faded-text">
+              Let's Create <span className="text-gradient-rainbow">Together</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
               Ready to amplify your impact and tell your story? We'd love to hear from you. 
@@ -125,7 +125,7 @@ const Contact = () => {
                       <Textarea id="message" required value={formData.message} onChange={e => handleInputChange("message", e.target.value)} placeholder="Tell us about your project, goals, timeline, and how we can help..." className="min-h-[120px]" />
                     </div>
 
-                    <Button type="submit" className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3 text-lg rounded-full shadow-lg">
+                    <Button type="submit" className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 text-lg rounded-full shadow-lg">
                       Send Message
                     </Button>
                   </form>
@@ -208,8 +208,8 @@ const Contact = () => {
         <section className="py-20 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="heading-secondary no-faded-text">
-                Frequently Asked <span className="bg-rainbow-gradient bg-clip-text text-transparent">Questions</span>
+              <h2 className="heading-secondary text-gradient-hero no-faded-text">
+                Frequently Asked <span className="text-gradient-rainbow">Questions</span>
               </h2>
             </div>
             

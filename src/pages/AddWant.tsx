@@ -54,8 +54,8 @@ const AddWant = () => {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <h1 className="heading-secondary no-faded-text text-center">
-              Post a <span className="bg-rainbow-gradient bg-clip-text text-transparent">Want</span>
+            <h1 className="heading-secondary text-gradient-hero no-faded-text text-center">
+              Post a <span className="text-gradient-rainbow">Want</span>
             </h1>
             <p className="text-gray-600 mt-1">Tell the community what wellness service you're looking for</p>
           </div>
@@ -182,7 +182,7 @@ const AddWant = () => {
                 <div className="pt-4">
                   <Button 
                     type="submit" 
-                    className="w-full bg-rainbow-gradient hover:opacity-90 text-white"
+                    className="w-full bg-gradient-rainbow hover:opacity-90 text-white"
                   >
                     <Heart className="h-4 w-4 mr-2" />
                     Post My Want

@@ -75,8 +75,8 @@ const Blog = () => {
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="heading-secondary no-faded-text">
-              Insights & <span className="bg-rainbow-gradient bg-clip-text text-transparent">Stories</span>
+            <h1 className="heading-secondary text-gradient-hero no-faded-text">
+              Insights & <span className="text-gradient-rainbow">Stories</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
               Explore our thoughts on conscious content creation, community empowerment, 
@@ -85,7 +85,7 @@ const Blog = () => {
             <div className="flex gap-4 justify-center">
               <Button 
                 onClick={() => window.location.href = '/blog/community'}
-                className="bg-rainbow-gradient hover:opacity-90 text-white"
+                className="bg-gradient-rainbow hover:opacity-90 text-white"
               >
                 Community Blog
               </Button>
@@ -98,7 +98,7 @@ const Blog = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
               <h2 className="font-heading font-semibold text-2xl mb-4">
-                Our Content <span className="bg-rainbow-gradient bg-clip-text text-transparent">Pillars</span>
+                Our Content <span className="text-gradient-rainbow">Pillars</span>
               </h2>
               <div className="flex flex-wrap justify-center gap-4">
                 {categories.slice(1).map((category, index) => (
@@ -161,8 +161,8 @@ const Blog = () => {
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="heading-secondary no-faded-text">
-                Featured <span className="bg-rainbow-gradient bg-clip-text text-transparent">Topics</span>
+              <h2 className="heading-secondary text-gradient-hero no-faded-text">
+                Featured <span className="text-gradient-rainbow">Topics</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Dive deeper into the subjects that matter most to our community.

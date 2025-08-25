@@ -104,7 +104,7 @@ const About = () => {
       <Hero
         title={
           <>
-            About <span className="bg-rainbow-gradient bg-clip-text text-transparent">Omni Wellness Media</span>
+            About <span className="text-gradient-rainbow">Omni Wellness Media</span>
           </>
         }
         description="We are messengers to humanity, creating authentic content that bridges communities and inspires positive change from South Africa to the world."
@@ -132,7 +132,7 @@ const About = () => {
         <section className="section-spacing bg-white">
           <div className="container-width">
             <div className="text-center mb-12">
-              <h2 className="heading-secondary no-faded-text">Our Story</h2>
+              <h2 className="heading-secondary text-gradient-hero no-faded-text">Our Story</h2>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto mb-8 leading-relaxed">
                 Omni Wellness Media was born from a vision to create authentic content that showcases 
                 the real stories behind the brands we work with. We believe in breaking stereotypes 
@@ -178,7 +178,7 @@ const About = () => {
         <section className="section-spacing bg-gray-50">
           <div className="container-width">
             <div className="text-center mb-16">
-              <h2 className="heading-secondary no-faded-text">
+              <h2 className="heading-secondary text-gradient-hero no-faded-text">
                 Meet Our <span className="text-rainbow-enhanced">Team</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -218,7 +218,7 @@ const About = () => {
         <section className="section-spacing bg-white">
           <div className="container-width">
             <div className="text-center mb-16">
-              <h2 className="heading-secondary no-faded-text">
+              <h2 className="heading-secondary text-gradient-hero no-faded-text">
                 Our <span className="text-rainbow-enhanced">Values</span>
               </h2>
             </div>
@@ -246,7 +246,7 @@ const About = () => {
         <section className="section-spacing bg-gray-50">
           <div className="container-width">
             <div className="text-center mb-16">
-              <h2 className="heading-secondary no-faded-text">
+              <h2 className="heading-secondary text-gradient-hero no-faded-text">
                 Our <span className="text-rainbow-enhanced">Impact</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -302,28 +302,28 @@ const About = () => {
             {/* Impact Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
               <div className="p-6">
-                <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">🌍</span>
                 </div>
                 <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">1000+</h4>
                 <p className="text-gray-600 font-medium">Lives Touched</p>
               </div>
               <div className="p-6">
-                <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">🤝</span>
                 </div>
                 <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">15+</h4>
                 <p className="text-gray-600 font-medium">Communities Served</p>
               </div>
               <div className="p-6">
-                <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">💡</span>
                 </div>
                 <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">50+</h4>
                 <p className="text-gray-600 font-medium">Projects Completed</p>
               </div>
               <div className="p-6">
-                <div className="w-16 h-16 bg-rainbow-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white text-2xl font-bold">🎬</span>
                 </div>
                 <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">100+</h4>
@@ -349,7 +349,7 @@ const About = () => {
               <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-6 leading-tight">
                 Ready to Create 
                 <br />
-                <span className="bg-rainbow-gradient bg-clip-text text-transparent">
+                <span className="text-gradient-rainbow">
                   Positive Change
                 </span> 
                 <br />

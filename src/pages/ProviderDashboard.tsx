@@ -264,7 +264,7 @@ const ProviderDashboard = () => {
               
               <div className="flex gap-3">
                 <Button 
-                  className="bg-rainbow-gradient hover:opacity-90 text-white"
+                  className="bg-gradient-rainbow hover:opacity-90 text-white"
                   onClick={() => navigate('/wellness-exchange/add-service')}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -718,7 +718,7 @@ const ProviderDashboard = () => {
                     </div>
                     <Button 
                       onClick={() => navigate('/blog/editor/new')}
-                      className="bg-rainbow-gradient hover:opacity-90 text-white"
+                      className="bg-gradient-rainbow hover:opacity-90 text-white"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Write New Post

@@ -296,7 +296,7 @@ const ProviderLandingPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button 
-                    className="w-full bg-rainbow-gradient hover:opacity-90 text-white"
+                    className="w-full bg-gradient-rainbow hover:opacity-90 text-white"
                     onClick={handleContactProvider}
                   >
                     <MessageCircle className="h-4 w-4 mr-2" />
@@ -462,7 +462,7 @@ const ProviderLandingPage = () => {
                         
                         <Button 
                           size="sm"
-                          className="bg-rainbow-gradient hover:opacity-90 text-white"
+                          className="bg-gradient-rainbow hover:opacity-90 text-white"
                           onClick={() => handleBookService(service.id)}
                         >
                           Book Now

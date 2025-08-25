@@ -273,7 +273,7 @@ const ServiceDetail = () => {
                       {user ? (
                         <Button 
                           onClick={() => setShowBooking(true)}
-                          className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3"
+                          className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3"
                           size="lg"
                         >
                           Book This Service
@@ -281,7 +281,7 @@ const ServiceDetail = () => {
                       ) : (
                         <Button 
                           onClick={() => navigate('/auth')}
-                          className="w-full bg-rainbow-gradient hover:opacity-90 text-white font-semibold py-3"
+                          className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3"
                           size="lg"
                         >
                           Sign In to Book

@@ -89,7 +89,7 @@ const TwoBeWell = () => {
                   <Button 
                     asChild 
                     size="lg"
-                    className="bg-rainbow-gradient hover:opacity-90 text-white px-8 py-3 text-lg rounded-full shadow-lg"
+                    className="bg-gradient-rainbow hover:opacity-90 text-white px-8 py-3 text-lg rounded-full shadow-lg"
                   >
                     <Link to="/2bewell-shop" className="inline-flex items-center">
                       <ShoppingCart className="mr-2 w-5 h-5" />
