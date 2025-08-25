@@ -229,13 +229,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "bookings_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "provider_public_profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "bookings_service_id_fkey"
             columns: ["service_id"]
             isOneToOne: false
@@ -289,13 +282,6 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "community_posts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "public_user_profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       consumer_profiles: {
@@ -332,13 +318,6 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "consumer_profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "public_user_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -413,13 +392,6 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "onboarding_sessions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "public_user_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -592,13 +564,6 @@ export type Database = {
             referencedRelation: "provider_profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "provider_media_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "provider_public_profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       provider_posts: {
@@ -656,13 +621,6 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "provider_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "provider_posts_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "provider_public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -730,13 +688,6 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "provider_profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "public_user_profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       provider_testimonials: {
@@ -785,13 +736,6 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "provider_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "provider_testimonials_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "provider_public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -871,13 +815,6 @@ export type Database = {
             referencedRelation: "provider_profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "provider_websites_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: true
-            referencedRelation: "provider_public_profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       reviews: {
@@ -927,24 +864,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "reviews_reviewee_id_fkey"
-            columns: ["reviewee_id"]
-            isOneToOne: false
-            referencedRelation: "public_user_profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "reviews_reviewer_id_fkey"
             columns: ["reviewer_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_reviewer_id_fkey"
-            columns: ["reviewer_id"]
-            isOneToOne: false
-            referencedRelation: "public_user_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1088,13 +1011,6 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "provider_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "services_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "provider_public_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1430,24 +1346,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "transactions_related_user_id_fkey"
-            columns: ["related_user_id"]
-            isOneToOne: false
-            referencedRelation: "public_user_profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "transactions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "transactions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "public_user_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1489,13 +1391,6 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "provider_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "want_responses_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "provider_public_profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1561,92 +1456,11 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "wants_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "public_user_profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
     }
     Views: {
-      provider_public_profiles: {
-        Row: {
-          business_name: string | null
-          created_at: string | null
-          description: string | null
-          experience_years: number | null
-          id: string | null
-          location: string | null
-          profile_image_url: string | null
-          specialties: string[] | null
-          verified: boolean | null
-        }
-        Insert: {
-          business_name?: string | null
-          created_at?: string | null
-          description?: string | null
-          experience_years?: number | null
-          id?: string | null
-          location?: string | null
-          profile_image_url?: string | null
-          specialties?: string[] | null
-          verified?: boolean | null
-        }
-        Update: {
-          business_name?: string | null
-          created_at?: string | null
-          description?: string | null
-          experience_years?: number | null
-          id?: string | null
-          location?: string | null
-          profile_image_url?: string | null
-          specialties?: string[] | null
-          verified?: boolean | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "provider_profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "provider_profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "public_user_profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      public_user_profiles: {
-        Row: {
-          avatar_url: string | null
-          created_at: string | null
-          full_name: string | null
-          id: string | null
-          user_type: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string | null
-          full_name?: string | null
-          id?: string | null
-          user_type?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string | null
-          full_name?: string | null
-          id?: string | null
-          user_type?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       ensure_provider_profile: {
