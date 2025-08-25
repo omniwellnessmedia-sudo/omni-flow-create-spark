@@ -83,7 +83,14 @@ const ExerciseSearch = () => {
   };
 
   const handleFilterChange = (key: keyof ExerciseSearchFilters, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    // Don't include "all" values in the filters
+    if (value === 'all-types' || value === 'all-levels') {
+      const newFilters = { ...filters };
+      delete newFilters[key];
+      setFilters(newFilters);
+    } else {
+      setFilters(prev => ({ ...prev, [key]: value }));
+    }
   };
 
   const clearFilters = () => {
@@ -153,12 +160,12 @@ const ExerciseSearch = () => {
 
             <div>
               <Label htmlFor="type">Exercise Type</Label>
-              <Select value={filters.type || ''} onValueChange={(value) => handleFilterChange('type', value)}>
+              <Select value={filters.type || 'all-types'} onValueChange={(value) => handleFilterChange('type', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Types</SelectItem>
+                  <SelectItem value="all-types">All Types</SelectItem>
                   {exerciseTypes.map((type) => (
                     <SelectItem key={type} value={type}>
                       {type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
@@ -180,12 +187,12 @@ const ExerciseSearch = () => {
 
             <div>
               <Label htmlFor="difficulty">Difficulty</Label>
-              <Select value={filters.difficulty || ''} onValueChange={(value) => handleFilterChange('difficulty', value)}>
+              <Select value={filters.difficulty || 'all-levels'} onValueChange={(value) => handleFilterChange('difficulty', value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select difficulty" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Levels</SelectItem>
+                  <SelectItem value="all-levels">All Levels</SelectItem>
                   {difficulties.map((difficulty) => (
                     <SelectItem key={difficulty} value={difficulty}>
                       {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}

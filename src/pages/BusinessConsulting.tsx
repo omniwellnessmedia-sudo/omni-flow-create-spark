@@ -88,7 +88,7 @@ const BusinessConsulting = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+              <h1 className="text-5xl md:text-6xl font-bold text-center mb-6 text-gradient-hero">
                 Scale Your Conscious Business
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -168,7 +168,7 @@ const BusinessConsulting = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-              Calculate Your <span className="bg-rainbow-gradient bg-clip-text text-transparent">ROI Potential</span>
+              Calculate Your <span className="text-gradient-rainbow">ROI Potential</span>
             </h2>
             <p className="text-lg text-gray-600">See how much our consulting could increase your revenue</p>
           </div>
@@ -246,7 +246,7 @@ const BusinessConsulting = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Complete <span className="bg-rainbow-gradient bg-clip-text text-transparent">Business Transformation</span>
+              Complete <span className="text-gradient-rainbow">Business Transformation</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Our comprehensive approach covers every aspect of conscious business development
@@ -281,7 +281,7 @@ const BusinessConsulting = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Client <span className="bg-rainbow-gradient bg-clip-text text-transparent">Success Stories</span>
+              Client <span className="text-gradient-rainbow">Success Stories</span>
             </h2>
           </div>
           

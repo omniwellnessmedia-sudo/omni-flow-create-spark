@@ -131,7 +131,7 @@ const HeroSection = () => {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
-          <div className="text-center mb-12 pt-8">
+          <div className="text-center mb-12 pt-8 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-2xl p-8 shadow-sm">
             <div className="flex justify-center mb-6">
               <img 
                 src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 

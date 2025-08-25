@@ -38,6 +38,7 @@ import ProviderDashboard from '@/pages/ProviderDashboard';
 import ProviderWebsite from '@/pages/ProviderWebsite';
 import ProviderLandingPage from '@/pages/ProviderLandingPage';
 import PartnerProfile from '@/pages/PartnerProfile';
+import PartnerPortal from '@/pages/PartnerPortal';
 import PartnersDirectory from '@/pages/PartnersDirectory';
 import ToursRetreats from '@/pages/ToursRetreats';
 import TourDetail from '@/pages/TourDetail';
@@ -63,6 +64,12 @@ import AdminDashboard from '@/pages/AdminDashboard';
 import NotFound from '@/pages/NotFound';
 import TravelWellConnectedStore from '@/pages/TravelWellConnectedStore';
 import ExerciseLibrary from '@/pages/ExerciseLibrary';
+
+// Service Pages
+import Consultation from '@/pages/services/Consultation';
+import CustomArt from '@/pages/services/CustomArt';
+import DocumentaryProduction from '@/pages/services/DocumentaryProduction';
+import Videography from '@/pages/services/Videography';
 
 function App() {
   return (
@@ -105,10 +112,17 @@ function App() {
             <Route path="/community-blog" element={<CommunityBlog />} />
             
             <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+            <Route path="/provider-portal" element={<PartnerPortal />} />
             <Route path="/provider-website/:providerId" element={<ProviderWebsite />} />
             <Route path="/provider-landing/:providerId" element={<ProviderLandingPage />} />
             <Route path="/partner-profile/:id" element={<PartnerProfile />} />
             <Route path="/partners-directory" element={<PartnersDirectory />} />
+            
+            {/* Service Detail Pages */}
+            <Route path="/services/consultation" element={<Consultation />} />
+            <Route path="/services/custom-art" element={<CustomArt />} />
+            <Route path="/services/documentary-production" element={<DocumentaryProduction />} />
+            <Route path="/services/videography" element={<Videography />} />
             <Route path="/tours-retreats" element={<ToursRetreats />} />
             <Route path="/tour-category/:category" element={<TourCategory />} />
             <Route path="/tour-category/:category/:slug" element={<TourDetail />} />

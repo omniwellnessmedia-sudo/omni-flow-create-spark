@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import DOMPurify from "dompurify";
 import { 
   Phone, 
   Mail, 
@@ -58,6 +59,24 @@ const ProviderWebsite = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+
+  // Sanitize custom CSS to prevent XSS attacks
+  const sanitizedCSS = useMemo(() => {
+    if (!website?.custom_css) return "";
+    
+    // Basic CSS sanitization - remove script tags, javascript:, and dangerous properties
+    const cleanCSS = website.custom_css
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove script tags
+      .replace(/javascript:/gi, '') // Remove javascript: URLs
+      .replace(/expression\s*\(/gi, '') // Remove CSS expressions
+      .replace(/@import/gi, '') // Remove @import to prevent external resource loading
+      .replace(/behavior\s*:/gi, '') // Remove IE behavior property
+      .replace(/binding\s*:/gi, '') // Remove binding property
+      .replace(/url\s*\(\s*["']?\s*javascript:/gi, '') // Remove javascript URLs in url()
+      .replace(/url\s*\(\s*["']?\s*data:/gi, ''); // Remove data URLs to prevent data injection
+
+    return cleanCSS;
+  }, [website?.custom_css]);
 
   useEffect(() => {
     if (websiteId) {
@@ -145,9 +164,9 @@ const ProviderWebsite = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Custom CSS injection */}
-      {website.custom_css && (
-        <style dangerouslySetInnerHTML={{ __html: website.custom_css }} />
+      {/* Sanitized Custom CSS */}
+      {sanitizedCSS && (
+        <style dangerouslySetInnerHTML={{ __html: sanitizedCSS }} />
       )}
 
       {/* Hero Section */}
