@@ -98,8 +98,21 @@ function App() {
             <Route path="/podcast" element={<Podcast />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/auth" element={<Auth />} />
+            {/* Wellness Exchange Routes */}
             <Route path="/wellness-exchange" element={<WellnessExchange />} />
             <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
+            <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
+            <Route path="/wellness-exchange/wants" element={<WellnessWants />} />
+            <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
+            <Route path="/wellness-exchange/search" element={<SearchServices />} />
+            <Route path="/wellness-exchange/add-service" element={<AddService />} />
+            <Route path="/wellness-exchange/add-want" element={<AddWant />} />
+            <Route path="/wellness-exchange/account" element={<WellnessAccount />} />
+            <Route path="/wellness-exchange/provider-signup" element={<WellnessExchangeSignup />} />
+            <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
+            <Route path="/wellness-exchange/service/:id" element={<ServiceDetail />} />
+            
+            {/* Legacy Routes (backward compatibility) */}
             <Route path="/wellness-community" element={<WellnessCommunity />} />
             <Route path="/wellness-marketplace" element={<WellnessMarketplace />} />
             <Route path="/wellness-account" element={<WellnessAccount />} />

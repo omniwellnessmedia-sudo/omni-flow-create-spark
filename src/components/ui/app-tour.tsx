@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { X, ArrowRight, ArrowLeft, Heart, Users, MapPin, Zap, Sparkles, Target } from 'lucide-react';
@@ -118,6 +118,9 @@ const AppTour = ({
       {/* Tour Dialog */}
       <Dialog open={isOpen} onOpenChange={handleSkip}>
         <DialogContent className="sm:max-w-lg z-[60] pointer-events-auto bg-white/95 backdrop-blur-sm border-0 shadow-2xl animate-scale-in">
+          <DialogDescription className="sr-only">
+            Interactive tour to help you navigate and discover the features of this application
+          </DialogDescription>
           <DialogHeader className="pb-4">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
