@@ -14,7 +14,15 @@ import { toast } from "sonner";
 const WellnessAccount = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<{
+    id: string;
+    full_name: string;
+    email: string;
+    user_type: string;
+    specialties?: string[];
+    bio?: string;
+    location?: string;
+  } | null>(null);
   const [wellCoinBalance, setWellCoinBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 

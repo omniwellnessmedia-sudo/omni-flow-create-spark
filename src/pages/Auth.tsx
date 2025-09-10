@@ -51,8 +51,9 @@ const Auth = () => {
       if (error) throw error;
 
       toast.success("Check your email for the confirmation link!");
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Sign up failed";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -74,8 +75,9 @@ const Auth = () => {
         toast.success("Welcome back!");
         navigate("/");
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Sign in failed";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -91,8 +93,9 @@ const Auth = () => {
         }
       });
       if (error) throw error;
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Google authentication failed";
+      toast.error(errorMessage);
       setLoading(false);
     }
   };
@@ -112,8 +115,9 @@ const Auth = () => {
       if (error) throw error;
       toast.success("Password reset email sent! Check your inbox.");
       setResetMode(false);
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Password reset failed";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

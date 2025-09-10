@@ -6,6 +6,15 @@ import { Progress } from "@/components/ui/progress";
 import { FirecrawlService } from '@/utils/FirecrawlService';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+interface CrawledPageData {
+  url: string;
+  title?: string;
+  content?: string;
+  metadata?: Record<string, unknown>;
+  html?: string;
+  markdown?: string;
+}
+
 interface CrawlResult {
   success: boolean;
   status?: string;
@@ -13,7 +22,7 @@ interface CrawlResult {
   total?: number;
   creditsUsed?: number;
   expiresAt?: string;
-  data?: any[];
+  data?: CrawledPageData[];
 }
 
 export const CrawlForm = () => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
@@ -68,13 +68,7 @@ const WebsiteBuilder = () => {
     published: false
   });
 
-  useEffect(() => {
-    if (user) {
-      fetchWebsiteData();
-    }
-  }, [user]);
-
-  const fetchWebsiteData = async () => {
+  const fetchWebsiteData = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('provider_websites')
@@ -90,7 +84,13 @@ const WebsiteBuilder = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchWebsiteData();
+    }
+  }, [user, fetchWebsiteData]);
 
   const saveWebsite = async () => {
     if (!user) return;
@@ -108,8 +108,9 @@ const WebsiteBuilder = () => {
 
       toast.success('Website saved successfully!');
       await fetchWebsiteData(); // Refresh data
-    } catch (error: any) {
-      toast.error('Error saving website: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error('Error saving website: ' + errorMessage);
     } finally {
       setSaving(false);
     }
@@ -132,8 +133,9 @@ const WebsiteBuilder = () => {
       if (error) throw error;
 
       toast.success(website.published ? 'Website unpublished' : 'Website published!');
-    } catch (error: any) {
-      toast.error('Error publishing website: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error('Error publishing website: ' + errorMessage);
     }
   };
 

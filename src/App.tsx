@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/contexts/CartContext';
-import SiteHeader from '@/components/SiteHeader';
+import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Index from '@/pages/Index';
 // Lazy load heavy components for better performance
 const Home = lazy(() => import('@/pages/Home'));
@@ -77,7 +77,7 @@ function App() {
       <AuthProvider>
         <Router>
           <div className="min-h-screen flex flex-col">
-            <SiteHeader />
+            <UnifiedNavigation />
             <main className="flex-grow">
               <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div></div>}>
                 <Routes>

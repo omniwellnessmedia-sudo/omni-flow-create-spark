@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface ExchangeRates {
   USD: number;
@@ -34,10 +34,6 @@ export const useCurrencyConverter = (): CurrencyHook => {
     GBP: 23.30  // 1 GBP = 23.30 ZAR
   };
 
-  useEffect(() => {
-    fetchExchangeRates();
-  }, []);
-
   const getCachedRates = () => {
     try {
       const cached = localStorage.getItem(CACHE_KEY);
@@ -69,7 +65,7 @@ export const useCurrencyConverter = (): CurrencyHook => {
     }
   };
 
-  const fetchExchangeRates = async () => {
+  const fetchExchangeRates = useCallback(async () => {
     setIsLoading(true);
     
     // Try to use cached rates first
@@ -113,7 +109,11 @@ export const useCurrencyConverter = (): CurrencyHook => {
     }
     
     setIsLoading(false);
-  };
+  }, [fallbackRates]);
+
+  useEffect(() => {
+    fetchExchangeRates();
+  }, [fetchExchangeRates]);
 
   const convertToZAR = (amount: number, fromCurrency: string): number => {
     if (!exchangeRates || !amount) return 0;

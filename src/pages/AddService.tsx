@@ -89,9 +89,10 @@ const AddService = () => {
       console.log("Service created successfully:", data);
       toast.success("Service created successfully and is now live on the marketplace!");
       navigate("/wellness-exchange/marketplace");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Service creation failed:", error);
-      toast.error(error.message);
+      const errorMessage = error instanceof Error ? error.message : "Failed to create service";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -113,7 +114,7 @@ const AddService = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0am1oaWVleXdkdmhqeHF5eGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNTUzMzcsImV4cCI6MjA2NjkzMTMzN30.1sNuCHnmmLsxT_qyew3RXVDw-jA9guR1UVBqIgqroXM`,
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({
           type: type === 'title' ? 'service_title' : 'service_description',

@@ -35,7 +35,7 @@ import {
   ToggleLeft,
   ToggleRight
 } from "lucide-react";
-import WebsiteBuilder from "@/components/WebsiteBuilder";
+import ModernWebsiteBuilder from "@/components/website-builder/ModernWebsiteBuilder";
 import ProviderMediaUpload from "@/components/ProviderMediaUpload";
 
 const ProviderDashboard = () => {
@@ -166,8 +166,9 @@ const ProviderDashboard = () => {
         setRating(Math.round(avgRating * 10) / 10);
       }
 
-    } catch (error: any) {
-      toast.error("Failed to load dashboard data: " + error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to load dashboard data";
+      toast.error("Failed to load dashboard data: " + errorMessage);
     } finally {
       setLoading(false);
     }
@@ -670,7 +671,7 @@ const ProviderDashboard = () => {
               </TabsContent>
 
               <TabsContent value="website" className="mt-6">
-                <WebsiteBuilder />
+                <ModernWebsiteBuilder />
               </TabsContent>
 
               <TabsContent value="media" className="mt-6">

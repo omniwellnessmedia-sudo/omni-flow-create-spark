@@ -69,11 +69,12 @@ const ExerciseSearch = () => {
           variant: "destructive",
         });
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error searching exercises:', error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to search exercises. Please try again.";
       toast({
         title: "Search Error",
-        description: error.message || "Failed to search exercises. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
       setExercises([]);

@@ -78,7 +78,7 @@ const AITools = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0am1oaWVleXdkdmhqeHF5eGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzNTUzMzcsImV4cCI6MjA2NjkzMTMzN30.1sNuCHnmmLsxT_qyew3RXVDw-jA9guR1UVBqIgqroXM`,
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({
           type: 'tool_demo',

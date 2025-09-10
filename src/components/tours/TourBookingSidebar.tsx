@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Calendar, Users, Plus, Minus, Send, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,11 +45,7 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
   const { toast } = useToast();
   const { formatUSD, formatZAR, convertZARToUSD } = useCurrencyConverter();
 
-  useEffect(() => {
-    fetchRoamBuddyServices();
-  }, [tour.destination]);
-
-  const fetchRoamBuddyServices = async () => {
+  const fetchRoamBuddyServices = useCallback(async () => {
     setServicesLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('roambuddy-api', {
@@ -84,7 +80,11 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
     } finally {
       setServicesLoading(false);
     }
-  };
+  }, [tour.destination]);
+
+  useEffect(() => {
+    fetchRoamBuddyServices();
+  }, [fetchRoamBuddyServices]);
 
   const calculateTotal = () => {
     const basePrice = tour.price_from * participants;
@@ -155,11 +155,12 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
       setSpecialRequirements('');
       setSelectedServices([]);
 
-    } catch (error: any) {
+    } catch (error) {
       console.error('Booking error:', error);
+      const errorMessage = error instanceof Error ? error.message : "Unable to submit booking. Please try again.";
       toast({
         title: "Booking Error",
-        description: error.message || "Unable to submit booking. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

@@ -73,7 +73,7 @@ serve(async (req) => {
         
       case 'tool_demo':
         // Generate demo content based on the tool name
-        const toolDemos = {
+        const toolDemos: Record<string, string> = {
           'logo-generator': 'Generated 5 unique logo concepts for "Zenith Wellness Studio" featuring lotus symbols and calming blue-green gradients. Brand guide includes complementary colors (#2D4A5A, #7FB3A3, #F5F5DC) and suggested fonts (Montserrat, Open Sans).',
           'business-plan': 'Created comprehensive business plan for wellness practice: Executive Summary outlines holistic yoga & meditation services targeting young professionals. Financial projections show break-even at month 8 with 50 regular clients.',
           'content-calendar-pro': 'Generated 90-day content calendar: Week 1-10 focus on "Mindful Mornings" theme with 63 Instagram posts, 21 LinkedIn articles, and 12 YouTube videos. Hashtag strategy includes #MindfulMorning #WellnessWednesday #SelfCareSunday.',
@@ -84,7 +84,7 @@ serve(async (req) => {
           'story-creator': 'Wellness Story Framework: Hook: "Two years ago, I couldn\'t climb stairs without getting winded..." Journey: Document struggles with energy, discovery of yoga, gradual transformation. Call-to-action: "What small step will you take today?"'
         };
         
-        const demoContent = toolDemos[sanitizedToolName] || `AI tool "${sanitizedToolName}" demonstration: This powerful tool uses advanced AI to generate personalized content tailored to your specific wellness goals and business needs.`;
+        const demoContent = toolDemos[sanitizedToolName] ?? `AI tool "${sanitizedToolName}" demonstration: This powerful tool uses advanced AI to generate personalized content tailored to your specific wellness goals and business needs.`;
         
         return new Response(JSON.stringify({ content: demoContent }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },

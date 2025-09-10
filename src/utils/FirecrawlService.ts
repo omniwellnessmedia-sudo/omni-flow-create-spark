@@ -12,7 +12,7 @@ interface CrawlStatusResponse {
   total: number;
   creditsUsed: number;
   expiresAt: string;
-  data: any[];
+  data: Record<string, unknown>[];
 }
 
 type CrawlResponse = CrawlStatusResponse | ErrorResponse;
@@ -46,7 +46,7 @@ export class FirecrawlService {
     }
   }
 
-  static async crawlWebsite(url: string): Promise<{ success: boolean; error?: string; data?: any }> {
+  static async crawlWebsite(url: string): Promise<{ success: boolean; error?: string; data?: CrawlStatusResponse }> {
     const apiKey = this.getApiKey();
     if (!apiKey) {
       return { success: false, error: 'API key not found' };

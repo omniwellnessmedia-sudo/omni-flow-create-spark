@@ -2,6 +2,67 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 
+// Type definitions
+interface RequestData {
+  action: string;
+  data?: Record<string, unknown>;
+}
+
+interface Product {
+  id?: string;
+  name?: string;
+  title?: string;
+  price?: number;
+  amount?: number;
+  description?: string;
+  data_amount?: string;
+  validity_days?: number;
+  coverage?: string[];
+  countries?: string[];
+}
+
+interface Country {
+  id?: string;
+  name: string;
+  code: string;
+}
+
+interface OrderData {
+  product_id?: string;
+  user_id?: string;
+  customer_name?: string;
+  customer_email?: string;
+  amount?: number;
+  product_name?: string;
+  destination?: string;
+  currency?: string;
+}
+
+interface WellnessPackageParams {
+  destination?: string;
+  wellness_type?: string;
+  duration?: string;
+}
+
+interface ServiceParams {
+  destination?: string;
+}
+
+interface PaginationParams {
+  page?: number;
+  pageSize?: number;
+  searchStr?: string;
+}
+
+interface WalletTransactionParams extends PaginationParams {
+  start_date?: string;
+  end_date?: string;
+}
+
+interface EsimParams {
+  iccid: string;
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -278,7 +339,7 @@ async function handleGetDestinations() {
 }
 
 // Get wellness-focused packages
-async function handleGetWellnessPackages(params: any) {
+async function handleGetWellnessPackages(params: WellnessPackageParams) {
   try {
     const { destination, wellness_type = 'all', duration = 'all' } = params
     
@@ -329,7 +390,7 @@ async function handleGetWellnessPackages(params: any) {
 }
 
 // Get services for destination with wellness enhancements
-async function handleGetServicesForDestination(params: any) {
+async function handleGetServicesForDestination(params: ServiceParams) {
   try {
     const { destination = 'South Africa' } = params
     console.log('Getting wellness services for destination:', destination)
@@ -374,7 +435,7 @@ async function handleGetServicesForDestination(params: any) {
 }
 
 // Enhanced order creation with wellness features
-async function handleCreateOrder(orderData: any, supabase: any) {
+async function handleCreateOrder(orderData: OrderData, supabase: ReturnType<typeof createClient>) {
   try {
     console.log('Creating Travel Well Connected order:', orderData)
 
@@ -441,7 +502,7 @@ async function handleCreateOrder(orderData: any, supabase: any) {
 }
 
 // Helper functions for wellness enhancements
-function getWellnessFeatures(product: any): string[] {
+function getWellnessFeatures(product: Product): string[] {
   const features = []
   if (product.data_amount) features.push('meditation_apps_optimized')
   if (product.validity_days >= 7) features.push('wellness_retreat_ready')
@@ -450,7 +511,7 @@ function getWellnessFeatures(product: any): string[] {
   return features
 }
 
-function calculatePeaceOfMindScore(product: any): number {
+function calculatePeaceOfMindScore(product: Product): number {
   let score = 0
   if (product.data_amount) score += 20
   if (product.validity_days >= 30) score += 30
@@ -459,7 +520,7 @@ function calculatePeaceOfMindScore(product: any): number {
   return Math.min(score, 100)
 }
 
-function getWellnessRating(country: any): number {
+function getWellnessRating(country: Country): number {
   // Simulate wellness rating based on country data
   const wellnessCountries = ['Thailand', 'Bali', 'Costa Rica', 'New Zealand', 'Switzerland']
   return wellnessCountries.includes(country.name) ? 
@@ -467,12 +528,12 @@ function getWellnessRating(country: any): number {
     Math.floor(Math.random() * 40) + 60
 }
 
-function getWellnessActivities(country: any): string[] {
+function getWellnessActivities(country: Country): string[] {
   const activities = ['Yoga Retreats', 'Meditation Centers', 'Spa Treatments', 'Nature Therapy', 'Digital Detox']
   return activities.slice(0, Math.floor(Math.random() * 3) + 2)
 }
 
-function getMentalHealthResources(country: any): object {
+function getMentalHealthResources(country: Country): Record<string, unknown> {
   return {
     emergency_hotline: '+1-800-WELLNESS',
     local_support: `${country.name} Mental Health Association`,
@@ -480,7 +541,7 @@ function getMentalHealthResources(country: any): object {
   }
 }
 
-function getEmergencyContacts(country: any): object {
+function getEmergencyContacts(country: Country): Record<string, unknown> {
   return {
     emergency: '911',
     wellness_support: '+1-800-PEACE',
@@ -488,7 +549,7 @@ function getEmergencyContacts(country: any): object {
   }
 }
 
-function getConnectivityPackages(country: any): string[] {
+function getConnectivityPackages(country: Country): string[] {
   return ['Wellness Basic', 'Retreat Pro', 'Digital Nomad Wellness', 'Peace of Mind Premium']
 }
 
@@ -590,7 +651,7 @@ async function handleFallbackDestinations() {
   )
 }
 
-async function handleFallbackWellnessPackages(params: any) {
+async function handleFallbackWellnessPackages(params: WellnessPackageParams) {
   const packages = [
     {
       id: 'wellness-basic',
@@ -615,7 +676,7 @@ async function handleFallbackWellnessPackages(params: any) {
   )
 }
 
-async function handleFallbackServices(params: any) {
+async function handleFallbackServices(params: ServiceParams) {
   const services = [
     {
       id: 'twc-service-1',
@@ -681,7 +742,7 @@ async function handleGetProductById(productId: string) {
   }
 }
 
-async function handleGetProductsPagination(params: any) {
+async function handleGetProductsPagination(params: PaginationParams) {
   try {
     const { page = 1, pageSize = 15, searchStr = '' } = params
     
@@ -743,7 +804,7 @@ async function handleTrackOrder(orderId: string) {
   )
 }
 
-async function handleGetOrderedEsims(params: any) {
+async function handleGetOrderedEsims(params: Record<string, unknown>) {
   try {
     const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/esims`, {
       method: 'GET',
@@ -815,7 +876,7 @@ async function handleGetEsimDetails(iccid: string) {
   }
 }
 
-async function handleActivateEsim(params: any) {
+async function handleActivateEsim(params: EsimParams) {
   try {
     const { iccid } = params
     
@@ -890,7 +951,7 @@ async function handleValidateEsim(iccid: string) {
   }
 }
 
-async function handleGetWalletTransactions(params: any) {
+async function handleGetWalletTransactions(params: WalletTransactionParams) {
   try {
     const { 
       page = 1, 

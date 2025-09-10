@@ -144,9 +144,10 @@ const ProviderMediaUpload = ({ onMediaUpdate }: ProviderMediaUploadProps) => {
       toast.success("Media uploaded successfully!");
       setMediaFiles([]);
       onMediaUpdate?.();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Upload error:', error);
-      toast.error("Failed to upload media: " + error.message);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+      toast.error("Failed to upload media: " + errorMessage);
     } finally {
       setUploading(false);
     }

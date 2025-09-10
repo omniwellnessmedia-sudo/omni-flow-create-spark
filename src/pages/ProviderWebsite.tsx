@@ -17,6 +17,7 @@ import {
   Calendar,
   ExternalLink
 } from "lucide-react";
+import { createIntersectionObserver, debounce } from '@/lib/accessibility';
 
 interface WebsiteData {
   id: string;
@@ -59,6 +60,7 @@ const ProviderWebsite = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // Sanitize custom CSS to prevent XSS attacks
   const sanitizedCSS = useMemo(() => {
@@ -137,6 +139,53 @@ const ProviderWebsite = () => {
     }
   };
 
+  // Performance-optimized image component
+  const OptimizedImage = ({ 
+    src, 
+    alt, 
+    className = "", 
+    ...props 
+  }: React.ImgHTMLAttributes<HTMLImageElement>) => {
+    const [loaded, setLoaded] = useState(false);
+    const [inView, setInView] = useState(false);
+
+    useEffect(() => {
+      const observer = createIntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setInView(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      });
+
+      const imgElement = document.querySelector(`img[alt="${alt}"]`);
+      if (imgElement) {
+        observer.observe(imgElement);
+      }
+
+      return () => observer.disconnect();
+    }, [alt]);
+
+    return (
+      <div className="relative">
+        {!loaded && (
+          <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg" />
+        )}
+        <img
+          src={inView ? src : undefined}
+          alt={alt}
+          className={`transition-opacity duration-300 ${
+            loaded ? 'opacity-100' : 'opacity-0'
+          } ${className}`}
+          onLoad={() => setLoaded(true)}
+          loading="lazy"
+          {...props}
+        />
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -169,56 +218,79 @@ const ProviderWebsite = () => {
         <style dangerouslySetInnerHTML={{ __html: sanitizedCSS }} />
       )}
 
-      {/* Hero Section */}
-      <section 
-        className="relative py-20 px-4 text-center text-white"
-        style={{
-          backgroundColor: website.theme_color,
-          backgroundImage: website.hero_image_url ? `url(${website.hero_image_url})` : undefined,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
+      {/* Skip to main content link for accessibility */}
+      <a 
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-md z-50"
       >
+        Skip to main content
+      </a>
+
+      {/* Hero Section - Mobile-First Responsive */}
+      <main id="main-content">
+        <section 
+          className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 text-center text-white"
+          style={{
+            backgroundColor: website.theme_color,
+            backgroundImage: website.hero_image_url ? `url(${website.hero_image_url})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+          aria-labelledby="hero-title"
+        >
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative z-10 max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 id="hero-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
             {website.page_title}
           </h1>
           {website.page_subtitle && (
-            <p className="text-xl md:text-2xl mb-8 opacity-90">
+            <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 opacity-90 max-w-3xl mx-auto">
               {website.page_subtitle}
             </p>
           )}
-          <div className="flex gap-4 justify-center">
-            <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
-              <Calendar className="w-5 h-5 mr-2" />
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center max-w-md sm:max-w-none mx-auto">
+            <Button 
+              size="lg" 
+              className="w-full sm:w-auto bg-white text-gray-900 hover:bg-gray-100 font-semibold"
+              aria-label="Book a wellness session"
+            >
+              <Calendar className="w-5 h-5 mr-2" aria-hidden="true" />
               Book Session
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-gray-900">
-              <Phone className="w-5 h-5 mr-2" />
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-gray-900 font-semibold"
+              aria-label="Contact wellness provider"
+            >
+              <Phone className="w-5 h-5 mr-2" aria-hidden="true" />
               Contact
             </Button>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      {website.about_section && (
-        <section className="py-16 px-4">
+        {/* About Section - Mobile-First Responsive */}
+        {website.about_section && (
+          <section className="py-12 sm:py-16 md:py-20 px-4" aria-labelledby="about-heading">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl font-bold mb-6">About {website.provider_profiles.business_name}</h2>
-                <div className="prose prose-lg text-gray-600">
-                  <p>{website.about_section}</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+              <div className="order-2 lg:order-1">
+                <h2 id="about-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 text-center lg:text-left">
+                  About {website.provider_profiles.business_name}
+                </h2>
+                <div className="prose prose-base sm:prose-lg text-gray-600 max-w-none">
+                  <p className="text-center lg:text-left leading-relaxed">
+                    {website.about_section}
+                  </p>
                 </div>
                 
                 {website.provider_profiles.specialties && (
-                  <div className="mt-6">
-                    <h3 className="font-semibold mb-3">Specialties</h3>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="mt-6 text-center lg:text-left">
+                    <h3 className="font-semibold mb-3 text-lg">Specialties</h3>
+                    <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
                       {website.provider_profiles.specialties.map((specialty, index) => (
-                        <Badge key={index} variant="secondary">
+                        <Badge key={index} variant="secondary" className="text-sm">
                           {specialty}
                         </Badge>
                       ))}
@@ -227,83 +299,87 @@ const ProviderWebsite = () => {
                 )}
 
                 {website.provider_profiles.experience_years && (
-                  <div className="mt-4">
-                    <p className="text-gray-600">
-                      <strong>{website.provider_profiles.experience_years}+ years</strong> of experience
+                  <div className="mt-4 text-center lg:text-left">
+                    <p className="text-gray-600 text-lg">
+                      <strong className="text-primary">{website.provider_profiles.experience_years}+ years</strong> of experience
                     </p>
                   </div>
                 )}
               </div>
               
               {website.provider_profiles.profile_image_url && (
-                <div className="text-center">
-                  <img
+                <div className="text-center order-1 lg:order-2">
+                  <OptimizedImage
                     src={website.provider_profiles.profile_image_url}
-                    alt={website.provider_profiles.business_name}
-                    className="w-80 h-80 object-cover rounded-full mx-auto shadow-2xl"
+                    alt={`${website.provider_profiles.business_name} profile photo`}
+                    className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 object-cover rounded-full mx-auto shadow-2xl transition-transform hover:scale-105"
                   />
                 </div>
               )}
             </div>
           </div>
-        </section>
-      )}
+          </section>
+        )}
 
-      {/* Services Section */}
-      {services.length > 0 && (
-        <section className="py-16 px-4 bg-gray-50">
+        {/* Services Section - Mobile-First Responsive */}
+        {services.length > 0 && (
+          <section className="py-12 sm:py-16 md:py-20 px-4 bg-gray-50" aria-labelledby="services-heading">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12">
+            <h2 id="services-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-8 sm:mb-12">
               {website.services_section_title}
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {services.map((service) => (
-                <Card key={service.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex justify-between items-start mb-2">
-                      <Badge variant="secondary">{service.category}</Badge>
+                <Card key={service.id} className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  <CardHeader className="pb-4">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                      <Badge variant="secondary" className="w-fit">{service.category}</Badge>
                       {service.is_online && (
-                        <Badge className="bg-green-100 text-green-800">Online</Badge>
+                        <Badge className="bg-green-100 text-green-800 w-fit">Online</Badge>
                       )}
                     </div>
-                    <CardTitle className="text-lg">{service.title}</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl leading-tight">{service.title}</CardTitle>
                   </CardHeader>
                   
                   <CardContent>
-                    <p className="text-gray-600 mb-4 line-clamp-3">
+                    <p className="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
                       {service.description}
                     </p>
                     
-                    <div className="space-y-2 mb-4">
+                    <div className="space-y-2 mb-6">
                       <div className="flex items-center text-sm text-gray-600">
-                        <MapPin className="h-4 w-4 mr-2" />
-                        <span>{service.location}</span>
+                        <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+                        <span className="truncate">{service.location}</span>
                       </div>
                       
                       {service.duration_minutes && (
                         <div className="flex items-center text-sm text-gray-600">
-                          <Clock className="h-4 w-4 mr-2" />
+                          <Clock className="h-4 w-4 mr-2 flex-shrink-0" />
                           <span>{service.duration_minutes} minutes</span>
                         </div>
                       )}
                     </div>
                     
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                       <div className="space-y-1">
                         {service.price_zar > 0 && (
-                          <p className="font-medium text-green-600">
+                          <p className="font-semibold text-green-600 text-lg">
                             R{service.price_zar}
                           </p>
                         )}
                         {service.price_wellcoins > 0 && (
-                          <p className="text-sm text-omni-orange">
+                          <p className="text-sm font-medium text-amber-600">
                             {service.price_wellcoins} WellCoins
                           </p>
                         )}
                       </div>
                       
-                      <Button size="sm" style={{ backgroundColor: website.theme_color }}>
+                      <Button 
+                        size="sm" 
+                        className="w-full sm:w-auto font-semibold"
+                        style={{ backgroundColor: website.theme_color }}
+                      >
                         Book Now
                       </Button>
                     </div>
@@ -312,52 +388,59 @@ const ProviderWebsite = () => {
               ))}
             </div>
           </div>
-        </section>
-      )}
+          </section>
+        )}
 
-      {/* Contact Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-8">
+        {/* Contact Section - Mobile-First Responsive */}
+        <section className="py-12 sm:py-16 md:py-20 px-4" aria-labelledby="contact-heading">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 id="contact-heading" className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-8 sm:mb-12">
             {website.contact_section_title}
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12">
             {website.provider_profiles.phone && (
-              <div className="text-center">
-                <Phone className="w-8 h-8 mx-auto mb-4" style={{ color: website.theme_color }} />
-                <h3 className="font-semibold mb-2">Phone</h3>
-                <p className="text-gray-600">{website.provider_profiles.phone}</p>
+              <div className="text-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                <Phone className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 transition-transform hover:scale-110" style={{ color: website.theme_color }} />
+                <h3 className="font-semibold mb-2 text-lg">Phone</h3>
+                <p className="text-gray-600 text-sm sm:text-base">{website.provider_profiles.phone}</p>
               </div>
             )}
             
-            <div className="text-center">
-              <Mail className="w-8 h-8 mx-auto mb-4" style={{ color: website.theme_color }} />
-              <h3 className="font-semibold mb-2">Email</h3>
-              <p className="text-gray-600">hello@{website.provider_profiles.business_name.toLowerCase().replace(/\s+/g, '')}.com</p>
+            <div className="text-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
+              <Mail className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 transition-transform hover:scale-110" style={{ color: website.theme_color }} />
+              <h3 className="font-semibold mb-2 text-lg">Email</h3>
+              <p className="text-gray-600 text-sm sm:text-base break-all">
+                hello@{website.provider_profiles.business_name.toLowerCase().replace(/\s+/g, '')}.com
+              </p>
             </div>
             
             {website.provider_profiles.location && (
-              <div className="text-center">
-                <MapPin className="w-8 h-8 mx-auto mb-4" style={{ color: website.theme_color }} />
-                <h3 className="font-semibold mb-2">Location</h3>
-                <p className="text-gray-600">{website.provider_profiles.location}</p>
+              <div className="text-center p-4 rounded-lg hover:bg-gray-50 transition-colors sm:col-span-2 lg:col-span-1">
+                <MapPin className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 transition-transform hover:scale-110" style={{ color: website.theme_color }} />
+                <h3 className="font-semibold mb-2 text-lg">Location</h3>
+                <p className="text-gray-600 text-sm sm:text-base">{website.provider_profiles.location}</p>
               </div>
             )}
           </div>
           
-          <div className="flex gap-4 justify-center">
-            <Button size="lg" style={{ backgroundColor: website.theme_color }}>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md sm:max-w-none mx-auto">
+            <Button 
+              size="lg" 
+              className="w-full sm:w-auto font-semibold text-base px-8"
+              style={{ backgroundColor: website.theme_color }}
+            >
               <Calendar className="w-5 h-5 mr-2" />
               Schedule Consultation
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto font-semibold text-base px-8">
               <ExternalLink className="w-5 h-5 mr-2" />
               View on Marketplace
             </Button>
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
       <footer className="py-8 px-4 bg-gray-900 text-white text-center">
