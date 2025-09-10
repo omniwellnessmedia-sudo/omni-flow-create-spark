@@ -42,7 +42,7 @@ interface Service {
 }
 
 const ServiceDetail = () => {
-  const { serviceId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [service, setService] = useState<Service | null>(null);
@@ -50,10 +50,10 @@ const ServiceDetail = () => {
   const [showBooking, setShowBooking] = useState(false);
 
   useEffect(() => {
-    if (serviceId) {
+    if (id) {
       fetchService();
     }
-  }, [serviceId]);
+  }, [id]);
 
   const fetchService = async () => {
     try {
@@ -70,7 +70,7 @@ const ServiceDetail = () => {
             verified
           )
         `)
-        .eq('id', serviceId)
+        .eq('id', id)
         .eq('active', true)
         .single();
 

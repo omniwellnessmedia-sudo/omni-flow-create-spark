@@ -121,8 +121,9 @@ const ProviderDashboard = () => {
 
       // Load services - use demo data in demo mode
       if (isDemoMode) {
-        setServices(demoData.services || []);
-        setActiveListings(demoData.services?.filter(s => s.active).length || 0);
+        const demoServices = (isSandyDemo && 'services' in demoData) ? demoData.services : [];
+        setServices(demoServices);
+        setActiveListings(demoServices.filter((s: any) => s.active).length || 0);
       } else {
         const { data: servicesData, error: servicesError } = await supabase
           .from('services')
@@ -272,7 +273,6 @@ const ProviderDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <MegaNavigation />
       <WellnessExchangeNavigation />
       <main className="pt-0">
         {/* Header */}

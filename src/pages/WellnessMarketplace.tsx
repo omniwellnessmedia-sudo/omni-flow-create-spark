@@ -177,7 +177,6 @@ const WellnessMarketplace = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <MegaNavigation />
         <WellnessExchangeNavigation />
         <div className="pt-8">
           <div className="max-w-7xl mx-auto px-4">
@@ -194,7 +193,6 @@ const WellnessMarketplace = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MegaNavigation />
       <WellnessExchangeNavigation />
       
       <Section size="large" background="white" id="hero">

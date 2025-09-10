@@ -87,7 +87,6 @@ const WellnessAccount = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MegaNavigation />
       <WellnessExchangeNavigation />
       
       <main className="pt-8 pb-20">
