@@ -36,7 +36,7 @@ const MobileEnhancements: React.FC = () => {
     
     // Improve scroll performance on mobile
     if (isMobile) {
-      document.body.style.webkitOverflowScrolling = 'touch';
+      (document.body.style as any).webkitOverflowScrolling = 'touch';
       document.body.style.overscrollBehavior = 'contain';
     }
 
@@ -93,7 +93,7 @@ const MobileEnhancements: React.FC = () => {
       </div>
 
       {/* Enhanced mobile styles injection */}
-      <style jsx global>{`
+      <style>{`
         /* 2025 Mobile UX Enhancements */
         @media (max-width: 768px) {
           /* Better touch targets - minimum 44px */

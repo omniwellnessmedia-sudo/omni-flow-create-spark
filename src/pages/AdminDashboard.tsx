@@ -119,11 +119,21 @@ const AdminDashboard = () => {
         users: [],
         services: services || [],
         tours: tours || [],
+        providers: helenAdminData.topProviders,
+        recentActivity: helenAdminData.recentActivity,
         stats: {
           totalRevenue,
+          monthlyRevenue: Math.round(totalRevenue / 12), // Estimated monthly
           totalOrders: orders?.length || 0,
           totalBookings: bookings?.length || 0,
+          monthlyBookings: Math.round((bookings?.length || 0) / 12), // Estimated monthly
           totalUsers: usersCount || 0,
+          activeUsers: Math.round((usersCount || 0) * 0.7), // Estimated 70% active
+          totalProviders: services?.length || 0,
+          activeProviders: services?.filter(s => s.active).length || 0,
+          wellcoinCirculation: 10000, // Placeholder
+          platformGrowth: 15, // Placeholder percentage
+          averageProviderRating: 4.5, // Placeholder
           pendingOrders,
           activeServices: services?.length || 0
         }

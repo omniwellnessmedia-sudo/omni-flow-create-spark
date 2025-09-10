@@ -180,8 +180,12 @@ export const isTouchDevice = (): boolean => {
 
 // Screen reader detection
 export const isScreenReaderActive = (): boolean => {
-  return (
-    'speechSynthesis' in window ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  );
+  if (typeof window === 'undefined') return false;
+  
+  const hasScreenReader = 'speechSynthesis' in window;
+  const prefersReducedMotion = typeof window.matchMedia === 'function' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+    : false;
+    
+  return hasScreenReader || prefersReducedMotion;
 };

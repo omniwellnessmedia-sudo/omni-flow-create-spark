@@ -2,14 +2,16 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Eye, EyeOff, ArrowLeft, Mail } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft, Loader2, CheckCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import ResponsiveLayout from "@/components/layout/ResponsiveLayout";
+import MobileOptimizedButton from "@/components/layout/MobileOptimizedButton";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +20,9 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [resetMode, setResetMode] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Check if user is already logged in
@@ -33,24 +37,39 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password || !fullName) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+    
     setLoading(true);
-
     try {
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/wellness-exchange/provider-signup`,
+          emailRedirectTo: `${window.location.origin}/`,
           data: {
             full_name: fullName,
-            user_type: 'provider'
+            user_type: 'consumer'
           }
         }
       });
 
-      if (error) throw error;
-
-      toast.success("Check your email for the confirmation link!");
+      if (error) {
+        if (error.message.includes("already registered")) {
+          toast.error("This email is already registered. Please sign in instead.");
+        } else {
+          throw error;
+        }
+      } else {
+        setEmailSent(true);
+        toast.success("Account created! Check your email to verify and sign in.");
+      }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Sign up failed";
       toast.error(errorMessage);
@@ -61,19 +80,29 @@ const Auth = () => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please enter both email and password");
+      return;
+    }
+    
     setLoading(true);
-
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
-
-      if (data.user) {
+      if (error) {
+        if (error.message.includes("Invalid login")) {
+          toast.error("Invalid email or password. Please try again.");
+        } else if (error.message.includes("Email not confirmed")) {
+          toast.error("Please check your email and click the verification link first.");
+        } else {
+          throw error;
+        }
+      } else if (data.user) {
         toast.success("Welcome back!");
-        navigate("/");
+        navigate("/wellness-exchange/marketplace");
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Sign in failed";
@@ -160,13 +189,13 @@ const Auth = () => {
                       </CardDescription>
                     </CardHeader>
 
-                    {/* Google Auth Button */}
-                    <Button 
+                    {/* Google Auth MobileOptimizedButton */}
+                    <MobileOptimizedButton 
                       type="button" 
                       variant="outline" 
-                      className="w-full"
+                      fullWidth
                       onClick={handleGoogleAuth}
-                      disabled={loading}
+                      loading={loading}
                     >
                       <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -209,7 +238,7 @@ const Auth = () => {
                           placeholder="Your password"
                           required
                         />
-                        <Button
+                        <MobileOptimizedButton
                           type="button"
                           variant="ghost"
                           size="sm"
@@ -222,7 +251,7 @@ const Auth = () => {
                     </div>
 
                     <div className="flex justify-end">
-                      <Button 
+                      <MobileOptimizedButton 
                         type="button" 
                         variant="link" 
                         className="px-0 text-sm text-omni-blue hover:underline"
@@ -232,10 +261,11 @@ const Auth = () => {
                       </Button>
                     </div>
 
-                    <Button 
+                    <MobileOptimizedButton 
                       type="submit" 
-                      className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold"
-                      disabled={loading}
+                      variant="gradient"
+                      fullWidth
+                      loading={loading}
                     >
                       {loading ? "Signing In..." : "Sign In"}
                     </Button>

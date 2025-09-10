@@ -22,7 +22,8 @@ interface CrawlResult {
   total?: number;
   creditsUsed?: number;
   expiresAt?: string;
-  data?: CrawledPageData[];
+  data?: Record<string, unknown>[];
+  error?: string;
 }
 
 export const CrawlForm = () => {
