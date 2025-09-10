@@ -110,7 +110,7 @@ const UnifiedNavigation = () => {
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic business development', icon: '💼' },
         { title: 'Media Production', href: '/media-production', description: 'Content creation services', icon: '🎬' },
         { title: 'Web Development', href: '/web-development', description: 'Digital solutions', icon: '💻' },
-        { title: 'Marketplace', href: '/wellness-marketplace', description: 'Find wellness providers', icon: '🛒' },
+        { title: 'Marketplace', href: '/wellness-exchange/marketplace', description: 'Find wellness providers', icon: '🛒' },
         { title: 'Provider Portal', href: '/provider-portal', description: 'For wellness professionals', icon: '🏢' },
       ]
     },

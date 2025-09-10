@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { helenAdminData } from "@/data/sandyDemoData";
+import LiveDemoPresence from "@/components/collaboration/LiveDemoPresence";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -29,11 +31,21 @@ const AdminDashboard = () => {
     users: [],
     services: [],
     tours: [],
+    providers: helenAdminData.topProviders,
+    recentActivity: helenAdminData.recentActivity,
     stats: {
-      totalRevenue: 0,
+      totalRevenue: helenAdminData.platformStats.totalRevenue,
+      monthlyRevenue: helenAdminData.platformStats.monthlyRevenue,
       totalOrders: 0,
-      totalBookings: 0,
-      totalUsers: 0,
+      totalBookings: helenAdminData.platformStats.totalBookings,
+      monthlyBookings: helenAdminData.platformStats.monthlyBookings,
+      totalUsers: helenAdminData.platformStats.totalUsers,
+      activeUsers: helenAdminData.platformStats.monthlyActiveUsers,
+      totalProviders: helenAdminData.platformStats.totalProviders,
+      activeProviders: helenAdminData.platformStats.activeProviders,
+      wellcoinCirculation: helenAdminData.platformStats.wellcoinCirculation,
+      platformGrowth: helenAdminData.platformStats.platformGrowth,
+      averageProviderRating: helenAdminData.platformStats.averageProviderRating,
       pendingOrders: 0,
       activeServices: 0
     }
@@ -159,117 +171,244 @@ const AdminDashboard = () => {
       </div>
 
       <div className="p-6">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* Enhanced Stats Cards for Helen's Admin View */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+              <CardTitle className="text-sm font-medium">Platform Revenue</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">R{dashboardData.stats.totalRevenue.toFixed(2)}</div>
-              <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+              <div className="text-2xl font-bold">R{dashboardData.stats.totalRevenue.toLocaleString()}</div>
+              <p className="text-xs text-muted-foreground">+{dashboardData.stats.platformGrowth}% growth</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-              <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{dashboardData.stats.totalOrders}</div>
-              <p className="text-xs text-muted-foreground">{dashboardData.stats.pendingOrders} pending</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tour Bookings</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{dashboardData.stats.totalBookings}</div>
+              <div className="text-2xl font-bold">R{dashboardData.stats.monthlyRevenue.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">This month</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Providers</CardTitle>
+              <Package className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{dashboardData.stats.totalProviders}</div>
+              <p className="text-xs text-muted-foreground">{dashboardData.stats.activeProviders} active</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Platform Users</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{dashboardData.stats.totalUsers}</div>
-              <p className="text-xs text-muted-foreground">+15% from last month</p>
+              <div className="text-2xl font-bold">{dashboardData.stats.totalUsers.toLocaleString()}</div>
+              <p className="text-xs text-muted-foreground">{dashboardData.stats.activeUsers} monthly active</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">WellCoin Circulation</CardTitle>
+              <Calendar className="h-4 w-4 text-omni-orange" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-omni-orange">{dashboardData.stats.wellcoinCirculation.toLocaleString()} WC</div>
+              <p className="text-xs text-muted-foreground">In circulation</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Average Rating</CardTitle>
+              <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{dashboardData.stats.averageProviderRating}</div>
+              <p className="text-xs text-muted-foreground">Provider average</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Main Content Tabs */}
+        {/* Enhanced Main Content Tabs for Helen's Admin Interface */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="providers">Top Providers</TabsTrigger>
+            <TabsTrigger value="activity">Recent Activity</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
             <TabsTrigger value="bookings">Bookings</TabsTrigger>
             <TabsTrigger value="services">Services</TabsTrigger>
-            <TabsTrigger value="tours">Tours</TabsTrigger>
             <TabsTrigger value="blog">Blog</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <Card>
+            {/* Collaboration Component for Helen's Admin Demo */}
+            <div className="mb-6">
+              <LiveDemoPresence 
+                currentPage="admin-dashboard"
+                currentUser="helen"
+                showFeatures={true}
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <Card className="lg:col-span-2">
                 <CardHeader>
-                  <CardTitle>Recent Orders</CardTitle>
-                  <CardDescription>Latest customer orders</CardDescription>
+                  <CardTitle>Platform Overview</CardTitle>
+                  <CardDescription>Key metrics for Omni Wellness Exchange</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {dashboardData.orders.slice(0, 5).map((order) => (
-                      <div key={order.id} className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">{order.customer_name}</p>
-                          <p className="text-sm text-muted-foreground">{order.product_name}</p>
-                        </div>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Monthly Bookings</span>
                         <div className="text-right">
-                          <p className="font-medium">R{order.amount}</p>
-                          <Badge variant={order.status === 'completed' ? 'default' : 'secondary'}>
-                            {order.status}
-                          </Badge>
+                          <span className="text-2xl font-bold text-omni-blue">{dashboardData.stats.monthlyBookings}</span>
+                          <p className="text-xs text-muted-foreground">+12% vs last month</p>
                         </div>
                       </div>
-                    ))}
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Active Providers</span>
+                        <div className="text-right">
+                          <span className="text-2xl font-bold text-omni-green">{dashboardData.stats.activeProviders}</span>
+                          <p className="text-xs text-muted-foreground">of {dashboardData.stats.totalProviders} total</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Platform Growth</span>
+                        <div className="text-right">
+                          <span className="text-2xl font-bold text-omni-orange">+{dashboardData.stats.platformGrowth}%</span>
+                          <p className="text-xs text-muted-foreground">Year over year</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">WellCoins Active</span>
+                        <div className="text-right">
+                          <span className="text-2xl font-bold text-omni-purple">{dashboardData.stats.wellcoinCirculation.toLocaleString()}</span>
+                          <p className="text-xs text-muted-foreground">Total circulation</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Recent Bookings</CardTitle>
-                  <CardDescription>Latest tour bookings</CardDescription>
+                  <CardTitle>System Health</CardTitle>
+                  <CardDescription>Platform performance indicators</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {dashboardData.bookings.slice(0, 5).map((booking) => (
-                      <div key={booking.id} className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">{booking.contact_name}</p>
-                          <p className="text-sm text-muted-foreground">{booking.tours?.title}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Provider Satisfaction</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div className="bg-green-500 h-2 rounded-full" style={{ width: '96%' }}></div>
                         </div>
-                        <div className="text-right">
-                          <p className="font-medium">R{booking.total_price}</p>
-                          <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'}>
-                            {booking.status}
-                          </Badge>
-                        </div>
+                        <span className="text-sm font-medium">96%</span>
                       </div>
-                    ))}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">User Engagement</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: '87%' }}></div>
+                        </div>
+                        <span className="text-sm font-medium">87%</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Platform Uptime</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div className="bg-green-600 h-2 rounded-full" style={{ width: '99.9%' }}></div>
+                        </div>
+                        <span className="text-sm font-medium">99.9%</span>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="providers" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Performing Providers</CardTitle>
+                <CardDescription>Leading wellness providers on the platform</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {dashboardData.providers.map((provider, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-omni-blue to-omni-purple rounded-full flex items-center justify-center text-white font-bold text-lg">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-medium text-lg">{provider.name}</p>
+                          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                            <span>⭐ {provider.rating}</span>
+                            <span>📅 {provider.bookings} bookings</span>
+                            <span className="text-green-600">📈 +{provider.growth}% growth</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xl font-bold text-omni-green">R{provider.revenue.toLocaleString()}</p>
+                        <p className="text-sm text-muted-foreground">Monthly revenue</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="activity" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Platform Activity</CardTitle>
+                <CardDescription>Latest actions and events across the platform</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {dashboardData.recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-start space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                      <div className="w-2 h-2 rounded-full bg-omni-blue mt-2 flex-shrink-0"></div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{activity.description}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {new Date(activity.timestamp).toLocaleString()}
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="text-xs">
+                        {activity.type.replace('_', ' ')}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="orders" className="space-y-4">
@@ -433,14 +572,41 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Revenue Trends</CardTitle>
-                  <CardDescription>Monthly revenue overview</CardDescription>
+                  <CardTitle>Revenue Analytics</CardTitle>
+                  <CardDescription>Platform financial performance</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 flex items-center justify-center text-muted-foreground">
-                    <div className="text-center">
-                      <BarChart className="w-12 h-12 mx-auto mb-2" />
-                      <p>Revenue chart will be implemented here</p>
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center p-4 bg-gradient-to-br from-omni-green/10 to-omni-blue/10 rounded-lg">
+                        <div className="text-2xl font-bold text-omni-green">R{dashboardData.stats.totalRevenue.toLocaleString()}</div>
+                        <div className="text-sm text-muted-foreground">Total Revenue</div>
+                      </div>
+                      <div className="text-center p-4 bg-gradient-to-br from-omni-orange/10 to-omni-purple/10 rounded-lg">
+                        <div className="text-2xl font-bold text-omni-orange">R{dashboardData.stats.monthlyRevenue.toLocaleString()}</div>
+                        <div className="text-sm text-muted-foreground">This Month</div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Provider Commissions</span>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-32 bg-gray-200 rounded-full h-3">
+                            <div className="bg-omni-green h-3 rounded-full" style={{ width: '85%' }}></div>
+                          </div>
+                          <span className="text-sm font-bold">85%</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Platform Revenue</span>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-32 bg-gray-200 rounded-full h-3">
+                            <div className="bg-omni-blue h-3 rounded-full" style={{ width: '15%' }}></div>
+                          </div>
+                          <span className="text-sm font-bold">15%</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -448,36 +614,54 @@ const AdminDashboard = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Popular Services</CardTitle>
-                  <CardDescription>Most booked services this month</CardDescription>
+                  <CardTitle>Popular Service Categories</CardTitle>
+                  <CardDescription>Most booked wellness services</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Yoga Classes</span>
+                      <span className="text-sm font-medium">Dru Yoga & Movement</span>
                       <div className="flex items-center space-x-2">
-                        <div className="w-20 bg-gray-200 rounded-full h-2">
-                          <div className="bg-primary h-2 rounded-full" style={{ width: '75%' }}></div>
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className="bg-omni-blue h-2 rounded-full" style={{ width: '78%' }}></div>
                         </div>
-                        <span className="text-sm">75%</span>
+                        <span className="text-sm font-bold">78%</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Wine Country Retreats</span>
+                      <span className="text-sm font-medium">Buteyko Breathing</span>
                       <div className="flex items-center space-x-2">
-                        <div className="w-20 bg-gray-200 rounded-full h-2">
-                          <div className="bg-primary h-2 rounded-full" style={{ width: '60%' }}></div>
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className="bg-omni-green h-2 rounded-full" style={{ width: '65%' }}></div>
                         </div>
-                        <span className="text-sm">60%</span>
+                        <span className="text-sm font-bold">65%</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm">Meditation Sessions</span>
+                      <span className="text-sm font-medium">Wellness Workshops</span>
                       <div className="flex items-center space-x-2">
-                        <div className="w-20 bg-gray-200 rounded-full h-2">
-                          <div className="bg-primary h-2 rounded-full" style={{ width: '45%' }}></div>
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className="bg-omni-orange h-2 rounded-full" style={{ width: '52%' }}></div>
                         </div>
-                        <span className="text-sm">45%</span>
+                        <span className="text-sm font-bold">52%</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Mental Health Support</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className="bg-omni-purple h-2 rounded-full" style={{ width: '41%' }}></div>
+                        </div>
+                        <span className="text-sm font-bold">41%</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Online Consultations</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div className="bg-gradient-to-r from-omni-blue to-omni-purple h-2 rounded-full" style={{ width: '33%' }}></div>
+                        </div>
+                        <span className="text-sm font-bold">33%</span>
                       </div>
                     </div>
                   </div>

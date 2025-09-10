@@ -73,7 +73,7 @@ const HeroSection = () => {
     {
       title: "Wellness Marketplace",
       description: "Connect with wellness providers",
-      href: "/wellness-marketplace",
+      href: "/wellness-exchange/marketplace",
       imagePrompt: "Beautiful outdoor wellness marketplace with diverse people practicing yoga, meditation, healthy food vendors, natural healing products",
       category: "wellness",
       author: "Community",

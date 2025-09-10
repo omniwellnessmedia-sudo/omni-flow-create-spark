@@ -78,7 +78,7 @@ const MegaNavigation = () => {
         { name: 'Custom Art & Design', href: '/services/custom-art', icon: '🎨' },
         { name: 'Consultation Services', href: '/services/consultation', icon: '🤝' },
         { name: 'Community Hub', href: '/wellness-community', icon: '🌱' },
-        { name: 'Marketplace', href: '/wellness-marketplace', icon: '🛒' },
+        { name: 'Marketplace', href: '/wellness-exchange/marketplace', icon: '🛒' },
         { name: 'Service Exchange', href: '/wellness-exchange', icon: '🔄' },
         { name: 'Find Services', href: '/search-services', icon: '🔍' },
         { name: 'My Account', href: '/wellness-account', icon: '👤' },

@@ -37,17 +37,35 @@ import {
 } from "lucide-react";
 import ModernWebsiteBuilder from "@/components/website-builder/ModernWebsiteBuilder";
 import ProviderMediaUpload from "@/components/ProviderMediaUpload";
+import LiveDemoPresence from "@/components/collaboration/LiveDemoPresence";
+import { sandyDemoData, helenProviderData } from "@/data/sandyDemoData";
 
 const ProviderDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [wellCoinBalance, setWellCoinBalance] = useState(0);
-  const [zarEarnings, setZarEarnings] = useState(0);
-  const [activeListings, setActiveListings] = useState(0);
-  const [totalBookings, setTotalBookings] = useState(0);
-  const [rating, setRating] = useState(0);
-  const [profileCompletion, setProfileCompletion] = useState(0);
-  const [providerProfile, setProviderProfile] = useState<any>(null);
+  
+  // Use demo data for stakeholder presentation
+  const isSandyDemo = user?.email?.includes('sandy');
+  const isHelenDemo = user?.email?.includes('helen');
+  const isDemoMode = isSandyDemo || isHelenDemo || process.env.NODE_ENV === 'development';
+  
+  // Select appropriate demo data based on user
+  const demoData = isHelenDemo ? helenProviderData : sandyDemoData;
+  
+  const [wellCoinBalance, setWellCoinBalance] = useState(isDemoMode ? demoData.profile.wellcoinBalance : 0);
+  const [zarEarnings, setZarEarnings] = useState(isDemoMode ? demoData.profile.zarEarnings : 0);
+  const [activeListings, setActiveListings] = useState(isDemoMode ? (isHelenDemo ? 5 : 7) : 0);
+  const [totalBookings, setTotalBookings] = useState(isDemoMode ? demoData.profile.totalClients : 0);
+  const [rating, setRating] = useState(isDemoMode ? demoData.profile.rating : 0);
+  const [profileCompletion, setProfileCompletion] = useState(isDemoMode ? demoData.profile.profileCompletion : 0);
+  const [providerProfile, setProviderProfile] = useState<any>(isDemoMode ? {
+    business_name: demoData.profile.business,
+    description: demoData.profile.bio,
+    specialties: demoData.profile.specialties,
+    location: 'Cape Town, South Africa',
+    years_experience: demoData.profile.yearsExperience,
+    verified: true
+  } : null);
   const [services, setServices] = useState<any[]>([]);
   const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
@@ -101,16 +119,21 @@ const ProviderDashboard = () => {
       const filledFields = completionFields.filter(Boolean).length;
       setProfileCompletion(Math.round((filledFields / completionFields.length) * 100));
 
-      // Load services
-      const { data: servicesData, error: servicesError } = await supabase
-        .from('services')
-        .select('*')
-        .eq('provider_id', userId)
-        .order('created_at', { ascending: false });
+      // Load services - use demo data in demo mode
+      if (isDemoMode) {
+        setServices(demoData.services || []);
+        setActiveListings(demoData.services?.filter(s => s.active).length || 0);
+      } else {
+        const { data: servicesData, error: servicesError } = await supabase
+          .from('services')
+          .select('*')
+          .eq('provider_id', userId)
+          .order('created_at', { ascending: false });
 
-      if (servicesError) throw servicesError;
-      setServices(servicesData || []);
-      setActiveListings(servicesData?.filter(s => s.active).length || 0);
+        if (servicesError) throw servicesError;
+        setServices(servicesData || []);
+        setActiveListings(servicesData?.filter(s => s.active).length || 0);
+      }
 
       // Load bookings
       const { data: bookingsData, error: bookingsError } = await supabase
@@ -405,6 +428,17 @@ const ProviderDashboard = () => {
               </TabsList>
 
               <TabsContent value="overview" className="mt-6">
+                {/* Collaboration Component for Stakeholder Demo */}
+                {isDemoMode && (
+                  <div className="mb-6">
+                    <LiveDemoPresence 
+                      currentPage="provider-dashboard"
+                      currentUser="sandy"
+                      showFeatures={true}
+                    />
+                  </div>
+                )}
+                
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Recent Activity */}
                   <Card>

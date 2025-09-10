@@ -70,6 +70,7 @@ import Consultation from '@/pages/services/Consultation';
 import CustomArt from '@/pages/services/CustomArt';
 import DocumentaryProduction from '@/pages/services/DocumentaryProduction';
 import Videography from '@/pages/services/Videography';
+import MobileEnhancements from '@/components/mobile/MobileEnhancements';
 
 function App() {
   return (
@@ -161,6 +162,7 @@ function App() {
                 </Routes>
               </Suspense>
             </main>
+            <MobileEnhancements />
           </div>
         </Router>
       </AuthProvider>
