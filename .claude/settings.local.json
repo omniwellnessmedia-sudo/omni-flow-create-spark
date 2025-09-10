@@ -9,7 +9,8 @@
       "Bash(npm run preview:*)",
       "Bash(git add:*)",
       "Bash(ping:*)",
-      "Bash(nslookup:*)"
+      "Bash(nslookup:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
