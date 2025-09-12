@@ -32,11 +32,13 @@ import {
   Bot,
   Globe,
   Search,
-  ChevronDown
+  ChevronDown,
+  Users
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { handleKeyboardNavigation, announceToScreenReader } from '@/lib/accessibility';
-import omniLogo from '/lovable-uploads/35aeb178-5b75-48ed-8192-1ac1ba363620.png';
+import { CartIcon } from '@/components/cart/CartIcon';
+import { getOmniLogo } from '@/lib/images';
 
 interface NavItem {
   title: string;
@@ -111,7 +113,7 @@ const UnifiedNavigation = () => {
         { title: 'Media Production', href: '/media-production', description: 'Content creation services', icon: '🎬' },
         { title: 'Web Development', href: '/web-development', description: 'Digital solutions', icon: '💻' },
         { title: 'Marketplace', href: '/wellness-exchange/marketplace', description: 'Find wellness providers', icon: '🛒' },
-        { title: 'Provider Portal', href: '/provider-portal', description: 'For wellness professionals', icon: '🏢' },
+        { title: 'Provider Directory', href: '/provider-directory', description: 'Discover wellness providers', icon: '👥' },
       ]
     },
     {
@@ -159,7 +161,7 @@ const UnifiedNavigation = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3">
               <img 
-                src={omniLogo} 
+                {...getOmniLogo()} 
                 alt="Omni Wellness Media" 
                 className="h-10 w-10 object-contain rounded-lg border border-primary/20 p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
               />
@@ -247,50 +249,56 @@ const UnifiedNavigation = () => {
             </Button>
 
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
-                        {user.email?.charAt(0).toUpperCase() || <User className="h-4 w-4" />}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">
-                        {user.user_metadata?.full_name || 'Wellness Member'}
-                      </p>
-                      <p className="text-xs leading-none text-muted-foreground">
-                        {user.email}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/wellness-account" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      <span>My Account</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/provider-dashboard" className="cursor-pointer">
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Provider Dashboard</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Sign out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <>
+                <CartIcon />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email} />
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {user.email?.charAt(0).toUpperCase() || <User className="h-4 w-4" />}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {user.user_metadata?.full_name || 'Wellness Member'}
+                        </p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          {user.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/wellness-account" className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>My Account</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    {user && user.email === 'sandy@omniwellness.co.za' && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/provider-dashboard" className="cursor-pointer">
+                          <Settings className="mr-2 h-4 w-4" />
+                          <span>Provider Dashboard</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sign out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <div className="flex items-center space-x-2">
+                <CartIcon />
                 <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
                   <Link to="/auth">
                     <LogIn className="mr-2 h-4 w-4" />
@@ -321,7 +329,7 @@ const UnifiedNavigation = () => {
               <SheetContent side="right" className="w-80">
                 <SheetHeader>
                   <SheetTitle className="text-left flex items-center">
-                    <img src={omniLogo} alt="Omni" className="h-8 w-8 mr-3" />
+                    <img {...getOmniLogo()} alt="Omni" className="h-8 w-8 mr-3" />
                     Omni Wellness
                   </SheetTitle>
                 </SheetHeader>

@@ -171,7 +171,7 @@ const TourDetail = () => {
         <img 
           src={images[selectedImage] || '/lovable-uploads/wellness-humans.png'} 
           alt={tour.title}
-          className="w-full h-full object-cover object-center scale-105 transition-transform duration-[20s] ease-out"
+          className="w-full h-full object-cover object-center scale-105 transition-transform duration-700 ease-out"
           loading="eager"
           onError={(e) => {
             e.currentTarget.src = '/lovable-uploads/wellness-humans.png';

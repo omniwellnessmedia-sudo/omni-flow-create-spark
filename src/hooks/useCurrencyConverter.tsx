@@ -21,18 +21,18 @@ interface CurrencyHook {
 const CACHE_KEY = 'exchange_rates';
 const CACHE_DURATION = 1000 * 60 * 60; // 1 hour
 
+// Fallback rates in case API fails (approximate rates as of 2024)
+const fallbackRates: ExchangeRates = {
+  USD: 18.50, // 1 USD = 18.50 ZAR
+  ZAR: 1,     // 1 ZAR = 1 ZAR
+  EUR: 20.10, // 1 EUR = 20.10 ZAR
+  GBP: 23.30  // 1 GBP = 23.30 ZAR
+};
+
 export const useCurrencyConverter = (): CurrencyHook => {
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-
-  // Fallback rates in case API fails (approximate rates as of 2024)
-  const fallbackRates: ExchangeRates = {
-    USD: 18.50, // 1 USD = 18.50 ZAR
-    ZAR: 1,     // 1 ZAR = 1 ZAR
-    EUR: 20.10, // 1 EUR = 20.10 ZAR
-    GBP: 23.30  // 1 GBP = 23.30 ZAR
-  };
 
   const getCachedRates = () => {
     try {
@@ -109,11 +109,11 @@ export const useCurrencyConverter = (): CurrencyHook => {
     }
     
     setIsLoading(false);
-  }, [fallbackRates]);
+  }, []); // Remove fallbackRates dependency
 
   useEffect(() => {
     fetchExchangeRates();
-  }, [fetchExchangeRates]);
+  }, []); // Run only once on mount
 
   const convertToZAR = (amount: number, fromCurrency: string): number => {
     if (!exchangeRates || !amount) return 0;

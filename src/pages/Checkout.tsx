@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useCart } from "@/contexts/CartContext";
+import { useCart } from "@/components/CartProvider";
 import { useState } from "react";
 import { ArrowLeft, CreditCard, Coins } from "lucide-react";
 import { Link } from "react-router-dom";

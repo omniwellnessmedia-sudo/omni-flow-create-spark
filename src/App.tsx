@@ -1,172 +1,107 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import { AuthProvider } from '@/components/AuthProvider';
-import { CartProvider } from '@/contexts/CartContext';
-import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
-import Index from '@/pages/Index';
-// Lazy load heavy components for better performance
-const Home = lazy(() => import('@/pages/Home'));
-const WellnessDeals = lazy(() => import('@/pages/WellnessDeals'));
-const DealDetail = lazy(() => import('@/pages/DealDetail'));
-const About = lazy(() => import('@/pages/About'));
-const Services = lazy(() => import('@/pages/Services'));
-const BusinessConsulting = lazy(() => import('@/pages/BusinessConsulting'));
-const MediaProduction = lazy(() => import('@/pages/MediaProduction'));
-const SocialMediaStrategy = lazy(() => import('@/pages/SocialMediaStrategy'));
-const WebDevelopment = lazy(() => import('@/pages/WebDevelopment'));
-const Contact = lazy(() => import('@/pages/Contact'));
-const Blog = lazy(() => import('@/pages/Blog'));
-const BlogPost = lazy(() => import('@/pages/BlogPost'));
-const BlogEditor = lazy(() => import('@/pages/BlogEditor'));
-const Podcast = lazy(() => import('@/pages/Podcast'));
-const Portfolio = lazy(() => import('@/pages/Portfolio'));
-const Auth = lazy(() => import('@/pages/Auth'));
-import WellnessExchange from '@/pages/WellnessExchange';
-import WellnessExchangeSignup from '@/pages/WellnessExchangeSignup';
-import WellnessCommunity from '@/pages/WellnessCommunity';
-import WellnessMarketplace from '@/pages/WellnessMarketplace';
-import WellnessAccount from '@/pages/WellnessAccount';
-import WellnessUsers from '@/pages/WellnessUsers';
-import WellnessWants from '@/pages/WellnessWants';
-import SearchServices from '@/pages/SearchServices';
-import ServiceDetail from '@/pages/ServiceDetail';
-import AddService from '@/pages/AddService';
-import AddWant from '@/pages/AddWant';
-import CommunityBlog from '@/pages/CommunityBlog';
+import { CartProvider } from '@/components/CartProvider';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
-import ProviderDashboard from '@/pages/ProviderDashboard';
-import ProviderWebsite from '@/pages/ProviderWebsite';
-import ProviderLandingPage from '@/pages/ProviderLandingPage';
-import PartnerProfile from '@/pages/PartnerProfile';
-import PartnerPortal from '@/pages/PartnerPortal';
-import PartnersDirectory from '@/pages/PartnersDirectory';
-import ToursRetreats from '@/pages/ToursRetreats';
-import TourDetail from '@/pages/TourDetail';
-import TourCategory from '@/pages/TourCategory';
-import TwoBeWell from '@/pages/TwoBeWell';
-import TwoBeWellShop from '@/pages/TwoBeWellShop';
-// Deprecated: RoamBuddy has been rebranded to Travel Well Connected
-// import RoamBuddyStore from '@/pages/RoamBuddyStore';
-import WellnessRoamingPackages from '@/pages/WellnessRoamingPackages';
-import AITools from '@/pages/AITools';
-import RoamBuddyAPITest from '@/pages/RoamBuddyAPITest';
-import RoamBuddyIntegrationTest from '@/pages/RoamBuddyIntegrationTest';
-import DataProducts from '@/pages/DataProducts';
-import DeviceCompatibility from '@/pages/DeviceCompatibility';
-import TechnicalOverview from '@/pages/TechnicalOverview';
-import ProductDetail from '@/pages/ProductDetail';
-import Checkout from '@/pages/Checkout';
-import PaymentSuccess from '@/pages/PaymentSuccess';
-import PaymentCancelled from '@/pages/PaymentCancelled';
-import TransactionPage from '@/pages/TransactionPage';
-import Resources from '@/pages/Resources';
-import AdminDashboard from '@/pages/AdminDashboard';
-import NotFound from '@/pages/NotFound';
-import TravelWellConnectedStore from '@/pages/TravelWellConnectedStore';
-import ExerciseLibrary from '@/pages/ExerciseLibrary';
+// Lazy load components for better performance
+const Index = React.lazy(() => import('@/pages/Index'));
+const WellnessExchange = React.lazy(() => import('@/pages/WellnessExchange'));
+const WellnessMarketplace = React.lazy(() => import('@/pages/WellnessMarketplace'));
+const UnifiedMarketplace = React.lazy(() => import('@/pages/UnifiedMarketplace'));
+const WellnessAccount = React.lazy(() => import('@/pages/WellnessAccount'));
+const WellnessWants = React.lazy(() => import('@/pages/WellnessWants'));
+const WellnessCommunity = React.lazy(() => import('@/pages/WellnessCommunity'));
+const SimpleServiceDetail = React.lazy(() => import('@/pages/SimpleServiceDetail'));
+const ServiceDetailFixed = React.lazy(() => import('@/pages/ServiceDetailFixed'));
+const IndividualProviderProfile = React.lazy(() => import('@/pages/IndividualProviderProfile'));
+const SandyMitchellProfile = React.lazy(() => import('@/pages/SandyMitchellProfile'));
+const AddService = React.lazy(() => import('@/pages/AddService'));
+const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
+const ProviderDashboard = React.lazy(() => import('@/pages/ProviderDashboard'));
+const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPortal'));
+const ToursRetreats = React.lazy(() => import('@/pages/ToursRetreats'));
+const TransactionPage = React.lazy(() => import('@/pages/TransactionPage'));
+const TwoBeWellShop = React.lazy(() => import('@/pages/TwoBeWellShop'));
+const WellnessDeals = React.lazy(() => import('@/pages/WellnessDeals'));
+const AuthPage = React.lazy(() => import('@/pages/Auth'));
+const TestPage = React.lazy(() => import('@/pages/TestPage'));
 
-// Service Pages
-import Consultation from '@/pages/services/Consultation';
-import CustomArt from '@/pages/services/CustomArt';
-import DocumentaryProduction from '@/pages/services/DocumentaryProduction';
-import Videography from '@/pages/services/Videography';
-import MobileEnhancements from '@/components/mobile/MobileEnhancements';
+// Loading component
+const LoadingSpinner = () => (
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 flex items-center justify-center">
+    <div className="text-center space-y-4">
+      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto"></div>
+      <h2 className="text-xl font-semibold text-gray-700">Loading Omni Wellness...</h2>
+      <p className="text-gray-500">Preparing your wellness experience</p>
+    </div>
+  </div>
+);
 
 function App() {
   return (
-    <CartProvider>
+    <ErrorBoundary>
       <AuthProvider>
-        <Router>
-          <div className="min-h-screen flex flex-col">
-            <UnifiedNavigation />
-            <main className="flex-grow">
-              <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div></div>}>
+        <CartProvider>
+          <Router>
+            <div className="min-h-screen">
+              <Suspense fallback={<LoadingSpinner />}>
                 <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/wellness-deals" element={<WellnessDeals />} />
-            <Route path="/wellness-deals/:id" element={<DealDetail />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/business-consulting" element={<BusinessConsulting />} />
-            <Route path="/media-production" element={<MediaProduction />} />
-            <Route path="/social-media-strategy" element={<SocialMediaStrategy />} />
-            <Route path="/web-development" element={<WebDevelopment />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/blog-editor" element={<BlogEditor />} />
-            <Route path="/podcast" element={<Podcast />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/auth" element={<Auth />} />
-            {/* Wellness Exchange Routes */}
-            <Route path="/wellness-exchange" element={<WellnessExchange />} />
-            <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
-            <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
-            <Route path="/wellness-exchange/wants" element={<WellnessWants />} />
-            <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
-            <Route path="/wellness-exchange/search" element={<SearchServices />} />
-            <Route path="/wellness-exchange/add-service" element={<AddService />} />
-            <Route path="/wellness-exchange/add-want" element={<AddWant />} />
-            <Route path="/wellness-exchange/account" element={<WellnessAccount />} />
-            <Route path="/wellness-exchange/provider-signup" element={<WellnessExchangeSignup />} />
-            <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
-            <Route path="/wellness-exchange/service/:id" element={<ServiceDetail />} />
-            
-            {/* Legacy Routes (backward compatibility) */}
-            <Route path="/wellness-community" element={<WellnessCommunity />} />
-            <Route path="/wellness-marketplace" element={<WellnessMarketplace />} />
-            <Route path="/wellness-account" element={<WellnessAccount />} />
-            <Route path="/wellness-users" element={<WellnessUsers />} />
-            <Route path="/wellness-wants" element={<WellnessWants />} />
-            <Route path="/search-services" element={<SearchServices />} />
-            <Route path="/service/:id" element={<ServiceDetail />} />
-            <Route path="/add-service" element={<AddService />} />
-            <Route path="/add-want" element={<AddWant />} />
-            <Route path="/community-blog" element={<CommunityBlog />} />
-            
-            <Route path="/provider-dashboard" element={<ProviderDashboard />} />
-            <Route path="/provider-portal" element={<PartnerPortal />} />
-            <Route path="/provider-website/:providerId" element={<ProviderWebsite />} />
-            <Route path="/provider-landing/:providerId" element={<ProviderLandingPage />} />
-            <Route path="/partner-profile/:id" element={<PartnerProfile />} />
-            <Route path="/partners-directory" element={<PartnersDirectory />} />
-            
-            {/* Service Detail Pages */}
-            <Route path="/services/consultation" element={<Consultation />} />
-            <Route path="/services/custom-art" element={<CustomArt />} />
-            <Route path="/services/documentary-production" element={<DocumentaryProduction />} />
-            <Route path="/services/videography" element={<Videography />} />
-            <Route path="/tours-retreats" element={<ToursRetreats />} />
-            <Route path="/tour-category/:category" element={<TourCategory />} />
-            <Route path="/tour-category/:category/:slug" element={<TourDetail />} />
-            <Route path="/two-be-well" element={<TwoBeWell />} />
-            <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
-            <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
-            <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
-            <Route path="/exercise-library" element={<ExerciseLibrary />} />
-            <Route path="/ai-tools" element={<AITools />} />
-            <Route path="/roambuddy-api-test" element={<RoamBuddyAPITest />} />
-            <Route path="/roambuddy-integration-test" element={<RoamBuddyIntegrationTest />} />
-            <Route path="/data-products" element={<DataProducts />} />
-            <Route path="/device-compatibility" element={<DeviceCompatibility />} />
-            <Route path="/technical-overview" element={<TechnicalOverview />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/payment-cancelled" element={<PaymentCancelled />} />
-            <Route path="/transaction" element={<TransactionPage />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="*" element={<NotFound />} />
+                  {/* Main Platform Routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/test" element={<TestPage />} />
+                  <Route path="/auth" element={<AuthPage />} />
+                  
+                  {/* Wellness Exchange Routes */}
+                  <Route path="/wellness-exchange" element={<WellnessExchange />} />
+                  <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
+                  <Route path="/wellness-exchange/account" element={<WellnessAccount />} />
+                  <Route path="/wellness-exchange/wants" element={<WellnessWants />} />
+                  <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
+                  
+                  {/* Marketplace & Services */}
+                  <Route path="/marketplace" element={<UnifiedMarketplace />} />
+                  <Route path="/service/:id" element={<SimpleServiceDetail />} />
+                  <Route path="/service-detail/:serviceId" element={<ServiceDetailFixed />} />
+                  <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
+                  <Route path="/wellness-deals" element={<WellnessDeals />} />
+                  
+                  {/* Provider Routes */}
+                  <Route path="/provider-directory" element={<IndividualProviderProfile />} />
+                  <Route path="/provider/sandy-mitchell" element={<SandyMitchellProfile />} />
+                  <Route path="/provider/:id" element={<IndividualProviderProfile />} />
+                  
+                  {/* Provider Dashboard & Management */}
+                  <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+                  <Route path="/provider-portal" element={<ModernProviderPortal />} />
+                  <Route path="/add-service" element={<AddService />} />
+                  
+                  {/* Community & Content */}
+                  <Route path="/community" element={<CommunityBlog />} />
+                  <Route path="/tours-retreats" element={<ToursRetreats />} />
+                  
+                  {/* Transaction & Payment */}
+                  <Route path="/transaction" element={<TransactionPage />} />
+                  
+                  {/* Catch-all redirect to homepage */}
+                  <Route path="*" element={<Index />} />
                 </Routes>
               </Suspense>
-            </main>
-            <MobileEnhancements />
-          </div>
-        </Router>
+              
+              {/* Global Toast Notifications */}
+              <Toaster 
+                position="top-right" 
+                toastOptions={{
+                  duration: 4000,
+                  className: 'bg-white border border-gray-200 shadow-lg',
+                }} 
+              />
+            </div>
+          </Router>
+        </CartProvider>
       </AuthProvider>
-    </CartProvider>
+    </ErrorBoundary>
   );
 }
 

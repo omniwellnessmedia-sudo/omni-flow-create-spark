@@ -2,7 +2,25 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git merge:*)",
+      "Bash(grep:*)",
+      "Bash(npm run build:*)",
+      "WebFetch(domain:druyogacapetown.co.za)",
+      "Read(//c/Users/tumel/**)",
+      "Bash(npm run dev:*)",
+      "Bash(pkill:*)",
+      "Bash(npx tsc:*)",
+      "Bash(sed:*)",
+      "Bash(timeout 5 npm run dev)",
+      "Bash(timeout 30 npm run build)",
+      "Bash(taskkill:*)",
+      "Bash(xcopy:*)",
+      "Bash(robocopy:*)",
+      "Bash(dir \"C:\\Users\\tumel\\omni-flow-create-spark\\src\\pages\")",
+      "Bash(del \"src\\pages\\Home.tsx\")"
     ],
     "deny": [],
     "ask": []

@@ -1,4 +1,4 @@
-import { useCart } from "@/contexts/CartContext";
+import { useCart } from "@/components/CartProvider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -6,9 +6,9 @@ import { Trash2, Plus, Minus } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const CartItems = () => {
-  const { state, removeItem, updateQuantity, clearCart } = useCart();
+  const { items, removeItem, updateQuantity, clearCart, totalZAR, totalWellCoins } = useCart();
 
-  if (state.items.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-center">
         <p className="text-gray-500 mb-4">Your cart is empty</p>
@@ -22,7 +22,7 @@ export const CartItems = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto space-y-4 mb-4">
-        {state.items.map((item) => (
+        {items.map((item) => (
           <Card key={item.id} className="shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-start justify-between mb-2">
@@ -79,18 +79,18 @@ export const CartItems = () => {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span>Subtotal</span>
-            <span>R{state.total.toFixed(2)}</span>
+            <span>R{totalZAR.toFixed(2)}</span>
           </div>
-          {state.wellcoinTotal > 0 && (
+          {totalWellCoins > 0 && (
             <div className="flex justify-between text-sm text-green-600">
               <span>WellCoins</span>
-              <span>{state.wellcoinTotal}</span>
+              <span>{totalWellCoins}</span>
             </div>
           )}
           <Separator />
           <div className="flex justify-between font-semibold">
             <span>Total</span>
-            <span>R{state.total.toFixed(2)}</span>
+            <span>R{totalZAR.toFixed(2)}</span>
           </div>
         </div>
 

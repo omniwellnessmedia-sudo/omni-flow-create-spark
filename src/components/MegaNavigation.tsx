@@ -83,7 +83,7 @@ const MegaNavigation = () => {
         { name: 'Find Services', href: '/search-services', icon: '🔍' },
         { name: 'My Account', href: '/wellness-account', icon: '👤' },
         { name: 'Add Service', href: '/add-service', icon: '➕' },
-        { name: 'Provider Portal', href: '/provider-portal', icon: '🏢' }
+        { name: 'Sandy Mitchell Yoga', href: '/provider/sandy-mitchell', icon: '🧘‍♀️' }
       ]
     },
     {

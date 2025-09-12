@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Check } from "lucide-react";
-import { useCart, CartItem } from "@/contexts/CartContext";
+import { useCart, CartItem } from "@/components/CartProvider";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
