@@ -20,7 +20,9 @@
       "Bash(xcopy:*)",
       "Bash(robocopy:*)",
       "Bash(dir \"C:\\Users\\tumel\\omni-flow-create-spark\\src\\pages\")",
-      "Bash(del \"src\\pages\\Home.tsx\")"
+      "Bash(del \"src\\pages\\Home.tsx\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
