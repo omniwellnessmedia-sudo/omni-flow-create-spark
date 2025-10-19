@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { IMAGES } from '@/lib/images';
 import type { WellnessExperience, WellnessMarketplaceItem } from "@/types/marketplace";
 
 // Sample tour and retreat data following the unified marketplace structure
@@ -31,7 +32,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'Conscious Connections SA',
     category: 'Indigenous Wisdom',
     subcategory: 'Healing Ceremonies',
-    images: ['/lovable-uploads/conscious-connections-hero.jpg', '/assets/indigenous-healing-ceremony.jpg'],
+    images: [IMAGES.wellness.retreat, IMAGES.wellness.landmark],
     location: 'Eastern Cape, South Africa',
     is_online: false,
     is_active: true,
@@ -64,7 +65,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'Mountain Wellness Co',
     category: 'Wellness Retreats',
     subcategory: 'Mountain Retreats',
-    images: ['/lovable-uploads/8899b34c-3cb2-4a70-b18f-2a78af5432e7.png', '/assets/mountain-wellness-retreat.jpg'],
+    images: [IMAGES.tours.mountain, IMAGES.tours.mountain2],
     location: 'Table Mountain, Cape Town',
     is_online: false,
     is_active: true,
@@ -97,7 +98,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'Ubuntu Healing Collective',
     category: 'Indigenous Wisdom',
     subcategory: 'Community Healing',
-    images: ['/assets/ubuntu-healing-circle.jpg', '/lovable-uploads/wellness-humans.png'],
+    images: [IMAGES.wellness.community, IMAGES.wellness.graduation],
     location: 'Eastern Cape Villages, South Africa',
     is_online: false,
     is_active: true,
@@ -130,7 +131,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'FACT Wellness Center',
     category: 'Wellness Programs',
     subcategory: 'Hybrid Programs',
-    images: ['/lovable-uploads/fact-wellness-hero.jpg', '/assets/mountain-wellness-retreat.jpg'],
+    images: [IMAGES.wellness.beachLions, IMAGES.tours.mountain2],
     location: 'Muizenberg, Cape Town',
     is_online: true,
     is_active: true,
@@ -163,7 +164,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'EcoLiving South Africa',
     category: 'Conscious Living',
     subcategory: 'Sustainability',
-    images: ['/assets/sustainable-living-community.jpg', '/lovable-uploads/3371c506-44f8-42f6-94f9-5daed6741c0a.png'],
+    images: [IMAGES.wellness.communityProject2, IMAGES.wellness.retreat2],
     location: 'Stellenbosch, Western Cape',
     is_online: false,
     is_active: true,
@@ -196,7 +197,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'Service Learning South Africa',
     category: 'Study Abroad',
     subcategory: 'Educational Programs',
-    images: ['/assets/service-learning-students.jpg', '/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png'],
+    images: [IMAGES.wellness.graduation2, IMAGES.wellness.communityProject3],
     location: 'Cape Town & Townships',
     is_online: false,
     is_active: true,
@@ -387,8 +388,8 @@ const ToursRetreats = () => {
       {/* Preload critical images */}
       <ImagePreloader images={[
         '/lovable-uploads/omni-wellness-hero.jpg',
-        '/lovable-uploads/conscious-connections-hero.jpg',
-        '/lovable-uploads/fact-wellness-hero.jpg',
+        IMAGES.wellness.retreat,
+        IMAGES.wellness.beachLions,
         '/lovable-uploads/service-learning-hero.jpg',
         ...filteredItems.flatMap(item => item.images).filter(Boolean)
       ]} />
