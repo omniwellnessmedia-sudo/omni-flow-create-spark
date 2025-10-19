@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PriceDisplay } from '@/components/ui/price-display';
 import { supabase } from '@/integrations/supabase/client';
+import { IMAGES } from '@/lib/images';
 
 interface Tour {
   id: string;
@@ -81,42 +82,42 @@ const TourCategory = () => {
             name: 'Indigenous Wisdom & Healing',
             slug: 'indigenous-wisdom',
             description: 'Connect with ancient healing traditions and indigenous knowledge systems',
-            image_url: '/lovable-uploads/conscious-connections-hero.jpg'
+            image_url: IMAGES.providers.chief
           },
           'wellness-retreats': {
             id: '2',
             name: 'Wellness Retreats',
             slug: 'wellness-retreats',
             description: 'Transformative wellness journeys combining modern and traditional healing',
-            image_url: '/lovable-uploads/fact-wellness-hero.jpg'
+            image_url: IMAGES.wellness.retreat
           },
           'conscious-living': {
             id: '3',
             name: 'Conscious Living',
             slug: 'conscious-living',
             description: 'Immersive experiences in sustainable and mindful living practices',
-            image_url: '/lovable-uploads/wellness-humans.png'
+            image_url: IMAGES.wellness.community
           },
           'study-abroad': {
             id: '4',
             name: 'Study Abroad',
             slug: 'study-abroad',
             description: 'Educational service-learning programs in Cape Town',
-            image_url: '/lovable-uploads/service-learning-hero.jpg'
+            image_url: IMAGES.wellness.graduation
           },
           'winter-wellness': {
             id: '5',
             name: 'Winter Wellness',
             slug: 'winter-wellness',
             description: 'Embrace Cape Town\'s beautiful winter season with warming wellness experiences',
-            image_url: '/lovable-uploads/winter-wellness-category.jpg'
+            image_url: IMAGES.tours.mountain
           },
           'weekend-retreats': {
             id: '6',
             name: 'Weekend Retreats',
             slug: 'weekend-retreats',
             description: 'Perfect short getaways for busy schedules',
-            image_url: '/lovable-uploads/weekend-retreats-category.jpg'
+            image_url: IMAGES.tours.coastal
           }
         };
 
@@ -134,7 +135,7 @@ const TourCategory = () => {
             max_participants: 16,
             price_from: 3850,
             destination: 'Cape Town & Western Cape, South Africa',
-            hero_image_url: '/lovable-uploads/conscious-connections-hero.jpg',
+            hero_image_url: IMAGES.wellness.landmark,
             difficulty_level: 'moderate',
             highlights: [
               'Learn from authentic Khoisan knowledge keepers',
@@ -158,7 +159,7 @@ const TourCategory = () => {
             max_participants: 8,
             price_from: 1850,
             destination: 'Stellenbosch Wine Country, Western Cape',
-            hero_image_url: '/lovable-uploads/wine-country-yoga-hero.jpg',
+            hero_image_url: IMAGES.tours.nature,
             difficulty_level: 'beginner',
             highlights: [
               'Luxury wine estate accommodation',

@@ -12,6 +12,7 @@ import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
 import { PriceDisplay } from '@/components/ui/price-display';
 import { Link } from 'react-router-dom';
+import { IMAGES } from '@/lib/images';
 
 interface Tour {
   id: string;
@@ -168,13 +169,13 @@ const TourDetail = () => {
       
       {/* Immersive Hero Section - National Geographic Style */}
       <section className="relative h-[120vh] sm:h-[90vh] lg:h-screen bg-cover bg-center overflow-hidden">
-        <img 
-          src={images[selectedImage] || '/lovable-uploads/wellness-humans.png'} 
+        <img
+          src={images[selectedImage] || IMAGES.wellness.retreat}
           alt={tour.title}
           className="w-full h-full object-cover object-center scale-105 transition-transform duration-700 ease-out"
           loading="eager"
           onError={(e) => {
-            e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+            e.currentTarget.src = IMAGES.wellness.retreat;
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
