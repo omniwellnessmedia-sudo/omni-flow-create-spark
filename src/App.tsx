@@ -42,6 +42,13 @@ const DealDetail = React.lazy(() => import('@/pages/DealDetail'));
 const Checkout = React.lazy(() => import('@/pages/Checkout'));
 const PaymentSuccess = React.lazy(() => import('@/pages/PaymentSuccess'));
 const PaymentCancelled = React.lazy(() => import('@/pages/PaymentCancelled'));
+const Blog = React.lazy(() => import('@/pages/Blog'));
+const BlogEditor = React.lazy(() => import('@/pages/BlogEditor'));
+const BlogPost = React.lazy(() => import('@/pages/BlogPost'));
+const Podcast = React.lazy(() => import('@/pages/Podcast'));
+const Portfolio = React.lazy(() => import('@/pages/Portfolio'));
+const Resources = React.lazy(() => import('@/pages/Resources'));
+const WellnessExchangeSignup = React.lazy(() => import('@/pages/WellnessExchangeSignup'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -77,7 +84,9 @@ function App() {
                   <Route path="/wellness-exchange/account" element={<WellnessAccount />} />
                   <Route path="/wellness-exchange/wants" element={<WellnessWants />} />
                   <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
-                  
+                  <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
+                  <Route path="/wellness-community" element={<WellnessCommunity />} />
+
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
                   <Route path="/services" element={<Services />} />
@@ -111,8 +120,16 @@ function App() {
                   
                   {/* Community & Content */}
                   <Route path="/community" element={<CommunityBlog />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog-editor" element={<BlogEditor />} />
+                  <Route path="/blog-post/:slug" element={<BlogPost />} />
+                  <Route path="/podcast" element={<Podcast />} />
+                  <Route path="/portfolio" element={<Portfolio />} />
+                  <Route path="/resources" element={<Resources />} />
+
+                  {/* Travel & Tours */}
                   <Route path="/tours-retreats" element={<ToursRetreats />} />
-                  
+
                   {/* Transaction & Payment */}
                   <Route path="/transaction" element={<TransactionPage />} />
                   
