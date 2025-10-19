@@ -30,6 +30,10 @@ const TestPage = React.lazy(() => import('@/pages/TestPage'));
 const TestSimple = React.lazy(() => import('@/pages/TestSimple'));
 const About = React.lazy(() => import('@/pages/About'));
 const Contact = React.lazy(() => import('@/pages/Contact'));
+const Services = React.lazy(() => import('@/pages/Services'));
+const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
+const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
+const AddWant = React.lazy(() => import('@/pages/AddWant'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -68,8 +72,12 @@ function App() {
                   
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
+                  <Route path="/services" element={<Services />} />
                   <Route path="/service/:id" element={<SimpleServiceDetail />} />
+                  <Route path="/service-detail/:id" element={<ServiceDetail />} />
                   <Route path="/service-detail/:serviceId" element={<ServiceDetailFixed />} />
+                  <Route path="/search-services" element={<SearchServices />} />
+                  <Route path="/add-want" element={<AddWant />} />
                   <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
                   <Route path="/wellness-deals" element={<WellnessDeals />} />
                   
