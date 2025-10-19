@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Star, ArrowLeft, Heart, ShoppingCart, Truck, Shield, RefreshCw } from "lucide-react";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { IMAGES } from "@/lib/images";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -25,9 +26,9 @@ const ProductDetail = () => {
       price_wellcoins: 25,
       description: "A carefully crafted blend of organic herbs designed to promote relaxation and well-being. Perfect for evening unwinding or meditation sessions.",
       images: [
-        "/lovable-uploads/2c1edd03-b748-4129-ad38-5ed1db48917e.png",
-        "/lovable-uploads/3e329aa7-398b-4473-948d-2d5f9d54915a.png",
-        "/lovable-uploads/4a01dcd5-fe18-4590-afd3-fe656ef63428.png"
+        IMAGES.sandy.meditation,
+        IMAGES.wellness.retreat,
+        IMAGES.sandy.nature
       ],
       category: "Wellness Teas",
       inStock: true,
@@ -50,8 +51,8 @@ const ProductDetail = () => {
       price_wellcoins: 35,
       description: "Plant-based energy support capsules made with natural adaptogens to help you maintain steady energy throughout the day without crashes.",
       images: [
-        "/lovable-uploads/55337f01-2391-4c96-a2a3-0044cb84cd8b.png",
-        "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png"
+        IMAGES.sandy.yoga,
+        IMAGES.sandy.action1
       ],
       category: "Supplements",
       inStock: true,

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Star, Clock, Users, Wifi, Car, Coffee } from 'lucide-react';
+import { IMAGES } from '@/lib/images';
 
 const DealDetail = () => {
   const { id } = useParams();
@@ -20,10 +21,10 @@ const DealDetail = () => {
     rating: 4.2,
     reviews: 127,
     images: [
-      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop"
+      IMAGES.wellness.retreat,
+      IMAGES.wellness.retreat3,
+      IMAGES.tours.coastal,
+      IMAGES.tours.mountain
     ],
     description: "Romantic 2-Night Stay for 2 at Cape Point Wellness Resort! Celebrate wellness and relaxation with a luxurious 2-night getaway for two at Cape Point Wellness Resort, located on the pristine shores near Cape Point. With breathtaking ocean views and elegant accommodation, it's the perfect setting for wellness retreats, spa treatments, or rejuvenation escapes.",
     includes: [

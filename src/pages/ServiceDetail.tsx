@@ -35,6 +35,7 @@ import {
   Sun
 } from "lucide-react";
 import { toast } from "sonner";
+import { IMAGES } from "@/lib/images";
 
 interface Service {
   id: string;
@@ -282,28 +283,28 @@ const ServiceDetail = () => {
     if (images && images.length > index && !images[index].startsWith('blob:')) {
       return images[index];
     }
-    
+
     // Enhanced fallback logic based on category and title
     const lowerTitle = title.toLowerCase();
     const lowerCategory = category.toLowerCase();
-    
+
     if (lowerTitle.includes('yoga') || lowerCategory.includes('yoga') || lowerTitle.includes('pilates')) {
-      return "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+      return IMAGES.sandy.yoga;
     }
     if (lowerTitle.includes('meditation') || lowerCategory.includes('meditation') || lowerTitle.includes('breathing')) {
-      return "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+      return IMAGES.sandy.meditation;
     }
     if (lowerTitle.includes('healing') || lowerCategory.includes('healing') || lowerTitle.includes('energy')) {
-      return "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+      return IMAGES.sandy.teaching;
     }
     if (lowerTitle.includes('massage') || lowerCategory.includes('massage')) {
-      return "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+      return IMAGES.sandy.action1;
     }
     if (lowerTitle.includes('nutrition') || lowerCategory.includes('nutrition')) {
-      return "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+      return IMAGES.wellness.community;
     }
-    
-    return "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+
+    return IMAGES.wellness.retreat;
   };
 
   const getCategoryIcon = (category: string) => {
