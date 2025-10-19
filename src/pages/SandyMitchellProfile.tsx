@@ -31,6 +31,20 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+// Sandy's Brand Theme
+const SANDY_THEME = {
+  COLORS: {
+    PRIMARY: '#2a9d8f', // Calming teal
+    SECONDARY: '#e76f51', // Warm terra cotta
+    BACKGROUND: '#f8f5f2', // Soft cream
+    TEXT: '#264653' // Deep blue-grey
+  },
+  FONTS: {
+    HEADING: '"Inter", system-ui, sans-serif',
+    BODY: '"Inter", system-ui, sans-serif'
+  }
+};
+
 const SandyMitchellProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -80,7 +94,7 @@ const SandyMitchellProfile = () => {
       {/* Hero Section with Sandy's Branding */}
       <div className="relative h-96 overflow-hidden">
         <img
-          src={IMAGES.SANDY.HERO}
+          src={IMAGES.sandy.hero}
           alt="Sandy Mitchell Dru Yoga Studio"
           className="w-full h-full object-cover"
         />
@@ -89,7 +103,7 @@ const SandyMitchellProfile = () => {
           <div className="text-center text-white max-w-4xl mx-auto px-6">
             <div className="flex items-center justify-center mb-4">
               <Avatar className="w-24 h-24 border-4 border-white/20">
-                <AvatarImage src={IMAGES.SANDY.PROFILE} alt="Sandy Mitchell" />
+                <AvatarImage src={IMAGES.sandy.profile} alt="Sandy Mitchell" />
                 <AvatarFallback style={{ backgroundColor: SANDY_THEME.COLORS.PRIMARY }}>
                   SM
                 </AvatarFallback>
@@ -404,7 +418,18 @@ const SandyMitchellProfile = () => {
           {/* Gallery Tab */}
           <TabsContent value="gallery" className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {IMAGES.SANDY.GALLERY.map((image, index) => (
+              {[
+                IMAGES.sandy.yoga,
+                IMAGES.sandy.meditation,
+                IMAGES.sandy.teaching,
+                IMAGES.sandy.nature,
+                IMAGES.sandy.portrait1,
+                IMAGES.sandy.portrait2,
+                IMAGES.sandy.portrait3,
+                IMAGES.sandy.action1,
+                IMAGES.sandy.action2,
+                IMAGES.sandy.closeup
+              ].map((image, index) => (
                 <div key={index} className="relative aspect-square overflow-hidden rounded-lg">
                   <img
                     src={image}
