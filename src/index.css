@@ -351,6 +351,10 @@ img {
   @apply aspect-[4/3] object-cover w-full;
 }
 
+.card-service {
+  @apply flex flex-col h-full border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow;
+}
+
 .img-square {
   @apply aspect-square object-cover w-full;
 }
@@ -397,6 +401,10 @@ img {
 
 .grid-services {
   @apply grid gap-8 grid-cols-1 md:grid-cols-2;
+}
+
+.grid-marketplace {
+  @apply grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
 }
 
 /* ===== RESPONSIVE UTILITIES ===== */
