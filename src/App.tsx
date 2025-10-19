@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/components/CartProvider';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 // Lazy load components for better performance
 const Index = React.lazy(() => import('@/pages/Index'));
@@ -62,6 +63,11 @@ const PartnerPortal = React.lazy(() => import('@/pages/PartnerPortal'));
 const ExerciseLibrary = React.lazy(() => import('@/pages/ExerciseLibrary'));
 const DeviceCompatibility = React.lazy(() => import('@/pages/DeviceCompatibility'));
 const NotFound = React.lazy(() => import('@/pages/NotFound'));
+const AdminDashboard = React.lazy(() => import('@/pages/AdminDashboard'));
+const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
+const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
+const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
+const RoamBuddyStore = React.lazy(() => import('@/pages/RoamBuddyStore'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -165,6 +171,38 @@ function App() {
 
                   {/* Transaction & Payment */}
                   <Route path="/transaction" element={<TransactionPage />} />
+
+                  {/* Protected Admin Routes */}
+                  <Route path="/admin" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin-dashboard" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/technical-overview" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <TechnicalOverview />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/api-test/roambuddy" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <RoamBuddyAPITest />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/integration-test" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <RoamBuddyIntegrationTest />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/roambuddy-store" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <RoamBuddyStore />
+                    </ProtectedRoute>
+                  } />
 
                   {/* Error Handling */}
                   <Route path="/404" element={<NotFound />} />
