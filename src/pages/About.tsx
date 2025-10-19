@@ -65,28 +65,28 @@ const About = () => {
       image: IMAGES.providers.chad,
       description: "Chad oversees content creation and overall design direction, leveraging his strong background in media to produce high-quality, impactful content that bridges communities and inspires positive change."
     },
-    { 
-      name: "Abbi Berkovitz", 
-      role: "Content Developer", 
-      image: "/lovable-uploads/310e880f-0ee8-41fe-b098-6a2d5481ea5b.png",
+    {
+      name: "Abbi Berkovitz",
+      role: "Content Developer",
+      image: IMAGES.sandy.portrait2,
       description: "Abbi works closely with Chad on content development, creating engaging copy and organizing visuals for the website and other platforms. She specializes in distributing content across Facebook and TikTok."
     },
-    { 
-      name: "Tumelo", 
-      role: "Web Development Lead", 
-      image: "/lovable-uploads/6d1fcc0d-a3de-47d0-91c1-353fecb2f9ca.png",
+    {
+      name: "Tumelo",
+      role: "Web Development Lead",
+      image: IMAGES.wellness.muiz,
       description: "Tumelo leads our web development and e-commerce services, ensuring a strong online presence for our clients with cutting-edge technical solutions."
     },
-    { 
-      name: "Zenith", 
-      role: "Administration and Coordination", 
-      image: "/lovable-uploads/19bf84a4-63da-41b9-b117-545dd1a52294.png",
+    {
+      name: "Zenith",
+      role: "Administration and Coordination",
+      image: IMAGES.wellness.graduation2,
       description: "Zenith handles the administrative and coordination aspects, ensuring deadlines are met and managing client relationships with precision and care."
     },
-    { 
-      name: "Feroza", 
-      role: "Project Lead Support", 
-      image: "/lovable-uploads/3e329aa7-398b-4473-948d-2d5f9d54915a.png",
+    {
+      name: "Feroza",
+      role: "Project Lead Support",
+      image: IMAGES.sandy.portrait1,
       description: "Feroza brings strategic insights and innovative thinking to help clients achieve their conscious business goals and sustainable growth."
     }
   ];
@@ -387,7 +387,7 @@ const About = () => {
                 <div className="flex items-center justify-center mb-6">
                   <div className="w-16 h-16 rounded-full bg-omni-violet/10 flex items-center justify-center mr-4">
                     <img 
-                      src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+                      src={IMAGES.omni.logo} 
                       alt="Omni Wellness Media" 
                       className="h-10 w-10 rounded-full"
                     />
