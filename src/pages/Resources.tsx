@@ -5,6 +5,7 @@ import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, BookOpen, Video, Headphones, Globe, Users } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 const Resources = () => {
   const resources = [
@@ -58,7 +59,7 @@ const Resources = () => {
           </>
         }
         description="Access our library of wellness guides, educational content, and community tools to support your journey toward conscious living and positive change."
-        image="/lovable-uploads/2c1edd03-b748-4129-ad38-5ed1db48917e.png"
+        image={IMAGES.wellness.retreat3}
         imageAlt="Resources and educational materials"
         variant="split"
         height="medium"

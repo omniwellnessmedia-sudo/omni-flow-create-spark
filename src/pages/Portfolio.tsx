@@ -2,13 +2,14 @@
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { IMAGES } from "@/lib/images";
 
 const Portfolio = () => {
   const projects = [
     {
       title: "Community Garden Initiative",
       description: "Empowering local communities through sustainable gardening practices and food security programs. This project showcased the journey from seed to harvest, highlighting community collaboration and environmental stewardship.",
-      image: "/lovable-uploads/9d51151d-b05c-4392-9f83-9e301a4f790d.png",
+      image: IMAGES.wellness.communityProject2,
       category: "Community Development",
       impact: "50+ families involved, 200+ meals provided monthly",
       services: ["Video Production", "Photography", "Community Engagement"]
@@ -16,7 +17,7 @@ const Portfolio = () => {
     {
       title: "Traditional Wisdom Documentation",
       description: "Preserving and sharing indigenous knowledge through multimedia storytelling. We worked with elders to document traditional practices, healing methods, and cultural wisdom for future generations.",
-      image: "/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png",
+      image: IMAGES.providers.chief,
       category: "Cultural Heritage",
       impact: "10+ elder interviews, 500+ community members reached",
       services: ["Documentary Production", "Cultural Consulting", "Digital Archiving"]
@@ -24,7 +25,7 @@ const Portfolio = () => {
     {
       title: "The Valley of Plenty - Kids React",
       description: "Engaging children in discussions about community, wellness, and positive change through interactive content creation. This series captures authentic reactions and insights from young community members.",
-      image: "/lovable-uploads/965c3c16-d837-4f01-8f8a-220d4a14a83b.png",
+      image: IMAGES.providers.bwc,
       category: "Youth Engagement",
       impact: "100K+ views, 15+ episodes produced",
       services: ["Video Series", "Youth Engagement", "Social Media Strategy"]
@@ -32,7 +33,7 @@ const Portfolio = () => {
     {
       title: "Mindful Movement Campaign",
       description: "A comprehensive wellness campaign promoting mental health awareness and mindful practices. Featured meditation sessions, wellness workshops, and community healing circles.",
-      image: "/lovable-uploads/00bcae7d-32b7-4512-ba26-c767559ee023.png",
+      image: IMAGES.sandy.meditation,
       category: "Wellness Advocacy",
       impact: "1000+ participants, 25+ workshops conducted",
       services: ["Campaign Strategy", "Event Production", "Content Creation"]
@@ -40,7 +41,7 @@ const Portfolio = () => {
     {
       title: "Unity Through Diversity",
       description: "A powerful storytelling project that celebrates cultural diversity while highlighting our shared humanity. Featured families from different backgrounds sharing their stories of connection and community.",
-      image: "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png",
+      image: IMAGES.wellness.team,
       category: "Social Cohesion",
       impact: "50+ stories collected, 75K+ social media reach",
       services: ["Documentary Series", "Social Media Campaign", "Community Outreach"]
@@ -48,7 +49,7 @@ const Portfolio = () => {
     {
       title: "Mentorship Bridge Program",
       description: "Connecting youth with experienced mentors through structured programs and content creation. Documented the journey of mentorship relationships and their transformative impact on communities.",
-      image: "/lovable-uploads/83be8984-2c43-478e-ba25-b848902c104f.png",
+      image: IMAGES.wellness.graduation,
       category: "Youth Development",
       impact: "30+ mentor-mentee pairs, 85% program completion rate",
       services: ["Program Documentation", "Mentorship Training", "Impact Assessment"]
