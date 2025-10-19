@@ -34,6 +34,14 @@ const Services = React.lazy(() => import('@/pages/Services'));
 const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
 const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
+const TwoBeWell = React.lazy(() => import('@/pages/TwoBeWell'));
+const TravelWellConnectedStore = React.lazy(() => import('@/pages/TravelWellConnectedStore'));
+const DataProducts = React.lazy(() => import('@/pages/DataProducts'));
+const ProductDetail = React.lazy(() => import('@/pages/ProductDetail'));
+const DealDetail = React.lazy(() => import('@/pages/DealDetail'));
+const Checkout = React.lazy(() => import('@/pages/Checkout'));
+const PaymentSuccess = React.lazy(() => import('@/pages/PaymentSuccess'));
+const PaymentCancelled = React.lazy(() => import('@/pages/PaymentCancelled'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -78,9 +86,19 @@ function App() {
                   <Route path="/service-detail/:serviceId" element={<ServiceDetailFixed />} />
                   <Route path="/search-services" element={<SearchServices />} />
                   <Route path="/add-want" element={<AddWant />} />
+
+                  {/* E-commerce & Products */}
+                  <Route path="/two-be-well" element={<TwoBeWell />} />
                   <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
                   <Route path="/wellness-deals" element={<WellnessDeals />} />
-                  
+                  <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
+                  <Route path="/data-products" element={<DataProducts />} />
+                  <Route path="/product-detail/:id" element={<ProductDetail />} />
+                  <Route path="/deal-detail/:id" element={<DealDetail />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/payment-success" element={<PaymentSuccess />} />
+                  <Route path="/payment-cancelled" element={<PaymentCancelled />} />
+
                   {/* Provider Routes */}
                   <Route path="/provider-directory" element={<IndividualProviderProfile />} />
                   <Route path="/provider/sandy-mitchell" element={<SandyMitchellProfile />} />
