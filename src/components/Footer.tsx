@@ -86,19 +86,43 @@ const Footer = () => {
 
             {/* Social Media with proper icons */}
             <div className="flex justify-center space-x-4">
-              <a href="#" className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20">
+              <a
+                href="https://facebook.com/omniwellnessmedia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+                aria-label="Follow us on Facebook"
+              >
                 <Facebook className="w-5 h-5 text-white group-hover:text-blue-300 transition-colors" />
                 <span className="sr-only">Facebook</span>
               </a>
-              <a href="#" className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20">
+              <a
+                href="https://instagram.com/omniwellnessmedia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+                aria-label="Follow us on Instagram"
+              >
                 <Instagram className="w-5 h-5 text-white group-hover:text-pink-300 transition-colors" />
                 <span className="sr-only">Instagram</span>
               </a>
-              <a href="#" className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20">
+              <a
+                href="https://linkedin.com/company/omni-wellness-media"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+                aria-label="Connect with us on LinkedIn"
+              >
                 <Linkedin className="w-5 h-5 text-white group-hover:text-blue-300 transition-colors" />
                 <span className="sr-only">LinkedIn</span>
               </a>
-              <a href="#" className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20">
+              <a
+                href="https://youtube.com/@omniwellnessmedia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+                aria-label="Subscribe to our YouTube channel"
+              >
                 <Youtube className="w-5 h-5 text-white group-hover:text-red-300 transition-colors" />
                 <span className="sr-only">YouTube</span>
               </a>
@@ -164,12 +188,12 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-300 text-sm">© 2025 Omni Wellness Media. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors">
+              <Link to="/privacy-policy" className="text-gray-300 hover:text-white text-sm transition-colors">
                 Privacy Policy
-              </a>
-              <a href="#" className="text-gray-300 hover:text-white text-sm transition-colors">
+              </Link>
+              <Link to="/terms-of-service" className="text-gray-300 hover:text-white text-sm transition-colors">
                 Terms of Service
-              </a>
+              </Link>
             </div>
           </div>
 

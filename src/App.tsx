@@ -32,6 +32,8 @@ const TestSimple = React.lazy(() => import('@/pages/TestSimple'));
 const About = React.lazy(() => import('@/pages/About'));
 const Contact = React.lazy(() => import('@/pages/Contact'));
 const Services = React.lazy(() => import('@/pages/Services'));
+const PrivacyPolicy = React.lazy(() => import('@/pages/PrivacyPolicy'));
+const TermsOfService = React.lazy(() => import('@/pages/TermsOfService'));
 const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
 const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
@@ -95,6 +97,8 @@ function App() {
                   <Route path="/test-simple" element={<TestSimple />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-of-service" element={<TermsOfService />} />
                   <Route path="/auth" element={<AuthPage />} />
 
                   {/* Wellness Exchange Routes */}
