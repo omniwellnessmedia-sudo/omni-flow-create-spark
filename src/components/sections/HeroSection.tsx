@@ -173,7 +173,9 @@ const HeroSection = () => {
                   <select className="border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm">
                     <option>All services</option>
                   </select>
-                  <Button variant="ghost" size="sm" className="text-xs sm:text-sm">View All</Button>
+                  <Link to="/services">
+                    <Button variant="ghost" size="sm" className="text-xs sm:text-sm">View All</Button>
+                  </Link>
                 </div>
               </div>
 
@@ -224,7 +226,7 @@ const HeroSection = () => {
                     </button>
                   ))}
                 </div>
-                <Link to="/home">
+                <Link to="/wellness-community">
                   <Button variant="ghost" size="sm">View All</Button>
                 </Link>
               </div>

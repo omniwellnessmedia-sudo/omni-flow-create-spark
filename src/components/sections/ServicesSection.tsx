@@ -2,11 +2,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, CheckCircle } from "lucide-react";
 
 const ServicesSection = () => {
   const [activeService, setActiveService] = useState(0);
+  const navigate = useNavigate();
 
   const services = [
     {
@@ -132,12 +133,12 @@ const ServicesSection = () => {
                     </li>
                   ))}
                 </ul>
-                <Button 
+                <Button
                   variant="outline"
                   className="w-full card-button-standard"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // Navigate to service detail
+                    navigate('/services');
                   }}
                 >
                   Learn More
