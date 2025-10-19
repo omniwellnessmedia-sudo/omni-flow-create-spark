@@ -372,6 +372,19 @@ img {
   @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
+/* ===== SECTION SIZE VARIANTS ===== */
+.section-large {
+  @apply py-12 sm:py-16 lg:py-24;
+}
+
+.section-medium {
+  @apply py-8 sm:py-12 lg:py-16;
+}
+
+.section-breathable {
+  @apply py-6 sm:py-10 lg:py-14;
+}
+
 /* ===== GRID SYSTEMS ===== */
 .grid-responsive {
   @apply grid gap-6;
