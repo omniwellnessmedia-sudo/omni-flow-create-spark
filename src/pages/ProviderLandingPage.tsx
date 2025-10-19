@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Section } from "@/components/ui/section";
 import { toast } from "sonner";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import {
   MapPin,
@@ -182,7 +182,7 @@ const ProviderLandingPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <MegaNavigation />
+        <UnifiedNavigation />
         <div className="pt-8">
           <div className="max-w-7xl mx-auto px-4">
             <div className="animate-pulse space-y-4">
@@ -202,7 +202,7 @@ const ProviderLandingPage = () => {
   if (!provider) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <MegaNavigation />
+        <UnifiedNavigation />
         <Section size="large" background="white">
           <div className="text-center py-16">
             <h1 className="text-2xl font-bold mb-4">Provider Not Found</h1>
@@ -223,7 +223,7 @@ const ProviderLandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MegaNavigation />
+      <UnifiedNavigation />
       
       {/* Hero Section */}
       <Section size="large" background="white">

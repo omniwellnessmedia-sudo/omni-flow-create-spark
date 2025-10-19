@@ -1,4 +1,4 @@
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
@@ -48,7 +48,7 @@ const Resources = () => {
 
   return (
     <div className="min-h-screen">
-      <MegaNavigation />
+      <UnifiedNavigation />
       <BreadcrumbNav />
       
       <Hero

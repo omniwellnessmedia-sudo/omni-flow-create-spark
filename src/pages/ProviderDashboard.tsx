@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { Button } from "@/components/ui/button";

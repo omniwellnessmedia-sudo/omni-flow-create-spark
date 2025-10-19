@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -194,7 +194,7 @@ const PartnerProfile = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-purple/5">
-        <MegaNavigation />
+        <UnifiedNavigation />
         <div className="pt-20 pb-20 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-omni-orange mx-auto mb-4"></div>
@@ -208,7 +208,7 @@ const PartnerProfile = () => {
   if (error || !partner) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-purple/5">
-        <MegaNavigation />
+        <UnifiedNavigation />
         <div className="pt-20 pb-20 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Partner Not Found</h1>
@@ -224,7 +224,7 @@ const PartnerProfile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-purple/5">
-      <MegaNavigation />
+      <UnifiedNavigation />
       
       <main className="pt-20 pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

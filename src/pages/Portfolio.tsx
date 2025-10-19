@@ -1,5 +1,5 @@
 
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -57,7 +57,7 @@ const Portfolio = () => {
 
   return (
     <div className="min-h-screen">
-      <MegaNavigation />
+      <UnifiedNavigation />
       <main className="pt-16">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">

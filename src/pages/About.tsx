@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Mail, Calendar, ArrowLeft } from "lucide-react";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
@@ -92,7 +92,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen">
-      <MegaNavigation />
+      <UnifiedNavigation />
       <div className="px-4 pt-6">
         <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" />

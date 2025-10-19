@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import TourBookingSidebar from '@/components/tours/TourBookingSidebar';
-import MegaNavigation from '@/components/MegaNavigation';
+import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
 import { PriceDisplay } from '@/components/ui/price-display';
 import { Link } from 'react-router-dom';
@@ -156,7 +156,7 @@ const TourDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <MegaNavigation />
+      <UnifiedNavigation />
       <BreadcrumbNav 
         items={[
           { label: 'Home', href: '/' },

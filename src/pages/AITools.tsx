@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -418,7 +418,7 @@ const AITools = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-purple-50 to-pink-50">
-      <MegaNavigation />
+      <UnifiedNavigation />
       
       {/* Hero Section */}
       <section className="pt-24 pb-16">

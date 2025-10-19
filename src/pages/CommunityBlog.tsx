@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -297,7 +297,7 @@ const CommunityBlog = () => {
     console.log("CommunityBlog: Loading state");
     return (
       <div className="min-h-screen bg-background">
-        <MegaNavigation />
+        <UnifiedNavigation />
         <div className="pt-16 flex items-center justify-center min-h-[50vh]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
@@ -313,7 +313,7 @@ const CommunityBlog = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <MegaNavigation />
+      <UnifiedNavigation />
       <main className="pt-16">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white">

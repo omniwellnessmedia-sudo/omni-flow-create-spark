@@ -1,5 +1,5 @@
 
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,7 +66,7 @@ const SocialMediaStrategy = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <MegaNavigation />
+      <UnifiedNavigation />
       
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-white via-gray-50 to-green-50">

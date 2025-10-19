@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Section } from "@/components/ui/section";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
@@ -163,7 +163,7 @@ const WellnessWants = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <MegaNavigation />
+        <UnifiedNavigation />
         <main className="pt-16">
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
@@ -178,7 +178,7 @@ const WellnessWants = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MegaNavigation />
+      <UnifiedNavigation />
       <WellnessExchangeNavigation />
       
       <Section size="large" background="white" id="hero">

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import Footer from "@/components/Footer";
 import { Search, Filter, MapPin, Star, TrendingUp, Clock, Users } from "lucide-react";
@@ -66,7 +66,7 @@ const SearchServices = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <MegaNavigation />
+      <UnifiedNavigation />
       <WellnessExchangeNavigation />
       
       <main className="pt-0 pb-20">

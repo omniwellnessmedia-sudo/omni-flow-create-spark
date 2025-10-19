@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -279,7 +279,7 @@ const BlogPost = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <MegaNavigation />
+        <UnifiedNavigation />
         <div className="pt-16 flex items-center justify-center min-h-[50vh]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
@@ -294,7 +294,7 @@ const BlogPost = () => {
   if (!post) {
     return (
       <div className="min-h-screen bg-background">
-        <MegaNavigation />
+        <UnifiedNavigation />
         <div className="pt-16 flex items-center justify-center min-h-[50vh]">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Post not found</h1>
@@ -311,7 +311,7 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <MegaNavigation />
+      <UnifiedNavigation />
       <main className="pt-16">
         {/* Article Header */}
         <article className="max-w-4xl mx-auto px-4 py-12">

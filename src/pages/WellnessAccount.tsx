@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import MegaNavigation from "@/components/MegaNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import Footer from "@/components/Footer";
 import { User, Settings, Heart, Star, Calendar, Coins, Gift } from "lucide-react";

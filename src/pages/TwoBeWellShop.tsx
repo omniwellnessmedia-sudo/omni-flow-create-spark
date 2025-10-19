@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import MegaNavigation from '@/components/MegaNavigation';
+import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -751,7 +751,7 @@ const TwoBeWellShop = () => {
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <MegaNavigation />
+      <UnifiedNavigation />
       
       <main className="pt-16">
         {/* Hero Section */}
