@@ -7,61 +7,62 @@ import Hero from "@/components/ui/hero";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import ImageCarousel3D from "@/components/ui/image-carousel-3d";
 import { Button } from "@/components/ui/button";
+import { IMAGES } from "@/lib/images";
 
 const About = () => {
   const storyImages = [
     {
-      src: "/lovable-uploads/f82ae266-4067-45f3-be51-c7eb82a086b5.png",
+      src: IMAGES.sandy.yoga,
       alt: "Community wellness activities - yoga session outdoors",
       caption: "Wellness in Action - Community yoga sessions bringing people together"
     },
     {
-      src: "/lovable-uploads/a173755d-1be1-43bf-90cf-73ff1ab97eca.png",
+      src: IMAGES.wellness.communityProject1,
       alt: "Community outreach with children",
       caption: "Youth Engagement - Connecting with the next generation"
     },
     {
-      src: "/lovable-uploads/5fc374c8-c75f-4568-8d6f-8b6690f60fe8.png",
+      src: IMAGES.wellness.retreat,
       alt: "Community gathering in nature",
       caption: "Nature Connection - Learning and growing together outdoors"
     },
     {
-      src: "/lovable-uploads/ae7dd422-830f-4fc0-bd09-99d59ac3c74d.png",
+      src: IMAGES.wellness.team,
       alt: "Team collaboration in nature",
       caption: "Team Spirit - Our collaborative approach to wellness"
     },
     {
-      src: "/lovable-uploads/9541ac9f-baaf-408d-b27b-d51d6b29843c.png",
+      src: IMAGES.providers.chad,
       alt: "Animal wellness and connection",
       caption: "Animal Wellness - Promoting compassionate living"
     },
     {
-      src: "/lovable-uploads/3b0dbe5c-71d7-4531-9223-49d482c3cae4.png",
+      src: IMAGES.wellness.communityProject2,
       alt: "Community group activities",
       caption: "Community Building - Bringing diverse groups together"
     },
     {
-      src: "/lovable-uploads/5fd8d5d0-c500-460f-b154-d7521729dbc7.png",
+      src: IMAGES.tours.hiking,
       alt: "Outdoor adventure and wellness",
       caption: "Adventure Wellness - Exploring nature for holistic health"
     },
     {
-      src: "/lovable-uploads/c34eeb26-fb7a-4e01-9a3d-be12dced06c5.png",
+      src: IMAGES.wellness.graduation,
       alt: "Panel discussion and community dialogue",
       caption: "Community Dialogue - Facilitating important conversations"
     },
     {
-      src: "/lovable-uploads/8237809d-793d-4524-8c54-a6395a6efe94.png",
+      src: IMAGES.wellness.communityProject3,
       alt: "Community garden and sustainable development",
       caption: "Sustainable Development - Growing community resilience"
     }
   ];
 
   const team = [
-    { 
-      name: "Chad Cupido", 
-      role: "Founder & Head of Media and Strategy", 
-      image: "/lovable-uploads/d149bef9-d800-4673-8e57-4c9befd8ad7c.png",
+    {
+      name: "Chad Cupido",
+      role: "Founder & Head of Media and Strategy",
+      image: IMAGES.providers.chad,
       description: "Chad oversees content creation and overall design direction, leveraging his strong background in media to produce high-quality, impactful content that bridges communities and inspires positive change."
     },
     { 
@@ -108,7 +109,7 @@ const About = () => {
           </>
         }
         description="We are messengers to humanity, creating authentic content that bridges communities and inspires positive change from South Africa to the world."
-        image="/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png"
+        image={IMAGES.wellness.community}
         imageAlt="Community outreach with distribution boxes"
         variant="split"
         height="medium"
@@ -258,8 +259,8 @@ const About = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
               <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="aspect-[3/4] overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/962ceac6-b494-43d6-b37e-f994560fecab.png"
+                  <img
+                    src={IMAGES.wellness.landmark}
                     alt="Environmental wellness and nature conservation"
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   />
@@ -272,8 +273,8 @@ const About = () => {
 
               <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="aspect-[3/4] overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/75a97d0a-ea73-42e4-b7b2-a80c52327de4.png"
+                  <img
+                    src={IMAGES.providers.bwc}
                     alt="Youth empowerment and community engagement"
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   />
@@ -286,8 +287,8 @@ const About = () => {
 
               <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="aspect-[3/4] overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/e85ad5c6-1b62-462b-a36e-4d42baf1f960.png"
+                  <img
+                    src={IMAGES.providers.chadAction}
                     alt="Animal wellness and compassionate living"
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   />

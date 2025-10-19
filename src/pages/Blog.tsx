@@ -3,6 +3,7 @@ import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { IMAGES } from "@/lib/images";
 
 const Blog = () => {
   const blogPosts = [
@@ -12,15 +13,15 @@ const Blog = () => {
       category: "Inspiration",
       date: "December 15, 2024",
       readTime: "5 min read",
-      image: "/lovable-uploads/fcf93d20-65c1-4e39-8c34-360afdf825f1.png"
+      image: IMAGES.wellness.graduation
     },
     {
       title: "Building Sustainable Wellness Programs in Local Communities",
       excerpt: "A comprehensive guide to creating wellness initiatives that grow from within communities.",
       category: "Wellness",
-      date: "December 10, 2024", 
+      date: "December 10, 2024",
       readTime: "8 min read",
-      image: "/lovable-uploads/9d51151d-b05c-4392-9f83-9e301a4f790d.png"
+      image: IMAGES.wellness.retreat
     },
     {
       title: "Digital Inclusion: Making Technology Work for Everyone",
@@ -28,7 +29,7 @@ const Blog = () => {
       category: "Education",
       date: "December 5, 2024",
       readTime: "6 min read",
-      image: "/lovable-uploads/83be8984-2c43-478e-ba25-b848902c104f.png"
+      image: IMAGES.ai.tools
     },
     {
       title: "The Role of Traditional Wisdom in Modern Wellness",
@@ -36,7 +37,7 @@ const Blog = () => {
       category: "Wellness",
       date: "November 28, 2024",
       readTime: "7 min read",
-      image: "/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png"
+      image: IMAGES.providers.chief
     },
     {
       title: "Creating Content That Matters: A Guide for Conscious Brands",
@@ -44,7 +45,7 @@ const Blog = () => {
       category: "Empowerment",
       date: "November 20, 2024",
       readTime: "9 min read",
-      image: "/lovable-uploads/00bcae7d-32b7-4512-ba26-c767559ee023.png"
+      image: IMAGES.media.production
     },
     {
       title: "Youth Voices: Amplifying the Next Generation of Change-Makers",
@@ -52,7 +53,7 @@ const Blog = () => {
       category: "Inspiration",
       date: "November 15, 2024",
       readTime: "6 min read",
-      image: "/lovable-uploads/965c3c16-d837-4f01-8f8a-220d4a14a83b.png"
+      image: IMAGES.providers.bwc
     }
   ];
 
