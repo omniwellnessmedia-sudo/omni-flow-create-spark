@@ -24,11 +24,18 @@ export interface SandyService {
 export const sandyProviderProfile = {
   id: 'sandy-mitchell-dru-yoga',
   business_name: 'Sandy Mitchell - Dru Yoga Cape Town',
-  description: `Certified Dru Yoga Instructor and Buteyko Breathing Facilitator offering personalized, gentle yoga classes in Cape Town. Specializing in the Healthy Back Programme and adaptive yoga for all bodies. My approach combines traditional Hatha yoga with Energy Block Release sequences, emphasizing breath work and flowing movements.`,
-  location: 'Cape Town, South Africa (Observatory, Muizenberg, Stonehurst)',
+  tagline: 'Breathe gently. Move slowly. Heal deeply.',
+  shortBio: `I'm Sandy Mitchell, a Dru Yoga and Buteyko Breathing practitioner based in Cape Town. My work is grounded in heart-based, breath awareness, that meets people where they are. I guide clients gently back to their breath, body, and inner stillness — especially those who feel disconnected from traditional wellness spaces. My sessions are soft, soulful, and rooted in real human experience.`,
+  description: `My journey into wellness has been a gradual progression over time, having always taken an interest in wellness and ways to improve one's health with minimal intervention. I've trained in Dru Yoga — a gentle, accessible form of yoga that works through energy block release sequences, flowing sequences and traditional asanas (postures) — as well Buteyko Breathing, a science-based, non-invasive approach to correcting dysfunctional breathing patterns, often linked to adverse health conditions.
+
+I aim to create a space where people feel safe to be themselves, guided by a belief in the power of subtlety and gentleness rather than pushing or forcing. I work with people of all ages, but especially support people who feel overwhelmed, burnt out, or simply stuck. My yoga classes are grounded and accessible, and at times we laugh a lot!
+
+I also collaborate with Omni Wellness Media on workshops, content, and a longer-term vision of co-creating accessible tools for combating stress and living life more in tune with nature and one's self.`,
+  location: 'Cape Town, South Africa (Observatory, Stonehurst)',
   phone: '+27 21 XXX XXXX',
   email: 'sandy@druyogacapetown.co.za',
   website: 'https://druyogacapetown.co.za/',
+  calendly: 'https://sandymitchell.co.za/book-a-call/',
   specialties: [
     'Dru Yoga',
     'Buteyko Breathing',
@@ -60,62 +67,61 @@ export const sandyProviderProfile = {
 
 export const sandyServices: SandyService[] = [
   {
-    id: 'dru-yoga-private-session',
-    title: 'Private Dru Yoga Session',
-    description: 'Personalized one-on-one Dru Yoga session tailored to your individual needs, abilities, and wellness goals.',
-    longDescription: 'Experience the transformative power of Dru Yoga in a completely personalized setting. This private session is designed specifically for your body, your needs, and your wellness journey. We\'ll work together to create a practice that honors where you are today while gently guiding you toward your goals. Perfect for beginners, those with specific physical considerations, or anyone wanting dedicated attention.',
+    id: 'dru-yoga-class',
+    title: 'Dru Yoga Class',
+    description: 'Gentle, flowing yoga designed for all bodies. Includes breath, movement, stillness.',
+    longDescription: 'Join our weekly Dru Yoga classes held at two convenient locations in Cape Town. These gentle, flowing sessions are designed to be accessible for all bodies and fitness levels. Each class incorporates breath work, mindful movement, and deep stillness, creating a holistic practice that nurtures body, mind, and spirit. Fridays at 9:00 AM in Stonehurst or Thursdays at 17:45 in Observatory.',
     category: 'Yoga',
-    price_zar: 650,
-    price_wellcoins: 85,
-    duration_minutes: 75,
-    location: 'Observatory, Cape Town',
-    is_online: true,
+    price_zar: 120,
+    price_wellcoins: 16,
+    duration_minutes: 60,
+    location: 'In-person: Fridays 9:00 AM Stonehurst, Thursdays 17:45 Observatory',
+    is_online: false,
     active: true,
     images: [
       IMAGES.sandy.teaching,
       IMAGES.sandy.yoga
     ],
     benefits: [
-      'Personalized instruction and modifications',
-      'Focus on your specific needs and goals',
       'Gentle movements suitable for all bodies',
       'Stress reduction and deep relaxation',
       'Improved flexibility and strength',
-      'Better posture and back health'
+      'Better posture and awareness',
+      'Community connection',
+      'Energy block release'
     ],
     suitableFor: [
+      'All fitness levels',
       'Complete beginners',
-      'Those with back issues or physical limitations',
-      'People recovering from injury',
-      'Anyone wanting personalized attention',
-      'Seniors and mature adults',
-      'Pregnant women (with modifications)'
+      'Those seeking gentle yoga',
+      'People wanting regular practice',
+      'Anyone seeking community'
     ],
     requirements: [
-      'Comfortable clothing for movement',
-      'Yoga mat (can be provided)',
+      'Yoga mat',
+      'Comfortable clothing',
       'Water bottle',
-      'Open mind and willingness to try'
+      'Open mind'
     ],
     specialFeatures: [
+      'Weekly classes at two locations',
       'Energy Block Release sequences',
-      'Functional breathing techniques',
-      'Soft joint movements',
-      'Adaptive modifications',
-      'Relaxation and meditation'
+      'Breath awareness techniques',
+      'All bodies welcome',
+      'Friendly, relaxed environment'
     ]
   },
   {
-    id: 'healthy-back-programme',
-    title: 'Healthy Back Programme (4-Week Course)',
-    description: 'Specialized 4-week programme focused on back health, combining Dru Yoga movements with therapeutic techniques.',
-    longDescription: 'Transform your relationship with back pain through this evidence-based 4-week programme. Combining the gentle movements of Dru Yoga with specialized therapeutic techniques, this course addresses the root causes of back discomfort while building strength, flexibility, and awareness. Each session builds progressively, giving you tools you can use for life.',
+    id: 'dru-backcare-course',
+    title: 'Dru Backcare Course',
+    description: 'A 5-10 week programme to relieve back pain. Simple, easy-to-do exercises. Stretch and strengthen the muscles that support your spine.',
+    longDescription: 'Transform your relationship with back pain through this comprehensive 5-10 week programme. Using gentle Dru Yoga movements specifically designed for back health, you\'ll learn simple, easy-to-do exercises that stretch and strengthen the muscles supporting your spine. Each session builds progressively, addressing the root causes of back discomfort while building awareness, flexibility, and strength. You\'ll receive tools you can use for life to maintain a healthy, pain-free back.',
     category: 'Yoga',
-    price_zar: 1800,
-    price_wellcoins: 240,
+    price_zar: 600,
+    price_wellcoins: 79,
     duration_minutes: 60,
-    location: 'Observatory, Cape Town',
-    is_online: true,
+    location: 'In-person',
+    is_online: false,
     active: true,
     images: [
       IMAGES.sandy.yoga,
@@ -125,8 +131,8 @@ export const sandyServices: SandyService[] = [
       'Reduced back pain and tension',
       'Improved spinal mobility',
       'Better posture awareness',
-      'Strengthened core muscles',
-      'Stress relief and relaxation',
+      'Strengthened core and back muscles',
+      'Simple exercises for daily practice',
       'Long-term back health strategies'
     ],
     suitableFor: [
@@ -137,29 +143,29 @@ export const sandyServices: SandyService[] = [
       'Anyone who sits for long periods'
     ],
     requirements: [
-      'Commitment to attend all 4 sessions',
+      'Commitment to attend sessions',
       'Comfortable clothing',
       'Yoga mat',
-      'Journal for tracking progress'
+      'Willingness to practice at home'
     ],
     specialFeatures: [
-      'Progressive 4-week structure',
-      'Take-home exercises',
-      'Posture assessment',
-      'Breathing techniques for pain relief',
-      'Lifetime access to resources'
+      'Progressive 5-10 week structure',
+      'Easy-to-follow exercises',
+      'Take-home practice routine',
+      'Gentle therapeutic approach',
+      'Personalized modifications'
     ]
   },
   {
-    id: 'buteyko-breathing-session',
-    title: 'Buteyko Breathing Method Session',
-    description: 'Learn the scientifically-proven Buteyko Breathing Method to improve your respiratory health and overall wellbeing.',
-    longDescription: 'Discover the power of proper breathing with the Buteyko Method, a scientifically-validated approach that can transform your health. This session teaches you how to optimize your breathing patterns, reduce anxiety, improve sleep, and enhance your overall vitality. Perfect for those with breathing difficulties, anxiety, or anyone wanting to optimize their respiratory health.',
+    id: 'buteyko-private-session',
+    title: 'Buteyko Private Session',
+    description: 'Personalised breathing retraining for anxiety, sleep, respiratory disorders or general health. Includes 4/5 sessions. Handouts, MP3s and WhatsApp support is included.',
+    longDescription: 'Discover the transformative power of proper breathing with personalized Buteyko Method training. This comprehensive package includes 4-5 private sessions where you\'ll learn science-based breathing techniques to address anxiety, sleep issues, respiratory disorders, or general health optimization. Each session builds on the last, with personalized attention to your specific needs. You\'ll receive handouts, MP3 practice recordings, and ongoing WhatsApp support between sessions to ensure your success.',
     category: 'Meditation',
-    price_zar: 550,
-    price_wellcoins: 72,
-    duration_minutes: 90,
-    location: 'Observatory, Cape Town',
+    price_zar: 350,
+    price_wellcoins: 46,
+    duration_minutes: 60,
+    location: 'Zoom or in-person',
     is_online: true,
     active: true,
     images: [
@@ -171,8 +177,8 @@ export const sandyServices: SandyService[] = [
       'Reduced anxiety and stress',
       'Better sleep quality',
       'Enhanced athletic performance',
-      'Reduced asthma symptoms',
-      'Increased energy levels'
+      'Reduced asthma and respiratory symptoms',
+      'Increased energy and vitality'
     ],
     suitableFor: [
       'People with breathing difficulties',
@@ -183,29 +189,118 @@ export const sandyServices: SandyService[] = [
       'Stress management seekers'
     ],
     requirements: [
-      'Comfortable seated position',
-      'Quiet environment',
+      'Commitment to 4-5 session package',
+      'Quiet environment for sessions',
       'Notebook for techniques',
-      'Commitment to daily practice'
+      'Daily practice commitment'
     ],
     specialFeatures: [
+      'Includes 4-5 personalized sessions',
+      'Handouts and MP3 recordings',
+      'WhatsApp support included',
       'Evidence-based breathing method',
-      'Personalized breathing assessment',
-      'Daily practice routine',
-      'Follow-up support materials',
-      'Progress tracking techniques'
+      'Flexible Zoom or in-person format'
     ]
   },
   {
-    id: 'dru-yoga-small-group',
-    title: 'Small Group Dru Yoga Class',
-    description: 'Intimate group yoga class limited to 6 people, ensuring personal attention while enjoying community energy.',
-    longDescription: 'Experience the best of both worlds - personalized attention in a supportive group setting. These small classes create a warm, inclusive environment where everyone feels welcome and supported. With a maximum of 6 participants, I can offer modifications and adjustments while you enjoy the energy and encouragement of practicing with others.',
+    id: 'dru-mental-wellness-course',
+    title: 'Dru Mental Wellness Course',
+    description: 'A 5 week Yoga course to improve one\'s feeling of wellbeing. Focusing on calming yoga flows, relaxation and better breathing.',
+    longDescription: 'Nurture your mental and emotional wellbeing through this supportive 5-week yoga course. Each session focuses on calming yoga flows, deep relaxation techniques, and breathing practices specifically designed to improve your overall sense of wellbeing. You\'ll learn tools to manage stress, cultivate inner peace, and develop a sustainable practice for ongoing mental health support. Perfect for those feeling overwhelmed, burnt out, or simply seeking more balance and calm in daily life.',
     category: 'Yoga',
-    price_zar: 280,
-    price_wellcoins: 37,
-    duration_minutes: 75,
-    location: 'Observatory, Cape Town',
+    price_zar: 600,
+    price_wellcoins: 79,
+    duration_minutes: 60,
+    location: 'In-person',
+    is_online: false,
+    active: true,
+    images: [
+      IMAGES.sandy.teaching,
+      IMAGES.wellness.meditation
+    ],
+    benefits: [
+      'Improved sense of wellbeing',
+      'Reduced stress and anxiety',
+      'Better emotional regulation',
+      'Enhanced relaxation skills',
+      'Improved breathing patterns',
+      'Tools for ongoing mental wellness'
+    ],
+    suitableFor: [
+      'Anyone feeling stressed or overwhelmed',
+      'Those experiencing burnout',
+      'People seeking emotional balance',
+      'Anyone wanting mental wellness tools',
+      'Those new to mindfulness practices'
+    ],
+    requirements: [
+      'Commitment to 5-week course',
+      'Yoga mat',
+      'Comfortable clothing',
+      'Willingness to practice at home'
+    ],
+    specialFeatures: [
+      'Structured 5-week programme',
+      'Calming yoga flows',
+      'Relaxation techniques',
+      'Breathing practice focus',
+      'Supportive group environment'
+    ]
+  },
+  {
+    id: 'free-discovery-call',
+    title: 'Free Discovery Call',
+    description: '15-min consult to understand your needs and see if we\'re a fit.',
+    longDescription: 'Not sure where to start? Book a complimentary 15-minute discovery call to explore how Dru Yoga or Buteyko Breathing might support your wellness journey. This friendly, no-pressure conversation allows us to discuss your needs, answer questions, and determine which service would be the best fit for you. Whether you\'re curious about yoga, struggling with breathing issues, or seeking support for stress and anxiety, this call will help clarify the best path forward.',
+    category: 'Life Coaching',
+    price_zar: 0,
+    price_wellcoins: 0,
+    duration_minutes: 15,
+    location: 'Zoom/Phone',
+    is_online: true,
+    active: true,
+    images: [
+      IMAGES.sandy.teaching,
+      IMAGES.wellness.community
+    ],
+    benefits: [
+      'No cost, no obligation',
+      'Understand which service fits your needs',
+      'Ask questions freely',
+      'Get to know Sandy\'s approach',
+      'Receive personalized recommendations',
+      'Feel confident in your decision'
+    ],
+    suitableFor: [
+      'Anyone curious about the services',
+      'Those new to yoga or breathing work',
+      'People unsure which service to choose',
+      'Anyone with questions or concerns',
+      'Those wanting to meet Sandy first'
+    ],
+    requirements: [
+      'Phone or Zoom access',
+      'Brief list of questions or goals',
+      'Open communication'
+    ],
+    specialFeatures: [
+      'Completely free',
+      '15 minutes, no pressure',
+      'Personalized recommendations',
+      'Friendly, relaxed conversation',
+      'Zoom or phone - your choice'
+    ]
+  },
+  {
+    id: 'monthly-workshop',
+    title: 'Monthly Workshop',
+    description: 'Themed sessions combining Dru Yoga & Buteyko with space for sharing, rest, and community.',
+    longDescription: 'Join our monthly themed workshops that weave together Dru Yoga and Buteyko Breathing in extended sessions designed to go deeper. Each workshop focuses on a specific theme - whether that\'s stress relief, back health, breathing for sleep, or seasonal wellness practices. These extended sessions (90-120 minutes) allow time for practice, learning, community connection, and deep rest. It\'s a chance to immerse yourself in wellness, meet like-minded people, and develop your practice in a supportive group setting.',
+    category: 'Yoga',
+    price_zar: 275,
+    price_wellcoins: 36,
+    duration_minutes: 105,
+    location: 'In-person',
     is_online: false,
     active: true,
     images: [
@@ -213,169 +308,32 @@ export const sandyServices: SandyService[] = [
       IMAGES.wellness.community
     ],
     benefits: [
-      'Community connection and support',
-      'Personal attention and modifications',
-      'Motivation from group energy',
-      'Cost-effective compared to private sessions',
-      'Regular practice routine',
-      'Social wellness aspect'
+      'Extended deep practice time',
+      'Themed wellness focus',
+      'Community connection',
+      'Integrated yoga & breathing work',
+      'Space for sharing and rest',
+      'Monthly wellness ritual'
     ],
     suitableFor: [
-      'Beginners to intermediate practitioners',
-      'Those wanting community connection',
-      'People comfortable in small groups',
-      'Anyone seeking regular practice',
-      'Those on a wellness budget'
+      'Anyone wanting deeper practice',
+      'Those seeking community connection',
+      'People who enjoy themed workshops',
+      'Anyone wanting monthly wellness time',
+      'Those interested in both yoga and breathing'
     ],
     requirements: [
       'Yoga mat',
-      'Comfortable clothes',
+      'Comfortable clothing',
       'Water bottle',
-      'Regular attendance commitment'
+      'Open to group sharing'
     ],
     specialFeatures: [
-      'Maximum 6 participants',
-      'Individual modifications offered',
-      'Seasonal themes and variations',
-      'Community building activities',
-      'Progressive skill development'
-    ]
-  },
-  {
-    id: 'online-dru-yoga',
-    title: 'Online Dru Yoga Session',
-    description: 'Connect from anywhere in the world for a live, interactive Dru Yoga session via video call.',
-    longDescription: 'Bring the benefits of Dru Yoga to your own space with these live, interactive online sessions. Perfect for those who can\'t travel to Cape Town, have mobility constraints, or simply prefer practicing at home. You\'ll receive the same quality instruction and personal attention as in-person sessions.',
-    category: 'Yoga',
-    price_zar: 380,
-    price_wellcoins: 50,
-    duration_minutes: 60,
-    location: 'Online (Worldwide)',
-    is_online: true,
-    active: true,
-    images: [
-      IMAGES.sandy.yoga,
-      IMAGES.wellness.meditation
-    ],
-    benefits: [
-      'Practice from home comfort',
-      'No travel time required',
-      'Global accessibility',
-      'Flexible scheduling',
-      'Same quality instruction',
-      'Recorded session available'
-    ],
-    suitableFor: [
-      'Anyone with reliable internet',
-      'Those preferring home practice',
-      'International students',
-      'People with mobility constraints',
-      'Busy professionals',
-      'Parents with young children'
-    ],
-    requirements: [
-      'Stable internet connection',
-      'Computer/tablet with camera',
-      'Quiet space for practice',
-      'Yoga mat',
-      'Good lighting'
-    ],
-    specialFeatures: [
-      'Live interactive instruction',
-      'Real-time modifications',
-      'Recording available for 48 hours',
-      'Chat support during session',
-      'Technical setup assistance'
-    ]
-  },
-  {
-    id: 'wellness-consultation',
-    title: 'Holistic Wellness Consultation',
-    description: 'Comprehensive wellness consultation to create your personalized yoga and breathing practice plan.',
-    longDescription: 'Begin your wellness journey with a thorough consultation that considers your whole being - physical, mental, and emotional. We\'ll discuss your health history, goals, lifestyle, and create a personalized plan incorporating yoga, breathing techniques, and lifestyle recommendations. This session sets the foundation for all future work together.',
-    category: 'Life Coaching',
-    price_zar: 450,
-    price_wellcoins: 59,
-    duration_minutes: 60,
-    location: 'Observatory, Cape Town',
-    is_online: true,
-    active: true,
-    images: [
-      IMAGES.sandy.teaching,
-      IMAGES.wellness.marketplace
-    ],
-    benefits: [
-      'Personalized wellness strategy',
-      'Clear understanding of your needs',
-      'Integrated approach to health',
-      'Goal setting and planning',
-      'Resource recommendations',
-      'Ongoing support structure'
-    ],
-    suitableFor: [
-      'New clients starting their wellness journey',
-      'Those with complex health considerations',
-      'Anyone wanting a holistic approach',
-      'People unsure where to start',
-      'Those with specific goals'
-    ],
-    requirements: [
-      'Health history information',
-      'List of current concerns/goals',
-      'Open communication',
-      'Commitment to recommendations'
-    ],
-    specialFeatures: [
-      'Comprehensive intake assessment',
-      'Personalized practice plan',
-      'Resource recommendations',
-      'Follow-up support included',
-      'Integration with other practitioners'
-    ]
-  },
-  {
-    id: 'energy-healing-session',
-    title: 'Energy Block Release Session',
-    description: 'Specialized session focusing on Energy Block Release sequences to clear energetic blockages and restore balance.',
-    longDescription: 'Experience the unique aspect of Dru Yoga through focused Energy Block Release work. These sessions use specific movements and breathing techniques to identify and release energetic blockages in the body, promoting deep healing and emotional release. A gentle yet powerful approach to holistic wellness.',
-    category: 'Energy Healing',
-    price_zar: 580,
-    price_wellcoins: 76,
-    duration_minutes: 90,
-    location: 'Observatory, Cape Town',
-    is_online: true,
-    active: true,
-    images: [
-      IMAGES.sandy.meditation,
-      IMAGES.wellness.meditation
-    ],
-    benefits: [
-      'Release of energetic blockages',
-      'Emotional healing and balance',
-      'Improved energy flow',
-      'Deep relaxation and peace',
-      'Enhanced intuition',
-      'Stress and trauma release'
-    ],
-    suitableFor: [
-      'Those feeling emotionally stuck',
-      'People with chronic stress',
-      'Anyone seeking deep healing',
-      'Those interested in energy work',
-      'People processing life transitions'
-    ],
-    requirements: [
-      'Open mind to energy work',
-      'Comfortable loose clothing',
-      'Willingness to experience emotions',
-      'Quiet, private space'
-    ],
-    specialFeatures: [
-      'Unique Dru Yoga energy work',
-      'Gentle trauma-informed approach',
-      'Integration techniques',
-      'Emotional support provided',
-      'Follow-up recommendations'
+      'Monthly themed sessions',
+      'Extended 90-120 minute format',
+      'Combines Dru Yoga & Buteyko',
+      'Community sharing circles',
+      'Deep rest and integration time'
     ]
   }
 ];
