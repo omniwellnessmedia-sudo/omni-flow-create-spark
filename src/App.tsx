@@ -27,6 +27,9 @@ const TwoBeWellShop = React.lazy(() => import('@/pages/TwoBeWellShop'));
 const WellnessDeals = React.lazy(() => import('@/pages/WellnessDeals'));
 const AuthPage = React.lazy(() => import('@/pages/Auth'));
 const TestPage = React.lazy(() => import('@/pages/TestPage'));
+const TestSimple = React.lazy(() => import('@/pages/TestSimple'));
+const About = React.lazy(() => import('@/pages/About'));
+const Contact = React.lazy(() => import('@/pages/Contact'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -51,8 +54,11 @@ function App() {
                   {/* Main Platform Routes */}
                   <Route path="/" element={<Index />} />
                   <Route path="/test" element={<TestPage />} />
+                  <Route path="/test-simple" element={<TestSimple />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
                   <Route path="/auth" element={<AuthPage />} />
-                  
+
                   {/* Wellness Exchange Routes */}
                   <Route path="/wellness-exchange" element={<WellnessExchange />} />
                   <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
