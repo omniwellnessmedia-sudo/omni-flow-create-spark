@@ -49,6 +49,19 @@ const Podcast = React.lazy(() => import('@/pages/Podcast'));
 const Portfolio = React.lazy(() => import('@/pages/Portfolio'));
 const Resources = React.lazy(() => import('@/pages/Resources'));
 const WellnessExchangeSignup = React.lazy(() => import('@/pages/WellnessExchangeSignup'));
+const BusinessConsulting = React.lazy(() => import('@/pages/BusinessConsulting'));
+const MediaProduction = React.lazy(() => import('@/pages/MediaProduction'));
+const WebDevelopment = React.lazy(() => import('@/pages/WebDevelopment'));
+const SocialMediaStrategy = React.lazy(() => import('@/pages/SocialMediaStrategy'));
+const AITools = React.lazy(() => import('@/pages/AITools'));
+const TourCategory = React.lazy(() => import('@/pages/TourCategory'));
+const TourDetail = React.lazy(() => import('@/pages/TourDetail'));
+const PartnersDirectory = React.lazy(() => import('@/pages/PartnersDirectory'));
+const PartnerProfile = React.lazy(() => import('@/pages/PartnerProfile'));
+const PartnerPortal = React.lazy(() => import('@/pages/PartnerPortal'));
+const ExerciseLibrary = React.lazy(() => import('@/pages/ExerciseLibrary'));
+const DeviceCompatibility = React.lazy(() => import('@/pages/DeviceCompatibility'));
+const NotFound = React.lazy(() => import('@/pages/NotFound'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -129,10 +142,33 @@ function App() {
 
                   {/* Travel & Tours */}
                   <Route path="/tours-retreats" element={<ToursRetreats />} />
+                  <Route path="/tour-category/:category" element={<TourCategory />} />
+                  <Route path="/tour-detail/:id" element={<TourDetail />} />
+
+                  {/* Business Services */}
+                  <Route path="/business-consulting" element={<BusinessConsulting />} />
+                  <Route path="/media-production" element={<MediaProduction />} />
+                  <Route path="/web-development" element={<WebDevelopment />} />
+                  <Route path="/social-media-strategy" element={<SocialMediaStrategy />} />
+
+                  {/* AI & Technology */}
+                  <Route path="/ai-tools" element={<AITools />} />
+
+                  {/* Partners */}
+                  <Route path="/partners-directory" element={<PartnersDirectory />} />
+                  <Route path="/partner-profile/:id" element={<PartnerProfile />} />
+                  <Route path="/partner-portal" element={<PartnerPortal />} />
+
+                  {/* Health & Fitness */}
+                  <Route path="/exercise-library" element={<ExerciseLibrary />} />
+                  <Route path="/device-compatibility" element={<DeviceCompatibility />} />
 
                   {/* Transaction & Payment */}
                   <Route path="/transaction" element={<TransactionPage />} />
-                  
+
+                  {/* Error Handling */}
+                  <Route path="/404" element={<NotFound />} />
+
                   {/* Catch-all redirect to homepage */}
                   <Route path="*" element={<Index />} />
                 </Routes>
