@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowRight, Palette, Brush, Image, Users, Star, Zap } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 const CustomArt = () => {
   const artServices = [
@@ -12,7 +13,7 @@ const CustomArt = () => {
       title: "Custom Illustration",
       description: "Bespoke digital and traditional illustrations for brands, publications, and personal projects",
       features: ["Character design", "Editorial illustrations", "Brand mascots", "Storyboard creation"],
-      image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=800",
+      image: IMAGES.wellness.community,
       priceRange: "R2,500 - R15,000",
       timeline: "1-3 weeks"
     },
@@ -20,7 +21,7 @@ const CustomArt = () => {
       title: "Commissioned Graffiti Art",
       description: "Street art and murals that transform spaces and communicate powerful messages",
       features: ["Wall murals", "Graffiti installations", "Community art projects", "Event live painting"],
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=800",
+      image: IMAGES.providers.bwc,
       priceRange: "R8,000 - R50,000",
       timeline: "2-6 weeks"
     },
@@ -28,7 +29,7 @@ const CustomArt = () => {
       title: "Large-Scale Artwork",
       description: "Monumental pieces that make bold statements and transform environments",
       features: ["Building murals", "Public installations", "Corporate art pieces", "Gallery exhibitions"],
-      image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=800",
+      image: IMAGES.wellness.team,
       priceRange: "R15,000 - R100,000+",
       timeline: "4-12 weeks"
     },
@@ -36,7 +37,7 @@ const CustomArt = () => {
       title: "Brand Visual Identity",
       description: "Comprehensive visual branding that captures your essence and values",
       features: ["Logo design", "Brand illustration style", "Pattern creation", "Visual guidelines"],
-      image: "https://images.unsplash.com/photo-1562577309-2592ab84b1bc?q=80&w=800",
+      image: IMAGES.wellness.graduation,
       priceRange: "R5,000 - R25,000",
       timeline: "2-4 weeks"
     }
@@ -47,21 +48,21 @@ const CustomArt = () => {
       title: "Community Unity Mural",
       location: "Hanover Park Community Center",
       description: "A vibrant 50-meter mural celebrating diversity and unity in the community",
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=800",
+      image: IMAGES.wellness.communityProject2,
       category: "Mural"
     },
     {
       title: "Eco-Warriors Campaign",
       client: "Environmental NGO",
       description: "Character design and illustrations for environmental awareness campaign",
-      image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=800",
+      image: IMAGES.wellness.landmark,
       category: "Illustration"
     },
     {
       title: "Corporate Headquarters Installation",
       client: "Tech Startup",
       description: "Modern abstract installation representing innovation and growth",
-      image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=800",
+      image: IMAGES.wellness.retreat,
       category: "Installation"
     }
   ];
@@ -122,8 +123,8 @@ const CustomArt = () => {
                 </div>
               </div>
               <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=800"
+                <img
+                  src={IMAGES.sandy.teaching}
                   alt="Artist creating custom illustration"
                   className="w-full h-96 object-cover rounded-3xl shadow-2xl"
                 />
