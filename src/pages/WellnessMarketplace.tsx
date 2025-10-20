@@ -26,13 +26,8 @@ import {
   PiggyBank
 } from "lucide-react";
 
-// Import service images
-import yogaStudio from "@/assets/yoga-studio.jpg";
-import qigongMeditation from "@/assets/qigong-meditation.jpg";
-import sacredCave from "@/assets/sacred-cave.jpg";
-import tableMountainHike from "@/assets/table-mountain-hike.jpg";
-import surfingLesson from "@/assets/surfing-lesson.jpg";
-import traditionalHealing from "@/assets/traditional-healing.jpg";
+// Import service images from centralized IMAGES library
+import { IMAGES } from "@/lib/images";
 
 interface Service {
   id: string;
@@ -131,23 +126,40 @@ const WellnessMarketplace = () => {
   // Use only real services from database - no sample data
   const displayServices = services;
 
-  // Helper function to get service image
+  // Helper function to get valid service image (filters out blob URLs)
+  const getValidServiceImage = (images: string[] | null) => {
+    // Filter out blob URLs and invalid URLs
+    if (images && images.length > 0) {
+      const validImage = images.find(img =>
+        img &&
+        !img.startsWith('blob:') &&
+        !img.includes('lovable.app') &&
+        img.startsWith('/')
+      );
+      if (validImage) return validImage;
+    }
+    return null;
+  };
+
+  // Helper function to get service image fallback
   const getServiceImage = (title: string, category: string) => {
     const lowerTitle = title.toLowerCase();
-    if (lowerTitle.includes('yoga') || lowerTitle.includes('pilates')) return yogaStudio;
-    if (lowerTitle.includes('qigong') || lowerTitle.includes('meditation')) return qigongMeditation;
-    if (lowerTitle.includes('cave') || lowerTitle.includes('indigenous')) return sacredCave;
-    if (lowerTitle.includes('mountain') || lowerTitle.includes('hiking')) return tableMountainHike;
-    if (lowerTitle.includes('surf')) return surfingLesson;
-    if (lowerTitle.includes('healing') || lowerTitle.includes('retreat')) return traditionalHealing;
-    
+    if (lowerTitle.includes('yoga') || lowerTitle.includes('pilates')) return IMAGES.sandy.yoga;
+    if (lowerTitle.includes('qigong') || lowerTitle.includes('meditation')) return IMAGES.sandy.meditation;
+    if (lowerTitle.includes('cave') || lowerTitle.includes('indigenous')) return IMAGES.wellness.landmark;
+    if (lowerTitle.includes('mountain') || lowerTitle.includes('hiking')) return IMAGES.tours.mountain;
+    if (lowerTitle.includes('surf') || lowerTitle.includes('beach')) return IMAGES.wellness.beachLions;
+    if (lowerTitle.includes('healing') || lowerTitle.includes('retreat')) return IMAGES.wellness.retreat;
+    if (lowerTitle.includes('breath')) return IMAGES.sandy.meditation;
+
     // Fallback based on category
-    if (category === 'Yoga' || category === 'Pilates') return yogaStudio;
-    if (category === 'Meditation' || category === 'QiGong') return qigongMeditation;
-    if (category === 'Personal Training') return tableMountainHike;
-    if (category === 'Life Coaching') return traditionalHealing;
-    
-    return yogaStudio; // Default fallback
+    if (category === 'Yoga' || category === 'Pilates') return IMAGES.sandy.yoga;
+    if (category === 'Meditation' || category === 'QiGong' || category === 'Breathwork') return IMAGES.sandy.meditation;
+    if (category === 'Personal Training' || category === 'Fitness') return IMAGES.tours.hiking;
+    if (category === 'Life Coaching' || category === 'Health Coaching') return IMAGES.sandy.teaching;
+    if (category === 'Massage Therapy' || category === 'Wellness Products') return IMAGES.wellness.wellness;
+
+    return IMAGES.sandy.yoga; // Default fallback
   };
 
   const filteredServices = displayServices.filter(service => {
@@ -346,11 +358,14 @@ const WellnessMarketplace = () => {
                 <Card key={service.id} className="card-service hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
                     {/* Service Image */}
                     <div className="overflow-hidden">
-                      <img 
-                        src={service.images && service.images.length > 0 ? service.images[0] : getServiceImage(service.title, service.category)} 
+                      <img
+                        src={getValidServiceImage(service.images) || getServiceImage(service.title, service.category)}
                         alt={service.title}
                         className="img-card hover:scale-105 transition-transform duration-300"
                         loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = getServiceImage(service.title, service.category);
+                        }}
                       />
                     </div>
                     
