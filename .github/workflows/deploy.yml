@@ -40,12 +40,13 @@ jobs:
       env:
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-        
-    - name: Deploy to Vercel
-      if: github.ref == 'refs/heads/main'
-      uses: vercel/action@v1
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        vercel-args: '--prod'
+
+    # Vercel deployment disabled - using Lovable for deployment
+    # - name: Deploy to Vercel
+    #   if: github.ref == 'refs/heads/main'
+    #   uses: vercel/action@v1
+    #   with:
+    #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+    #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+    #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+    #     vercel-args: '--prod'
