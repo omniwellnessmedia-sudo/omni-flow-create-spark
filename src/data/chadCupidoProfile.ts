@@ -157,7 +157,7 @@ export const chadCupidoProfile: ProviderDirectory = {
       active: true,
       images: [
         IMAGES.wellness.retreat,
-        getImageWithFallback(IMAGES.GENERAL.WELLNESS_COMMUNITY)
+        IMAGES.wellness.communityProject1
       ],
       benefits: [
         'Wellness-specific business strategies',

@@ -148,7 +148,7 @@ const WellnessMarketplace = () => {
   };
 
   // Helper function to get service image fallback with variety
-  const getServiceImage = (title: string, category: string) => {
+  const getServiceImage = (title: string, category: string, serviceId?: string) => {
     const lowerTitle = title.toLowerCase();
     console.log(`🎨 Getting image for: "${title}" (${category})`);
 
@@ -194,17 +194,25 @@ const WellnessMarketplace = () => {
 
     // Final fallback - rotate through different images to add variety
     console.log('  → No category match, using hash-based rotation');
-    const hash = (title + category).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    // Use serviceId for better distribution if available, otherwise use title + category
+    const hashString = serviceId || (title + category);
+    const hash = hashString.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const fallbacks = [
       IMAGES.sandy.yoga,
       IMAGES.sandy.meditation,
       IMAGES.sandy.teaching,
       IMAGES.sandy.nature,
+      IMAGES.sandy.portrait1,
+      IMAGES.sandy.portrait2,
+      IMAGES.sandy.action1,
+      IMAGES.sandy.closeup,
       IMAGES.wellness.retreat,
-      IMAGES.wellness.wellness
+      IMAGES.wellness.retreat2,
+      IMAGES.wellness.wellness,
+      IMAGES.wellness.beachLions
     ];
     const selectedImage = fallbacks[hash % fallbacks.length];
-    console.log(`  → Selected fallback image #${hash % fallbacks.length}`);
+    console.log(`  → Selected fallback image #${hash % fallbacks.length} from ${fallbacks.length} options`);
     return selectedImage;
   };
 
@@ -403,14 +411,17 @@ const WellnessMarketplace = () => {
                 {filteredServices.map((service) => (
                 <Card key={service.id} className="card-service hover:shadow-lg transition-shadow animate-fade-in overflow-hidden">
                     {/* Service Image */}
-                    <div className="overflow-hidden">
+                    <div
+                      className="overflow-hidden cursor-pointer"
+                      onClick={() => handleViewService(service.id)}
+                    >
                       <img
-                        src={getValidServiceImage(service.images) || getServiceImage(service.title, service.category)}
+                        src={getValidServiceImage(service.images) || getServiceImage(service.title, service.category, service.id)}
                         alt={service.title}
                         className="img-card hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                         onError={(e) => {
-                          e.currentTarget.src = getServiceImage(service.title, service.category);
+                          e.currentTarget.src = getServiceImage(service.title, service.category, service.id);
                         }}
                       />
                     </div>
@@ -424,7 +435,12 @@ const WellnessMarketplace = () => {
                           <Badge className="bg-green-100 text-green-800">Online</Badge>
                         )}
                       </div>
-                      <CardTitle className="text-lg leading-tight">{service.title}</CardTitle>
+                      <CardTitle
+                        className="text-lg leading-tight cursor-pointer hover:text-omni-blue transition-colors"
+                        onClick={() => handleViewService(service.id)}
+                      >
+                        {service.title}
+                      </CardTitle>
                       <CardDescription className="text-sm">
                         by {service.provider_profiles?.business_name || 'Wellness Provider'}
                       </CardDescription>
