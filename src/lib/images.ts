@@ -4,25 +4,25 @@
 export const IMAGES = {
   // Sandy Mitchell - Professional photoshoot images
   sandy: {
-    profile: '/images/sandy/Sandy _August shoot _ omni-2.png',
-    hero: '/images/sandy/Sandy _August shoot _ omni-3.png',
-    meditation: '/images/sandy/Sandy _August shoot _ omni-5.png',
-    yoga: '/images/sandy/Sandy _August shoot _ omni-4.png',
-    teaching: '/images/sandy/Sandy _August shoot _ omni-6.png',
-    nature: '/images/sandy/Sandy _August shoot _ omni-7.png',
-    portrait1: '/images/sandy/Sandy _August shoot _ omni-8.png',
-    portrait2: '/images/sandy/Sandy _August shoot _ omni-9.png',
-    portrait3: '/images/sandy/Sandy _August shoot _ omni-10.png',
-    action1: '/images/sandy/Sandy _August shoot _ omni-11.png',
-    action2: '/images/sandy/Sandy _August shoot _ omni-12.png',
-    closeup: '/images/sandy/Sandy _August shoot _ omni-13.png',
-    fallback: '/images/sandy/Sandy _August shoot _ omni-2.png'
+    profile: '/images/sandy/Sandy_August_shoot_omni-2.png',
+    hero: '/images/sandy/Sandy_August_shoot_omni-3.png',
+    meditation: '/images/sandy/Sandy_August_shoot_omni-5.png',
+    yoga: '/images/sandy/Sandy_August_shoot_omni-4.png',
+    teaching: '/images/sandy/Sandy_August_shoot_omni-6.png',
+    nature: '/images/sandy/Sandy_August_shoot_omni-7.png',
+    portrait1: '/images/sandy/Sandy_August_shoot_omni-8.png',
+    portrait2: '/images/sandy/Sandy_August_shoot_omni-9.png',
+    portrait3: '/images/sandy/Sandy_August_shoot_omni-10.png',
+    action1: '/images/sandy/Sandy_August_shoot_omni-11.png',
+    action2: '/images/sandy/Sandy_August_shoot_omni-12.png',
+    closeup: '/images/sandy/Sandy_August_shoot_omni-13.png',
+    fallback: '/images/sandy/Sandy_August_shoot_omni-2.png'
   },
 
   // Omni Services - from /public/images/wellness/
   omni: {
-    logo: '/images/logos/omni logo.png',
-    logoAlt: '/images/logos/omni wellness media logo with no bg copy.png',
+    logo: '/images/logos/OMNI LOGO FA-06(1).png',
+    logoAlt: '/images/logos/OMNI WELLNESS MEDIA ICON.png',
     team: '/images/wellness/Omni wellness team.jpg',
     communityProject1: '/images/wellness/Omni wellness community project 1.JPG',
     communityProject2: '/images/wellness/Omni wellness community project 2.JPG',
@@ -46,8 +46,8 @@ export const IMAGES = {
     marketplace: '/images/wellness/wellness 2.jpg',
     community: '/images/wellness/Omni wellness community project 1.JPG',
     deals: '/images/wellness/wellness.jpg',
-    meditation: '/images/sandy/Sandy _August shoot _ omni-5.png',
-    yoga: '/images/sandy/Sandy _August shoot _ omni-4.png',
+    meditation: '/images/sandy/Sandy_August_shoot_omni-5.png',
+    yoga: '/images/sandy/Sandy_August_shoot_omni-4.png',
     retreat: '/images/wellness/OMNI_OLIVETREE_RETREAT_2024.jpg',
     retreat2: '/images/wellness/OMNI_OLIVETREE_RETREAT_2024-6.jpg',
     retreat3: '/images/wellness/OMNI_OLIVETREE_RETREAT_2024-17.jpg',
