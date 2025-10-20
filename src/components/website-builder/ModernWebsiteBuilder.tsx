@@ -64,7 +64,7 @@ const ModernWebsiteBuilder = () => {
     page_title: 'Transform Your Wellness Journey',
     page_subtitle: 'Experience authentic healing through our proven wellness methodologies',
     custom_domain: '',
-    hero_image_url: '/images/sandy/Sandy _August shoot _ omni-3.png',
+    hero_image_url: '/images/sandy/Sandy_August_shoot_omni-3.png',
     hero_video_url: '',
     about_section: 'As a certified wellness practitioner with over a decade of experience, I specialize in holistic healing approaches that address mind, body, and spirit. My evidence-based methods have helped hundreds of clients achieve lasting transformation and optimal well-being.',
     services_section_title: 'Transformative Wellness Services',

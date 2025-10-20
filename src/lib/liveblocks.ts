@@ -72,7 +72,7 @@ export const DEMO_USERS = {
       name: "Sandy Mitchell",
       email: "sandy@sandymitchell.co.za",
       role: "provider" as const,
-      avatar: "/lovable-uploads/conscious-connections-healer-Bb89mVKs.jpg"
+      avatar: "/images/sandy/Sandy_August_shoot_omni-2.png"
     }
   },
   helen: {
@@ -81,7 +81,7 @@ export const DEMO_USERS = {
       name: "Helen Thompson",
       email: "helen@omniwellness.co.za", 
       role: "admin" as const,
-      avatar: "/lovable-uploads/admin-avatar.jpg"
+      avatar: "/images/logos/omni logo.png"
     }
   },
   demo_consumer: {
