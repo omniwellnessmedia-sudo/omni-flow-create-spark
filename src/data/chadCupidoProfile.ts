@@ -65,7 +65,7 @@ export const chadCupidoProfile: ProviderDirectory = {
       active: true,
       images: [
         IMAGES.wellness.team,
-        getImageWithFallback(IMAGES.GENERAL.OFFICE_PROFESSIONAL)
+        IMAGES.wellness.communityProject2
       ],
       benefits: [
         'Clear business growth roadmap',
