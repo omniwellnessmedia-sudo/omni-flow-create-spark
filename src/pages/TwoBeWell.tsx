@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Heart, Users, Sparkles, Coins, ShoppingCart } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 const TwoBeWell = () => {
   const products = [
@@ -13,7 +14,7 @@ const TwoBeWell = () => {
       name: "2BeKissed - Natural Lip Balm",
       price: "R85",
       wellCoins: "42",
-      image: "/lovable-uploads/d369fae4-4adf-4e4c-89dd-9d37a01ea88e.png",
+      image: IMAGES.sandy.nature,
       description: "Mint-infused natural lip balm with Shea Butter, Coconut Oil, and Vitamin E for lasting moisture and protection.",
       ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Essential Oil, Vitamin E"
     },
@@ -21,7 +22,7 @@ const TwoBeWell = () => {
       name: "2BeGlow - Radiance Face Serum",
       price: "R165",
       wellCoins: "82",
-      image: "/lovable-uploads/bb1d5ac4-6c06-4ce7-8866-b0376ad65c36.png",
+      image: IMAGES.sandy.meditation,
       description: "Glow & Calm face serum with Macadamia Nut Oil and Essential Oil Blend for radiant, healthy-looking skin.",
       ingredients: "Macadamia Nut Oil + Essential Oil Blend"
     },
@@ -29,7 +30,7 @@ const TwoBeWell = () => {
       name: "2BeSmooth - Whipped Body Butter",
       price: "R125",
       wellCoins: "62",
-      image: "/lovable-uploads/55337f01-2391-4c96-a2a3-0044cb84cd8b.png",
+      image: IMAGES.sandy.yoga,
       description: "Luxuriously whipped body butter with Shea Butter, Cocoa Butter, and nourishing oils for silky-smooth skin.",
       ingredients: "Shea Butter, Cocoa Butter, Coconut Oil, Sweet Almond Oil, Arrowroot Powder, Vitamin E"
     },
@@ -37,7 +38,7 @@ const TwoBeWell = () => {
       name: "2BeFresh - All-Purpose Cleaner",
       price: "R95",
       wellCoins: "47",
-      image: "/lovable-uploads/76a99deb-2c78-4ed9-9276-4d468c36b33b.png",
+      image: IMAGES.wellness.retreat,
       description: "Natural all-purpose cleaning spray with plant-based ingredients for a chemical-free, eco-friendly home.",
       ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Essential Oil, Vitamin E"
     }
@@ -108,24 +109,24 @@ const TwoBeWell = () => {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-                <img 
-                  src="/lovable-uploads/7c743eb8-f381-4e63-af07-39be635a68ca.png" 
-                  alt="2BeWell Product Collection" 
+                <img
+                  src={IMAGES.sandy.portrait1}
+                  alt="2BeWell Product Collection"
                   className="instagram-post-img rounded-2xl shadow-lg"
                 />
-                <img 
-                  src="/lovable-uploads/2c1edd03-b748-4129-ad38-5ed1db48917e.png" 
-                  alt="Natural Beauty Products" 
+                <img
+                  src={IMAGES.sandy.portrait2}
+                  alt="Natural Beauty Products"
                   className="instagram-post-img rounded-2xl shadow-lg"
                 />
-                <img 
-                  src="/lovable-uploads/c30dfe79-4b96-4249-94c7-9857d7d6c9d9.png" 
-                  alt="Handcrafted Skincare" 
+                <img
+                  src={IMAGES.sandy.action1}
+                  alt="Handcrafted Skincare"
                   className="instagram-post-img rounded-2xl shadow-lg"
                 />
-                <img 
-                  src="/lovable-uploads/d32f4057-ca85-4a5e-87c1-249728440f65.png" 
-                  alt="Natural Face Serum" 
+                <img
+                  src={IMAGES.sandy.action2}
+                  alt="Natural Face Serum"
                   className="instagram-post-img rounded-2xl shadow-lg"
                 />
               </div>
@@ -253,14 +254,14 @@ const TwoBeWell = () => {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-                <img 
-                  src="/lovable-uploads/efba401e-9536-48d1-8682-6729c73bd9bc.png" 
-                  alt="Handcrafted with Love" 
+                <img
+                  src={IMAGES.sandy.portrait3}
+                  alt="Handcrafted with Love"
                   className="instagram-post-img rounded-2xl shadow-lg"
                 />
-                <img 
-                  src="/lovable-uploads/3371c506-44f8-42f6-94f9-5daed6741c0a.png" 
-                  alt="Natural Ingredients" 
+                <img
+                  src={IMAGES.sandy.closeup}
+                  alt="Natural Ingredients"
                   className="instagram-post-img rounded-2xl shadow-lg"
                 />
               </div>

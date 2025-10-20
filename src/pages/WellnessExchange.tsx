@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Coins, Users, Bot, Star, Zap, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
+import { IMAGES } from "@/lib/images";
 
 const WellnessExchange = () => {
   const { user } = useAuth();
@@ -59,9 +60,9 @@ const WellnessExchange = () => {
         <section className="relative py-20 bg-white overflow-hidden">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
-            <img 
-              src="/lovable-uploads/edf104cf-2a2d-4ccc-9e08-1f426620f690.png"
-              alt="Community gathering" 
+            <img
+              src={IMAGES.wellness.retreat}
+              alt="Community gathering"
               className="w-full h-full object-cover opacity-10"
             />
           </div>
@@ -121,9 +122,9 @@ const WellnessExchange = () => {
               </div>
               
               <div className="lg:pl-8">
-                <img 
-                  src="/lovable-uploads/83be8984-2c43-478e-ba25-b848902c104f.png"
-                  alt="Wellness professionals collaborating" 
+                <img
+                  src={IMAGES.sandy.yoga}
+                  alt="Wellness professionals collaborating"
                   className="w-full h-96 object-cover rounded-2xl shadow-2xl"
                 />
               </div>
@@ -180,9 +181,9 @@ const WellnessExchange = () => {
               {/* For Providers */}
               <Card className="p-8 hover:shadow-xl transition-all duration-300 bg-white border border-gray-200 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                  <img 
-                    src="/lovable-uploads/965c3c16-d837-4f01-8f8a-220d4a14a83b.png"
-                    alt="Wellness provider" 
+                  <img
+                    src={IMAGES.sandy.teaching}
+                    alt="Wellness provider"
                     className="w-full h-full object-cover rounded-bl-full"
                   />
                 </div>
@@ -228,9 +229,9 @@ const WellnessExchange = () => {
               {/* For Consumers */}
               <Card className="p-8 hover:shadow-xl transition-all duration-300 bg-white border border-gray-200 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
-                  <img 
-                    src="/lovable-uploads/76a99deb-2c78-4ed9-9276-4d468c36b33b.png"
-                    alt="Wellness consumer" 
+                  <img
+                    src={IMAGES.sandy.meditation}
+                    alt="Wellness consumer"
                     className="w-full h-full object-cover rounded-bl-full"
                   />
                 </div>
