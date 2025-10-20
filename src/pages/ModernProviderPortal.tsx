@@ -122,6 +122,7 @@ import {
   LogOut,
   Palette
 } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 // Mock Data - Replace with real API calls
 const mockProvider: WellnessProvider = {
@@ -140,8 +141,8 @@ const mockProvider: WellnessProvider = {
       facebook: "SerenityWellnessStudio"
     }
   },
-  profile_image_url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face",
-  cover_image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=400&fit=crop",
+  profile_image_url: IMAGES.sandy.profile,
+  cover_image_url: IMAGES.wellness.retreat,
   specialties: ["Yoga", "Meditation", "Breathwork", "Energy Healing", "Sound Therapy"],
   certifications: ["RYT 500 Yoga Alliance", "Certified Meditation Teacher", "Reiki Master Level III"],
   years_experience: 8,

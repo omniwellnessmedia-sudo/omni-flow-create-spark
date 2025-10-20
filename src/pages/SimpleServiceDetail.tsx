@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Footer from "@/components/Footer";
 import sandyMitchellData from "@/data/sandyMitchellProfile";
+import { IMAGES } from "@/lib/images";
 import { 
   ArrowLeft, 
   MapPin, 
@@ -96,11 +97,11 @@ const SimpleServiceDetail = () => {
               <Card className="overflow-hidden bg-white/80 backdrop-blur-sm border-2 border-white/50 shadow-xl rounded-3xl">
                 <div className="aspect-video relative">
                   <img 
-                    src={service.images?.[0] || "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png"}
+                    src={service.images?.[0] || IMAGES.sandy.meditation}
                     alt={service.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+                      e.currentTarget.src = IMAGES.sandy.meditation;
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>

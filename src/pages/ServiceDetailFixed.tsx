@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import sandyMitchellData from "@/data/sandyMitchellProfile";
+import { IMAGES } from "@/lib/images";
 import { 
   ArrowLeft, 
   MapPin, 
@@ -94,7 +95,7 @@ const ServiceDetailFixed = () => {
     if (images && images.length > 0 && !images[0].startsWith('blob:')) {
       return images[0];
     }
-    return "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+    return IMAGES.sandy.yoga;
   };
 
   const handleBookNow = () => {
@@ -167,7 +168,7 @@ const ServiceDetailFixed = () => {
                     alt={service.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = "/lovable-uploads/590721a1-f529-47d4-b7f1-8e856b424bb9.png";
+                      e.currentTarget.src = IMAGES.sandy.yoga;
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>

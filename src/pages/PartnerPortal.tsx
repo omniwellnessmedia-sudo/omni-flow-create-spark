@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { IMAGES } from "@/lib/images";
 import { 
   Users, 
   Store, 
@@ -116,7 +117,7 @@ const PartnerPortal = () => {
       earnings: "R8,500/month",
       rating: 4.9,
       story: "Joined 6 months ago and tripled my client base through the platform",
-      image: "/lovable-uploads/8599bcc3-c73a-4244-84fe-6caa49ab80df.png"
+      image: IMAGES.sandy.yoga
     },
     {
       name: "David Chen",
@@ -124,7 +125,7 @@ const PartnerPortal = () => {
       earnings: "R12,000/month",
       rating: 5.0,
       story: "The AI matching system connects me with perfect clients every time",
-      image: "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png"
+      image: IMAGES.sandy.teaching
     },
     {
       name: "Maria Santos",
@@ -132,7 +133,7 @@ const PartnerPortal = () => {
       earnings: "R6,800/month",
       rating: 4.8,
       story: "Omni Media's support helped me showcase my work professionally",
-      image: "/lovable-uploads/362cb38a-2c1c-4857-a238-75f8e507408e.png"
+      image: IMAGES.sandy.portrait1
     }
   ];
 
