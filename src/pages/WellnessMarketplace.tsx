@@ -141,25 +141,54 @@ const WellnessMarketplace = () => {
     return null;
   };
 
-  // Helper function to get service image fallback
+  // Helper function to get service image fallback with variety
   const getServiceImage = (title: string, category: string) => {
     const lowerTitle = title.toLowerCase();
-    if (lowerTitle.includes('yoga') || lowerTitle.includes('pilates')) return IMAGES.sandy.yoga;
-    if (lowerTitle.includes('qigong') || lowerTitle.includes('meditation')) return IMAGES.sandy.meditation;
+
+    // Title-based matching (most specific)
+    if (lowerTitle.includes('yoga')) return IMAGES.sandy.yoga;
+    if (lowerTitle.includes('pilates')) return IMAGES.sandy.teaching;
+    if (lowerTitle.includes('qigong')) return IMAGES.sandy.meditation;
+    if (lowerTitle.includes('meditation')) return IMAGES.sandy.meditation;
+    if (lowerTitle.includes('breath')) return IMAGES.sandy.portrait1;
     if (lowerTitle.includes('cave') || lowerTitle.includes('indigenous')) return IMAGES.wellness.landmark;
     if (lowerTitle.includes('mountain') || lowerTitle.includes('hiking')) return IMAGES.tours.mountain;
     if (lowerTitle.includes('surf') || lowerTitle.includes('beach')) return IMAGES.wellness.beachLions;
-    if (lowerTitle.includes('healing') || lowerTitle.includes('retreat')) return IMAGES.wellness.retreat;
-    if (lowerTitle.includes('breath')) return IMAGES.sandy.meditation;
+    if (lowerTitle.includes('healing')) return IMAGES.wellness.retreat;
+    if (lowerTitle.includes('retreat')) return IMAGES.wellness.retreat2;
+    if (lowerTitle.includes('massage')) return IMAGES.sandy.nature;
+    if (lowerTitle.includes('coaching') || lowerTitle.includes('counseling')) return IMAGES.sandy.teaching;
 
-    // Fallback based on category
-    if (category === 'Yoga' || category === 'Pilates') return IMAGES.sandy.yoga;
-    if (category === 'Meditation' || category === 'QiGong' || category === 'Breathwork') return IMAGES.sandy.meditation;
-    if (category === 'Personal Training' || category === 'Fitness') return IMAGES.tours.hiking;
-    if (category === 'Life Coaching' || category === 'Health Coaching') return IMAGES.sandy.teaching;
-    if (category === 'Massage Therapy' || category === 'Wellness Products') return IMAGES.wellness.wellness;
+    // Category-based fallback (more variety)
+    if (category === 'Yoga') return IMAGES.sandy.yoga;
+    if (category === 'Pilates') return IMAGES.sandy.teaching;
+    if (category === 'Meditation') return IMAGES.sandy.meditation;
+    if (category === 'QiGong' || category === 'Breathwork') return IMAGES.sandy.portrait2;
+    if (category === 'Personal Training') return IMAGES.tours.hiking;
+    if (category === 'Fitness') return IMAGES.wellness.beachLions2;
+    if (category === 'Life Coaching') return IMAGES.sandy.teaching;
+    if (category === 'Health Coaching') return IMAGES.sandy.portrait1;
+    if (category === 'Massage Therapy') return IMAGES.sandy.nature;
+    if (category === 'Wellness Products') return IMAGES.wellness.wellness;
+    if (category === 'Nutrition Counseling') return IMAGES.wellness.marketplace;
+    if (category === 'Acupuncture') return IMAGES.sandy.closeup;
+    if (category === 'Reiki' || category === 'Energy Healing') return IMAGES.sandy.meditation;
+    if (category === 'Aromatherapy') return IMAGES.wellness.wellness;
+    if (category === 'Herbalism') return IMAGES.wellness.communityProject1;
+    if (category === 'Sound Healing') return IMAGES.sandy.portrait3;
+    if (category === 'Crystal Healing') return IMAGES.sandy.action1;
 
-    return IMAGES.sandy.yoga; // Default fallback
+    // Final fallback - rotate through different images to add variety
+    const hash = (title + category).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const fallbacks = [
+      IMAGES.sandy.yoga,
+      IMAGES.sandy.meditation,
+      IMAGES.sandy.teaching,
+      IMAGES.sandy.nature,
+      IMAGES.wellness.retreat,
+      IMAGES.wellness.wellness
+    ];
+    return fallbacks[hash % fallbacks.length];
   };
 
   const filteredServices = displayServices.filter(service => {
