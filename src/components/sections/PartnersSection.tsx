@@ -1,20 +1,21 @@
 
 import { useEffect, useState } from "react";
+import { IMAGES } from "@/lib/images";
 
 const PartnersSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const partners = [
-    { name: "2beWell All Natural", logo: "/lovable-uploads/cce3929c-15e1-4240-9a10-194917d0e6a2.png", description: "Natural Wellness Products" },
-    { name: "APKX Advocacy", logo: "/lovable-uploads/9bd1fc88-8e30-41bb-96f8-f3ad2031c817.png", description: "Legal Advocacy Services" },
-    { name: "MBS Mzansi Business Services", logo: "/lovable-uploads/f4e7812d-5be4-40ea-a408-13cef8f14bb6.png", description: "Business Solutions" },
-    { name: "Dr. Phil-Afei", logo: "/lovable-uploads/47f2fdf7-983a-4c24-a947-c9914636cc6a.png", description: "Healthcare Services" },
-    { name: "Hucklberry", logo: "/lovable-uploads/e1f8172d-03e9-45da-832c-b084ae0ff6ad.png", description: "Digital Innovation" },
-    { name: "Baboon Conservation", logo: "/lovable-uploads/400a06a0-ddbf-429f-975b-b1c1ca96281a.png", description: "Wildlife Protection" },
-    { name: "Kai Cape Nature Cubs", logo: "/lovable-uploads/2cf2a37d-a993-44f1-9751-330306a03454.png", description: "Environmental Education" },
-    { name: "Travel & Tours Cape Town", logo: "/lovable-uploads/f5ec8070-277a-4f50-b8e7-f4cd339954e1.png", description: "Adventure Travel" },
-    { name: "Cape Nature", logo: "/lovable-uploads/c872ecf3-8ddf-4fd9-8980-1be21b7538c0.png", description: "Conservation Partnership" },
-    { name: "Muiz Kitchen", logo: "/lovable-uploads/7bde770e-9c2d-4c9c-89c5-648f41e8470e.png", description: "Conscious Cuisine" }
+    { name: "2beWell All Natural", logo: IMAGES.partners.twoBeWell, description: "Natural Wellness Products" },
+    { name: "APEX Advocacy", logo: IMAGES.partners.apex, description: "Legal Advocacy Services" },
+    { name: "MBS Mzansi Business Services", logo: IMAGES.partners.mbs, description: "Business Solutions" },
+    { name: "Dr. Phil-Afei", logo: IMAGES.partners.drPhil, description: "Healthcare Services" },
+    { name: "Amor Foundation", logo: IMAGES.partners.amor, description: "Community Support" },
+    { name: "Baboon Conservation", logo: IMAGES.partners.baboonConservation, description: "Wildlife Protection" },
+    { name: "Kai Cape Nature Cubs", logo: IMAGES.partners.kai, description: "Environmental Education" },
+    { name: "Travel & Tours Cape Town", logo: IMAGES.partners.travelTours, description: "Adventure Travel" },
+    { name: "Omni Wellness", logo: IMAGES.omni.logo, description: "Holistic Wellness Platform" },
+    { name: "Sandy Mitchell Yoga", logo: IMAGES.sandy.profile, description: "Yoga & Breathwork" }
   ];
 
   useEffect(() => {

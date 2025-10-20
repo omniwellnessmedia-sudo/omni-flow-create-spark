@@ -13,7 +13,7 @@ import {
 import { User, Settings, LogOut, LogIn, Menu, X } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import MegaNavigation from '@/components/MegaNavigation';
-import omniLogo from '/lovable-uploads/35aeb178-5b75-48ed-8192-1ac1ba363620.png';
+import omniLogo from '/images/logos/omni logo.png';
 import { useState } from 'react';
 
 const SiteHeader = () => {

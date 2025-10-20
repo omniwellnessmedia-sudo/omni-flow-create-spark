@@ -1,6 +1,6 @@
 // Chief Kingsley - Traditional Cultural Guide Profile
 import { ProviderDirectory } from '@/types/provider';
-import { IMAGES, getImageWithFallback } from '@/constants/images';
+import { IMAGES } from '@/lib/images';
 
 export const chiefKingsleyProfile: ProviderDirectory = {
   profile: {
@@ -32,8 +32,8 @@ export const chiefKingsleyProfile: ProviderDirectory = {
     years_experience: 25,
     verified: true,
     wellcoin_balance: 1850,
-    profile_image_url: getImageWithFallback('/lovable-uploads/chief-kingsley-profile.jpg'),
-    cover_image: getImageWithFallback('/lovable-uploads/traditional-ceremony-cover.jpg'),
+    profile_image_url: IMAGES.providers.chief,
+    cover_image: IMAGES.wellness.landmark,
     philosophy: "The wisdom of our ancestors flows through us like a river. My role is to help people reconnect with this ancient knowledge and find healing through traditional practices that have sustained our people for generations.",
     social_media: {
       facebook: 'Chief Kingsley Traditional Wellness',
@@ -64,8 +64,8 @@ export const chiefKingsleyProfile: ProviderDirectory = {
       is_online: false,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/traditional-healing.jpg'),
-        getImageWithFallback('/lovable-uploads/healing-herbs.jpg')
+        IMAGES.providers.castle,
+        IMAGES.wellness.communityProject3
       ],
       benefits: [
         'Holistic approach to health and wellness',
@@ -110,8 +110,8 @@ export const chiefKingsleyProfile: ProviderDirectory = {
       is_online: false,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/cultural-immersion.jpg'),
-        getImageWithFallback('/lovable-uploads/traditional-village.jpg')
+        IMAGES.wellness.communityProject1,
+        IMAGES.wellness.communityProject2
       ],
       benefits: [
         'Deep cultural understanding and appreciation',
@@ -156,8 +156,8 @@ export const chiefKingsleyProfile: ProviderDirectory = {
       is_online: false,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/ancestral-wisdom.jpg'),
-        getImageWithFallback('/lovable-uploads/traditional-teachings.jpg')
+        IMAGES.wellness.retreat,
+        IMAGES.wellness.team
       ],
       benefits: [
         'Integration of traditional and modern wellness',
@@ -202,8 +202,8 @@ export const chiefKingsleyProfile: ProviderDirectory = {
       is_online: false,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/medicinal-plants.jpg'),
-        getImageWithFallback('/lovable-uploads/plant-medicine.jpg')
+        IMAGES.wellness.graduation,
+        IMAGES.wellness.muiz
       ],
       benefits: [
         'Deep knowledge of traditional medicine',
@@ -248,8 +248,8 @@ export const chiefKingsleyProfile: ProviderDirectory = {
       is_online: false,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/traditional-drumming.jpg'),
-        getImageWithFallback('/lovable-uploads/sacred-music.jpg')
+        IMAGES.wellness.beachLions,
+        IMAGES.wellness.beachLions2
       ],
       benefits: [
         'Stress relief through rhythmic expression',

@@ -53,7 +53,7 @@ const WebsiteBuilder = () => {
     page_title: 'Transform Your Life Through Wellness',
     page_subtitle: 'Discover authentic healing and sustainable growth with our expert wellness services',
     custom_domain: '',
-    hero_image_url: '/lovable-uploads/wellness-humans.png',
+    hero_image_url: '/images/sandy/Sandy _August shoot _ omni-3.png',
     hero_video_url: '',
     about_section: 'I believe in the power of holistic wellness to transform lives. With years of experience and a deep commitment to authentic healing, I help individuals discover their path to optimal health and conscious living. My approach combines ancient wisdom with modern techniques to create lasting positive change.',
     services_section_title: 'Wellness Services That Transform Lives',

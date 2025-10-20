@@ -1,25 +1,26 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { IMAGES } from "@/lib/images";
 
 const FeaturedProjectsSection = () => {
   const projects = [
     {
       title: "Community Outreach & Support",
       description: "Providing essential resources and support to families and children in our community.",
-      image: "/lovable-uploads/f83c6a43-7fb0-45db-8f28-4701fae8f52c.png",
+      image: IMAGES.wellness.communityProject1,
       category: "Community Development"
     },
     {
       title: "Indigenous Wisdom & Healing",
       description: "Learning from traditional healers and documenting ancient wisdom for future generations.",
-      image: "/lovable-uploads/8899b34c-3cb2-4a70-b18f-2a78af5432e7.png",
+      image: IMAGES.wellness.landmark,
       category: "Cultural Heritage"
     },
     {
       title: "Wellness Education & Growth",
       description: "Sharing knowledge and fostering growth through educational programs and community workshops.",
-      image: "/lovable-uploads/8b543d05-352e-44f6-96e4-eebf7233704f.png",
+      image: IMAGES.wellness.graduation,
       category: "Education & Development"
     }
   ];

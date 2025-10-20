@@ -1,6 +1,6 @@
 // 2BeWell - Wellness Products Provider Profile
 import { ProviderDirectory } from '@/types/provider';
-import { IMAGES, getImageWithFallback } from '@/constants/images';
+import { IMAGES } from '@/lib/images';
 
 export const twoBeWellProfile: ProviderDirectory = {
   profile: {
@@ -32,8 +32,8 @@ export const twoBeWellProfile: ProviderDirectory = {
     years_experience: 8,
     verified: true,
     wellcoin_balance: 4500,
-    profile_image_url: getImageWithFallback('/lovable-uploads/2bewell-logo.jpg'),
-    cover_image: getImageWithFallback('/lovable-uploads/wellness-products-cover.jpg'),
+    profile_image_url: IMAGES.twoBeWell.logo,
+    cover_image: IMAGES.wellness.wellness,
     philosophy: "True wellness extends beyond the individual to encompass our communities and planet. We believe in products that nurture personal health while supporting ethical practices and environmental sustainability.",
     social_media: {
       instagram: '@2bewellcapetown',
@@ -65,8 +65,8 @@ export const twoBeWellProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/wellness-consultation.jpg'),
-        getImageWithFallback('/lovable-uploads/natural-products.jpg')
+        IMAGES.sandy.teaching,
+        IMAGES.twoBeWell.product1
       ],
       benefits: [
         'Personalized product recommendations',
@@ -111,8 +111,8 @@ export const twoBeWellProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/organic-skincare.jpg'),
-        getImageWithFallback('/lovable-uploads/natural-beauty.jpg')
+        IMAGES.twoBeWell.faceSerum,
+        IMAGES.twoBeWell.lipBalm
       ],
       benefits: [
         'Complete organic skincare routine',
@@ -157,8 +157,8 @@ export const twoBeWellProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/mindful-living.jpg'),
-        getImageWithFallback('/lovable-uploads/meditation-space.jpg')
+        IMAGES.sandy.meditation,
+        IMAGES.sandy.yoga
       ],
       benefits: [
         'Complete mindful living setup',
@@ -203,8 +203,8 @@ export const twoBeWellProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/natural-supplements.jpg'),
-        getImageWithFallback('/lovable-uploads/health-consultation.jpg')
+        IMAGES.twoBeWell.bodyButter,
+        IMAGES.sandy.teaching
       ],
       benefits: [
         'Personalized supplement recommendations',
@@ -249,8 +249,8 @@ export const twoBeWellProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/sustainable-wellness.jpg'),
-        getImageWithFallback('/lovable-uploads/eco-products.jpg')
+        IMAGES.wellness.wellness,
+        IMAGES.twoBeWell.product2
       ],
       benefits: [
         'Complete sustainable wellness setup',

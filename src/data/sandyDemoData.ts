@@ -51,7 +51,7 @@ export const sandyDemoData = {
     responseTime: "Within 2 hours",
     locations: ["Stonehurst Observatory", "Online Sessions"],
     bio: "I'm Sandy Mitchell, a Dru Yoga and Buteyko Breathing practitioner based in Cape Town. My work is grounded in heart-based, breath awareness, that meets people where they are. I guide clients gently back to their breath, body, and inner stillness — especially those who feel disconnected from traditional wellness spaces. My sessions are soft, soulful, and rooted in real human experience.",
-    avatar: "/lovable-uploads/conscious-connections-healer-Bb89mVKs.jpg"
+    avatar: IMAGES.sandy.profile
   },
 
   recentBookings: [
@@ -283,7 +283,7 @@ export const helenProviderData = {
     responseTime: "Within 1 hour",
     locations: ["Cape Town CBD", "Online Sessions", "Corporate Venues"],
     bio: "I'm Helen Thompson, founder of Laughinggirl Cape Town - a certified laughter coach bringing joy and wellness to individuals and organizations across the Western Cape. Through the power of therapeutic laughter, I help people reduce stress, boost immunity, and reconnect with their natural joy.",
-    avatar: "/lovable-uploads/helen-laughing-coach.jpg"
+    avatar: IMAGES.sandy.portrait1
   },
 
   services: [

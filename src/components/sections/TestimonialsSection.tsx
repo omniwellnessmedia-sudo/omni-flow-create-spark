@@ -1,5 +1,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
+import { IMAGES } from "@/lib/images";
 
 const TestimonialsSection = () => {
   const testimonials = [
@@ -7,19 +8,19 @@ const TestimonialsSection = () => {
       quote: "Omni Wellness Media transformed our brand story and helped us connect with our community in ways we never imagined. Their authentic approach to content creation is unparalleled.",
       author: "Sarah Johnson",
       role: "Founder, Green Living Co.",
-      image: "/lovable-uploads/fcf93d20-65c1-4e39-8c34-360afdf825f1.png"
+      image: IMAGES.sandy.portrait1
     },
     {
       quote: "The team's dedication to conscious business development and their holistic approach to wellness has been instrumental in our organization's growth and impact.",
       author: "Marcus Williams",
       role: "Director, Community Wellness Foundation",
-      image: "/lovable-uploads/00bcae7d-32b7-4512-ba26-c767559ee023.png"
+      image: IMAGES.sandy.portrait2
     },
     {
       quote: "Working with Omni Wellness Media has been transformative. They don't just create content; they create movements that inspire positive change in communities.",
       author: "Dr. Amara Okafor",
       role: "Health & Wellness Consultant",
-      image: "/lovable-uploads/65549a00-dea0-461e-9e85-fe455db1c706.png"
+      image: IMAGES.sandy.portrait3
     }
   ];
 

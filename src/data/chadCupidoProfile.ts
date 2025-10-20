@@ -1,6 +1,6 @@
 // Chad Cupido - Business Developer Profile
 import { ProviderDirectory } from '@/types/provider';
-import { IMAGES, getImageWithFallback } from '@/constants/images';
+import { IMAGES } from '@/lib/images';
 
 export const chadCupidoProfile: ProviderDirectory = {
   profile: {
@@ -32,8 +32,8 @@ export const chadCupidoProfile: ProviderDirectory = {
     years_experience: 12,
     verified: true,
     wellcoin_balance: 3200,
-    profile_image_url: getImageWithFallback('/lovable-uploads/chad-cupido-profile.jpg'),
-    cover_image: getImageWithFallback('/lovable-uploads/business-development-cover.jpg'),
+    profile_image_url: IMAGES.providers.chad,
+    cover_image: IMAGES.providers.chadAction,
     philosophy: "Every business has the potential to create positive impact. My role is to unlock that potential through strategic thinking, sustainable practices, and human-centered development approaches.",
     social_media: {
       linkedin: 'Chad Cupido Business Development',
@@ -64,7 +64,7 @@ export const chadCupidoProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/business-consultation.jpg'),
+        IMAGES.wellness.team,
         getImageWithFallback(IMAGES.GENERAL.OFFICE_PROFESSIONAL)
       ],
       benefits: [
@@ -110,8 +110,8 @@ export const chadCupidoProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/digital-transformation.jpg'),
-        getImageWithFallback('/lovable-uploads/technology-consulting.jpg')
+        IMAGES.wellness.graduation,
+        IMAGES.wellness.communityProject2
       ],
       benefits: [
         'Streamlined digital operations',
@@ -156,7 +156,7 @@ export const chadCupidoProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/wellness-business.jpg'),
+        IMAGES.wellness.retreat,
         getImageWithFallback(IMAGES.GENERAL.WELLNESS_COMMUNITY)
       ],
       benefits: [
@@ -202,8 +202,8 @@ export const chadCupidoProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/startup-mentorship.jpg'),
-        getImageWithFallback('/lovable-uploads/business-meeting.jpg')
+        IMAGES.providers.chadAction2,
+        IMAGES.wellness.team
       ],
       benefits: [
         'Experienced startup guidance',
@@ -248,8 +248,8 @@ export const chadCupidoProfile: ProviderDirectory = {
       is_online: true,
       active: true,
       images: [
-        getImageWithFallback('/lovable-uploads/market-research.jpg'),
-        getImageWithFallback('/lovable-uploads/data-analysis.jpg')
+        IMAGES.wellness.communityProject1,
+        IMAGES.wellness.communityProject3
       ],
       benefits: [
         'Comprehensive market understanding',

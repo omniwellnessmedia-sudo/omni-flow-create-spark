@@ -67,7 +67,7 @@ const WellnessHumansSection = () => {
           <div className="relative">
             <div className="relative z-10">
               <img 
-                src="/lovable-uploads/60f3df5d-7b9d-4d23-8f98-6924ef5a005b.png"
+                src="/images/sandy/Sandy _August shoot _ omni-2.png"
                 alt="Person practicing wellness yoga on beach" 
                 className="w-full h-auto rounded-3xl shadow-2xl"
               />

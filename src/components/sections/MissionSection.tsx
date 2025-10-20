@@ -45,7 +45,7 @@ const MissionSection = () => {
           {/* Image */}
           <div className="animate-fade-in">
             <img 
-              src="/lovable-uploads/2cbfba5c-c500-4e2a-bfe4-bea1c9043973.png" 
+              src="/images/wellness/OMNI_KALK BAY_ GRADUATION-8.jpg" 
               alt="Community celebrating achievements together with certificates"
               className="w-full h-96 object-cover rounded-2xl shadow-2xl"
             />

@@ -21,12 +21,24 @@ export const IMAGES = {
 
   // Omni Services - from /public/images/wellness/
   omni: {
-    logo: '/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png',
-    logoAlt: '/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png',
+    logo: '/images/logos/omni logo.png',
+    logoAlt: '/images/logos/omni wellness media logo with no bg copy.png',
     team: '/images/wellness/Omni wellness team.jpg',
     communityProject1: '/images/wellness/Omni wellness community project 1.JPG',
     communityProject2: '/images/wellness/Omni wellness community project 2.JPG',
     communityProject3: '/images/wellness/Omni wellness community project 3.jpg'
+  },
+
+  // 2BeWell Products - Natural wellness products
+  twoBeWell: {
+    lipBalm: '/images/2bewell/2 be well packaging cmyk [Recovered]-15.png',
+    faceSerum: '/images/2bewell/2 be well packaging cmyk [Recovered]-16.png',
+    bodyButter: '/images/2bewell/2 be well packaging cmyk [Recovered]-17.png',
+    cleaner: '/images/2bewell/2 be well packaging cmyk [Recovered]-18.png',
+    product1: '/images/2bewell/2 be well packaging cmyk [Recovered]-19.png',
+    product2: '/images/2bewell/2 be well packaging cmyk [Recovered]-20.png',
+    logo: '/images/2bewell/2 be well NEW LOGO_OMNI.png',
+    packaging: '/images/2bewell/12.png'
   },
 
   // Community & Wellness - Real photos
@@ -80,9 +92,9 @@ export const IMAGES = {
 
   // AI & Technology - Using wellness tech imagery
   ai: {
-    tools: '/lovable-uploads/dd3b9532-dbb3-471a-939d-894418e20e0e.png',
-    interface: '/lovable-uploads/dd3b9532-dbb3-471a-939d-894418e20e0e.png',
-    neural: '/lovable-uploads/dd3b9532-dbb3-471a-939d-894418e20e0e.png'
+    tools: '/images/wellness/SAGA_HKL_OMNI_Artscape-9.jpg',
+    interface: '/images/wellness/CAPTCHA_OMNI_IMAGES_DAILY_MUIZ-7.jpg',
+    neural: '/images/wellness/OMNI_LANDMARK FOUNDATION_IMAGES_JUNE 2024-2.jpg'
   },
 
   // Products & Shopping - Real wellness products
@@ -100,6 +112,18 @@ export const IMAGES = {
     chief: '/images/wellness/Chief_Hennie_van_Wyk_001_2.slideshow.jpg',
     castle: '/images/wellness/Castle1.jpg',
     bwc: '/images/wellness/bwc cover youth troopers.png'
+  },
+
+  // Partner Logos
+  partners: {
+    twoBeWell: '/images/logos/2 be well packaging cmyk [Recovered]-19.png',
+    apex: '/images/logos/APEXAdvocacy_logo_blackonwhitebubble-01.png',
+    mbs: '/images/logos/Cropped MBS Logo (1).webp',
+    drPhil: '/images/logos/DR PHIL LOGO NPO_OMNI-01.png',
+    amor: '/images/logos/1April2025_Amor logo png.png',
+    baboonConservation: '/images/logos/Bwc logo.JPG',
+    kai: '/images/logos/Kai Logo BW.png',
+    travelTours: '/images/logos/logo tt ct (1).png'
   }
 } as const;
 

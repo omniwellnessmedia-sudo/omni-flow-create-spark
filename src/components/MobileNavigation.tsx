@@ -55,7 +55,7 @@ const MobileNavigation = () => {
           
           <Link to="/wellness-exchange/marketplace" className="flex items-center">
             <img 
-              src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
+              src="/images/logos/omni logo.png" 
               alt="Omni Wellness" 
               className="h-8 w-8"
             />
