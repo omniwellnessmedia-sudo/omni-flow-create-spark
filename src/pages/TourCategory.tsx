@@ -362,13 +362,13 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
       <Card className="hover:shadow-lg transition-shadow">
         <div className="flex flex-col lg:flex-row">
           <div className="lg:w-80 h-64 sm:h-48 lg:h-auto relative overflow-hidden">
-            <img 
-              src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
+            <img
+              src={tour.hero_image_url || IMAGES.wellness.retreat}
               alt={tour.title}
               className="w-full h-full object-cover object-center"
               loading="lazy"
               onError={(e) => {
-                e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+                e.currentTarget.src = IMAGES.wellness.retreat;
               }}
             />
             <div className="absolute top-3 left-3">
@@ -441,13 +441,13 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
   return (
     <Card className="group hover:shadow-xl transition-all duration-300">
       <div className="relative overflow-hidden rounded-t-lg h-64 sm:h-56 lg:h-64">
-        <img 
-          src={tour.hero_image_url || '/lovable-uploads/wellness-humans.png'} 
+        <img
+          src={tour.hero_image_url || IMAGES.wellness.retreat}
           alt={tour.title}
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
           onError={(e) => {
-            e.currentTarget.src = '/lovable-uploads/wellness-humans.png';
+            e.currentTarget.src = IMAGES.wellness.retreat;
           }}
         />
         <div className="absolute top-3 left-3">

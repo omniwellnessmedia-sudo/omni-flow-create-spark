@@ -387,10 +387,10 @@ const ToursRetreats = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
       {/* Preload critical images */}
       <ImagePreloader images={[
-        '/lovable-uploads/omni-wellness-hero.jpg',
+        IMAGES.wellness.retreat3,
         IMAGES.wellness.retreat,
         IMAGES.wellness.beachLions,
-        '/lovable-uploads/service-learning-hero.jpg',
+        IMAGES.tours.mountain,
         ...filteredItems.flatMap(item => item.images).filter(Boolean)
       ]} />
 
@@ -477,12 +477,12 @@ const ToursRetreats = () => {
             {filteredItems.map((item) => (
               <Card key={item.id} className="bg-white/80 backdrop-blur-sm border-2 border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 cursor-pointer">
                 <div className="aspect-video relative overflow-hidden rounded-t-xl">
-                  <img 
-                    src={item.images[0] || "/lovable-uploads/omni-wellness-hero.jpg"}
+                  <img
+                    src={item.images[0] || IMAGES.wellness.retreat}
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
-                      e.currentTarget.src = "/lovable-uploads/omni-wellness-hero.jpg";
+                      e.currentTarget.src = IMAGES.wellness.retreat;
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>

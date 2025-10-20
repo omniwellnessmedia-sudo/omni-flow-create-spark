@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/components/CartProvider";
+import { IMAGES } from "@/lib/images";
 import { 
   Globe, 
   Wifi, 
@@ -330,7 +331,7 @@ const TravelWellConnectedStore = () => {
           id: product.id,
           title: product.name,
           price_zar: product.price,
-          image: '/lovable-uploads/esim-product-image.png',
+          image: IMAGES.tours.coastal,
           category: 'travel-well-connected'
         });
       } else {

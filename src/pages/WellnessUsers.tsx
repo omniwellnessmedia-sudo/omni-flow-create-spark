@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MobileNavigation from "@/components/MobileNavigation";
 import { Search, Filter, MapPin, Users, MessageSquare, Heart, Star } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 const WellnessUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,33 +21,33 @@ const WellnessUsers = () => {
       location: "Cape Town",
       rating: 4.9,
       reviews: 127,
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b602?w=150&h=150&fit=crop&crop=face"
+      image: IMAGES.sandy.yoga
     },
     {
-      id: "2", 
+      id: "2",
       name: "Marcus Johnson",
       type: "consumer",
       interests: ["Meditation", "Hiking"],
       location: "Stellenbosch",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+      image: IMAGES.sandy.meditation
     },
     {
       id: "3",
-      name: "Dr. Amara Okafor", 
+      name: "Dr. Amara Okafor",
       type: "provider",
       specialty: "Holistic Healer",
       location: "Johannesburg",
       rating: 4.8,
       reviews: 89,
-      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face"
+      image: IMAGES.sandy.teaching
     },
     {
       id: "4",
       name: "Emma Rodriguez",
-      type: "consumer", 
+      type: "consumer",
       interests: ["Pilates", "Nutrition"],
       location: "Durban",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+      image: IMAGES.sandy.portrait1
     }
   ];
 

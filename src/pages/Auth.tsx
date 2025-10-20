@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Eye, EyeOff, ArrowLeft, Loader2, CheckCircle } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 import { Separator } from "@/components/ui/separator";
 import ResponsiveLayout from "@/components/layout/ResponsiveLayout";
 import MobileOptimizedButton from "@/components/layout/MobileOptimizedButton";
@@ -160,9 +161,9 @@ const Auth = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Home
           </Link>
-          <img 
-            src="/lovable-uploads/9d9ecf28-f102-4674-949b-c09c14479f21.png" 
-            alt="Omni Wellness Media" 
+          <img
+            src={IMAGES.omni.logo}
+            alt="Omni Wellness Media"
             className="h-16 w-16 mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold text-gradient-rainbow">
