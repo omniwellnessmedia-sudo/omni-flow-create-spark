@@ -132,21 +132,31 @@ const WellnessMarketplace = () => {
     if (images && images.length > 0) {
       const validImage = images.find(img =>
         img &&
+        typeof img === 'string' &&
         !img.startsWith('blob:') &&
         !img.includes('lovable.app') &&
-        img.startsWith('/')
+        !img.includes('placeholder') &&
+        (img.startsWith('/') || img.startsWith('http'))
       );
-      if (validImage) return validImage;
+      if (validImage) {
+        console.log('✓ Using service-provided image:', validImage);
+        return validImage;
+      }
     }
+    console.log('→ No valid images in array, using fallback');
     return null;
   };
 
   // Helper function to get service image fallback with variety
   const getServiceImage = (title: string, category: string) => {
     const lowerTitle = title.toLowerCase();
+    console.log(`🎨 Getting image for: "${title}" (${category})`);
 
     // Title-based matching (most specific)
-    if (lowerTitle.includes('yoga')) return IMAGES.sandy.yoga;
+    if (lowerTitle.includes('yoga')) {
+      console.log('  → Matched title: yoga');
+      return IMAGES.sandy.yoga;
+    }
     if (lowerTitle.includes('pilates')) return IMAGES.sandy.teaching;
     if (lowerTitle.includes('qigong')) return IMAGES.sandy.meditation;
     if (lowerTitle.includes('meditation')) return IMAGES.sandy.meditation;
@@ -160,7 +170,11 @@ const WellnessMarketplace = () => {
     if (lowerTitle.includes('coaching') || lowerTitle.includes('counseling')) return IMAGES.sandy.teaching;
 
     // Category-based fallback (more variety)
-    if (category === 'Yoga') return IMAGES.sandy.yoga;
+    console.log('  → No title match, trying category match...');
+    if (category === 'Yoga') {
+      console.log('  → Matched category: Yoga');
+      return IMAGES.sandy.yoga;
+    }
     if (category === 'Pilates') return IMAGES.sandy.teaching;
     if (category === 'Meditation') return IMAGES.sandy.meditation;
     if (category === 'QiGong' || category === 'Breathwork') return IMAGES.sandy.portrait2;
@@ -179,6 +193,7 @@ const WellnessMarketplace = () => {
     if (category === 'Crystal Healing') return IMAGES.sandy.action1;
 
     // Final fallback - rotate through different images to add variety
+    console.log('  → No category match, using hash-based rotation');
     const hash = (title + category).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const fallbacks = [
       IMAGES.sandy.yoga,
@@ -188,7 +203,9 @@ const WellnessMarketplace = () => {
       IMAGES.wellness.retreat,
       IMAGES.wellness.wellness
     ];
-    return fallbacks[hash % fallbacks.length];
+    const selectedImage = fallbacks[hash % fallbacks.length];
+    console.log(`  → Selected fallback image #${hash % fallbacks.length}`);
+    return selectedImage;
   };
 
   const filteredServices = displayServices.filter(service => {

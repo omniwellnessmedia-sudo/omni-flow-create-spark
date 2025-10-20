@@ -108,6 +108,10 @@ function App() {
                   <Route path="/wellness-exchange/account" element={<WellnessAccount />} />
                   <Route path="/wellness-exchange/wants" element={<WellnessWants />} />
                   <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
+                  <Route path="/wellness-exchange/search" element={<SearchServices />} />
+                  <Route path="/wellness-exchange/add-service" element={<AddService />} />
+                  <Route path="/wellness-exchange/add-want" element={<AddWant />} />
+                  <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
                   <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
                   <Route path="/wellness-community" element={<WellnessCommunity />} />
 
