@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowRight, Film, Clock, Users, Award, Target, Camera } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 const DocumentaryProduction = () => {
   const processSteps = [
@@ -43,15 +44,15 @@ const DocumentaryProduction = () => {
       title: "Social Impact Documentaries",
       description: "Stories that drive awareness and inspire social change",
       examples: ["Community development projects", "Environmental activism", "Social justice movements"],
-      image: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=800",
+      image: IMAGES.wellness.community,
       duration: "20-90 minutes",
       investment: "R50,000 - R200,000"
     },
     {
-      title: "Corporate Documentaries", 
+      title: "Corporate Documentaries",
       description: "Authentic brand storytelling and company culture films",
       examples: ["Company history narratives", "CSR impact stories", "Employee journey films"],
-      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800",
+      image: IMAGES.wellness.team,
       duration: "10-30 minutes",
       investment: "R30,000 - R100,000"
     },
@@ -59,8 +60,8 @@ const DocumentaryProduction = () => {
       title: "Educational Documentaries",
       description: "Knowledge-sharing content for schools and organizations",
       examples: ["Historical preservation", "Cultural heritage stories", "Scientific research films"],
-      image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=800",
-      duration: "15-60 minutes", 
+      image: IMAGES.providers.chief,
+      duration: "15-60 minutes",
       investment: "R40,000 - R150,000"
     }
   ];
@@ -100,8 +101,8 @@ const DocumentaryProduction = () => {
                 </div>
               </div>
               <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=800"
+                <img
+                  src={IMAGES.wellness.graduation}
                   alt="Documentary filmmaker at work"
                   className="w-full h-96 object-cover rounded-3xl shadow-2xl"
                 />
@@ -242,8 +243,8 @@ const DocumentaryProduction = () => {
                 </div>
               </div>
               <div>
-                <img 
-                  src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800"
+                <img
+                  src={IMAGES.sandy.teaching}
                   alt="Documentary interview setup"
                   className="w-full h-96 object-cover rounded-2xl shadow-2xl"
                 />

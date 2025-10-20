@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowRight, Play, CheckCircle, Star, Users, Camera, Film } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 const Videography = () => {
   const packages = [
@@ -63,19 +64,19 @@ const Videography = () => {
     {
       title: "Valley of Plenty Community Project",
       description: "Documenting sustainable development in Hanover Park",
-      thumbnail: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800",
+      thumbnail: IMAGES.wellness.communityProject2,
       category: "Documentary"
     },
     {
       title: "Human Animal Project",
       description: "Advocacy campaign for animal rights and compassionate living",
-      thumbnail: "https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=800",
+      thumbnail: IMAGES.providers.chad,
       category: "Campaign"
     },
     {
       title: "Corporate Wellness Initiative",
       description: "Employee wellness program launch for major corporation",
-      thumbnail: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800",
+      thumbnail: IMAGES.wellness.team,
       category: "Corporate"
     }
   ];
@@ -109,8 +110,8 @@ const Videography = () => {
                 </div>
               </div>
               <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800"
+                <img
+                  src={IMAGES.wellness.retreat}
                   alt="Professional videography equipment"
                   className="w-full h-96 object-cover rounded-3xl shadow-2xl"
                 />

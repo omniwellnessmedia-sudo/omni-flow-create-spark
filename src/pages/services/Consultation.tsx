@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowRight, Users, Target, Lightbulb, TrendingUp, MessageCircle, Calendar } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 const Consultation = () => {
   const consultationTypes = [
@@ -94,13 +95,13 @@ const Consultation = () => {
       quote: "The strategic consultation transformed how we communicate our impact. Our community engagement increased by 300%.",
       author: "Sarah Johnson",
       role: "Director, Valley of Hope Foundation",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b5bc?q=80&w=150"
+      image: IMAGES.sandy.portrait2
     },
     {
       quote: "Their ethical storytelling workshop helped us find our authentic voice and connect with supporters on a deeper level.",
       author: "Marcus Thompson",
       role: "CEO, Urban Gardens Initiative",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=150"
+      image: IMAGES.sandy.portrait1
     }
   ];
 
@@ -133,8 +134,8 @@ const Consultation = () => {
                 </div>
               </div>
               <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800"
+                <img
+                  src={IMAGES.wellness.retreat}
                   alt="Strategic consultation meeting"
                   className="w-full h-96 object-cover rounded-3xl shadow-2xl"
                 />
@@ -267,8 +268,8 @@ const Consultation = () => {
                 </div>
               </div>
               <div>
-                <img 
-                  src="https://images.unsplash.com/photo-1542744173-05336fcc7ad4?q=80&w=800"
+                <img
+                  src={IMAGES.wellness.team}
                   alt="Team collaboration and strategy planning"
                   className="w-full h-96 object-cover rounded-2xl shadow-2xl"
                 />
