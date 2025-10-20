@@ -275,9 +275,9 @@ const UnifiedNavigation = () => {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link to="/wellness-account" className="cursor-pointer">
+                      <Link to="/wellness-exchange/account" className="cursor-pointer">
                         <User className="mr-2 h-4 w-4" />
-                        <span>My Account</span>
+                        <span>My Profile</span>
                       </Link>
                     </DropdownMenuItem>
                     {user && user.email === 'sandy@omniwellness.co.za' && (
