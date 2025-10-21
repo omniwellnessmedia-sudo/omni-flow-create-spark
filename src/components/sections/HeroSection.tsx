@@ -28,14 +28,14 @@ const HeroSection = () => {
   // Helper function to get unique images based on category using centralized system
   const getImageForCategory = (category: string) => {
     const imageMap = {
-      'business': IMAGES.business.consulting,
-      'media': IMAGES.media.production,
-      'ai-tools': IMAGES.ai.tools,
-      'wellness': IMAGES.wellness.marketplace,
-      'tours': IMAGES.tours.mountain,
-      'inspiration': IMAGES.tours.retreat,
-      'podcast': IMAGES.media.podcast,
-      'community': IMAGES.wellness.community,
+      'business': IMAGES.services.team,
+      'media': IMAGES.services.artscape,
+      'ai-tools': IMAGES.services.humanAnimal1,
+      'wellness': IMAGES.community.empowerment,
+      'tours': IMAGES.locations.view1,
+      'inspiration': IMAGES.services.retreat5,
+      'podcast': IMAGES.services.muizKitchen,
+      'community': IMAGES.community.khoe6,
     };
     return imageMap[category as keyof typeof imageMap] || IMAGES.wellness.deals;
   };

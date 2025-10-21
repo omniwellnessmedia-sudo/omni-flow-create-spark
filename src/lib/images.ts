@@ -30,6 +30,15 @@ const CORE = {
     wellness2: `${SUPABASE_URL}/provider-images/wellness%202.jpg`,
     landmark: `${SUPABASE_URL}/provider-images/OMNI_LANDMARK%20FOUNDATION_IMAGES_JUNE%202024-2.jpg`,
     artscape: `${SUPABASE_URL}/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg`,
+    muizKitchen: `${SUPABASE_URL}/provider-images/CAPTCHA_OMNI_IMAGES_DAILY_MUIZ-7.jpg`,
+    beachLions1: `${SUPABASE_URL}/provider-images/CPTCHA_BEACH_LIONSHEAD_MARCH_SHOOT%2002_OMNI-4.jpg`,
+    beachLions2: `${SUPABASE_URL}/provider-images/CPTCHA_BEACH_LIONSHEAD_MARCH_SHOOT%2002_OMNI-20.jpg`,
+    humanAnimal1: `${SUPABASE_URL}/provider-images/HUMAN%20ANIMAL_CHAD-3.jpg`,
+    humanAnimal2: `${SUPABASE_URL}/provider-images/HUMAN%20ANIMAL_CHAD-4.jpg`,
+    chadBwc: `${SUPABASE_URL}/provider-images/Chad%20and%20cow_OMNI_BWC.jpg`,
+    bwcCover: `${SUPABASE_URL}/provider-images/bwc%20cover%20youth%20troopers.png`,
+    castle: `${SUPABASE_URL}/provider-images/Castle1.jpg`,
+    chief: `${SUPABASE_URL}/provider-images/Chief_Hennie_van_Wyk_001_2.slideshow.jpg`,
   },
   locations: {
     view1: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/_MG_0220.jpg`,
@@ -58,9 +67,16 @@ const CORE = {
     empowerment: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
     empowerment2: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
     empowerment3: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-6.jpg`,
+    empowerment4: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-8.jpg`,
+    empowerment5: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-9.jpg`,
     khoe: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
     khoe2: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-3.jpg`,
     khoe3: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-4.jpg`,
+    khoe4: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
+    khoe5: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-6.jpg`,
+    khoe6: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/Khoe%20meisie_Omni-3.jpg`,
+    khoe7: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/Khoe%20meisie_Omni-7.jpg`,
+    roze: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/ROZE.jpg`,
   },
   logos: {
     omniPrimary: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`,
@@ -108,7 +124,7 @@ export const IMAGES = {
   logos: CORE.logos,
   wellness: { 
     marketplace: CORE.services.wellness1, 
-    community: CORE.services.community1, 
+    community: CORE.community.empowerment, 
     deals: CORE.services.wellness2, 
     meditation: CORE.sandy.meditation, 
     yoga: CORE.sandy.yoga, 
@@ -126,9 +142,9 @@ export const IMAGES = {
     graduation: CORE.services.graduation1, 
     graduation2: CORE.services.graduation2, 
     landmark: CORE.services.landmark, 
-    muiz: CORE.services.community1, 
-    beachLions: CORE.locations.coastal, 
-    beachLions2: CORE.locations.capeTown2 
+    muiz: CORE.services.muizKitchen, 
+    beachLions: CORE.services.beachLions1, 
+    beachLions2: CORE.services.beachLions2 
   },
   tours: { 
     mountain: CORE.locations.view1, 
@@ -153,14 +169,14 @@ export const IMAGES = {
   },
   media: { 
     production: CORE.services.artscape, 
-    podcast: CORE.services.wellness1, 
-    video: CORE.services.artscape, 
-    content: CORE.services.wellness2 
+    podcast: CORE.services.muizKitchen, 
+    video: CORE.services.humanAnimal1, 
+    content: CORE.services.humanAnimal2 
   },
   ai: { 
-    tools: CORE.services.wellness1, 
-    interface: CORE.services.wellness2, 
-    neural: CORE.locations.view1 
+    tools: CORE.services.humanAnimal1, 
+    interface: CORE.services.humanAnimal2, 
+    neural: CORE.services.bwcCover 
   },
   omni: { 
     logo: CORE.logos.omniPrimary, 
@@ -197,39 +213,44 @@ export const IMAGES = {
   },
   providers: { 
     chad: CORE.services.team, 
-    chadAction: CORE.services.artscape, 
+    chadAction: CORE.services.chadBwc, 
     chadAction2: CORE.services.landmark, 
-    chief: CORE.community.khoe, 
-    castle: CORE.locations.capeTown1, 
+    chief: CORE.services.chief, 
+    castle: CORE.services.castle, 
     bwc: CORE.logos.bwc 
   },
   fallbacks: { 
-    yoga: [CORE.sandy.yoga], 
-    meditation: [CORE.sandy.meditation], 
+    yoga: [CORE.sandy.yoga, CORE.sandy.outdoor, CORE.sandy.wellness], 
+    meditation: [CORE.sandy.meditation, CORE.sandy.consultation, CORE.sandy.workshop], 
     workshops: [
-      CORE.services.retreat1, 
-      CORE.services.retreat4,
-      CORE.community.empowerment2
+      CORE.community.empowerment2, 
+      CORE.community.empowerment4,
+      CORE.community.khoe6,
+      CORE.services.retreat4
     ], 
     retreats: [
-      CORE.services.retreat1, 
+      CORE.services.retreat2, 
       CORE.services.retreat5,
-      CORE.services.retreat6
+      CORE.services.retreat6,
+      CORE.services.retreat1
     ], 
     community: [
-      CORE.services.community1, 
-      CORE.services.community2,
-      CORE.community.khoe2
+      CORE.community.khoe4, 
+      CORE.community.khoe7,
+      CORE.community.roze,
+      CORE.services.community3
     ], 
     locations: [
-      CORE.locations.view1, 
+      CORE.locations.view2, 
       CORE.locations.capeTown4,
-      CORE.locations.sunrise
+      CORE.locations.sunrise,
+      CORE.services.beachLions2
     ], 
     general: [
-      CORE.sandy.portrait, 
+      CORE.services.team, 
       CORE.services.wellness1,
-      CORE.locations.view2
+      CORE.locations.view2,
+      CORE.community.empowerment
     ] 
   },
 };
