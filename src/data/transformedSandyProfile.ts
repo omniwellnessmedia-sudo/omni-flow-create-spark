@@ -1,6 +1,6 @@
 // Sandy Mitchell - Transformed to match new provider interface
 import { ProviderDirectory } from '@/types/provider';
-import { IMAGES, getImageWithFallback } from '@/constants/images';
+import { IMAGES, getImageWithFallback } from '@/lib/images';
 import { sandyProviderProfile, sandyServices, sandyPackages } from './sandyMitchellProfile';
 
 export const transformedSandyProfile: ProviderDirectory = {

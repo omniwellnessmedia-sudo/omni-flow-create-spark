@@ -9,7 +9,7 @@ import { Globe, Wifi, Smartphone, MapPin, Clock, Check, Star, Zap, ArrowLeft, Se
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { PriceDisplay } from "@/components/ui/price-display";
-import heroImage from "@/assets/esim-hero-wellness.jpg";
+import { IMAGES } from "@/lib/images";
 
 const DataProducts = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -400,7 +400,7 @@ const DataProducts = () => {
           <div className="relative">
             <div className="relative z-10 overflow-hidden rounded-3xl shadow-2xl">
               <img 
-                src={heroImage} 
+                src={IMAGES.wellness.deals} 
                 alt="Wellness traveler staying connected with eSIM"
                 className="w-full h-auto object-cover"
               />

@@ -38,7 +38,6 @@ export const twoBeWellProfile: ProviderDirectory = {
     social_media: {
       instagram: '@2bewellcapetown',
       facebook: '2BeWell Wellness Products',
-      pinterest: '2BeWell Lifestyle',
       twitter: '@2bewellness'
     },
     rating: 4.7,

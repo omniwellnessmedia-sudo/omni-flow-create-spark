@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import wellnessHumans from "@/assets/wellness-humans.png";
+import { IMAGES } from "@/lib/images";
 
 const WellnessHumansSection = () => {
   return (
@@ -67,8 +67,8 @@ const WellnessHumansSection = () => {
           <div className="relative">
             <div className="relative z-10">
               <img 
-                src="/images/sandy/Sandy_August_shoot_omni-2.png"
-                alt="Person practicing wellness yoga on beach" 
+                src={IMAGES.sandy.profile}
+                alt="Person practicing wellness yoga on beach"
                 className="w-full h-auto rounded-3xl shadow-2xl"
               />
             </div>

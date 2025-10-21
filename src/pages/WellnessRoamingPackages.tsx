@@ -8,20 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-
-// Import images
-import premiumTransferImage from '@/assets/premium-airport-transfer.jpg';
-import safariVehicleImage from '@/assets/safari-vehicle-rental.jpg';
-import ecoLodgeImage from '@/assets/eco-lodge-accommodation.jpg';
-import wellnessRetreatImage from '@/assets/wellness-retreat-center.jpg';
-import wineTourImage from '@/assets/premium-wine-tour.jpg';
-import hikingImage from '@/assets/table-mountain-hiking.jpg';
-import appTechImage from '@/assets/wellness-app-technology.jpg';
-import simCardImage from '@/assets/unlimited-data-sim.jpg';
-import insuranceImage from '@/assets/wellness-travel-insurance.jpg';
-import safetyTrackerImage from '@/assets/personal-safety-tracker.jpg';
-import healingImage from '@/assets/traditional-healing-experience.jpg';
-import soundHealingImage from '@/assets/sound-healing-retreat.jpg';
+import { IMAGES } from '@/lib/images';
 
 interface RoamBuddyService {
   id: string;
@@ -87,7 +74,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.9,
             duration: '1 hour',
             includes: ['Door-to-door service', 'Wellness kit', 'Peace of mind guarantee'],
-            image_url: premiumTransferImage
+            image_url: IMAGES.tours.capeTown
           },
           {
             id: '2',
@@ -101,7 +88,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.7,
             duration: 'Per day',
             includes: ['Insurance', 'Unlimited mileage', 'Roadside assistance'],
-            image_url: safariVehicleImage
+            image_url: IMAGES.tours.adventure
           },
           
           // Accommodation Services
@@ -117,7 +104,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.8,
             duration: 'Per night',
             includes: ['Breakfast', 'Wi-Fi', 'Airport shuttle'],
-            image_url: ecoLodgeImage
+            image_url: IMAGES.wellness.retreat
           },
           {
             id: '4',
@@ -131,7 +118,7 @@ const WellnessRoamingPackages = () => {
             rating: 5.0,
             duration: 'Per night',
             includes: ['All meals', 'Daily yoga', 'Spa access', 'Healing sessions'],
-            image_url: wellnessRetreatImage
+            image_url: IMAGES.wellness.retreat2
           },
 
           // Experience Services
@@ -147,7 +134,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.6,
             duration: '6 hours',
             includes: ['Wine tastings', 'Gourmet lunch', 'Transportation', 'Guide'],
-            image_url: wineTourImage
+            image_url: IMAGES.tours.scenic
           },
           {
             id: '6',
@@ -161,7 +148,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.8,
             duration: '4 hours',
             includes: ['Professional guide', 'Snacks', 'Water', 'First aid'],
-            image_url: hikingImage
+            image_url: IMAGES.tours.hiking
           },
 
           // Technology Services
@@ -177,7 +164,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.5,
             duration: '30 days access',
             includes: ['App license', 'Premium features', 'Customer support'],
-            image_url: appTechImage
+            image_url: IMAGES.ai.tools
           },
           {
             id: '8',
@@ -191,7 +178,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.3,
             duration: '30 days',
             includes: ['SIM card', 'Activation', 'Customer support'],
-            image_url: simCardImage
+            image_url: IMAGES.wellness.deals
           },
 
           // Insurance & Safety
@@ -207,7 +194,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.9,
             duration: 'Trip duration',
             includes: ['24/7 support', 'Emergency evacuation', 'Pre-existing conditions'],
-            image_url: insuranceImage
+            image_url: IMAGES.products.essentials
           },
           {
             id: '10',
@@ -221,7 +208,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.4,
             duration: 'Trip duration',
             includes: ['Device rental', 'Emergency monitoring', 'Mobile app'],
-            image_url: safetyTrackerImage
+            image_url: IMAGES.ai.interface
           },
 
           // Wellness Specific Services
@@ -237,7 +224,7 @@ const WellnessRoamingPackages = () => {
             rating: 5.0,
             duration: '3 hours',
             includes: ['Healing session', 'Herbal kit', 'Cultural guide', 'Certificate'],
-            image_url: healingImage
+            image_url: IMAGES.wellness.meditation
           },
           {
             id: '12',
@@ -251,7 +238,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.9,
             duration: '2 hours',
             includes: ['Sound session', 'Meditation guide', 'Herbal tea', 'Take-home audio'],
-            image_url: soundHealingImage
+            image_url: IMAGES.wellness.yoga
           }
         ];
 

@@ -4,9 +4,8 @@ import { ArrowRight, MapPin, Clock, Users, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import consciousConnectionsImage from '@/assets/conscious-connections-healer.jpg';
-import factWellnessImage from '@/assets/fact-wellness-hybrid.jpg';
-import ubuntuCommunityImage from '@/assets/ubuntu-community-gathering.jpg';
+import { IMAGES } from '@/lib/images';
+
 const ToursRetreatsPreview = () => {
   const featuredTours = [{
     id: '1',
@@ -19,7 +18,7 @@ const ToursRetreatsPreview = () => {
     category: 'Indigenous Wisdom',
     slug: 'conscious-connections-indigenous-wisdom-healing',
     categorySlug: 'indigenous-wisdom',
-    image: consciousConnectionsImage,
+    image: IMAGES.wellness.meditation,
     highlights: ['Learn from authentic Khoisan knowledge keepers', 'Traditional fynbos medicine', 'Ancient rock art sites']
   }, {
     id: '2',
@@ -32,7 +31,7 @@ const ToursRetreatsPreview = () => {
     category: 'Wellness Retreats',
     slug: 'fact-wellness-hybrid-classes',
     categorySlug: 'wellness-retreats',
-    image: factWellnessImage,
+    image: IMAGES.wellness.yoga,
     highlights: ['Hybrid technology', 'Muizenberg beach location', 'Community-focused approach']
   }, {
     id: '3',
@@ -45,7 +44,7 @@ const ToursRetreatsPreview = () => {
     category: 'Weekend Retreats',
     slug: 'winter-wine-country-wellness',
     categorySlug: 'weekend-retreats',
-    image: ubuntuCommunityImage,
+    image: IMAGES.wellness.retreat,
     highlights: ['Luxury wine estate accommodation', 'Private wine tastings', 'Professional photography included']
   }];
   return <div className="py-16">
