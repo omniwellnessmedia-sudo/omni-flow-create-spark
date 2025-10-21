@@ -41,6 +41,7 @@ interface Service {
   is_online: boolean;
   images: string[] | null;
   provider_profiles: {
+    id: string;
     business_name: string;
     specialties: string[];
   };
@@ -84,6 +85,7 @@ const WellnessMarketplace = () => {
           is_online,
           images,
           provider_profiles (
+            id,
             business_name,
             specialties
           )
@@ -148,9 +150,24 @@ const WellnessMarketplace = () => {
   };
 
   // Helper function to get service image fallback with variety
-  const getServiceImage = (title: string, category: string, serviceId?: string) => {
+  const getServiceImage = (title: string, category: string, serviceId?: string, providerId?: string) => {
     const lowerTitle = title.toLowerCase();
     console.log(`🎨 Getting image for: "${title}" (${category})`);
+
+    // Check if this is Sandy's service and use her actual photos
+    if (providerId === 'ec7887f9-e0bc-494d-afd6-3779f85021ff') {
+      console.log('  → Sandy\'s service - using professional photos');
+      const sandyImages = [
+        IMAGES.sandy.yoga,
+        IMAGES.sandy.outdoor,
+        IMAGES.sandy.meditation,
+        IMAGES.sandy.wellness,
+        IMAGES.sandy.consultation
+      ];
+      // Use service ID hash to distribute images
+      const hash = serviceId ? serviceId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) : 0;
+      return sandyImages[hash % sandyImages.length];
+    }
 
     // Title-based matching (most specific)
     if (lowerTitle.includes('yoga')) {
@@ -416,12 +433,12 @@ const WellnessMarketplace = () => {
                       onClick={() => handleViewService(service.id)}
                     >
                       <img
-                        src={getValidServiceImage(service.images) || getServiceImage(service.title, service.category, service.id)}
+                        src={getValidServiceImage(service.images) || getServiceImage(service.title, service.category, service.id, service.provider_profiles.id)}
                         alt={service.title}
                         className="img-card hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                         onError={(e) => {
-                          e.currentTarget.src = getServiceImage(service.title, service.category, service.id);
+                          e.currentTarget.src = getServiceImage(service.title, service.category, service.id, service.provider_profiles.id);
                         }}
                       />
                     </div>

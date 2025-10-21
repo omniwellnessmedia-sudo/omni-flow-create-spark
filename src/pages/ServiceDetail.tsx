@@ -279,7 +279,20 @@ const ServiceDetail = () => {
     );
   }
 
-  const getServiceImage = (title: string, category: string, images?: string[], index: number = 0) => {
+  const getServiceImage = (title: string, category: string, images?: string[], index: number = 0, providerId?: string) => {
+    // Check if this is Sandy's service and use her actual photos
+    if (providerId === 'ec7887f9-e0bc-494d-afd6-3779f85021ff') {
+      const sandyYogaImages = [
+        IMAGES.sandy.yoga,
+        IMAGES.sandy.outdoor,
+        IMAGES.sandy.meditation,
+        IMAGES.sandy.wellness,
+        IMAGES.sandy.consultation,
+        IMAGES.sandy.workshop
+      ];
+      return sandyYogaImages[index % sandyYogaImages.length];
+    }
+    
     if (images && images.length > index && !images[index].startsWith('blob:')) {
       return images[index];
     }
@@ -340,7 +353,19 @@ const ServiceDetail = () => {
   };
 
   const CategoryIcon = getCategoryIcon(service.category);
-  const serviceImages = service.images && service.images.length > 0 ? service.images : [getServiceImage(service.title, service.category)];
+  const isSandyService = service.provider_profiles.id === 'ec7887f9-e0bc-494d-afd6-3779f85021ff';
+  const serviceImages = isSandyService 
+    ? [
+        IMAGES.sandy.yoga,
+        IMAGES.sandy.outdoor,
+        IMAGES.sandy.meditation,
+        IMAGES.sandy.wellness,
+        IMAGES.sandy.consultation,
+        IMAGES.sandy.workshop
+      ]
+    : service.images && service.images.length > 0 
+      ? service.images 
+      : [getServiceImage(service.title, service.category, undefined, 0, service.provider_profiles.id)];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
@@ -370,7 +395,7 @@ const ServiceDetail = () => {
                 <div className="space-y-4">
                   <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl bg-white/10 backdrop-blur-sm border border-white/20">
                     <img 
-                      src={imageError ? getServiceImage(service.title, service.category, undefined, activeImageIndex) : getServiceImage(service.title, service.category, service.images, activeImageIndex)}
+                      src={imageError ? getServiceImage(service.title, service.category, undefined, activeImageIndex, service.provider_profiles.id) : getServiceImage(service.title, service.category, service.images, activeImageIndex, service.provider_profiles.id)}
                       alt={service.title}
                       className="w-full h-full object-cover transition-all duration-500"
                       onError={handleImageError}
@@ -391,7 +416,7 @@ const ServiceDetail = () => {
                           }`}
                         >
                           <img 
-                            src={getServiceImage(service.title, service.category, service.images, index)}
+                            src={getServiceImage(service.title, service.category, service.images, index, service.provider_profiles.id)}
                             alt={`${service.title} ${index + 1}`}
                             className="w-full h-full object-cover"
                           />
