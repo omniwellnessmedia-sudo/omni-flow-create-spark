@@ -1,3 +1,4 @@
+// Phase 8: Updated Checkout with PayPal Integration
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import { useState } from "react";
 import { ArrowLeft, CreditCard, Coins } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { PayPalCheckout } from "@/components/PayPalCheckout";
 
 const Checkout = () => {
   const { items, clearCart, totalZAR, totalWellCoins } = useCart();
@@ -34,46 +35,14 @@ const Checkout = () => {
     setBillingInfo(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmitOrder = async () => {
-    if (paymentMethod === "paypal") {
-      try {
-        // Create PayPal order
-        const { data } = await supabase.functions.invoke('paypal-payment', {
-          body: {
-            action: 'create_order',
-            amount: totalZAR * 1.15, // Include tax
-            customerName: `${billingInfo.firstName} ${billingInfo.lastName}`,
-            customerEmail: billingInfo.email,
-            productId: 'cart-items',
-            productName: `Cart Items (${items.length} items)`,
-            productType: 'mixed',
-            returnUrl: `${window.location.origin}/payment-success`
-          }
-        });
-
-        if (data.success && data.approveUrl) {
-          // Redirect to PayPal for payment approval
-          window.location.href = data.approveUrl;
-        } else {
-          throw new Error('Failed to create PayPal order');
-        }
-      } catch (error) {
-        console.error('PayPal payment error:', error);
-        toast({
-          title: "Payment Error",
-          description: "Failed to process PayPal payment. Please try again.",
-          variant: "destructive"
-        });
-      }
-    } else {
-      // Handle WellCoins or other payment methods
-      toast({
-        title: "Order Placed Successfully!",
-        description: "Thank you for your purchase. You'll receive a confirmation email shortly.",
-      });
-      
-      clearCart();
-    }
+  const handleWellCoinsPayment = async () => {
+    // Handle WellCoins payment
+    toast({
+      title: "Order Placed Successfully!",
+      description: "Thank you for your purchase. You'll receive a confirmation email shortly.",
+    });
+    
+    clearCart();
   };
 
   if (items.length === 0) {
@@ -240,9 +209,22 @@ const Checkout = () => {
                   
                   {paymentMethod === "paypal" && (
                     <div className="mt-4 p-4 border rounded-lg bg-blue-50">
-                      <p className="text-sm text-blue-700">
-                        You will be redirected to PayPal to complete your secure payment.
+                      <p className="text-sm text-blue-700 mb-4">
+                        Complete your secure payment with PayPal below.
                       </p>
+                      <PayPalCheckout />
+                    </div>
+                  )}
+                  
+                  {paymentMethod === "wellcoins" && (
+                    <div className="mt-4">
+                      <Button 
+                        onClick={handleWellCoinsPayment}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        size="lg"
+                      >
+                        Pay with WellCoins
+                      </Button>
                     </div>
                   )}
                 </CardContent>
@@ -305,15 +287,7 @@ const Checkout = () => {
                       </div>
                     </div>
                     
-                    <Button 
-                      onClick={handleSubmitOrder}
-                      className="w-full bg-gradient-rainbow hover:opacity-90 text-white mt-6"
-                      size="lg"
-                    >
-                      Complete Order
-                    </Button>
-                    
-                    <p className="text-xs text-gray-500 text-center mt-2">
+                    <p className="text-xs text-gray-500 text-center mt-4">
                       By placing your order, you agree to our Terms of Service and Privacy Policy.
                     </p>
                   </div>

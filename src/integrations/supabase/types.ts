@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+    PostgrestVersion: "13.0.5"
   }
   public: {
     Tables: {
@@ -396,6 +396,51 @@ export type Database = {
           },
         ]
       }
+      order_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          order_id: string | null
+          price_zar: number
+          product_id: string | null
+          product_name: string
+          quantity: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          price_zar: number
+          product_id?: string | null
+          product_name: string
+          quantity?: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          price_zar?: number
+          product_id?: string | null
+          product_name?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           amount: number
@@ -409,8 +454,11 @@ export type Database = {
           esim_activation_code: string | null
           esim_qr_code: string | null
           id: string
+          items: Json | null
           notes: string | null
           order_number: string
+          payment_method: string | null
+          paypal_payer_id: string | null
           product_id: string
           product_name: string
           product_type: string
@@ -418,6 +466,9 @@ export type Database = {
           status: string
           stripe_payment_intent_id: string | null
           stripe_session_id: string | null
+          subtotal_zar: number | null
+          tax_zar: number | null
+          total_zar: number | null
           updated_at: string
           user_id: string | null
           validity_days: number | null
@@ -434,8 +485,11 @@ export type Database = {
           esim_activation_code?: string | null
           esim_qr_code?: string | null
           id?: string
+          items?: Json | null
           notes?: string | null
           order_number: string
+          payment_method?: string | null
+          paypal_payer_id?: string | null
           product_id: string
           product_name: string
           product_type?: string
@@ -443,6 +497,9 @@ export type Database = {
           status?: string
           stripe_payment_intent_id?: string | null
           stripe_session_id?: string | null
+          subtotal_zar?: number | null
+          tax_zar?: number | null
+          total_zar?: number | null
           updated_at?: string
           user_id?: string | null
           validity_days?: number | null
@@ -459,8 +516,11 @@ export type Database = {
           esim_activation_code?: string | null
           esim_qr_code?: string | null
           id?: string
+          items?: Json | null
           notes?: string | null
           order_number?: string
+          payment_method?: string | null
+          paypal_payer_id?: string | null
           product_id?: string
           product_name?: string
           product_type?: string
@@ -468,9 +528,113 @@ export type Database = {
           status?: string
           stripe_payment_intent_id?: string | null
           stripe_session_id?: string | null
+          subtotal_zar?: number | null
+          tax_zar?: number | null
+          total_zar?: number | null
           updated_at?: string
           user_id?: string | null
           validity_days?: number | null
+        }
+        Relationships: []
+      }
+      product_deals: {
+        Row: {
+          available_spots: number | null
+          claimed_spots: number | null
+          created_at: string | null
+          deal_price: number
+          discount_percent: number | null
+          id: string
+          is_active: boolean | null
+          original_price: number
+          product_id: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          available_spots?: number | null
+          claimed_spots?: number | null
+          created_at?: string | null
+          deal_price: number
+          discount_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          original_price: number
+          product_id?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          available_spots?: number | null
+          claimed_spots?: number | null
+          created_at?: string | null
+          deal_price?: number
+          discount_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          original_price?: number
+          product_id?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_deals_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          duration: string | null
+          features: Json | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          name: string
+          price_wellcoins: number
+          price_zar: number
+          provider: string
+          stock: number | null
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          duration?: string | null
+          features?: Json | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name: string
+          price_wellcoins: number
+          price_zar: number
+          provider: string
+          stock?: number | null
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          duration?: string | null
+          features?: Json | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name?: string
+          price_wellcoins?: number
+          price_zar?: number
+          provider?: string
+          stock?: number | null
+          type?: string
+          updated_at?: string | null
         }
         Relationships: []
       }

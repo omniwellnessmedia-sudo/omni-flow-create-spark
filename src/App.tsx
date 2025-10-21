@@ -43,6 +43,7 @@ const DataProducts = React.lazy(() => import('@/pages/DataProducts'));
 const ProductDetail = React.lazy(() => import('@/pages/ProductDetail'));
 const DealDetail = React.lazy(() => import('@/pages/DealDetail'));
 const Checkout = React.lazy(() => import('@/pages/Checkout'));
+const OrderConfirmation = React.lazy(() => import('@/pages/OrderConfirmation'));
 const PaymentSuccess = React.lazy(() => import('@/pages/PaymentSuccess'));
 const PaymentCancelled = React.lazy(() => import('@/pages/PaymentCancelled'));
 const Blog = React.lazy(() => import('@/pages/Blog'));
@@ -133,6 +134,7 @@ function App() {
                   <Route path="/product-detail/:id" element={<ProductDetail />} />
                   <Route path="/deal-detail/:id" element={<DealDetail />} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
                   <Route path="/payment-success" element={<PaymentSuccess />} />
                   <Route path="/payment-cancelled" element={<PaymentCancelled />} />
 

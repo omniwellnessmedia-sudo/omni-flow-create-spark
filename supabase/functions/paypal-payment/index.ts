@@ -1,3 +1,4 @@
+// Phase 11: Update to PRODUCTION PayPal endpoints
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 
@@ -5,6 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
+
+// LIVE PayPal API endpoints (PRODUCTION)
+const PAYPAL_API_BASE = 'https://api-m.paypal.com';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -21,7 +25,7 @@ serve(async (req) => {
 
     if (action === 'create_order') {
       // Get PayPal access token
-      const authResponse = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+      const authResponse = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -40,7 +44,7 @@ serve(async (req) => {
       const accessToken = authData.access_token
 
       // Create PayPal order
-      const orderResponse = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
+      const orderResponse = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +104,7 @@ serve(async (req) => {
 
     if (action === 'capture_order') {
       // Get PayPal access token
-      const authResponse = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+      const authResponse = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -115,7 +119,7 @@ serve(async (req) => {
       const accessToken = authData.access_token
 
       // Capture PayPal order
-      const captureResponse = await fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${data.orderId}/capture`, {
+      const captureResponse = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders/${data.orderId}/capture`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
