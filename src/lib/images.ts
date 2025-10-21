@@ -1,17 +1,17 @@
 // Centralized Image Management System - Supabase CDN
-const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public';
+const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images';
 
 const CORE = {
   sandy: {
-    profile: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-2.png`,
-    yoga: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-3.png`,
-    meditation: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-4.png`,
-    outdoor: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-6.png`,
-    portrait: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-7.png`,
-    wellness: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-8.png`,
-    consultation: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-10.png`,
-    workshop: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-11.png`,
-    hero: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-13.png`,
+    profile: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-2.png`,
+    yoga: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-3.png`,
+    meditation: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-4.png`,
+    outdoor: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-6.png`,
+    portrait: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-7.png`,
+    wellness: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-8.png`,
+    consultation: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-10.png`,
+    workshop: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-11.png`,
+    hero: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-13.png`,
   },
   services: {
     retreat1: `${SUPABASE_URL}/provider-images/OMNI_OLIVETREE_RETREAT_2024.jpg`,
@@ -32,50 +32,50 @@ const CORE = {
     artscape: `${SUPABASE_URL}/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg`,
   },
   locations: {
-    view1: `${SUPABASE_URL}/location-images/_MG_0220.jpg`,
-    view2: `${SUPABASE_URL}/location-images/_MG_0235.jpg`,
-    coastal: `${SUPABASE_URL}/location-images/image00004.jpeg`,
-    capeTown1: `${SUPABASE_URL}/location-images/IMG_20241010_142332.jpg`,
-    capeTown2: `${SUPABASE_URL}/location-images/IMG_20241010_174621.jpg`,
-    capeTown3: `${SUPABASE_URL}/location-images/IMG_20241026_100612.jpg`,
-    capeTown4: `${SUPABASE_URL}/location-images/IMG_20241026_111216.jpg`,
-    capeTown5: `${SUPABASE_URL}/location-images/IMG_20241026_123154.jpg`,
-    sunrise: `${SUPABASE_URL}/location-images/IMG_20250117_060441.jpg`,
+    view1: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/_MG_0220.jpg`,
+    view2: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/_MG_0235.jpg`,
+    coastal: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/image00004.jpeg`,
+    capeTown1: `${SUPABASE_URL}/provider-images/IMG_20241010_142332.jpg`,
+    capeTown2: `${SUPABASE_URL}/provider-images/IMG_20241010_174621.jpg`,
+    capeTown3: `${SUPABASE_URL}/provider-images/IMG_20241026_100612.jpg`,
+    capeTown4: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/IMG_20241026_111216.jpg`,
+    capeTown5: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/IMG_20241026_123154.jpg`,
+    sunrise: `${SUPABASE_URL}/provider-images/IMG_20250117_060441.jpg`,
   },
   products: {
-    logo: `${SUPABASE_URL}/product-images/2%20be%20well%20NEW%20LOGO_OMNI.png`,
-    allPurpose: `${SUPABASE_URL}/product-images/all%20purpose%20cleaner%20stock.png`,
-    product1: `${SUPABASE_URL}/product-images/OMNI_2BeWell-7.jpg`,
-    product2: `${SUPABASE_URL}/product-images/OMNI_2BeWell-8.jpg`,
-    spray: `${SUPABASE_URL}/product-images/Minimal%20Natural%20spray%20Instagram%20post.png`,
-    post5: `${SUPABASE_URL}/product-images/post%205.png`,
-    post7: `${SUPABASE_URL}/product-images/post%207.png`,
-    post8: `${SUPABASE_URL}/product-images/post%208.png`,
-    bottle12: `${SUPABASE_URL}/product-images/12.png`,
-    bottle3: `${SUPABASE_URL}/product-images/3.png`,
+    logo: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/2%20be%20well%20NEW%20LOGO_OMNI.png`,
+    allPurpose: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/all%20purpose%20cleaner%20stock.png`,
+    product1: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-7.jpg`,
+    product2: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`,
+    spray: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/Minimal%20Natural%20spray%20Instagram%20post.png`,
+    post5: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%205.png`,
+    post7: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%207.png`,
+    post8: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%208.png`,
+    bottle12: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/12.png`,
+    bottle3: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/3.png`,
   },
   community: {
-    empowerment: `${SUPABASE_URL}/community-images/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
-    empowerment2: `${SUPABASE_URL}/community-images/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
-    empowerment3: `${SUPABASE_URL}/community-images/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-6.jpg`,
-    khoe: `${SUPABASE_URL}/community-images/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
-    khoe2: `${SUPABASE_URL}/community-images/RR_OMNI_Khoe%20Meisie_WRM-3.jpg`,
-    khoe3: `${SUPABASE_URL}/community-images/RR_OMNI_Khoe%20Meisie_WRM-4.jpg`,
+    empowerment: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
+    empowerment2: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
+    empowerment3: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-6.jpg`,
+    khoe: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
+    khoe2: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-3.jpg`,
+    khoe3: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-4.jpg`,
   },
   logos: {
-    omniPrimary: `${SUPABASE_URL}/partner-logos/OMNI%20LOGO%20FA-06(1).png`,
-    omniIcon: `${SUPABASE_URL}/partner-logos/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
-    bwc: `${SUPABASE_URL}/partner-logos/Bwc%20logo.JPG`,
-    drPhil1: `${SUPABASE_URL}/partner-logos/DR%20PHIL%20LOGO%20NPO_OMNI-01.png`,
-    drPhil2: `${SUPABASE_URL}/partner-logos/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
-    amor: `${SUPABASE_URL}/partner-logos/1April2025_Amor%20logo%20png.png`,
-    apex: `${SUPABASE_URL}/partner-logos/APEXAdvocacy_logo_blackonwhitebubble-01.png`,
-    gorachouqua: `${SUPABASE_URL}/partner-logos/Gorachouqua-Logo-300x300.png`,
-    kai: `${SUPABASE_URL}/partner-logos/Kai%20Logo%20BW.png`,
-    muddyRambler: `${SUPABASE_URL}/partner-logos/Muddy%20Rambler%20Logo%20Square%20White.png`,
-    muizKitchen: `${SUPABASE_URL}/partner-logos/muiz-kitchen-logo3.jpg`,
-    valleyOfPlenty: `${SUPABASE_URL}/partner-logos/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
-    tt: `${SUPABASE_URL}/partner-logos/TT%20Logo%20no%20background.png`,
+    omniPrimary: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`,
+    omniIcon: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
+    bwc: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/Bwc%20logo.JPG`,
+    drPhil1: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-01.png`,
+    drPhil2: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
+    amor: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/1April2025_Amor%20logo%20png.png`,
+    apex: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/APEXAdvocacy_logo_blackonwhitebubble-01.png`,
+    gorachouqua: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/Gorachouqua-Logo-300x300.png`,
+    kai: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/Kai%20Logo%20BW.png`,
+    muddyRambler: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/Muddy%20Rambler%20Logo%20Square%20White.png`,
+    muizKitchen: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/muiz-kitchen-logo3.jpg`,
+    valleyOfPlenty: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
+    tt: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/TT%20Logo%20no%20background.png`,
   },
 };
 
@@ -234,8 +234,24 @@ export const IMAGES = {
   },
 };
 
-export const getImageWithFallback = (primaryPath: string, fallbackPath?: string) => ({ src: primaryPath, onError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => { if (fallbackPath && e.currentTarget.src !== fallbackPath) e.currentTarget.src = fallbackPath; else e.currentTarget.src = IMAGES.logos.omniPrimary; } });
-export const getSandyImage = (variant: keyof typeof IMAGES.sandy = 'profile') => getImageWithFallback(IMAGES.sandy[variant], IMAGES.sandy.profile);
-export const getOmniLogo = () => getImageWithFallback(IMAGES.logos.omniPrimary);
-export const getPartnerLogo = (partner: keyof typeof IMAGES.logos) => getImageWithFallback(IMAGES.logos[partner], IMAGES.logos.omniPrimary);
-export const getRandomFallback = (category: keyof typeof IMAGES.fallbacks) => IMAGES.fallbacks[category][0];
+export const getImageWithFallback = (primaryPath: string, fallbackPath?: string) => ({ 
+  src: primaryPath, 
+  onError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => { 
+    if (fallbackPath && e.currentTarget.src !== fallbackPath) 
+      e.currentTarget.src = fallbackPath; 
+    else 
+      e.currentTarget.src = IMAGES.logos.omniPrimary; 
+  } 
+});
+
+export const getSandyImage = (variant: keyof typeof IMAGES.sandy = 'profile') => 
+  getImageWithFallback(IMAGES.sandy[variant], IMAGES.sandy.profile);
+
+export const getOmniLogo = () => 
+  getImageWithFallback(IMAGES.logos.omniPrimary);
+
+export const getPartnerLogo = (partner: keyof typeof IMAGES.logos) => 
+  getImageWithFallback(IMAGES.logos[partner], IMAGES.logos.omniPrimary);
+
+export const getRandomFallback = (category: keyof typeof IMAGES.fallbacks) => 
+  IMAGES.fallbacks[category][0];
