@@ -54,7 +54,7 @@ interface Testimonial {
 }
 
 const TourDetail = () => {
-  const { category, slug } = useParams();
+  const { category, slug, id } = useParams();
   const [tour, setTour] = useState<Tour | null>(null);
   const [itinerary, setItinerary] = useState<Itinerary[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -62,25 +62,32 @@ const TourDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
-    if (slug) {
+    if (id || slug) {
       fetchTourData();
     }
-  }, [slug]);
+  }, [id, slug]);
 
   const fetchTourData = async () => {
     try {
-      console.log('Fetching tour with slug:', slug, 'in category:', category);
+      console.log('Fetching tour with:', { id, slug, category });
       
-      // Fetch tour details
-      const { data: tourData, error: tourError } = await supabase
+      let query = supabase
         .from('tours')
         .select(`
           *,
           category:tour_categories(name, slug)
         `)
-        .eq('slug', slug)
-        .eq('active', true)
-        .maybeSingle();
+        .eq('active', true);
+
+      // Fetch by ID if available (from /experience/:id route)
+      if (id) {
+        query = query.eq('id', id);
+      } else if (slug) {
+        // Fetch by slug (from /tour-detail/:slug route)
+        query = query.eq('slug', slug);
+      }
+
+      const { data: tourData, error: tourError } = await query.maybeSingle();
 
       if (tourError) {
         console.error('Error fetching tour:', tourError);
