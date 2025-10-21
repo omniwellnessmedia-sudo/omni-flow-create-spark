@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Large media files - use external storage/CDN
+Omni-Wellness-Images/
+public/images/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.tif
+*.webp
+*.ARW
+*.pdf
