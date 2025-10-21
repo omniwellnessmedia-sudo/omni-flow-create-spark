@@ -104,7 +104,7 @@ function App() {
                   {/* Wellness Exchange Routes */}
                   <Route path="/wellness-exchange" element={<WellnessExchange />} />
                   <Route path="/wellness-exchange/marketplace" element={<WellnessMarketplace />} />
-                  <Route path="/wellness-exchange/service/:id" element={<SimpleServiceDetail />} />
+                  <Route path="/wellness-exchange/service/:id" element={<ServiceDetail />} />
                   <Route path="/wellness-exchange/account" element={<WellnessAccount />} />
                   <Route path="/wellness-exchange/wants" element={<WellnessWants />} />
                   <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
