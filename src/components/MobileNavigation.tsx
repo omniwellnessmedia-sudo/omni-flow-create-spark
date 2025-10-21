@@ -17,6 +17,7 @@ import {
   Plus
 } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
+import { IMAGES } from "@/lib/images";
 
 const MobileNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +56,7 @@ const MobileNavigation = () => {
           
           <Link to="/wellness-exchange/marketplace" className="flex items-center">
             <img 
-              src="/images/logos/OMNI LOGO FA-06(1).png" 
+              src={IMAGES.logos.omniPrimary} 
               alt="Omni Wellness" 
               className="h-8 w-8"
             />

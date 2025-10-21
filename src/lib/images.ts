@@ -1,160 +1,92 @@
 // Centralized Image Management System for Omni Wellness Platform
-// All images organized by category based on /public/images/ structure
+// All images from Supabase Storage with actual filenames
+
+const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public';
+
+const CORE_IMAGES = {
+  sandy: {
+    profile: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-2.png`,
+    yoga: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-3.png`,
+    meditation: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-4.png`,
+    outdoor: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-6.png`,
+    portrait: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-7.png`,
+    wellness: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-8.png`,
+    consultation: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-10.png`,
+    workshop: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-11.png`,
+    hero: `${SUPABASE_URL}/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-13.png`,
+  },
+  services: {
+    retreat1: `${SUPABASE_URL}/provider-images/OMNI_OLIVETREE_RETREAT_2024.jpg`,
+    retreat2: `${SUPABASE_URL}/provider-images/OMNI_OLIVETREE_RETREAT_2024-5.jpg`,
+    retreat3: `${SUPABASE_URL}/provider-images/OMNI_OLIVETREE_RETREAT_2024-6.jpg`,
+    retreat4: `${SUPABASE_URL}/provider-images/OMNI_OLIVETREE_RETREAT_2024-10.jpg`,
+    retreat5: `${SUPABASE_URL}/provider-images/OMNI_OLIVETREE_RETREAT_2024-17.jpg`,
+    retreat6: `${SUPABASE_URL}/provider-images/OMNI_OLIVETREE_RETREAT_2024-43.jpg`,
+    graduation1: `${SUPABASE_URL}/provider-images/OMNI_KALK%20BAY_%20GRADUATION-8.jpg`,
+    graduation2: `${SUPABASE_URL}/provider-images/OMNI_KALK%20BAY_%20GRADUATION-48.jpg`,
+    community1: `${SUPABASE_URL}/provider-images/Omni%20wellness%20community%20project%201.JPG`,
+    community2: `${SUPABASE_URL}/provider-images/Omni%20wellness%20community%20project%202.JPG`,
+    community3: `${SUPABASE_URL}/provider-images/Omni%20wellness%20community%20project%203.jpg`,
+    team: `${SUPABASE_URL}/provider-images/Omni%20wellness%20team.jpg`,
+    wellness1: `${SUPABASE_URL}/provider-images/wellness.jpg`,
+    wellness2: `${SUPABASE_URL}/provider-images/wellness%202.jpg`,
+    landmark: `${SUPABASE_URL}/provider-images/OMNI_LANDMARK%20FOUNDATION_IMAGES_JUNE%202024-2.jpg`,
+    artscape: `${SUPABASE_URL}/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg`,
+  },
+  locations: {
+    view1: `${SUPABASE_URL}/location-images/_MG_0220.jpg`,
+    view2: `${SUPABASE_URL}/location-images/_MG_0235.jpg`,
+    coastal: `${SUPABASE_URL}/location-images/image00004.jpeg`,
+    capeTown1: `${SUPABASE_URL}/location-images/IMG_20241010_142332.jpg`,
+    capeTown2: `${SUPABASE_URL}/location-images/IMG_20241010_174621.jpg`,
+    capeTown3: `${SUPABASE_URL}/location-images/IMG_20241026_100612.jpg`,
+    capeTown4: `${SUPABASE_URL}/location-images/IMG_20241026_111216.jpg`,
+    capeTown5: `${SUPABASE_URL}/location-images/IMG_20241026_123154.jpg`,
+    sunrise: `${SUPABASE_URL}/location-images/IMG_20250117_060441.jpg`,
+  },
+  products: {
+    logo: `${SUPABASE_URL}/product-images/2%20be%20well%20NEW%20LOGO_OMNI.png`,
+    allPurpose: `${SUPABASE_URL}/product-images/all%20purpose%20cleaner%20stock.png`,
+    product1: `${SUPABASE_URL}/product-images/OMNI_2BeWell-7.jpg`,
+    product2: `${SUPABASE_URL}/product-images/OMNI_2BeWell-8.jpg`,
+    spray: `${SUPABASE_URL}/product-images/Minimal%20Natural%20spray%20Instagram%20post.png`,
+  },
+  community: {
+    empowerment1: `${SUPABASE_URL}/community-images/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
+    khoe1: `${SUPABASE_URL}/community-images/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
+  },
+  logos: {
+    omniPrimary: `${SUPABASE_URL}/partner-logos/OMNI%20LOGO%20FA-06(1).png`,
+    omniIcon: `${SUPABASE_URL}/partner-logos/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
+    bwc: `${SUPABASE_URL}/partner-logos/Bwc%20logo.JPG`,
+    drPhil1: `${SUPABASE_URL}/partner-logos/DR%20PHIL%20LOGO%20NPO_OMNI-01.png`,
+    amor: `${SUPABASE_URL}/partner-logos/1April2025_Amor%20logo%20png.png`,
+    apex: `${SUPABASE_URL}/partner-logos/APEXAdvocacy_logo_blackonwhitebubble-01.png`,
+    kai: `${SUPABASE_URL}/partner-logos/Kai%20Logo%20BW.png`,
+    muddyRambler: `${SUPABASE_URL}/partner-logos/Muddy%20Rambler%20Logo%20Square%20White.png`,
+    muizKitchen: `${SUPABASE_URL}/partner-logos/muiz-kitchen-logo3.jpg`,
+    valleyOfPlenty: `${SUPABASE_URL}/partner-logos/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
+  },
+};
 
 export const IMAGES = {
-  // Sandy Mitchell - Professional photoshoot images (using placeholders)
-  sandy: {
-    profile: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80',
-    hero: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80',
-    meditation: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=800&q=80',
-    yoga: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=800&q=80',
-    teaching: 'https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?w=800&q=80',
-    nature: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
-    portrait1: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80',
-    portrait2: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=800&q=80',
-    portrait3: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80',
-    action1: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
-    action2: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?w=800&q=80',
-    closeup: 'https://images.unsplash.com/photo-1485178575877-1a13bf489dfe?w=800&q=80',
-    fallback: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80'
-  },
-
-  // Omni Services (using placeholders)
-  omni: {
-    logo: 'https://placehold.co/400x400/8B7355/ffffff?text=Omni+Wellness',
-    logoAlt: 'https://placehold.co/200x200/8B7355/ffffff?text=Omni',
-    team: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80',
-    communityProject1: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=80',
-    communityProject2: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&q=80',
-    communityProject3: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80'
-  },
-
-  // 2BeWell Products - Natural wellness products (using placeholders)
-  twoBeWell: {
-    lipBalm: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=600&q=80',
-    faceSerum: 'https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=600&q=80',
-    bodyButter: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&q=80',
-    cleaner: 'https://images.unsplash.com/photo-1556228852-80952c2add82?w=600&q=80',
-    product1: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=600&q=80',
-    product2: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=600&q=80',
-    logo: 'https://placehold.co/300x300/4A5D23/ffffff?text=2BeWell',
-    packaging: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80'
-  },
-
-  // Community & Wellness (using placeholders)
-  wellness: {
-    marketplace: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1200&q=80',
-    community: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&q=80',
-    deals: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80',
-    meditation: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=1200&q=80',
-    yoga: 'https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=1200&q=80',
-    retreat: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80',
-    retreat2: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1200&q=80',
-    retreat3: 'https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?w=1200&q=80',
-    retreat4: 'https://images.unsplash.com/photo-1588286840104-8957b019727f?w=1200&q=80',
-    graduation: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80',
-    graduation2: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1200&q=80',
-    landmark: 'https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?w=1200&q=80',
-    muiz: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&q=80',
-    beachLions: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80',
-    beachLions2: 'https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=1200&q=80',
-    wellness: 'https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=1200&q=80',
-    team: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80',
-    communityProject1: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=80',
-    communityProject2: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&q=80',
-    communityProject3: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80'
-  },
-
-  // Tours & Retreats (using placeholders)
-  tours: {
-    mountain: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80',
-    mountain2: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80',
-    capeTown: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1200&q=80',
-    nature: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80',
-    hiking: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80',
-    adventure: 'https://images.unsplash.com/photo-1476611338391-6f395a0ebc7b?w=1200&q=80',
-    scenic: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80',
-    coastal: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80',
-    retreat: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1200&q=80'
-  },
-
-  // Business & Professional (using placeholders)
-  business: {
-    consulting: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&q=80',
-    partnership: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&q=80',
-    strategy: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80',
-    teamwork: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80',
-    community: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&q=80'
-  },
-
-  // Media & Content (using placeholders)
-  media: {
-    production: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200&q=80',
-    podcast: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=1200&q=80',
-    video: 'https://images.unsplash.com/photo-1533230408708-8f9f91d1235a?w=1200&q=80',
-    content: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&q=80'
-  },
-
-  // AI & Technology (using placeholders)
-  ai: {
-    tools: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80',
-    interface: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=80',
-    neural: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&q=80'
-  },
-
-  // Products & Shopping (using placeholders)
-  products: {
-    wellness: 'https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=1200&q=80',
-    supplements: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=1200&q=80',
-    essentials: 'https://images.unsplash.com/photo-1556229010-aa9e5f8e821f?w=1200&q=80'
-  },
-
-  // Providers (using placeholders)
-  providers: {
-    chad: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80',
-    chadAction: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80',
-    chadAction2: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80',
-    chief: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?w=800&q=80',
-    castle: 'https://images.unsplash.com/photo-1519222970733-f546218fa6d7?w=1200&q=80',
-    bwc: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=1200&q=80'
-  },
-
-  // Partner Logos (using placeholders)
-  partners: {
-    twoBeWell: 'https://placehold.co/200x200/4A5D23/ffffff?text=2BeWell',
-    apex: 'https://placehold.co/200x200/1a365d/ffffff?text=APEX',
-    mbs: 'https://placehold.co/200x200/7c2d12/ffffff?text=MBS',
-    drPhil: 'https://placehold.co/200x200/065f46/ffffff?text=Dr+Phil',
-    amor: 'https://placehold.co/200x200/9f1239/ffffff?text=Amor',
-    baboonConservation: 'https://placehold.co/200x200/0f766e/ffffff?text=BWC',
-    kai: 'https://placehold.co/200x200/4c1d95/ffffff?text=Kai',
-    travelTours: 'https://placehold.co/200x200/92400e/ffffff?text=Travel+Tours'
-  }
-} as const;
-
-// Helper functions for image management
-export const getImageWithFallback = (primaryPath: string, fallbackPath?: string) => {
-  return {
-    src: primaryPath,
-    fallback: fallbackPath || IMAGES.omni.logoAlt,
-    onError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-      if (fallbackPath && e.currentTarget.src !== fallbackPath) {
-        e.currentTarget.src = fallbackPath;
-      } else {
-        e.currentTarget.src = IMAGES.omni.logoAlt;
-      }
-    }
-  };
+  ...CORE_IMAGES,
+  sandy: { ...CORE_IMAGES.sandy, portrait1: CORE_IMAGES.sandy.portrait, portrait2: CORE_IMAGES.sandy.profile, portrait3: CORE_IMAGES.sandy.consultation, action1: CORE_IMAGES.sandy.yoga, action2: CORE_IMAGES.sandy.outdoor, closeup: CORE_IMAGES.sandy.portrait, fallback: CORE_IMAGES.sandy.profile, nature: CORE_IMAGES.sandy.outdoor, teaching: CORE_IMAGES.sandy.workshop, beach: CORE_IMAGES.sandy.outdoor },
+  wellness: { marketplace: CORE_IMAGES.services.wellness1, community: CORE_IMAGES.services.community1, deals: CORE_IMAGES.services.wellness2, meditation: CORE_IMAGES.sandy.meditation, yoga: CORE_IMAGES.sandy.yoga, retreat: CORE_IMAGES.services.retreat1, retreat2: CORE_IMAGES.services.retreat2, team: CORE_IMAGES.services.team, communityProject1: CORE_IMAGES.services.community1, communityProject2: CORE_IMAGES.services.community2, communityProject3: CORE_IMAGES.services.community3, wellness: CORE_IMAGES.services.wellness1 },
+  tours: { mountain: CORE_IMAGES.locations.view1, capeTown: CORE_IMAGES.locations.capeTown1, retreat: CORE_IMAGES.services.retreat1 },
+  business: { consulting: CORE_IMAGES.services.team, partnership: CORE_IMAGES.services.community1 },
+  media: { production: CORE_IMAGES.services.artscape, podcast: CORE_IMAGES.services.wellness1 },
+  ai: { tools: CORE_IMAGES.services.wellness1 },
+  omni: { logo: CORE_IMAGES.logos.omniPrimary, logoAlt: CORE_IMAGES.logos.omniIcon, team: CORE_IMAGES.services.team },
+  partners: { twoBeWell: CORE_IMAGES.products.logo, apex: CORE_IMAGES.logos.apex, mbs: CORE_IMAGES.logos.muddyRambler, drPhil: CORE_IMAGES.logos.drPhil1, amor: CORE_IMAGES.logos.amor, baboonConservation: CORE_IMAGES.logos.bwc, kai: CORE_IMAGES.logos.kai, travelTours: CORE_IMAGES.logos.valleyOfPlenty },
+  twoBeWell: { lipBalm: CORE_IMAGES.products.product1, logo: CORE_IMAGES.products.logo },
+  providers: { chad: CORE_IMAGES.services.team },
+  fallbacks: { yoga: [CORE_IMAGES.sandy.yoga], meditation: [CORE_IMAGES.sandy.meditation], workshops: [CORE_IMAGES.services.retreat1], retreats: [CORE_IMAGES.services.retreat1], community: [CORE_IMAGES.services.community1], locations: [CORE_IMAGES.locations.view1], general: [CORE_IMAGES.sandy.portrait] },
 };
 
-export const getSandyImage = (variant: keyof typeof IMAGES.sandy = 'profile') => {
-  return getImageWithFallback(IMAGES.sandy[variant], IMAGES.sandy.fallback);
-};
+export const getImageWithFallback = (primaryPath: string, fallbackPath?: string) => ({ src: primaryPath, onError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => { if (fallbackPath && e.currentTarget.src !== fallbackPath) e.currentTarget.src = fallbackPath; else e.currentTarget.src = IMAGES.logos.omniPrimary; } });
 
-export const getOmniLogo = () => {
-  return getImageWithFallback(IMAGES.omni.logo, IMAGES.omni.logoAlt);
-};
-
-export const getPartnerLogo = (partner: keyof typeof IMAGES.partners) => {
-  return getImageWithFallback(IMAGES.partners[partner], IMAGES.omni.logoAlt);
-};
+export const getSandyImage = (variant: keyof typeof IMAGES.sandy = 'profile') => getImageWithFallback(IMAGES.sandy[variant], IMAGES.sandy.profile);
+export const getOmniLogo = () => getImageWithFallback(IMAGES.logos.omniPrimary);
+export const getPartnerLogo = (partner: keyof typeof IMAGES.logos) => getImageWithFallback(IMAGES.logos[partner], IMAGES.logos.omniPrimary);
+export const getRandomFallback = (category: keyof typeof IMAGES.fallbacks) => IMAGES.fallbacks[category][0];

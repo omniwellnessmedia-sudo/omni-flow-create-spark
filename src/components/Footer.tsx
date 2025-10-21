@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ChevronUp, Mail, Calendar, MessageCircle, Facebook, Instagram, Linkedin, Youtube, Heart, Lightbulb, BookOpen, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { IMAGES } from "@/lib/images";
 const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({
@@ -52,7 +53,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative">
-                <img src="/images/logos/OMNI LOGO FA-06(1).png" alt="Omni Wellness Media" className="h-20 w-20 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
+                <img src={IMAGES.logos.omniPrimary} alt="Omni Wellness Media" className="h-20 w-20 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-accent opacity-20 animate-pulse"></div>
               </div>
               <div>
