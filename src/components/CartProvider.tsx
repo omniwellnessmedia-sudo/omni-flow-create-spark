@@ -6,7 +6,7 @@ export interface CartItem {
   price_zar: number;
   price_wellcoins: number;
   quantity: number;
-  provider_name: string;
+  provider_name?: string;
   category: string;
   duration_minutes?: number;
   location?: string;

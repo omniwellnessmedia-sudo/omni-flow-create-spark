@@ -379,15 +379,17 @@ const SandyMitchellProfile = () => {
                     <CardDescription>{pkg.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="text-3xl font-bold" style={{ color: SANDY_THEME.COLORS.PRIMARY }}>
-                          R{pkg.price_zar}
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="text-3xl font-bold" style={{ color: SANDY_THEME.COLORS.PRIMARY }}>
+                            R{pkg.price_zar}
+                          </div>
+                          {pkg.savings && (
+                            <Badge variant="secondary">
+                              {pkg.savings}
+                            </Badge>
+                          )}
                         </div>
-                        <Badge variant="secondary">
-                          Save R{pkg.savings_amount}
-                        </Badge>
-                      </div>
                       <div className="space-y-2">
                         <div className="text-sm font-medium">Package Includes:</div>
                         <ul className="space-y-1">

@@ -662,14 +662,12 @@ const WellnessDeals = () => {
                         item={{
                           id: deal.id,
                           title: deal.title,
-                          price: deal.deal_price_zar,
-                          wellcoinPrice: deal.deal_price_wellcoins,
+                          price_zar: deal.deal_price_zar,
+                          price_wellcoins: deal.deal_price_wellcoins,
                           image: deal.images[0] || IMAGES.wellness.deals,
                           category: deal.category,
-                          provider: deal.provider_name,
-                          location: deal.location,
-                          originalPrice: deal.original_price_zar,
-                          discount: deal.discount_percentage
+                          provider_name: deal.provider_name,
+                          location: deal.location
                         }}
                         variant="default"
                         className="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white font-bold"

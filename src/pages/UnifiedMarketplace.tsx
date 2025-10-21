@@ -448,11 +448,11 @@ const UnifiedMarketplace = () => {
                         item={{
                           id: item.id,
                           title: item.title,
-                          price: item.price_zar,
-                          wellcoinPrice: 'price_wellcoins' in item ? item.price_wellcoins : 0,
+                          price_zar: item.price_zar,
+                          price_wellcoins: 'price_wellcoins' in item ? item.price_wellcoins : 0,
                           image: item.images[0] || IMAGES.wellness.marketplace,
                           category: item.category,
-                          provider: item.provider_name,
+                          provider_name: item.provider_name,
                           location: item.location
                         }}
                         variant="default"
