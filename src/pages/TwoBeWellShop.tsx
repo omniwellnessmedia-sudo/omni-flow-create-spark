@@ -592,7 +592,7 @@ const subcategories: Record<string, string[]> = {
 };
 
 const TwoBeWellShop = () => {
-  const { state, addItem } = useCart();
+  const { items, addItem } = useCart();
   const { toast } = useToast();
 
   // State management

@@ -270,6 +270,8 @@ const RoamBuddyStore = () => {
           id: product.id,
           title: product.name,
           price_zar: product.price,
+          price_wellcoins: Math.floor(product.price * 10),
+          provider_name: 'RoamBuddy',
           image: IMAGES.tours.nature,
           category: 'roambuddy'
         });

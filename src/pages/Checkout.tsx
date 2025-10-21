@@ -15,7 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 const Checkout = () => {
-  const { state, clearCart } = useCart();
+  const { items, clearCart, totalZAR, totalWellCoins } = useCart();
   const { toast } = useToast();
   
   const [paymentMethod, setPaymentMethod] = useState("paypal");
@@ -41,11 +41,11 @@ const Checkout = () => {
         const { data } = await supabase.functions.invoke('paypal-payment', {
           body: {
             action: 'create_order',
-            amount: state.total * 1.15, // Include tax
+            amount: totalZAR * 1.15, // Include tax
             customerName: `${billingInfo.firstName} ${billingInfo.lastName}`,
             customerEmail: billingInfo.email,
             productId: 'cart-items',
-            productName: `Cart Items (${state.items.length} items)`,
+            productName: `Cart Items (${items.length} items)`,
             productType: 'mixed',
             returnUrl: `${window.location.origin}/payment-success`
           }
@@ -76,7 +76,7 @@ const Checkout = () => {
     }
   };
 
-  if (state.items.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="min-h-screen">
         <UnifiedNavigation />
@@ -227,12 +227,12 @@ const Checkout = () => {
                         PayPal
                       </Label>
                     </div>
-                    {state.wellcoinTotal > 0 && (
+                    {totalWellCoins > 0 && (
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="wellcoins" id="wellcoins" />
                         <Label htmlFor="wellcoins" className="flex items-center cursor-pointer">
                           <Coins className="w-4 h-4 mr-2 text-green-600" />
-                          WellCoins ({state.wellcoinTotal} available)
+                          WellCoins ({totalWellCoins} available)
                         </Label>
                       </div>
                     )}
@@ -257,7 +257,7 @@ const Checkout = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {state.items.map((item) => (
+                    {items.map((item) => (
                       <div key={item.id} className="flex justify-between items-start">
                         <div className="flex-1">
                           <h4 className="font-medium text-sm">{item.title}</h4>
@@ -277,7 +277,7 @@ const Checkout = () => {
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span>Subtotal</span>
-                        <span>R{state.total.toFixed(2)}</span>
+                        <span>R{totalZAR.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span>Shipping</span>
@@ -285,12 +285,12 @@ const Checkout = () => {
                       </div>
                       <div className="flex justify-between text-sm">
                         <span>Tax</span>
-                        <span>R{(state.total * 0.15).toFixed(2)}</span>
+                        <span>R{(totalZAR * 0.15).toFixed(2)}</span>
                       </div>
-                      {state.wellcoinTotal > 0 && paymentMethod === "wellcoins" && (
+                      {totalWellCoins > 0 && paymentMethod === "wellcoins" && (
                         <div className="flex justify-between text-sm text-green-600">
                           <span>WellCoins Discount</span>
-                          <span>-R{(state.wellcoinTotal * 0.1).toFixed(2)}</span>
+                          <span>-R{(totalWellCoins * 0.1).toFixed(2)}</span>
                         </div>
                       )}
                       <Separator />
@@ -298,8 +298,8 @@ const Checkout = () => {
                         <span>Total</span>
                         <span>
                           R{paymentMethod === "wellcoins" 
-                            ? ((state.total * 1.15) - (state.wellcoinTotal * 0.1)).toFixed(2)
-                            : (state.total * 1.15).toFixed(2)
+                            ? ((totalZAR * 1.15) - (totalWellCoins * 0.1)).toFixed(2)
+                            : (totalZAR * 1.15).toFixed(2)
                           }
                         </span>
                       </div>

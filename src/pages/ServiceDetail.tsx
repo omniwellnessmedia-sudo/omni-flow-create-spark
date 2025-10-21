@@ -80,7 +80,7 @@ const ServiceDetail = () => {
   }, [id]);
 
   const fetchService = async () => {
-    if (!serviceId) {
+    if (!id) {
       setLoading(false);
       return;
     }
@@ -89,7 +89,7 @@ const ServiceDetail = () => {
       setLoading(true);
       
       // First check if it's one of Sandy's services
-      const sandyService = sandyMitchellData.services.find(service => service.id === serviceId);
+      const sandyService = sandyMitchellData.services.find(service => service.id === id);
       
       if (sandyService) {
         // Transform Sandy's service to match the expected format

@@ -17,7 +17,7 @@ const PartnerLogos = ({
 
   const partners = [
     {
-      key: 'bwc' as const,
+      key: 'baboonConservation' as const,
       name: 'BWC - 2 Be Well',
       description: 'Wellness packaging & community programs',
       category: 'Wellness Community'
@@ -29,7 +29,7 @@ const PartnerLogos = ({
       category: 'Healthcare'
     },
     {
-      key: 'valley' as const,
+      key: 'travelTours' as const,
       name: 'The Valley of Plenty',
       description: 'Sustainable wellness retreat center',
       category: 'Retreats'
@@ -41,7 +41,7 @@ const PartnerLogos = ({
       category: 'Professional Services'
     },
     {
-      key: 'muddy' as const,
+      key: 'mbs' as const,
       name: 'Muddy Rambler',
       description: 'Adventure wellness experiences',
       category: 'Adventure Tourism'
@@ -59,7 +59,7 @@ const PartnerLogos = ({
       category: 'Community Impact'
     },
     {
-      key: 'muiz' as const,
+      key: 'twoBeWell' as const,
       name: 'Muiz Kitchen',
       description: 'Conscious nutrition & wellness',
       category: 'Nutrition'

@@ -177,9 +177,9 @@ const MobileOptimizations: React.FC = () => {
     window.addEventListener('orientationchange', handleOrientationChange);
     handleResize(); // Initial call
 
-    // Improve scroll performance
+    // Improve scroll performance on iOS
     const improveScrolling = () => {
-      document.documentElement.style.webkitOverflowScrolling = 'touch';
+      (document.documentElement.style as any).webkitOverflowScrolling = 'touch';
     };
     improveScrolling();
 
