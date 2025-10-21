@@ -433,12 +433,12 @@ const WellnessMarketplace = () => {
                       onClick={() => handleViewService(service.id)}
                     >
                       <img
-                        src={getValidServiceImage(service.images) || getServiceImage(service.title, service.category, service.id, service.provider_profiles.id)}
+                        src={getValidServiceImage(service.images) || getServiceImage(service.title, service.category, service.id, service.provider_profiles?.id)}
                         alt={service.title}
                         className="img-card hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                         onError={(e) => {
-                          e.currentTarget.src = getServiceImage(service.title, service.category, service.id, service.provider_profiles.id);
+                          e.currentTarget.src = getServiceImage(service.title, service.category, service.id, service.provider_profiles?.id);
                         }}
                       />
                     </div>
