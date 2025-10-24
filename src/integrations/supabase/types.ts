@@ -1627,14 +1627,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      ensure_provider_profile: {
-        Args: { user_id: string }
-        Returns: undefined
+      check_contact_rate_limit: {
+        Args: { submitter_email: string }
+        Returns: boolean
       }
-      generate_order_number: {
-        Args: Record<PropertyKey, never>
-        Returns: string
+      check_quote_rate_limit: {
+        Args: { submitter_email: string }
+        Returns: boolean
       }
+      ensure_provider_profile: { Args: { user_id: string }; Returns: undefined }
+      generate_order_number: { Args: never; Returns: string }
+      is_admin: { Args: { user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
