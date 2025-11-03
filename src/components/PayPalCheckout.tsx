@@ -82,6 +82,34 @@ export const PayPalCheckout = () => {
         return;
       }
 
+      // Track affiliate commission if click tracking exists
+      const clickId = sessionStorage.getItem('affiliate_click_id');
+      if (clickId && orderData?.id) {
+        try {
+          const { error: commissionError } = await supabase.functions.invoke('record-affiliate-commission', {
+            body: {
+              orderId: orderData.id,
+              clickId: clickId,
+              orderAmount: totalZAR,
+              currency: 'ZAR'
+            }
+          });
+
+          if (commissionError) {
+            console.error('Failed to record affiliate commission:', commissionError);
+          } else {
+            console.log('Affiliate commission recorded successfully');
+          }
+          
+          // Clear click tracking after commission recorded
+          sessionStorage.removeItem('affiliate_click_id');
+          sessionStorage.removeItem('affiliate_program_id');
+        } catch (error) {
+          console.error('Error recording affiliate commission:', error);
+          // Don't block order completion on commission tracking failure
+        }
+      }
+
       // Save individual order items
       const orderItems = items.map((item) => ({
         order_id: orderData.id,

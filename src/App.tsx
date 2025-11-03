@@ -71,6 +71,9 @@ const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
 const RoamBuddyStore = React.lazy(() => import('@/pages/RoamBuddyStore'));
+const AffiliateMarketplace = React.lazy(() => import('@/pages/AffiliateMarketplace'));
+const AffiliatePerformance = React.lazy(() => import('@/pages/admin/AffiliatePerformance'));
+const AffiliatePayouts = React.lazy(() => import('@/pages/admin/AffiliatePayouts'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -171,6 +174,9 @@ function App() {
                   {/* AI & Technology */}
                   <Route path="/ai-tools" element={<AITools />} />
 
+                  {/* Affiliate Marketplace */}
+                  <Route path="/affiliate-marketplace" element={<AffiliateMarketplace />} />
+
                   {/* Partners */}
                   <Route path="/partners-directory" element={<PartnersDirectory />} />
                   <Route path="/partner-profile/:id" element={<PartnerProfile />} />
@@ -212,6 +218,16 @@ function App() {
                   <Route path="/roambuddy-store" element={
                     <ProtectedRoute requireAdmin={true}>
                       <RoamBuddyStore />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/affiliate-performance" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AffiliatePerformance />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/affiliate-payouts" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AffiliatePayouts />
                     </ProtectedRoute>
                   } />
 

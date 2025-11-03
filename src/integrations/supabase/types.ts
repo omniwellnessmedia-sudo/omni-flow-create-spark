@@ -14,6 +14,240 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_clicks: {
+        Row: {
+          affiliate_program_id: string
+          click_id: string
+          country_code: string | null
+          created_at: string | null
+          destination_url: string
+          device_type: string | null
+          id: string
+          ip_address: string | null
+          referrer_url: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          affiliate_program_id: string
+          click_id: string
+          country_code?: string | null
+          created_at?: string | null
+          destination_url: string
+          device_type?: string | null
+          id?: string
+          ip_address?: string | null
+          referrer_url?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          affiliate_program_id?: string
+          click_id?: string
+          country_code?: string | null
+          created_at?: string | null
+          destination_url?: string
+          device_type?: string | null
+          id?: string
+          ip_address?: string | null
+          referrer_url?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_clicks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_commissions: {
+        Row: {
+          affiliate_program_id: string
+          approved_at: string | null
+          click_id: string | null
+          commission_amount: number
+          commission_currency: string
+          commission_rate: number | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          order_amount: number
+          order_id: string | null
+          paid_at: string | null
+          payment_batch_id: string | null
+          product_id: string | null
+          product_name: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          affiliate_program_id: string
+          approved_at?: string | null
+          click_id?: string | null
+          commission_amount: number
+          commission_currency: string
+          commission_rate?: number | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          order_amount: number
+          order_id?: string | null
+          paid_at?: string | null
+          payment_batch_id?: string | null
+          product_id?: string | null
+          product_name?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          affiliate_program_id?: string
+          approved_at?: string | null
+          click_id?: string | null
+          commission_amount?: number
+          commission_currency?: string
+          commission_rate?: number | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          order_amount?: number
+          order_id?: string | null
+          paid_at?: string | null
+          payment_batch_id?: string | null
+          product_id?: string | null
+          product_name?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_commissions_click_id_fkey"
+            columns: ["click_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_clicks"
+            referencedColumns: ["click_id"]
+          },
+          {
+            foreignKeyName: "affiliate_commissions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_commissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_payouts: {
+        Row: {
+          commission_count: number | null
+          created_at: string | null
+          id: string
+          payment_gateway: string | null
+          payment_reference: string | null
+          payout_period_end: string
+          payout_period_start: string
+          processed_at: string | null
+          status: string | null
+          total_amount_eur: number | null
+          total_amount_usd: number | null
+          total_amount_zar: number | null
+        }
+        Insert: {
+          commission_count?: number | null
+          created_at?: string | null
+          id?: string
+          payment_gateway?: string | null
+          payment_reference?: string | null
+          payout_period_end: string
+          payout_period_start: string
+          processed_at?: string | null
+          status?: string | null
+          total_amount_eur?: number | null
+          total_amount_usd?: number | null
+          total_amount_zar?: number | null
+        }
+        Update: {
+          commission_count?: number | null
+          created_at?: string | null
+          id?: string
+          payment_gateway?: string | null
+          payment_reference?: string | null
+          payout_period_end?: string
+          payout_period_start?: string
+          processed_at?: string | null
+          status?: string | null
+          total_amount_eur?: number | null
+          total_amount_usd?: number | null
+          total_amount_zar?: number | null
+        }
+        Relationships: []
+      }
+      affiliate_products: {
+        Row: {
+          affiliate_program_id: string
+          affiliate_url: string
+          category: string | null
+          commission_rate: number | null
+          created_at: string | null
+          description: string | null
+          external_product_id: string
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          last_synced_at: string | null
+          name: string
+          price_eur: number | null
+          price_usd: number | null
+          price_zar: number | null
+        }
+        Insert: {
+          affiliate_program_id: string
+          affiliate_url: string
+          category?: string | null
+          commission_rate?: number | null
+          created_at?: string | null
+          description?: string | null
+          external_product_id: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          name: string
+          price_eur?: number | null
+          price_usd?: number | null
+          price_zar?: number | null
+        }
+        Update: {
+          affiliate_program_id?: string
+          affiliate_url?: string
+          category?: string | null
+          commission_rate?: number | null
+          created_at?: string | null
+          description?: string | null
+          external_product_id?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          name?: string
+          price_eur?: number | null
+          price_usd?: number | null
+          price_zar?: number | null
+        }
+        Relationships: []
+      }
       blog_comments: {
         Row: {
           blog_post_id: string
@@ -443,6 +677,9 @@ export type Database = {
       }
       orders: {
         Row: {
+          affiliate_click_id: string | null
+          affiliate_commission_id: string | null
+          affiliate_program_id: string | null
           amount: number
           coverage: string[] | null
           created_at: string
@@ -474,6 +711,9 @@ export type Database = {
           validity_days: number | null
         }
         Insert: {
+          affiliate_click_id?: string | null
+          affiliate_commission_id?: string | null
+          affiliate_program_id?: string | null
           amount: number
           coverage?: string[] | null
           created_at?: string
@@ -505,6 +745,9 @@ export type Database = {
           validity_days?: number | null
         }
         Update: {
+          affiliate_click_id?: string | null
+          affiliate_commission_id?: string | null
+          affiliate_program_id?: string | null
           amount?: number
           coverage?: string[] | null
           created_at?: string
@@ -535,7 +778,15 @@ export type Database = {
           user_id?: string | null
           validity_days?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_affiliate_commission_id_fkey"
+            columns: ["affiliate_commission_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_commissions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_deals: {
         Row: {
