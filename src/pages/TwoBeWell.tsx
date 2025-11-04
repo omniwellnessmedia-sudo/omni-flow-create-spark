@@ -14,7 +14,7 @@ const TwoBeWell = () => {
       name: "2BeKissed - Natural Lip Balm",
       price: "R85",
       wellCoins: "42",
-      image: IMAGES.sandy.nature,
+      image: IMAGES.twoBeWell.lipBalm,
       description: "Mint-infused natural lip balm with Shea Butter, Coconut Oil, and Vitamin E for lasting moisture and protection.",
       ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Essential Oil, Vitamin E"
     },
@@ -22,7 +22,7 @@ const TwoBeWell = () => {
       name: "2BeGlow - Radiance Face Serum",
       price: "R165",
       wellCoins: "82",
-      image: IMAGES.sandy.meditation,
+      image: IMAGES.twoBeWell.faceSerum,
       description: "Glow & Calm face serum with Macadamia Nut Oil and Essential Oil Blend for radiant, healthy-looking skin.",
       ingredients: "Macadamia Nut Oil + Essential Oil Blend"
     },
@@ -30,7 +30,7 @@ const TwoBeWell = () => {
       name: "2BeSmooth - Whipped Body Butter",
       price: "R125",
       wellCoins: "62",
-      image: IMAGES.sandy.yoga,
+      image: IMAGES.twoBeWell.bodyButter,
       description: "Luxuriously whipped body butter with Shea Butter, Cocoa Butter, and nourishing oils for silky-smooth skin.",
       ingredients: "Shea Butter, Cocoa Butter, Coconut Oil, Sweet Almond Oil, Arrowroot Powder, Vitamin E"
     },
@@ -38,7 +38,7 @@ const TwoBeWell = () => {
       name: "2BeFresh - All-Purpose Cleaner",
       price: "R95",
       wellCoins: "47",
-      image: IMAGES.wellness.retreat,
+      image: IMAGES.twoBeWell.cleaner,
       description: "Natural all-purpose cleaning spray with plant-based ingredients for a chemical-free, eco-friendly home.",
       ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Essential Oil, Vitamin E"
     }

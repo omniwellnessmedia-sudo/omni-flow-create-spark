@@ -120,7 +120,7 @@ const wellnessProducts: WellnessProduct[] = [
     category: 'Skincare',
     subcategory: 'Lip Care',
     images: [
-      IMAGES.products.essentials
+      IMAGES.twoBeWell.lipBalm
     ],
     location: 'Cape Town, South Africa',
     is_online: true,
@@ -174,7 +174,7 @@ const wellnessProducts: WellnessProduct[] = [
     category: 'Skincare',
     subcategory: 'Face Serums',
     images: [
-      IMAGES.products.wellness
+      IMAGES.twoBeWell.faceSerum
     ],
     location: 'Cape Town, South Africa',
     is_online: true,
@@ -229,7 +229,8 @@ const wellnessProducts: WellnessProduct[] = [
     category: 'Skincare',
     subcategory: 'Body Care',
     images: [
-      IMAGES.products.essentials
+      IMAGES.twoBeWell.bodyButter,
+      IMAGES.twoBeWell.bodyButterLavender
     ],
     location: 'Cape Town, South Africa',
     is_online: true,
@@ -294,7 +295,7 @@ const wellnessProducts: WellnessProduct[] = [
     category: 'Supplements',
     subcategory: 'Adaptogens',
     images: [
-      IMAGES.products.supplements
+      IMAGES.twoBeWell.ashwagandha
     ],
     location: 'Cape Town, South Africa',
     is_online: true,
@@ -350,9 +351,8 @@ const wellnessProducts: WellnessProduct[] = [
     category: 'Home & Cleaning',
     subcategory: 'Multi-Purpose Cleaners',
     images: [
-      IMAGES.wellness.marketplace,
-      IMAGES.products.essentials,
-      IMAGES.products.wellness
+      IMAGES.twoBeWell.cleaner,
+      IMAGES.twoBeWell.spray
     ],
     location: 'Cape Town, South Africa',
     is_online: true,
@@ -415,9 +415,7 @@ const wellnessProducts: WellnessProduct[] = [
     category: 'Wellness Tools',
     subcategory: 'Facial Tools',
     images: [
-      IMAGES.products.essentials,
-      IMAGES.wellness.community,
-      IMAGES.products.wellness
+      IMAGES.twoBeWell.jadeRoller
     ],
     location: 'Cape Town, South Africa',
     is_online: true,
@@ -472,9 +470,7 @@ const wellnessProducts: WellnessProduct[] = [
     category: 'Digital Products',
     subcategory: 'E-Books',
     images: [
-      IMAGES.media.production,
-      IMAGES.ai.interface,
-      IMAGES.business.strategy
+      IMAGES.twoBeWell.ebook
     ],
     location: 'Cape Town, South Africa',
     is_online: true,
@@ -528,7 +524,7 @@ const wellnessProducts: WellnessProduct[] = [
     category: 'Gift Sets',
     subcategory: 'Starter Sets',
     images: [
-      IMAGES.products.wellness
+      IMAGES.twoBeWell.giftSet
     ],
     location: 'Cape Town, South Africa',
     is_online: true,

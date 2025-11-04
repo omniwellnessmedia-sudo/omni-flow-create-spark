@@ -1,6 +1,13 @@
 // Centralized Image Management System - Supabase CDN
 const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images';
 
+// AI-Generated Product Images
+import jadeRollerSet from '@/assets/jade-roller-set.jpg';
+import wellnessEbookBundle from '@/assets/wellness-ebook-bundle.jpg';
+import ashwagandhaSupplement from '@/assets/ashwagandha-supplement.jpg';
+import lavenderBodyButter from '@/assets/lavender-body-butter.jpg';
+import wellnessLifestyleHappy from '@/assets/wellness-lifestyle-happy.jpg';
+
 const CORE = {
   sandy: {
     profile: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-2.png`,
@@ -52,16 +59,34 @@ const CORE = {
     sunrise: `${SUPABASE_URL}/provider-images/IMG_20250117_060441.jpg`,
   },
   products: {
+    // PRIMARY BRAND ASSETS
     logo: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/2%20be%20well%20NEW%20LOGO_OMNI.png`,
-    allPurpose: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/all%20purpose%20cleaner%20stock.png`,
-    product1: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-7.jpg`,
-    product2: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`,
-    spray: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/Minimal%20Natural%20spray%20Instagram%20post.png`,
-    post5: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%205.png`,
-    post7: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%207.png`,
-    post8: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%208.png`,
-    bottle12: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/12.png`,
-    bottle3: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/3.png`,
+    
+    // SKINCARE PRODUCTS (unique, no repetitions)
+    lipBalm: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/3.png`, // Bottle 3
+    faceSerum: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/12.png`, // Bottle 12
+    bodyButter: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-7.jpg`, // Hero product shot
+    bodyButterLavender: lavenderBodyButter, // AI-generated lavender variation
+    
+    // CLEANING PRODUCTS
+    allPurposeCleaner: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/all%20purpose%20cleaner%20stock.png`,
+    sprayBottle: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/Minimal%20Natural%20spray%20Instagram%20post.png`,
+    
+    // SUPPLEMENTS & WELLNESS TOOLS
+    supplementBottle: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/ChatGPT%20Image%20Jul%201%2C%202025%2C%2002_16_46%20PM.png`,
+    ashwagandha: ashwagandhaSupplement, // AI-generated supplement
+    jadeRoller: jadeRollerSet, // AI-generated wellness tool
+    
+    // GIFT SETS & DIGITAL PRODUCTS
+    giftSet: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/ChatGPT%20Image%20Jun%2024%2C%202025%2C%2009_26_31%20AM.png`,
+    ebookBundle: wellnessEbookBundle, // AI-generated digital product
+    
+    // LIFESTYLE & MARKETING ASSETS
+    productShot1: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`, // Lifestyle shot
+    lifestyleHero: wellnessLifestyleHappy, // AI-generated happy lifestyle
+    socialPost1: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%205.png`,
+    socialPost2: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%207.png`,
+    socialPost3: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%208.png`,
   },
   community: {
     empowerment: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
@@ -114,11 +139,14 @@ export const IMAGES = {
   products: { 
     ...CORE.products, 
     wellness: CORE.services.wellness1, 
-    supplements: CORE.products.product1, 
-    essentials: CORE.products.product2,
-    packaging1: CORE.products.post5,
-    packaging2: CORE.products.post7,
-    packaging3: CORE.products.post8,
+    supplements: CORE.products.bodyButter,
+    essentials: CORE.products.productShot1,
+    // Legacy aliases for backward compatibility
+    product1: CORE.products.bodyButter,
+    product2: CORE.products.productShot1,
+    post5: CORE.products.socialPost1,
+    post7: CORE.products.socialPost2,
+    post8: CORE.products.socialPost3,
   },
   community: CORE.community,
   logos: CORE.logos,
@@ -197,19 +225,42 @@ export const IMAGES = {
     travelTours: CORE.logos.valleyOfPlenty 
   },
   twoBeWell: { 
-    lipBalm: CORE.products.product1, 
-    faceSerum: CORE.products.product2, 
-    bodyButter: CORE.products.allPurpose, 
-    cleaner: CORE.products.allPurpose, 
-    product1: CORE.products.product1, 
-    product2: CORE.products.product2, 
-    logo: CORE.products.logo, 
-    packaging: CORE.products.product1,
-    packaging1: CORE.products.post5,
-    packaging2: CORE.products.post7,
-    packaging3: CORE.products.post8,
-    spray: CORE.products.spray,
-    allPurpose: CORE.products.allPurpose,
+    // Brand
+    logo: CORE.products.logo,
+    
+    // Skincare - Each product has unique image
+    lipBalm: CORE.products.lipBalm,
+    faceSerum: CORE.products.faceSerum,
+    bodyButter: CORE.products.bodyButter,
+    bodyButterLavender: CORE.products.bodyButterLavender,
+    
+    // Cleaning
+    cleaner: CORE.products.allPurposeCleaner,
+    allPurposeCleaner: CORE.products.allPurposeCleaner,
+    spray: CORE.products.sprayBottle,
+    
+    // Supplements & Wellness Tools
+    supplement: CORE.products.supplementBottle,
+    ashwagandha: CORE.products.ashwagandha,
+    jadeRoller: CORE.products.jadeRoller,
+    
+    // Gift Sets & Digital
+    giftSet: CORE.products.giftSet,
+    starterSet: CORE.products.giftSet,
+    ebook: CORE.products.ebookBundle,
+    
+    // Marketing & Lifestyle
+    hero: CORE.products.productShot1,
+    lifestyle: CORE.products.lifestyleHero,
+    productShot: CORE.products.productShot1,
+    packaging1: CORE.products.socialPost1,
+    packaging2: CORE.products.socialPost2,
+    packaging3: CORE.products.socialPost3,
+    
+    // Legacy aliases for backward compatibility
+    product1: CORE.products.bodyButter,
+    product2: CORE.products.productShot1,
+    allPurpose: CORE.products.allPurposeCleaner,
   },
   providers: { 
     chad: CORE.services.team, 
@@ -276,3 +327,6 @@ export const getPartnerLogo = (partner: keyof typeof IMAGES.logos) =>
 
 export const getRandomFallback = (category: keyof typeof IMAGES.fallbacks) => 
   IMAGES.fallbacks[category][0];
+
+export const getTwoBeWellImage = (imageType: keyof typeof IMAGES.twoBeWell) => 
+  getImageWithFallback(IMAGES.twoBeWell[imageType], IMAGES.twoBeWell.logo);

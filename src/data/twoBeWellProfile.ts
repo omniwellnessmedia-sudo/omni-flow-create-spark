@@ -65,7 +65,7 @@ export const twoBeWellProfile: ProviderDirectory = {
       active: true,
       images: [
         IMAGES.sandy.teaching,
-        IMAGES.twoBeWell.product1
+        IMAGES.twoBeWell.lifestyle
       ],
       benefits: [
         'Personalized product recommendations',
@@ -249,7 +249,7 @@ export const twoBeWellProfile: ProviderDirectory = {
       active: true,
       images: [
         IMAGES.wellness.wellness,
-        IMAGES.twoBeWell.product2
+        IMAGES.twoBeWell.hero
       ],
       benefits: [
         'Complete sustainable wellness setup',
