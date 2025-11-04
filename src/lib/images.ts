@@ -1,13 +1,6 @@
 // Centralized Image Management System - Supabase CDN
 const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images';
 
-// AI-Generated Product Images
-import jadeRollerSet from '@/assets/jade-roller-set.jpg';
-import wellnessEbookBundle from '@/assets/wellness-ebook-bundle.jpg';
-import ashwagandhaSupplement from '@/assets/ashwagandha-supplement.jpg';
-import lavenderBodyButter from '@/assets/lavender-body-butter.jpg';
-import wellnessLifestyleHappy from '@/assets/wellness-lifestyle-happy.jpg';
-
 const CORE = {
   sandy: {
     profile: `${SUPABASE_URL}/Sandy/Sandy%20_August%20shoot%20_%20omni-2.png`,
@@ -66,7 +59,7 @@ const CORE = {
     lipBalm: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/3.png`, // Bottle 3
     faceSerum: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/12.png`, // Bottle 12
     bodyButter: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-7.jpg`, // Hero product shot
-    bodyButterLavender: lavenderBodyButter, // AI-generated lavender variation
+    bodyButterLavender: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`, // Lifestyle product variation
     
     // CLEANING PRODUCTS
     allPurposeCleaner: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/all%20purpose%20cleaner%20stock.png`,
@@ -74,16 +67,16 @@ const CORE = {
     
     // SUPPLEMENTS & WELLNESS TOOLS
     supplementBottle: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/ChatGPT%20Image%20Jul%201%2C%202025%2C%2002_16_46%20PM.png`,
-    ashwagandha: ashwagandhaSupplement, // AI-generated supplement
-    jadeRoller: jadeRollerSet, // AI-generated wellness tool
+    ashwagandha: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/ChatGPT%20Image%20Jul%201%2C%202025%2C%2002_16_46%20PM.png`, // Use existing supplement image
+    jadeRoller: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%205.png`, // Use existing product image
     
     // GIFT SETS & DIGITAL PRODUCTS
     giftSet: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/ChatGPT%20Image%20Jun%2024%2C%202025%2C%2009_26_31%20AM.png`,
-    ebookBundle: wellnessEbookBundle, // AI-generated digital product
+    ebookBundle: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%207.png`, // Use existing product image for digital
     
     // LIFESTYLE & MARKETING ASSETS
     productShot1: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`, // Lifestyle shot
-    lifestyleHero: wellnessLifestyleHappy, // AI-generated happy lifestyle
+    lifestyleHero: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%208.png`, // Use existing lifestyle image
     socialPost1: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%205.png`,
     socialPost2: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%207.png`,
     socialPost3: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%208.png`,
