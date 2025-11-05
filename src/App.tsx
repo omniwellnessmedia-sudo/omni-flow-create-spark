@@ -75,6 +75,8 @@ const AffiliateMarketplace = React.lazy(() => import('@/pages/AffiliateMarketpla
 const AffiliatePerformance = React.lazy(() => import('@/pages/admin/AffiliatePerformance'));
 const AffiliatePayouts = React.lazy(() => import('@/pages/admin/AffiliatePayouts'));
 const CJAffiliateProducts = React.lazy(() => import('@/pages/CJAffiliateProducts'));
+const StoreCollections = React.lazy(() => import('@/pages/StoreCollections'));
+const StoreProductDetail = React.lazy(() => import('@/pages/StoreProductDetail'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -133,6 +135,9 @@ function App() {
                   <Route path="/two-be-well" element={<TwoBeWell />} />
                   <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
+                  <Route path="/store" element={<StoreCollections />} />
+                  <Route path="/store/collections/:handle" element={<StoreCollections />} />
+                  <Route path="/store/product/:id" element={<StoreProductDetail />} />
                   <Route path="/wellness-deals" element={<WellnessDeals />} />
                   <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
                   <Route path="/data-products" element={<DataProducts />} />

@@ -88,6 +88,39 @@ const CJAffiliateProducts = () => {
     }
   };
 
+  const runConnectivityCheck = async () => {
+    try {
+      toast({
+        title: 'Running connectivity check...',
+        description: 'Testing CJ API endpoints',
+      });
+
+      const { data, error } = await supabase.functions.invoke('cj-connectivity-check');
+
+      if (error) throw error;
+
+      const results = data.results;
+      const allGood = results.productCatalog.status === 'success' || results.commissions.status === 'success';
+
+      toast({
+        title: allGood ? 'Connectivity Check Passed' : 'Connectivity Issues Detected',
+        description: allGood 
+          ? `Product Catalog: ${results.productCatalog.endpoint}` 
+          : data.recommendations[0],
+        variant: allGood ? 'default' : 'destructive',
+      });
+
+      console.log('Connectivity check results:', data);
+    } catch (error) {
+      console.error('Connectivity check error:', error);
+      toast({
+        title: 'Connectivity Check Failed',
+        description: error.message || 'Failed to run connectivity check',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const syncProducts = async () => {
     setSyncing(true);
     try {
@@ -97,19 +130,24 @@ const CJAffiliateProducts = () => {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        throw new Error(error.message || 'Sync failed');
+      }
 
-      toast({
-        title: 'Sync Complete',
-        description: `Synced ${data.results.inserted} products from CJ Affiliate`,
-      });
-
-      fetchProducts();
+      if (data && data.success) {
+        toast({
+          title: 'Sync Complete',
+          description: `Synced ${data.results.inserted} products. ${data.results.errors} errors.`,
+        });
+        fetchProducts();
+      } else {
+        throw new Error(data?.error || 'Unknown sync error');
+      }
     } catch (error) {
       console.error('Error syncing products:', error);
       toast({
         title: 'Sync Failed',
-        description: 'Failed to sync products from CJ Affiliate',
+        description: error.message || 'Failed to sync products from CJ Affiliate. Try running connectivity check first.',
         variant: 'destructive',
       });
     } finally {
@@ -250,6 +288,10 @@ const CJAffiliateProducts = () => {
                 <Button onClick={syncProducts} disabled={syncing} size="lg" variant="default">
                   <RefreshCw className={`mr-2 w-5 h-5 ${syncing ? 'animate-spin' : ''}`} />
                   {syncing ? 'Syncing Products...' : 'Sync Latest Products'}
+                </Button>
+                <Button onClick={runConnectivityCheck} size="lg" variant="secondary">
+                  <ExternalLink className="mr-2 w-5 h-5" />
+                  Run Connectivity Check
                 </Button>
                 <Button size="lg" variant="outline" asChild>
                   <a href="#products">

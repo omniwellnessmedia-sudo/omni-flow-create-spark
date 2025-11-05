@@ -28,32 +28,27 @@ serve(async (req) => {
       errors: 0,
     };
 
-    // Fetch products for each category
+    // Fetch products for each category using Supabase client
     for (const category of categories) {
       try {
-        const response = await fetch(
-          `${supabaseUrl}/functions/v1/cj-fetch-products`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${supabaseKey}`,
-            },
-            body: JSON.stringify({
-              keywords: category,
-              limit: 100,
-            }),
-          }
-        );
+        console.log(`Calling cj-fetch-products for category: ${category}`);
+        
+        const { data, error } = await supabase.functions.invoke('cj-fetch-products', {
+          body: {
+            keywords: category,
+            limit: 100,
+          },
+        });
 
-        if (response.ok) {
-          const data = await response.json();
-          allProducts.push(...(data.products || []));
-          syncResults.totalFetched += data.products?.length || 0;
-          console.log(`Fetched ${data.products?.length || 0} products for ${category}`);
+        if (error) {
+          console.error(`cj-fetch-products error for ${category}:`, error);
+          syncResults.errors++;
+        } else if (data && data.success && data.products) {
+          allProducts.push(...data.products);
+          syncResults.totalFetched += data.products.length;
+          console.log(`Fetched ${data.products.length} products for ${category}`);
         } else {
-          const errText = await response.text();
-          console.error(`cj-fetch-products returned ${response.status} for ${category}:`, errText);
+          console.error(`cj-fetch-products returned no products for ${category}:`, data);
           syncResults.errors++;
         }
       } catch (error) {

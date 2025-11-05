@@ -41,6 +41,13 @@ serve(async (req) => {
 
     console.log('Fetching CJ products via GraphQL:', { category, keywords, limit });
 
+    // Try multiple Product Catalog endpoints
+    const productCatalogEndpoints = [
+      'https://productcatalog.api.cj.com/query',
+      'https://product-catalog.api.cj.com/query',
+      'https://catalog.api.cj.com/query',
+    ];
+
     // Build GraphQL query for product search
     const searchKeywords = keywords || category || 'wellness';
     const graphqlQuery = {
@@ -74,18 +81,39 @@ serve(async (req) => {
 
     console.log('GraphQL Query:', JSON.stringify(graphqlQuery, null, 2));
 
-    // Call CJ GraphQL API
-    const response = await fetch(
-      'https://productcatalog.api.cj.com/query',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${CJ_PAT}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(graphqlQuery)
+    let response: Response | null = null;
+    let workingEndpoint = '';
+
+    // Try each endpoint until one works
+    for (const endpoint of productCatalogEndpoints) {
+      try {
+        console.log(`Attempting endpoint: ${endpoint}`);
+        response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${CJ_PAT}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(graphqlQuery)
+        });
+
+        if (response.ok) {
+          workingEndpoint = endpoint;
+          console.log(`✓ Successfully connected to: ${endpoint}`);
+          break;
+        } else {
+          console.log(`✗ Endpoint ${endpoint} returned ${response.status}`);
+        }
+      } catch (error) {
+        console.log(`✗ Endpoint ${endpoint} failed:`, error.message);
       }
-    );
+    }
+
+    if (!response || !response.ok) {
+      const errorText = response ? await response.text() : 'No endpoints responded';
+      console.error('All CJ GraphQL API endpoints failed:', errorText);
+      throw new Error(`CJ API returned error: ${errorText}`);
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
