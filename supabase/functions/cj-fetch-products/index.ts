@@ -31,74 +31,117 @@ serve(async (req) => {
   }
 
   try {
-    const CJ_API_KEY = Deno.env.get('CJ_AFFILIATE_API_KEY');
-    const CJ_CID = Deno.env.get('CJ_AFFILIATE_CID');
+    const CJ_PAT = Deno.env.get('CJ_PERSONAL_ACCESS_TOKEN');
 
-    if (!CJ_API_KEY || !CJ_CID) {
-      throw new Error('CJ Affiliate credentials not configured');
+    if (!CJ_PAT) {
+      throw new Error('CJ Personal Access Token not configured');
     }
 
     const { category, keywords, limit = 50 } = await req.json();
 
-    console.log('Fetching CJ products:', { category, keywords, limit });
+    console.log('Fetching CJ products via GraphQL:', { category, keywords, limit });
 
-    // Build CJ API request
-    const params = new URLSearchParams({
-      'website-id': CJ_CID,
-      'records-per-page': limit.toString(),
-    });
+    // Build GraphQL query for product search
+    const searchKeywords = keywords || category || 'wellness';
+    const graphqlQuery = {
+      query: `
+        query ProductSearch {
+          products(
+            searchText: "${searchKeywords}"
+            first: ${limit}
+          ) {
+            totalCount
+            edges {
+              node {
+                id
+                name
+                description
+                advertiserId
+                advertiserName
+                price {
+                  amount
+                  currency
+                }
+                imageUrl
+                buyUrl
+                category
+              }
+            }
+          }
+        }
+      `
+    };
 
-    if (category) params.append('category', category);
-    if (keywords) params.append('keywords', keywords);
+    console.log('GraphQL Query:', JSON.stringify(graphqlQuery, null, 2));
 
-    // Call CJ Product Catalog Search API
+    // Call CJ GraphQL API
     const response = await fetch(
-      `https://product-search.api.cj.com/v2/product-search?${params.toString()}`,
+      'https://productcatalog.api.cj.com/query',
       {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${CJ_API_KEY}`,
-          'Accept': 'application/json',
+          'Authorization': `Bearer ${CJ_PAT}`,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify(graphqlQuery)
       }
     );
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('CJ API error:', response.status, errorText);
+      console.error('CJ GraphQL API error:', response.status, errorText);
       throw new Error(`CJ API returned ${response.status}: ${errorText}`);
     }
 
     const data = await response.json();
-    console.log('CJ API response:', {
-      totalRecords: data.totalRecords,
-      productsReturned: data.products?.length || 0
+    console.log('CJ GraphQL API response:', JSON.stringify(data, null, 2));
+
+    // Check for GraphQL errors
+    if (data.errors) {
+      console.error('GraphQL errors:', data.errors);
+      throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
+    }
+
+    const productsData = data.data?.products;
+    const totalCount = productsData?.totalCount || 0;
+    const edges = productsData?.edges || [];
+
+    console.log('Products found:', {
+      totalCount,
+      productsReturned: edges.length
     });
 
     // Transform CJ products to our format
-    const products = data.products?.map((product: CJProduct) => ({
-      affiliate_program_id: 'cj',
-      external_product_id: product.catalogId,
-      name: product.name,
-      description: product.description || '',
-      category: product.category?.primary || 'General Wellness',
-      image_url: product.imageUrl,
-      affiliate_url: product.buyUrl,
-      price_usd: product.price?.amount || 0,
-      price_zar: (product.price?.amount || 0) * 18.5, // Approximate ZAR conversion
-      price_eur: (product.price?.amount || 0) * 0.92, // Approximate EUR conversion
-      commission_rate: 0.08, // Default 8%, will vary by advertiser
-      is_active: true,
-      last_synced_at: new Date().toISOString(),
-    })) || [];
+    const products = edges.map((edge: any) => {
+      const product = edge.node;
+      const priceAmount = product.price?.amount || 0;
+      
+      return {
+        affiliate_program_id: 'cj',
+        external_product_id: product.id,
+        name: product.name,
+        description: product.description || '',
+        category: product.category || 'General Wellness',
+        image_url: product.imageUrl,
+        affiliate_url: product.buyUrl,
+        price_usd: priceAmount,
+        price_zar: priceAmount * 18.5, // Approximate ZAR conversion
+        price_eur: priceAmount * 0.92, // Approximate EUR conversion
+        commission_rate: 0.08, // Default 8%, will vary by advertiser
+        is_active: true,
+        last_synced_at: new Date().toISOString(),
+      };
+    });
 
     return new Response(
       JSON.stringify({
         success: true,
-        totalRecords: data.totalRecords,
+        totalRecords: totalCount,
         products,
         metadata: {
           category,
           keywords,
+          searchText: searchKeywords,
           fetchedAt: new Date().toISOString()
         }
       }),
