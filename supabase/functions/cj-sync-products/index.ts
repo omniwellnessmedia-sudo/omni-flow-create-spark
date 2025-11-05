@@ -51,6 +51,10 @@ serve(async (req) => {
           allProducts.push(...(data.products || []));
           syncResults.totalFetched += data.products?.length || 0;
           console.log(`Fetched ${data.products?.length || 0} products for ${category}`);
+        } else {
+          const errText = await response.text();
+          console.error(`cj-fetch-products returned ${response.status} for ${category}:`, errText);
+          syncResults.errors++;
         }
       } catch (error) {
         console.error(`Error fetching products for ${category}:`, error);
