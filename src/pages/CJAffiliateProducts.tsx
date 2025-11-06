@@ -100,17 +100,30 @@ const CJAffiliateProducts = () => {
       if (error) throw error;
 
       const results = data.results;
-      const allGood = results.productCatalog.status === 'success' || results.commissions.status === 'success';
-
-      toast({
-        title: allGood ? 'Connectivity Check Passed' : 'Connectivity Issues Detected',
-        description: allGood 
-          ? `Product Catalog: ${results.productCatalog.endpoint}` 
-          : data.recommendations[0],
-        variant: allGood ? 'default' : 'destructive',
-      });
+      const allGood = results.productFeed?.status === 'success' && 
+                     results.commissions?.status === 'success' &&
+                     results.companyId?.status === 'configured';
 
       console.log('Connectivity check results:', data);
+
+      // Show detailed results
+      const statusEmoji = (status: string) => status === 'success' || status === 'configured' ? '✅' : '❌';
+      
+      toast({
+        title: allGood ? '✅ All Checks Passed' : '⚠️ Configuration Issues',
+        description: (
+          <div className="space-y-1 text-sm">
+            <div>{statusEmoji(results.productFeed?.status)} Product Feed API: {results.productFeed?.status}</div>
+            <div>{statusEmoji(results.commissions?.status)} Commissions API: {results.commissions?.status}</div>
+            <div>{statusEmoji(results.companyId?.status)} Company ID: {results.companyId?.status}</div>
+            <div className="mt-2 pt-2 border-t border-border">
+              {data.recommendations?.[0] || 'All systems operational'}
+            </div>
+          </div>
+        ),
+        variant: allGood ? 'default' : 'destructive',
+        duration: 8000,
+      });
     } catch (error) {
       console.error('Connectivity check error:', error);
       toast({

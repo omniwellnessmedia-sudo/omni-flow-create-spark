@@ -20,53 +20,55 @@ serve(async (req) => {
     console.log('Running CJ connectivity check...');
     
     const results = {
-      productCatalog: { status: 'unknown', endpoint: '', error: null as any },
+      productFeed: { status: 'unknown', endpoint: 'https://ads.api.cj.com/query', error: null as any },
       commissions: { status: 'unknown', endpoint: '', error: null as any },
       auth: { status: 'unknown', error: null as any },
+      companyId: { status: 'unknown', error: null as any },
     };
 
-    // Test endpoints list for Product Catalog
-    const productCatalogEndpoints = [
-      'https://productcatalog.api.cj.com/query',
-      'https://product-catalog.api.cj.com/query',
-      'https://catalog.api.cj.com/query',
-    ];
+    // Check for Company ID
+    const CJ_COMPANY_ID = Deno.env.get('CJ_COMPANY_ID');
+    if (!CJ_COMPANY_ID) {
+      results.companyId.status = 'missing';
+      results.companyId.error = 'CJ_COMPANY_ID not configured';
+      console.error('✗ CJ_COMPANY_ID not configured');
+    } else {
+      results.companyId.status = 'configured';
+      console.log(`✓ CJ_COMPANY_ID configured: ${CJ_COMPANY_ID}`);
+    }
 
-    // Test Product Catalog endpoints
-    for (const endpoint of productCatalogEndpoints) {
-      try {
-        console.log(`Testing Product Catalog endpoint: ${endpoint}`);
-        
-        const testQuery = {
-          query: `query { __typename }` // Simple introspection query
-        };
+    // Test Product Feed API (official endpoint)
+    try {
+      console.log('Testing Product Feed API at https://ads.api.cj.com/query');
+      
+      const testQuery = {
+        query: `query { __typename }` // Simple introspection query
+      };
 
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${CJ_PAT}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(testQuery)
-        });
+      const response = await fetch('https://ads.api.cj.com/query', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${CJ_PAT}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(testQuery)
+      });
 
-        results.productCatalog.endpoint = endpoint;
-        results.productCatalog.status = response.ok ? 'success' : 'failed';
-        
-        if (response.ok) {
-          const data = await response.json();
-          console.log(`✓ Product Catalog working at ${endpoint}:`, data);
-          results.auth.status = 'success';
-          break; // Found working endpoint
-        } else {
-          const errorText = await response.text();
-          results.productCatalog.error = `HTTP ${response.status}: ${errorText}`;
-          console.error(`✗ Product Catalog failed at ${endpoint}:`, errorText);
-        }
-      } catch (error) {
-        results.productCatalog.error = error.message;
-        console.error(`✗ Product Catalog error at ${endpoint}:`, error.message);
+      results.productFeed.status = response.ok ? 'success' : 'failed';
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(`✓ Product Feed API working:`, data);
+        results.auth.status = 'success';
+      } else {
+        const errorText = await response.text();
+        results.productFeed.error = `HTTP ${response.status}: ${errorText}`;
+        console.error(`✗ Product Feed API failed:`, errorText);
       }
+    } catch (error) {
+      results.productFeed.error = error.message;
+      results.productFeed.status = 'error';
+      console.error(`✗ Product Feed API error:`, error.message);
     }
 
     // Test Commissions API (known good endpoint)
@@ -96,9 +98,9 @@ serve(async (req) => {
     }
 
     // Determine overall auth status
-    if (results.productCatalog.status === 'success' || results.commissions.status === 'success') {
+    if (results.productFeed.status === 'success' || results.commissions.status === 'success') {
       results.auth.status = 'success';
-    } else if (results.productCatalog.error || results.commissions.error) {
+    } else if (results.productFeed.error || results.commissions.error) {
       results.auth.status = 'failed';
       results.auth.error = 'Authentication may be invalid or endpoints unreachable';
     }
@@ -135,8 +137,13 @@ serve(async (req) => {
 function generateRecommendations(results: any): string[] {
   const recommendations: string[] = [];
 
-  if (results.productCatalog.status !== 'success') {
-    recommendations.push('Product Catalog API is not accessible. Check if your CJ account has access to the Product Catalog API.');
+  if (results.companyId.status === 'missing') {
+    recommendations.push('⚠️ CRITICAL: Add your CJ_COMPANY_ID secret in Supabase. This is required for Product Feed API access.');
+    recommendations.push('Find your Company ID in CJ Account Manager under Settings > Company Information.');
+  }
+
+  if (results.productFeed.status !== 'success') {
+    recommendations.push('Product Feed API is not accessible. Check if your CJ account has Product Feed API access enabled.');
     recommendations.push('Verify your CJ_PERSONAL_ACCESS_TOKEN is valid and has the correct permissions.');
   }
 
@@ -150,7 +157,7 @@ function generateRecommendations(results: any): string[] {
   }
 
   if (recommendations.length === 0) {
-    recommendations.push('All connectivity checks passed! You can proceed with product sync.');
+    recommendations.push('✅ All connectivity checks passed! You can proceed with product sync.');
   }
 
   return recommendations;
