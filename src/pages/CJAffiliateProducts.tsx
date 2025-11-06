@@ -133,25 +133,33 @@ const CJAffiliateProducts = () => {
 
   const syncProducts = async () => {
     setSyncing(true);
+    toast({
+      title: '🔄 Starting Product Sync',
+      description: 'Fetching wellness products from CJ... This takes 2-3 minutes.',
+    });
+    
     try {
       const { data, error } = await supabase.functions.invoke('cj-sync-products', {
-        body: {
-          categories: ['wellness', 'natural', 'organic', 'health', 'fitness', 'yoga', 'meditation'],
-        },
+        body: {}
       });
 
       if (error) throw new Error(error.message || 'Sync failed');
 
       if (data && data.success) {
+        const { inserted = 0, updated = 0, totalFetched = 0 } = data.results || {};
         toast({
-          title: 'Sync Complete',
-          description: `Synced ${data.results.inserted} products.`,
+          title: '✅ Sync Complete!',
+          description: `Added ${inserted} new products, updated ${updated}. Total fetched: ${totalFetched}.`,
         });
-        fetchProducts();
+        
+        // Refresh products after short delay
+        setTimeout(() => {
+          fetchProducts();
+        }, 1000);
       } else {
         throw new Error(data?.error || 'Unknown sync error');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error syncing products:', error);
       toast({
         title: 'Sync Failed',
