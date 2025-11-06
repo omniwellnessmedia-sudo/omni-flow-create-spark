@@ -53,7 +53,7 @@ serve(async (req) => {
                 amount
                 currency
               }
-              imageUrl
+              imageLink
               link
               catalogId
             }
@@ -112,7 +112,7 @@ serve(async (req) => {
         name: product.title,
         description: product.description || '',
         category: category || 'General Wellness',
-        image_url: product.imageUrl || null,
+        image_url: product.imageLink || null,
         affiliate_url: product.link || '',
         price_usd: priceAmount,
         price_zar: priceAmount * 18.5, // Approximate ZAR conversion
