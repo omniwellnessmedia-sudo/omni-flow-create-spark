@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Toaster } from 'sonner';
+import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/components/CartProvider';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -247,13 +247,7 @@ function App() {
               </Suspense>
               
               {/* Global Toast Notifications */}
-              <Toaster 
-                position="top-right" 
-                toastOptions={{
-                  duration: 4000,
-                  className: 'bg-white border border-gray-200 shadow-lg',
-                }} 
-              />
+              <Toaster />
             </div>
           </Router>
         </CartProvider>
