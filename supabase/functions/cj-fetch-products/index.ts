@@ -14,10 +14,52 @@ const CJ_PRODUCT_FEED_ENDPOINT = 'https://ads.api.cj.com/query';
 const isValidImageUrl = (url: string): boolean => {
   if (!url) return false;
   if (url.endsWith('/')) return false;
+  if (url.length < 10) return false;
   const hasValidDomain = url.startsWith('http://') || url.startsWith('https://');
   const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
-  const looksLikeImage = url.includes('image') || url.includes('img') || url.includes('product');
+  const looksLikeImage = url.includes('image') || url.includes('img') || url.includes('product') || url.includes('photo');
   return hasValidDomain && (hasImageExtension || looksLikeImage);
+};
+
+// Extract clean product title from title or description
+const extractProductTitle = (title: string, description?: string): string => {
+  // If title is already good (not generic like "Meditation"), return it
+  if (title && title.length > 10 && !['Meditation', 'Wellness', 'Health', 'Yoga'].includes(title)) {
+    return title.substring(0, 150); // Limit to 150 chars
+  }
+  
+  // Try to extract from description
+  if (description && description.length > 20) {
+    // Take first sentence or first 150 chars
+    const firstSentence = description.split(/[.!?]\s/)[0];
+    if (firstSentence && firstSentence.length >= 10) {
+      return firstSentence.substring(0, 150);
+    }
+  }
+  
+  return title || 'Wellness Product';
+};
+
+// Infer category from title, description, and keywords
+const inferCategory = (title: string, description: string, providedCategory?: string): string => {
+  if (providedCategory && providedCategory !== 'General Wellness') {
+    return providedCategory;
+  }
+  
+  const text = `${title} ${description}`.toLowerCase();
+  
+  // Category keyword matching
+  if (/yoga|asana|mat|block|strap|bolster/i.test(text)) return 'Yoga Equipment';
+  if (/meditat|mindfulness|cushion|zafu|singing bowl/i.test(text)) return 'Meditation Tools';
+  if (/essential oil|aromatherapy|diffuser|incense/i.test(text)) return 'Aromatherapy';
+  if (/protein|supplement|vitamin|mineral|probiotic|collagen/i.test(text)) return 'Nutrition & Supplements';
+  if (/fitness|exercise|resistance band|dumbbell|tracker|smartwatch/i.test(text)) return 'Fitness Equipment';
+  if (/tea|herbal|beverage|drink|matcha/i.test(text)) return 'Beverages';
+  if (/skincare|cosmetic|beauty|serum|moisturizer|cream/i.test(text)) return 'Beauty & Skincare';
+  if (/massage|spa|bodywork|relaxation/i.test(text)) return 'Massage & Bodywork';
+  if (/book|guide|manual|journal/i.test(text)) return 'Books & Education';
+  
+  return 'General Wellness';
 };
 
 // Extract domain from advertiser name for logo fetching
@@ -149,35 +191,61 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Transform CJ products to our format with image validation and brand data
+    // Transform and validate CJ products
     const productsWithBrands = await Promise.all(
       resultList
         .filter((product: any) => {
+          // Validate image
           const hasValidImage = isValidImageUrl(product.imageLink);
           if (!hasValidImage) {
-            console.log(`Skipping product with invalid image: ${product.title}`);
+            console.log(`⊘ Invalid image: ${product.title}`);
+            return false;
           }
-          return hasValidImage;
+          
+          // Validate title
+          if (!product.title || product.title.length < 5) {
+            console.log(`⊘ Invalid title: "${product.title}"`);
+            return false;
+          }
+          
+          // Validate price
+          const price = parseFloat(product.price?.amount || '0');
+          if (price <= 0) {
+            console.log(`⊘ Invalid price for: ${product.title}`);
+            return false;
+          }
+          
+          return true;
         })
         .map(async (product: any) => {
           const priceAmount = parseFloat(product.price?.amount || '0');
           const advertiserName = product.advertiserName || null;
           const advertiserId = product.advertiserId || null;
+          const description = product.description || '';
           
-          // Fetch brand logo
-          const brandLogoUrl = advertiserName ? await fetchBrandLogo(advertiserName) : null;
+          // Extract clean title
+          const cleanTitle = extractProductTitle(product.title, description);
+          
+          // Infer category
+          const inferredCategory = inferCategory(cleanTitle, description, category);
+          
+          // Fetch brand logo (with retry)
+          let brandLogoUrl = null;
+          if (advertiserName) {
+            brandLogoUrl = await fetchBrandLogo(advertiserName);
+          }
           
           return {
             affiliate_program_id: 'cj',
             external_product_id: product.id,
-            name: product.title,
-            description: product.description || '',
-            category: category || 'General Wellness',
-            image_url: product.imageLink || null,
+            name: cleanTitle,
+            description: description.substring(0, 500), // Limit description length
+            category: inferredCategory,
+            image_url: product.imageLink,
             affiliate_url: product.link || '',
             price_usd: priceAmount,
-            price_zar: priceAmount * 18.5,
-            price_eur: priceAmount * 0.92,
+            price_zar: Math.round(priceAmount * 18.5 * 100) / 100,
+            price_eur: Math.round(priceAmount * 0.92 * 100) / 100,
             commission_rate: 0.08,
             is_active: true,
             advertiser_id: advertiserId,
@@ -187,6 +255,8 @@ serve(async (req) => {
           };
         })
     );
+
+    console.log(`✓ Processed ${productsWithBrands.length} valid products`);
 
     // Store products in database
     if (productsWithBrands.length > 0) {
