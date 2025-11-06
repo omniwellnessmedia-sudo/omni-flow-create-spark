@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,11 +13,41 @@ const CJ_PRODUCT_FEED_ENDPOINT = 'https://ads.api.cj.com/query';
 // Image validation helper
 const isValidImageUrl = (url: string): boolean => {
   if (!url) return false;
-  if (url.endsWith('/')) return false; // Incomplete URLs
+  if (url.endsWith('/')) return false;
   const hasValidDomain = url.startsWith('http://') || url.startsWith('https://');
   const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
   const looksLikeImage = url.includes('image') || url.includes('img') || url.includes('product');
   return hasValidDomain && (hasImageExtension || looksLikeImage);
+};
+
+// Extract domain from advertiser name for logo fetching
+const extractDomain = (advertiserName: string): string => {
+  if (!advertiserName) return '';
+  const cleaned = advertiserName
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, '')
+    .replace(/(inc|llc|ltd|corp|corporation|company|co)$/i, '');
+  return `${cleaned}.com`;
+};
+
+// Fetch brand logo from Clearbit
+const fetchBrandLogo = async (advertiserName: string): Promise<string | null> => {
+  if (!advertiserName) return null;
+  
+  const domain = extractDomain(advertiserName);
+  
+  try {
+    const clearbitUrl = `https://logo.clearbit.com/${domain}`;
+    const response = await fetch(clearbitUrl, { method: 'HEAD' });
+    if (response.ok) {
+      return clearbitUrl;
+    }
+  } catch (error) {
+    console.log(`Logo fetch failed for ${domain}`);
+  }
+  
+  return null;
 };
 
 serve(async (req) => {
@@ -112,41 +143,101 @@ serve(async (req) => {
       productsReturned: resultList.length
     });
 
-    // Transform CJ products to our format with image validation
-    const products = resultList
-      .filter((product: any) => {
-        // Filter out products with invalid images
-        const hasValidImage = isValidImageUrl(product.imageLink);
-        if (!hasValidImage) {
-          console.log(`Skipping product with invalid image: ${product.title}`);
+    // Initialize Supabase client for storing products
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    // Transform CJ products to our format with image validation and brand data
+    const productsWithBrands = await Promise.all(
+      resultList
+        .filter((product: any) => {
+          const hasValidImage = isValidImageUrl(product.imageLink);
+          if (!hasValidImage) {
+            console.log(`Skipping product with invalid image: ${product.title}`);
+          }
+          return hasValidImage;
+        })
+        .map(async (product: any) => {
+          const priceAmount = parseFloat(product.price?.amount || '0');
+          const advertiserName = product.advertiserName || null;
+          const advertiserId = product.advertiserId || null;
+          
+          // Fetch brand logo
+          const brandLogoUrl = advertiserName ? await fetchBrandLogo(advertiserName) : null;
+          
+          return {
+            affiliate_program_id: 'cj',
+            external_product_id: product.id,
+            name: product.title,
+            description: product.description || '',
+            category: category || 'General Wellness',
+            image_url: product.imageLink || null,
+            affiliate_url: product.link || '',
+            price_usd: priceAmount,
+            price_zar: priceAmount * 18.5,
+            price_eur: priceAmount * 0.92,
+            commission_rate: 0.08,
+            is_active: true,
+            advertiser_id: advertiserId,
+            advertiser_name: advertiserName,
+            brand_logo_url: brandLogoUrl,
+            last_synced_at: new Date().toISOString(),
+          };
+        })
+    );
+
+    // Store products in database
+    if (productsWithBrands.length > 0) {
+      const { error: insertError } = await supabaseClient
+        .from('affiliate_products')
+        .upsert(productsWithBrands, { 
+          onConflict: 'external_product_id,affiliate_program_id',
+          ignoreDuplicates: false 
+        });
+
+      if (insertError) {
+        console.error('Error inserting products:', insertError);
+      } else {
+        console.log(`Inserted ${productsWithBrands.length} products into database`);
+      }
+
+      // Update affiliate_brands table
+      const uniqueBrands = productsWithBrands
+        .filter(p => p.advertiser_id && p.advertiser_name)
+        .reduce((acc: any[], product) => {
+          if (!acc.find(b => b.advertiser_id === product.advertiser_id)) {
+            acc.push({
+              advertiser_id: product.advertiser_id,
+              name: product.advertiser_name,
+              logo_url: product.brand_logo_url
+            });
+          }
+          return acc;
+        }, []);
+
+      if (uniqueBrands.length > 0) {
+        const { error: brandError } = await supabaseClient
+          .from('affiliate_brands')
+          .upsert(uniqueBrands, { 
+            onConflict: 'advertiser_id',
+            ignoreDuplicates: false 
+          });
+
+        if (brandError) {
+          console.error('Error upserting brands:', brandError);
+        } else {
+          console.log(`Synced ${uniqueBrands.length} brands`);
         }
-        return hasValidImage;
-      })
-      .map((product: any) => {
-        const priceAmount = parseFloat(product.price?.amount || '0');
-        
-        return {
-          affiliate_program_id: 'cj',
-          external_product_id: product.id,
-          name: product.title,
-          description: product.description || '',
-          category: category || 'General Wellness',
-          image_url: product.imageLink || null,
-          affiliate_url: product.link || '',
-          price_usd: priceAmount,
-          price_zar: priceAmount * 18.5, // Approximate ZAR conversion
-          price_eur: priceAmount * 0.92, // Approximate EUR conversion
-          commission_rate: 0.08, // Default 8%, will vary by advertiser
-          is_active: true,
-          last_synced_at: new Date().toISOString(),
-        };
-      });
+      }
+    }
 
     return new Response(
       JSON.stringify({
         success: true,
         totalRecords: totalCount,
-        products,
+        products: productsWithBrands,
         metadata: {
           category,
           keywords: searchKeywords,

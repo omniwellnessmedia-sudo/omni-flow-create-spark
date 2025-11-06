@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SmartProductImage } from './SmartProductImage';
-import { Heart, Share2, Eye, TrendingUp } from 'lucide-react';
+import { Heart, Share2, Eye } from 'lucide-react';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import { useState } from 'react';
 
@@ -17,9 +17,11 @@ interface PremiumProductCardProps {
     price_zar: number;
     price_usd: number;
     price_eur: number;
-    commission_rate: number;
+    commission_rate?: number;
     affiliate_url: string;
     affiliate_program_id: string;
+    advertiser_name?: string;
+    brand_logo_url?: string;
   };
   onFavoriteToggle?: (productId: string) => void;
   isFavorite?: boolean;
@@ -31,22 +33,6 @@ export const PremiumProductCard = ({
   isFavorite = false 
 }: PremiumProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-
-  const calculateCommission = () => {
-    return (product.price_zar * product.commission_rate).toFixed(2);
-  };
-
-  const getCommissionBadge = () => {
-    const commissionPercent = product.commission_rate * 100;
-    if (commissionPercent >= 10) {
-      return (
-        <Badge className="absolute top-2 right-2 bg-green-500 text-white z-10">
-          {commissionPercent.toFixed(0)}% Commission
-        </Badge>
-      );
-    }
-    return null;
-  };
 
   return (
     <Card 
@@ -65,8 +51,12 @@ export const PremiumProductCard = ({
           />
         </Link>
         
-        {/* Badges */}
-        {getCommissionBadge()}
+        {/* Brand Badge */}
+        {product.advertiser_name && (
+          <Badge className="absolute top-2 left-2 bg-background/90 backdrop-blur z-10">
+            {product.advertiser_name}
+          </Badge>
+        )}
         
         {/* Quick Actions Bar - appears on hover */}
         <div 
@@ -125,12 +115,6 @@ export const PremiumProductCard = ({
           <span className="text-xs text-muted-foreground">
             ${product.price_usd.toFixed(2)}
           </span>
-        </div>
-
-        {/* Commission Highlight */}
-        <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 p-2 rounded">
-          <TrendingUp className="w-3 h-3" />
-          <span className="font-medium">Earn R{calculateCommission()}</span>
         </div>
 
         {/* Add to Cart */}

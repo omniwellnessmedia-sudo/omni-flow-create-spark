@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_brands: {
+        Row: {
+          advertiser_id: string
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          is_featured: boolean | null
+          logo_url: string | null
+          name: string
+          product_count: number | null
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          advertiser_id: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_featured?: boolean | null
+          logo_url?: string | null
+          name: string
+          product_count?: number | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          advertiser_id?: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_featured?: boolean | null
+          logo_url?: string | null
+          name?: string
+          product_count?: number | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       affiliate_clicks: {
         Row: {
           affiliate_program_id: string
@@ -196,8 +238,11 @@ export type Database = {
       }
       affiliate_products: {
         Row: {
+          advertiser_id: string | null
+          advertiser_name: string | null
           affiliate_program_id: string
           affiliate_url: string
+          brand_logo_url: string | null
           category: string | null
           commission_rate: number | null
           created_at: string | null
@@ -206,15 +251,21 @@ export type Database = {
           id: string
           image_url: string | null
           is_active: boolean | null
+          is_featured: boolean | null
+          is_trending: boolean | null
           last_synced_at: string | null
           name: string
           price_eur: number | null
           price_usd: number | null
           price_zar: number | null
+          view_count: number | null
         }
         Insert: {
+          advertiser_id?: string | null
+          advertiser_name?: string | null
           affiliate_program_id: string
           affiliate_url: string
+          brand_logo_url?: string | null
           category?: string | null
           commission_rate?: number | null
           created_at?: string | null
@@ -223,15 +274,21 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          is_featured?: boolean | null
+          is_trending?: boolean | null
           last_synced_at?: string | null
           name: string
           price_eur?: number | null
           price_usd?: number | null
           price_zar?: number | null
+          view_count?: number | null
         }
         Update: {
+          advertiser_id?: string | null
+          advertiser_name?: string | null
           affiliate_program_id?: string
           affiliate_url?: string
+          brand_logo_url?: string | null
           category?: string | null
           commission_rate?: number | null
           created_at?: string | null
@@ -240,11 +297,14 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          is_featured?: boolean | null
+          is_trending?: boolean | null
           last_synced_at?: string | null
           name?: string
           price_eur?: number | null
           price_usd?: number | null
           price_zar?: number | null
+          view_count?: number | null
         }
         Relationships: []
       }
@@ -831,6 +891,44 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_views: {
+        Row: {
+          id: string
+          product_id: string | null
+          referrer_url: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+          viewed_at: string | null
+        }
+        Insert: {
+          id?: string
+          product_id?: string | null
+          referrer_url?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          viewed_at?: string | null
+        }
+        Update: {
+          id?: string
+          product_id?: string | null
+          referrer_url?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_views_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_products"
             referencedColumns: ["id"]
           },
         ]
