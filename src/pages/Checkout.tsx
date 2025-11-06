@@ -243,7 +243,12 @@ const Checkout = () => {
                       <div key={item.id} className="flex justify-between items-start">
                         <div className="flex-1">
                           <h4 className="font-medium text-sm">{item.title}</h4>
-                          <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                          <p className="text-xs text-gray-500">
+                            Qty: {item.quantity}
+                            {item.item_type === 'affiliate' && (
+                              <span className="ml-2 text-blue-600">• Partner Product</span>
+                            )}
+                          </p>
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-sm">R{(item.price_zar * item.quantity).toFixed(2)}</p>

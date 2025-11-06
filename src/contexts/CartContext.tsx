@@ -4,10 +4,16 @@ export interface CartItem {
   id: string;
   title: string;
   price_zar: number;
+  price_usd?: number;
+  price_eur?: number;
   price_wellcoins?: number;
   quantity: number;
   image?: string;
   category?: string;
+  item_type?: 'product' | 'service' | 'affiliate';
+  affiliate_url?: string;
+  affiliate_program_id?: string;
+  commission_rate?: number;
 }
 
 interface CartState {

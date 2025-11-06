@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { useCart } from '@/components/CartProvider';
+import { PremiumProductCard } from '@/components/product/PremiumProductCard';
 import { 
   Search, 
   ExternalLink, 
@@ -20,9 +20,9 @@ import {
   ShoppingCart,
   Filter,
   Star,
-  Heart,
-  Share2,
-  Zap
+  Zap,
+  Grid3x3,
+  List
 } from 'lucide-react';
 
 interface CJProduct {
@@ -51,14 +51,17 @@ const CJAffiliateProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
-  const [currency, setCurrency] = useState<'USD' | 'ZAR' | 'EUR'>('ZAR');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const { toast } = useToast();
-  const { addItem } = useCart();
 
   useEffect(() => {
     fetchProducts();
+    // Load favorites from localStorage
+    const savedFavorites = localStorage.getItem('cj-favorites');
+    if (savedFavorites) {
+      setFavorites(new Set(JSON.parse(savedFavorites)));
+    }
   }, []);
 
   useEffect(() => {
@@ -104,25 +107,19 @@ const CJAffiliateProducts = () => {
                      results.commissions?.status === 'success' &&
                      results.companyId?.status === 'configured';
 
-      console.log('Connectivity check results:', data);
-
-      // Show detailed results
       const statusEmoji = (status: string) => status === 'success' || status === 'configured' ? '✅' : '❌';
       
       toast({
         title: allGood ? '✅ All Checks Passed' : '⚠️ Configuration Issues',
         description: (
           <div className="space-y-1 text-sm">
-            <div>{statusEmoji(results.productFeed?.status)} Product Feed API: {results.productFeed?.status}</div>
-            <div>{statusEmoji(results.commissions?.status)} Commissions API: {results.commissions?.status}</div>
-            <div>{statusEmoji(results.companyId?.status)} Company ID: {results.companyId?.status}</div>
-            <div className="mt-2 pt-2 border-t border-border">
-              {data.recommendations?.[0] || 'All systems operational'}
-            </div>
+            <div>{statusEmoji(results.productFeed?.status)} Product Feed API</div>
+            <div>{statusEmoji(results.commissions?.status)} Commissions API</div>
+            <div>{statusEmoji(results.companyId?.status)} Company ID</div>
           </div>
         ),
         variant: allGood ? 'default' : 'destructive',
-        duration: 8000,
+        duration: 6000,
       });
     } catch (error) {
       console.error('Connectivity check error:', error);
@@ -143,14 +140,12 @@ const CJAffiliateProducts = () => {
         },
       });
 
-      if (error) {
-        throw new Error(error.message || 'Sync failed');
-      }
+      if (error) throw new Error(error.message || 'Sync failed');
 
       if (data && data.success) {
         toast({
           title: 'Sync Complete',
-          description: `Synced ${data.results.inserted} products. ${data.results.errors} errors.`,
+          description: `Synced ${data.results.inserted} products.`,
         });
         fetchProducts();
       } else {
@@ -160,7 +155,7 @@ const CJAffiliateProducts = () => {
       console.error('Error syncing products:', error);
       toast({
         title: 'Sync Failed',
-        description: error.message || 'Failed to sync products from CJ Affiliate. Try running connectivity check first.',
+        description: error.message || 'Failed to sync products from CJ Affiliate.',
         variant: 'destructive',
       });
     } finally {
@@ -188,10 +183,10 @@ const CJAffiliateProducts = () => {
     // Apply sorting
     switch (sortBy) {
       case 'price_low':
-        filtered.sort((a, b) => getPriceInCurrency(a) - getPriceInCurrency(b));
+        filtered.sort((a, b) => a.price_zar - b.price_zar);
         break;
       case 'price_high':
-        filtered.sort((a, b) => getPriceInCurrency(b) - getPriceInCurrency(a));
+        filtered.sort((a, b) => b.price_zar - a.price_zar);
         break;
       case 'commission_high':
         filtered.sort((a, b) => (b.commission_rate || 0) - (a.commission_rate || 0));
@@ -200,67 +195,10 @@ const CJAffiliateProducts = () => {
         filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
       default:
-        // Keep original order (featured)
         break;
     }
 
     setFilteredProducts(filtered);
-  };
-
-  const getPriceInCurrency = (product: CJProduct): number => {
-    switch (currency) {
-      case 'USD':
-        return product.price_usd || 0;
-      case 'EUR':
-        return product.price_eur || 0;
-      case 'ZAR':
-      default:
-        return product.price_zar || 0;
-    }
-  };
-
-  const formatPrice = (product: CJProduct): string => {
-    const price = getPriceInCurrency(product);
-    switch (currency) {
-      case 'USD':
-        return `$${price.toFixed(2)}`;
-      case 'EUR':
-        return `€${price.toFixed(2)}`;
-      case 'ZAR':
-      default:
-        return `R${price.toFixed(2)}`;
-    }
-  };
-
-  const calculateEarnings = (product: CJProduct): string => {
-    const price = getPriceInCurrency(product);
-    const earnings = price * (product.commission_rate || 0);
-    switch (currency) {
-      case 'USD':
-        return `$${earnings.toFixed(2)}`;
-      case 'EUR':
-        return `€${earnings.toFixed(2)}`;
-      case 'ZAR':
-      default:
-        return `R${earnings.toFixed(2)}`;
-    }
-  };
-
-  const trackClick = async (product: CJProduct) => {
-    try {
-      const clickId = `cj-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      
-      await supabase.from('affiliate_clicks').insert({
-        affiliate_program_id: 'cj',
-        click_id: clickId,
-        destination_url: product.affiliate_url,
-        referrer_url: window.location.href,
-      });
-
-      window.open(product.affiliate_url, '_blank');
-    } catch (error) {
-      console.error('Error tracking click:', error);
-    }
   };
 
   const toggleFavorite = (productId: string) => {
@@ -273,6 +211,7 @@ const CJAffiliateProducts = () => {
         newFavorites.add(productId);
         toast({ title: 'Added to favorites' });
       }
+      localStorage.setItem('cj-favorites', JSON.stringify([...newFavorites]));
       return newFavorites;
     });
   };
@@ -289,22 +228,22 @@ const CJAffiliateProducts = () => {
             <div className="text-center space-y-4">
               <Badge variant="secondary" className="mb-2">
                 <Zap className="w-3 h-3 mr-1" />
-                CJ Affiliate Network
+                Shop Conscious Products, Earn Rewards
               </Badge>
               <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Premium Wellness Store
+                Premium Wellness Marketplace
               </h1>
               <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-                Discover curated wellness products from trusted brands. Earn commissions on every sale.
+                Discover curated wellness products from trusted brands. Every purchase supports our community.
               </p>
               <div className="flex flex-wrap gap-4 justify-center">
                 <Button onClick={syncProducts} disabled={syncing} size="lg" variant="default">
                   <RefreshCw className={`mr-2 w-5 h-5 ${syncing ? 'animate-spin' : ''}`} />
-                  {syncing ? 'Syncing Products...' : 'Sync Latest Products'}
+                  {syncing ? 'Syncing...' : 'Sync Products'}
                 </Button>
                 <Button onClick={runConnectivityCheck} size="lg" variant="secondary">
                   <ExternalLink className="mr-2 w-5 h-5" />
-                  Run Connectivity Check
+                  Check API Status
                 </Button>
                 <Button size="lg" variant="outline" asChild>
                   <a href="#products">
@@ -371,7 +310,7 @@ const CJAffiliateProducts = () => {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{filteredProducts.length}</p>
-                    <p className="text-sm text-muted-foreground">Filtered Results</p>
+                    <p className="text-sm text-muted-foreground">Results</p>
                   </div>
                 </div>
               </CardContent>
@@ -389,7 +328,7 @@ const CJAffiliateProducts = () => {
                   <div className="flex-1 relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                     <Input
-                      placeholder="Search products by name, description, or category..."
+                      placeholder="Search products..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
@@ -412,38 +351,35 @@ const CJAffiliateProducts = () => {
 
                 {/* Secondary Controls */}
                 <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                  <div className="flex gap-2 w-full sm:w-auto">
-                    <Select value={sortBy} onValueChange={setSortBy}>
-                      <SelectTrigger className="w-full sm:w-48">
-                        <SelectValue placeholder="Sort by" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="featured">Featured</SelectItem>
-                        <SelectItem value="price_low">Price: Low to High</SelectItem>
-                        <SelectItem value="price_high">Price: High to Low</SelectItem>
-                        <SelectItem value="commission_high">Highest Commission</SelectItem>
-                        <SelectItem value="name">Name A-Z</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-full sm:w-48">
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="featured">Featured</SelectItem>
+                      <SelectItem value="price_low">Price: Low to High</SelectItem>
+                      <SelectItem value="price_high">Price: High to Low</SelectItem>
+                      <SelectItem value="commission_high">Highest Commission</SelectItem>
+                      <SelectItem value="name">Name A-Z</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-                    <Select value={currency} onValueChange={(v) => setCurrency(v as any)}>
-                      <SelectTrigger className="w-full sm:w-32">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="ZAR">ZAR (R)</SelectItem>
-                        <SelectItem value="USD">USD ($)</SelectItem>
-                        <SelectItem value="EUR">EUR (€)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="flex gap-2">
+                    <Button
+                      variant={viewMode === 'grid' ? 'default' : 'outline'}
+                      size="icon"
+                      onClick={() => setViewMode('grid')}
+                    >
+                      <Grid3x3 className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant={viewMode === 'list' ? 'default' : 'outline'}
+                      size="icon"
+                      onClick={() => setViewMode('list')}
+                    >
+                      <List className="w-4 h-4" />
+                    </Button>
                   </div>
-
-                  <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as any)} className="w-full sm:w-auto">
-                    <TabsList>
-                      <TabsTrigger value="grid">Grid</TabsTrigger>
-                      <TabsTrigger value="list">List</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
                 </div>
               </div>
             </CardContent>
@@ -465,119 +401,28 @@ const CJAffiliateProducts = () => {
                 <p className="text-muted-foreground mb-6">
                   {products.length === 0 
                     ? 'Sync products to get started' 
-                    : 'Try adjusting your filters or search term'}
+                    : 'Try adjusting your filters'}
                 </p>
                 <Button onClick={syncProducts} disabled={syncing}>
                   <RefreshCw className={`mr-2 w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
-                  Sync Products Now
+                  Sync Products
                 </Button>
               </CardContent>
             </Card>
           ) : (
             <>
-              <div className={viewMode === 'grid' 
-                ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
-                : 'space-y-4'}>
+              <div className={
+                viewMode === 'grid' 
+                  ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
+                  : 'space-y-4'
+              }>
                 {filteredProducts.map((product) => (
-                  <Card 
-                    key={product.id} 
-                    className={`group hover:shadow-xl transition-all duration-300 ${
-                      viewMode === 'list' ? 'flex flex-row' : ''
-                    }`}
-                  >
-                    <div className={viewMode === 'list' ? 'w-48 flex-shrink-0' : ''}>
-                      {product.image_url ? (
-                        <div className="relative overflow-hidden rounded-t-lg">
-                          <img
-                            src={product.image_url}
-                            alt={product.name}
-                            className={`w-full object-cover group-hover:scale-105 transition-transform duration-300 ${
-                              viewMode === 'list' ? 'h-full rounded-l-lg rounded-t-none' : 'h-48'
-                            }`}
-                            loading="lazy"
-                          />
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm hover:bg-background"
-                            onClick={() => toggleFavorite(product.id)}
-                          >
-                            <Heart 
-                              className={`w-5 h-5 ${
-                                favorites.has(product.id) 
-                                  ? 'fill-red-500 text-red-500' 
-                                  : 'text-muted-foreground'
-                              }`} 
-                            />
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className={`bg-muted flex items-center justify-center ${
-                          viewMode === 'list' ? 'h-full rounded-l-lg' : 'h-48 rounded-t-lg'
-                        }`}>
-                          <Package className="w-12 h-12 text-muted-foreground" />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex-1">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <Badge variant="outline" className="text-xs">
-                            {product.category || 'Wellness'}
-                          </Badge>
-                          <Badge variant="secondary" className="text-xs">
-                            <Star className="w-3 h-3 mr-1" />
-                            {(product.commission_rate * 100).toFixed(0)}%
-                          </Badge>
-                        </div>
-                        <CardTitle className="line-clamp-2 text-lg group-hover:text-primary transition-colors">
-                          {product.name}
-                        </CardTitle>
-                        <CardDescription className="line-clamp-2 text-sm">
-                          {product.description}
-                        </CardDescription>
-                      </CardHeader>
-
-                      <CardContent className="space-y-4">
-                        {/* Pricing */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-2xl font-bold text-foreground">
-                              {formatPrice(product)}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              Earn: <span className="font-semibold text-green-600">
-                                {calculateEarnings(product)}
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex gap-2">
-                          <Button
-                            onClick={() => trackClick(product)}
-                            className="flex-1"
-                            size="sm"
-                          >
-                            View Product
-                            <ExternalLink className="ml-2 w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              navigator.clipboard.writeText(product.affiliate_url);
-                              toast({ title: 'Link copied to clipboard!' });
-                            }}
-                          >
-                            <Share2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </div>
-                  </Card>
+                  <PremiumProductCard
+                    key={product.id}
+                    product={product}
+                    onFavoriteToggle={toggleFavorite}
+                    isFavorite={favorites.has(product.id)}
+                  />
                 ))}
               </div>
 

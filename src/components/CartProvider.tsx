@@ -4,13 +4,19 @@ export interface CartItem {
   id: string;
   title: string;
   price_zar: number;
-  price_wellcoins: number;
+  price_usd?: number;
+  price_eur?: number;
+  price_wellcoins?: number;
   quantity: number;
   provider_name?: string;
-  category: string;
+  category?: string;
   duration_minutes?: number;
   location?: string;
   image?: string;
+  item_type?: 'product' | 'service' | 'affiliate';
+  affiliate_url?: string;
+  affiliate_program_id?: string;
+  commission_rate?: number;
 }
 
 interface CartContextType {
@@ -90,7 +96,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalZAR = items.reduce((sum, item) => sum + (item.price_zar * item.quantity), 0);
-  const totalWellCoins = items.reduce((sum, item) => sum + (item.price_wellcoins * item.quantity), 0);
+  const totalWellCoins = items.reduce((sum, item) => sum + ((item.price_wellcoins || 0) * item.quantity), 0);
 
   const value: CartContextType = {
     items,

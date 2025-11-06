@@ -9,6 +9,16 @@ const corsHeaders = {
 // Reference: https://developers.cj.com/graphql/reference/Product%20Feed
 const CJ_PRODUCT_FEED_ENDPOINT = 'https://ads.api.cj.com/query';
 
+// Image validation helper
+const isValidImageUrl = (url: string): boolean => {
+  if (!url) return false;
+  if (url.endsWith('/')) return false; // Incomplete URLs
+  const hasValidDomain = url.startsWith('http://') || url.startsWith('https://');
+  const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
+  const looksLikeImage = url.includes('image') || url.includes('img') || url.includes('product');
+  return hasValidDomain && (hasImageExtension || looksLikeImage);
+};
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -102,26 +112,35 @@ serve(async (req) => {
       productsReturned: resultList.length
     });
 
-    // Transform CJ products to our format
-    const products = resultList.map((product: any) => {
-      const priceAmount = parseFloat(product.price?.amount || '0');
-      
-      return {
-        affiliate_program_id: 'cj',
-        external_product_id: product.id,
-        name: product.title,
-        description: product.description || '',
-        category: category || 'General Wellness',
-        image_url: product.imageLink || null,
-        affiliate_url: product.link || '',
-        price_usd: priceAmount,
-        price_zar: priceAmount * 18.5, // Approximate ZAR conversion
-        price_eur: priceAmount * 0.92, // Approximate EUR conversion
-        commission_rate: 0.08, // Default 8%, will vary by advertiser
-        is_active: true,
-        last_synced_at: new Date().toISOString(),
-      };
-    });
+    // Transform CJ products to our format with image validation
+    const products = resultList
+      .filter((product: any) => {
+        // Filter out products with invalid images
+        const hasValidImage = isValidImageUrl(product.imageLink);
+        if (!hasValidImage) {
+          console.log(`Skipping product with invalid image: ${product.title}`);
+        }
+        return hasValidImage;
+      })
+      .map((product: any) => {
+        const priceAmount = parseFloat(product.price?.amount || '0');
+        
+        return {
+          affiliate_program_id: 'cj',
+          external_product_id: product.id,
+          name: product.title,
+          description: product.description || '',
+          category: category || 'General Wellness',
+          image_url: product.imageLink || null,
+          affiliate_url: product.link || '',
+          price_usd: priceAmount,
+          price_zar: priceAmount * 18.5, // Approximate ZAR conversion
+          price_eur: priceAmount * 0.92, // Approximate EUR conversion
+          commission_rate: 0.08, // Default 8%, will vary by advertiser
+          is_active: true,
+          last_synced_at: new Date().toISOString(),
+        };
+      });
 
     return new Response(
       JSON.stringify({
