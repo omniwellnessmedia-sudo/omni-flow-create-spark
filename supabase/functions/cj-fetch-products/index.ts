@@ -120,8 +120,6 @@ serve(async (req) => {
         commission_rate: 0.08, // Default 8%, will vary by advertiser
         is_active: true,
         last_synced_at: new Date().toISOString(),
-        advertiser_id: product.advertiserId || null,
-        advertiser_name: product.advertiserName || null,
       };
     });
 

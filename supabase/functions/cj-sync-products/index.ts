@@ -62,13 +62,27 @@ serve(async (req) => {
 
     for (const product of allProducts) {
       try {
+        // Whitelist only valid columns for affiliate_products table
+        const toUpsert = {
+          affiliate_program_id: product.affiliate_program_id,
+          external_product_id: product.external_product_id,
+          name: product.name,
+          description: product.description ?? null,
+          category: product.category ?? null,
+          image_url: product.image_url ?? null,
+          affiliate_url: product.affiliate_url,
+          price_usd: Number.isFinite(product.price_usd) ? product.price_usd : null,
+          price_eur: Number.isFinite(product.price_eur) ? product.price_eur : null,
+          price_zar: Number.isFinite(product.price_zar) ? product.price_zar : null,
+          commission_rate: product.commission_rate ?? null,
+          is_active: true,
+          last_synced_at: new Date().toISOString(),
+        };
+
         const { error } = await supabase
           .from('affiliate_products')
           .upsert(
-            {
-              ...product,
-              last_synced_at: new Date().toISOString(),
-            },
+            toUpsert,
             {
               onConflict: 'affiliate_program_id,external_product_id',
             }
