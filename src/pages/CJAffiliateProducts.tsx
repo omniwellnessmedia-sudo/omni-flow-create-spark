@@ -46,6 +46,7 @@ interface CJProduct {
 const CJAffiliateProducts = () => {
   const [products, setProducts] = useState<CJProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<CJProduct[]>([]);
+  const [displayedProducts, setDisplayedProducts] = useState<CJProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -53,7 +54,12 @@ const CJAffiliateProducts = () => {
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const { toast } = useToast();
+  
+  const INITIAL_LOAD = 24;
+  const LOAD_MORE = 12;
 
   useEffect(() => {
     fetchProducts();
@@ -67,6 +73,37 @@ const CJAffiliateProducts = () => {
   useEffect(() => {
     filterAndSortProducts();
   }, [products, searchTerm, categoryFilter, sortBy]);
+
+  useEffect(() => {
+    // Reset pagination when filters change
+    setPage(1);
+    const initialProducts = filteredProducts.slice(0, INITIAL_LOAD);
+    setDisplayedProducts(initialProducts);
+    setHasMore(filteredProducts.length > INITIAL_LOAD);
+  }, [filteredProducts]);
+
+  useEffect(() => {
+    // Infinite scroll observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const sentinel = document.getElementById('scroll-sentinel');
+    if (sentinel) {
+      observer.observe(sentinel);
+    }
+
+    return () => {
+      if (sentinel) {
+        observer.unobserve(sentinel);
+      }
+    };
+  }, [hasMore, loading, page]);
 
   const fetchProducts = async () => {
     try {
@@ -207,6 +244,21 @@ const CJAffiliateProducts = () => {
     }
 
     setFilteredProducts(filtered);
+  };
+
+  const loadMore = () => {
+    const nextPage = page + 1;
+    const startIndex = INITIAL_LOAD + (page - 1) * LOAD_MORE;
+    const endIndex = startIndex + LOAD_MORE;
+    const newProducts = filteredProducts.slice(startIndex, endIndex);
+    
+    if (newProducts.length > 0) {
+      setDisplayedProducts(prev => [...prev, ...newProducts]);
+      setPage(nextPage);
+      setHasMore(endIndex < filteredProducts.length);
+    } else {
+      setHasMore(false);
+    }
   };
 
   const toggleFavorite = (productId: string) => {
@@ -424,7 +476,7 @@ const CJAffiliateProducts = () => {
                   ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
                   : 'space-y-4'
               }>
-                {filteredProducts.map((product) => (
+                {displayedProducts.map((product) => (
                   <PremiumProductCard
                     key={product.id}
                     product={product}
@@ -434,11 +486,21 @@ const CJAffiliateProducts = () => {
                 ))}
               </div>
 
+              {/* Infinite Scroll Sentinel */}
+              <div id="scroll-sentinel" className="h-20 flex items-center justify-center">
+                {hasMore && (
+                  <RefreshCw className="w-6 h-6 animate-spin text-primary" />
+                )}
+              </div>
+
               {/* Pagination Info */}
-              <div className="mt-8 text-center">
+              <div className="mt-4 text-center">
                 <p className="text-sm text-muted-foreground">
-                  Showing <span className="font-semibold">{filteredProducts.length}</span> of{' '}
-                  <span className="font-semibold">{products.length}</span> products
+                  Showing <span className="font-semibold">{displayedProducts.length}</span> of{' '}
+                  <span className="font-semibold">{filteredProducts.length}</span> products
+                  {filteredProducts.length !== products.length && (
+                    <span> (filtered from {products.length} total)</span>
+                  )}
                 </p>
               </div>
             </>
