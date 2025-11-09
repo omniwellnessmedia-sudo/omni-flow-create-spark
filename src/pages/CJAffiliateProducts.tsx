@@ -329,31 +329,62 @@ const CJAffiliateProducts = () => {
       <UnifiedNavigation />
       
       <main className="pt-20 pb-16">
-        {/* Hero Section - Brand-Focused */}
-        <section className="relative bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+        {/* Hero Section - Modern Glassmorphism Design */}
+        <section className="relative py-24 overflow-hidden animated-gradient-hero">
+          {/* Decorative Elements */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-omni-violet/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-20 right-10 w-96 h-96 bg-omni-orange/20 rounded-full blur-3xl" />
+          </div>
+          
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center space-y-6 max-w-4xl mx-auto">
-              <Badge variant="secondary" className="mb-2">
-                <Sparkles className="w-3 h-3 mr-1" />
-                Conscious Wellness Marketplace by Omni Wellness Media
-              </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
-                Bridging Wellness, Outreach & Media
+            <div className="text-center space-y-8 max-w-5xl mx-auto">
+              {/* Badge */}
+              <div className="animate-scale-in">
+                <Badge className="badge-modern glass-button border-primary/20 bg-background/60 text-foreground">
+                  <Sparkles className="w-3.5 h-3.5 mr-2 text-primary" />
+                  Conscious Wellness Marketplace by Omni Wellness Media
+                </Badge>
+              </div>
+
+              {/* Main Heading - Solid text for readability */}
+              <h1 className="text-hero text-foreground animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                Bridging Wellness,
+                <br />
+                <span className="text-gradient-primary">Outreach & Media</span>
               </h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+
+              {/* Subheading */}
+              <p className="text-subhero mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 Curated wellness products that align with our mission of holistic wellness, sustainable living, and conscious consumption. Every purchase supports our community programs.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center pt-4">
-                <Button onClick={syncProducts} disabled={syncing} size="lg">
+
+              {/* CTA Buttons - Glassmorphism Style */}
+              <div className="flex flex-wrap gap-4 justify-center pt-6 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                <Button 
+                  onClick={syncProducts} 
+                  disabled={syncing} 
+                  size="lg"
+                  className="glass-button hover-lift shadow-elegant"
+                >
                   <RefreshCw className={`mr-2 w-5 h-5 ${syncing ? 'animate-spin' : ''}`} />
                   {syncing ? 'Syncing Products...' : 'Sync Products'}
                 </Button>
-                <Button onClick={runConnectivityCheck} size="lg" variant="outline">
+                <Button 
+                  onClick={runConnectivityCheck} 
+                  size="lg" 
+                  variant="outline"
+                  className="glass-button hover-lift"
+                >
                   <ExternalLink className="mr-2 w-5 h-5" />
                   API Status
                 </Button>
-                <Button size="lg" variant="outline" asChild>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  asChild
+                  className="glass-button hover-lift"
+                >
                   <a href="#products">
                     <ShoppingCart className="mr-2 w-5 h-5" />
                     Browse {products.length} Products
@@ -364,36 +395,46 @@ const CJAffiliateProducts = () => {
           </div>
         </section>
 
-        {/* About Marketplace Section */}
+        {/* Section Divider */}
+        <div className="section-divider-thick max-w-4xl mx-auto" />
+
+        {/* About Marketplace Section - Enhanced Design */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <Card className="border-primary/10">
-            <CardContent className="p-8 md:p-12">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="space-y-4">
-                  <h2 className="text-3xl font-bold">Welcome to the Omni Wellness Marketplace</h2>
-                  <p className="text-muted-foreground leading-relaxed">
+          <Card className="card-modern glass-card border-border/30 overflow-hidden">
+            <CardContent className="p-0">
+              <div className="grid md:grid-cols-2 gap-0">
+                {/* Text Content */}
+                <div className="p-8 md:p-12 space-y-6">
+                  <h2 className="text-section-title text-foreground">
+                    Welcome to the Omni Wellness Marketplace
+                  </h2>
+                  <p className="text-base text-muted-foreground leading-relaxed">
                     At Omni Wellness Media, we believe in bridging wellness, outreach, and media to empower South Africa's journey to health and consciousness.
                   </p>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-base text-muted-foreground leading-relaxed">
                     This marketplace features carefully curated wellness products from trusted partners through CJ Affiliate. Every purchase supports our mission to create conscious media content, business development, and sustainable community initiatives like The Valley of Plenty and the Human Animal Project.
                   </p>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 bg-primary/5 rounded-lg">
-                    <div className="text-3xl font-bold text-primary">{products.length}</div>
-                    <div className="text-sm text-muted-foreground">Products</div>
-                  </div>
-                  <div className="text-center p-4 bg-secondary/5 rounded-lg">
-                    <div className="text-3xl font-bold text-secondary">
-                      {products.length > 0 ? (products.reduce((sum, p) => sum + p.commission_rate, 0) / products.length * 100).toFixed(1) : 0}%
+
+                {/* Stats Cards */}
+                <div className="p-8 md:p-12 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 flex items-center">
+                  <div className="grid grid-cols-2 gap-4 w-full">
+                    <div className="text-center p-6 bg-background/60 backdrop-blur-sm rounded-xl border border-border/50 hover-lift">
+                      <div className="text-4xl font-bold text-primary mb-2">{products.length}</div>
+                      <div className="text-sm font-medium text-muted-foreground">Products</div>
                     </div>
-                    <div className="text-sm text-muted-foreground">Avg Commission</div>
-                  </div>
-                  <div className="text-center p-4 bg-accent/5 rounded-lg col-span-2">
-                    <div className="text-3xl font-bold text-accent">
-                      R{products.length > 0 ? (products.reduce((sum, p) => sum + (p.price_zar * p.commission_rate), 0) / products.length).toFixed(0) : 0}
+                    <div className="text-center p-6 bg-background/60 backdrop-blur-sm rounded-xl border border-border/50 hover-lift">
+                      <div className="text-4xl font-bold text-secondary mb-2">
+                        {products.length > 0 ? (products.reduce((sum, p) => sum + p.commission_rate, 0) / products.length * 100).toFixed(1) : 0}%
+                      </div>
+                      <div className="text-sm font-medium text-muted-foreground">Avg Commission</div>
                     </div>
-                    <div className="text-sm text-muted-foreground">Avg Commission Earned</div>
+                    <div className="text-center p-6 bg-background/60 backdrop-blur-sm rounded-xl border border-border/50 col-span-2 hover-lift">
+                      <div className="text-4xl font-bold text-accent mb-2">
+                        R{products.length > 0 ? (products.reduce((sum, p) => sum + (p.price_zar * p.commission_rate), 0) / products.length).toFixed(0) : 0}
+                      </div>
+                      <div className="text-sm font-medium text-muted-foreground">Avg Commission Earned</div>
+                    </div>
                   </div>
                 </div>
               </div>
