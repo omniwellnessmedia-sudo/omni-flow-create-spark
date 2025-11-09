@@ -14,13 +14,23 @@ export const useViewTracker = (productId: string | undefined) => {
       // Only count as new view if not viewed in last 24 hours
       if (!lastViewed || now - parseInt(lastViewed) > 24 * 60 * 60 * 1000) {
         try {
-          // Increment view count in database
-          const { error } = await supabase.rpc('increment_view_count', {
-            product_id: productId
-          });
+          // Fetch current product to get view count
+          const { data: product } = await supabase
+            .from('affiliate_products')
+            .select('view_count')
+            .eq('id', productId)
+            .single();
           
-          if (!error) {
-            localStorage.setItem(viewedKey, now.toString());
+          if (product) {
+            // Increment view count
+            const { error } = await supabase
+              .from('affiliate_products')
+              .update({ view_count: (product.view_count || 0) + 1 })
+              .eq('id', productId);
+            
+            if (!error) {
+              localStorage.setItem(viewedKey, now.toString());
+            }
           }
         } catch (err) {
           console.error('Error tracking view:', err);
