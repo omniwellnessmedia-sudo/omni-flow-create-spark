@@ -3,9 +3,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SmartProductImage } from './SmartProductImage';
-import { Heart, Share2, Eye } from 'lucide-react';
+import { Heart, Share2, Eye, Zap } from 'lucide-react';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import { useState } from 'react';
+import { isNewProduct, hasHighCommission } from '@/lib/productUtils';
 
 interface PremiumProductCardProps {
   product: {
@@ -22,15 +23,18 @@ interface PremiumProductCardProps {
     affiliate_program_id: string;
     advertiser_name?: string;
     brand_logo_url?: string;
+    created_at?: string;
   };
   onFavoriteToggle?: (productId: string) => void;
   isFavorite?: boolean;
+  onQuickView?: (productId: string) => void;
 }
 
 export const PremiumProductCard = ({ 
   product, 
   onFavoriteToggle,
-  isFavorite = false 
+  isFavorite = false,
+  onQuickView 
 }: PremiumProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -41,52 +45,75 @@ export const PremiumProductCard = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-[3/4] overflow-hidden">
         <Link to={`/cj-products/${product.id}`}>
           <SmartProductImage
             src={product.image_url}
             alt={product.name}
             category={product.category}
-            className="w-full h-full transition-transform duration-300 group-hover:scale-110"
+            className="w-full h-full transition-transform duration-500 group-hover:scale-110"
           />
         </Link>
         
+        {/* Top Badges */}
+        <div className="absolute top-2 left-2 space-y-1 z-10">
+          {isNewProduct(product.created_at) && (
+            <Badge className="bg-green-600 text-white shadow-md">
+              🆕 New
+            </Badge>
+          )}
+          {product.commission_rate && hasHighCommission(product.commission_rate) && (
+            <Badge className="bg-orange-600 text-white shadow-md">
+              <Zap className="w-3 h-3 mr-1" />
+              High Commission
+            </Badge>
+          )}
+        </div>
+        
         {/* Brand Badge */}
         {product.advertiser_name && (
-          <Badge className="absolute top-2 left-2 bg-background/90 backdrop-blur z-10">
+          <Badge className="absolute top-2 right-2 bg-background/90 backdrop-blur z-10 shadow-md">
             {product.advertiser_name}
           </Badge>
         )}
         
         {/* Quick Actions Bar - appears on hover */}
         <div 
-          className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 transition-opacity duration-300 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
+          className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4 transition-all duration-300 ${
+            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
           }`}
         >
           <div className="flex gap-2 justify-center">
-            <Button
-              size="sm"
-              variant="secondary"
-              className="flex-1"
-              asChild
-            >
-              <Link to={`/cj-products/${product.id}`}>
+            {onQuickView && (
+              <Button
+                size="sm"
+                variant="secondary"
+                className="flex-1 bg-white/90 hover:bg-white text-black"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onQuickView(product.id);
+                }}
+              >
                 <Eye className="w-4 h-4 mr-1" />
                 Quick View
-              </Link>
-            </Button>
+              </Button>
+            )}
             <Button
               size="sm"
               variant="secondary"
+              className="bg-white/90 hover:bg-white text-black"
               onClick={(e) => {
                 e.preventDefault();
                 onFavoriteToggle?.(product.id);
               }}
             >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current text-red-500' : ''}`} />
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
             </Button>
-            <Button size="sm" variant="secondary">
+            <Button 
+              size="sm" 
+              variant="secondary"
+              className="bg-white/90 hover:bg-white text-black"
+            >
               <Share2 className="w-4 h-4" />
             </Button>
           </div>

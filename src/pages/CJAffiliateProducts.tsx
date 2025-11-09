@@ -6,10 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { PremiumProductCard } from '@/components/product/PremiumProductCard';
+import { FeaturedProductsCarousel } from '@/components/product/FeaturedProductsCarousel';
+import { ProductQuickView } from '@/components/product/ProductQuickView';
+import { FiltersSidebar } from '@/components/product/FiltersSidebar';
+import { BackToTopButton } from '@/components/product/BackToTopButton';
+import { ProductSkeleton } from '@/components/product/ProductSkeleton';
+import { TrustBadges } from '@/components/product/TrustBadges';
+import { EmptyState } from '@/components/ui/empty-state';
 import { 
   Search, 
   ExternalLink, 
@@ -18,11 +24,9 @@ import {
   Package, 
   RefreshCw,
   ShoppingCart,
-  Filter,
   Star,
   Zap,
-  Grid3x3,
-  List
+  Sparkles
 } from 'lucide-react';
 
 interface CJProduct {
@@ -50,12 +54,14 @@ const CJAffiliateProducts = () => {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [sortBy, setSortBy] = useState('featured');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [quickViewProductId, setQuickViewProductId] = useState<string | null>(null);
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const { toast } = useToast();
   
   const INITIAL_LOAD = 24;
@@ -72,7 +78,7 @@ const CJAffiliateProducts = () => {
 
   useEffect(() => {
     filterAndSortProducts();
-  }, [products, searchTerm, categoryFilter, sortBy]);
+  }, [products, searchTerm, selectedCategories, priceRange, sortBy]);
 
   useEffect(() => {
     // Reset pagination when filters change
@@ -221,9 +227,16 @@ const CJAffiliateProducts = () => {
     }
 
     // Apply category filter
-    if (categoryFilter !== 'all') {
-      filtered = filtered.filter(product => product.category === categoryFilter);
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(product => 
+        selectedCategories.includes(product.category)
+      );
     }
+
+    // Apply price range filter
+    filtered = filtered.filter(product =>
+      product.price_zar >= priceRange[0] && product.price_zar <= priceRange[1]
+    );
 
     // Apply sorting
     switch (sortBy) {
@@ -235,6 +248,11 @@ const CJAffiliateProducts = () => {
         break;
       case 'commission_high':
         filtered.sort((a, b) => (b.commission_rate || 0) - (a.commission_rate || 0));
+        break;
+      case 'newest':
+        filtered.sort((a, b) => 
+          new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+        );
         break;
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -276,39 +294,69 @@ const CJAffiliateProducts = () => {
     });
   };
 
+  const handleQuickView = (productId: string) => {
+    setQuickViewProductId(productId);
+    setIsQuickViewOpen(true);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategories(prev => {
+      if (prev.includes(category)) {
+        return prev.filter(c => c !== category);
+      }
+      return [...prev, category];
+    });
+  };
+
+  const handleClearFilters = () => {
+    setSelectedCategories([]);
+    setPriceRange([0, 10000]);
+    setSearchTerm('');
+    setSortBy('featured');
+  };
+
+  const activeFiltersCount = 
+    selectedCategories.length + 
+    (priceRange[0] !== 0 || priceRange[1] !== 10000 ? 1 : 0) +
+    (searchTerm ? 1 : 0);
+
   const categories = ['all', ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))];
+  const minPrice = Math.min(...products.map(p => p.price_zar), 0);
+  const maxPrice = Math.max(...products.map(p => p.price_zar), 10000);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <UnifiedNavigation />
+      
       <main className="pt-20 pb-16">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-primary/5 via-background to-secondary/5 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center space-y-4">
+        {/* Hero Section - Brand-Focused */}
+        <section className="relative bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 py-20 overflow-hidden">
+          <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center space-y-6 max-w-4xl mx-auto">
               <Badge variant="secondary" className="mb-2">
-                <Zap className="w-3 h-3 mr-1" />
-                Shop Conscious Products, Earn Rewards
+                <Sparkles className="w-3 h-3 mr-1" />
+                Conscious Wellness Marketplace by Omni Wellness Media
               </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Premium Wellness Marketplace
+              <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
+                Bridging Wellness, Outreach & Media
               </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-                Discover curated wellness products from trusted brands. Every purchase supports our community.
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                Curated wellness products that align with our mission of holistic wellness, sustainable living, and conscious consumption. Every purchase supports our community programs.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Button onClick={syncProducts} disabled={syncing} size="lg" variant="default">
+              <div className="flex flex-wrap gap-4 justify-center pt-4">
+                <Button onClick={syncProducts} disabled={syncing} size="lg">
                   <RefreshCw className={`mr-2 w-5 h-5 ${syncing ? 'animate-spin' : ''}`} />
-                  {syncing ? 'Syncing...' : 'Sync Products'}
+                  {syncing ? 'Syncing Products...' : 'Sync Products'}
                 </Button>
-                <Button onClick={runConnectivityCheck} size="lg" variant="secondary">
+                <Button onClick={runConnectivityCheck} size="lg" variant="outline">
                   <ExternalLink className="mr-2 w-5 h-5" />
-                  Check API Status
+                  API Status
                 </Button>
                 <Button size="lg" variant="outline" asChild>
                   <a href="#products">
                     <ShoppingCart className="mr-2 w-5 h-5" />
-                    Browse Products
+                    Browse {products.length} Products
                   </a>
                 </Button>
               </div>
@@ -316,129 +364,36 @@ const CJAffiliateProducts = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card className="border-primary/20">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary/10 rounded-lg">
-                    <Package className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{products.length}</p>
-                    <p className="text-sm text-muted-foreground">Products</p>
-                  </div>
+        {/* About Marketplace Section */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <Card className="border-primary/10">
+            <CardContent className="p-8 md:p-12">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div className="space-y-4">
+                  <h2 className="text-3xl font-bold">Welcome to the Omni Wellness Marketplace</h2>
+                  <p className="text-muted-foreground leading-relaxed">
+                    At Omni Wellness Media, we believe in bridging wellness, outreach, and media to empower South Africa's journey to health and consciousness.
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    This marketplace features carefully curated wellness products from trusted partners through CJ Affiliate. Every purchase supports our mission to create conscious media content, business development, and sustainable community initiatives like The Valley of Plenty and the Human Animal Project.
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-            <Card className="border-secondary/20">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-secondary/10 rounded-lg">
-                    <TrendingUp className="w-6 h-6 text-secondary" />
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-4 bg-primary/5 rounded-lg">
+                    <div className="text-3xl font-bold text-primary">{products.length}</div>
+                    <div className="text-sm text-muted-foreground">Products</div>
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold">
+                  <div className="text-center p-4 bg-secondary/5 rounded-lg">
+                    <div className="text-3xl font-bold text-secondary">
                       {products.length > 0 ? (products.reduce((sum, p) => sum + p.commission_rate, 0) / products.length * 100).toFixed(1) : 0}%
-                    </p>
-                    <p className="text-sm text-muted-foreground">Avg Commission</p>
+                    </div>
+                    <div className="text-sm text-muted-foreground">Avg Commission</div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-accent/20">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-accent/10 rounded-lg">
-                    <DollarSign className="w-6 h-6 text-accent" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">
+                  <div className="text-center p-4 bg-accent/5 rounded-lg col-span-2">
+                    <div className="text-3xl font-bold text-accent">
                       R{products.length > 0 ? (products.reduce((sum, p) => sum + (p.price_zar * p.commission_rate), 0) / products.length).toFixed(0) : 0}
-                    </p>
-                    <p className="text-sm text-muted-foreground">Avg Earning</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="border-muted">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-muted rounded-lg">
-                    <Star className="w-6 h-6 text-foreground" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold">{filteredProducts.length}</p>
-                    <p className="text-sm text-muted-foreground">Results</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* Filters & Controls */}
-        <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="space-y-4">
-                {/* Search & Primary Filters */}
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                    <Input
-                      placeholder="Search products..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                  <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                    <SelectTrigger className="w-full md:w-48">
-                      <Filter className="mr-2 h-4 w-4" />
-                      <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          {cat === 'all' ? 'All Categories' : cat}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Secondary Controls */}
-                <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full sm:w-48">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="featured">Featured</SelectItem>
-                      <SelectItem value="price_low">Price: Low to High</SelectItem>
-                      <SelectItem value="price_high">Price: High to Low</SelectItem>
-                      <SelectItem value="commission_high">Highest Commission</SelectItem>
-                      <SelectItem value="name">Name A-Z</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <div className="flex gap-2">
-                    <Button
-                      variant={viewMode === 'grid' ? 'default' : 'outline'}
-                      size="icon"
-                      onClick={() => setViewMode('grid')}
-                    >
-                      <Grid3x3 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === 'list' ? 'default' : 'outline'}
-                      size="icon"
-                      onClick={() => setViewMode('list')}
-                    >
-                      <List className="w-4 h-4" />
-                    </Button>
+                    </div>
+                    <div className="text-sm text-muted-foreground">Avg Commission Earned</div>
                   </div>
                 </div>
               </div>
@@ -446,67 +401,124 @@ const CJAffiliateProducts = () => {
           </Card>
         </section>
 
-        {/* Products Display */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-          {loading ? (
-            <div className="text-center py-12">
-              <RefreshCw className="w-12 h-12 animate-spin mx-auto text-primary mb-4" />
-              <p className="text-muted-foreground">Loading products...</p>
+        {/* Trust Badges */}
+        <TrustBadges />
+
+        {/* Featured Products Carousel */}
+        {!loading && products.length > 0 && (
+          <FeaturedProductsCarousel 
+            products={products}
+            onQuickView={handleQuickView}
+          />
+        )}
+
+        {/* Main Products Section with Sidebar */}
+        <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* Search Bar */}
+          <div className="mb-8">
+            <div className="relative max-w-2xl mx-auto">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+              <Input
+                placeholder="Search wellness products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-12 h-14 text-lg"
+              />
             </div>
-          ) : filteredProducts.length === 0 ? (
-            <Card className="text-center py-12">
-              <CardContent>
-                <Package className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-xl font-semibold mb-2">No Products Found</h3>
-                <p className="text-muted-foreground mb-6">
-                  {products.length === 0 
-                    ? 'Sync products to get started' 
-                    : 'Try adjusting your filters'}
-                </p>
-                <Button onClick={syncProducts} disabled={syncing}>
-                  <RefreshCw className={`mr-2 w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
-                  Sync Products
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              <div className={
-                viewMode === 'grid' 
-                  ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
-                  : 'space-y-4'
-              }>
-                {displayedProducts.map((product) => (
-                  <PremiumProductCard
-                    key={product.id}
-                    product={product}
-                    onFavoriteToggle={toggleFavorite}
-                    isFavorite={favorites.has(product.id)}
-                  />
-                ))}
+          </div>
+
+          <div className="grid lg:grid-cols-[280px_1fr] gap-8">
+            {/* Filters Sidebar - Desktop */}
+            <div className="hidden lg:block">
+              <FiltersSidebar
+                categories={categories}
+                selectedCategories={selectedCategories}
+                onCategoryChange={handleCategoryChange}
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+                priceRange={priceRange}
+                onPriceRangeChange={setPriceRange}
+                sortBy={sortBy}
+                onSortChange={setSortBy}
+                onClearFilters={handleClearFilters}
+                activeFiltersCount={activeFiltersCount}
+              />
+            </div>
+
+            {/* Products Grid */}
+            <div className="space-y-6">
+              {/* Results Header */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    Showing <span className="font-semibold text-foreground">{displayedProducts.length}</span> of{' '}
+                    <span className="font-semibold text-foreground">{filteredProducts.length}</span> products
+                    {filteredProducts.length !== products.length && (
+                      <span className="text-xs"> (filtered from {products.length} total)</span>
+                    )}
+                  </p>
+                </div>
               </div>
 
-              {/* Infinite Scroll Sentinel */}
-              <div id="scroll-sentinel" className="h-20 flex items-center justify-center">
-                {hasMore && (
-                  <RefreshCw className="w-6 h-6 animate-spin text-primary" />
-                )}
-              </div>
+              {/* Loading State */}
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  <ProductSkeleton count={24} />
+                </div>
+              ) : filteredProducts.length === 0 ? (
+                <EmptyState
+                  icon={<Package className="w-16 h-16 text-muted-foreground" />}
+                  title={products.length === 0 ? "No Products Yet" : "No Products Found"}
+                  description={products.length === 0 
+                    ? "Sync products from CJ Affiliate to get started" 
+                    : "Try adjusting your filters or search term"}
+                  actionLabel={products.length === 0 ? "Sync Products" : "Clear Filters"}
+                  onAction={products.length === 0 ? syncProducts : handleClearFilters}
+                />
+              ) : (
+                <>
+                  {/* Products Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {displayedProducts.map((product) => (
+                      <PremiumProductCard
+                        key={product.id}
+                        product={product}
+                        onFavoriteToggle={toggleFavorite}
+                        isFavorite={favorites.has(product.id)}
+                        onQuickView={handleQuickView}
+                      />
+                    ))}
+                  </div>
 
-              {/* Pagination Info */}
-              <div className="mt-4 text-center">
-                <p className="text-sm text-muted-foreground">
-                  Showing <span className="font-semibold">{displayedProducts.length}</span> of{' '}
-                  <span className="font-semibold">{filteredProducts.length}</span> products
-                  {filteredProducts.length !== products.length && (
-                    <span> (filtered from {products.length} total)</span>
-                  )}
-                </p>
-              </div>
-            </>
-          )}
+                  {/* Infinite Scroll Sentinel */}
+                  <div id="scroll-sentinel" className="h-20 flex items-center justify-center">
+                    {hasMore && !loading && (
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <span className="text-sm">Loading more products...</span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </section>
       </main>
+
+      {/* Quick View Modal */}
+      <ProductQuickView
+        productId={quickViewProductId}
+        isOpen={isQuickViewOpen}
+        onClose={() => {
+          setIsQuickViewOpen(false);
+          setQuickViewProductId(null);
+        }}
+      />
+
+      {/* Back to Top Button */}
+      <BackToTopButton />
+
       <Footer />
     </div>
   );
