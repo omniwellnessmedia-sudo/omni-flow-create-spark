@@ -46,15 +46,19 @@ export const FeaturedProductsCarousel = ({
   if (featured.length === 0) return null;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-gradient-to-br from-muted/30 to-background">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold mb-3">
-          Featured Wellness Essentials
-        </h2>
-        <p className="text-muted-foreground text-lg">
-          Hand-picked products for your wellness journey
-        </p>
-      </div>
+    <section className="py-20 section-divider-top relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5 animate-gradient-slow" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center mb-12">
+          <h2 className="text-section-title text-foreground mb-3">
+            Featured Wellness Essentials
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Hand-picked products for your wellness journey
+          </p>
+        </div>
 
       <Carousel
         plugins={[plugin.current]}
@@ -69,7 +73,7 @@ export const FeaturedProductsCarousel = ({
         <CarouselContent className="-ml-4">
           {featured.map((product) => (
             <CarouselItem key={product.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-              <Card className="group relative overflow-hidden h-full hover:shadow-2xl transition-all duration-500">
+              <Card className="group relative overflow-hidden h-full glass-card hover-lift border-border/20 transition-all duration-500">
                 {/* Image Container */}
                 <div className="relative aspect-[3/4] overflow-hidden">
                   <SmartProductImage
@@ -135,9 +139,10 @@ export const FeaturedProductsCarousel = ({
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="hidden md:flex -left-12" />
-        <CarouselNext className="hidden md:flex -right-12" />
+        <CarouselPrevious className="hidden md:flex -left-12 glass-button" />
+        <CarouselNext className="hidden md:flex -right-12 glass-button" />
       </Carousel>
+      </div>
     </section>
   );
 };

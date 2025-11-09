@@ -30,20 +30,20 @@ const badges = [
 
 export const TrustBadges = () => {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {badges.map((badge, index) => {
           const Icon = badge.icon;
           return (
-            <Card key={index} className="border-muted/50 hover:border-primary/30 transition-colors">
+            <Card key={index} className="glass-card hover-lift border-border/20 transition-all duration-300">
               <CardContent className="pt-6 text-center">
-                <div className="flex justify-center mb-3">
-                  <div className={`p-3 rounded-full bg-muted/50 ${badge.color}`}>
-                    <Icon className="w-6 h-6" />
+                <div className="flex justify-center mb-4">
+                  <div className={`p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 ${badge.color}`}>
+                    <Icon className="w-7 h-7" />
                   </div>
                 </div>
-                <h3 className="font-semibold mb-1">{badge.title}</h3>
-                <p className="text-sm text-muted-foreground">{badge.description}</p>
+                <h3 className="font-semibold mb-2 text-foreground">{badge.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{badge.description}</p>
               </CardContent>
             </Card>
           );

@@ -6,12 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star, ArrowLeft, Heart, Truck, Shield, RefreshCw, ExternalLink, TrendingUp } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Star, ArrowLeft, Heart, Truck, Shield, RefreshCw, ExternalLink, TrendingUp, Eye, Package, Calendar } from "lucide-react";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
-import { SmartProductImage } from "@/components/product/SmartProductImage";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PriceDisplay } from "@/components/ui/price-display";
+import { ProductImageGallery } from "@/components/product/ProductImageGallery";
+import { RecentlyViewedSection } from "@/components/product/RecentlyViewedSection";
+import { RelatedProductsSection } from "@/components/product/RelatedProductsSection";
+import { useViewTracker } from "@/hooks/useViewTracker";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
+import { formatDistanceToNow } from "date-fns";
 
 const CJProductDetail = () => {
   const { id } = useParams();
@@ -19,6 +26,10 @@ const CJProductDetail = () => {
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [quickViewId, setQuickViewId] = useState<string | null>(null);
+  
+  const { addToRecentlyViewed } = useRecentlyViewed();
+  useViewTracker(id);
 
   useEffect(() => {
     fetchProduct();
@@ -34,6 +45,14 @@ const CJProductDetail = () => {
 
       if (error) throw error;
       setProduct(data);
+      
+      // Add to recently viewed
+      if (data) {
+        addToRecentlyViewed({
+          id: data.id,
+          category: data.category
+        });
+      }
     } catch (error) {
       console.error('Error fetching product:', error);
       toast({
@@ -55,6 +74,17 @@ const CJProductDetail = () => {
     toast({
       title: isFavorite ? 'Removed from favorites' : 'Added to favorites',
     });
+  };
+
+  const formatViewCount = (count: number) => {
+    if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
+    return count?.toString() || '0';
+  };
+
+  const isNewProduct = (createdAt: string) => {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    return new Date(createdAt) > sevenDaysAgo;
   };
 
   if (loading) {
@@ -89,37 +119,36 @@ const CJProductDetail = () => {
     );
   }
 
+  const breadcrumbItems = product ? [
+    { label: 'Home', href: '/' },
+    { label: 'Wellness Products', href: '/cj-affiliate-products' },
+    { label: product.category, href: `/cj-affiliate-products?category=${encodeURIComponent(product.category)}` },
+    { label: product.name, current: true }
+  ] : [];
+
   return (
     <div className="min-h-screen">
       <UnifiedNavigation />
       
-      <main className="pt-20 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="pt-20 pb-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumb */}
-          <div className="mb-8">
-            <Button variant="ghost" asChild className="mb-4">
-              <Link to="/cj-affiliate-products">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Shop
-              </Link>
-            </Button>
-          </div>
+          <BreadcrumbNav items={breadcrumbItems} className="mb-8 glass-card" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
             {/* Product Image */}
             <div className="space-y-4">
-              <SmartProductImage
-                src={product.image_url}
-                alt={product.name}
+              <ProductImageGallery
+                imageUrl={product.image_url}
+                productName={product.name}
                 category={product.category}
-                className="aspect-square rounded-lg"
               />
               
               {/* Affiliate Disclosure */}
-              <Card className="bg-blue-50 border-blue-200">
+              <Card className="glass-card border-primary/20">
                 <CardContent className="pt-4">
-                  <div className="flex items-start gap-2 text-sm text-blue-800">
-                    <ExternalLink className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <ExternalLink className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
                     <p>
                       This is a partner product. We earn a commission when you purchase, 
                       which helps support our platform at no extra cost to you.
@@ -132,8 +161,31 @@ const CJProductDetail = () => {
             {/* Product Info */}
             <div className="space-y-6">
               <div>
-                <Badge variant="secondary" className="mb-2">{product.category}</Badge>
-                <h1 className="font-heading font-bold text-3xl mb-4">{product.name}</h1>
+                {/* Advertiser Info */}
+                {product.advertiser_name && (
+                  <div className="flex items-center gap-3 mb-4">
+                    {product.brand_logo_url && (
+                      <img src={product.brand_logo_url} alt={product.advertiser_name} className="h-8 object-contain" />
+                    )}
+                    <span className="text-sm text-muted-foreground">by {product.advertiser_name}</span>
+                  </div>
+                )}
+                
+                {/* Badges */}
+                <div className="flex flex-wrap gap-2 mb-3">
+                  <Badge variant="secondary">{product.category}</Badge>
+                  {product.is_featured && <Badge className="badge-modern bg-gradient-to-r from-omni-violet to-omni-orange">Featured</Badge>}
+                  {product.is_trending && <Badge className="badge-modern bg-gradient-to-r from-orange-500 to-red-500">🔥 Trending</Badge>}
+                  {isNewProduct(product.created_at) && <Badge className="badge-modern bg-gradient-to-r from-green-500 to-emerald-500">New</Badge>}
+                </div>
+                
+                <h1 className="font-heading font-bold text-3xl mb-4 text-foreground">{product.name}</h1>
+                
+                {/* View Count */}
+                <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
+                  <Eye className="w-4 h-4" />
+                  <span>{formatViewCount(product.view_count || 0)} people viewed this</span>
+                </div>
                 
                 {/* Price */}
                 <div className="mb-6">
@@ -146,13 +198,15 @@ const CJProductDetail = () => {
                 </div>
 
                 {/* Commission Earning Highlight */}
-                <Card className="bg-green-50 border-green-200 mb-6">
+                <Card className="glass-card border-primary/20 mb-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10">
                   <CardContent className="pt-4">
-                    <div className="flex items-center gap-2 text-green-800">
-                      <TrendingUp className="w-5 h-5" />
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-green-500/20">
+                        <TrendingUp className="w-5 h-5 text-green-700" />
+                      </div>
                       <div>
-                        <p className="font-semibold">Earn R{calculateCommission(product.price_zar, product.commission_rate)} Commission</p>
-                        <p className="text-sm">Help others discover this product and earn rewards!</p>
+                        <p className="font-semibold text-foreground">Earn R{calculateCommission(product.price_zar, product.commission_rate)} Commission</p>
+                        <p className="text-sm text-muted-foreground">Help others discover this product and earn rewards!</p>
                       </div>
                     </div>
                   </CardContent>
@@ -213,89 +267,164 @@ const CJProductDetail = () => {
           </div>
 
           {/* Product Details Tabs */}
-          <div className="mt-16">
-            <Tabs defaultValue="details" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="details">Details</TabsTrigger>
+          <div className="mb-0">
+            <Tabs defaultValue="specifications" className="w-full">
+              <TabsList className="glass-card w-full justify-start overflow-x-auto">
+                <TabsTrigger value="specifications">Specifications</TabsTrigger>
+                <TabsTrigger value="description">Description</TabsTrigger>
                 <TabsTrigger value="benefits">Why Buy This?</TabsTrigger>
-                <TabsTrigger value="partner">Partner Info</TabsTrigger>
+                <TabsTrigger value="shipping">Shipping</TabsTrigger>
+                <TabsTrigger value="faq">FAQ</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="details" className="mt-8">
-                <Card>
+              <TabsContent value="specifications" className="mt-8">
+                <Card className="glass-card">
                   <CardHeader>
-                    <CardTitle>Product Details</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <Package className="w-5 h-5 text-primary" />
+                      Product Specifications
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold mb-2">Description:</h4>
-                      <p className="text-muted-foreground">{product.description}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-2">Category:</h4>
-                      <Badge variant="outline">{product.category}</Badge>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-2">Commission Rate:</h4>
-                      <Badge variant="secondary">{(product.commission_rate * 100).toFixed(1)}%</Badge>
+                  <CardContent>
+                    <div className="space-y-0">
+                      <div className="spec-row">
+                        <span className="spec-label">Product ID</span>
+                        <span className="spec-value">{product.external_product_id || product.id}</span>
+                      </div>
+                      <div className="spec-row">
+                        <span className="spec-label">Category</span>
+                        <Badge variant="outline">{product.category}</Badge>
+                      </div>
+                      <div className="spec-row">
+                        <span className="spec-label">Commission Rate</span>
+                        <Badge className="badge-modern">{(product.commission_rate * 100).toFixed(1)}%</Badge>
+                      </div>
+                      <div className="spec-row">
+                        <span className="spec-label">Advertiser</span>
+                        <span className="spec-value">{product.advertiser_name || 'N/A'}</span>
+                      </div>
+                      <div className="spec-row">
+                        <span className="spec-label">Last Updated</span>
+                        <span className="spec-value">
+                          {product.last_synced_at ? formatDistanceToNow(new Date(product.last_synced_at), { addSuffix: true }) : 'Recently'}
+                        </span>
+                      </div>
+                      <div className="spec-row">
+                        <span className="spec-label">Total Views</span>
+                        <span className="spec-value">{formatViewCount(product.view_count || 0)}</span>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
               
+              <TabsContent value="description" className="mt-8">
+                <Card className="glass-card">
+                  <CardHeader>
+                    <CardTitle>Product Description</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{product.description}</p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
               <TabsContent value="benefits" className="mt-8">
-                <Card>
+                <Card className="glass-card">
                   <CardHeader>
                     <CardTitle>Why Choose This Product?</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-muted-foreground">Carefully curated from trusted wellness brands</span>
+                    <ul className="space-y-4">
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-muted-foreground leading-relaxed">Carefully curated from trusted wellness brands</span>
                       </li>
-                      <li className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-muted-foreground">Support conscious commerce and ethical sourcing</span>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-muted-foreground leading-relaxed">Support conscious commerce and ethical sourcing</span>
                       </li>
-                      <li className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-muted-foreground">Earn rewards while shopping for wellness</span>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-muted-foreground leading-relaxed">Earn rewards while shopping for wellness</span>
                       </li>
-                      <li className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-muted-foreground">Secure transactions and reliable fulfillment</span>
+                      <li className="flex items-start gap-3">
+                        <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-muted-foreground leading-relaxed">Secure transactions and reliable fulfillment</span>
                       </li>
                     </ul>
                   </CardContent>
                 </Card>
               </TabsContent>
               
-              <TabsContent value="partner" className="mt-8">
-                <Card>
+              <TabsContent value="shipping" className="mt-8">
+                <Card className="glass-card">
                   <CardHeader>
-                    <CardTitle>Partner Information</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      <Truck className="w-5 h-5 text-primary" />
+                      Shipping Information
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <p className="text-muted-foreground">
-                      This product is fulfilled by our trusted partner through the CJ Affiliate Network. 
-                      When you purchase, you'll be directed to the partner's secure checkout.
-                    </p>
-                    <div className="bg-muted p-4 rounded-lg">
-                      <h4 className="font-semibold mb-2">What happens next?</h4>
-                      <ol className="space-y-2 text-sm text-muted-foreground">
-                        <li>1. Add to cart and complete checkout</li>
-                        <li>2. You'll receive order details and partner fulfillment link</li>
-                        <li>3. Complete purchase with our trusted partner</li>
-                        <li>4. Track your order and earn rewards</li>
-                      </ol>
+                  <CardContent>
+                    <div className="space-y-3 text-muted-foreground">
+                      <p>• Free shipping on orders over R200</p>
+                      <p>• Delivered by our trusted partner</p>
+                      <p>• Estimated delivery: 3-5 business days</p>
+                      <p>• Track your order after purchase</p>
                     </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="faq" className="mt-8">
+                <Card className="glass-card">
+                  <CardHeader>
+                    <CardTitle>Frequently Asked Questions</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="return">
+                        <AccordionTrigger className="text-left">What's the return policy?</AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground">
+                          Returns are handled by our partner. Please refer to the partner's website for their specific return policy.
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="commission">
+                        <AccordionTrigger className="text-left">How does commission work?</AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground">
+                          When you share this product and someone makes a purchase, you earn a commission. It's our way of rewarding you for spreading wellness!
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="secure">
+                        <AccordionTrigger className="text-left">Is my purchase secure?</AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground">
+                          Yes! All transactions are processed through our trusted partners using industry-standard security protocols.
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                   </CardContent>
                 </Card>
               </TabsContent>
             </Tabs>
           </div>
         </div>
+        
+        {/* Related Products */}
+        {product && (
+          <RelatedProductsSection
+            category={product.category}
+            currentProductId={product.id}
+            onQuickView={setQuickViewId}
+          />
+        )}
+        
+        {/* Recently Viewed */}
+        {product && (
+          <RecentlyViewedSection
+            currentProductId={product.id}
+            onQuickView={setQuickViewId}
+          />
+        )}
       </main>
       
       <Footer />
