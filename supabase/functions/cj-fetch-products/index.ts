@@ -219,6 +219,7 @@ serve(async (req) => {
         })
         .map(async (product: any) => {
           const priceAmount = parseFloat(product.price?.amount || '0');
+          const priceCurrency = product.price?.currency || 'USD'; // Get actual currency from CJ
           const advertiserName = product.advertiserName || null;
           const advertiserId = product.advertiserId || null;
           const description = product.description || '';
@@ -235,6 +236,36 @@ serve(async (req) => {
             brandLogoUrl = await fetchBrandLogo(advertiserName);
           }
           
+          // Convert prices based on actual currency from CJ
+          // These are approximate rates - frontend will use live rates
+          let price_usd = 0;
+          let price_zar = 0;
+          let price_eur = 0;
+          
+          if (priceCurrency === 'USD') {
+            price_usd = priceAmount;
+            price_zar = Math.round(priceAmount * 18.5 * 100) / 100;
+            price_eur = Math.round(priceAmount * 0.92 * 100) / 100;
+          } else if (priceCurrency === 'EUR') {
+            price_eur = priceAmount;
+            price_usd = Math.round(priceAmount * 1.09 * 100) / 100;
+            price_zar = Math.round(priceAmount * 20.1 * 100) / 100;
+          } else if (priceCurrency === 'ZAR') {
+            price_zar = priceAmount;
+            price_usd = Math.round(priceAmount * 0.054 * 100) / 100;
+            price_eur = Math.round(priceAmount * 0.05 * 100) / 100;
+          } else if (priceCurrency === 'GBP') {
+            price_usd = Math.round(priceAmount * 1.27 * 100) / 100;
+            price_zar = Math.round(priceAmount * 23.3 * 100) / 100;
+            price_eur = Math.round(priceAmount * 1.16 * 100) / 100;
+          } else {
+            // Default to treating as USD if unknown currency
+            console.log(`Unknown currency ${priceCurrency} for product ${product.id}, treating as USD`);
+            price_usd = priceAmount;
+            price_zar = Math.round(priceAmount * 18.5 * 100) / 100;
+            price_eur = Math.round(priceAmount * 0.92 * 100) / 100;
+          }
+          
           return {
             affiliate_program_id: 'cj',
             external_product_id: product.id,
@@ -243,9 +274,9 @@ serve(async (req) => {
             category: inferredCategory,
             image_url: product.imageLink,
             affiliate_url: product.link || '',
-            price_usd: priceAmount,
-            price_zar: Math.round(priceAmount * 18.5 * 100) / 100,
-            price_eur: Math.round(priceAmount * 0.92 * 100) / 100,
+            price_usd,
+            price_zar,
+            price_eur,
             commission_rate: 0.08,
             is_active: true,
             advertiser_id: advertiserId,
