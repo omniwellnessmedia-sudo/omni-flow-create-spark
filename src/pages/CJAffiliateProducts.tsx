@@ -118,7 +118,9 @@ const CJAffiliateProducts = () => {
         .select('*')
         .eq('affiliate_program_id', 'cj')
         .eq('is_active', true)
-        .order('created_at', { ascending: false });
+        .order('is_featured', { ascending: false })
+        .order('is_trending', { ascending: false })
+        .order('view_count', { ascending: false });
 
       if (error) throw error;
       setProducts(data || []);
@@ -387,7 +389,7 @@ const CJAffiliateProducts = () => {
                 >
                   <a href="#products">
                     <ShoppingCart className="mr-2 w-5 h-5" />
-                    Browse {products.length} Products
+                    {loading ? 'Loading...' : `Browse ${products.length} Products`}
                   </a>
                 </Button>
               </div>

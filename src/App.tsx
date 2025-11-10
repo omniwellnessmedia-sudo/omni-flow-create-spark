@@ -67,6 +67,7 @@ const ExerciseLibrary = React.lazy(() => import('@/pages/ExerciseLibrary'));
 const DeviceCompatibility = React.lazy(() => import('@/pages/DeviceCompatibility'));
 const NotFound = React.lazy(() => import('@/pages/NotFound'));
 const AdminDashboard = React.lazy(() => import('@/pages/AdminDashboard'));
+const ProductManagement = React.lazy(() => import('@/pages/admin/ProductManagement'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));

@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { helenAdminData } from "@/data/sandyDemoData";
+import { useToast } from "@/hooks/use-toast";
 import LiveDemoPresence from "@/components/collaboration/LiveDemoPresence";
+import ProductManagement from "@/pages/admin/ProductManagement";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,7 @@ import {
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState({
     orders: [],
@@ -63,8 +66,20 @@ const AdminDashboard = () => {
       return;
     }
     
-    // For now, we'll allow any authenticated user to access admin
-    // In production, you'd check for admin role
+    // Check if user has admin role
+    const { data: isAdmin, error } = await supabase.rpc('is_admin', { 
+      user_id: user.id 
+    });
+    
+    if (error || !isAdmin) {
+      toast({
+        title: 'Access Denied',
+        description: 'You do not have admin privileges. Contact omnimediawellness@gmail.com for access.',
+        variant: 'destructive',
+      });
+      navigate('/');
+      return;
+    }
   };
 
   const fetchDashboardData = async () => {
@@ -252,8 +267,9 @@ const AdminDashboard = () => {
 
         {/* Enhanced Main Content Tabs for Helen's Admin Interface */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-8">
+          <TabsList className="grid w-full grid-cols-9">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="providers">Top Providers</TabsTrigger>
             <TabsTrigger value="activity">Recent Activity</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -358,6 +374,10 @@ const AdminDashboard = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="products" className="space-y-4">
+            <ProductManagement />
           </TabsContent>
 
           <TabsContent value="providers" className="space-y-4">
