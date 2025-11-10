@@ -238,72 +238,123 @@ export type Database = {
       }
       affiliate_products: {
         Row: {
+          additional_images: Json | null
           advertiser_id: string | null
           advertiser_name: string | null
           affiliate_program_id: string
           affiliate_url: string
+          availability: string | null
+          brand: string | null
           brand_logo_url: string | null
           category: string | null
+          color: string | null
           commission_rate: number | null
+          condition: string | null
           created_at: string | null
           description: string | null
           external_product_id: string
+          google_category: Json | null
+          gtin: string | null
           id: string
           image_url: string | null
           is_active: boolean | null
           is_featured: boolean | null
           is_trending: boolean | null
           last_synced_at: string | null
+          long_description: string | null
+          manufacturer: string | null
+          material: string | null
+          mpn: string | null
           name: string
           price_eur: number | null
           price_usd: number | null
           price_zar: number | null
+          product_details: Json | null
+          product_highlights: Json | null
+          sale_price_eur: number | null
+          sale_price_usd: number | null
+          sale_price_zar: number | null
+          size: string | null
           view_count: number | null
         }
         Insert: {
+          additional_images?: Json | null
           advertiser_id?: string | null
           advertiser_name?: string | null
           affiliate_program_id: string
           affiliate_url: string
+          availability?: string | null
+          brand?: string | null
           brand_logo_url?: string | null
           category?: string | null
+          color?: string | null
           commission_rate?: number | null
+          condition?: string | null
           created_at?: string | null
           description?: string | null
           external_product_id: string
+          google_category?: Json | null
+          gtin?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
           is_featured?: boolean | null
           is_trending?: boolean | null
           last_synced_at?: string | null
+          long_description?: string | null
+          manufacturer?: string | null
+          material?: string | null
+          mpn?: string | null
           name: string
           price_eur?: number | null
           price_usd?: number | null
           price_zar?: number | null
+          product_details?: Json | null
+          product_highlights?: Json | null
+          sale_price_eur?: number | null
+          sale_price_usd?: number | null
+          sale_price_zar?: number | null
+          size?: string | null
           view_count?: number | null
         }
         Update: {
+          additional_images?: Json | null
           advertiser_id?: string | null
           advertiser_name?: string | null
           affiliate_program_id?: string
           affiliate_url?: string
+          availability?: string | null
+          brand?: string | null
           brand_logo_url?: string | null
           category?: string | null
+          color?: string | null
           commission_rate?: number | null
+          condition?: string | null
           created_at?: string | null
           description?: string | null
           external_product_id?: string
+          google_category?: Json | null
+          gtin?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean | null
           is_featured?: boolean | null
           is_trending?: boolean | null
           last_synced_at?: string | null
+          long_description?: string | null
+          manufacturer?: string | null
+          material?: string | null
+          mpn?: string | null
           name?: string
           price_eur?: number | null
           price_usd?: number | null
           price_zar?: number | null
+          product_details?: Json | null
+          product_highlights?: Json | null
+          sale_price_eur?: number | null
+          sale_price_usd?: number | null
+          sale_price_zar?: number | null
+          size?: string | null
           view_count?: number | null
         }
         Relationships: []

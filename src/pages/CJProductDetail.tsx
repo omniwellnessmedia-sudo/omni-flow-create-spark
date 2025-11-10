@@ -143,6 +143,7 @@ const CJProductDetail = () => {
                 imageUrl={product.image_url}
                 productName={product.name}
                 category={product.category}
+                additionalImages={product.additional_images || []}
               />
               
               {/* Affiliate Disclosure */}
@@ -162,6 +163,11 @@ const CJProductDetail = () => {
             {/* Product Info */}
             <div className="space-y-6">
               <div>
+                {/* Brand */}
+                {product.brand && (
+                  <p className="text-sm text-muted-foreground mb-2">{product.brand}</p>
+                )}
+                
                 {/* Advertiser Info */}
                 {product.advertiser_name && (
                   <div className="flex items-center gap-3 mb-4">
@@ -178,6 +184,16 @@ const CJProductDetail = () => {
                   {product.is_featured && <Badge className="badge-modern bg-gradient-to-r from-omni-violet to-omni-orange">Featured</Badge>}
                   {product.is_trending && <Badge className="badge-modern bg-gradient-to-r from-orange-500 to-red-500">🔥 Trending</Badge>}
                   {isNewProduct(product.created_at) && <Badge className="badge-modern bg-gradient-to-r from-green-500 to-emerald-500">New</Badge>}
+                  {product.sale_price_zar && <Badge variant="destructive">SALE</Badge>}
+                  {product.condition && <Badge variant="outline">{product.condition}</Badge>}
+                  {product.availability && (
+                    <Badge 
+                      variant={product.availability === 'in stock' ? 'default' : 'secondary'}
+                      className={product.availability === 'in stock' ? 'bg-green-500' : ''}
+                    >
+                      {product.availability}
+                    </Badge>
+                  )}
                 </div>
                 
                 <h1 className="font-heading font-bold text-3xl mb-4 text-foreground">{product.name}</h1>
@@ -190,12 +206,23 @@ const CJProductDetail = () => {
                 
                 {/* Price */}
                 <div className="mb-6">
-                  <PriceDisplay 
-                    price={product.price_zar} 
-                    showBothCurrencies={true}
-                    primaryCurrency="ZAR"
-                    size="lg"
-                  />
+                  {product.sale_price_zar ? (
+                    <div>
+                      <p className="text-xl line-through text-muted-foreground">R {product.price_zar?.toFixed(2)}</p>
+                      <p className="text-3xl font-bold text-destructive">R {product.sale_price_zar?.toFixed(2)}</p>
+                      <p className="text-sm text-green-600 mt-1">
+                        Save R {((product.price_zar || 0) - (product.sale_price_zar || 0)).toFixed(2)} 
+                        ({Math.round(((product.price_zar || 0) - (product.sale_price_zar || 0)) / (product.price_zar || 1) * 100)}% off)
+                      </p>
+                    </div>
+                  ) : (
+                    <PriceDisplay 
+                      price={product.price_zar} 
+                      showBothCurrencies={true}
+                      primaryCurrency="ZAR"
+                      size="lg"
+                    />
+                  )}
                 </div>
 
                 {/* Commission Earning Highlight */}
@@ -213,7 +240,33 @@ const CJProductDetail = () => {
                   </CardContent>
                 </Card>
 
-                <p className="text-muted-foreground mb-6">{product.description}</p>
+                {/* Product Highlights */}
+                {product.product_highlights && product.product_highlights.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="font-semibold mb-3">Key Features</h3>
+                    <ul className="space-y-2">
+                      {product.product_highlights.map((highlight: string, index: number) => (
+                        <li key={index} className="flex items-start gap-2 text-sm">
+                          <span className="text-primary mt-0.5">✓</span>
+                          <span className="text-muted-foreground">{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <p className="text-muted-foreground mb-6">{product.long_description || product.description}</p>
+
+                {/* Product Attributes */}
+                {(product.color || product.size || product.material) && (
+                  <div className="mb-6">
+                    <div className="flex flex-wrap gap-2">
+                      {product.color && <Badge variant="outline">Color: {product.color}</Badge>}
+                      {product.size && <Badge variant="outline">Size: {product.size}</Badge>}
+                      {product.material && <Badge variant="outline">Material: {product.material}</Badge>}
+                    </div>
+                  </div>
+                )}
 
                 {/* Stock Status */}
                 <div className="flex items-center gap-2 mb-6">
@@ -286,36 +339,79 @@ const CJProductDetail = () => {
                       Product Specifications
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-0">
-                      <div className="spec-row">
-                        <span className="spec-label">Product ID</span>
-                        <span className="spec-value">{product.external_product_id || product.id}</span>
-                      </div>
-                      <div className="spec-row">
-                        <span className="spec-label">Category</span>
-                        <Badge variant="outline">{product.category}</Badge>
-                      </div>
-                      <div className="spec-row">
-                        <span className="spec-label">Commission Rate</span>
-                        <Badge className="badge-modern">{(product.commission_rate * 100).toFixed(1)}%</Badge>
-                      </div>
-                      <div className="spec-row">
-                        <span className="spec-label">Advertiser</span>
-                        <span className="spec-value">{product.advertiser_name || 'N/A'}</span>
-                      </div>
-                      <div className="spec-row">
-                        <span className="spec-label">Last Updated</span>
-                        <span className="spec-value">
-                          {product.last_synced_at ? formatDistanceToNow(new Date(product.last_synced_at), { addSuffix: true }) : 'Recently'}
-                        </span>
-                      </div>
-                      <div className="spec-row">
-                        <span className="spec-label">Total Views</span>
-                        <span className="spec-value">{formatViewCount(product.view_count || 0)}</span>
-                      </div>
-                    </div>
-                  </CardContent>
+                   <CardContent>
+                     <div className="space-y-0">
+                       {/* Product Details from API */}
+                       {product.product_details && Object.keys(product.product_details).length > 0 && (
+                         <>
+                           {Object.entries(product.product_details).map(([key, value]) => (
+                             <div key={key} className="spec-row">
+                               <span className="spec-label">{key}</span>
+                               <span className="spec-value">{value as string}</span>
+                             </div>
+                           ))}
+                         </>
+                       )}
+                       
+                       {/* Basic Product Info */}
+                       {product.brand && (
+                         <div className="spec-row">
+                           <span className="spec-label">Brand</span>
+                           <span className="spec-value">{product.brand}</span>
+                         </div>
+                       )}
+                       {product.manufacturer && (
+                         <div className="spec-row">
+                           <span className="spec-label">Manufacturer</span>
+                           <span className="spec-value">{product.manufacturer}</span>
+                         </div>
+                       )}
+                       <div className="spec-row">
+                         <span className="spec-label">Product ID</span>
+                         <span className="spec-value">{product.external_product_id || product.id}</span>
+                       </div>
+                       <div className="spec-row">
+                         <span className="spec-label">Category</span>
+                         <Badge variant="outline">{product.category}</Badge>
+                       </div>
+                       {product.condition && (
+                         <div className="spec-row">
+                           <span className="spec-label">Condition</span>
+                           <Badge variant="outline">{product.condition}</Badge>
+                         </div>
+                       )}
+                       {product.gtin && (
+                         <div className="spec-row">
+                           <span className="spec-label">GTIN</span>
+                           <span className="spec-value font-mono text-sm">{product.gtin}</span>
+                         </div>
+                       )}
+                       {product.mpn && (
+                         <div className="spec-row">
+                           <span className="spec-label">MPN</span>
+                           <span className="spec-value font-mono text-sm">{product.mpn}</span>
+                         </div>
+                       )}
+                       <div className="spec-row">
+                         <span className="spec-label">Commission Rate</span>
+                         <Badge className="badge-modern">{(product.commission_rate * 100).toFixed(1)}%</Badge>
+                       </div>
+                       <div className="spec-row">
+                         <span className="spec-label">Advertiser</span>
+                         <span className="spec-value">{product.advertiser_name || 'N/A'}</span>
+                       </div>
+                       <div className="spec-row">
+                         <span className="spec-label">Last Updated</span>
+                         <span className="spec-value">
+                           {product.last_synced_at ? formatDistanceToNow(new Date(product.last_synced_at), { addSuffix: true }) : 'Recently'}
+                         </span>
+                       </div>
+                       <div className="spec-row">
+                         <span className="spec-label">Total Views</span>
+                         <span className="spec-value">{formatViewCount(product.view_count || 0)}</span>
+                       </div>
+                     </div>
+                   </CardContent>
                 </Card>
               </TabsContent>
               
@@ -324,9 +420,11 @@ const CJProductDetail = () => {
                   <CardHeader>
                     <CardTitle>Product Description</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">{product.description}</p>
-                  </CardContent>
+                   <CardContent>
+                     <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                       {product.long_description || product.description}
+                     </p>
+                   </CardContent>
                 </Card>
               </TabsContent>
               

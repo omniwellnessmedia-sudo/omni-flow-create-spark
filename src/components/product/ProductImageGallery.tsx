@@ -8,10 +8,14 @@ interface ProductImageGalleryProps {
   imageUrl: string;
   productName: string;
   category: string;
+  additionalImages?: string[];
 }
 
-export const ProductImageGallery = ({ imageUrl, productName, category }: ProductImageGalleryProps) => {
+export const ProductImageGallery = ({ imageUrl, productName, category, additionalImages = [] }: ProductImageGalleryProps) => {
   const [isZoomed, setIsZoomed] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(imageUrl);
+  
+  const allImages = [imageUrl, ...additionalImages].filter(Boolean);
 
   return (
     <>
@@ -19,7 +23,7 @@ export const ProductImageGallery = ({ imageUrl, productName, category }: Product
         {/* Main Image with Zoom */}
         <div className="relative aspect-square rounded-2xl overflow-hidden glass-card group">
           <SmartProductImage
-            src={imageUrl}
+            src={selectedImage}
             alt={productName}
             category={category}
             className="w-full h-full"
@@ -33,6 +37,30 @@ export const ProductImageGallery = ({ imageUrl, productName, category }: Product
             <ZoomIn className="w-4 h-4" />
           </Button>
         </div>
+
+        {/* Thumbnail Gallery */}
+        {allImages.length > 1 && (
+          <div className="grid grid-cols-4 gap-2">
+            {allImages.map((img, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedImage(img)}
+                className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                  selectedImage === img 
+                    ? 'border-primary shadow-lg' 
+                    : 'border-transparent hover:border-muted'
+                }`}
+              >
+                <SmartProductImage
+                  src={img}
+                  alt={`${productName} view ${index + 1}`}
+                  category={category}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Zoom Dialog */}
@@ -48,7 +76,7 @@ export const ProductImageGallery = ({ imageUrl, productName, category }: Product
           </Button>
           <div className="relative w-full h-[80vh]">
             <img
-              src={imageUrl}
+              src={selectedImage}
               alt={productName}
               className="w-full h-full object-contain"
             />

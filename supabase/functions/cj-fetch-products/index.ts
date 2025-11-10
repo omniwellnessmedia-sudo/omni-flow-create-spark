@@ -6,11 +6,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Official CJ Product Feed GraphQL endpoint
-// Reference: https://developers.cj.com/graphql/reference/Product%20Feed
 const CJ_PRODUCT_FEED_ENDPOINT = 'https://ads.api.cj.com/query';
 
-// Image validation helper
 const isValidImageUrl = (url: string): boolean => {
   if (!url) return false;
   if (url.endsWith('/')) return false;
@@ -21,26 +18,19 @@ const isValidImageUrl = (url: string): boolean => {
   return hasValidDomain && (hasImageExtension || looksLikeImage);
 };
 
-// Extract clean product title from title or description
 const extractProductTitle = (title: string, description?: string): string => {
-  // If title is already good (not generic like "Meditation"), return it
   if (title && title.length > 10 && !['Meditation', 'Wellness', 'Health', 'Yoga'].includes(title)) {
-    return title.substring(0, 150); // Limit to 150 chars
+    return title.substring(0, 150);
   }
-  
-  // Try to extract from description
   if (description && description.length > 20) {
-    // Take first sentence or first 150 chars
     const firstSentence = description.split(/[.!?]\s/)[0];
     if (firstSentence && firstSentence.length >= 10) {
       return firstSentence.substring(0, 150);
     }
   }
-  
   return title || 'Wellness Product';
 };
 
-// Infer category from title, description, and keywords
 const inferCategory = (title: string, description: string, providedCategory?: string): string => {
   if (providedCategory && providedCategory !== 'General Wellness') {
     return providedCategory;
@@ -48,7 +38,6 @@ const inferCategory = (title: string, description: string, providedCategory?: st
   
   const text = `${title} ${description}`.toLowerCase();
   
-  // Category keyword matching
   if (/yoga|asana|mat|block|strap|bolster/i.test(text)) return 'Yoga Equipment';
   if (/meditat|mindfulness|cushion|zafu|singing bowl/i.test(text)) return 'Meditation Tools';
   if (/essential oil|aromatherapy|diffuser|incense/i.test(text)) return 'Aromatherapy';
@@ -62,7 +51,6 @@ const inferCategory = (title: string, description: string, providedCategory?: st
   return 'General Wellness';
 };
 
-// Extract domain from advertiser name for logo fetching
 const extractDomain = (advertiserName: string): string => {
   if (!advertiserName) return '';
   const cleaned = advertiserName
@@ -73,7 +61,6 @@ const extractDomain = (advertiserName: string): string => {
   return `${cleaned}.com`;
 };
 
-// Fetch brand logo from Clearbit
 const fetchBrandLogo = async (advertiserName: string): Promise<string | null> => {
   if (!advertiserName) return null;
   
@@ -93,7 +80,6 @@ const fetchBrandLogo = async (advertiserName: string): Promise<string | null> =>
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -102,55 +88,51 @@ serve(async (req) => {
     const CJ_PAT = Deno.env.get('CJ_PERSONAL_ACCESS_TOKEN');
     const CJ_COMPANY_ID = Deno.env.get('CJ_COMPANY_ID');
 
-    if (!CJ_PAT) {
-      throw new Error('CJ Personal Access Token not configured');
-    }
-
-    if (!CJ_COMPANY_ID) {
-      throw new Error('CJ Company ID not configured. Please add your CJ_COMPANY_ID secret in Supabase.');
-    }
+    if (!CJ_PAT) throw new Error('CJ Personal Access Token not configured');
+    if (!CJ_COMPANY_ID) throw new Error('CJ Company ID not configured');
 
     const { category, keywords, limit = 100 } = await req.json();
     const searchKeywords = keywords || category || 'wellness';
 
-    console.log('Fetching CJ products via GraphQL:', { category, keywords, limit, companyId: CJ_COMPANY_ID });
+    console.log('Fetching CJ products:', { category, keywords, limit, companyId: CJ_COMPANY_ID });
 
-    // Build GraphQL query for Product Search using the official CJ Product Feed API
-    // Reference: https://developers.cj.com/graphql/reference/Product%20Feed
     const graphqlQuery = {
       query: `
         query ProductSearch($companyId: ID!, $keywords: [String!], $limit: Int) {
-          products(
-            companyId: $companyId
-            keywords: $keywords
-            limit: $limit
-          ) {
+          products(companyId: $companyId, keywords: $keywords, limit: $limit) {
             totalCount
             resultList {
               id
               title
               description
+              longDescription
+              brand
+              manufacturer
               advertiserId
               advertiserName
-              price {
-                amount
-                currency
-              }
-              imageLink
-              link
               catalogId
+              imageLink
+              additionalImageLinks
+              link
+              mobileLink
+              price { amount currency }
+              salePrice { amount currency }
+              color
+              size
+              material
+              condition
+              availability
+              gtin
+              mpn
+              productHighlight
+              productDetail { attributeName attributeValue }
+              googleProductCategory { id name }
             }
           }
         }
       `,
-      variables: {
-        companyId: CJ_COMPANY_ID,
-        keywords: [searchKeywords],
-        limit: limit
-      }
+      variables: { companyId: CJ_COMPANY_ID, keywords: [searchKeywords], limit }
     };
-
-    console.log('GraphQL Query:', JSON.stringify(graphqlQuery, null, 2));
 
     const response = await fetch(CJ_PRODUCT_FEED_ENDPOINT, {
       method: 'POST',
@@ -163,148 +145,104 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`CJ API error (${response.status}):`, errorText);
-      throw new Error(`CJ API returned HTTP ${response.status}: ${errorText}`);
+      throw new Error(`CJ API error ${response.status}: ${errorText}`);
     }
 
     const data = await response.json();
-    console.log(`✓ Success:`, JSON.stringify(data, null, 2));
-
-    // Check for GraphQL errors
-    if (data.errors) {
-      console.error('GraphQL errors:', data.errors);
-      throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
-    }
+    if (data.errors) throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
 
     const productsData = data.data?.products;
-    const totalCount = productsData?.totalCount || 0;
     const resultList = productsData?.resultList || [];
 
-    console.log('Products found:', {
-      totalCount,
-      productsReturned: resultList.length
-    });
-
-    // Initialize Supabase client for storing products
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    // Transform and validate CJ products
     const productsWithBrands = await Promise.all(
       resultList
         .filter((product: any) => {
-          // Validate image
-          const hasValidImage = isValidImageUrl(product.imageLink);
-          if (!hasValidImage) {
-            console.log(`⊘ Invalid image: ${product.title}`);
-            return false;
-          }
-          
-          // Validate title
-          if (!product.title || product.title.length < 5) {
-            console.log(`⊘ Invalid title: "${product.title}"`);
-            return false;
-          }
-          
-          // Validate price
-          const price = parseFloat(product.price?.amount || '0');
-          if (price <= 0) {
-            console.log(`⊘ Invalid price for: ${product.title}`);
-            return false;
-          }
-          
+          if (!isValidImageUrl(product.imageLink)) return false;
+          if (!product.title || product.title.length < 5) return false;
+          if (parseFloat(product.price?.amount || '0') <= 0) return false;
           return true;
         })
         .map(async (product: any) => {
           const priceAmount = parseFloat(product.price?.amount || '0');
-          const priceCurrency = product.price?.currency || 'USD'; // Get actual currency from CJ
-          const advertiserName = product.advertiserName || null;
-          const advertiserId = product.advertiserId || null;
-          const description = product.description || '';
+          const priceCurrency = product.price?.currency || 'USD';
+          const salePriceAmount = parseFloat(product.salePrice?.amount || '0');
+          const salePriceCurrency = product.salePrice?.currency || priceCurrency;
+          const cleanTitle = extractProductTitle(product.title, product.description);
+          const inferredCategory = inferCategory(cleanTitle, product.description || '', category);
           
-          // Extract clean title
-          const cleanTitle = extractProductTitle(product.title, description);
+          const brandLogoUrl = product.advertiserName ? await fetchBrandLogo(product.advertiserName) : null;
           
-          // Infer category
-          const inferredCategory = inferCategory(cleanTitle, description, category);
-          
-          // Fetch brand logo (with retry)
-          let brandLogoUrl = null;
-          if (advertiserName) {
-            brandLogoUrl = await fetchBrandLogo(advertiserName);
+          // Currency conversion helper
+          const convertCurrency = (amount: number, currency: string) => {
+            if (currency === 'USD') return { usd: amount, zar: amount * 18.5, eur: amount * 0.92 };
+            if (currency === 'EUR') return { usd: amount * 1.09, zar: amount * 20.1, eur: amount };
+            if (currency === 'ZAR') return { usd: amount * 0.054, zar: amount, eur: amount * 0.05 };
+            if (currency === 'GBP') return { usd: amount * 1.27, zar: amount * 23.3, eur: amount * 1.16 };
+            return { usd: amount, zar: amount * 18.5, eur: amount * 0.92 };
+          };
+
+          const prices = convertCurrency(priceAmount, priceCurrency);
+          const saleConv = salePriceAmount > 0 ? convertCurrency(salePriceAmount, salePriceCurrency) : null;
+
+          // Process product details
+          const productDetails: Record<string, string> = {};
+          if (Array.isArray(product.productDetail)) {
+            product.productDetail.forEach((detail: any) => {
+              if (detail.attributeName && detail.attributeValue) {
+                productDetails[detail.attributeName] = detail.attributeValue;
+              }
+            });
           }
-          
-          // Convert prices based on actual currency from CJ
-          // These are approximate rates - frontend will use live rates
-          let price_usd = 0;
-          let price_zar = 0;
-          let price_eur = 0;
-          
-          if (priceCurrency === 'USD') {
-            price_usd = priceAmount;
-            price_zar = Math.round(priceAmount * 18.5 * 100) / 100;
-            price_eur = Math.round(priceAmount * 0.92 * 100) / 100;
-          } else if (priceCurrency === 'EUR') {
-            price_eur = priceAmount;
-            price_usd = Math.round(priceAmount * 1.09 * 100) / 100;
-            price_zar = Math.round(priceAmount * 20.1 * 100) / 100;
-          } else if (priceCurrency === 'ZAR') {
-            price_zar = priceAmount;
-            price_usd = Math.round(priceAmount * 0.054 * 100) / 100;
-            price_eur = Math.round(priceAmount * 0.05 * 100) / 100;
-          } else if (priceCurrency === 'GBP') {
-            price_usd = Math.round(priceAmount * 1.27 * 100) / 100;
-            price_zar = Math.round(priceAmount * 23.3 * 100) / 100;
-            price_eur = Math.round(priceAmount * 1.16 * 100) / 100;
-          } else {
-            // Default to treating as USD if unknown currency
-            console.log(`Unknown currency ${priceCurrency} for product ${product.id}, treating as USD`);
-            price_usd = priceAmount;
-            price_zar = Math.round(priceAmount * 18.5 * 100) / 100;
-            price_eur = Math.round(priceAmount * 0.92 * 100) / 100;
-          }
-          
+
           return {
-            affiliate_program_id: 'cj',
             external_product_id: product.id,
+            affiliate_program_id: 'cj',
             name: cleanTitle,
-            description: description.substring(0, 500), // Limit description length
+            description: product.description || '',
+            long_description: product.longDescription || product.description || '',
             category: inferredCategory,
             image_url: product.imageLink,
             affiliate_url: product.link || '',
-            price_usd,
-            price_zar,
-            price_eur,
+            price_usd: Math.round(prices.usd * 100) / 100,
+            price_zar: Math.round(prices.zar * 100) / 100,
+            price_eur: Math.round(prices.eur * 100) / 100,
+            sale_price_usd: saleConv ? Math.round(saleConv.usd * 100) / 100 : null,
+            sale_price_zar: saleConv ? Math.round(saleConv.zar * 100) / 100 : null,
+            sale_price_eur: saleConv ? Math.round(saleConv.eur * 100) / 100 : null,
             commission_rate: 0.08,
             is_active: true,
-            advertiser_id: advertiserId,
-            advertiser_name: advertiserName,
+            advertiser_id: product.advertiserId,
+            advertiser_name: product.advertiserName,
             brand_logo_url: brandLogoUrl,
+            brand: product.brand || null,
+            manufacturer: product.manufacturer || null,
+            condition: product.condition || null,
+            availability: product.availability || null,
+            color: product.color || null,
+            size: product.size || null,
+            material: product.material || null,
+            gtin: product.gtin || null,
+            mpn: product.mpn || null,
+            product_highlights: Array.isArray(product.productHighlight) ? product.productHighlight.filter((h: any) => h) : [],
+            product_details: productDetails,
+            additional_images: Array.isArray(product.additionalImageLinks) ? product.additionalImageLinks.filter((img: any) => isValidImageUrl(img)) : [],
+            google_category: product.googleProductCategory ? { id: product.googleProductCategory.id, name: product.googleProductCategory.name } : {},
             last_synced_at: new Date().toISOString(),
           };
         })
     );
 
-    console.log(`✓ Processed ${productsWithBrands.length} valid products`);
-
-    // Store products in database
     if (productsWithBrands.length > 0) {
-      const { error: insertError } = await supabaseClient
-        .from('affiliate_products')
-        .upsert(productsWithBrands, { 
-          onConflict: 'external_product_id,affiliate_program_id',
-          ignoreDuplicates: false 
-        });
+      await supabaseClient.from('affiliate_products').upsert(productsWithBrands, { 
+        onConflict: 'external_product_id,affiliate_program_id',
+        ignoreDuplicates: false 
+      });
 
-      if (insertError) {
-        console.error('Error inserting products:', insertError);
-      } else {
-        console.log(`Inserted ${productsWithBrands.length} products into database`);
-      }
-
-      // Update affiliate_brands table
       const uniqueBrands = productsWithBrands
         .filter(p => p.advertiser_id && p.advertiser_name)
         .reduce((acc: any[], product) => {
@@ -319,50 +257,32 @@ serve(async (req) => {
         }, []);
 
       if (uniqueBrands.length > 0) {
-        const { error: brandError } = await supabaseClient
-          .from('affiliate_brands')
-          .upsert(uniqueBrands, { 
-            onConflict: 'advertiser_id',
-            ignoreDuplicates: false 
-          });
-
-        if (brandError) {
-          console.error('Error upserting brands:', brandError);
-        } else {
-          console.log(`Synced ${uniqueBrands.length} brands`);
-        }
+        await supabaseClient.from('affiliate_brands').upsert(uniqueBrands, { 
+          onConflict: 'advertiser_id',
+          ignoreDuplicates: false 
+        });
       }
     }
 
     return new Response(
       JSON.stringify({
         success: true,
-        totalRecords: totalCount,
+        totalRecords: productsData?.totalCount || 0,
         products: productsWithBrands,
         metadata: {
           category,
           keywords: searchKeywords,
           fetchedAt: new Date().toISOString(),
-          endpoint: CJ_PRODUCT_FEED_ENDPOINT
         }
       }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
-      }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     );
 
   } catch (error) {
-    console.error('Error fetching CJ products:', error);
+    console.error('Error:', error);
     return new Response(
-      JSON.stringify({
-        success: false,
-        error: error.message
-      }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
-      }
+      JSON.stringify({ success: false, error: error.message }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
     );
   }
 });
