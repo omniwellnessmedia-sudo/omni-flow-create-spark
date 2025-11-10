@@ -17,6 +17,7 @@ import { RecentlyViewedSection } from "@/components/product/RecentlyViewedSectio
 import { RelatedProductsSection } from "@/components/product/RelatedProductsSection";
 import { useViewTracker } from "@/hooks/useViewTracker";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+import { useWishlist } from "@/hooks/useWishlist";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import { formatDistanceToNow } from "date-fns";
 
@@ -25,10 +26,11 @@ const CJProductDetail = () => {
   const { toast } = useToast();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [compareMode, setCompareMode] = useState(false);
   const [quickViewId, setQuickViewId] = useState<string | null>(null);
   
   const { addToRecentlyViewed } = useRecentlyViewed();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   useViewTracker(id);
 
   useEffect(() => {
@@ -69,11 +71,10 @@ const CJProductDetail = () => {
     return (price * rate).toFixed(2);
   };
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    toast({
-      title: isFavorite ? 'Removed from favorites' : 'Added to favorites',
-    });
+  const handleToggleFavorite = async () => {
+    if (id) {
+      await toggleWishlist(id);
+    }
   };
 
   const formatViewCount = (count: number) => {
@@ -241,9 +242,9 @@ const CJProductDetail = () => {
                   <Button 
                     variant="outline" 
                     size="icon"
-                    onClick={toggleFavorite}
+                    onClick={handleToggleFavorite}
                   >
-                    <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current text-red-500' : ''}`} />
+                    <Heart className={`w-4 h-4 ${id && isInWishlist(id) ? 'fill-current text-red-500' : ''}`} />
                   </Button>
                 </div>
 

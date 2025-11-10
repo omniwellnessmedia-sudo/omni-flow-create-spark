@@ -848,6 +848,33 @@ export type Database = {
           },
         ]
       }
+      product_comparisons: {
+        Row: {
+          comparison_name: string | null
+          created_at: string
+          id: string
+          product_ids: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comparison_name?: string | null
+          created_at?: string
+          id?: string
+          product_ids: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comparison_name?: string | null
+          created_at?: string
+          id?: string
+          product_ids?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       product_deals: {
         Row: {
           available_spots: number | null
@@ -1891,6 +1918,38 @@ export type Database = {
         }
         Relationships: []
       }
+      user_wishlists: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_wishlists_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       want_responses: {
         Row: {
           created_at: string
@@ -2000,6 +2059,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      auto_curate_featured_products: { Args: never; Returns: undefined }
       check_contact_rate_limit: {
         Args: { submitter_email: string }
         Returns: boolean

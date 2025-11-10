@@ -8,9 +8,11 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useWishlist } from '@/hooks/useWishlist';
 import { PremiumProductCard } from '@/components/product/PremiumProductCard';
 import { FeaturedProductsCarousel } from '@/components/product/FeaturedProductsCarousel';
 import { ProductQuickView } from '@/components/product/ProductQuickView';
+import { ProductComparison } from '@/components/product/ProductComparison';
 import { FiltersSidebar } from '@/components/product/FiltersSidebar';
 import { BackToTopButton } from '@/components/product/BackToTopButton';
 import { ProductSkeleton } from '@/components/product/ProductSkeleton';
@@ -26,7 +28,9 @@ import {
   ShoppingCart,
   Star,
   Zap,
-  Sparkles
+  Sparkles,
+  GitCompare,
+  Heart
 } from 'lucide-react';
 
 interface CJProduct {
@@ -57,7 +61,9 @@ const CJAffiliateProducts = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [sortBy, setSortBy] = useState('featured');
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [compareProducts, setCompareProducts] = useState<string[]>([]);
+  const [showComparison, setShowComparison] = useState(false);
+  const { toggleWishlist, isInWishlist, getWishlistCount } = useWishlist();
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [quickViewProductId, setQuickViewProductId] = useState<string | null>(null);
@@ -69,10 +75,10 @@ const CJAffiliateProducts = () => {
 
   useEffect(() => {
     fetchProducts();
-    // Load favorites from localStorage
-    const savedFavorites = localStorage.getItem('cj-favorites');
-    if (savedFavorites) {
-      setFavorites(new Set(JSON.parse(savedFavorites)));
+    // Load comparison from localStorage
+    const savedComparison = localStorage.getItem('cj-comparison');
+    if (savedComparison) {
+      setCompareProducts(JSON.parse(savedComparison));
     }
   }, []);
 
@@ -281,19 +287,31 @@ const CJAffiliateProducts = () => {
     }
   };
 
-  const toggleFavorite = (productId: string) => {
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(productId)) {
-        newFavorites.delete(productId);
-        toast({ title: 'Removed from favorites' });
-      } else {
-        newFavorites.add(productId);
-        toast({ title: 'Added to favorites' });
-      }
-      localStorage.setItem('cj-favorites', JSON.stringify([...newFavorites]));
-      return newFavorites;
-    });
+  const addToCompare = (productId: string) => {
+    if (compareProducts.includes(productId)) {
+      toast({ title: 'Already in comparison', variant: 'destructive' });
+      return;
+    }
+    
+    if (compareProducts.length >= 4) {
+      toast({ 
+        title: 'Maximum reached', 
+        description: 'You can compare up to 4 products at once',
+        variant: 'destructive' 
+      });
+      return;
+    }
+
+    const newCompare = [...compareProducts, productId];
+    setCompareProducts(newCompare);
+    localStorage.setItem('cj-comparison', JSON.stringify(newCompare));
+    toast({ title: 'Added to comparison' });
+  };
+
+  const removeFromCompare = (productId: string) => {
+    const newCompare = compareProducts.filter(id => id !== productId);
+    setCompareProducts(newCompare);
+    localStorage.setItem('cj-comparison', JSON.stringify(newCompare));
   };
 
   const handleQuickView = (productId: string) => {
@@ -491,7 +509,7 @@ const CJAffiliateProducts = () => {
             {/* Products Grid */}
             <div className="space-y-6">
               {/* Results Header */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground">
                     Showing <span className="font-semibold text-foreground">{displayedProducts.length}</span> of{' '}
@@ -500,6 +518,23 @@ const CJAffiliateProducts = () => {
                       <span className="text-xs"> (filtered from {products.length} total)</span>
                     )}
                   </p>
+                </div>
+                
+                {/* Quick Actions */}
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setShowComparison(true)}
+                    disabled={compareProducts.length === 0}
+                  >
+                    <GitCompare className="w-4 h-4 mr-2" />
+                    Compare ({compareProducts.length})
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Heart className="w-4 h-4 mr-2" />
+                    Wishlist ({getWishlistCount()})
+                  </Button>
                 </div>
               </div>
 
@@ -526,9 +561,10 @@ const CJAffiliateProducts = () => {
                       <PremiumProductCard
                         key={product.id}
                         product={product}
-                        onFavoriteToggle={toggleFavorite}
-                        isFavorite={favorites.has(product.id)}
+                        onFavoriteToggle={toggleWishlist}
+                        isFavorite={isInWishlist(product.id)}
                         onQuickView={handleQuickView}
+                        onAddToCompare={addToCompare}
                       />
                     ))}
                   </div>
@@ -557,6 +593,14 @@ const CJAffiliateProducts = () => {
           setIsQuickViewOpen(false);
           setQuickViewProductId(null);
         }}
+      />
+
+      {/* Product Comparison Modal */}
+      <ProductComparison
+        products={products.filter(p => compareProducts.includes(p.id))}
+        open={showComparison}
+        onOpenChange={setShowComparison}
+        onRemoveProduct={removeFromCompare}
       />
 
       {/* Back to Top Button */}

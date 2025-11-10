@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SmartProductImage } from './SmartProductImage';
-import { Heart, Share2, Eye, Zap } from 'lucide-react';
+import { Heart, Share2, Eye, Zap, GitCompare } from 'lucide-react';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import { useState } from 'react';
 import { isNewProduct, hasHighCommission } from '@/lib/productUtils';
@@ -28,13 +28,15 @@ interface PremiumProductCardProps {
   onFavoriteToggle?: (productId: string) => void;
   isFavorite?: boolean;
   onQuickView?: (productId: string) => void;
+  onAddToCompare?: (productId: string) => void;
 }
 
 export const PremiumProductCard = ({ 
   product, 
   onFavoriteToggle,
   isFavorite = false,
-  onQuickView 
+  onQuickView,
+  onAddToCompare
 }: PremiumProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -109,6 +111,19 @@ export const PremiumProductCard = ({
             >
               <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
             </Button>
+            {onAddToCompare && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="shadow-sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onAddToCompare(product.id);
+                }}
+              >
+                <GitCompare className="w-4 h-4" />
+              </Button>
+            )}
             <Button 
               size="sm" 
               variant="outline"
