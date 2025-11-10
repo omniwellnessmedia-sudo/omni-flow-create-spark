@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Wand2, UserPlus, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react';
+import { Wand2, UserPlus, RefreshCw, CheckCircle, AlertCircle, Users, Info } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const AdminTools = () => {
@@ -185,12 +185,98 @@ const AdminTools = () => {
     setLoading(false);
   };
 
+  const teamMembers = [
+    { name: 'Chad Cupido', email: 'chad@omniwellnessmedia.com', role: 'Founder & Head of Media' },
+    { name: 'Zenith', email: 'zenith@omniwellnessmedia.com', role: 'Administration & Coordination' },
+    { name: 'Ferozza', email: 'ferozza@omniwellnessmedia.com', role: 'Team Member' },
+  ];
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-2">Admin Tools</h2>
         <p className="text-muted-foreground">Manage product curation and admin users</p>
       </div>
+
+      {/* Team Signup Instructions */}
+      <Card className="mb-8 border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5 text-primary" />
+            Team Member Setup
+          </CardTitle>
+          <CardDescription>
+            Instructions for new team members to get admin access
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-4 bg-background rounded-lg border">
+            <h4 className="font-semibold mb-3 flex items-center gap-2">
+              <Info className="h-4 w-4 text-blue-500" />
+              Setup Process (3 Steps)
+            </h4>
+            <ol className="list-decimal list-inside space-y-2 text-sm">
+              <li>
+                <strong>Sign Up:</strong> Each team member visits{' '}
+                <a href="/auth" className="text-primary hover:underline font-medium">
+                  /auth
+                </a>{' '}
+                and creates an account using their official email
+              </li>
+              <li>
+                <strong>Verify Email:</strong> Check inbox and verify email address
+              </li>
+              <li>
+                <strong>Admin Grant:</strong> An existing admin adds them using the form below
+              </li>
+            </ol>
+          </div>
+
+          <div>
+            <h4 className="font-semibold mb-3">Team Members</h4>
+            <div className="space-y-2">
+              {teamMembers.map((member) => (
+                <div
+                  key={member.email}
+                  className="flex items-center justify-between p-3 bg-background rounded-lg border"
+                >
+                  <div>
+                    <p className="font-medium">{member.name}</p>
+                    <p className="text-sm text-muted-foreground">{member.email}</p>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {member.role}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => window.open('/auth', '_blank')}
+              className="flex-1"
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              Open Signup Page
+            </Button>
+            <Button
+              onClick={() => {
+                const emails = teamMembers.map(m => m.email).join('\n');
+                navigator.clipboard.writeText(emails);
+                toast({
+                  title: 'Success',
+                  description: 'Team emails copied to clipboard',
+                });
+              }}
+              variant="secondary"
+            >
+              Copy Emails
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Auto-Curation Tool */}
       <Card>

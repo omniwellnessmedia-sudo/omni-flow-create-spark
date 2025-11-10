@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { User, Settings, LogOut, LogIn, Menu, X } from 'lucide-react';
+import { User, Settings, LogOut, LogIn, Menu, X, Heart, Shield } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import MegaNavigation from '@/components/MegaNavigation';
 import { IMAGES } from '@/lib/images';
@@ -84,9 +84,21 @@ const SiteHeader = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link to="/wishlist" className="cursor-pointer">
+                      <Heart className="mr-2 h-4 w-4" />
+                      <span>Wishlist</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link to="/provider-dashboard" className="cursor-pointer">
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin" className="cursor-pointer opacity-40 hover:opacity-100 transition-opacity">
+                      <Shield className="mr-2 h-4 w-4" />
+                      <span>Admin</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

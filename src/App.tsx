@@ -78,6 +78,8 @@ const AffiliatePayouts = React.lazy(() => import('@/pages/admin/AffiliatePayouts
 const CJAffiliateProducts = React.lazy(() => import('@/pages/CJAffiliateProducts'));
 const CJProductDetail = React.lazy(() => import('@/pages/CJProductDetail'));
 const StoreCollections = React.lazy(() => import('@/pages/StoreCollections'));
+const AdminTools = React.lazy(() => import('@/pages/admin/AdminTools'));
+const Wishlist = React.lazy(() => import('@/pages/Wishlist'));
 const StoreProductDetail = React.lazy(() => import('@/pages/StoreProductDetail'));
 
 // Loading component
@@ -141,6 +143,11 @@ function App() {
                   <Route path="/store" element={<StoreCollections />} />
                   <Route path="/store/collections/:handle" element={<StoreCollections />} />
                   <Route path="/store/product/:id" element={<StoreProductDetail />} />
+                  <Route path="/wishlist" element={
+                    <ProtectedRoute>
+                      <Wishlist />
+                    </ProtectedRoute>
+                  } />
                   <Route path="/wellness-deals" element={<WellnessDeals />} />
                   <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
                   <Route path="/data-products" element={<DataProducts />} />
@@ -238,6 +245,11 @@ function App() {
                   <Route path="/admin/affiliate-payouts" element={
                     <ProtectedRoute requireAdmin={true}>
                       <AffiliatePayouts />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/tools" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <AdminTools />
                     </ProtectedRoute>
                   } />
 
