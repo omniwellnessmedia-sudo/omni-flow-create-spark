@@ -8,7 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { ExternalLink, Heart, Share2, TrendingUp, DollarSign, Tag } from 'lucide-react';
-import seedProducts from '@/data/cjSeedProducts.json';
+import curatedSeed from '@/data/curated_wellness_seed.json';
+import cjSeed from '@/data/cjSeedProducts.json';
 
 interface Product {
   id: string;
@@ -44,13 +45,14 @@ const StoreProductDetail = () => {
         .from('affiliate_products')
         .select('*')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
       let productData = data;
 
-      // Fallback to seed products
-      if (error || !data) {
-        productData = (seedProducts as any[]).find(p => p.id === id) || null;
+      // Fallback to curated seed products, then CJ seed products
+      if (!productData) {
+        const allSeedProducts = [...(curatedSeed as any[]), ...(cjSeed as any[])];
+        productData = allSeedProducts.find(p => p.id === id) || null;
       }
 
       setProduct(productData);
@@ -64,9 +66,10 @@ const StoreProductDetail = () => {
           .neq('id', id)
           .limit(4);
 
+        const allSeedProducts = [...(curatedSeed as any[]), ...(cjSeed as any[])];
         const relatedData = related && related.length > 0 
           ? related 
-          : (seedProducts as any[]).filter(p => p.category === productData.category && p.id !== id).slice(0, 4);
+          : allSeedProducts.filter(p => p.category === productData.category && p.id !== id).slice(0, 4);
 
         setRelatedProducts(relatedData);
       }
