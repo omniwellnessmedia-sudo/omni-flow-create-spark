@@ -973,6 +973,48 @@ export type Database = {
           },
         ]
       }
+      product_reviews: {
+        Row: {
+          created_at: string
+          helpful_count: number | null
+          id: string
+          photos: Json | null
+          product_id: string
+          rating: number
+          review_text: string
+          review_title: string
+          updated_at: string
+          user_id: string | null
+          verified_purchase: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          helpful_count?: number | null
+          id?: string
+          photos?: Json | null
+          product_id: string
+          rating: number
+          review_text: string
+          review_title: string
+          updated_at?: string
+          user_id?: string | null
+          verified_purchase?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          helpful_count?: number | null
+          id?: string
+          photos?: Json | null
+          product_id?: string
+          rating?: number
+          review_text?: string
+          review_title?: string
+          updated_at?: string
+          user_id?: string | null
+          verified_purchase?: boolean | null
+        }
+        Relationships: []
+      }
       product_views: {
         Row: {
           id: string
@@ -1404,6 +1446,38 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: true
             referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_helpfulness: {
+        Row: {
+          created_at: string
+          id: string
+          is_helpful: boolean
+          review_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_helpful: boolean
+          review_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_helpful?: boolean
+          review_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_helpfulness_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "product_reviews"
             referencedColumns: ["id"]
           },
         ]
