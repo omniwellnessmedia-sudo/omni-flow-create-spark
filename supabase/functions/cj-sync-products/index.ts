@@ -12,6 +12,8 @@ const isValidImageUrl = (url: string): boolean => {
   if (!url) return false;
   if (url.endsWith('/')) return false;
   if (url.length < 10) return false;
+  // Filter out placeholder images
+  if (/no[_-]?image|noimaged|placeholder|default/i.test(url)) return false;
   const hasValidDomain = url.startsWith('http://') || url.startsWith('https://');
   const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
   const looksLikeImage = url.includes('image') || url.includes('img') || url.includes('product') || url.includes('photo');
@@ -106,6 +108,7 @@ serve(async (req) => {
               id
               title
               description
+              longDescription
               brand
               advertiserId
               advertiserName
@@ -117,6 +120,7 @@ serve(async (req) => {
               price { amount currency }
               salePrice { amount currency }
               ... on Shopping {
+                additionalImageLinks
                 color
                 size
                 material
@@ -202,8 +206,15 @@ serve(async (req) => {
             });
           }
 
-          // Process additional images
+          // Process additional images from both fields
           const additionalImages: string[] = [];
+          
+          // Add images from additionalImageLinks array (Shopping type)
+          if (Array.isArray(product.additionalImageLinks)) {
+            additionalImages.push(...product.additionalImageLinks.filter((img: string) => isValidImageUrl(img)));
+          }
+          
+          // Add single additionalImageLink if present
           if (product.additionalImageLink) {
             if (Array.isArray(product.additionalImageLink)) {
               additionalImages.push(...product.additionalImageLink.filter((img: string) => isValidImageUrl(img)));
@@ -212,12 +223,25 @@ serve(async (req) => {
             }
           }
 
+          // If no additional images, at least include main image for gallery
+          if (additionalImages.length === 0 && isValidImageUrl(product.imageLink)) {
+            additionalImages.push(product.imageLink);
+          }
+
+          // Get the best description available
+          const longDesc = product.longDescription || product.description || '';
+          const shortDesc = product.description || '';
+          
+          // Defensive: synthesize description if completely empty
+          const finalLongDesc = longDesc || (product.brand && cleanTitle ? `${product.brand} - ${cleanTitle}` : shortDesc);
+          const finalShortDesc = shortDesc || cleanTitle;
+
           return {
             external_product_id: product.id,
             affiliate_program_id: 'cj',
             name: cleanTitle,
-            description: product.description || '',
-            long_description: product.description || '', // Use description since longDescription doesn't exist
+            description: finalShortDesc,
+            long_description: finalLongDesc,
             category: inferredCategory,
             image_url: product.imageLink,
             affiliate_url: product.link || '',
@@ -252,24 +276,50 @@ serve(async (req) => {
 
     console.log(`Processed ${productsWithBrands.length} valid products`);
 
-    if (productsWithBrands.length > 0) {
-      // Upsert products with proper conflict resolution
-      const { error: productsError, count } = await supabaseClient
+    // De-duplicate products before upsert to prevent ON CONFLICT errors
+    const productMap = new Map();
+    productsWithBrands.forEach(product => {
+      const key = `${product.external_product_id}|${product.affiliate_program_id}`;
+      if (!productMap.has(key)) {
+        productMap.set(key, product);
+      }
+    });
+    const uniqueProducts = Array.from(productMap.values());
+    console.log(`De-duplicated to ${uniqueProducts.length} unique products`);
+
+    let inserted = 0;
+    let updated = 0;
+
+    if (uniqueProducts.length > 0) {
+      // Get existing product IDs to calculate inserted vs updated
+      const externalIds = uniqueProducts.map(p => p.external_product_id);
+      const { data: existingProducts } = await supabaseClient
         .from('affiliate_products')
-        .upsert(productsWithBrands, { 
+        .select('external_product_id')
+        .eq('affiliate_program_id', 'cj')
+        .in('external_product_id', externalIds);
+
+      const existingIds = new Set(existingProducts?.map(p => p.external_product_id) || []);
+      inserted = uniqueProducts.filter(p => !existingIds.has(p.external_product_id)).length;
+      updated = existingProducts?.length || 0;
+
+      // Upsert products with proper conflict resolution
+      const { error: productsError } = await supabaseClient
+        .from('affiliate_products')
+        .upsert(uniqueProducts, { 
           onConflict: 'external_product_id,affiliate_program_id',
           ignoreDuplicates: false 
-        })
-        .select('id', { count: 'exact', head: true });
+        });
 
       if (productsError) {
         console.error('Error upserting products:', productsError);
+        throw productsError;
       } else {
-        console.log(`Upserted ${count || productsWithBrands.length} products`);
+        console.log(`Upserted products: ${inserted} new, ${updated} updated`);
       }
 
       // Upsert brands
-      const uniqueBrands = productsWithBrands
+      const uniqueBrands = uniqueProducts
         .filter(p => p.advertiser_id && p.advertiser_name)
         .reduce((acc: any[], product) => {
           if (!acc.find(b => b.advertiser_id === product.advertiser_id)) {
@@ -301,9 +351,14 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
+        results: {
+          inserted,
+          updated,
+          totalFetched: resultList.length
+        },
+        processedCount: uniqueProducts.length,
         totalRecords: productsData?.totalCount || 0,
-        processedCount: productsWithBrands.length,
-        products: productsWithBrands,
+        products: uniqueProducts.slice(0, 10), // Return first 10 for debugging
         metadata: {
           category,
           keywords: searchKeywords,
