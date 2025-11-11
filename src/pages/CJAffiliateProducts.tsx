@@ -540,26 +540,26 @@ const CJAffiliateProducts = () => {
 
               {/* Loading State */}
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  <ProductSkeleton count={24} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <ProductSkeleton count={12} />
                 </div>
               ) : filteredProducts.length === 0 ? (
                 <EmptyState
                   icon={<Package className="w-16 h-16 text-muted-foreground" />}
                   title={products.length === 0 ? "No Products Yet" : "No Products Found"}
                   description={products.length === 0 
-                    ? "Sync products from CJ Affiliate to get started" 
+                    ? "Click 'Sync Products' above to fetch wellness products from CJ Affiliate" 
                     : "Try adjusting your filters or search term"}
-                  actionLabel={products.length === 0 ? "Sync Products" : "Clear Filters"}
+                  actionLabel={products.length === 0 ? "Sync Products Now" : "Clear All Filters"}
                   onAction={products.length === 0 ? syncProducts : handleClearFilters}
                 />
               ) : (
                 <>
-                  {/* Products Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {/* Products Grid - Better spacing and responsive */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
                     {displayedProducts.map((product) => (
                       <PremiumProductCard
-                        key={product.id}
+                        key={`${product.external_product_id}-${product.id}`}
                         product={product}
                         onFavoriteToggle={toggleWishlist}
                         isFavorite={isInWishlist(product.id)}
@@ -576,6 +576,11 @@ const CJAffiliateProducts = () => {
                         <RefreshCw className="w-5 h-5 animate-spin" />
                         <span className="text-sm">Loading more products...</span>
                       </div>
+                    )}
+                    {!hasMore && displayedProducts.length > INITIAL_LOAD && (
+                      <p className="text-sm text-muted-foreground">
+                        You've reached the end of the catalog
+                      </p>
                     )}
                   </div>
                 </>

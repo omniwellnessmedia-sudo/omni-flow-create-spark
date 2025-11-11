@@ -42,12 +42,12 @@ export const PremiumProductCard = ({
 
   return (
     <Card 
-      className="card-product group relative overflow-hidden hover-lift shadow-soft"
+      className="card-product group relative overflow-hidden hover-lift shadow-soft h-full flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Container */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+      <div className="relative aspect-square overflow-hidden bg-muted">
         <Link to={`/cj-products/${product.id}`}>
           <SmartProductImage
             src={product.image_url}
@@ -67,14 +67,14 @@ export const PremiumProductCard = ({
           {product.commission_rate && hasHighCommission(product.commission_rate) && (
             <Badge className="badge-modern bg-omni-orange text-white shadow-elegant border-0">
               <Zap className="w-3 h-3 mr-1" />
-              High Commission
+              {(product.commission_rate * 100).toFixed(0)}%
             </Badge>
           )}
         </div>
         
         {/* Brand Badge - Glassmorphism */}
         {product.advertiser_name && (
-          <Badge className="badge-modern absolute top-3 right-3 glass-card text-foreground z-10">
+          <Badge className="badge-modern absolute top-3 right-3 glass-card text-foreground z-10 max-w-[120px] truncate">
             {product.advertiser_name}
           </Badge>
         )}
@@ -128,6 +128,16 @@ export const PremiumProductCard = ({
               size="sm" 
               variant="outline"
               className="shadow-sm"
+              onClick={(e) => {
+                e.preventDefault();
+                if (navigator.share) {
+                  navigator.share({
+                    title: product.name,
+                    text: product.description || product.name,
+                    url: `${window.location.origin}/cj-products/${product.id}`
+                  });
+                }
+              }}
             >
               <Share2 className="w-4 h-4" />
             </Button>
@@ -136,21 +146,26 @@ export const PremiumProductCard = ({
       </div>
 
       {/* Content - Improved Spacing & Typography */}
-      <CardContent className="p-5 space-y-3">
+      <CardContent className="p-5 space-y-3 flex-1 flex flex-col">
         {/* Category Badge */}
-        <Badge variant="outline" className="text-xs font-medium">
+        <Badge variant="outline" className="text-xs font-medium w-fit">
           {product.category}
         </Badge>
 
-        {/* Product Title - Better Typography */}
-        <Link to={`/cj-products/${product.id}`}>
-          <h3 className="font-semibold text-base line-clamp-2 hover:text-primary transition-colors min-h-[3rem] leading-snug">
+        {/* Product Title & Description */}
+        <Link to={`/cj-products/${product.id}`} className="flex-1 flex flex-col">
+          <h3 className="font-semibold text-base line-clamp-2 hover:text-primary transition-colors leading-snug mb-2">
             {product.name}
           </h3>
+          {product.description && (
+            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+              {product.description}
+            </p>
+          )}
         </Link>
 
         {/* Price - Enhanced Design */}
-        <div className="flex items-baseline gap-2 pt-1">
+        <div className="flex items-baseline gap-2 pt-2 border-t border-border/50">
           <span className="text-2xl font-bold text-foreground">
             R{product.price_zar.toFixed(2)}
           </span>
