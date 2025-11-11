@@ -6,11 +6,17 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal, Heart, Scale } from 'lucide-react';
 import { TakealotProductCard } from '@/components/product/TakealotProductCard';
 import { FilterSidebar, FilterState } from '@/components/product/FilterSidebar';
+import { ProductComparison } from '@/components/product/ProductComparison';
+import { WishlistDrawer } from '@/components/product/WishlistDrawer';
+import { SearchAutocomplete } from '@/components/product/SearchAutocomplete';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useProductComparison } from '@/hooks/useProductComparison';
+import { useWishlist } from '@/hooks/useWishlist';
 import curatedSeed from '@/data/curated_wellness_seed.json';
 
 interface Product {
@@ -38,6 +44,13 @@ const StoreCollections = () => {
   const [sortBy, setSortBy] = useState('featured');
   const { toast } = useToast();
   
+  // Comparison and Wishlist state
+  const { comparisonProducts, count: comparisonCount } = useProductComparison();
+  const { getWishlistCount } = useWishlist();
+  const [showComparison, setShowComparison] = useState(false);
+  const [showWishlist, setShowWishlist] = useState(false);
+  const [comparisonProductsData, setComparisonProductsData] = useState<Product[]>([]);
+  
   const [filters, setFilters] = useState<FilterState>({
     priceRange: [0, 5000],
     selectedBrands: [],
@@ -55,6 +68,26 @@ const StoreCollections = () => {
   useEffect(() => {
     fetchProducts();
   }, [handle]);
+
+  useEffect(() => {
+    if (comparisonProducts.length > 0) {
+      fetchComparisonProducts();
+    }
+  }, [comparisonProducts]);
+
+  const fetchComparisonProducts = async () => {
+    const { data } = await supabase
+      .from('affiliate_products')
+      .select('*')
+      .in('id', comparisonProducts);
+    
+    const dbProducts = data || [];
+    const seedProducts = (curatedSeed as any[]).filter(p => 
+      comparisonProducts.includes(p.id)
+    );
+    
+    setComparisonProductsData([...seedProducts, ...dbProducts] as any);
+  };
 
   const fetchProducts = async () => {
     try {
@@ -173,16 +206,39 @@ const StoreCollections = () => {
 
         {/* Main Content */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Action Bar */}
+          <div className="flex gap-3 mb-6">
+            <Button
+              variant="outline"
+              onClick={() => setShowComparison(true)}
+              disabled={comparisonCount === 0}
+            >
+              <Scale className="w-4 h-4 mr-2" />
+              Compare
+              {comparisonCount > 0 && (
+                <Badge variant="secondary" className="ml-2">
+                  {comparisonCount}
+                </Badge>
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowWishlist(true)}
+            >
+              <Heart className="w-4 h-4 mr-2" />
+              Wishlist
+              {getWishlistCount() > 0 && (
+                <Badge variant="secondary" className="ml-2">
+                  {getWishlistCount()}
+                </Badge>
+              )}
+            </Button>
+          </div>
+
           {/* Search & Sort Bar */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-              <Input
-                placeholder="Search wellness products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+            <div className="flex-1">
+              <SearchAutocomplete />
             </div>
             
             {/* Mobile Filter Toggle */}
@@ -259,6 +315,21 @@ const StoreCollections = () => {
           </div>
         </section>
       </main>
+      
+      {/* Comparison Modal */}
+      <ProductComparison
+        products={comparisonProductsData as any}
+        open={showComparison}
+        onOpenChange={setShowComparison}
+        onRemoveProduct={() => fetchComparisonProducts()}
+      />
+      
+      {/* Wishlist Drawer */}
+      <WishlistDrawer
+        open={showWishlist}
+        onOpenChange={setShowWishlist}
+      />
+      
       <Footer />
     </div>
   );

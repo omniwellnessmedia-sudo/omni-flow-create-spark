@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
-import { Heart, Eye, Star, TrendingUp, Zap } from 'lucide-react';
+import { Heart, Eye, Star, TrendingUp, Zap, Scale } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { SmartProductImage } from './SmartProductImage';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useWishlist } from '@/hooks/useWishlist';
+import { useProductComparison } from '@/hooks/useProductComparison';
 
 interface TakealotProductCardProps {
   product: {
@@ -29,14 +31,25 @@ interface TakealotProductCardProps {
 export const TakealotProductCard = ({ product, showQuickView = true }: TakealotProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const { toast } = useToast();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+  const { addToComparison, isInComparison } = useProductComparison();
 
   const discount = product.sale_price_zar 
     ? Math.round(((product.price_zar - product.sale_price_zar) / product.price_zar) * 100)
     : 0;
 
-  const handleWishlist = (e: React.MouseEvent) => {
+  const handleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault();
-    toast({ title: 'Added to wishlist', description: product.name });
+    await toggleWishlist(product.id);
+  };
+
+  const handleComparison = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToComparison({
+      id: product.id,
+      name: product.name,
+      category: product.category
+    });
   };
 
   const handleQuickView = (e: React.MouseEvent) => {
@@ -80,10 +93,19 @@ export const TakealotProductCard = ({ product, showQuickView = true }: TakealotP
           <Button
             variant="secondary"
             size="icon"
-            className="bg-background/90 backdrop-blur-sm h-9 w-9"
+            className={`bg-background/90 backdrop-blur-sm h-9 w-9 ${isInWishlist(product.id) ? 'text-primary' : ''}`}
             onClick={handleWishlist}
           >
-            <Heart className="w-4 h-4" />
+            <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
+          </Button>
+          <Button
+            variant="secondary"
+            size="icon"
+            className={`bg-background/90 backdrop-blur-sm h-9 w-9 ${isInComparison(product.id) ? 'text-primary' : ''}`}
+            onClick={handleComparison}
+            title="Add to comparison"
+          >
+            <Scale className="w-4 h-4" />
           </Button>
           <Button
             variant="secondary"

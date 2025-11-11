@@ -13,6 +13,10 @@ import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { ProductImageGallery } from '@/components/product/ProductImageGallery';
 import { CommissionCard } from '@/components/product/CommissionCard';
 import { TakealotProductCard } from '@/components/product/TakealotProductCard';
+import { ReviewSystem } from '@/components/product/ReviewSystem';
+import { RecentlyViewedSection } from '@/components/product/RecentlyViewedSection';
+import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
+import { useViewTracker } from '@/hooks/useViewTracker';
 import curatedSeed from '@/data/curated_wellness_seed.json';
 import cjSeed from '@/data/cjSeedProducts.json';
 
@@ -76,6 +80,10 @@ const StoreProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [currency, setCurrency] = useState<'USD' | 'ZAR' | 'EUR'>('ZAR');
   const { toast } = useToast();
+  const { addToRecentlyViewed } = useRecentlyViewed();
+  
+  // Track view count
+  useViewTracker(id);
 
   useEffect(() => {
     fetchProduct();
@@ -113,6 +121,12 @@ const StoreProductDetail = () => {
           product_details: productData.product_details as Record<string, string> || {},
         };
         setProduct(transformedProduct as Product);
+        
+        // Add to recently viewed
+        addToRecentlyViewed({
+          id: transformedProduct.id,
+          category: transformedProduct.category
+        });
       } else {
         setProduct(null);
       }
@@ -459,6 +473,22 @@ const StoreProductDetail = () => {
               </Card>
             </TabsContent>
           </Tabs>
+        </section>
+
+        {/* Reviews Section */}
+        {product && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <ReviewSystem productId={product.id} />
+          </section>
+        )}
+
+        {/* Recently Viewed */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h2 className="text-3xl font-bold mb-8">Recently Viewed</h2>
+          <RecentlyViewedSection 
+            currentProductId={product?.id}
+            onQuickView={() => {}}
+          />
         </section>
 
         {/* Related Products */}
