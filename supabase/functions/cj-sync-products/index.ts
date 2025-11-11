@@ -98,7 +98,7 @@ serve(async (req) => {
 
     console.log('Fetching CJ products:', { category, keywords, limit, companyId: CJ_COMPANY_ID });
 
-    // Fixed GraphQL query with correct field names and inline fragments
+    // Fixed GraphQL query - removed longDescription as it doesn't exist in CJ API
     const graphqlQuery = {
       query: `
         query ProductSearch($companyId: ID!, $keywords: [String!], $limit: Int) {
@@ -108,7 +108,6 @@ serve(async (req) => {
               id
               title
               description
-              longDescription
               brand
               advertiserId
               advertiserName
@@ -228,20 +227,17 @@ serve(async (req) => {
             additionalImages.push(product.imageLink);
           }
 
-          // Get the best description available
-          const longDesc = product.longDescription || product.description || '';
-          const shortDesc = product.description || '';
-          
-          // Defensive: synthesize description if completely empty
-          const finalLongDesc = longDesc || (product.brand && cleanTitle ? `${product.brand} - ${cleanTitle}` : shortDesc);
-          const finalShortDesc = shortDesc || cleanTitle;
+          // Map description to both fields (short and long)
+          const description = product.description || '';
+          const shortDesc = description.length > 200 ? description.substring(0, 200) + '...' : description;
+          const longDesc = description || (product.brand && cleanTitle ? `${product.brand} - ${cleanTitle}` : '');
 
           return {
             external_product_id: product.id,
             affiliate_program_id: 'cj',
             name: cleanTitle,
-            description: finalShortDesc,
-            long_description: finalLongDesc,
+            description: shortDesc || cleanTitle,
+            long_description: longDesc || shortDesc || cleanTitle,
             category: inferredCategory,
             image_url: product.imageLink,
             affiliate_url: product.link || '',

@@ -13,6 +13,7 @@ interface PremiumProductCardProps {
     id: string;
     name: string;
     description: string;
+    long_description?: string;
     category: string;
     image_url: string;
     price_zar: number;
@@ -157,9 +158,9 @@ export const PremiumProductCard = ({
           <h3 className="font-semibold text-base line-clamp-2 hover:text-primary transition-colors leading-snug mb-2">
             {product.name}
           </h3>
-          {product.description && (
+          {(product.long_description || product.description) && (
             <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-              {product.description}
+              {product.long_description || product.description}
             </p>
           )}
         </Link>

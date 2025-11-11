@@ -39,6 +39,7 @@ interface CJProduct {
   external_product_id: string;
   name: string;
   description: string;
+  long_description?: string;
   category: string;
   image_url: string;
   affiliate_url: string;
@@ -49,6 +50,13 @@ interface CJProduct {
   is_active: boolean;
   created_at?: string;
   last_synced_at?: string;
+  advertiser_name?: string;
+  advertiser_id?: string;
+  brand?: string;
+  brand_logo_url?: string;
+  is_featured?: boolean;
+  is_trending?: boolean;
+  view_count?: number;
 }
 
 const CJAffiliateProducts = () => {
