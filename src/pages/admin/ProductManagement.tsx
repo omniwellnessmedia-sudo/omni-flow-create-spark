@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,7 +31,10 @@ import {
   DollarSign,
   RefreshCw,
   CheckSquare,
-  XSquare
+  XSquare,
+  Upload,
+  Download,
+  FileSpreadsheet
 } from 'lucide-react';
 
 interface Product {
@@ -56,6 +59,8 @@ const ProductManagement = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
   const [updating, setUpdating] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -207,6 +212,124 @@ const ProductManagement = () => {
     }
   };
 
+  const handleCSVImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImporting(true);
+    try {
+      const text = await file.text();
+      const rows = text.split('\n').map(row => row.split(','));
+      const headers = rows[0].map(h => h.trim().toLowerCase());
+      
+      const newProducts = rows.slice(1)
+        .filter(row => row.length >= headers.length && row[0])
+        .map(row => {
+          const product: any = {
+            external_product_id: `csv_${Date.now()}_${Math.random()}`,
+            affiliate_program_id: 'csv_import',
+            is_active: true,
+          };
+          
+          headers.forEach((header, index) => {
+            const value = row[index]?.trim();
+            if (!value) return;
+
+            switch (header) {
+              case 'name':
+              case 'title':
+                product.name = value;
+                break;
+              case 'description':
+                product.description = value;
+                break;
+              case 'category':
+                product.category = value;
+                break;
+              case 'brand':
+                product.brand = value;
+                product.advertiser_name = value;
+                break;
+              case 'price_zar':
+              case 'price':
+                product.price_zar = parseFloat(value);
+                break;
+              case 'price_usd':
+                product.price_usd = parseFloat(value);
+                break;
+              case 'price_eur':
+                product.price_eur = parseFloat(value);
+                break;
+              case 'commission_rate':
+              case 'commission':
+                product.commission_rate = parseFloat(value) / 100;
+                break;
+              case 'image_url':
+              case 'image':
+                product.image_url = value;
+                break;
+              case 'affiliate_url':
+              case 'url':
+                product.affiliate_url = value;
+                break;
+              case 'featured':
+                product.is_featured = value.toLowerCase() === 'true' || value === '1';
+                break;
+            }
+          });
+
+          return product;
+        })
+        .filter(p => p.name && p.price_zar && p.affiliate_url);
+
+      if (newProducts.length === 0) {
+        throw new Error('No valid products found in CSV');
+      }
+
+      const { error } = await supabase
+        .from('affiliate_products')
+        .insert(newProducts);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: `Imported ${newProducts.length} products successfully`,
+      });
+
+      fetchProducts();
+    } catch (error: any) {
+      console.error('Error importing CSV:', error);
+      toast({
+        title: 'Import Error',
+        description: error.message || 'Failed to import products',
+        variant: 'destructive',
+      });
+    } finally {
+      setImporting(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const downloadCSVTemplate = () => {
+    const template = [
+      'name,description,category,brand,price_zar,price_usd,price_eur,commission_rate,image_url,affiliate_url,featured',
+      'Sample Wellness Product,High quality organic product,Health & Beauty,BrandName,299.99,19.99,17.99,12,https://example.com/image.jpg,https://example.com/product,false'
+    ].join('\n');
+    
+    const blob = new Blob([template], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'product-import-template.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
   const categories = ['all', ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))];
   const stats = {
     total: products.length,
@@ -288,6 +411,51 @@ const ProductManagement = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* CSV Import Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileSpreadsheet className="w-5 h-5" />
+            Bulk Product Import
+          </CardTitle>
+          <CardDescription>
+            Upload a CSV file to add multiple products at once
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={downloadCSVTemplate}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download Template
+            </Button>
+            <Button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={importing}
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              {importing ? 'Importing...' : 'Upload CSV'}
+            </Button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".csv"
+              onChange={handleCSVImport}
+              className="hidden"
+            />
+          </div>
+          <div className="text-sm text-muted-foreground bg-muted/30 p-4 rounded-lg">
+            <p className="font-medium mb-2">CSV Format:</p>
+            <p className="mb-1">Required columns: <code className="bg-background px-1 rounded">name</code>, <code className="bg-background px-1 rounded">price_zar</code>, <code className="bg-background px-1 rounded">affiliate_url</code></p>
+            <p>Optional: description, category, brand, commission_rate, image_url, featured</p>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Filters and Bulk Actions */}
       <Card>

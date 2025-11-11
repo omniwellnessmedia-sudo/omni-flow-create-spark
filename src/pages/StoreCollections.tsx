@@ -192,15 +192,57 @@ const StoreCollections = () => {
     <div className="min-h-screen bg-background">
       <UnifiedNavigation />
       <main className="pt-20 pb-16">
-        {/* Collection Header */}
-        <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12 border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              {collectionTitle}
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              {filteredProducts.length} curated wellness products • Free delivery in South Africa 🇿🇦
-            </p>
+        {/* Hero Section */}
+        <section className="relative h-[50vh] min-h-[400px] overflow-hidden">
+          {/* Background Images */}
+          <div className="absolute inset-0 grid grid-cols-3 gap-1">
+            <div className="relative overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop"
+                alt="Wellness products"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/40 to-transparent" />
+            </div>
+            <div className="relative overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&auto=format&fit=crop"
+                alt="Natural wellness"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-primary/30" />
+            </div>
+            <div className="relative overflow-hidden">
+              <img 
+                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop"
+                alt="Wellness lifestyle"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-l from-secondary/40 to-transparent" />
+            </div>
+          </div>
+
+          {/* Overlay Content */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60 flex items-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
+              <h1 className="text-5xl md:text-7xl font-bold mb-4 text-white drop-shadow-lg">
+                {collectionTitle}
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 mb-6 drop-shadow-md">
+                Discover {filteredProducts.length} curated wellness products
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center">
+                <Badge variant="secondary" className="text-base px-4 py-2">
+                  🇿🇦 Free SA Delivery
+                </Badge>
+                <Badge variant="secondary" className="text-base px-4 py-2">
+                  ✨ Wellness Certified
+                </Badge>
+                <Badge variant="secondary" className="text-base px-4 py-2">
+                  💚 Eco-Friendly
+                </Badge>
+              </div>
+            </div>
           </div>
         </section>
 
