@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { AffiliateProductCard } from "@/components/affiliate/AffiliateProductCard";
+import { TakealotProductCard } from "@/components/product/TakealotProductCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -157,10 +157,15 @@ const AffiliateMarketplace = () => {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredProducts.map(product => (
-              <AffiliateProductCard
+              <TakealotProductCard
                 key={product.id}
-                product={product}
-                currency={currency}
+                product={{
+                  ...product,
+                  category: product.category || 'Uncategorized',
+                  price_zar: product.price_zar || 0,
+                  commission_rate: product.commission_rate || 0,
+                }}
+                showQuickView={true}
               />
             ))}
           </div>

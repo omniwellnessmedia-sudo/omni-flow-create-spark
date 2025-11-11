@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useWishlist } from '@/hooks/useWishlist';
-import { PremiumProductCard } from '@/components/product/PremiumProductCard';
+import { TakealotProductCard } from '@/components/product/TakealotProductCard';
 import { FeaturedProductsCarousel } from '@/components/product/FeaturedProductsCarousel';
 import { ProductQuickView } from '@/components/product/ProductQuickView';
 import { ProductComparison } from '@/components/product/ProductComparison';
@@ -629,13 +629,10 @@ const CJAffiliateProducts = () => {
                   {/* Products Grid - Better spacing and responsive */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
                     {displayedProducts.map((product) => (
-                      <PremiumProductCard
+                      <TakealotProductCard
                         key={`${product.external_product_id}-${product.id}`}
                         product={product}
-                        onFavoriteToggle={toggleWishlist}
-                        isFavorite={isInWishlist(product.id)}
-                        onQuickView={handleQuickView}
-                        onAddToCompare={addToCompare}
+                        showQuickView={true}
                       />
                     ))}
                   </div>

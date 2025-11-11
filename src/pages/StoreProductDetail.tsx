@@ -17,6 +17,7 @@ import { ReviewSystem } from '@/components/product/ReviewSystem';
 import { RecentlyViewedSection } from '@/components/product/RecentlyViewedSection';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useViewTracker } from '@/hooks/useViewTracker';
+import { useUserRole } from '@/hooks/useUserRole';
 import curatedSeed from '@/data/curated_wellness_seed.json';
 import cjSeed from '@/data/cjSeedProducts.json';
 
@@ -81,6 +82,7 @@ const StoreProductDetail = () => {
   const [currency, setCurrency] = useState<'USD' | 'ZAR' | 'EUR'>('ZAR');
   const { toast } = useToast();
   const { addToRecentlyViewed } = useRecentlyViewed();
+  const { isAffiliate, isCustomer } = useUserRole();
   
   // Track view count
   useViewTracker(id);
@@ -330,12 +332,14 @@ const StoreProductDetail = () => {
                 </div>
               </div>
 
-              {/* Commission Card */}
-              <CommissionCard 
-                price={currency === 'ZAR' ? product.price_zar : currency === 'USD' ? product.price_usd : product.price_eur}
-                commissionRate={product.commission_rate}
-                currency={currency}
-              />
+              {/* Commission Card - Only for Affiliates */}
+              {isAffiliate && (
+                <CommissionCard 
+                  price={currency === 'ZAR' ? product.price_zar : currency === 'USD' ? product.price_usd : product.price_eur}
+                  commissionRate={product.commission_rate}
+                  currency={currency}
+                />
+              )}
 
               {/* Product Highlights */}
               {product.product_highlights && product.product_highlights.length > 0 && (
@@ -376,12 +380,14 @@ const StoreProductDetail = () => {
               <div className="space-y-3">
                 <Button size="lg" className="w-full" onClick={trackClick}>
                   <ExternalLink className="mr-2 w-5 h-5" />
-                  Buy Now
+                  {isAffiliate ? 'Get Affiliate Link' : 'Buy Now'}
                 </Button>
-                <Button size="lg" variant="outline" className="w-full" onClick={copyAffiliateLink}>
-                  <Copy className="mr-2 w-5 h-5" />
-                  Copy Affiliate Link
-                </Button>
+                {isAffiliate && (
+                  <Button size="lg" variant="outline" className="w-full" onClick={copyAffiliateLink}>
+                    <Copy className="mr-2 w-5 h-5" />
+                    Copy Affiliate Link
+                  </Button>
+                )}
                 <div className="flex gap-3">
                   <Button variant="outline" className="flex-1" onClick={() => toast({ title: 'Added to wishlist' })}>
                     <Heart className="mr-2 w-4 h-4" />
@@ -396,6 +402,15 @@ const StoreProductDetail = () => {
                   </Button>
                 </div>
               </div>
+
+              {/* Affiliate Invitation - Only for Customers */}
+              {isCustomer && (
+                <div className="text-center py-4 border-t border-border/50">
+                  <Link to="/wellness-exchange-signup" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    💼 Want to earn commission? <span className="underline font-medium">Become an affiliate</span>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </section>

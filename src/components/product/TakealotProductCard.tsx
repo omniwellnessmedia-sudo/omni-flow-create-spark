@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart, Eye, Star, TrendingUp, Zap, Scale } from 'lucide-react';
+import { Heart, Eye, Star, TrendingUp, Zap, Scale, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useWishlist } from '@/hooks/useWishlist';
 import { useProductComparison } from '@/hooks/useProductComparison';
+import { useUserRole } from '@/hooks/useUserRole';
 
 interface TakealotProductCardProps {
   product: {
@@ -33,6 +34,7 @@ export const TakealotProductCard = ({ product, showQuickView = true }: TakealotP
   const { toast } = useToast();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { addToComparison, isInComparison } = useProductComparison();
+  const { isAffiliate } = useUserRole();
 
   const discount = product.sale_price_zar 
     ? Math.round(((product.price_zar - product.sale_price_zar) / product.price_zar) * 100)
@@ -180,20 +182,23 @@ export const TakealotProductCard = ({ product, showQuickView = true }: TakealotP
             )}
           </div>
 
-          {/* Commission Badge */}
-          <div className="flex items-center justify-between mb-3">
-            <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20">
-              Earn R{commissionAmount} ({(product.commission_rate * 100).toFixed(0)}%)
-            </Badge>
-          </div>
+          {/* Commission Badge - Only for Affiliates */}
+          {isAffiliate && (
+            <div className="flex items-center justify-between mb-3">
+              <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20">
+                Earn R{commissionAmount} ({(product.commission_rate * 100).toFixed(0)}%)
+              </Badge>
+            </div>
+          )}
 
-          {/* Add to Links Button */}
+          {/* CTA Button */}
           <Link to={`/store/product/${product.id}`}>
             <Button 
               className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all"
               size="sm"
             >
-              Get Affiliate Link
+              <ExternalLink className="w-4 h-4 mr-2" />
+              {isAffiliate ? 'Get Affiliate Link' : 'View Product'}
             </Button>
           </Link>
         </div>
