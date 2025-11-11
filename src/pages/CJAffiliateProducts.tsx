@@ -32,7 +32,6 @@ import {
   GitCompare,
   Heart
 } from 'lucide-react';
-import marketplaceHeroImage from '@/assets/cj-marketplace-hero.jpg';
 
 interface CJProduct {
   id: string;
@@ -350,22 +349,16 @@ const CJAffiliateProducts = () => {
       <UnifiedNavigation />
       
       <main className="pt-20 pb-16">
-        {/* Hero Section - Modern Glassmorphism Design with Background */}
+        {/* Hero Section - Modern Gradient Background */}
         <section className="relative py-24 overflow-hidden">
-          {/* Hero Background Image */}
-          <div className="absolute inset-0">
-            <img 
-              src={marketplaceHeroImage}
-              alt="Wellness Marketplace" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/80 backdrop-blur-sm" />
-          </div>
+          {/* Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-omni-violet/10 via-background to-omni-orange/10" />
           
           {/* Decorative Elements */}
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-20 left-10 w-72 h-72 bg-omni-violet/30 rounded-full blur-3xl animate-pulse" />
             <div className="absolute bottom-20 right-10 w-96 h-96 bg-omni-orange/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-omni-green/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
           </div>
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
