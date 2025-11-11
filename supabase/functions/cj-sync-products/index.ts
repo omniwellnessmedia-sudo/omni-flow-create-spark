@@ -1,9 +1,82 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+const CJ_PRODUCT_FEED_ENDPOINT = 'https://ads.api.cj.com/query';
+
+const isValidImageUrl = (url: string): boolean => {
+  if (!url) return false;
+  if (url.endsWith('/')) return false;
+  if (url.length < 10) return false;
+  const hasValidDomain = url.startsWith('http://') || url.startsWith('https://');
+  const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
+  const looksLikeImage = url.includes('image') || url.includes('img') || url.includes('product') || url.includes('photo');
+  return hasValidDomain && (hasImageExtension || looksLikeImage);
+};
+
+const extractProductTitle = (title: string, description?: string): string => {
+  if (title && title.length > 10 && !['Meditation', 'Wellness', 'Health', 'Yoga'].includes(title)) {
+    return title.substring(0, 150);
+  }
+  if (description && description.length > 20) {
+    const firstSentence = description.split(/[.!?]\s/)[0];
+    if (firstSentence && firstSentence.length >= 10) {
+      return firstSentence.substring(0, 150);
+    }
+  }
+  return title || 'Wellness Product';
+};
+
+const inferCategory = (title: string, description: string, providedCategory?: string): string => {
+  if (providedCategory && providedCategory !== 'General Wellness') {
+    return providedCategory;
+  }
+  
+  const text = `${title} ${description}`.toLowerCase();
+  
+  if (/yoga|asana|mat|block|strap|bolster/i.test(text)) return 'Yoga Equipment';
+  if (/meditat|mindfulness|cushion|zafu|singing bowl/i.test(text)) return 'Meditation Tools';
+  if (/essential oil|aromatherapy|diffuser|incense/i.test(text)) return 'Aromatherapy';
+  if (/protein|supplement|vitamin|mineral|probiotic|collagen/i.test(text)) return 'Nutrition & Supplements';
+  if (/fitness|exercise|resistance band|dumbbell|tracker|smartwatch/i.test(text)) return 'Fitness Equipment';
+  if (/tea|herbal|beverage|drink|matcha/i.test(text)) return 'Beverages';
+  if (/skincare|cosmetic|beauty|serum|moisturizer|cream/i.test(text)) return 'Beauty & Skincare';
+  if (/massage|spa|bodywork|relaxation/i.test(text)) return 'Massage & Bodywork';
+  if (/book|guide|manual|journal/i.test(text)) return 'Books & Education';
+  
+  return 'General Wellness';
+};
+
+const extractDomain = (advertiserName: string): string => {
+  if (!advertiserName) return '';
+  const cleaned = advertiserName
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, '')
+    .replace(/(inc|llc|ltd|corp|corporation|company|co)$/i, '');
+  return `${cleaned}.com`;
+};
+
+const fetchBrandLogo = async (advertiserName: string): Promise<string | null> => {
+  if (!advertiserName) return null;
+  
+  const domain = extractDomain(advertiserName);
+  
+  try {
+    const clearbitUrl = `https://logo.clearbit.com/${domain}`;
+    const response = await fetch(clearbitUrl, { method: 'HEAD' });
+    if (response.ok) {
+      return clearbitUrl;
+    }
+  } catch (error) {
+    console.log(`Logo fetch failed for ${domain}`);
+  }
+  
+  return null;
 };
 
 serve(async (req) => {
@@ -12,182 +85,239 @@ serve(async (req) => {
   }
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const CJ_PAT = Deno.env.get('CJ_PERSONAL_ACCESS_TOKEN');
+    const CJ_COMPANY_ID = Deno.env.get('CJ_COMPANY_ID');
 
-    // Define specific wellness product searches with category mapping
-    const wellnessSearches = [
-      { keywords: 'yoga mat', category: 'Yoga Equipment', limit: 50 },
-      { keywords: 'yoga block', category: 'Yoga Equipment', limit: 30 },
-      { keywords: 'meditation cushion', category: 'Meditation Tools', limit: 30 },
-      { keywords: 'essential oils', category: 'Aromatherapy', limit: 50 },
-      { keywords: 'aromatherapy diffuser', category: 'Aromatherapy', limit: 30 },
-      { keywords: 'protein powder', category: 'Nutrition & Supplements', limit: 50 },
-      { keywords: 'vitamins supplements', category: 'Nutrition & Supplements', limit: 50 },
-      { keywords: 'fitness tracker', category: 'Fitness Equipment', limit: 30 },
-      { keywords: 'resistance bands', category: 'Fitness Equipment', limit: 30 },
-      { keywords: 'herbal tea', category: 'Beverages', limit: 30 },
-      { keywords: 'organic skincare', category: 'Beauty & Skincare', limit: 40 },
-      { keywords: 'natural cosmetics', category: 'Beauty & Skincare', limit: 30 },
-      { keywords: 'massage oil', category: 'Massage & Bodywork', limit: 30 },
-      { keywords: 'wellness books', category: 'Books & Education', limit: 20 },
-    ];
+    if (!CJ_PAT) throw new Error('CJ Personal Access Token not configured');
+    if (!CJ_COMPANY_ID) throw new Error('CJ Company ID not configured');
 
-    console.log(`Starting CJ product sync with ${wellnessSearches.length} targeted searches`);
+    const { category, keywords, limit = 100 } = await req.json();
+    const searchKeywords = keywords || category || 'wellness';
 
-    let allProducts = [];
-    let syncResults = {
-      totalFetched: 0,
-      inserted: 0,
-      updated: 0,
-      errors: 0,
-      skipped: 0,
+    console.log('Fetching CJ products:', { category, keywords, limit, companyId: CJ_COMPANY_ID });
+
+    // Fixed GraphQL query with correct field names and inline fragments
+    const graphqlQuery = {
+      query: `
+        query ProductSearch($companyId: ID!, $keywords: [String!], $limit: Int) {
+          products(companyId: $companyId, keywords: $keywords, limit: $limit) {
+            totalCount
+            resultList {
+              id
+              title
+              description
+              brand
+              advertiserId
+              advertiserName
+              catalogId
+              imageLink
+              additionalImageLink
+              link
+              mobileLink
+              price { amount currency }
+              salePrice { amount currency }
+              ... on Shopping {
+                color
+                size
+                material
+                condition
+                availability
+                gtin
+                mpn
+                productHighlight
+                productDetail { attributeName attributeValue }
+                googleProductCategory { id name }
+              }
+            }
+          }
+        }
+      `,
+      variables: { companyId: CJ_COMPANY_ID, keywords: [searchKeywords], limit }
     };
 
-    // Fetch products for each search term
-    for (const search of wellnessSearches) {
-      try {
-        console.log(`Fetching: "${search.keywords}" → Category: ${search.category}`);
-        
-        const { data, error } = await supabase.functions.invoke('cj-fetch-products', {
-          body: {
-            keywords: search.keywords,
-            category: search.category,
-            limit: search.limit,
-          },
-        });
-
-        if (error) {
-          console.error(`Error for "${search.keywords}":`, error);
-          syncResults.errors++;
-        } else if (data && data.success && data.products) {
-          allProducts.push(...data.products);
-          syncResults.totalFetched += data.products.length;
-          console.log(`✓ Fetched ${data.products.length} products for "${search.keywords}"`);
-        } else {
-          console.log(`⊘ No products for "${search.keywords}"`);
-          syncResults.errors++;
-        }
-
-        // Add small delay to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 500));
-      } catch (error) {
-        console.error(`Exception for "${search.keywords}":`, error);
-        syncResults.errors++;
-      }
-    }
-
-    console.log(`\nTotal products fetched: ${allProducts.length}`);
-
-    // Deduplicate products by external_product_id
-    const uniqueProducts = allProducts.reduce((acc: any[], product) => {
-      if (!acc.find(p => p.external_product_id === product.external_product_id)) {
-        acc.push(product);
-      } else {
-        syncResults.skipped++;
-      }
-      return acc;
-    }, []);
-
-    console.log(`After deduplication: ${uniqueProducts.length} unique products (${syncResults.skipped} duplicates removed)`);
-
-    // Validate and clean product data before upserting
-    const validProducts = uniqueProducts.filter(product => {
-      // Validate title length
-      if (!product.name || product.name.length < 5) {
-        console.log(`Skipping product with short title: "${product.name}"`);
-        syncResults.skipped++;
-        return false;
-      }
-      
-      // Validate image URL
-      if (!product.image_url || product.image_url.endsWith('/')) {
-        console.log(`Skipping product with invalid image: ${product.name}`);
-        syncResults.skipped++;
-        return false;
-      }
-      
-      // Validate price
-      if (!product.price_usd || product.price_usd <= 0) {
-        console.log(`Skipping product with invalid price: ${product.name}`);
-        syncResults.skipped++;
-        return false;
-      }
-      
-      return true;
+    const response = await fetch(CJ_PRODUCT_FEED_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${CJ_PAT}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(graphqlQuery),
     });
 
-    console.log(`After validation: ${validProducts.length} valid products`);
-
-    // Batch upsert products
-    if (validProducts.length > 0) {
-      const productsToUpsert = validProducts.map(product => ({
-        affiliate_program_id: product.affiliate_program_id,
-        external_product_id: product.external_product_id,
-        name: product.name,
-        description: product.description ?? null,
-        category: product.category ?? null,
-        image_url: product.image_url ?? null,
-        affiliate_url: product.affiliate_url,
-        price_usd: Number.isFinite(product.price_usd) ? product.price_usd : null,
-        price_eur: Number.isFinite(product.price_eur) ? product.price_eur : null,
-        price_zar: Number.isFinite(product.price_zar) ? product.price_zar : null,
-        commission_rate: product.commission_rate ?? null,
-        advertiser_id: product.advertiser_id ?? null,
-        advertiser_name: product.advertiser_name ?? null,
-        brand_logo_url: product.brand_logo_url ?? null,
-        is_active: true,
-        last_synced_at: new Date().toISOString(),
-      }));
-
-      try {
-        const { error, count } = await supabase
-          .from('affiliate_products')
-          .upsert(productsToUpsert, {
-            onConflict: 'affiliate_program_id,external_product_id',
-            count: 'exact'
-          });
-
-        if (error) {
-          console.error('Batch upsert error:', error);
-          syncResults.errors++;
-        } else {
-          syncResults.inserted = count || validProducts.length;
-          console.log(`✓ Successfully upserted ${syncResults.inserted} products`);
-        }
-      } catch (error) {
-        console.error('Exception during batch upsert:', error);
-        syncResults.errors++;
-      }
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`CJ API error ${response.status}: ${errorText}`);
     }
 
-    // Update sync stats
-    console.log('Sync completed:', syncResults);
+    const data = await response.json();
+    if (data.errors) throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
+
+    const productsData = data.data?.products;
+    const resultList = productsData?.resultList || [];
+
+    console.log(`Fetched ${resultList.length} products from CJ API`);
+
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    const productsWithBrands = await Promise.all(
+      resultList
+        .filter((product: any) => {
+          if (!isValidImageUrl(product.imageLink)) return false;
+          if (!product.title || product.title.length < 5) return false;
+          if (parseFloat(product.price?.amount || '0') <= 0) return false;
+          return true;
+        })
+        .map(async (product: any) => {
+          const priceAmount = parseFloat(product.price?.amount || '0');
+          const priceCurrency = product.price?.currency || 'USD';
+          const salePriceAmount = parseFloat(product.salePrice?.amount || '0');
+          const salePriceCurrency = product.salePrice?.currency || priceCurrency;
+          const cleanTitle = extractProductTitle(product.title, product.description);
+          const inferredCategory = inferCategory(cleanTitle, product.description || '', category);
+          
+          const brandLogoUrl = product.advertiserName ? await fetchBrandLogo(product.advertiserName) : null;
+          
+          // Currency conversion helper
+          const convertCurrency = (amount: number, currency: string) => {
+            if (currency === 'USD') return { usd: amount, zar: amount * 18.5, eur: amount * 0.92 };
+            if (currency === 'EUR') return { usd: amount * 1.09, zar: amount * 20.1, eur: amount };
+            if (currency === 'ZAR') return { usd: amount * 0.054, zar: amount, eur: amount * 0.05 };
+            if (currency === 'GBP') return { usd: amount * 1.27, zar: amount * 23.3, eur: amount * 1.16 };
+            return { usd: amount, zar: amount * 18.5, eur: amount * 0.92 };
+          };
+
+          const prices = convertCurrency(priceAmount, priceCurrency);
+          const saleConv = salePriceAmount > 0 ? convertCurrency(salePriceAmount, salePriceCurrency) : null;
+
+          // Process product details
+          const productDetails: Record<string, string> = {};
+          if (Array.isArray(product.productDetail)) {
+            product.productDetail.forEach((detail: any) => {
+              if (detail.attributeName && detail.attributeValue) {
+                productDetails[detail.attributeName] = detail.attributeValue;
+              }
+            });
+          }
+
+          // Process additional images
+          const additionalImages: string[] = [];
+          if (product.additionalImageLink) {
+            if (Array.isArray(product.additionalImageLink)) {
+              additionalImages.push(...product.additionalImageLink.filter((img: string) => isValidImageUrl(img)));
+            } else if (typeof product.additionalImageLink === 'string' && isValidImageUrl(product.additionalImageLink)) {
+              additionalImages.push(product.additionalImageLink);
+            }
+          }
+
+          return {
+            external_product_id: product.id,
+            affiliate_program_id: 'cj',
+            name: cleanTitle,
+            description: product.description || '',
+            long_description: product.description || '', // Use description since longDescription doesn't exist
+            category: inferredCategory,
+            image_url: product.imageLink,
+            affiliate_url: product.link || '',
+            price_usd: Math.round(prices.usd * 100) / 100,
+            price_zar: Math.round(prices.zar * 100) / 100,
+            price_eur: Math.round(prices.eur * 100) / 100,
+            sale_price_usd: saleConv ? Math.round(saleConv.usd * 100) / 100 : null,
+            sale_price_zar: saleConv ? Math.round(saleConv.zar * 100) / 100 : null,
+            sale_price_eur: saleConv ? Math.round(saleConv.eur * 100) / 100 : null,
+            commission_rate: 0.08,
+            is_active: true,
+            advertiser_id: product.advertiserId,
+            advertiser_name: product.advertiserName,
+            brand_logo_url: brandLogoUrl,
+            brand: product.brand || null,
+            manufacturer: null, // Field doesn't exist in CJ API
+            condition: product.condition || null,
+            availability: product.availability || null,
+            color: product.color || null,
+            size: product.size || null,
+            material: product.material || null,
+            gtin: product.gtin || null,
+            mpn: product.mpn || null,
+            product_highlights: Array.isArray(product.productHighlight) ? product.productHighlight.filter((h: any) => h) : [],
+            product_details: productDetails,
+            additional_images: additionalImages,
+            google_category: product.googleProductCategory ? { id: product.googleProductCategory.id, name: product.googleProductCategory.name } : {},
+            last_synced_at: new Date().toISOString(),
+          };
+        })
+    );
+
+    console.log(`Processed ${productsWithBrands.length} valid products`);
+
+    if (productsWithBrands.length > 0) {
+      // Upsert products with proper conflict resolution
+      const { error: productsError, count } = await supabaseClient
+        .from('affiliate_products')
+        .upsert(productsWithBrands, { 
+          onConflict: 'external_product_id,affiliate_program_id',
+          ignoreDuplicates: false 
+        })
+        .select('id', { count: 'exact', head: true });
+
+      if (productsError) {
+        console.error('Error upserting products:', productsError);
+      } else {
+        console.log(`Upserted ${count || productsWithBrands.length} products`);
+      }
+
+      // Upsert brands
+      const uniqueBrands = productsWithBrands
+        .filter(p => p.advertiser_id && p.advertiser_name)
+        .reduce((acc: any[], product) => {
+          if (!acc.find(b => b.advertiser_id === product.advertiser_id)) {
+            acc.push({
+              advertiser_id: product.advertiser_id,
+              name: product.advertiser_name,
+              logo_url: product.brand_logo_url
+            });
+          }
+          return acc;
+        }, []);
+
+      if (uniqueBrands.length > 0) {
+        const { error: brandsError } = await supabaseClient
+          .from('affiliate_brands')
+          .upsert(uniqueBrands, { 
+            onConflict: 'advertiser_id',
+            ignoreDuplicates: false 
+          });
+
+        if (brandsError) {
+          console.error('Error upserting brands:', brandsError);
+        } else {
+          console.log(`Upserted ${uniqueBrands.length} brands`);
+        }
+      }
+    }
 
     return new Response(
       JSON.stringify({
         success: true,
-        results: syncResults,
-        completedAt: new Date().toISOString(),
+        totalRecords: productsData?.totalCount || 0,
+        processedCount: productsWithBrands.length,
+        products: productsWithBrands,
+        metadata: {
+          category,
+          keywords: searchKeywords,
+          fetchedAt: new Date().toISOString(),
+        }
       }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
-      }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     );
 
   } catch (error) {
-    console.error('Error syncing CJ products:', error);
+    console.error('Error:', error);
     return new Response(
-      JSON.stringify({
-        success: false,
-        error: error.message,
-      }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
-      }
+      JSON.stringify({ success: false, error: error.message }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
     );
   }
 });
