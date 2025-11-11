@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Search, SlidersHorizontal, Heart, ExternalLink } from 'lucide-react';
-import seedProducts from '@/data/cjSeedProducts.json';
+import { Search, SlidersHorizontal } from 'lucide-react';
+import { TakealotProductCard } from '@/components/product/TakealotProductCard';
+import { FilterSidebar, FilterState } from '@/components/product/FilterSidebar';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import curatedSeed from '@/data/curated_wellness_seed.json';
 
 interface Product {
   id: string;
@@ -25,6 +26,8 @@ interface Product {
   commission_rate: number;
   created_at?: string;
   last_synced_at?: string;
+  brand?: string;
+  advertiser_name?: string;
 }
 
 const StoreCollections = () => {
@@ -33,8 +36,17 @@ const StoreCollections = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('featured');
-  const [currency, setCurrency] = useState<'USD' | 'ZAR' | 'EUR'>('ZAR');
   const { toast } = useToast();
+  
+  const [filters, setFilters] = useState<FilterState>({
+    priceRange: [0, 5000],
+    selectedBrands: [],
+    selectedCategories: [],
+    minCommission: 0,
+    minRating: 0,
+    inStock: false,
+    onSale: false,
+  });
 
   const collectionTitle = handle?.split('-').map(word => 
     word.charAt(0).toUpperCase() + word.slice(1)
@@ -46,27 +58,31 @@ const StoreCollections = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('affiliate_products')
         .select('*')
-        .eq('affiliate_program_id', 'cj')
-        .eq('is_active', true)
-        .ilike('category', handle ? `%${handle.replace('-', ' ')}%` : '%');
+        .eq('is_active', true);
+
+      // Filter by category if handle is provided
+      if (handle) {
+        query = query.ilike('category', `%${handle.replace('-', ' ')}%`);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
 
-      // Use seed products as fallback if database is empty
-      const productsToUse = data && data.length > 0 
-        ? data 
-        : (seedProducts as any[]).filter(p => 
-            !handle || p.category.toLowerCase().includes(handle.replace('-', ' '))
-          );
-
-      setProducts(productsToUse);
+      // Combine database products with curated seed products
+      const dbProducts = data || [];
+      const seedData = (curatedSeed as any[]).filter(p => 
+        !handle || p.category.toLowerCase().includes(handle.replace('-', ' '))
+      );
+      
+      setProducts([...seedData, ...dbProducts]);
     } catch (error) {
       console.error('Error fetching products:', error);
-      // Use seed products on error
-      setProducts((seedProducts as any[]).filter(p => 
+      // Use curated seed products as fallback
+      setProducts((curatedSeed as any[]).filter(p => 
         !handle || p.category.toLowerCase().includes(handle.replace('-', ' '))
       ));
     } finally {
@@ -74,131 +90,173 @@ const StoreCollections = () => {
     }
   };
 
+  // Extract unique brands and categories
+  const uniqueBrands = Array.from(new Set(products.map(p => p.brand).filter(Boolean))) as string[];
+  const uniqueCategories = Array.from(new Set(products.map(p => p.category).filter(Boolean))) as string[];
+
   const filteredProducts = products
-    .filter(p => 
-      !searchTerm || 
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter(p => {
+      // Search filter
+      if (searchTerm && !p.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          !p.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
+
+      // Price range filter
+      const displayPrice = (p as any).sale_price_zar || p.price_zar;
+      if (displayPrice < filters.priceRange[0] || displayPrice > filters.priceRange[1]) {
+        return false;
+      }
+
+      // Brand filter
+      if (filters.selectedBrands.length > 0 && !filters.selectedBrands.includes(p.brand || '')) {
+        return false;
+      }
+
+      // Category filter
+      if (filters.selectedCategories.length > 0 && !filters.selectedCategories.includes(p.category)) {
+        return false;
+      }
+
+      // Commission filter
+      if (filters.minCommission > 0 && (p.commission_rate * 100) < filters.minCommission) {
+        return false;
+      }
+
+      // Rating filter
+      if (filters.minRating > 0 && ((p as any).rating || 0) < filters.minRating) {
+        return false;
+      }
+
+      // Sale filter
+      if (filters.onSale && !(p as any).sale_price_zar) {
+        return false;
+      }
+
+      return true;
+    })
     .sort((a, b) => {
       switch (sortBy) {
         case 'price_low':
-          return a.price_zar - b.price_zar;
+          return ((a as any).sale_price_zar || a.price_zar) - ((b as any).sale_price_zar || b.price_zar);
         case 'price_high':
-          return b.price_zar - a.price_zar;
+          return ((b as any).sale_price_zar || b.price_zar) - ((a as any).sale_price_zar || a.price_zar);
         case 'commission':
           return b.commission_rate - a.commission_rate;
+        case 'rating':
+          return ((b as any).rating || 0) - ((a as any).rating || 0);
+        case 'newest':
+          return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
         default:
+          // Featured first
+          if ((b as any).is_featured && !(a as any).is_featured) return 1;
+          if ((a as any).is_featured && !(b as any).is_featured) return -1;
           return 0;
       }
     });
-
-  const formatPrice = (product: Product) => {
-    const prices = {
-      USD: `$${product.price_usd.toFixed(2)}`,
-      ZAR: `R${product.price_zar.toFixed(2)}`,
-      EUR: `€${product.price_eur.toFixed(2)}`,
-    };
-    return prices[currency];
-  };
 
   return (
     <div className="min-h-screen bg-background">
       <UnifiedNavigation />
       <main className="pt-20 pb-16">
         {/* Collection Header */}
-        <section className="bg-gradient-to-br from-primary/5 via-background to-secondary/5 py-12">
+        <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12 border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{collectionTitle}</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              {collectionTitle}
+            </h1>
             <p className="text-lg text-muted-foreground">
-              {filteredProducts.length} products available
+              {filteredProducts.length} curated wellness products • Free delivery in South Africa 🇿🇦
             </p>
           </div>
         </section>
 
-        {/* Filters */}
+        {/* Main Content */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
+          {/* Search & Sort Bar */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <Input
-                placeholder="Search products..."
+                placeholder="Search wellness products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
+            
+            {/* Mobile Filter Toggle */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="sm:hidden">
+                  <SlidersHorizontal className="mr-2 h-4 w-4" />
+                  Filters
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-80 overflow-y-auto">
+                <FilterSidebar
+                  onFilterChange={setFilters}
+                  brands={uniqueBrands}
+                  categories={uniqueCategories}
+                  currentFilters={filters}
+                />
+              </SheetContent>
+            </Sheet>
+
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full md:w-48">
-                <SlidersHorizontal className="mr-2 h-4 w-4" />
-                <SelectValue />
+              <SelectTrigger className="w-full sm:w-56">
+                <SelectValue placeholder="Sort by..." />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="featured">Featured</SelectItem>
                 <SelectItem value="price_low">Price: Low to High</SelectItem>
                 <SelectItem value="price_high">Price: High to Low</SelectItem>
                 <SelectItem value="commission">Highest Commission</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={currency} onValueChange={(v) => setCurrency(v as any)}>
-              <SelectTrigger className="w-full md:w-32">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ZAR">ZAR (R)</SelectItem>
-                <SelectItem value="USD">USD ($)</SelectItem>
-                <SelectItem value="EUR">EUR (€)</SelectItem>
+                <SelectItem value="rating">Customer Rating</SelectItem>
+                <SelectItem value="newest">Newest First</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {/* Products Grid */}
-          {loading ? (
-            <div className="text-center py-12">Loading...</div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredProducts.map((product) => (
-                <Link key={product.id} to={`/store/product/${product.id}`}>
-                  <Card className="group hover:shadow-xl transition-all duration-300 h-full">
-                    <div className="relative overflow-hidden rounded-t-lg">
-                      <img
-                        src={product.image_url}
-                        alt={product.name}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          toast({ title: 'Added to favorites' });
-                        }}
-                      >
-                        <Heart className="w-5 h-5" />
-                      </Button>
-                    </div>
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                        {product.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                        {product.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-2xl font-bold text-primary">
-                          {formatPrice(product)}
-                        </span>
-                        <Badge variant="secondary">
-                          {(product.commission_rate * 100).toFixed(0)}% comm.
-                        </Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+          {/* Layout: Sidebar + Products */}
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Desktop Filter Sidebar */}
+            <aside className="hidden lg:block w-64 flex-shrink-0">
+              <div className="sticky top-24">
+                <FilterSidebar
+                  onFilterChange={setFilters}
+                  brands={uniqueBrands}
+                  categories={uniqueCategories}
+                  currentFilters={filters}
+                />
+              </div>
+            </aside>
+
+            {/* Products Grid */}
+            <div className="flex-1">
+              {loading ? (
+                <div className="text-center py-20">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+                  <p className="text-muted-foreground">Loading wellness products...</p>
+                </div>
+              ) : filteredProducts.length === 0 ? (
+                <div className="text-center py-20">
+                  <p className="text-xl text-muted-foreground mb-2">No products found</p>
+                  <p className="text-sm text-muted-foreground">Try adjusting your filters or search terms</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredProducts.map((product) => (
+                    <TakealotProductCard 
+                      key={product.id} 
+                      product={product as any}
+                      showQuickView={true}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </section>
       </main>
       <Footer />

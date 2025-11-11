@@ -140,10 +140,9 @@ const CJProductDetail = () => {
             {/* Product Image */}
             <div className="space-y-4">
               <ProductImageGallery
-                imageUrl={product.image_url}
+                images={[product.image_url, ...(product.additional_images || [])]}
                 productName={product.name}
                 category={product.category}
-                additionalImages={product.additional_images || []}
               />
               
               {/* Affiliate Disclosure */}
