@@ -32,6 +32,7 @@ import {
   GitCompare,
   Heart
 } from 'lucide-react';
+import marketplaceHeroImage from '@/assets/cj-marketplace-hero.jpg';
 
 interface CJProduct {
   id: string;
@@ -349,12 +350,22 @@ const CJAffiliateProducts = () => {
       <UnifiedNavigation />
       
       <main className="pt-20 pb-16">
-        {/* Hero Section - Modern Glassmorphism Design */}
-        <section className="relative py-24 overflow-hidden animated-gradient-hero">
+        {/* Hero Section - Modern Glassmorphism Design with Background */}
+        <section className="relative py-24 overflow-hidden">
+          {/* Hero Background Image */}
+          <div className="absolute inset-0">
+            <img 
+              src={marketplaceHeroImage}
+              alt="Wellness Marketplace" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/80 backdrop-blur-sm" />
+          </div>
+          
           {/* Decorative Elements */}
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-omni-violet/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-20 right-10 w-96 h-96 bg-omni-orange/20 rounded-full blur-3xl" />
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-omni-violet/30 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-20 right-10 w-96 h-96 bg-omni-orange/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
           </div>
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -418,48 +429,107 @@ const CJAffiliateProducts = () => {
         {/* Section Divider */}
         <div className="section-divider-thick max-w-4xl mx-auto" />
 
-        {/* About Marketplace Section - Enhanced Design */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <Card className="card-modern glass-card border-border/30 overflow-hidden">
-            <CardContent className="p-0">
-              <div className="grid md:grid-cols-2 gap-0">
-                {/* Text Content */}
-                <div className="p-8 md:p-12 space-y-6">
-                  <h2 className="text-section-title text-foreground">
-                    Welcome to the Omni Wellness Marketplace
-                  </h2>
-                  <p className="text-base text-muted-foreground leading-relaxed">
-                    At Omni Wellness Media, we believe in bridging wellness, outreach, and media to empower South Africa's journey to health and consciousness.
-                  </p>
-                  <p className="text-base text-muted-foreground leading-relaxed">
-                    This marketplace features carefully curated wellness products from trusted partners through CJ Affiliate. Every purchase supports our mission to create conscious media content, business development, and sustainable community initiatives like The Valley of Plenty and the Human Animal Project.
-                  </p>
-                </div>
-
-                {/* Stats Cards */}
-                <div className="p-8 md:p-12 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 flex items-center">
-                  <div className="grid grid-cols-2 gap-4 w-full">
-                    <div className="text-center p-6 bg-background/60 backdrop-blur-sm rounded-xl border border-border/50 hover-lift">
-                      <div className="text-4xl font-bold text-primary mb-2">{products.length}</div>
-                      <div className="text-sm font-medium text-muted-foreground">Products</div>
-                    </div>
-                    <div className="text-center p-6 bg-background/60 backdrop-blur-sm rounded-xl border border-border/50 hover-lift">
-                      <div className="text-4xl font-bold text-secondary mb-2">
-                        {products.length > 0 ? (products.reduce((sum, p) => sum + p.commission_rate, 0) / products.length * 100).toFixed(1) : 0}%
-                      </div>
-                      <div className="text-sm font-medium text-muted-foreground">Avg Commission</div>
-                    </div>
-                    <div className="text-center p-6 bg-background/60 backdrop-blur-sm rounded-xl border border-border/50 col-span-2 hover-lift">
-                      <div className="text-4xl font-bold text-accent mb-2">
-                        R{products.length > 0 ? (products.reduce((sum, p) => sum + (p.price_zar * p.commission_rate), 0) / products.length).toFixed(0) : 0}
-                      </div>
-                      <div className="text-sm font-medium text-muted-foreground">Avg Commission Earned</div>
-                    </div>
-                  </div>
-                </div>
+        {/* About Marketplace Section - Clean & Visual Design */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="grid lg:grid-cols-5 gap-8 items-start">
+            {/* Text Content - Larger, More Prominent */}
+            <div className="lg:col-span-3 space-y-8">
+              <div className="space-y-4">
+                <Badge className="badge-modern bg-primary/10 text-primary border-primary/20">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  About Our Marketplace
+                </Badge>
+                
+                <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+                  Welcome to the
+                  <br />
+                  <span className="text-gradient-primary">Omni Wellness Marketplace</span>
+                </h2>
               </div>
-            </CardContent>
-          </Card>
+              
+              <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
+                <p className="flex items-start gap-3">
+                  <span className="text-primary mt-1 flex-shrink-0">✓</span>
+                  <span>
+                    <strong className="text-foreground">Bridging wellness, outreach & media</strong> to empower South Africa's journey to health and consciousness.
+                  </span>
+                </p>
+                
+                <p className="flex items-start gap-3">
+                  <span className="text-primary mt-1 flex-shrink-0">✓</span>
+                  <span>
+                    <strong className="text-foreground">Carefully curated products</strong> from trusted wellness partners through CJ Affiliate network.
+                  </span>
+                </p>
+                
+                <p className="flex items-start gap-3">
+                  <span className="text-primary mt-1 flex-shrink-0">✓</span>
+                  <span>
+                    <strong className="text-foreground">Every purchase supports</strong> conscious media content, business development, and community initiatives like The Valley of Plenty and Human Animal Project.
+                  </span>
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Button size="lg" className="shadow-lg" asChild>
+                  <a href="#products">
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    Browse Products
+                  </a>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <Link to="/about">
+                    Learn Our Mission
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Stats Cards - Redesigned for Better Visibility */}
+            <div className="lg:col-span-2 space-y-4">
+              <Card className="glass-card border-primary/20 hover-lift overflow-hidden">
+                <CardContent className="p-6 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-4">
+                    <Package className="w-8 h-8 text-primary" />
+                  </div>
+                  <div className="text-5xl font-bold text-foreground mb-2">
+                    {products.length}
+                  </div>
+                  <div className="text-base font-medium text-muted-foreground">
+                    Curated Products
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card border-secondary/20 hover-lift overflow-hidden">
+                <CardContent className="p-6 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary/10 mb-4">
+                    <TrendingUp className="w-8 h-8 text-secondary" />
+                  </div>
+                  <div className="text-5xl font-bold text-foreground mb-2">
+                    {products.length > 0 ? (products.reduce((sum, p) => sum + p.commission_rate, 0) / products.length * 100).toFixed(1) : 0}%
+                  </div>
+                  <div className="text-base font-medium text-muted-foreground">
+                    Average Commission
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card border-accent/20 hover-lift overflow-hidden">
+                <CardContent className="p-6 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent/10 mb-4">
+                    <DollarSign className="w-8 h-8 text-accent" />
+                  </div>
+                  <div className="text-5xl font-bold text-foreground mb-2">
+                    R{products.length > 0 ? (products.reduce((sum, p) => sum + (p.price_zar * p.commission_rate), 0) / products.length).toFixed(0) : 0}
+                  </div>
+                  <div className="text-base font-medium text-muted-foreground">
+                    Avg. Earnings per Sale
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </section>
 
         {/* Trust Badges */}
