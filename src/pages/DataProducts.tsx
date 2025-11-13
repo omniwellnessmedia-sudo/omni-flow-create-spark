@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -327,16 +328,7 @@ const DataProducts = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
-      {/* Header with Navigation */}
-      <header className="relative z-10 flex items-center justify-between p-4 lg:p-6 bg-white/80 backdrop-blur-sm">
-        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
-        </Link>
-        <div className="text-sm text-gray-500">
-          By the creators of <span className="font-semibold text-blue-600">Omni Wellness Media</span>
-        </div>
-      </header>
+      <UnifiedNavigation />
 
       {/* Hero Section - Saily-inspired with Omni branding */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-teal-500 to-cyan-400 min-h-[85vh] flex items-center">

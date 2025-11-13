@@ -98,7 +98,9 @@ const StoreCollections = () => {
 
       // Filter by category if handle is provided
       if (handle) {
-        query = query.ilike('category', `%${handle.replace('-', ' ')}%`);
+        // Normalize handle to handle underscores, hyphens, and convert to spaces
+        const normalizedHandle = handle.replace(/[-_]/g, ' ').toLowerCase();
+        query = query.ilike('category', `%${normalizedHandle}%`);
       }
 
       const { data, error } = await query;
@@ -107,16 +109,18 @@ const StoreCollections = () => {
 
       // Combine database products with curated seed products
       const dbProducts = data || [];
+      const normalizedHandle = handle ? handle.replace(/[-_]/g, ' ').toLowerCase() : '';
       const seedData = (curatedSeed as any[]).filter(p => 
-        !handle || p.category.toLowerCase().includes(handle.replace('-', ' '))
+        !handle || p.category.toLowerCase().includes(normalizedHandle)
       );
       
       setProducts([...seedData, ...dbProducts]);
     } catch (error) {
       console.error('Error fetching products:', error);
       // Use curated seed products as fallback
+      const normalizedHandle = handle ? handle.replace(/[-_]/g, ' ').toLowerCase() : '';
       setProducts((curatedSeed as any[]).filter(p => 
-        !handle || p.category.toLowerCase().includes(handle.replace('-', ' '))
+        !handle || p.category.toLowerCase().includes(normalizedHandle)
       ));
     } finally {
       setLoading(false);

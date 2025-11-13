@@ -495,13 +495,7 @@ const TravelWellConnectedStore = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-green-50/30 to-blue-50/30">
-      {/* Back Navigation */}
-      <div className="px-4 pt-6">
-        <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
-        </Link>
-      </div>
+      <UnifiedNavigation />
       
       {/* Hero Section */}
       <section className="relative py-16 px-4 overflow-hidden">
