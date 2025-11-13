@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Section } from "@/components/ui/section";
@@ -260,7 +259,7 @@ const WellnessMarketplace = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <WellnessExchangeNavigation />
+        <UnifiedNavigation />
         <div className="pt-8">
           <div className="max-w-7xl mx-auto px-4">
             <div className="animate-pulse space-y-4">
@@ -276,7 +275,7 @@ const WellnessMarketplace = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <WellnessExchangeNavigation />
+      <UnifiedNavigation />
       
       <Section size="large" background="white" id="hero">
         <div className="py-8">

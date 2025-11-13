@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
-import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { Coins, DollarSign, ArrowUpRight, ArrowDownRight, Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -110,7 +109,6 @@ const TransactionPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <UnifiedNavigation />
-      <WellnessExchangeNavigation />
       
       <main className="pt-8 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

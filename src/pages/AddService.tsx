@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
+import Footer from "@/components/Footer";
 import { ArrowLeft, Plus, Coins, Clock, MapPin, Sparkles, Loader2, PiggyBank, Search } from "lucide-react";
 import { toast } from "sonner";
 import { wellnessSpecialties, wellnessCategories, getCategoryForSpecialty } from "@/data/wellnessGlossary";
@@ -136,7 +137,7 @@ const AddService = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <WellnessExchangeNavigation />
+      <UnifiedNavigation />
       
       <main className="pt-20 pb-20 lg:pt-8">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -420,6 +421,8 @@ const AddService = () => {
           </form>
         </div>
       </main>
+      
+      <Footer />
     </div>
   );
 };

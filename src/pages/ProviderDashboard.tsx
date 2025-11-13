@@ -5,7 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
-import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -273,7 +272,7 @@ const ProviderDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <WellnessExchangeNavigation />
+      <UnifiedNavigation />
       <main className="pt-0">
         {/* Header */}
         <section className="py-8 bg-card border-b">
