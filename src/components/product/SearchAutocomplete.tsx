@@ -103,8 +103,8 @@ export const SearchAutocomplete = ({ onResultClick }: SearchAutocompleteProps) =
       </div>
 
       {showResults && (
-        <div className="absolute top-full mt-2 w-full bg-background border rounded-lg shadow-lg z-50 max-h-96 overflow-hidden">
-          <Command>
+        <div className="absolute top-full mt-2 w-full bg-background border border-border rounded-lg shadow-lg z-[100] max-h-96 overflow-hidden">
+          <Command className="bg-background">
             <CommandList>
               {loading ? (
                 <div className="p-4 text-center text-sm text-muted-foreground">
