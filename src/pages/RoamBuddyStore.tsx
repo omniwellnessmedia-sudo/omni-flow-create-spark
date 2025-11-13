@@ -30,6 +30,8 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PriceDisplay } from "@/components/ui/price-display";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
+import Footer from "@/components/Footer";
 
 interface RoamBuddyProduct {
   id: string;
@@ -384,16 +386,10 @@ const RoamBuddyStore = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5">
-      {/* Back Navigation */}
-      <div className="px-4 pt-6">
-        <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
-        </Link>
-      </div>
+      <UnifiedNavigation />
       
       {/* Header */}
-      <section className="relative py-12 px-4">
+      <section className="relative py-12 px-4 pt-24">
         <div className="container mx-auto">
           <div className={`inline-flex items-center px-4 py-2 rounded-full mb-6 ${
             apiStatus === 'connected' ? 'bg-green-100 text-green-700' : 
@@ -516,6 +512,8 @@ const RoamBuddyStore = () => {
           )}
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 };

@@ -239,6 +239,17 @@ const ToursRetreats = () => {
   useEffect(() => {
     const initializeData = async () => {
       setLoading(true);
+      
+      // Add timeout to prevent infinite loading
+      const timeout = setTimeout(() => {
+        if (loading) {
+          console.warn('Loading timeout - using sample data');
+          setItems(sampleToursRetreats);
+          setLoading(false);
+          toast.info('Loaded sample wellness experiences');
+        }
+      }, 8000);
+      
       try {
         // Try to fetch from Supabase first, fallback to sample data
         const { data: dbTours } = await supabase
@@ -290,11 +301,13 @@ const ToursRetreats = () => {
           setItems(sampleToursRetreats);
         }
         
+        clearTimeout(timeout);
         toast.success(`Loaded wellness experiences`);
       } catch (error) {
         console.error('Error loading tours data:', error);
         setItems(sampleToursRetreats);
         toast.info('Loaded sample wellness experiences');
+        clearTimeout(timeout);
       } finally {
         setLoading(false);
       }

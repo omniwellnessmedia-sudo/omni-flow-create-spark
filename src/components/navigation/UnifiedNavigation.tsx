@@ -39,6 +39,7 @@ import { useAuth } from '@/components/AuthProvider';
 import { handleKeyboardNavigation, announceToScreenReader } from '@/lib/accessibility';
 import { CartIcon } from '@/components/cart/CartIcon';
 import { getOmniLogo } from '@/lib/images';
+import { SearchAutocomplete } from '@/components/product/SearchAutocomplete';
 
 interface NavItem {
   title: string;
@@ -178,6 +179,11 @@ const UnifiedNavigation = () => {
             </Link>
           </div>
 
+          {/* Search Bar - Desktop */}
+          <div className="hidden md:flex flex-1 max-w-md mx-4">
+            <SearchAutocomplete />
+          </div>
+
           {/* Desktop Navigation */}
           <nav 
             className="hidden lg:flex lg:items-center lg:space-x-1"
@@ -203,11 +209,11 @@ const UnifiedNavigation = () => {
                         )}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-64 p-2">
+                    <DropdownMenuContent className="w-64 p-2 bg-background border-border z-[100]">
                       <div className="grid gap-1">
                         {item.children.map((child) => (
                           <Link key={child.href} to={child.href}>
-                            <div className="flex items-start space-x-3 p-3 rounded-md hover:bg-accent/80 transition-colors">
+                            <div className="flex items-start space-x-3 p-3 rounded-md hover:bg-accent/80 transition-all duration-200">
                               <span className="text-lg">{child.icon}</span>
                               <div className="space-y-1">
                                 <div className="text-sm font-medium">{child.title}</div>
@@ -238,18 +244,6 @@ const UnifiedNavigation = () => {
 
           {/* User Actions */}
           <div className="flex items-center space-x-2">
-            {/* Search - Hidden on mobile */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="hidden md:flex"
-              aria-label="Search the website"
-              title="Search"
-            >
-              <Search className="w-4 h-4" />
-              <span className="sr-only">Search</span>
-            </Button>
-
             {user ? (
               <>
                 <CartIcon />
@@ -264,7 +258,7 @@ const UnifiedNavigation = () => {
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuContent className="w-56 bg-background border-border z-[100]" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
