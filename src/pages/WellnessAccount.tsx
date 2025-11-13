@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
-import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import Footer from "@/components/Footer";
 import { User, Settings, Heart, Star, Calendar, Coins, Gift } from "lucide-react";
 import { toast } from "sonner";
@@ -87,7 +86,7 @@ const WellnessAccount = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <WellnessExchangeNavigation />
+      <UnifiedNavigation />
       
       <main className="pt-8 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

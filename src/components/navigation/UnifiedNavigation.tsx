@@ -87,6 +87,20 @@ const UnifiedNavigation = () => {
       ]
     },
     {
+      title: 'Wellness Exchange',
+      icon: Users,
+      children: [
+        { title: 'Marketplace', href: '/wellness-exchange/marketplace', description: 'Browse services', icon: '🛒' },
+        { title: 'Wants', href: '/wellness-exchange/wants', description: 'Community requests', icon: '❤️' },
+        { title: 'Community', href: '/wellness-exchange/community', description: 'Connect & share', icon: '👥' },
+        { title: 'Search', href: '/wellness-exchange/search', description: 'Find services', icon: '🔍' },
+        { title: 'Add Service', href: '/wellness-exchange/add-service', description: 'List your service', icon: '➕' },
+        { title: 'Add Want', href: '/wellness-exchange/add-want', description: 'Request something', icon: '💬' },
+        { title: 'Dashboard', href: '/wellness-exchange/provider-dashboard', description: 'Provider dashboard', icon: '📊' },
+        { title: 'Account', href: '/wellness-exchange/account', description: 'My account', icon: '👤' },
+      ]
+    },
+    {
       title: 'Travel',
       icon: Plane,
       children: [
@@ -115,7 +129,6 @@ const UnifiedNavigation = () => {
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic business development', icon: '💼' },
         { title: 'Media Production', href: '/media-production', description: 'Content creation services', icon: '🎬' },
         { title: 'Web Development', href: '/web-development', description: 'Digital solutions', icon: '💻' },
-        { title: 'Marketplace', href: '/wellness-exchange/marketplace', description: 'Find wellness providers', icon: '🛒' },
         { title: 'Provider Directory', href: '/provider-directory', description: 'Discover wellness providers', icon: '👥' },
       ]
     },

@@ -3,7 +3,6 @@ import { supabase } from "@/integrations/supabase/client";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Section } from "@/components/ui/section";
-import WellnessExchangeNavigation from "@/components/WellnessExchangeNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -179,7 +178,6 @@ const WellnessWants = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <UnifiedNavigation />
-      <WellnessExchangeNavigation />
       
       <Section size="large" background="white" id="hero">
         <div className="py-8 border-b">
