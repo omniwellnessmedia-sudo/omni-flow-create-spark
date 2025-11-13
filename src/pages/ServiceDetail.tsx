@@ -63,7 +63,7 @@ interface Service {
 }
 
 const ServiceDetail = () => {
-  const { id } = useParams();
+  const { id, serviceId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [service, setService] = useState<Service | null>(null);
@@ -73,14 +73,17 @@ const ServiceDetail = () => {
   const [imageError, setImageError] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
+  // Use either id or serviceId param
+  const currentServiceId = id || serviceId;
+
   useEffect(() => {
-    if (id) {
+    if (currentServiceId) {
       fetchService();
     }
-  }, [id]);
+  }, [currentServiceId]);
 
   const fetchService = async () => {
-    if (!id) {
+    if (!currentServiceId) {
       setLoading(false);
       return;
     }
@@ -89,7 +92,7 @@ const ServiceDetail = () => {
       setLoading(true);
       
       // First check if it's one of Sandy's services
-      const sandyService = sandyMitchellData.services.find(service => service.id === id);
+      const sandyService = sandyMitchellData.services.find(service => service.id === currentServiceId);
       
       if (sandyService) {
         // Transform Sandy's service to match the expected format
@@ -136,7 +139,7 @@ const ServiceDetail = () => {
             verified
           )
         `)
-        .eq('id', id)
+        .eq('id', currentServiceId)
         .eq('active', true)
         .single();
 

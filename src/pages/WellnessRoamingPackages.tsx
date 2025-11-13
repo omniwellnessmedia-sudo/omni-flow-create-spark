@@ -9,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { IMAGES } from '@/lib/images';
+import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 
 interface RoamBuddyService {
   id: string;
@@ -371,6 +372,7 @@ const WellnessRoamingPackages = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <UnifiedNavigation />
       {/* Hero Section */}
       <section className="py-16 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
         <div className="container mx-auto px-4 text-center">
