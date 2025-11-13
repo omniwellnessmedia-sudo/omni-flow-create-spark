@@ -100,6 +100,8 @@ const UnifiedNavigation = () => {
       title: 'Store',
       icon: Store,
       children: [
+        { title: 'Browse Store', href: '/store', description: 'Browse all wellness products', icon: '🛒' },
+        { title: 'Roaming Packages', href: '/wellness-roaming-packages', description: 'Travel connectivity & services', icon: '✈️' },
         { title: 'Travel Connected', href: '/travel-well-connected-store', description: 'Travel connectivity solutions', icon: '🌐' },
         { title: 'Wellness Products', href: '/two-be-well-shop', description: 'Curated wellness products', icon: '🛍️' },
         { title: 'Data & Services', href: '/data-products', description: 'Digital wellness tools', icon: '📊' },

@@ -14,8 +14,7 @@ const UnifiedMarketplace = React.lazy(() => import('@/pages/UnifiedMarketplace')
 const WellnessAccount = React.lazy(() => import('@/pages/WellnessAccount'));
 const WellnessWants = React.lazy(() => import('@/pages/WellnessWants'));
 const WellnessCommunity = React.lazy(() => import('@/pages/WellnessCommunity'));
-const SimpleServiceDetail = React.lazy(() => import('@/pages/SimpleServiceDetail'));
-const ServiceDetailFixed = React.lazy(() => import('@/pages/ServiceDetailFixed'));
+// Consolidated to use ServiceDetail.tsx for all service detail routes
 const IndividualProviderProfile = React.lazy(() => import('@/pages/IndividualProviderProfile'));
 const SandyMitchellProfile = React.lazy(() => import('@/pages/SandyMitchellProfile'));
 const AddService = React.lazy(() => import('@/pages/AddService'));
@@ -129,9 +128,9 @@ function App() {
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
                   <Route path="/services" element={<Services />} />
-                  <Route path="/service/:id" element={<SimpleServiceDetail />} />
+                  <Route path="/service/:id" element={<ServiceDetail />} />
                   <Route path="/service-detail/:id" element={<ServiceDetail />} />
-                  <Route path="/service-detail/:serviceId" element={<ServiceDetailFixed />} />
+                  <Route path="/service-detail/:serviceId" element={<ServiceDetail />} />
                   <Route path="/search-services" element={<SearchServices />} />
                   <Route path="/add-want" element={<AddWant />} />
 
