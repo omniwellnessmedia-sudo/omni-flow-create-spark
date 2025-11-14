@@ -9,7 +9,7 @@ import { twoBeWellBundles } from "@/data/twoBeWellBundles";
 import { twoBeWellTeam } from "@/data/2bewellTeam";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
-import heroImage from "@/assets/hero-products-collection.jpg";
+import heroImage from "@/assets/omni-wellness-hero.jpg";
 
 const TwoBeWellShop = () => {
   return (
