@@ -27,21 +27,44 @@ const TwoBeWellShop = () => {
           </Button>
         </div>
 
-        <section className="py-12 bg-gradient-to-br from-green-50 via-white to-blue-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <Badge className="mb-4 bg-green-100 text-green-800 hover:bg-green-200">
-                <Leaf className="w-3 h-3 mr-1" />100% Natural • Vegan • Handmade in South Africa
-              </Badge>
-              <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
-                2BeWell Natural Shop
-              </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
-                Premium plant-based skincare, nutrition, and home essentials. Handcrafted with love by Zenith & Feroza.
-              </p>
-              <div className="flex items-center justify-center gap-4 flex-wrap">
-                <Badge variant="secondary" className="px-4 py-2"><Award className="w-4 h-4 mr-2" />BWC Endorsed</Badge>
-                <Badge variant="secondary" className="px-4 py-2">🪙 Earn WellCoins on Every Purchase</Badge>
+        <section className="relative py-16 bg-gradient-to-br from-green-50 via-white to-blue-50 overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-10 left-10 w-64 h-64 bg-green-400 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-10 right-10 w-64 h-64 bg-purple-400 rounded-full blur-3xl"></div>
+          </div>
+          
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
+              <div className="text-center lg:text-left">
+                <Badge className="mb-4 bg-green-100 text-green-800 hover:bg-green-200">
+                  <Leaf className="w-3 h-3 mr-1" />100% Natural • Vegan • Handmade in South Africa
+                </Badge>
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-black via-purple-600 to-orange-500 bg-clip-text text-transparent">
+                  Meet the 2BeWell Family
+                </h1>
+                <p className="text-xl text-gray-600 mb-6 leading-relaxed">
+                  Premium plant-based skincare, nutrition, and home essentials. Handcrafted with love by <strong>Zenith & Feroza</strong>.
+                </p>
+                <div className="flex items-center justify-center lg:justify-start gap-4 flex-wrap mb-6">
+                  <Badge variant="secondary" className="px-4 py-2 text-sm"><Award className="w-4 h-4 mr-2" />Beauty Without Cruelty Endorsed</Badge>
+                  <Badge variant="secondary" className="px-4 py-2 text-sm">🪙 Earn WellCoins on Every Purchase</Badge>
+                </div>
+                <div className="flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-600">
+                  <span>📧 info.2bewell@gmail.com</span>
+                  <span>•</span>
+                  <span>📱 @2bewell_natural</span>
+                </div>
+              </div>
+              
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/2bewell-hero-products.png" 
+                  alt="2BeWell Natural Products Collection" 
+                  className="rounded-2xl shadow-2xl w-full h-auto transform hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg p-4 hidden md:block">
+                  <p className="text-sm font-semibold text-green-600">🌱 Small Batch, Big Love</p>
+                </div>
               </div>
             </div>
           </div>
@@ -66,23 +89,33 @@ const TwoBeWellShop = () => {
               {filteredProducts.map((product, index) => (
                 <Card key={product.id} className="hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in-up border-0 shadow-lg group overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
                   <div className="relative">
-                    <img src={product.image} alt={product.name} className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={product.image} alt={product.name} className="w-full h-64 object-contain bg-white p-4 group-hover:scale-105 transition-transform duration-300" />
                     <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
                       <span className="text-sm font-semibold text-green-600">🪙 {product.wellCoins} WellCoins</span>
                     </div>
                     <Button variant="ghost" size="icon" className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white">
                       <Heart className="w-5 h-5 text-gray-600" />
                     </Button>
+                    {product.bwcEndorsed && (
+                      <div className="absolute bottom-3 left-3 bg-green-600 text-white rounded-full px-3 py-1 flex items-center gap-1">
+                        <Award className="w-3 h-3" />
+                        <span className="text-xs font-semibold">BWC</span>
+                      </div>
+                    )}
                   </div>
                   <CardHeader className="pb-2">
                     <div className="flex items-center gap-2 mb-2 flex-wrap">
                       {product.certifications.slice(0, 2).map((cert) => (
                         <Badge key={cert} variant="secondary" className="text-xs">
-                          {cert.includes("Vegan") && "🌱"}{cert.includes("Cruelty") && "🐰"}{cert.includes("Organic") && "🌿"}{cert.split(" ")[0]}
+                          {cert.includes("Vegan") && "🌱"}
+                          {cert.includes("Cruelty") && "🐰"}
+                          {cert.includes("Organic") && "🌿"}
+                          {cert.includes("BWC") ? "BWC" : cert.split(" ")[0]}
                         </Badge>
                       ))}
+                      <Badge variant="outline" className="text-xs border-green-200 text-green-700">🇿🇦 ZA</Badge>
                     </div>
-                    <CardTitle className="font-heading text-lg">{product.name}</CardTitle>
+                    <CardTitle className="font-heading text-lg line-clamp-2">{product.name}</CardTitle>
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-2xl font-bold text-green-600">R{product.price}</span>
                       <Badge className="bg-purple-100 text-purple-800 capitalize">{product.category}</Badge>
@@ -90,7 +123,10 @@ const TwoBeWellShop = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-600 text-sm mb-3 line-clamp-3">{product.shortDescription}</p>
-                    <div className="mb-4"><p className="text-xs text-gray-500"><strong>Size:</strong> {product.size}</p></div>
+                    <div className="flex items-center justify-between mb-4 text-xs text-gray-500">
+                      <span><strong>Size:</strong> {product.size}</span>
+                      {product.shelfLife && <span className="text-xs text-orange-600">{product.shelfLife}</span>}
+                    </div>
                     <AddToCartButton item={{ id: product.id, image: product.image, title: product.name, price_zar: product.price, price_wellcoins: product.wellCoins, item_type: "product" as const }} className="w-full bg-green-600 hover:bg-green-700 text-white rounded-full" />
                   </CardContent>
                 </Card>

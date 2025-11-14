@@ -13,6 +13,7 @@ export interface TwoBeWellProduct {
   usage: string;
   size: string;
   certifications: string[];
+  shelfLife?: string;
   nutritionalInfo?: {
     servingSize: string;
     perServing?: Array<{ nutrient: string; amount: string; rda?: string }>;
@@ -20,40 +21,48 @@ export interface TwoBeWellProduct {
   };
   cautions?: string[];
   featured?: boolean;
+  bwcEndorsed?: boolean;
 }
 
 export const twoBeWellProducts: TwoBeWellProduct[] = [
   {
     id: "2bekissed-lip-balm",
-    name: "2BeKissed - Natural Lip Balm",
+    name: "2BeKissed - Natural Lip Balm (Sweet Orange)",
     price: 85,
     wellCoins: 42,
     category: "skincare",
-    image: "/lovable-uploads/2bewell-lip-balm-label.tif",
-    shortDescription: "Mint-infused natural lip balm with Shea Butter, Coconut Oil, and Vitamin E for lasting moisture and protection.",
-    fullDescription: "Experience the refreshing touch of our mint-infused natural lip balm. Handcrafted with premium ingredients, 2BeKissed provides deep hydration and protection for your lips. The combination of Shea Butter and Coconut Oil creates a smooth, non-greasy formula that locks in moisture, while Vitamin E nourishes and protects against environmental damage.",
+    image: "/lovable-uploads/2bewell-lip-balm-label.png",
+    shortDescription: "Sweet Orange infused natural lip balm with Shea Butter, Coconut Oil, and Vitamin E for lasting moisture and protection.",
+    fullDescription: "Experience the uplifting touch of our Sweet Orange infused natural lip balm. Handcrafted with premium ingredients, 2BeKissed provides deep hydration and protection for your lips. The combination of Shea Butter and Coconut Oil creates a smooth, non-greasy formula that locks in moisture, while Vitamin E nourishes and protects against environmental damage.",
     benefits: [
       "Deep hydration with Shea Butter and Coconut Oil",
-      "Refreshing mint sensation",
+      "Uplifting Sweet Orange scent",
       "Vitamin E protection against environmental damage",
       "Long-lasting moisture barrier",
       "100% natural and vegan ingredients"
     ],
-    ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Peppermint Essential Oil, Vitamin E",
-    usage: "Apply generously to lips as needed throughout the day. Perfect for daily use, especially in dry or cold weather.",
-    size: "15ml",
+    ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Essential Oil (Sweet Orange), Vitamin E Oil",
+    usage: "Apply to lips as needed for hydration and protection. Suitable for daily use.",
+    size: "20ml",
     certifications: ["100% Vegan", "Cruelty-Free", "Natural Ingredients", "Handmade in South Africa"],
-    featured: true
+    cautions: [
+      "Patch test before use",
+      "Avoid contact with eyes",
+      "Contains coconut - avoid if allergic",
+      "External use only"
+    ],
+    featured: true,
+    bwcEndorsed: true
   },
   {
     id: "2beglow-face-serum",
-    name: "2BeGlow - Radiance Face Serum",
+    name: "2BeGlow - Glow & Calm Face Serum",
     price: 165,
     wellCoins: 82,
     category: "skincare",
-    image: "/lovable-uploads/2bewell-face-serum-label.tif",
-    shortDescription: "Glow & Calm face serum with Macadamia Nut Oil and Essential Oil Blend for radiant, healthy-looking skin.",
-    fullDescription: "Unlock your skin's natural radiance with 2BeGlow face serum. This lightweight, fast-absorbing formula combines the nourishing power of Macadamia Nut Oil with a carefully selected blend of essential oils. Perfect for all skin types, this serum helps calm irritation, reduce inflammation, and promote a healthy, glowing complexion.",
+    image: "/lovable-uploads/2bewell-face-serum-label.png",
+    shortDescription: "Unlock your skin's natural radiance through our Glow & Calm face serum with Macadamia Oil, Rosehip, and essential oils.",
+    fullDescription: "Your skin's new favorite flex. Unlock your skin's natural radiance through our Glow & Calm face serum. With a glow so good you'll catch yourself doing a double-take in the mirror. This lightweight, fast-absorbing formula combines Macadamia Oil, Rosehip, Avocado Oil, Lavender, and Frankincense for radiant, calm skin.",
     benefits: [
       "Promotes radiant, glowing skin",
       "Calms and soothes irritated skin",
@@ -61,11 +70,19 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
       "Fast-absorbing, non-greasy formula",
       "Suitable for all skin types"
     ],
-    ingredients: "Macadamia Nut Oil, Jojoba Oil, Rosehip Oil, Lavender Essential Oil, Frankincense Essential Oil, Vitamin E",
-    usage: "Apply 2-3 drops to clean, damp skin morning and evening. Gently massage into face and neck in upward circular motions. Follow with your favorite moisturizer.",
+    ingredients: "Macadamia Oil, Rosa Canina Seed Oil (Rosehip), Avocado Oil, Boswellia Carterii (Frankincense Essential Oil), Angustifolia (Lavender Essential Oil)",
+    usage: "Apply 3-5 drops to clean slightly damp face and neck. Massage gently using upward motions. Use alone or under moisturizer. Store in a cool dark place. Avoid direct sunlight.",
     size: "30ml",
-    certifications: ["100% Vegan", "Cruelty-Free", "Natural Ingredients", "Handmade in South Africa"],
-    featured: true
+    shelfLife: "Use within 6-9 months",
+    certifications: ["100% Vegan", "Beauty Without Cruelty Endorsed", "Cruelty-Free", "Natural Ingredients", "Handmade in South Africa"],
+    cautions: [
+      "Patch test before use",
+      "Contains nut oils - avoid if allergic",
+      "Stop use if irritation occurs",
+      "Avoid contact with eyes"
+    ],
+    featured: true,
+    bwcEndorsed: true
   },
   {
     id: "2besmooth-body-butter",
@@ -73,29 +90,38 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 125,
     wellCoins: 62,
     category: "skincare",
-    image: "/lovable-uploads/2bewell-body-butter-label.tif",
-    shortDescription: "Luxuriously whipped body butter with Shea Butter, Cocoa Butter, and nourishing oils for silky-smooth skin.",
-    fullDescription: "Indulge your skin with 2BeSmooth whipped body butter. This rich, creamy formula melts into your skin, providing intense hydration and nourishment. The combination of Shea and Cocoa Butter with Sweet Almond and Coconut Oils creates a protective barrier that locks in moisture all day long, leaving your skin feeling soft, supple, and smooth.",
+    image: "/lovable-uploads/2bewell-body-butter-label.png",
+    shortDescription: "Your favourite pamper partner. Leaves your skin so soft you'll be showing it off everywhere, from brunch to your mirror selfies.",
+    fullDescription: "Introducing your favourite pamper partner, our Whipped Body Butter. This rich, creamy formula melts into your skin, providing intense hydration and nourishment. The luxurious combination of Shea and Cocoa Butter with Sweet Almond and Coconut Oils creates a protective barrier that locks in moisture all day long.",
     benefits: [
       "Intense deep hydration for dry skin",
       "Luxurious whipped texture that melts on contact",
-      "Long-lasting moisture retention",
-      "Improves skin elasticity and texture",
+      "Long-lasting moisture with Shea and Cocoa Butter",
+      "Sweet Orange & Lavender aromatherapy",
       "Soothes and nourishes all skin types"
     ],
-    ingredients: "Shea Butter, Cocoa Butter, Coconut Oil, Sweet Almond Oil, Arrowroot Powder, Vitamin E, Natural Fragrance",
-    usage: "Apply generously to clean skin after bathing or showering. Massage in circular motions until fully absorbed. Use daily for best results, especially on dry areas like elbows, knees, and heels.",
-    size: "200ml",
+    ingredients: "Shea Butter, Cocoa Butter, Coconut Oil, Prunus Sweet Almond Oil, Arrowroot Powder, Vitamin E Oil, Essential oils (Sweet Orange & Lavender)",
+    usage: "Apply generously to dry skin and massage until fully absorbed. Store in a cool, dry place. Product may melt in heat. If so, refrigerate briefly and re-whip if needed.",
+    size: "90ml",
+    shelfLife: "Use within 6-9 months",
     certifications: ["100% Vegan", "Cruelty-Free", "Natural Ingredients", "Handmade in South Africa"],
-    featured: true
+    cautions: [
+      "Patch test before use",
+      "Contains nut oils (almond) and coconut",
+      "Avoid if allergic",
+      "External use only",
+      "Avoid contact with eyes"
+    ],
+    featured: true,
+    bwcEndorsed: true
   },
   {
     id: "2befresh-cleaner",
-    name: "2BeFresh - All-Purpose Cleaner",
+    name: "2BeFresh - Natural All-Purpose Cleaner",
     price: 95,
     wellCoins: 47,
     category: "homecare",
-    image: "/lovable-uploads/2bewell-cleaner-label.tif",
+    image: "/lovable-uploads/2bewell-cleaner-label.png",
     shortDescription: "Natural all-purpose cleaning spray with plant-based ingredients for a chemical-free, eco-friendly home.",
     fullDescription: "Transform your cleaning routine with 2BeFresh all-purpose cleaner. This powerful, plant-based formula effectively removes dirt, grease, and grime from all household surfaces without harsh chemicals. Safe for your family, pets, and the environment, 2BeFresh leaves your home sparkling clean with a fresh, natural scent.",
     benefits: [
@@ -117,7 +143,7 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 145,
     wellCoins: 72,
     category: "nutrition",
-    image: "/lovable-uploads/2bewell-chia-seeds-label.tif",
+    image: "/lovable-uploads/2bewell-chia-seeds.png",
     shortDescription: "Nutrient-dense organic chia seeds packed with omega-3s, fiber, and plant-based protein for sustained energy and optimal health.",
     fullDescription: "Tiny but mighty, our organic chia seeds are a nutritional powerhouse. Rich in omega-3 fatty acids, dietary fiber, and plant-based protein, these versatile seeds support digestion, heart health, and sustained energy throughout the day. Perfect for smoothies, yogurt, baking, or making chia pudding.",
     benefits: [
@@ -135,18 +161,22 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     nutritionalInfo: {
       servingSize: "2 tablespoons (28g)",
       per100g: [
-        { nutrient: "Magnesium", amount: "335mg", rda: "84%" },
+        { nutrient: "Energy", amount: "1839kJ (439 Cal)" },
+        { nutrient: "Protein", amount: "16.5g" },
+        { nutrient: "Total Fat", amount: "30.7g (Saturated: 3.3g)" },
+        { nutrient: "Carbohydrates", amount: "42.1g (Sugar: 0.8g)" },
+        { nutrient: "Fibre", amount: "33.7g" },
+        { nutrient: "Calcium", amount: "631mg", rda: "63%" },
+        { nutrient: "Magnesium", amount: "335mg", rda: "96%" },
         { nutrient: "Iron", amount: "7.7mg", rda: "43%" },
-        { nutrient: "Calcium", amount: "631mg", rda: "48%" },
-        { nutrient: "Fiber", amount: "34g", rda: "136%" },
-        { nutrient: "Protein", amount: "17g", rda: "34%" },
-        { nutrient: "Omega-3 ALA", amount: "18g", rda: "N/A" }
+        { nutrient: "Omega-3", amount: "17.6g" }
       ]
     },
     cautions: [
-      "Consume with sufficient water to avoid digestive discomfort",
-      "Do not exceed 2 tablespoons per day without consulting a healthcare provider",
-      "May interact with blood thinners - consult your doctor if on medication"
+      "Start with small amounts",
+      "Ensure adequate water intake",
+      "May cause digestive discomfort if consumed in excess",
+      "Consult healthcare provider if on blood thinners"
     ],
     featured: true
   },
@@ -156,7 +186,7 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 285,
     wellCoins: 142,
     category: "nutrition",
-    image: "/lovable-uploads/2bewell-pea-protein-label.tif",
+    image: "/lovable-uploads/2bewell-pea-protein.png",
     shortDescription: "High-protein, allergen-free supplement with 80g protein per 100g, perfect for muscle recovery, sustained energy, and plant-based nutrition.",
     fullDescription: "Fuel your body with 2BeStrong pea protein powder. This premium, allergen-free protein supplement provides 80% pure protein to support muscle repair, boost satiety, and maintain sustained energy levels. Easily digestible and rich in iron, it's the perfect addition to smoothies, shakes, or baked goods for athletes, fitness enthusiasts, or anyone seeking quality plant-based protein.",
     benefits: [
@@ -172,25 +202,33 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     size: "500g",
     certifications: ["100% Organic", "Vegan", "Gluten-Free", "Non-GMO", "Allergen-Free"],
     nutritionalInfo: {
-      servingSize: "1 scoop (25g)",
+      servingSize: "15-25g (1-2 scoops)",
       per100g: [
-        { nutrient: "Protein", amount: "80g", rda: "160%" },
-        { nutrient: "Iron", amount: "33.4mg", rda: "186%" },
-        { nutrient: "Carbohydrates", amount: "5g", rda: "2%" },
-        { nutrient: "Fat", amount: "8g", rda: "12%" },
-        { nutrient: "Fiber", amount: "3g", rda: "12%" }
+        { nutrient: "Energy", amount: "1640kJ (392 Cal)" },
+        { nutrient: "Protein", amount: "80g" },
+        { nutrient: "Total Fat", amount: "7.0g" },
+        { nutrient: "Carbohydrates", amount: "2.5g" },
+        { nutrient: "Fibre", amount: "1.5g" },
+        { nutrient: "Iron", amount: "33.4mg", rda: "186%" }
       ]
     },
-    cautions: [
-      "Individuals with kidney concerns should consult a healthcare provider before use",
-      "Ensure adequate hydration when consuming protein supplements",
-      "Do not exceed recommended daily protein intake for your body weight"
-    ],
     featured: true
   }
 ];
 
-export const getFeaturedProducts = () => twoBeWellProducts.filter(p => p.featured);
-export const getProductsByCategory = (category: TwoBeWellProduct['category']) => 
-  twoBeWellProducts.filter(p => p.category === category);
-export const getProductById = (id: string) => twoBeWellProducts.find(p => p.id === id);
+// Utility functions
+export const getFeaturedProducts = (): TwoBeWellProduct[] => {
+  return twoBeWellProducts.filter(product => product.featured);
+};
+
+export const getProductsByCategory = (category: TwoBeWellProduct['category']): TwoBeWellProduct[] => {
+  return twoBeWellProducts.filter(product => product.category === category);
+};
+
+export const getProductById = (id: string): TwoBeWellProduct | undefined => {
+  return twoBeWellProducts.find(product => product.id === id);
+};
+
+export const getBWCEndorsedProducts = (): TwoBeWellProduct[] => {
+  return twoBeWellProducts.filter(product => product.bwcEndorsed);
+};
