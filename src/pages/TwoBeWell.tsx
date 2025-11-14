@@ -7,42 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Heart, Users, Sparkles, Coins, ShoppingCart } from "lucide-react";
 import { IMAGES } from "@/lib/images";
+import { getFeaturedProducts } from "@/data/twoBeWellProducts";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 
 const TwoBeWell = () => {
-  const products = [
-    {
-      name: "2BeKissed - Natural Lip Balm",
-      price: "R85",
-      wellCoins: "42",
-      image: IMAGES.twoBeWell.lipBalm,
-      description: "Mint-infused natural lip balm with Shea Butter, Coconut Oil, and Vitamin E for lasting moisture and protection.",
-      ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Essential Oil, Vitamin E"
-    },
-    {
-      name: "2BeGlow - Radiance Face Serum",
-      price: "R165",
-      wellCoins: "82",
-      image: IMAGES.twoBeWell.faceSerum,
-      description: "Glow & Calm face serum with Macadamia Nut Oil and Essential Oil Blend for radiant, healthy-looking skin.",
-      ingredients: "Macadamia Nut Oil + Essential Oil Blend"
-    },
-    {
-      name: "2BeSmooth - Whipped Body Butter",
-      price: "R125",
-      wellCoins: "62",
-      image: IMAGES.twoBeWell.bodyButter,
-      description: "Luxuriously whipped body butter with Shea Butter, Cocoa Butter, and nourishing oils for silky-smooth skin.",
-      ingredients: "Shea Butter, Cocoa Butter, Coconut Oil, Sweet Almond Oil, Arrowroot Powder, Vitamin E"
-    },
-    {
-      name: "2BeFresh - All-Purpose Cleaner",
-      price: "R95",
-      wellCoins: "47",
-      image: IMAGES.twoBeWell.cleaner,
-      description: "Natural all-purpose cleaning spray with plant-based ingredients for a chemical-free, eco-friendly home.",
-      ingredients: "Shea Butter, Coconut Oil, Candelilla Wax, Essential Oil, Vitamin E"
-    }
-  ];
+  const featuredProducts = getFeaturedProducts();
 
   const values = [
     {
@@ -148,9 +117,9 @@ const TwoBeWell = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {products.map((product, index) => (
+              {featuredProducts.map((product, index) => (
                 <Card 
-                  key={product.name}
+                  key={product.id}
                   className="hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in-up border-0 shadow-lg group overflow-hidden"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
@@ -158,7 +127,7 @@ const TwoBeWell = () => {
                     <img 
                       src={product.image} 
                       alt={product.name}
-                      className="instagram-post-img group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
                       <span className="text-sm font-semibold text-green-600">🪙 {product.wellCoins} WellCoins</span>
@@ -167,23 +136,28 @@ const TwoBeWell = () => {
                   <CardHeader className="pb-2">
                     <CardTitle className="font-heading text-lg">{product.name}</CardTitle>
                     <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-green-600">{product.price}</span>
+                      <span className="text-2xl font-bold text-green-600">R{product.price}</span>
                       <Badge variant="secondary" className="bg-green-100 text-green-800">
                         100% Natural
                       </Badge>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.shortDescription}</p>
                     <p className="text-xs text-gray-500 mb-4">
-                      <strong>Ingredients:</strong> {product.ingredients}
+                      <strong>Size:</strong> {product.size}
                     </p>
-                    <Button 
-                      asChild 
+                    <AddToCartButton 
+                      item={{
+                        id: product.id,
+                        image: product.image,
+                        title: product.name,
+                        price_zar: product.price,
+                        price_wellcoins: product.wellCoins,
+                        item_type: "product" as const,
+                      }}
                       className="w-full bg-green-600 hover:bg-green-700 text-white rounded-full"
-                    >
-                      <Link to="/2bewell-shop">Add to Cart</Link>
-                    </Button>
+                    />
                   </CardContent>
                 </Card>
               ))}
