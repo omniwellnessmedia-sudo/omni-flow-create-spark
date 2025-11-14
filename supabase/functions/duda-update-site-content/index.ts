@@ -43,16 +43,21 @@ serve(async (req) => {
       throw new Error('Website not found or unauthorized');
     }
 
+    // Validate credentials
     const dudaUsername = Deno.env.get('DUDA_API_USERNAME');
     const dudaPassword = Deno.env.get('DUDA_API_PASSWORD');
 
     if (!dudaUsername || !dudaPassword) {
+      console.error('❌ Missing Duda credentials');
       throw new Error('Duda API credentials not configured');
     }
 
+    console.log('✅ Credentials validated for update');
     const authString = btoa(`${dudaUsername}:${dudaPassword}`);
 
-    console.log('Updating Duda site content:', site_name);
+    console.log('=== UPDATING DUDA SITE CONTENT ===');
+    console.log('Site Name:', site_name);
+    console.log('Updates:', JSON.stringify(updates, null, 2));
 
     // Update site content via Duda API
     const dudaResponse = await fetch(`https://api.duda.co/api/sites/multiscreen/${site_name}`, {
@@ -70,11 +75,17 @@ serve(async (req) => {
       }),
     });
 
+    console.log('API Response Status:', dudaResponse.status);
+
     if (!dudaResponse.ok) {
       const errorText = await dudaResponse.text();
-      console.error('Duda API error:', dudaResponse.status, errorText);
-      throw new Error(`Duda API error: ${errorText}`);
+      console.error('=== DUDA UPDATE ERROR ===');
+      console.error('Status:', dudaResponse.status);
+      console.error('Response:', errorText);
+      throw new Error(`Duda API error (${dudaResponse.status}): ${errorText}`);
     }
+
+    console.log('✅ Content updated successfully');
 
     // Update local database record
     const localUpdates: any = {};

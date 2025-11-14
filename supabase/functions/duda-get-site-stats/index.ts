@@ -45,13 +45,16 @@ serve(async (req) => {
       throw new Error('Website not found or unauthorized');
     }
 
+    // Validate credentials
     const dudaUsername = Deno.env.get('DUDA_API_USERNAME');
     const dudaPassword = Deno.env.get('DUDA_API_PASSWORD');
 
     if (!dudaUsername || !dudaPassword) {
+      console.error('❌ Missing Duda credentials');
       throw new Error('Duda API credentials not configured');
     }
 
+    console.log('✅ Credentials validated for stats');
     const authString = btoa(`${dudaUsername}:${dudaPassword}`);
 
     // Calculate date range
@@ -60,7 +63,10 @@ serve(async (req) => {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - periodDays);
 
-    console.log('Fetching Duda stats for:', site_name, 'period:', period);
+    console.log('=== FETCHING DUDA STATS ===');
+    console.log('Site Name:', site_name);
+    console.log('Period:', period);
+    console.log('Date Range:', startDate.toISOString().split('T')[0], 'to', endDate.toISOString().split('T')[0]);
 
     // Fetch stats from Duda API
     const dudaResponse = await fetch(

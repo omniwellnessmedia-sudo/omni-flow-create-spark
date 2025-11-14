@@ -62,18 +62,47 @@ serve(async (req) => {
       );
     }
 
-    // Prepare Duda API credentials
+    // PHASE 3: Validate API Credentials
     const dudaUsername = Deno.env.get('DUDA_API_USERNAME');
     const dudaPassword = Deno.env.get('DUDA_API_PASSWORD');
-    const dudaTemplateId = Deno.env.get('DUDA_PARTNER_TEMPLATE_ID') || 'omni-wellness-partner';
+    const dudaTemplateId = Deno.env.get('DUDA_PARTNER_TEMPLATE_ID');
 
     if (!dudaUsername || !dudaPassword) {
+      console.error('❌ Missing Duda credentials!');
+      console.error('Username exists:', !!dudaUsername);
+      console.error('Password exists:', !!dudaPassword);
       throw new Error('Duda API credentials not configured');
     }
 
+    // PHASE 1: Verify Template ID
+    if (!dudaTemplateId) {
+      console.error('❌ Missing Duda template ID! DUDA_PARTNER_TEMPLATE_ID not set.');
+      throw new Error('DUDA_PARTNER_TEMPLATE_ID environment variable not set');
+    }
+
+    console.log('✅ Credentials validated:');
+    console.log('- Username:', dudaUsername.substring(0, 4) + '***');
+    console.log('- Password length:', dudaPassword.length);
+    console.log('- Template ID:', dudaTemplateId);
+
     const authString = btoa(`${dudaUsername}:${dudaPassword}`);
 
-    console.log('Creating Duda site:', siteName);
+    // PHASE 2 & 4: Enhanced Logging + Simplified Request Body
+    console.log('=== DUDA API REQUEST ===');
+    console.log('Endpoint: https://api.duda.co/api/sites/multiscreen/create');
+    console.log('Method: POST');
+    console.log('Template ID:', dudaTemplateId);
+    console.log('Site Name:', siteName);
+    console.log('Business Name:', business_name);
+    console.log('Auth String Length:', authString.length);
+
+    // PHASE 4: Simplified request body (only essential fields)
+    const requestBody = {
+      template_id: dudaTemplateId,
+      site_name: siteName,
+    };
+
+    console.log('Request Body:', JSON.stringify(requestBody, null, 2));
 
     // Create site from template via Duda API
     const dudaResponse = await fetch('https://api.duda.co/api/sites/multiscreen/create', {
@@ -82,30 +111,33 @@ serve(async (req) => {
         'Authorization': `Basic ${authString}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        template_id: dudaTemplateId,
-        site_name: siteName,
-        site_data: {
-          site_business_info: {
-            business_name: business_name,
-            email: user.email,
-          },
-          site_texts: {
-            overview: providerProfile.description || '',
-          }
-        }
-      }),
+      body: JSON.stringify(requestBody),
     });
+
+    console.log('=== DUDA API RESPONSE ===');
+    console.log('Status:', dudaResponse.status);
+    console.log('Status Text:', dudaResponse.statusText);
+    console.log('Headers:', JSON.stringify(Object.fromEntries(dudaResponse.headers.entries())));
 
     if (!dudaResponse.ok) {
       const errorText = await dudaResponse.text();
-      console.error('Duda API error:', dudaResponse.status, errorText);
-      throw new Error(`Duda API error: ${errorText}`);
+      console.error('=== DUDA API ERROR ===');
+      console.error('Status:', dudaResponse.status);
+      console.error('Response Body:', errorText);
+      
+      // Try to parse as JSON for better error details
+      try {
+        const errorJson = JSON.parse(errorText);
+        console.error('Parsed Error:', JSON.stringify(errorJson, null, 2));
+      } catch (e) {
+        console.error('Raw Error Text:', errorText);
+      }
+      
+      throw new Error(`Duda API Error (${dudaResponse.status}): ${errorText}`);
     }
 
     const dudaSite = await dudaResponse.json();
-
-    console.log('Duda site created:', dudaSite);
+    console.log('✅ Duda site created successfully:', JSON.stringify(dudaSite, null, 2));
 
     // Store site details in database
     const websiteData = {
@@ -144,6 +176,8 @@ serve(async (req) => {
       savedWebsite = data;
     }
 
+    console.log('✅ Website saved to database:', savedWebsite.id);
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -159,7 +193,8 @@ serve(async (req) => {
       }
     );
   } catch (error) {
-    console.error('Error creating Duda site:', error);
+    console.error('❌ Error creating Duda site:', error);
+    console.error('Error stack:', error.stack);
     return new Response(
       JSON.stringify({
         success: false,
