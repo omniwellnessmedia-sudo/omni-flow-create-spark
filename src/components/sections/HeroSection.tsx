@@ -315,15 +315,19 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
               {communityItems
                 .filter(item => item.tags?.includes(activeFilter))
                 .slice(0, showMoreCommunity ? 99 : 6)
                 .map((item, index) => (
-                <Link key={index} to={item.href} className="group">
-                  <Card className={`overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+                <Link 
+                  key={index} 
+                  to={item.href} 
+                  className={`group block ${
                     item.orientation === 'portrait' ? 'md:col-span-1' : 'md:col-span-2'
-                  }`}>
+                  }`}
+                >
+                  <Card className="h-full overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                     <div className={`relative bg-gradient-to-br from-wellness-light/20 to-wellness-accent/10 ${
                       item.orientation === 'portrait' ? 'aspect-[3/4]' : 'aspect-video'
                     }`}>

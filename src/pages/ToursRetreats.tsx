@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { IMAGES } from '@/lib/images';
+import { useStorageImages } from '@/hooks/useStorageImages';
 import type { WellnessExperience, WellnessMarketplaceItem } from "@/types/marketplace";
 
 // Supabase storage helper for tour images
@@ -241,9 +242,26 @@ const ToursRetreats = () => {
   const [filteredItems, setFilteredItems] = useState<WellnessExperience[]>([]);
 
   // Initialize data
+  // Add storage images hook
+  const { images: storageImages, loading: imagesLoading } = useStorageImages({
+    bucket: 'provider-images',
+    folders: ['General Images', 'Tours', 'Retreats', 'Experiences'],
+  });
+
   useEffect(() => {
+    const timeoutRef = useRef<number | null>(null);
+    
     const initializeData = async () => {
+      console.debug('[Tours] Initializing data fetch');
       setLoading(true);
+      
+      // Hard timeout fallback - prevents infinite loading
+      timeoutRef.current = window.setTimeout(() => {
+        console.debug('[Tours] Fallback timeout fired → loading sample data');
+        setItems(sampleToursRetreats);
+        setLoading(false);
+        toast.info('Loaded sample wellness experiences');
+      }, 4000);
       
       try {
         // Try to fetch from Supabase first, fallback to sample data
@@ -251,63 +269,102 @@ const ToursRetreats = () => {
           .from('tours')
           .select(`
             *,
-            category:tour_categories(*)
+            category:tour_categories(name, slug)
           `)
-          .eq('active', true);
+          .or('active.eq.true,active.is.null')
+          .order('created_at', { ascending: false });
+
+        // Clear timeout on successful fetch
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+
+        console.debug('[Tours] DB query returned:', dbTours?.length || 0, 'tours');
 
         if (dbTours && dbTours.length > 0) {
-          // Convert database tours to unified format
-          const convertedTours: WellnessExperience[] = dbTours.map(tour => ({
+          // Convert database tours to WellnessExperience format
+          const convertedTours: WellnessExperience[] = dbTours.map((tour: any) => ({
             id: tour.id,
-            content_type: 'experience' as const,
+            content_type: 'experience',
             title: tour.title,
-            description: tour.subtitle || '',
-            longDescription: tour.subtitle,
+            description: tour.subtitle || tour.title,
+            longDescription: tour.overview,
             provider_id: 'omni-wellness',
             provider_name: 'Omni Wellness',
-            category: tour.category?.name || 'Tours & Retreats',
-            subcategory: tour.category?.slug,
-            images: [tour.hero_image_url].filter(Boolean),
-            location: tour.destination || 'South Africa',
+            category: tour.category?.name || 'Wellness',
+            subcategory: tour.category?.slug || 'general',
+            images: tour.image_gallery || [tour.hero_image_url],
+            location: tour.destination,
             is_online: false,
-            is_active: tour.active,
+            is_active: tour.active !== false,
             created_at: tour.created_at,
             updated_at: tour.updated_at,
-            rating: 4.5,
-            review_count: Math.floor(Math.random() * 100) + 20,
-            tags: tour.category ? [tour.category.slug] : [],
-            price_zar: tour.price_from || 999,
-            price_wellcoins: Math.floor((tour.price_from || 999) * 0.8),
-            experience_type: 'retreat' as const,
-            start_date: new Date(Date.now() + Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            end_date: new Date(Date.now() + Math.random() * 90 * 24 * 60 * 60 * 1000 + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            duration_days: Math.floor(Math.random() * 10) + 3,
-            max_participants: tour.max_participants || 12,
-            current_participants: Math.floor(Math.random() * (tour.max_participants || 12)),
-            includes: ['Accommodation', 'Meals', 'Activities', 'Transportation'],
+            rating: 4.8,
+            review_count: 0,
+            tags: [],
+            price_zar: tour.price_from,
+            price_wellcoins: Math.floor(tour.price_from * 0.8),
+            experience_type: 'retreat',
+            start_date: tour.start_date || new Date().toISOString().split('T')[0],
+            end_date: tour.end_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            duration_days: parseInt(tour.duration?.split(' ')[0]) || 7,
+            max_participants: tour.max_participants,
+            current_participants: 0,
+            includes: tour.inclusions || [],
             accommodation_included: true,
             meals_included: true,
             transport_included: false,
             difficulty_level: tour.difficulty_level as any || 'all_levels'
           }));
           setItems(convertedTours);
+          console.debug('[Tours] Loaded', convertedTours.length, 'tours from database');
           toast.success('Loaded wellness experiences');
         } else {
-          // Use sample data
-          setItems(sampleToursRetreats);
+          // Use sample data with dynamic storage images
+          const enhancedSampleData = sampleToursRetreats.map((tour, idx) => {
+            const relevantImages = storageImages
+              .filter(img => img.folder.toLowerCase().includes('tour') || 
+                            img.folder.toLowerCase().includes('general'))
+              .slice(idx * 2, idx * 2 + 2)
+              .map(img => img.url);
+            
+            return {
+              ...tour,
+              images: relevantImages.length > 0 ? relevantImages : tour.images,
+            };
+          });
+          
+          setItems(enhancedSampleData);
+          console.debug('[Tours] Loaded', enhancedSampleData.length, 'sample tours');
           toast.info('Loaded sample wellness experiences');
         }
       } catch (error) {
         console.error('Error loading tours data:', error);
+        
+        // Clear timeout on error
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+        
         setItems(sampleToursRetreats);
         toast.info('Loaded sample wellness experiences');
       } finally {
         setLoading(false);
+        console.debug('[Tours] Loading complete');
       }
     };
 
     initializeData();
-  }, []);
+    
+    // Cleanup timeout on unmount
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [storageImages]);
 
   // Filter items based on search and filters
   useEffect(() => {
