@@ -409,6 +409,14 @@ const WellnessExchange = () => {
           </div>
         </section>
       </main>
+
+      {/* 2BeWell CTA */}
+      <section className="py-16 bg-gradient-to-br from-emerald-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TwoBeWellCTA variant="compact" />
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
