@@ -31,7 +31,8 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 85,
     wellCoins: 42,
     category: "skincare",
-    image: "/lovable-uploads/2bewell-lip-balm-label.png",
+    image: "/src/assets/2bewell-lip-balm-product.jpg",
+    labelImage: "/lovable-uploads/2bewell-lip-balm-label.png",
     shortDescription: "Sweet Orange infused natural lip balm with Shea Butter, Coconut Oil, and Vitamin E for lasting moisture and protection.",
     fullDescription: "Experience the uplifting touch of our Sweet Orange infused natural lip balm. Handcrafted with premium ingredients, 2BeKissed provides deep hydration and protection for your lips. The combination of Shea Butter and Coconut Oil creates a smooth, non-greasy formula that locks in moisture, while Vitamin E nourishes and protects against environmental damage.",
     benefits: [
@@ -60,7 +61,8 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 165,
     wellCoins: 82,
     category: "skincare",
-    image: "/lovable-uploads/2bewell-face-serum-label.png",
+    image: "/src/assets/2bewell-face-serum-product.jpg",
+    labelImage: "/lovable-uploads/2bewell-face-serum-label.png",
     shortDescription: "Unlock your skin's natural radiance through our Glow & Calm face serum with Macadamia Oil, Rosehip, and essential oils.",
     fullDescription: "Your skin's new favorite flex. Unlock your skin's natural radiance through our Glow & Calm face serum. With a glow so good you'll catch yourself doing a double-take in the mirror. This lightweight, fast-absorbing formula combines Macadamia Oil, Rosehip, Avocado Oil, Lavender, and Frankincense for radiant, calm skin.",
     benefits: [
@@ -90,7 +92,8 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 125,
     wellCoins: 62,
     category: "skincare",
-    image: "/lovable-uploads/2bewell-body-butter-label.png",
+    image: "/src/assets/2bewell-body-butter-product.jpg",
+    labelImage: "/lovable-uploads/2bewell-body-butter-label.png",
     shortDescription: "Your favourite pamper partner. Leaves your skin so soft you'll be showing it off everywhere, from brunch to your mirror selfies.",
     fullDescription: "Introducing your favourite pamper partner, our Whipped Body Butter. This rich, creamy formula melts into your skin, providing intense hydration and nourishment. The luxurious combination of Shea and Cocoa Butter with Sweet Almond and Coconut Oils creates a protective barrier that locks in moisture all day long.",
     benefits: [
@@ -121,7 +124,8 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 95,
     wellCoins: 47,
     category: "homecare",
-    image: "/lovable-uploads/2bewell-cleaner-label.png",
+    image: "/src/assets/2bewell-cleaner-product.jpg",
+    labelImage: "/lovable-uploads/2bewell-cleaner-label.png",
     shortDescription: "Natural all-purpose cleaning spray with plant-based ingredients for a chemical-free, eco-friendly home.",
     fullDescription: "Transform your cleaning routine with 2BeFresh all-purpose cleaner. This powerful, plant-based formula effectively removes dirt, grease, and grime from all household surfaces without harsh chemicals. Safe for your family, pets, and the environment, 2BeFresh leaves your home sparkling clean with a fresh, natural scent.",
     benefits: [
@@ -143,7 +147,7 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 145,
     wellCoins: 72,
     category: "nutrition",
-    image: "/lovable-uploads/2bewell-chia-seeds.png",
+    image: "/src/assets/2bewell-chia-seeds-product.jpg",
     shortDescription: "Nutrient-dense organic chia seeds packed with omega-3s, fiber, and plant-based protein for sustained energy and optimal health.",
     fullDescription: "Tiny but mighty, our organic chia seeds are a nutritional powerhouse. Rich in omega-3 fatty acids, dietary fiber, and plant-based protein, these versatile seeds support digestion, heart health, and sustained energy throughout the day. Perfect for smoothies, yogurt, baking, or making chia pudding.",
     benefits: [
@@ -186,7 +190,7 @@ export const twoBeWellProducts: TwoBeWellProduct[] = [
     price: 285,
     wellCoins: 142,
     category: "nutrition",
-    image: "/lovable-uploads/2bewell-pea-protein.png",
+    image: "/src/assets/2bewell-pea-protein-product.jpg",
     shortDescription: "High-protein, allergen-free supplement with 80g protein per 100g, perfect for muscle recovery, sustained energy, and plant-based nutrition.",
     fullDescription: "Fuel your body with 2BeStrong pea protein powder. This premium, allergen-free protein supplement provides 80% pure protein to support muscle repair, boost satiety, and maintain sustained energy levels. Easily digestible and rich in iron, it's the perfect addition to smoothies, shakes, or baked goods for athletes, fitness enthusiasts, or anyone seeking quality plant-based protein.",
     benefits: [
