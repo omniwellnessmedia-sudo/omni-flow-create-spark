@@ -1,13 +1,14 @@
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, ArrowLeft, Heart, Leaf, Award } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Heart, Leaf, Award, Clock, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { useState } from "react";
 import { twoBeWellProducts, type TwoBeWellProduct } from "@/data/twoBeWellProducts";
+import { twoBeWellBundles } from "@/data/twoBeWellBundles";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const TwoBeWellShop = () => {
@@ -61,6 +62,10 @@ const TwoBeWellShop = () => {
                   src="/lovable-uploads/2bewell-hero-products.png" 
                   alt="2BeWell Natural Products Collection" 
                   className="rounded-2xl shadow-2xl w-full h-auto transform hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    console.error('Image failed to load:', e.currentTarget.src);
+                    e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23f0f0f0" width="400" height="400"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3E2BeWell Products%3C/text%3E%3C/svg%3E';
+                  }}
                 />
                 <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg p-4 hidden md:block">
                   <p className="text-sm font-semibold text-green-600">🌱 Small Batch, Big Love</p>
