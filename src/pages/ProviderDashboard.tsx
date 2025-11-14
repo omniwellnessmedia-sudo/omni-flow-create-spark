@@ -34,7 +34,7 @@ import {
   ToggleLeft,
   ToggleRight
 } from "lucide-react";
-import ModernWebsiteBuilder from "@/components/website-builder/ModernWebsiteBuilder";
+import DudaSiteManager from "@/components/duda/DudaSiteManager";
 import ProviderMediaUpload from "@/components/ProviderMediaUpload";
 import LiveDemoPresence from "@/components/collaboration/LiveDemoPresence";
 import { sandyDemoData, helenProviderData } from "@/data/sandyDemoData";
@@ -704,7 +704,7 @@ const ProviderDashboard = () => {
               </TabsContent>
 
               <TabsContent value="website" className="mt-6">
-                <ModernWebsiteBuilder />
+                <DudaSiteManager />
               </TabsContent>
 
               <TabsContent value="media" className="mt-6">
