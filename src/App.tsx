@@ -139,7 +139,8 @@ function App() {
                   <Route path="/two-be-well" element={<TwoBeWell />} />
                   <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
                   <Route path="/2bewell" element={<TwoBeWell />} />
-                  <Route path="/2bewell-shop" element={<TwoBeWellShop />} />
+          <Route path="/2bewell-shop" element={<TwoBeWellShop />} />
+          <Route path="/2bewell/shop" element={<TwoBeWellShop />} />
                   <Route path="/2bewell/product/:productId" element={<TwoBeWellProductDetail />} />
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
                   <Route path="/cj-products/:id" element={<CJProductDetail />} />
