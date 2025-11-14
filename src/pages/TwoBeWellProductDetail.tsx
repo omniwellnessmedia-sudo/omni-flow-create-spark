@@ -98,14 +98,13 @@ const TwoBeWellProductDetail = () => {
                 )}
 
                 <AddToCartButton
-                  product={{
+                  item={{
                     id: product.id,
                     title: product.name,
                     price_zar: product.price,
-                    price_usd: product.price / 18,
-                    wellcoins: product.wellCoins,
-                    category: product.category,
-                    image_url: product.image,
+                    price_wellcoins: product.wellCoins,
+                    image: product.image,
+                    item_type: "product" as const
                   }}
                   className="w-full h-14 text-lg"
                 />

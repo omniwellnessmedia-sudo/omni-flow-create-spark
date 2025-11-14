@@ -24,6 +24,7 @@ const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPort
 const ToursRetreats = React.lazy(() => import('@/pages/ToursRetreats'));
 const TransactionPage = React.lazy(() => import('@/pages/TransactionPage'));
 const TwoBeWellShop = React.lazy(() => import('@/pages/TwoBeWellShop'));
+const TwoBeWellProductDetail = React.lazy(() => import('@/pages/TwoBeWellProductDetail'));
 const WellnessDeals = React.lazy(() => import('@/pages/WellnessDeals'));
 const AuthPage = React.lazy(() => import('@/pages/Auth'));
 const TestPage = React.lazy(() => import('@/pages/TestPage'));
@@ -137,6 +138,9 @@ function App() {
                   {/* E-commerce & Products */}
                   <Route path="/two-be-well" element={<TwoBeWell />} />
                   <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
+                  <Route path="/2bewell" element={<TwoBeWell />} />
+                  <Route path="/2bewell-shop" element={<TwoBeWellShop />} />
+                  <Route path="/2bewell/product/:productId" element={<TwoBeWellProductDetail />} />
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
                   <Route path="/cj-products/:id" element={<CJProductDetail />} />
                   <Route path="/store" element={<StoreCollections />} />
