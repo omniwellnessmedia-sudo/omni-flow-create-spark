@@ -22,16 +22,16 @@ import {
   Globe
 } from "lucide-react";
 
-// Import community images
-import zenithImg from "@/assets/community-zenith.jpg";
-import chadMeditationImg from "@/assets/community-chad-meditation.jpg";
-import groupTourImg from "@/assets/community-group-tour.jpg";
-import chiefKingsleyImg from "@/assets/community-chief-kingsley.jpg";
-import rockArtImg from "@/assets/community-rock-art.jpg";
-import mountainViewImg from "@/assets/community-mountain-view.jpg";
-import caveGroupImg from "@/assets/community-cave-group.jpg";
-import indigenousTourImg from "@/assets/community-indigenous-tour.jpg";
-import tourGroupImg from "@/assets/community-tour-group.jpg";
+// Import existing community images
+import consciousConnectionsCommunityImg from "@/assets/conscious-connections-community.jpg";
+import indigenousHealingImg from "@/assets/indigenous-healing-ceremony.jpg";
+import ubuntuGatheringImg from "@/assets/ubuntu-community-gathering.jpg";
+import sacredCaveImg from "@/assets/sacred-cave.jpg";
+import tableMountainHikeImg from "@/assets/table-mountain-hike.jpg";
+import communityConnectionImg from "@/assets/community-connection.jpg";
+import ubuntuHealingCircleImg from "@/assets/ubuntu-healing-circle.jpg";
+import qigongMeditationImg from "@/assets/qigong-meditation.jpg";
+import traditionalHealingImg from "@/assets/traditional-healing.jpg";
 
 const HeroSection = () => {
   const { isOpen, hasSeenTour, steps, startTour, completeTour, skipTour } = useAppTour();
@@ -83,65 +83,54 @@ const HeroSection = () => {
 
   const communityItems = [
     {
-      title: "Meet Zenith",
-      description: "Co-Founder & Skincare Specialist at 2BeWell",
-      href: "/2bewell",
-      image: zenithImg,
+      title: "Conscious Connections",
+      description: "Building community through shared wellness practices",
+      href: "/wellness-community",
+      image: consciousConnectionsCommunityImg,
       category: "wellness",
-      author: "Team",
+      author: "Community",
       badge: "Wellness",
-      orientation: "portrait",
-      tags: ["Popular", "Wellness", "Personal"]
+      orientation: "landscape",
+      tags: ["Popular", "Wellness", "Discover"]
     },
     {
-      title: "Meditation Journey",
-      description: "Finding peace on Cape Town's mountains",
+      title: "Indigenous Healing",
+      description: "Ancient wisdom & traditional healing ceremonies",
       href: "/tours-retreats",
-      image: chadMeditationImg,
+      image: indigenousHealingImg,
       category: "tours",
-      author: "Chad Cupido",
+      author: "Cultural Experience",
       badge: "Travel",
       orientation: "landscape",
-      tags: ["Popular", "Discover", "Wellness", "Personal"]
+      tags: ["Popular", "Discover", "Personal"]
     },
     {
-      title: "Wellness Group Tours",
-      description: "Experience nature with conscious community",
-      href: "/tours-retreats",
-      image: groupTourImg,
-      category: "tours",
-      author: "Experiences",
-      badge: "Travel",
+      title: "Ubuntu Gatherings",
+      description: "Community circles honoring Ubuntu philosophy",
+      href: "/wellness-community",
+      image: ubuntuGatheringImg,
+      category: "community",
+      author: "Ubuntu",
+      badge: "Community",
       orientation: "landscape",
       tags: ["Popular", "Discover", "Wellness"]
     },
     {
-      title: "Chief Kingsley",
-      description: "Indigenous wisdom & spiritual guidance",
+      title: "Sacred Cave Meditation",
+      description: "Ancient sites for deep spiritual practice",
       href: "/tours-retreats",
-      image: chiefKingsleyImg,
-      category: "community",
-      author: "Chief Kingsley",
-      badge: "Community",
-      orientation: "portrait",
-      tags: ["Popular", "Discover", "Personal"]
-    },
-    {
-      title: "Ancient Rock Art",
-      description: "Connecting with ancestral heritage",
-      href: "/tours-retreats",
-      image: rockArtImg,
-      category: "inspiration",
-      author: "Heritage",
-      badge: "Culture",
+      image: sacredCaveImg,
+      category: "wellness",
+      author: "Experiences",
+      badge: "Wellness",
       orientation: "landscape",
-      tags: ["Discover", "Personal"]
+      tags: ["Wellness", "Discover", "Personal"]
     },
     {
-      title: "Mountain Adventures",
-      description: "Breathtaking views & wellness experiences",
+      title: "Table Mountain Adventures",
+      description: "Breathtaking hikes & wellness experiences",
       href: "/tours-retreats",
-      image: mountainViewImg,
+      image: tableMountainHikeImg,
       category: "tours",
       author: "Adventures",
       badge: "Travel",
@@ -149,37 +138,48 @@ const HeroSection = () => {
       tags: ["Popular", "Discover", "Wellness"]
     },
     {
-      title: "Sacred Cave Experience",
-      description: "Group meditation in ancient caves",
-      href: "/tours-retreats",
-      image: caveGroupImg,
-      category: "wellness",
-      author: "Experiences",
-      badge: "Wellness",
+      title: "Community Connection",
+      description: "Building meaningful relationships consciously",
+      href: "/wellness-community",
+      image: communityConnectionImg,
+      category: "community",
+      author: "Social",
+      badge: "Community",
       orientation: "landscape",
-      tags: ["Popular", "Wellness", "Discover"]
+      tags: ["Popular", "Personal", "Wellness"]
     },
     {
-      title: "Indigenous Tours",
-      description: "Learn from traditional wisdom keepers",
+      title: "Ubuntu Healing Circles",
+      description: "Traditional healing in community spaces",
       href: "/tours-retreats",
-      image: indigenousTourImg,
+      image: ubuntuHealingCircleImg,
+      category: "wellness",
+      author: "Healing",
+      badge: "Wellness",
+      orientation: "landscape",
+      tags: ["Wellness", "Discover", "Personal"]
+    },
+    {
+      title: "Qigong & Meditation",
+      description: "Ancient practices for modern wellness",
+      href: "/wellness-community",
+      image: qigongMeditationImg,
+      category: "wellness",
+      author: "Practices",
+      badge: "Wellness",
+      orientation: "landscape",
+      tags: ["Popular", "Wellness", "Personal"]
+    },
+    {
+      title: "Traditional Healing",
+      description: "Connect with ancestral wisdom & healing",
+      href: "/tours-retreats",
+      image: traditionalHealingImg,
       category: "community",
-      author: "Cultural Tours",
+      author: "Heritage",
       badge: "Community",
       orientation: "landscape",
       tags: ["Discover", "Personal", "Wellness"]
-    },
-    {
-      title: "Community Adventures",
-      description: "Connect with nature & like-minded souls",
-      href: "/tours-retreats",
-      image: tourGroupImg,
-      category: "community",
-      author: "Community",
-      badge: "Community",
-      orientation: "landscape",
-      tags: ["Popular", "Discover", "Wellness"]
     }
   ];
 
