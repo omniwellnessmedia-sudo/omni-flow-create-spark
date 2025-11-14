@@ -23,7 +23,7 @@ export const ProductBundleCard = ({ bundle }: ProductBundleCardProps) => {
       title: bundle.name,
       price_zar: bundle.bundlePrice,
       price_usd: bundle.bundlePrice / 18,
-      wellcoins: bundle.wellCoins,
+      price_wellcoins: bundle.wellCoins,
       category: "bundle"
     });
 

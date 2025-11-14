@@ -140,7 +140,7 @@ const TwoBeWellProductDetail = () => {
                       title: product.name,
                       price_zar: product.price,
                       price_usd: product.price / 18,
-                      wellcoins: product.wellCoins,
+                      price_wellcoins: product.wellCoins,
                       image: product.image,
                       category: product.category
                     }}
