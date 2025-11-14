@@ -899,6 +899,84 @@ export type Database = {
           },
         ]
       }
+      partner_website_stats: {
+        Row: {
+          avg_session_duration: number | null
+          bookings_generated: number | null
+          bounce_rate: number | null
+          commission_earned_wellcoins: number | null
+          commission_earned_zar: number | null
+          commission_rate: number | null
+          commission_status: string | null
+          created_at: string | null
+          form_submissions: number | null
+          id: string
+          page_views: number | null
+          period_end: string
+          period_start: string
+          provider_id: string | null
+          revenue_generated_zar: number | null
+          unique_visitors: number | null
+          updated_at: string | null
+          website_id: string | null
+        }
+        Insert: {
+          avg_session_duration?: number | null
+          bookings_generated?: number | null
+          bounce_rate?: number | null
+          commission_earned_wellcoins?: number | null
+          commission_earned_zar?: number | null
+          commission_rate?: number | null
+          commission_status?: string | null
+          created_at?: string | null
+          form_submissions?: number | null
+          id?: string
+          page_views?: number | null
+          period_end: string
+          period_start: string
+          provider_id?: string | null
+          revenue_generated_zar?: number | null
+          unique_visitors?: number | null
+          updated_at?: string | null
+          website_id?: string | null
+        }
+        Update: {
+          avg_session_duration?: number | null
+          bookings_generated?: number | null
+          bounce_rate?: number | null
+          commission_earned_wellcoins?: number | null
+          commission_earned_zar?: number | null
+          commission_rate?: number | null
+          commission_status?: string | null
+          created_at?: string | null
+          form_submissions?: number | null
+          id?: string
+          page_views?: number | null
+          period_end?: string
+          period_start?: string
+          provider_id?: string | null
+          revenue_generated_zar?: number | null
+          unique_visitors?: number | null
+          updated_at?: string | null
+          website_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_website_stats_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "partner_website_stats_website_id_fkey"
+            columns: ["website_id"]
+            isOneToOne: false
+            referencedRelation: "provider_websites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_comparisons: {
         Row: {
           comparison_name: string | null
@@ -1376,10 +1454,20 @@ export type Database = {
       provider_websites: {
         Row: {
           about_section: string | null
+          auto_publish: boolean | null
+          branding_config: Json | null
           contact_section_title: string | null
           created_at: string
           custom_css: string | null
+          custom_css_override: string | null
           custom_domain: string | null
+          duda_created_at: string | null
+          duda_external_id: string | null
+          duda_last_published: string | null
+          duda_site_name: string | null
+          duda_site_url: string | null
+          duda_stats: Json | null
+          duda_template_id: string | null
           facebook_pixel_id: string | null
           google_analytics_id: string | null
           hero_image_url: string | null
@@ -1392,16 +1480,27 @@ export type Database = {
           seo_meta_description: string | null
           seo_meta_title: string | null
           services_section_title: string | null
+          site_status: string | null
           testimonials_section_title: string | null
           theme_color: string | null
           updated_at: string
         }
         Insert: {
           about_section?: string | null
+          auto_publish?: boolean | null
+          branding_config?: Json | null
           contact_section_title?: string | null
           created_at?: string
           custom_css?: string | null
+          custom_css_override?: string | null
           custom_domain?: string | null
+          duda_created_at?: string | null
+          duda_external_id?: string | null
+          duda_last_published?: string | null
+          duda_site_name?: string | null
+          duda_site_url?: string | null
+          duda_stats?: Json | null
+          duda_template_id?: string | null
           facebook_pixel_id?: string | null
           google_analytics_id?: string | null
           hero_image_url?: string | null
@@ -1414,16 +1513,27 @@ export type Database = {
           seo_meta_description?: string | null
           seo_meta_title?: string | null
           services_section_title?: string | null
+          site_status?: string | null
           testimonials_section_title?: string | null
           theme_color?: string | null
           updated_at?: string
         }
         Update: {
           about_section?: string | null
+          auto_publish?: boolean | null
+          branding_config?: Json | null
           contact_section_title?: string | null
           created_at?: string
           custom_css?: string | null
+          custom_css_override?: string | null
           custom_domain?: string | null
+          duda_created_at?: string | null
+          duda_external_id?: string | null
+          duda_last_published?: string | null
+          duda_site_name?: string | null
+          duda_site_url?: string | null
+          duda_stats?: Json | null
+          duda_template_id?: string | null
           facebook_pixel_id?: string | null
           google_analytics_id?: string | null
           hero_image_url?: string | null
@@ -1436,6 +1546,7 @@ export type Database = {
           seo_meta_description?: string | null
           seo_meta_title?: string | null
           services_section_title?: string | null
+          site_status?: string | null
           testimonials_section_title?: string | null
           theme_color?: string | null
           updated_at?: string
@@ -1449,6 +1560,81 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      resources: {
+        Row: {
+          access_level: string | null
+          category: string
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          download_count: number | null
+          file_size_bytes: number | null
+          file_type: string
+          file_url: string
+          id: string
+          is_featured: boolean | null
+          is_published: boolean | null
+          metadata: Json | null
+          published_at: string | null
+          search_vector: unknown
+          seo_keywords: string[] | null
+          subcategory: string | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string | null
+          view_count: number | null
+        }
+        Insert: {
+          access_level?: string | null
+          category: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          download_count?: number | null
+          file_size_bytes?: number | null
+          file_type: string
+          file_url: string
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          metadata?: Json | null
+          published_at?: string | null
+          search_vector?: unknown
+          seo_keywords?: string[] | null
+          subcategory?: string | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          access_level?: string | null
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          download_count?: number | null
+          file_size_bytes?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          metadata?: Json | null
+          published_at?: string | null
+          search_vector?: unknown
+          seo_keywords?: string[] | null
+          subcategory?: string | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
       }
       review_helpfulness: {
         Row: {
@@ -2179,6 +2365,66 @@ export type Database = {
           },
         ]
       }
+      website_ai_content: {
+        Row: {
+          content_type: string
+          created_at: string | null
+          generated_content: string
+          generation_time_ms: number | null
+          id: string
+          is_applied: boolean | null
+          model_used: string | null
+          prompt_used: string | null
+          provider_id: string | null
+          rating: number | null
+          tokens_used: number | null
+          website_id: string | null
+        }
+        Insert: {
+          content_type: string
+          created_at?: string | null
+          generated_content: string
+          generation_time_ms?: number | null
+          id?: string
+          is_applied?: boolean | null
+          model_used?: string | null
+          prompt_used?: string | null
+          provider_id?: string | null
+          rating?: number | null
+          tokens_used?: number | null
+          website_id?: string | null
+        }
+        Update: {
+          content_type?: string
+          created_at?: string | null
+          generated_content?: string
+          generation_time_ms?: number | null
+          id?: string
+          is_applied?: boolean | null
+          model_used?: string | null
+          prompt_used?: string | null
+          provider_id?: string | null
+          rating?: number | null
+          tokens_used?: number | null
+          website_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "website_ai_content_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "website_ai_content_website_id_fkey"
+            columns: ["website_id"]
+            isOneToOne: false
+            referencedRelation: "provider_websites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -2198,6 +2444,10 @@ export type Database = {
       has_role: {
         Args: { role: Database["public"]["Enums"]["app_role"]; user_id: string }
         Returns: boolean
+      }
+      increment_resource_download: {
+        Args: { resource_id: string }
+        Returns: undefined
       }
       is_admin: { Args: { user_id: string }; Returns: boolean }
     }

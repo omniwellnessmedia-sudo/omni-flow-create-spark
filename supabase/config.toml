@@ -1,1 +1,19 @@
 project_id = "dtjmhieeywdvhjxqyxad"
+
+[functions.duda-create-partner-site]
+verify_jwt = true
+
+[functions.duda-update-site-content]
+verify_jwt = true
+
+[functions.duda-publish-site]
+verify_jwt = true
+
+[functions.duda-get-site-stats]
+verify_jwt = true
+
+[functions.duda-generate-content]
+verify_jwt = true
+
+[functions.duda-delete-site]
+verify_jwt = true
