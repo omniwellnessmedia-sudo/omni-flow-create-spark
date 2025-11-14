@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Leaf, Heart, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import { getLifestyleImage, getTeamImage, getProductImage } from "@/lib/imageHelpers";
 
 interface TwoBeWellCTAProps {
   variant?: "default" | "compact" | "sidebar";
@@ -189,22 +190,22 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 aspect-[16/9] bg-white rounded-3xl overflow-hidden shadow-lg">
               <img 
-                src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&auto=format&fit=crop"
-                alt="2BeWell Natural Products"
+                src={getLifestyleImage('hero-collage')}
+                alt="2BeWell Natural Products Collection"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div className="aspect-square bg-white rounded-2xl overflow-hidden shadow-md">
               <img 
-                src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&auto=format&fit=crop"
-                alt="Natural ingredients"
+                src={getTeamImage('zenith')}
+                alt="Zenith - Co-Founder & Skincare Specialist"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div className="aspect-square bg-white rounded-2xl overflow-hidden shadow-md">
               <img 
-                src="https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=400&auto=format&fit=crop"
-                alt="Handcrafted process"
+                src={getProductImage('2beglow-face-serum')}
+                alt="2BeGlow Face Serum"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
