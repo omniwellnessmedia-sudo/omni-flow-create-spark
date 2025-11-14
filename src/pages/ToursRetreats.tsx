@@ -21,6 +21,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { IMAGES } from '@/lib/images';
 import type { WellnessExperience, WellnessMarketplaceItem } from "@/types/marketplace";
 
+// Supabase storage helper for tour images
+const SUPABASE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co";
+const getStorageUrl = (filename: string) => 
+  `${SUPABASE_URL}/storage/v1/object/public/provider-images/General%20Images/${encodeURIComponent(filename)}`;
+
 // Sample tour and retreat data following the unified marketplace structure
 const sampleToursRetreats: WellnessExperience[] = [
   {
@@ -33,7 +38,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'Conscious Connections SA',
     category: 'Indigenous Wisdom',
     subcategory: 'Healing Ceremonies',
-    images: [IMAGES.wellness.retreat, IMAGES.wellness.landmark],
+    images: [getStorageUrl('indigenous tour chief kingsley explaining.jpg'), getStorageUrl('Chief Kingsley amazing portrait.jpg')],
     location: 'Eastern Cape, South Africa',
     is_online: false,
     is_active: true,
@@ -66,7 +71,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'Mountain Wellness Co',
     category: 'Wellness Retreats',
     subcategory: 'Mountain Retreats',
-    images: [IMAGES.tours.mountain, IMAGES.tours.mountain2],
+    images: [getStorageUrl('Tourimage 1.jpg'), getStorageUrl('wellness group tour.jpg')],
     location: 'Table Mountain, Cape Town',
     is_online: false,
     is_active: true,
@@ -99,7 +104,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'Ubuntu Healing Collective',
     category: 'Indigenous Wisdom',
     subcategory: 'Community Healing',
-    images: [IMAGES.wellness.community, IMAGES.wellness.graduation],
+    images: [getStorageUrl('community outing 1.jpg'), getStorageUrl('community outing 2.jpg')],
     location: 'Eastern Cape Villages, South Africa',
     is_online: false,
     is_active: true,
@@ -132,7 +137,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'FACT Wellness Center',
     category: 'Wellness Programs',
     subcategory: 'Hybrid Programs',
-    images: [IMAGES.wellness.beachLions, IMAGES.tours.mountain2],
+    images: [getStorageUrl('muizenberg cave view.jpg'), getStorageUrl('group tour amazing cave view.jpg')],
     location: 'Muizenberg, Cape Town',
     is_online: true,
     is_active: true,
@@ -165,7 +170,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'EcoLiving South Africa',
     category: 'Conscious Living',
     subcategory: 'Sustainability',
-    images: [IMAGES.wellness.communityProject2, IMAGES.wellness.retreat2],
+    images: [getStorageUrl('Wellness retreat 2.jpg'), getStorageUrl('Wellness retreat.JPG')],
     location: 'Stellenbosch, Western Cape',
     is_online: false,
     is_active: true,
@@ -198,7 +203,7 @@ const sampleToursRetreats: WellnessExperience[] = [
     provider_name: 'Service Learning South Africa',
     category: 'Study Abroad',
     subcategory: 'Educational Programs',
-    images: [IMAGES.wellness.graduation2, IMAGES.wellness.communityProject3],
+    images: [getStorageUrl('tour picture couple with chief kingsley.jpg'), getStorageUrl('happy tour participant.jpg')],
     location: 'Cape Town & Townships',
     is_online: false,
     is_active: true,
