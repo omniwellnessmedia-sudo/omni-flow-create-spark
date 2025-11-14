@@ -1,3 +1,5 @@
+import { IMAGES } from '@/lib/images';
+import { Heart, Users, Sprout, Sparkles } from 'lucide-react';
 
 const MissionSection = () => {
   return (
@@ -18,7 +20,7 @@ const MissionSection = () => {
           {/* Large Image Card - Left */}
           <div className="lg:col-span-2 relative overflow-hidden rounded-3xl shadow-xl group">
             <img 
-              src="/images/wellness/OMNI_KALK BAY_ GRADUATION-8.jpg" 
+              src={IMAGES.services.graduation1}
               alt="Community celebrating achievements"
               className="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
             />
@@ -31,44 +33,69 @@ const MissionSection = () => {
             </div>
           </div>
 
-          {/* Values Stack - Right */}
+          {/* Values Stack - Right - Vibrant Omni Rainbow */}
           <div className="space-y-6">
             {[
               { 
-                title: "Authenticity", 
-                desc: "Real stories, genuine impact",
-                gradient: "from-orange-500 to-red-500"
+                title: "Inspiration", 
+                desc: "Igniting passion for change",
+                gradient: "from-red-500 via-orange-500 to-yellow-500",
+                icon: Sparkles,
+                glow: "group-hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]"
               },
               { 
                 title: "Community", 
-                desc: "Empowering local voices",
-                gradient: "from-green-500 to-teal-500"
-              },
-              { 
-                title: "Sustainability", 
-                desc: "Building lasting change",
-                gradient: "from-blue-500 to-indigo-500"
+                desc: "Ubuntu in action",
+                gradient: "from-green-500 via-emerald-500 to-teal-500",
+                icon: Users,
+                glow: "group-hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]"
               },
               { 
                 title: "Wellness", 
                 desc: "Holistic flourishing",
-                gradient: "from-purple-500 to-pink-500"
+                gradient: "from-blue-500 via-indigo-500 to-purple-500",
+                icon: Heart,
+                glow: "group-hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]"
+              },
+              { 
+                title: "Growth", 
+                desc: "Sustainable transformation",
+                gradient: "from-purple-500 via-pink-500 to-rose-500",
+                icon: Sprout,
+                glow: "group-hover:shadow-[0_0_30px_rgba(168,85,247,0.5)]"
               }
-            ].map((value, index) => (
-              <div 
-                key={value.title}
-                className="relative overflow-hidden rounded-2xl shadow-lg group hover:shadow-xl transition-all duration-300 animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${value.gradient} opacity-10 group-hover:opacity-20 transition-opacity`}></div>
-                <div className="relative p-6 bg-white/80 backdrop-blur-sm">
-                  <h3 className="font-bold text-xl text-gray-900 mb-2">
-                    {value.title}
-                  </h3>
-                  <p className="text-gray-600">{value.desc}</p>
+            ].map((value, index) => {
+              const Icon = value.icon;
+              return (
+                <div 
+                  key={value.title}
+                  className={`relative overflow-hidden rounded-2xl shadow-lg group hover:shadow-2xl transition-all duration-500 animate-fade-in hover:-translate-y-1 ${value.glow}`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  {/* Animated gradient background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${value.gradient} opacity-90 group-hover:opacity-100 transition-opacity`}></div>
+                  
+                  {/* Floating orb effect */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                  
+                  {/* Content */}
+                  <div className="relative p-6 text-white">
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="font-bold text-xl">
+                        {value.title}
+                      </h3>
+                      <Icon className="h-6 w-6 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all" />
+                    </div>
+                    <p className="text-white/90 font-medium">{value.desc}</p>
+                  </div>
+                  
+                  {/* Shine effect on hover */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
