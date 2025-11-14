@@ -1,3 +1,5 @@
+import { getBundleImage } from '@/lib/imageHelpers';
+
 export interface TwoBeWellBundle {
   id: string;
   name: string;
@@ -21,7 +23,7 @@ export const twoBeWellBundles: TwoBeWellBundle[] = [
     bundlePrice: 350,
     savings: 25,
     wellCoins: 175,
-    image: "/lovable-uploads/2bewell-hero-products.png",
+    image: getBundleImage("skincare-essentials"),
     featured: true
   },
   {
@@ -33,7 +35,7 @@ export const twoBeWellBundles: TwoBeWellBundle[] = [
     bundlePrice: 420,
     savings: 50,
     wellCoins: 210,
-    image: "/lovable-uploads/2bewell-hero-products.png",
+    image: getBundleImage("complete-selfcare"),
     featured: true
   },
   {
@@ -45,7 +47,7 @@ export const twoBeWellBundles: TwoBeWellBundle[] = [
     bundlePrice: 400,
     savings: 30,
     wellCoins: 200,
-    image: "/lovable-uploads/2bewell-hero-products.png"
+    image: getBundleImage("wellness-boost")
   },
   {
     id: "starter-wellness",
@@ -56,7 +58,7 @@ export const twoBeWellBundles: TwoBeWellBundle[] = [
     bundlePrice: 285,
     savings: 25,
     wellCoins: 142,
-    image: "/lovable-uploads/2bewell-hero-products.png"
+    image: getBundleImage("starter-wellness")
   }
 ];
 

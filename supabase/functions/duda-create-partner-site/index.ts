@@ -110,6 +110,8 @@ serve(async (req) => {
       headers: {
         'Authorization': `Basic ${authString}`,
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': 'OmniWellnessMedia/1.0 (Supabase Edge Function; +https://omniwellnessmedia.com)',
       },
       body: JSON.stringify(requestBody),
     });
