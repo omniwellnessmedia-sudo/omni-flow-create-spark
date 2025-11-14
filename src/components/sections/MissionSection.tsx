@@ -20,7 +20,7 @@ const MissionSection = () => {
           {/* Large Image Card - Left */}
           <div className="lg:col-span-2 relative overflow-hidden rounded-3xl shadow-xl group">
             <img 
-              src={IMAGES.services.retreat1}
+              src={IMAGES.services.retreat6}
               alt="Community wellness and empowerment"
               className="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
             />
