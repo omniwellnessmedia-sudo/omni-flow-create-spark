@@ -31,9 +31,25 @@ export const useDudaSite = () => {
       return data;
     } catch (error: any) {
       console.error('Error creating site:', error);
+      
+      // Enhanced error messages based on error type
+      let errorMessage = 'Could not create your website. Please try again.';
+      
+      if (error.message?.includes('401')) {
+        errorMessage = 'Authentication failed with Duda. Please contact support to verify your account setup.';
+      } else if (error.message?.includes('template')) {
+        errorMessage = 'Website template not found. Please contact support.';
+      } else if (error.message?.includes('already exists')) {
+        errorMessage = 'A website already exists for your account.';
+      } else if (error.message?.includes('credentials not configured')) {
+        errorMessage = 'Website service not configured. Please contact support.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: 'Creation Failed',
-        description: error.message || 'Could not create your website',
+        description: errorMessage,
         variant: 'destructive',
       });
       throw error;

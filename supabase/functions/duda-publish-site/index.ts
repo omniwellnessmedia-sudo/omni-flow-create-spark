@@ -47,16 +47,21 @@ serve(async (req) => {
       throw new Error('Website not found or unauthorized');
     }
 
+    // Validate credentials
     const dudaUsername = Deno.env.get('DUDA_API_USERNAME');
     const dudaPassword = Deno.env.get('DUDA_API_PASSWORD');
 
     if (!dudaUsername || !dudaPassword) {
+      console.error('❌ Missing Duda credentials');
       throw new Error('Duda API credentials not configured');
     }
 
+    console.log('✅ Credentials validated for publish');
     const authString = btoa(`${dudaUsername}:${dudaPassword}`);
 
-    console.log(`${action}ing Duda site:`, site_name);
+    console.log(`=== ${action.toUpperCase()}ING DUDA SITE ===`);
+    console.log('Site Name:', site_name);
+    console.log('Action:', action);
 
     // Publish or unpublish via Duda API
     const endpoint = action === 'publish' 
@@ -71,11 +76,17 @@ serve(async (req) => {
       },
     });
 
+    console.log('API Response Status:', dudaResponse.status);
+
     if (!dudaResponse.ok) {
       const errorText = await dudaResponse.text();
-      console.error('Duda API error:', dudaResponse.status, errorText);
-      throw new Error(`Duda API error: ${errorText}`);
+      console.error('=== DUDA PUBLISH ERROR ===');
+      console.error('Status:', dudaResponse.status);
+      console.error('Response:', errorText);
+      throw new Error(`Duda API error (${dudaResponse.status}): ${errorText}`);
     }
+
+    console.log(`✅ Site ${action}ed successfully`);
 
     // Update database
     const updateData: any = {
