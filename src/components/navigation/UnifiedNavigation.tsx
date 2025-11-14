@@ -118,7 +118,7 @@ const UnifiedNavigation = () => {
         { title: 'Browse Store', href: '/store', description: 'Browse all wellness products', icon: '🛒' },
         { title: 'Roaming Packages', href: '/wellness-roaming-packages', description: 'Travel connectivity & services', icon: '✈️' },
         { title: 'Travel Connected', href: '/travel-well-connected-store', description: 'Travel connectivity solutions', icon: '🌐' },
-        { title: 'Wellness Products', href: '/two-be-well-shop', description: 'Curated wellness products', icon: '🛍️' },
+        { title: '2BeWell Shop', href: '/2bewell/shop', description: 'Natural skincare & wellness', icon: '🛍️' },
         { title: 'Data & Services', href: '/data-products', description: 'Digital wellness tools', icon: '📊' },
       ]
     },
