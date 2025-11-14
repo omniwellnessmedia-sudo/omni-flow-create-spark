@@ -4,11 +4,13 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Leaf, Award, AlertCircle, CheckCircle } from "lucide-react";
+import { ArrowLeft, Leaf, Award, AlertCircle, CheckCircle, User } from "lucide-react";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { twoBeWellProducts } from "@/data/twoBeWellProducts";
+import { twoBeWellTeam } from "@/data/2bewellTeam";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { handleImageError } from "@/lib/imageHelpers";
 
 const TwoBeWellProductDetail = () => {
   const { productId } = useParams();
@@ -45,19 +47,21 @@ const TwoBeWellProductDetail = () => {
           <div className="grid lg:grid-cols-2 gap-12 mb-12">
             {/* Product Images */}
             <div className="space-y-4">
-              <div className="aspect-square rounded-2xl overflow-hidden bg-muted">
+              <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-muted/50 shadow-xl">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-contain p-8"
+                  className="w-full h-full object-cover p-8 hover:scale-110 transition-transform duration-500"
+                  onError={handleImageError}
                 />
               </div>
               {product.labelImage && (
-                <div className="aspect-square rounded-2xl overflow-hidden bg-muted">
+                <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-muted/50 shadow-lg">
                   <img
                     src={product.labelImage}
                     alt={`${product.name} - Label Details`}
-                    className="w-full h-full object-contain p-8"
+                    className="w-full h-full object-cover p-8"
+                    onError={handleImageError}
                   />
                 </div>
               )}
@@ -94,7 +98,19 @@ const TwoBeWellProductDetail = () => {
                   <p className="text-sm text-muted-foreground mb-2">Size: {product.size}</p>
                 )}
                 {product.shelfLife && (
-                  <p className="text-sm text-muted-foreground mb-6">Shelf Life: {product.shelfLife}</p>
+                  <p className="text-sm text-muted-foreground mb-4">Shelf Life: {product.shelfLife}</p>
+                )}
+
+                {product.teamCreator && (
+                  <div className="flex items-center gap-3 mb-6 p-3 bg-muted/50 rounded-lg">
+                    <User className="w-5 h-5 text-primary" />
+                    <span className="text-sm">
+                      Handcrafted by <strong className="text-primary">
+                        {product.teamCreator === 'both' ? 'Zenith & Feroza' : 
+                         product.teamCreator.charAt(0).toUpperCase() + product.teamCreator.slice(1)}
+                      </strong>
+                    </span>
+                  </div>
                 )}
 
                 <AddToCartButton
