@@ -22,6 +22,17 @@ import {
   Globe
 } from "lucide-react";
 
+// Import community images
+import zenithImg from "@/assets/community-zenith.jpg";
+import chadMeditationImg from "@/assets/community-chad-meditation.jpg";
+import groupTourImg from "@/assets/community-group-tour.jpg";
+import chiefKingsleyImg from "@/assets/community-chief-kingsley.jpg";
+import rockArtImg from "@/assets/community-rock-art.jpg";
+import mountainViewImg from "@/assets/community-mountain-view.jpg";
+import caveGroupImg from "@/assets/community-cave-group.jpg";
+import indigenousTourImg from "@/assets/community-indigenous-tour.jpg";
+import tourGroupImg from "@/assets/community-tour-group.jpg";
+
 const HeroSection = () => {
   const { isOpen, hasSeenTour, steps, startTour, completeTour, skipTour } = useAppTour();
 
@@ -72,58 +83,103 @@ const HeroSection = () => {
 
   const communityItems = [
     {
-      title: "Wellness Marketplace",
-      description: "Connect with wellness providers",
-      href: "/wellness-exchange/marketplace",
-      imagePrompt: "Beautiful outdoor wellness marketplace with diverse people practicing yoga, meditation, healthy food vendors, natural healing products",
+      title: "Meet Zenith",
+      description: "Co-Founder & Skincare Specialist at 2BeWell",
+      href: "/2bewell",
+      image: zenithImg,
       category: "wellness",
-      author: "Community",
-      badge: "Wellness"
+      author: "Team",
+      badge: "Wellness",
+      orientation: "portrait",
+      tags: ["Popular", "Wellness", "Personal"]
     },
     {
-      title: "Tours & Retreats", 
-      description: "Transformative wellness experiences",
+      title: "Meditation Journey",
+      description: "Finding peace on Cape Town's mountains",
       href: "/tours-retreats",
-      imagePrompt: "Stunning South African landscape with Table Mountain, people on a wellness retreat doing yoga at sunrise, beautiful Cape Town scenery",
+      image: chadMeditationImg,
+      category: "tours",
+      author: "Chad Cupido",
+      badge: "Travel",
+      orientation: "landscape",
+      tags: ["Popular", "Discover", "Wellness", "Personal"]
+    },
+    {
+      title: "Wellness Group Tours",
+      description: "Experience nature with conscious community",
+      href: "/tours-retreats",
+      image: groupTourImg,
       category: "tours",
       author: "Experiences",
-      badge: "Travel"
+      badge: "Travel",
+      orientation: "landscape",
+      tags: ["Popular", "Discover", "Wellness"]
     },
     {
-      title: "Conscious Blog",
-      description: "Inspiration, education & empowerment",
-      href: "/blog",
-      imagePrompt: "Inspiring blog content creation scene with person writing, surrounded by books, plants, natural light, peaceful creative workspace",
-      category: "inspiration",
-      author: "Content",
-      badge: "Blog"
-    },
-    {
-      title: "Podcast Platform",
-      description: "Conscious conversations & interviews",
-      href: "/podcast",
-      imagePrompt: "Professional podcast studio with high-quality microphones, soundproofing, warm lighting, two people having an engaging conversation",
-      category: "podcast",
-      author: "Audio",
-      badge: "Podcast"
-    },
-    {
-      title: "Partner Network",
-      description: "Collaborate with conscious businesses",
-      href: "/partners-directory", 
-      imagePrompt: "Diverse group of business partners shaking hands, networking event with conscious business leaders, collaborative workspace with sustainable elements",
-      category: "business",
-      author: "Network",
-      badge: "Partners"
-    },
-    {
-      title: "Community Hub",
-      description: "Connect with like-minded souls",
-      href: "/wellness-community",
-      imagePrompt: "Diverse community gathering in a circle, people connecting and sharing, warm inclusive atmosphere, outdoor community space with natural elements",
+      title: "Chief Kingsley",
+      description: "Indigenous wisdom & spiritual guidance",
+      href: "/tours-retreats",
+      image: chiefKingsleyImg,
       category: "community",
-      author: "Social",
-      badge: "Community"
+      author: "Chief Kingsley",
+      badge: "Community",
+      orientation: "portrait",
+      tags: ["Popular", "Discover", "Personal"]
+    },
+    {
+      title: "Ancient Rock Art",
+      description: "Connecting with ancestral heritage",
+      href: "/tours-retreats",
+      image: rockArtImg,
+      category: "inspiration",
+      author: "Heritage",
+      badge: "Culture",
+      orientation: "landscape",
+      tags: ["Discover", "Personal"]
+    },
+    {
+      title: "Mountain Adventures",
+      description: "Breathtaking views & wellness experiences",
+      href: "/tours-retreats",
+      image: mountainViewImg,
+      category: "tours",
+      author: "Adventures",
+      badge: "Travel",
+      orientation: "landscape",
+      tags: ["Popular", "Discover", "Wellness"]
+    },
+    {
+      title: "Sacred Cave Experience",
+      description: "Group meditation in ancient caves",
+      href: "/tours-retreats",
+      image: caveGroupImg,
+      category: "wellness",
+      author: "Experiences",
+      badge: "Wellness",
+      orientation: "landscape",
+      tags: ["Popular", "Wellness", "Discover"]
+    },
+    {
+      title: "Indigenous Tours",
+      description: "Learn from traditional wisdom keepers",
+      href: "/tours-retreats",
+      image: indigenousTourImg,
+      category: "community",
+      author: "Cultural Tours",
+      badge: "Community",
+      orientation: "landscape",
+      tags: ["Discover", "Personal", "Wellness"]
+    },
+    {
+      title: "Community Adventures",
+      description: "Connect with nature & like-minded souls",
+      href: "/tours-retreats",
+      image: tourGroupImg,
+      category: "community",
+      author: "Community",
+      badge: "Community",
+      orientation: "landscape",
+      tags: ["Popular", "Discover", "Wellness"]
     }
   ];
 
@@ -208,15 +264,15 @@ const HeroSection = () => {
 
           {/* Community Section */}
           <div className="mb-16">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
               <h2 className="text-xl font-semibold text-gray-900">From the Community</h2>
-              <div className="flex items-center gap-4">
-                <div className="flex gap-2 text-sm">
-                  {['Popular', 'Discover', 'Wellness', 'Personal', 'Business'].map((filter) => (
+              <div className="flex items-center gap-4 w-full sm:w-auto">
+                <div className="flex gap-2 text-sm overflow-x-auto pb-2 sm:pb-0">
+                  {['Popular', 'Discover', 'Wellness', 'Personal'].map((filter) => (
                     <button
                       key={filter}
                       onClick={() => setActiveFilter(filter)}
-                      className={`px-3 py-1 rounded-full transition-colors ${
+                      className={`px-3 py-1 rounded-full transition-colors whitespace-nowrap ${
                         activeFilter === filter 
                           ? 'bg-wellness-primary text-white' 
                           : 'hover:bg-gray-100'
@@ -226,39 +282,47 @@ const HeroSection = () => {
                     </button>
                   ))}
                 </div>
-                <Link to="/wellness-community">
+                <Link to="/wellness-community" className="shrink-0">
                   <Button variant="ghost" size="sm">View All</Button>
                 </Link>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {communityItems.slice(0, showMoreCommunity ? communityItems.length : 6).map((item, index) => (
+              {communityItems
+                .filter(item => item.tags?.includes(activeFilter))
+                .slice(0, showMoreCommunity ? 99 : 6)
+                .map((item, index) => (
                 <Link key={index} to={item.href} className="group">
-                  <Card className="overflow-hidden hover:shadow-md transition-shadow">
-                    <div className="aspect-video bg-gradient-to-br from-wellness-light to-wellness-accent/20 relative">
+                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className={`relative bg-gradient-to-br from-wellness-light/20 to-wellness-accent/10 ${
+                      item.orientation === 'portrait' ? 'aspect-[3/4]' : 'aspect-video'
+                    }`}>
                        <img 
-                         src={getImageForCategory(item.category)} 
+                         src={item.image} 
                          alt={item.title}
-                         className="w-full h-full object-cover opacity-80"
+                         loading="lazy"
+                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                        />
                       <div className="absolute top-3 right-3">
-                        <span className="bg-white text-wellness-primary text-xs px-2 py-1 rounded-full">
+                        <span className="bg-white/90 backdrop-blur-sm text-wellness-primary text-xs px-2 py-1 rounded-full font-medium shadow-sm">
                           {item.badge}
                         </span>
                       </div>
+                      {/* Gradient overlay for better text contrast */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 bg-wellness-primary/10 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-medium text-wellness-primary">
+                        <div className="w-8 h-8 bg-gradient-to-br from-wellness-primary to-wellness-accent rounded-full flex items-center justify-center shrink-0">
+                          <span className="text-xs font-medium text-white">
                             {item.author.charAt(0)}
                           </span>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                          <p className="text-sm text-gray-600 mb-2">{item.description}</p>
-                          <p className="text-xs text-gray-500">{item.author}</p>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-gray-900 mb-1 truncate group-hover:text-wellness-primary transition-colors">{item.title}</h3>
+                          <p className="text-sm text-gray-600 mb-2 line-clamp-2">{item.description}</p>
+                          <p className="text-xs text-gray-500 truncate">{item.author}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -267,14 +331,17 @@ const HeroSection = () => {
               ))}
             </div>
 
-            <div className="text-center mt-8">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowMoreCommunity(!showMoreCommunity)}
-              >
-                {showMoreCommunity ? 'Show Less' : 'Show More'}
-              </Button>
-            </div>
+            {communityItems.filter(item => item.tags?.includes(activeFilter)).length > 6 && (
+              <div className="text-center mt-8">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowMoreCommunity(!showMoreCommunity)}
+                  className="px-6"
+                >
+                  {showMoreCommunity ? 'Show Less' : `Show More (${communityItems.filter(item => item.tags?.includes(activeFilter)).length - 6} more)`}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
