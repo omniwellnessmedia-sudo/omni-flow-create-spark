@@ -8,6 +8,7 @@ import { ArrowRight, Coins, Users, Bot, Star, Zap, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { IMAGES } from "@/lib/images";
+import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
 
 const WellnessExchange = () => {
   const { user } = useAuth();

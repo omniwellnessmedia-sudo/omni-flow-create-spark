@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Section } from "@/components/ui/section";
+import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
 import { 
   Search, 
   Filter, 
@@ -124,8 +125,10 @@ const WellnessMarketplace = () => {
     }
   };
 
-  // Use only real services from database - no sample data
-  const displayServices = services;
+  // Use only real services from database - deduplicate by ID
+  const displayServices = Array.from(
+    new Map(services.map(s => [s.id, s])).values()
+  );
 
   // Helper function to get valid service image (filters out blob URLs)
   const getValidServiceImage = (images: string[] | null) => {
@@ -540,6 +543,13 @@ const WellnessMarketplace = () => {
                 </div>
               )}
             </>
+          )}
+
+          {/* 2BeWell CTA */}
+          {services.length > 0 && (
+            <div className="mt-16">
+              <TwoBeWellCTA variant="sidebar" />
+            </div>
           )}
         </div>
       </Section>

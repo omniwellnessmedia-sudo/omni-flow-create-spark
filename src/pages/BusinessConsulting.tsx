@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
 import { useState } from "react";
 import { CheckCircle, TrendingUp, Users, Target, Calendar, Download, Calculator } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -343,6 +344,13 @@ const BusinessConsulting = () => {
               Book My Free Session Now
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* 2BeWell CTA */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TwoBeWellCTA variant="compact" />
         </div>
       </section>
 
