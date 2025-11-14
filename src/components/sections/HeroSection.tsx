@@ -315,13 +315,15 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-auto">
               {communityItems
                 .filter(item => item.tags?.includes(activeFilter))
                 .slice(0, showMoreCommunity ? 99 : 6)
                 .map((item, index) => (
                 <Link key={index} to={item.href} className="group">
-                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  <Card className={`overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+                    item.orientation === 'portrait' ? 'md:col-span-1' : 'md:col-span-2'
+                  }`}>
                     <div className={`relative bg-gradient-to-br from-wellness-light/20 to-wellness-accent/10 ${
                       item.orientation === 'portrait' ? 'aspect-[3/4]' : 'aspect-video'
                     }`}>
@@ -329,6 +331,7 @@ const HeroSection = () => {
                          src={item.image} 
                          alt={item.title}
                          loading="lazy"
+                         decoding="async"
                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                        />
                       <div className="absolute top-3 right-3">
