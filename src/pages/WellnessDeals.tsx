@@ -19,6 +19,8 @@ import { toast } from "sonner";
 import { IMAGES, getImageWithFallback } from "@/lib/images";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import type { WellnessDeal, WellnessMarketplaceItem } from "@/types/marketplace";
+import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Enhanced deal data with comprehensive e-commerce features
 const sampleDeals: WellnessDeal[] = [
@@ -235,6 +237,17 @@ const WellnessDeals = () => {
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
   const [sortBy, setSortBy] = useState('ending_soon');
   const [deals, setDeals] = useState<WellnessDeal[]>(sampleDeals);
+
+  // Initialize deals and simulate loading
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setDeals(sampleDeals);
+      setLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Real-time countdown logic
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -717,6 +730,13 @@ const WellnessDeals = () => {
               </Button>
             </div>
           </div>
+
+          {/* 2BeWell CTA Section */}
+          {!loading && filteredDeals.length > 0 && (
+            <div className="mt-16">
+              <TwoBeWellCTA variant="compact" />
+            </div>
+          )}
         </div>
       </main>
 
