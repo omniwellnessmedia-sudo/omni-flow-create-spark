@@ -137,11 +137,11 @@ export const useAppTour = () => {
     const seen = localStorage.getItem(tourKey);
     setHasSeenTour(!!seen);
     
-    // Auto-start tour for new users on homepage
+    // Auto-start tour for new users on homepage with longer delay
     if (location.pathname === '/' && !seen) {
       const timer = setTimeout(() => {
         setIsOpen(true);
-      }, 2000); // Start after 2 seconds
+      }, 10000); // Start after 10 seconds to allow exploration
       
       return () => clearTimeout(timer);
     }
