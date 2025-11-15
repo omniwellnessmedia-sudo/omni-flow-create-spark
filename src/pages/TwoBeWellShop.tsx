@@ -9,7 +9,9 @@ import { twoBeWellBundles } from "@/data/twoBeWellBundles";
 import { twoBeWellTeam } from "@/data/2bewellTeam";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
-import heroImage from "@/assets/omni-wellness-hero.jpg";
+import productsHero from "@/assets/2bewell-products-hero.jpg";
+import ferozaPortrait from "@/assets/feroza-portrait.jpg";
+import zenithPortrait from "@/assets/zenith-portrait.jpg";
 
 const TwoBeWellShop = () => {
   return (
@@ -25,47 +27,74 @@ const TwoBeWellShop = () => {
           </div>
         </div>
 
-        <section className="py-20 bg-gradient-to-br from-green-50 via-yellow-50 to-purple-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
-                <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
-                  <Leaf className="w-4 h-4 text-green-600" />
-                  <span className="text-sm font-medium">100% Natural • Vegan • Handmade in SA</span>
+        <section className="relative overflow-hidden bg-gradient-to-br from-amber-50 via-white to-green-50">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.1),transparent_50%),radial-gradient(circle_at_70%_80%,rgba(34,197,94,0.1),transparent_50%)]" />
+          
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8 animate-fade-in-up">
+                <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-lg border border-amber-200">
+                  <Leaf className="w-5 h-5 text-green-600" />
+                  <span className="text-sm font-semibold text-foreground">100% Natural • Vegan • Handmade in SA</span>
                 </div>
                 
-                <h1 className="text-5xl lg:text-7xl font-bold bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-clip-text text-transparent leading-tight">
-                  Nature Bottled with Love
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1]">
+                  <span className="bg-gradient-to-r from-amber-600 via-green-600 to-emerald-600 bg-clip-text text-transparent">
+                    Nature Bottled
+                  </span>
+                  <br />
+                  <span className="text-foreground">with Love</span>
                 </h1>
                 
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  In a small kitchen in Cape Town, Zenith and Feroza transform nature's finest ingredients into 
+                <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
+                  From a small kitchen in Cape Town, Zenith and Feroza transform nature's finest ingredients into 
                   wellness essentials. Every jar tells a story of conscious care and plant-based purity.
                 </p>
                 
-                <div className="flex flex-wrap gap-4">
-                  <Badge className="px-4 py-2 bg-amber-100 text-amber-800">
-                    <Star className="w-4 h-4 mr-2" />BWC Endorsed
+                <div className="flex flex-wrap gap-3">
+                  <Badge variant="secondary" className="px-5 py-2.5 text-base bg-amber-100 text-amber-900 border-amber-200 hover:bg-amber-200">
+                    <Star className="w-5 h-5 mr-2 fill-amber-600 text-amber-600" />
+                    BWC Endorsed
                   </Badge>
-                  <Badge className="px-4 py-2 bg-purple-100 text-purple-800">
-                    <Sparkles className="w-4 h-4 mr-2" />Earn WellCoins
+                  <Badge variant="secondary" className="px-5 py-2.5 text-base bg-purple-100 text-purple-900 border-purple-200 hover:bg-purple-200">
+                    <Sparkles className="w-5 h-5 mr-2 fill-purple-600 text-purple-600" />
+                    Earn WellCoins
+                  </Badge>
+                  <Badge variant="secondary" className="px-5 py-2.5 text-base bg-green-100 text-green-900 border-green-200 hover:bg-green-200">
+                    <Heart className="w-5 h-5 mr-2 fill-green-600 text-green-600" />
+                    Cruelty Free
                   </Badge>
                 </div>
-                
-                <div className="flex flex-col gap-2 text-sm text-muted-foreground pt-4">
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    <span>info.2bewell@gmail.com</span>
+
+                <div className="flex items-center gap-6 pt-4">
+                  <div className="flex -space-x-4">
+                    <img src={zenithPortrait} alt="Zenith" className="w-14 h-14 rounded-full border-4 border-white shadow-lg object-cover" />
+                    <img src={ferozaPortrait} alt="Feroza" className="w-14 h-14 rounded-full border-4 border-white shadow-lg object-cover" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Instagram className="w-4 h-4" />
-                    <span>@2bewell_natural</span>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-foreground">Crafted by Zenith & Feroza</span>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <a href="mailto:info.2bewell@gmail.com" className="flex items-center gap-1.5 hover:text-foreground transition-colors">
+                        <Mail className="w-4 h-4" />
+                        info.2bewell@gmail.com
+                      </a>
+                      <span className="text-border">•</span>
+                      <a href="https://instagram.com/2bewell_natural" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-foreground transition-colors">
+                        <Instagram className="w-4 h-4" />
+                        @2bewell_natural
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div>
-                <img src={heroImage} alt="2BeWell Products" className="w-full rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-500" />
+              <div className="relative animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-400/20 to-green-400/20 rounded-3xl blur-3xl transform scale-110" />
+                <img 
+                  src={productsHero} 
+                  alt="2BeWell Natural Products Collection" 
+                  className="relative w-full rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]" 
+                />
               </div>
             </div>
           </div>
