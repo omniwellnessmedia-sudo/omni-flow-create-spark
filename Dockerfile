@@ -1,28 +1,31 @@
-# Multi-stage Docker build for production
+# Multi-stage Docker build for production (fixed)
 FROM node:18-alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files (package-lock.json will be copied if present)
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies needed for the build)
+RUN npm ci
 
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the application (outputs to /app/dist by default for Vite)
 RUN npm run build
 
 # Production stage
 FROM nginx:alpine AS production
 
+# Install curl required by the HEALTHCHECK (and keep image small)
+RUN apk add --no-cache curl
+
 # Copy built application
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy nginx configuration
+# Copy nginx configuration (ensure nginx.conf exists and is correct)
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port
