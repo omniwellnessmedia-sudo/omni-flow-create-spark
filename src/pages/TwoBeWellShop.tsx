@@ -10,10 +10,9 @@ import { twoBeWellTeam } from "@/data/2bewellTeam";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
 // Images from Supabase Storage
-const SUPABASE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
-const productsHero = `${SUPABASE_URL}/General%20Images/Wellness%20retreat3%20portrait.jpg`;
-const ferozaPortrait = `${SUPABASE_URL}/General%20Images/Feroza%20Portrait.jpg`;
-const zenithPortrait = `${SUPABASE_URL}/General%20Images/Zenith_TNT_OMNI-9.jpg`;
+const productsHero = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/1.jpg";
+const ferozaPortrait = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/feroza%20begg%20-%20portrait.jpg";
+const zenithPortrait = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg";
 
 const TwoBeWellShop = () => {
   return (
@@ -29,7 +28,7 @@ const TwoBeWellShop = () => {
           </div>
         </div>
 
-        <section className="relative overflow-hidden bg-gradient-to-br from-amber-50 via-white to-green-50">
+        <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-amber-50">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.1),transparent_50%),radial-gradient(circle_at_70%_80%,rgba(34,197,94,0.1),transparent_50%)]" />
           
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
