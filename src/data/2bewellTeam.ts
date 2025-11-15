@@ -14,7 +14,7 @@ export const twoBeWellTeam: TeamMember[] = [
   {
     name: 'Zenith',
     role: 'Co-Founder & Skincare Specialist',
-    image: getTeamImage('zenith'),
+    image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg',
     bio: 'Passionate about natural ingredients and the healing power of plants. Zenith crafts each skincare product with love and scientific precision.',
     specialties: ['Skincare Formulation', 'Essential Oils', 'Natural Preservatives', 'Product Development'],
     email: 'zenith@2bewell.co.za',
