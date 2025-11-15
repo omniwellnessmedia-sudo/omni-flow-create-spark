@@ -214,31 +214,134 @@ const HeroSection = () => {
     <>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-          {/* Header */}
-          <div className="text-center mb-8 sm:mb-12 pt-4 sm:pt-8 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-sm">
-            <div className="flex justify-center mb-4 sm:mb-6">
-              <img 
-                {...getOmniLogo()} 
-                alt="Omni Wellness Media" 
-                className="h-12 w-12 sm:h-16 sm:w-16 object-contain"
-              />
+          
+          {/* Visual Hero Banner with Images */}
+          <div className="relative overflow-hidden rounded-3xl mb-8 sm:mb-12 shadow-2xl">
+            {/* Background Image Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 opacity-40">
+              <div className="aspect-square">
+                <img src={getStorageUrl("Chief Kingsley amazing portrait.jpg")} alt="Chief Kingsley" className="w-full h-full object-cover" />
+              </div>
+              <div className="aspect-square">
+                <img src={getStorageUrl("group tour amazing cave view.jpg")} alt="Sacred Cave" className="w-full h-full object-cover" />
+              </div>
+              <div className="aspect-square">
+                <img src={getStorageUrl("wellness group tour.jpg")} alt="Wellness Group" className="w-full h-full object-cover" />
+              </div>
+              <div className="aspect-square">
+                <img src={getStorageUrl("ubuntu-community-gathering.jpg")} alt="Ubuntu Community" className="w-full h-full object-cover" />
+              </div>
+              <div className="aspect-square hidden lg:block">
+                <img src={getStorageUrl("service-learning-education.jpg")} alt="Education" className="w-full h-full object-cover" />
+              </div>
+              <div className="aspect-square hidden lg:block">
+                <img src={getStorageUrl("traditional-healing-experience.jpg")} alt="Traditional Healing" className="w-full h-full object-cover" />
+              </div>
             </div>
             
-            <h1 className="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-tight">
-              Build something <span className="text-wellness-primary">Conscious</span>
-            </h1>
+            {/* Overlay Content */}
+            <div className="absolute inset-0 bg-gradient-to-br from-wellness-primary/90 via-wellness-accent/85 to-blue-600/80 flex items-center justify-center">
+              <div className="text-center text-white px-4 py-12 sm:py-20">
+                <div className="flex justify-center mb-4 sm:mb-6">
+                  <div className="bg-white/20 backdrop-blur-md rounded-full p-4">
+                    <img 
+                      {...getOmniLogo()} 
+                      alt="Omni Wellness Media" 
+                      className="h-12 w-12 sm:h-20 sm:w-20 object-contain"
+                    />
+                  </div>
+                </div>
+                
+                <h1 className="text-3xl sm:text-4xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight drop-shadow-lg">
+                  Build something <span className="text-yellow-300">Conscious</span>
+                </h1>
+                
+                <p className="text-lg sm:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed drop-shadow-md">
+                  Transform communities through indigenous wisdom, wellness experiences, and conscious content
+                </p>
+
+                {/* Impact Stats */}
+                <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto mb-8">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
+                    <div className="text-2xl sm:text-4xl font-bold text-yellow-300">100+</div>
+                    <div className="text-xs sm:text-sm mt-1">Children Educated</div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
+                    <div className="text-2xl sm:text-4xl font-bold text-yellow-300">247</div>
+                    <div className="text-xs sm:text-sm mt-1">Lives Transformed</div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
+                    <div className="text-2xl sm:text-4xl font-bold text-yellow-300">20%</div>
+                    <div className="text-xs sm:text-sm mt-1">Community Impact</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
+                  <Link to="/tours-retreats">
+                    <Button size="lg" className="bg-white text-wellness-primary hover:bg-white/90 shadow-lg">
+                      <MapPin className="mr-2 h-5 w-5" />
+                      Explore Tours & Retreats
+                    </Button>
+                  </Link>
+                  <Link to="/wellness-deals">
+                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 backdrop-blur-sm">
+                      <Heart className="mr-2 h-5 w-5" />
+                      Wellness Marketplace
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* AI Assistant Section - Redesigned */}
+          <div className="text-center mb-8 sm:mb-12 bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-wellness-primary/10">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="relative">
+                <Bot className="h-8 w-8 text-wellness-primary" />
+                <Sparkles className="h-4 w-4 text-wellness-accent absolute -top-1 -right-1" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+                Chat with Omni AI Assistant
+              </h2>
+            </div>
             
-            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create wellness experiences by chatting with Omni AI or explore our <Link to="/wellness-deals" className="text-wellness-primary underline font-semibold hover:text-wellness-primary/80">wellness deals marketplace</Link>
+            <p className="text-sm sm:text-base text-gray-600 mb-6 max-w-2xl mx-auto">
+              Get instant guidance on wellness services, business consulting, AI tools, and content creation. 
+              <span className="text-wellness-primary font-medium"> Ask about tours, retreats, or community programs!</span>
             </p>
 
-            {/* Main Chat Interface */}
-            <div className="max-w-2xl mx-auto mb-8 sm:mb-16" data-tour="mission">
+            {/* Quick Action Buttons */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 max-w-3xl mx-auto">
+              <Button variant="outline" size="sm" className="flex items-center gap-2 justify-center">
+                <Users className="h-4 w-4" />
+                Wellness Services
+              </Button>
+              <Button variant="outline" size="sm" className="flex items-center gap-2 justify-center">
+                <Briefcase className="h-4 w-4" />
+                Business Consulting
+              </Button>
+              <Button variant="outline" size="sm" className="flex items-center gap-2 justify-center">
+                <Zap className="h-4 w-4" />
+                AI Tools
+              </Button>
+              <Button variant="outline" size="sm" className="flex items-center gap-2 justify-center">
+                <Video className="h-4 w-4" />
+                Content Creation
+              </Button>
+            </div>
+
+            {/* Chat Interface */}
+            <div className="max-w-2xl mx-auto" data-tour="mission">
               <ChatInterface 
-                placeholder="Ask Omni AI to create a wellness program about..."
-                welcomeMessage="👋 Welcome! I'm Omni AI. I can help you create wellness programs, business strategies, content, and more. What would you like to build today?"
+                placeholder="Ask about wellness programs, tours, or how to get involved..."
+                welcomeMessage="👋 Welcome! I'm Omni AI, your conscious wellness guide. I can help you discover wellness programs, indigenous wisdom experiences with Chief Kingsley, sacred cave tours, or community impact opportunities with the Dr. Phil-afel Foundation. What interests you?"
               />
             </div>
+
+            <p className="text-xs text-gray-500 mt-4">
+              💡 This is an interactive guide. For personalized consultations, <Link to="/contact" className="text-wellness-primary underline">contact our team</Link>.
+            </p>
           </div>
 
           {/* Workspace Section */}
