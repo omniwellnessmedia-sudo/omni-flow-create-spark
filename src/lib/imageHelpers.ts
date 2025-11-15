@@ -17,10 +17,10 @@ export const get2BeWellImage = (
   // Map to actual storage file names based on your upload
   const storageMap: Record<string, string> = {
     // Products (numbered files in storage)
-    'lip-balm': '1.jpg',
-    'face-serum': '2.jpg',
-    'body-butter': '3.jpg',
-    'home-cleaner': '4.png',
+    'lip-balm': '6.png',
+    'face-serum': '9.png',
+    'body-butter': '10.png',
+    'home-cleaner': '11.png',
     'chia-seeds': '5.png',
     'pea-protein': '6.png',
     // Team

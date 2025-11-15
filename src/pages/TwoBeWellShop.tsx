@@ -10,7 +10,7 @@ import { twoBeWellTeam } from "@/data/2bewellTeam";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
 // Images from Supabase Storage
-const productsHero = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/1.jpg";
+const productsHero = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/3.jpg";
 const ferozaPortrait = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/feroza%20begg%20-%20portrait.jpg";
 const zenithPortrait = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg";
 
@@ -165,21 +165,29 @@ const TwoBeWellShop = () => {
         </section>
 
         <section className="py-20 bg-background">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-4xl font-bold mb-16">Meet the Heart Behind 2BeWell</h2>
-            <div className="grid md:grid-cols-2 gap-12">
+            <div className="grid md:grid-cols-2 gap-16">
               {twoBeWellTeam.map((member) => (
-                <Card key={member.name} className="p-8 border-0 bg-gradient-to-br from-white to-purple-50">
-                  <img src={member.image} alt={member.name} className="w-48 h-48 rounded-full mx-auto mb-6 border-4 shadow-xl" />
-                  <h3 className="text-2xl font-bold mb-2">{member.name}</h3>
-                  <p className="text-primary font-semibold mb-4">{member.role}</p>
-                  <p className="italic mb-6">"{member.bio}"</p>
-                  <div className="text-sm text-muted-foreground">
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      <Mail className="w-4 h-4" />{member.email}
+                <Card key={member.name} className="p-8 border-0 bg-gradient-to-br from-white to-purple-50 overflow-hidden">
+                  <div className="flex flex-col items-center">
+                    <div className="w-56 h-72 mb-6 rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                      <img 
+                        src={member.image} 
+                        alt={member.name} 
+                        className="w-full h-full object-cover object-center" 
+                      />
                     </div>
-                    <div className="flex items-center justify-center gap-2">
-                      <Instagram className="w-4 h-4" />{member.instagram}
+                    <h3 className="text-2xl font-bold mb-2">{member.name}</h3>
+                    <p className="text-primary font-semibold mb-4">{member.role}</p>
+                    <p className="italic mb-6 text-muted-foreground">"{member.bio}"</p>
+                    <div className="text-sm text-muted-foreground space-y-2">
+                      <div className="flex items-center justify-center gap-2">
+                        <Mail className="w-4 h-4" />{member.email}
+                      </div>
+                      <div className="flex items-center justify-center gap-2">
+                        <Instagram className="w-4 h-4" />{member.instagram}
+                      </div>
                     </div>
                   </div>
                 </Card>
