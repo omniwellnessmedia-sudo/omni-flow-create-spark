@@ -9,9 +9,9 @@ import { twoBeWellBundles } from "@/data/twoBeWellBundles";
 import { twoBeWellTeam } from "@/data/2bewellTeam";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
-import productsHero from "@/assets/2bewell-products-hero.jpg";
-import ferozaPortrait from "@/assets/feroza-portrait.jpg";
-import zenithPortrait from "@/assets/zenith-portrait.jpg";
+import productsHero from "@/assets/wellness-humans.png";
+import ferozaPortrait from "@/assets/community-connection.jpg";
+import zenithPortrait from "@/assets/community-connection.jpg";
 
 const TwoBeWellShop = () => {
   return (
