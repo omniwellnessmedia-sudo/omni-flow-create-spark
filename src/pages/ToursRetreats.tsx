@@ -403,7 +403,12 @@ const ToursRetreats = () => {
   }, [items, activeTab, selectedCategory, searchTerm, setSearchParams]);
 
   const handleItemClick = (item: WellnessExperience) => {
-    navigate(`/experience/${item.id}`);
+    // Check if dedicated page exists
+    if (item.id === 'muizenberg-cave-tours') {
+      navigate('/tours/muizenberg-cave-tours');
+    } else {
+      navigate(`/tour-detail/${item.id}`);
+    }
   };
 
   const getExperienceTypeIcon = (type: string) => {

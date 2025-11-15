@@ -21,7 +21,6 @@ const AddService = React.lazy(() => import('@/pages/AddService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
 const ProviderDashboard = React.lazy(() => import('@/pages/ProviderDashboard'));
 const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPortal'));
-const ToursRetreats = React.lazy(() => import('@/pages/ToursRetreats'));
 const TransactionPage = React.lazy(() => import('@/pages/TransactionPage'));
 const TwoBeWellShop = React.lazy(() => import('@/pages/TwoBeWellShop'));
 const TwoBeWellProductDetail = React.lazy(() => import('@/pages/TwoBeWellProductDetail'));
@@ -60,6 +59,9 @@ const SocialMediaStrategy = React.lazy(() => import('@/pages/SocialMediaStrategy
 const AITools = React.lazy(() => import('@/pages/AITools'));
 const TourCategory = React.lazy(() => import('@/pages/TourCategory'));
 const TourDetail = React.lazy(() => import('@/pages/TourDetail'));
+const ToursRetreats = React.lazy(() => import('@/pages/ToursRetreats'));
+const MuizenbergCaveTours = React.lazy(() => import('@/pages/tours/MuizenbergCaveTours'));
+const CSRImpact = React.lazy(() => import('@/pages/CSRImpact'));
 const PartnersDirectory = React.lazy(() => import('@/pages/PartnersDirectory'));
 const PartnerProfile = React.lazy(() => import('@/pages/PartnerProfile'));
 const PartnerPortal = React.lazy(() => import('@/pages/PartnerPortal'));
@@ -182,9 +184,12 @@ function App() {
                   <Route path="/resources" element={<Resources />} />
 
                   {/* Travel & Tours */}
-                  <Route path="/tours-retreats" element={<ToursRetreats />} />
-                  <Route path="/tour-category/:category" element={<TourCategory />} />
-                  <Route path="/tour-detail/:id" element={<TourDetail />} />
+            <Route path="/tours-retreats" element={<ToursRetreats />} />
+            <Route path="/tour-category/:category" element={<TourCategory />} />
+            <Route path="/tour-detail/:id" element={<TourDetail />} />
+            <Route path="/tours/muizenberg-cave-tours" element={<MuizenbergCaveTours />} />
+            <Route path="/experience/:id" element={<TourDetail />} />
+            <Route path="/csr-impact" element={<CSRImpact />} />
 
                   {/* Business Services */}
                   <Route path="/business-consulting" element={<BusinessConsulting />} />
