@@ -240,6 +240,7 @@ const ToursRetreats = () => {
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
   const [items, setItems] = useState<WellnessExperience[]>([]);
   const [filteredItems, setFilteredItems] = useState<WellnessExperience[]>([]);
+  const timeoutRef = useRef<number | null>(null);
 
   // Initialize data
   // Add storage images hook
@@ -249,7 +250,6 @@ const ToursRetreats = () => {
   });
 
   useEffect(() => {
-    const timeoutRef = useRef<number | null>(null);
     
     const initializeData = async () => {
       console.debug('[Tours] Initializing data fetch');
