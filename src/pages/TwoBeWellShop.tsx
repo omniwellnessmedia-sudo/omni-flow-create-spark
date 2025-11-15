@@ -11,8 +11,8 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
 // Images from Supabase Storage
 const SUPABASE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
-const productsHero = `${SUPABASE_URL}/General%20Images/Wellness%20retreat%202.jpg`;
-const ferozaPortrait = `${SUPABASE_URL}/General%20Images/feroza%20begg%20-%20portrait.jpg`;
+const productsHero = `${SUPABASE_URL}/General%20Images/Wellness%20retreat3%20portrait.jpg`;
+const ferozaPortrait = `${SUPABASE_URL}/General%20Images/Feroza%20Portrait.jpg`;
 const zenithPortrait = `${SUPABASE_URL}/General%20Images/Zenith_TNT_OMNI-9.jpg`;
 
 const TwoBeWellShop = () => {
