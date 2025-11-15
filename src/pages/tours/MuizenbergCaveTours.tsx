@@ -5,34 +5,21 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
-import { Check, Heart, BookOpen, Users, Leaf, Award, TrendingUp, Star, MapPin, Calendar } from 'lucide-react';
-
-const SUPABASE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co";
-const getStorageUrl = (filename: string) => 
-  `${SUPABASE_URL}/storage/v1/object/public/provider-images/General%20Images/${encodeURIComponent(filename)}`;
+import { Check, Heart, BookOpen, Users, Leaf, Award } from 'lucide-react';
 
 export default function MuizenbergCaveTours() {
-  const tourImages = [
-    getStorageUrl('muizenberg cave view.jpg'),
-    getStorageUrl('group tour amazing cave view.jpg'),
-    getStorageUrl('sacred cave wellness.jpg'),
-    getStorageUrl('fact-wellness-hero.jpg'),
-    getStorageUrl('fact-outdoor-fitness.jpg')
-  ];
-
   useTourSEO({
-    tourName: 'Sacred Cave Healing: Muizenberg Wellness Journey',
-    title: 'Sacred Cave Healing | Ancient Khoi-San Wisdom Meets Modern Therapy | Muizenberg',
-    description: 'Transform through evidence-based indigenous healing in sacred cave spaces. 7-10 day academic program combining Khoi-San traditions, trauma-informed care, and therapeutic practices. 20% supports Dr. Phil-afel Foundation. 40% stress reduction proven.',
+    tourName: 'Muizenberg Cave Wellness Journey',
+    title: 'Evidence-Based Indigenous Healing | Muizenberg Cave Wellness Journey',
+    description: 'Therapeutic integration of Khoi-San healing traditions with contemporary wellness science in Cape Town. Academic study abroad program combining trauma-informed care, somatic practices, and indigenous wisdom.',
     price: 3999,
     currency: 'USD',
-    location: 'Muizenberg, Cape Town, South Africa',
+    location: 'Muizenberg, Cape Town',
     duration: '7-10 days',
     rating: 4.8,
     reviewCount: 247,
-    images: tourImages,
-    url: window.location.href,
-    keywords: ['sacred cave healing', 'Khoi-San wisdom', 'indigenous healing', 'trauma-informed care', 'wellness retreat', 'Cape Town', 'Muizenberg', 'Dr. Phil-afel Foundation', 'therapeutic retreat', 'somatic practices']
+    images: [],
+    url: window.location.href
   });
 
   const tour = {
@@ -53,145 +40,35 @@ export default function MuizenbergCaveTours() {
     <>
       <UnifiedNavigation />
       
-      {/* Hero Section with Cave Images */}
-      <section className="relative h-[80vh] overflow-hidden">
-        <div className="absolute inset-0">
-          <img 
-            src={tourImages[0]} 
-            alt="Sacred Muizenberg Cave Wellness Space"
-            className="w-full h-full object-cover"
-            loading="eager"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
-        </div>
+      {/* Hero Section */}
+      <section className="relative h-[70vh] bg-gradient-to-br from-wellness-primary to-wellness-accent">
+        <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 container mx-auto h-full flex items-center px-4">
           <div className="max-w-3xl text-white">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Badge className="bg-wellness-primary/90 text-white border-0">Academic Program</Badge>
-              <Badge className="bg-white/20 text-white border-white/30">7-10 Days</Badge>
-              <Badge className="bg-white/20 text-white border-white/30">Dr. Phil-afel Foundation Partner</Badge>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Sacred Cave Healing: Where Ancient Wisdom Meets Modern Therapy
+            <Badge className="mb-4 bg-white/20 text-white border-white/30">Academic Program | 7-10 Days</Badge>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Muizenberg Cave Wellness Journey: Indigenous Healing in Clinical Context
             </h1>
-            <p className="text-xl md:text-2xl mb-4 text-white/90">
-              Evidence-based integration of Khoi-San healing traditions in sacred cave spaces
-            </p>
-            <p className="text-lg mb-8 text-white/80">
-              40% stress reduction • Cultural competency certification • 20% supports community programs
+            <p className="text-xl mb-8 text-white/90">
+              Evidence-based integration of Khoi-San healing traditions with contemporary therapeutic modalities in a transformative educational setting
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-wellness-primary text-white hover:bg-wellness-primary/90">
-                <Calendar className="mr-2 h-5 w-5" />
+              <Button size="lg" className="bg-white text-wellness-primary hover:bg-white/90">
                 Enroll Now - $3,999
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 backdrop-blur-sm">
-                <BookOpen className="mr-2 h-5 w-5" />
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
                 Download Syllabus
               </Button>
             </div>
-            
-            {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/20">
-              <div>
-                <div className="text-3xl font-bold mb-1">247</div>
-                <div className="text-sm text-white/70">Participants</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold mb-1 flex items-center gap-1">
-                  4.8 <Star className="h-5 w-5 fill-current" />
-                </div>
-                <div className="text-sm text-white/70">Rating</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold mb-1">40%</div>
-                <div className="text-sm text-white/70">Stress Reduction</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* What Makes This Unique */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">What Makes This Journey Unique</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="border-wellness-primary/20">
-                <CardHeader>
-                  <MapPin className="w-10 h-10 text-wellness-primary mb-2" />
-                  <CardTitle className="text-xl">Sacred Cave Spaces</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    The only program using authentic Khoi-San sacred caves for healing work. Natural acoustics enhance breathwork and meditation practices.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-wellness-primary/20">
-                <CardHeader>
-                  <Users className="w-10 h-10 text-wellness-primary mb-2" />
-                  <CardTitle className="text-xl">Indigenous Knowledge Keepers</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Learn directly from Chief Kingsley and traditional healers following authentic Khoi-San protocols with cultural respect and consent.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-wellness-primary/20">
-                <CardHeader>
-                  <Award className="w-10 h-10 text-wellness-primary mb-2" />
-                  <CardTitle className="text-xl">Clinical Integration</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    FACT Wellness certified facilitators bridge indigenous wisdom with trauma-informed care and evidence-based therapeutic practices.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-wellness-primary/20">
-                <CardHeader>
-                  <Heart className="w-10 h-10 text-wellness-primary mb-2" />
-                  <CardTitle className="text-xl">Community Impact</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    20% of every enrollment directly supports Dr. Phil-afel Foundation programs: education for 100+ children, urban gardening, and women's empowerment.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Image Gallery */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-4">
-            {tourImages.slice(1, 4).map((img, idx) => (
-              <div key={idx} className="relative h-64 rounded-lg overflow-hidden group">
-                <img 
-                  src={img} 
-                  alt={`Muizenberg Cave Wellness Experience ${idx + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
       {/* Therapeutic Outcomes Section */}
-      <section className="py-16 bg-muted/30">
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto mb-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Measurable Learning Outcomes</h2>
+          <div className="max-w-3xl mb-12">
+            <h2 className="text-3xl font-bold mb-4">Measurable Learning Outcomes</h2>
             <p className="text-lg text-muted-foreground">
               Participants develop evidence-based competencies in trauma-informed care, somatic practices, 
               and cultural humility through experiential learning with indigenous knowledge holders.
