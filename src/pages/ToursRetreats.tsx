@@ -591,139 +591,125 @@ const ToursRetreats = () => {
             </Tabs>
           </div>
 
-          {/* Results Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredItems.map((item) => (
-              <Card key={item.id} className="bg-white/80 backdrop-blur-sm border-2 border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 cursor-pointer">
-                <div className="aspect-video relative overflow-hidden rounded-t-xl">
-                  <img
-                    src={item.images[0] || IMAGES.wellness.retreat}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      e.currentTarget.src = IMAGES.wellness.retreat;
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  
-                  {/* Experience Type Badge */}
-                  <div className="absolute top-3 left-3">
-                    <Badge className={`${getExperienceTypeColor(item.experience_type)} border-0 flex items-center gap-1`}>
-                      {getExperienceTypeIcon(item.experience_type)}
-                      {item.experience_type}
-                    </Badge>
-                  </div>
+          {/* Results Grid - GetYourGuide Style */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredItems.map((item, index) => {
+              // Assign unique images based on index to ensure variety
+              const imageIndex = index % storageImages.length;
+              const tourImage = storageImages[imageIndex]?.url || item.images[0] || IMAGES.wellness.retreat;
+              
+              return (
+                <Card 
+                  key={item.id} 
+                  className="group overflow-hidden bg-white border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                  onClick={() => handleItemClick(item)}
+                >
+                  {/* Image Section */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={tourImage}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      onError={(e) => {
+                        e.currentTarget.src = IMAGES.wellness.retreat;
+                      }}
+                    />
+                    
+                    {/* Wishlist Button */}
+                    <button 
+                      className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toast.info('Added to wishlist');
+                      }}
+                    >
+                      <Heart className="h-4 w-4 text-gray-700" />
+                    </button>
 
-                  {/* Duration Badge */}
-                  <div className="absolute top-3 right-3">
-                    <Badge className="bg-black/50 text-white">
-                      <Clock className="h-3 w-3 mr-1" />
-                      {item.duration_days}d
-                    </Badge>
-                  </div>
-
-                  {/* Rating */}
-                  <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/50 px-2 py-1 rounded-full">
-                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                    <span className="text-white text-xs font-medium">{item.rating}</span>
-                  </div>
-
-                  {/* Availability Indicator */}
-                  <div className="absolute bottom-3 left-3">
-                    <Badge className={`${item.current_participants < item.max_participants ? 'bg-green-500/90' : 'bg-orange-500/90'} text-white`}>
-                      {item.max_participants - item.current_participants} spots left
-                    </Badge>
-                  </div>
-                </div>
-
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start mb-2">
-                    <CardTitle className="text-lg font-bold line-clamp-2 group-hover:text-purple-600 transition-colors">
-                      {item.title}
-                    </CardTitle>
-                  </div>
-                  <CardDescription className="text-sm text-purple-600 font-medium">
-                    {item.provider_name}
-                  </CardDescription>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  <p className="text-gray-600 text-sm line-clamp-2">
-                    {item.description}
-                  </p>
-
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      <span className="truncate">{item.location}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Users className="h-4 w-4" />
-                      <span>Max {item.max_participants}</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <div className="font-medium">Includes:</div>
-                    <div className="flex flex-wrap gap-1">
-                      {item.includes.slice(0, 3).map((include, idx) => (
-                        <Badge key={idx} variant="secondary" className="text-xs px-2 py-1">
-                          {include}
+                    {/* Featured Badge */}
+                    {index < 3 && (
+                      <div className="absolute top-3 left-3">
+                        <Badge className="bg-orange-500 text-white border-0 text-xs">
+                          Featured
                         </Badge>
-                      ))}
-                      {item.includes.length > 3 && (
-                        <Badge variant="secondary" className="text-xs px-2 py-1">
-                          +{item.includes.length - 3} more
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Pricing */}
-                  <div className="space-y-2 border-t pt-3">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-lg text-gray-900">
-                        <PriceDisplay 
-                          price={item.price_zar} 
-                          primaryCurrency="ZAR"
-                          showBothCurrencies={false}
-                          className="text-lg font-bold"
-                        />
-                      </span>
-                      <span className="text-sm text-gray-500">per person</span>
-                    </div>
-                    {item.price_wellcoins > 0 && (
-                      <div className="flex items-center justify-between text-orange-600">
-                        <div className="flex items-center gap-1">
-                          <Coins className="h-4 w-4" />
-                          <span className="font-semibold">{item.price_wellcoins} WellCoins</span>
-                        </div>
                       </div>
                     )}
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-2 pt-2">
-                    <Button 
-                      variant="default" 
-                      size="sm"
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-                      onClick={() => handleItemClick(item)}
-                    >
-                      <Eye className="h-4 w-4 mr-2" />
-                      View Details
-                    </Button>
-                    <Button variant="outline" size="sm" className="px-3">
-                      <Bookmark className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm" className="px-3">
-                      <Share2 className="h-4 w-4" />
-                    </Button>
+                  {/* Content Section */}
+                  <div className="p-4 space-y-2">
+                    {/* Location & Type */}
+                    <div className="flex items-center gap-2 text-xs text-gray-600">
+                      <MapPin className="h-3 w-3" />
+                      <span className="truncate">{item.location}</span>
+                      <span className="text-gray-300">•</span>
+                      <span className="capitalize">{item.experience_type}</span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="font-semibold text-base line-clamp-2 group-hover:text-wellness-primary transition-colors">
+                      {item.title}
+                    </h3>
+
+                    {/* Rating & Reviews */}
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-semibold">{item.rating}</span>
+                      </div>
+                      <span className="text-xs text-gray-500">({item.review_count} reviews)</span>
+                    </div>
+
+                    {/* Duration & Spots */}
+                    <div className="flex items-center gap-3 text-xs text-gray-600">
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        <span>{item.duration_days} days</span>
+                      </div>
+                      <span className="text-gray-300">•</span>
+                      <div className="flex items-center gap-1">
+                        <Users className="h-3 w-3" />
+                        <span>{item.max_participants - item.current_participants} spots left</span>
+                      </div>
+                    </div>
+
+                    {/* Separator */}
+                    <div className="border-t border-gray-100 pt-3 mt-3">
+                      {/* Pricing */}
+                      <div className="flex items-end justify-between">
+                        <div>
+                          <div className="text-xs text-gray-500">From</div>
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-xl font-bold">R {item.price_zar.toLocaleString()}</span>
+                          </div>
+                          <div className="text-xs text-gray-500">per person</div>
+                        </div>
+                        <Button 
+                          size="sm" 
+                          className="bg-wellness-primary hover:bg-wellness-primary/90"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleItemClick(item);
+                          }}
+                        >
+                          View
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                </Card>
+              );
+            })}
           </div>
+
+          {/* Load More - GetYourGuide Style */}
+          {filteredItems.length > 12 && (
+            <div className="text-center mt-8">
+              <Button variant="outline" size="lg" className="min-w-[200px]">
+                Load More Experiences
+              </Button>
+            </div>
+          )}
 
           {/* No Results State */}
           {filteredItems.length === 0 && (
