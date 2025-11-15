@@ -9,9 +9,11 @@ import { twoBeWellBundles } from "@/data/twoBeWellBundles";
 import { twoBeWellTeam } from "@/data/2bewellTeam";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
-import productsHero from "@/assets/wellness-humans.png";
-import ferozaPortrait from "@/assets/community-connection.jpg";
-import zenithPortrait from "@/assets/community-connection.jpg";
+// Images from Supabase Storage
+const SUPABASE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
+const productsHero = `${SUPABASE_URL}/General%20Images/Wellness%20retreat%202.jpg`;
+const ferozaPortrait = `${SUPABASE_URL}/General%20Images/feroza%20begg%20-%20portrait.jpg`;
+const zenithPortrait = `${SUPABASE_URL}/General%20Images/Zenith_TNT_OMNI-9.jpg`;
 
 const TwoBeWellShop = () => {
   return (
