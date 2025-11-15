@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (including devDependencies needed for build)
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -18,6 +18,9 @@ RUN npm run build
 
 # Production stage
 FROM nginx:alpine AS production
+
+# Install curl for healthcheck
+RUN apk add --no-cache curl
 
 # Copy built application
 COPY --from=builder /app/dist /usr/share/nginx/html
