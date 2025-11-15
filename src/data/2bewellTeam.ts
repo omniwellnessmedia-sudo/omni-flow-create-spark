@@ -23,7 +23,7 @@ export const twoBeWellTeam: TeamMember[] = [
   {
     name: 'Feroza',
     role: 'Co-Founder & Nutrition Expert',
-    image: getTeamImage('feroza'),
+    image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/feroza%20begg%20-%20portrait.jpg',
     bio: 'Believes in food as medicine and the power of plant-based nutrition. Feroza sources the finest superfoods and creates nourishing blends.',
     specialties: ['Plant-Based Nutrition', 'Superfood Blends', 'Home Care', 'Wellness Coaching'],
     email: 'feroza@2bewell.co.za',
