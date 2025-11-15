@@ -30,6 +30,39 @@ const getStorageUrl = (filename: string) =>
 // Sample tour and retreat data following the unified marketplace structure
 const sampleToursRetreats: WellnessExperience[] = [
   {
+    id: 'muizenberg-cave-tours',
+    content_type: 'experience',
+    title: 'Muizenberg Cave Wellness Journey',
+    description: 'Evidence-based integration of Khoi-San healing traditions with contemporary wellness science in therapeutic cave environments.',
+    longDescription: 'Academic study abroad program combining trauma-informed care, somatic practices, and indigenous wisdom in the sacred caves of Muizenberg. Measurable outcomes include 40% reduction in stress markers and enhanced emotional regulation capacity.',
+    provider_id: 'omni-wellness',
+    provider_name: 'Omni Wellness Media',
+    category: 'Indigenous Wisdom',
+    subcategory: 'Healing Retreats',
+    images: ['/lovable-uploads/sacred-cave.jpg', '/lovable-uploads/indigenous-healing-ceremony.jpg'],
+    location: 'Muizenberg, Cape Town',
+    is_online: false,
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    rating: 4.8,
+    review_count: 247,
+    tags: ['indigenous', 'healing', 'therapeutic', 'academic', 'cave-healing'],
+    price_zar: 3999,
+    price_wellcoins: 3199,
+    experience_type: 'retreat',
+    start_date: '2025-02-01',
+    end_date: '2025-02-10',
+    duration_days: 10,
+    max_participants: 12,
+    current_participants: 7,
+    includes: ['Accommodation', 'All organic meals', 'Academic materials', 'Healing sessions', 'Cave access', 'Transport'],
+    accommodation_included: true,
+    meals_included: true,
+    transport_included: true,
+    difficulty_level: 'all_levels'
+  },
+  {
     id: 'conscious-connections-indigenous-healing',
     content_type: 'experience',
     title: 'Conscious Connections: Indigenous Wisdom + Healing',
@@ -284,39 +317,55 @@ const ToursRetreats = () => {
 
         if (dbTours && dbTours.length > 0) {
           // Convert database tours to WellnessExperience format
-          const convertedTours: WellnessExperience[] = dbTours.map((tour: any) => ({
-            id: tour.id,
-            content_type: 'experience',
-            title: tour.title,
-            description: tour.subtitle || tour.title,
-            longDescription: tour.overview,
-            provider_id: 'omni-wellness',
-            provider_name: 'Omni Wellness',
-            category: tour.category?.name || 'Wellness',
-            subcategory: tour.category?.slug || 'general',
-            images: tour.image_gallery || [tour.hero_image_url],
-            location: tour.destination,
-            is_online: false,
-            is_active: tour.active !== false,
-            created_at: tour.created_at,
-            updated_at: tour.updated_at,
-            rating: 4.8,
-            review_count: 0,
-            tags: [],
-            price_zar: tour.price_from,
-            price_wellcoins: Math.floor(tour.price_from * 0.8),
-            experience_type: 'retreat',
-            start_date: tour.start_date || new Date().toISOString().split('T')[0],
-            end_date: tour.end_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            duration_days: parseInt(tour.duration?.split(' ')[0]) || 7,
-            max_participants: tour.max_participants,
-            current_participants: 0,
-            includes: tour.inclusions || [],
-            accommodation_included: true,
-            meals_included: true,
-            transport_included: false,
-            difficulty_level: tour.difficulty_level as any || 'all_levels'
-          }));
+          const convertedTours: WellnessExperience[] = dbTours.map((tour: any) => {
+            // Convert image paths to full URLs
+            const getImageUrl = (path: string) => {
+              if (!path) return '';
+              if (path.startsWith('http')) return path;
+              if (path.startsWith('/lovable-uploads/')) {
+                return `${window.location.origin}${path}`;
+              }
+              return path;
+            };
+
+            const tourImages = tour.image_gallery && Array.isArray(tour.image_gallery) 
+              ? tour.image_gallery.map(getImageUrl)
+              : [getImageUrl(tour.hero_image_url)];
+
+            return {
+              id: tour.id,
+              content_type: 'experience',
+              title: tour.title,
+              description: tour.subtitle || tour.title,
+              longDescription: tour.overview,
+              provider_id: 'omni-wellness',
+              provider_name: 'Omni Wellness',
+              category: tour.category?.name || 'Wellness',
+              subcategory: tour.category?.slug || 'general',
+              images: tourImages.filter(Boolean),
+              location: tour.destination,
+              is_online: false,
+              is_active: tour.active !== false,
+              created_at: tour.created_at,
+              updated_at: tour.updated_at,
+              rating: 4.8,
+              review_count: 0,
+              tags: [],
+              price_zar: tour.price_from,
+              price_wellcoins: Math.floor(tour.price_from * 0.8),
+              experience_type: 'retreat',
+              start_date: tour.start_date || new Date().toISOString().split('T')[0],
+              end_date: tour.end_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              duration_days: parseInt(tour.duration?.split(' ')[0]) || 7,
+              max_participants: tour.max_participants,
+              current_participants: 0,
+              includes: tour.inclusions || [],
+              accommodation_included: true,
+              meals_included: true,
+              transport_included: false,
+              difficulty_level: tour.difficulty_level as any || 'all_levels'
+            };
+          });
           setItems(convertedTours);
           console.debug('[Tours] Loaded', convertedTours.length, 'tours from database');
           toast.success('Loaded wellness experiences');

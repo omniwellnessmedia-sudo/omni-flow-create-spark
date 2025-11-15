@@ -41,8 +41,13 @@ export default function MuizenbergCaveTours() {
       <UnifiedNavigation />
       
       {/* Hero Section */}
-      <section className="relative h-[70vh] bg-gradient-to-br from-wellness-primary to-wellness-accent">
-        <div className="absolute inset-0 bg-black/40" />
+      <section className="relative h-[70vh] overflow-hidden">
+        <img 
+          src="/lovable-uploads/sacred-cave.jpg" 
+          alt="Muizenberg Cave Wellness Journey"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
         <div className="relative z-10 container mx-auto h-full flex items-center px-4">
           <div className="max-w-3xl text-white">
             <Badge className="mb-4 bg-white/20 text-white border-white/30">Academic Program | 7-10 Days</Badge>
