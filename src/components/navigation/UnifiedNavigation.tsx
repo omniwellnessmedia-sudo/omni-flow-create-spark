@@ -137,12 +137,13 @@ const UnifiedNavigation = () => {
         { title: 'Provider Directory', href: '/provider-directory', description: 'Discover wellness providers', icon: '👥' },
       ]
     },
-    {
-      title: 'AI Tools',
-      href: '/ai-tools',
-      icon: Bot,
-      badge: 'NEW',
-    },
+    // AI Tools temporarily hidden - launching soon with 100% donations to Dr. Phil Foundation
+    // {
+    //   title: 'AI Tools',
+    //   href: '/ai-tools',
+    //   icon: Bot,
+    //   badge: 'NEW',
+    // },
   ];
 
   const handleSignOut = async () => {
