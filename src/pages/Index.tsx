@@ -39,7 +39,7 @@ const Index = () => {
         
         <ServicesSection />
         <ToursRetreatsPreview />
-        <AIToolsPreview />
+        {/* <AIToolsPreview /> Temporarily hidden */}
         <FeaturedProjectsSection />
         <TestimonialsSection />
         <VideoShowcaseSection />

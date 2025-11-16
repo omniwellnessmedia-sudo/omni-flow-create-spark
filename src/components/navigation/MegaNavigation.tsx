@@ -277,8 +277,8 @@ export const MegaNavigation = () => {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        {/* AI Tools */}
-        <NavigationMenuItem>
+        {/* AI Tools - Temporarily Hidden */}
+        {/* <NavigationMenuItem>
           <Link to="/ai-tools">
             <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
               <Bot className="mr-2 h-4 w-4" />
@@ -286,7 +286,7 @@ export const MegaNavigation = () => {
               <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">NEW</span>
             </NavigationMenuLink>
           </Link>
-        </NavigationMenuItem>
+        </NavigationMenuItem> */}
 
         {/* Community */}
         <NavigationMenuItem>

@@ -104,38 +104,35 @@ export const hasGoodCommission = (product: Product): boolean => {
   // Filter out products with very low commission (< 5%)\\n  return product.commission_rate >= 0.05;
 };
 
-// RELAXED filter - Option B approach
+// RELAXED filter - Using OR logic (any one condition passes)
 export const filterQualityProducts = (products: Product[]): Product[] => {
   return products.filter(product => {
     // STRICT: Must not be adult content
     if (isAdultContent(product)) {
-      console.log('❌ Filtered out adult content:', product.name);
       return false;
     }
     
     // STRICT: Must not be non-wellness harmful products
     if (isNonWellness(product)) {
-      console.log('❌ Filtered out non-wellness:', product.name);
       return false;
     }
     
-    // RELAXED: Pass if in trusted category OR has wellness keywords OR has good image
+    // RELAXED: Pass if ANY of these conditions are met (OR logic)
     const inTrustedCategory = isInTrustedCategory(product);
     const hasWellnessKeyword = hasWellnessKeywords(product);
     const hasGoodImage = hasImage(product) && !hasBrokenImage(product);
+    const hasReasonablePrice_ = hasReasonablePrice(product);
     
+    // Must meet at least ONE wellness criterion
     if (!inTrustedCategory && !hasWellnessKeyword && !hasGoodImage) {
-      console.log('❌ Filtered out - no trusted category, keywords, or image:', product.name);
       return false;
     }
     
-    // RELAXED: Only filter extreme prices
-    if (!hasReasonablePrice(product)) {
-      console.log('❌ Filtered out unreasonable price:', product.name, product.price_zar);
+    // Must have reasonable price
+    if (!hasReasonablePrice_) {
       return false;
     }
     
-    console.log('✅ Passed filter:', product.name, { inTrustedCategory, hasWellnessKeyword, hasGoodImage });
     return true;
   });
 };
