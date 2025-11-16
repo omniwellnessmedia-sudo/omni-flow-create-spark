@@ -429,7 +429,7 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
               </div>
             )}
 
-            <Link to={`/tour-category/${tour.category.slug}/${tour.slug}`}>
+            <Link to={`/tour-detail/${tour.slug}`}>
               <Button className="w-full sm:w-auto">View Details</Button>
             </Link>
           </CardContent>
@@ -487,7 +487,7 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
           </div>
         </div>
 
-        <Link to={`/tour-category/${tour.category.slug}/${tour.slug}`}>
+        <Link to={`/tour-detail/${tour.slug}`}>
           <Button className="w-full text-sm sm:text-base">View Details</Button>
         </Link>
       </CardContent>
