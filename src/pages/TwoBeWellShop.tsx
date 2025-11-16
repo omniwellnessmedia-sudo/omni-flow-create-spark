@@ -10,7 +10,6 @@ import { twoBeWellTeam } from "@/data/2bewellTeam";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
 import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
-import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
 // Images from Supabase Storage
 const productsHero = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/3.jpg";
 const ferozaPortrait = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/feroza%20begg%20-%20portrait.jpg";
