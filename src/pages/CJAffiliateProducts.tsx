@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,8 @@ import { BackToTopButton } from '@/components/product/BackToTopButton';
 import { ProductSkeleton } from '@/components/product/ProductSkeleton';
 import { TrustBadges } from '@/components/product/TrustBadges';
 import { EmptyState } from '@/components/ui/empty-state';
+import { ImpactBadges } from '@/components/social-impact/ImpactBadges';
+import { filterQualityProducts } from '@/lib/productFilters';
 import { 
   Search, 
   ExternalLink, 
@@ -60,13 +62,16 @@ interface CJProduct {
 }
 
 const CJAffiliateProducts = () => {
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  
   const [products, setProducts] = useState<CJProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<CJProduct[]>([]);
   const [displayedProducts, setDisplayedProducts] = useState<CJProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(categoryParam ? [categoryParam] : []);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [sortBy, setSortBy] = useState('featured');
   const [compareProducts, setCompareProducts] = useState<string[]>([]);
@@ -137,7 +142,10 @@ const CJAffiliateProducts = () => {
         .order('view_count', { ascending: false });
 
       if (error) throw error;
-      setProducts(data || []);
+      
+      // Apply quality filters - cast to compatible type
+      const qualityProducts = filterQualityProducts(data || [] as any) as CJProduct[];
+      setProducts(qualityProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
       toast({

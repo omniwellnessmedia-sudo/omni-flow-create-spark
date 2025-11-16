@@ -1,26 +1,32 @@
 
 import { Card, CardContent } from "@/components/ui/card";
-import { IMAGES } from "@/lib/images";
+import { Star } from "lucide-react";
 
 const TestimonialsSection = () => {
   const testimonials = [
     {
-      quote: "Omni Wellness Media transformed our brand story and helped us connect with our community in ways we never imagined. Their authentic approach to content creation is unparalleled.",
-      author: "Sarah Johnson",
-      role: "Founder, Green Living Co.",
-      image: IMAGES.sandy.portrait1
+      quote: "Joined these lovely people yesterday for a very interesting indigenous walk. Was fascinating to learn more about the mountains here in Cape Town. The plants, their medicinal properties and how Chief Kingsley's ancestors passed on this amazing knowledge. So wonderful that he's passing it on today and sharing his gifts with the world. Thanks so much Chad and team!",
+      author: "Janneke Blake",
+      role: "Cape Town Explorer",
+      initials: "JB",
+      rating: 5,
+      featured: true
     },
     {
-      quote: "The team's dedication to conscious business development and their holistic approach to wellness has been instrumental in our organization's growth and impact.",
-      author: "Marcus Williams",
-      role: "Director, Community Wellness Foundation",
-      image: IMAGES.sandy.portrait2
+      quote: "The natural skincare products from 2BeWell have transformed my skin. Knowing they're handmade with love and completely natural gives me peace of mind. The face serum is absolutely incredible!",
+      author: "Anonymous",
+      role: "2BeWell Customer",
+      initials: "AC",
+      rating: 5,
+      featured: false
     },
     {
-      quote: "Working with Omni Wellness Media has been transformative. They don't just create content; they create movements that inspire positive change in communities.",
-      author: "Dr. Amara Okafor",
-      role: "Health & Wellness Consultant",
-      image: IMAGES.sandy.portrait3
+      quote: "My weekend wellness retreat in Cape Town was life-changing. The combination of nature, indigenous wisdom, and community connection created a profound healing experience I'll never forget.",
+      author: "Anonymous",
+      role: "Retreat Participant",
+      initials: "RP",
+      rating: 5,
+      featured: false
     }
   ];
 
@@ -40,25 +46,34 @@ const TestimonialsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <Card 
-              key={testimonial.author}
+              key={testimonial.author + index}
               variant="standard"
-              className="hover:shadow-lg transition-all duration-300 animate-fade-in-up border-0 bg-rainbow-subtle"
+              className={`hover:shadow-lg transition-all duration-300 animate-fade-in-up border-2 ${
+                testimonial.featured 
+                  ? 'border-primary/30 bg-gradient-to-br from-primary/5 to-purple-50' 
+                  : 'border-border/50 bg-white'
+              }`}
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <CardContent className="p-6 flex flex-col h-full">
                 <div className="flex-1 mb-6">
-                  <div className="text-4xl text-omni-indigo mb-4">"</div>
-                  <p className="text-gray-700 italic leading-relaxed card-description-clamp">{testimonial.quote}</p>
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <div className="text-6xl font-serif text-primary/20 mb-4 leading-none">"</div>
+                  <p className={`text-gray-700 leading-relaxed ${testimonial.featured ? 'text-base' : 'text-sm'} line-clamp-6`}>
+                    {testimonial.quote}
+                  </p>
                 </div>
-                <div className="flex items-center mt-auto">
-                  <img 
-                    src={testimonial.image}
-                    alt={testimonial.author}
-                    className="w-12 h-12 rounded-full object-cover mr-4"
-                  />
+                <div className="flex items-center mt-auto pt-4 border-t border-border/50">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3 flex-shrink-0">
+                    <span className="text-sm font-bold text-primary">{testimonial.initials}</span>
+                  </div>
                   <div>
                     <div className="font-bold text-gray-800">{testimonial.author}</div>
-                    <div className="text-sm text-gray-600">{testimonial.role}</div>
+                    <div className="text-xs text-gray-600">{testimonial.role}</div>
                   </div>
                 </div>
               </CardContent>
