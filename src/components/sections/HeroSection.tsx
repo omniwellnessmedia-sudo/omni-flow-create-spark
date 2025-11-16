@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { TourTrigger } from "@/components/ui/app-tour";
 import { useAppTour } from "@/hooks/useAppTour";
 import AppTour from "@/components/ui/app-tour";
-import { ChatInterface } from "@/components/ui/chat-interface";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { IMAGES, getOmniLogo, getImageWithFallback } from "@/lib/images";
@@ -53,25 +52,36 @@ const HeroSection = () => {
       title: "Business Strategy",
       description: "Strategic consulting for conscious growth",
       href: "/business-consulting",
-      imagePrompt: "Professional business consulting meeting with diverse team around a modern conference table, strategic planning documents, charts and graphs, clean modern office environment",
-      category: "business",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Business%20Consulting/Business%20consulting.jpg",
       badge: "Consulting"
     },
     {
       title: "Content Creation",
       description: "Video, podcast & social media production", 
       href: "/media-production",
-      imagePrompt: "Professional video production studio with cameras, lighting equipment, creative content being filmed, modern media workspace with editing screens",
-      category: "media",
+      image: IMAGES.services.artscape,
       badge: "Media"
     },
     {
       title: "Wellness AI Tools",
       description: "AI-powered wellness assistants",
       href: "/ai-tools", 
-      imagePrompt: "Futuristic AI interface with holographic wellness data, brain-computer interface, glowing neural networks, advanced technology for health and wellness",
-      category: "ai-tools",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg",
       badge: "AI Tools"
+    },
+    {
+      title: "Conscious Connections: Indigenous Wisdom + Healing",
+      description: "Ancient healing practices & cultural experiences",
+      href: "/tours-retreats",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg",
+      badge: "Cultural"
+    },
+    {
+      title: "FACT Wellness Hybrid Classes",
+      description: "Fitness, wellness & community classes",
+      href: "/wellness-community",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg",
+      badge: "Wellness"
     }
   ];
 
@@ -212,34 +222,64 @@ const HeroSection = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-          {/* Header */}
-          <div className="text-center mb-8 sm:mb-12 pt-4 sm:pt-8 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-sm">
-            <div className="flex justify-center mb-4 sm:mb-6">
-              <img 
-                {...getOmniLogo()} 
-                alt="Omni Wellness Media" 
-                className="h-12 w-12 sm:h-16 sm:w-16 object-contain"
-              />
-            </div>
-            
-            <h1 className="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-tight">
-              Build something <span className="text-wellness-primary">Conscious</span>
-            </h1>
-            
-            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed">
-              Create wellness experiences by chatting with Omni AI or explore our <Link to="/wellness-deals" className="text-wellness-primary underline font-semibold hover:text-wellness-primary/80">wellness deals marketplace</Link>
-            </p>
+      {/* Stunning Hero Section with Cave View */}
+      <div className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/muizenberg%20cave%20view%202.jpg"
+            alt="Muizenberg Cave View - Spiritual Wellness Journey"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
+        </div>
 
-            {/* Main Chat Interface */}
-            <div className="max-w-2xl mx-auto mb-8 sm:mb-16" data-tour="mission">
-              <ChatInterface 
-                placeholder="Ask Omni AI to create a wellness program about..."
-                welcomeMessage="👋 Welcome! I'm Omni AI. I can help you create wellness programs, business strategies, content, and more. What would you like to build today?"
-              />
-            </div>
+        {/* Hero Content */}
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Logo */}
+          <div className="flex justify-center mb-6 sm:mb-8 animate-fade-in">
+            <img 
+              {...getOmniLogo()} 
+              alt="Omni Wellness Media" 
+              className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 object-contain drop-shadow-2xl"
+            />
           </div>
+          
+          {/* Main Headline */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-white drop-shadow-lg animate-fade-in-up leading-tight">
+            Bridging Wellness, Outreach & Media
+          </h1>
+          
+          {/* Subheadline */}
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 mb-8 sm:mb-12 max-w-4xl mx-auto drop-shadow-md animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.2s' }}>
+            Empowering South Africa's Journey to Health & Consciousness
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold bg-wellness-primary hover:bg-wellness-primary/90 text-white shadow-2xl">
+              <Link to="/services">Explore Services</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-wellness-primary border-2 border-white shadow-2xl">
+              <Link to="/tours-retreats">Wellness Tours</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-wellness-primary border-2 border-white shadow-2xl">
+              <Link to="/twobewellshop">2BeWell Shop</Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2">
+            <div className="w-1 h-3 bg-white/70 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="bg-gradient-to-br from-gray-50 to-purple-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
 
           {/* Workspace Section */}
           <div className="mb-8 sm:mb-16">
@@ -262,13 +302,13 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
                 {workspaceItems.map((item, index) => (
                   <Link key={index} to={item.href} className="group">
                     <Card className="overflow-hidden hover:shadow-md transition-shadow">
                       <div className="aspect-video bg-gradient-to-br from-wellness-light to-wellness-primary/20 relative">
                         <img 
-                          src={getImageForCategory(item.category)} 
+                          src={item.image} 
                           alt={item.title}
                           className="w-full h-full object-cover opacity-80"
                         />
