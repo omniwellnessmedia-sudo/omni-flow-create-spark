@@ -21,6 +21,8 @@ import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import type { WellnessDeal, WellnessMarketplaceItem } from "@/types/marketplace";
 import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
+import { supabase } from "@/integrations/supabase/client";
 
 // Enhanced deal data with comprehensive e-commerce features
 const sampleDeals: WellnessDeal[] = [
@@ -501,6 +503,11 @@ const WellnessDeals = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Impact Badges */}
+          <div className="mb-8">
+            <ImpactBadges />
           </div>
 
           {/* Deal Cards Grid */}

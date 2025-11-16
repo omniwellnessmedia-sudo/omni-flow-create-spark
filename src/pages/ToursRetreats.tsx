@@ -21,6 +21,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { IMAGES } from '@/lib/images';
 import { useStorageImages } from '@/hooks/useStorageImages';
 import type { WellnessExperience, WellnessMarketplaceItem } from "@/types/marketplace";
+import { getTourImage } from '@/lib/tourImages';
 
 // Supabase storage helper for tour images
 const SUPABASE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co";

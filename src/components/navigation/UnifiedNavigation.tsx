@@ -40,6 +40,7 @@ import { handleKeyboardNavigation, announceToScreenReader } from '@/lib/accessib
 import { CartIcon } from '@/components/cart/CartIcon';
 import { getOmniLogo } from '@/lib/images';
 import { SearchAutocomplete } from '@/components/product/SearchAutocomplete';
+import { MegaNavigation } from './MegaNavigation';
 
 interface NavItem {
   title: string;
@@ -201,63 +202,8 @@ const UnifiedNavigation = () => {
             <SearchAutocomplete />
           </div>
 
-          {/* Desktop Navigation */}
-          <nav 
-            className="hidden lg:flex lg:items-center lg:space-x-1"
-            role="navigation"
-            aria-label="Primary navigation"
-          >
-            {navigationItems.map((item) => (
-              <div key={item.title} className="relative group">
-                {item.children ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        className="h-9 px-3 text-sm font-medium hover:bg-accent/80 transition-colors"
-                      >
-                        <item.icon className="w-4 h-4 mr-2" />
-                        {item.title}
-                        <ChevronDown className="w-3 h-3 ml-1" />
-                        {item.badge && (
-                          <span className="ml-2 px-1.5 py-0.5 text-xs bg-primary text-primary-foreground rounded-full">
-                            {item.badge}
-                          </span>
-                        )}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-64 p-2 bg-background border-border z-[100]">
-                      <div className="grid gap-1">
-                        {item.children.map((child) => (
-                          <Link key={child.href} to={child.href}>
-                            <div className="flex items-start space-x-3 p-3 rounded-md hover:bg-accent/80 transition-all duration-200">
-                              <span className="text-lg">{child.icon}</span>
-                              <div className="space-y-1">
-                                <div className="text-sm font-medium">{child.title}</div>
-                                <div className="text-xs text-muted-foreground">{child.description}</div>
-                              </div>
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Button asChild variant="ghost" className="h-9 px-3 text-sm font-medium">
-                    <Link to={item.href!} className="flex items-center">
-                      <item.icon className="w-4 h-4 mr-2" />
-                      {item.title}
-                      {item.badge && (
-                        <span className="ml-2 px-1.5 py-0.5 text-xs bg-primary text-primary-foreground rounded-full">
-                          {item.badge}
-                        </span>
-                      )}
-                    </Link>
-                  </Button>
-                )}
-              </div>
-            ))}
-          </nav>
+          {/* Desktop Mega Navigation */}
+          <MegaNavigation />
 
           {/* User Actions */}
           <div className="flex items-center space-x-2">

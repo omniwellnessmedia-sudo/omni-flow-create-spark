@@ -21,7 +21,10 @@ import {
   Lightbulb,
   Star,
   Calendar as CalendarIcon,
-  Megaphone
+  Megaphone,
+  Briefcase,
+  BookOpen,
+  Zap
 } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { toast } from "sonner";
@@ -29,6 +32,7 @@ import { format } from "date-fns";
 import { VolunteerForm } from "@/components/community/VolunteerForm";
 import { ProgramsList } from "@/components/community/ProgramsList";
 import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
+import { ProgramCard } from "@/components/community/ProgramCard";
 
 interface CommunityPost {
   id: string;
