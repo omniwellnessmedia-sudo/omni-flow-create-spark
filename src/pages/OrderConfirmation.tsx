@@ -2,14 +2,18 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle2, Loader2, ShoppingBag } from "lucide-react";
+import { CheckCircle2, Loader2, ShoppingBag, Key, Copy } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/AuthProvider";
+import { useToast } from "@/hooks/use-toast";
 
 export default function OrderConfirmation() {
   const { orderId } = useParams();
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -31,6 +35,16 @@ export default function OrderConfirmation() {
 
     fetchOrder();
   }, [orderId]);
+
+  const copyAccessToken = () => {
+    if (order?.access_token) {
+      navigator.clipboard.writeText(order.access_token);
+      toast({
+        title: "Access code copied!",
+        description: "You can use this code to track your order later.",
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -88,6 +102,35 @@ export default function OrderConfirmation() {
               <p className="font-medium capitalize text-green-600">{order.status}</p>
             </div>
           </div>
+
+          {/* Show access token for guest users */}
+          {!user && order.access_token && (
+            <div className="bg-amber-50 border-2 border-amber-200 p-4 rounded-lg space-y-3">
+              <div className="flex items-center gap-2 text-amber-800">
+                <Key className="h-5 w-5" />
+                <h3 className="font-semibold">Important: Save Your Access Code</h3>
+              </div>
+              <p className="text-sm text-amber-700">
+                Since you checked out as a guest, you'll need this code to track your order:
+              </p>
+              <div className="bg-white border border-amber-300 p-3 rounded flex items-center justify-between">
+                <code className="font-mono font-semibold text-sm break-all">
+                  {order.access_token}
+                </code>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={copyAccessToken}
+                  className="ml-2 flex-shrink-0"
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-amber-600">
+                💡 Use this code at <Link to="/guest-order-lookup" className="underline font-medium">Guest Order Lookup</Link> to view your order status anytime.
+              </p>
+            </div>
+          )}
 
           <div>
             <div className="flex items-center gap-2 mb-3">

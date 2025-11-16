@@ -1,5 +1,8 @@
 project_id = "dtjmhieeywdvhjxqyxad"
 
+[functions.check-user-role]
+verify_jwt = true
+
 [functions.duda-create-partner-site]
 verify_jwt = true
 
