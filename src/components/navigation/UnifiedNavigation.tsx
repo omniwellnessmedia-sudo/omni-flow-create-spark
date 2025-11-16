@@ -115,11 +115,15 @@ const UnifiedNavigation = () => {
       title: 'Store',
       icon: Store,
       children: [
-        { title: 'Browse Store', href: '/store', description: 'Browse all wellness products', icon: '🛒' },
-        { title: 'Roaming Packages', href: '/wellness-roaming-packages', description: 'Travel connectivity & services', icon: '✈️' },
-        { title: 'Travel Connected', href: '/travel-well-connected-store', description: 'Travel connectivity solutions', icon: '🌐' },
-        { title: '2BeWell Shop', href: '/2bewell/shop', description: 'Natural skincare & wellness', icon: '🛍️' },
-        { title: 'Data & Services', href: '/data-products', description: 'Digital wellness tools', icon: '📊' },
+        { title: 'Browse All Products', href: '/store', description: 'Browse all wellness products', icon: '🛒' },
+        { title: 'CJ Wellness Products', href: '/cj-products', description: '700+ Affiliate wellness products', icon: '✨' },
+        { title: 'General Wellness', href: '/cj-products?category=General%20Wellness', description: '359 wellness products', icon: '💊' },
+        { title: 'Fitness Equipment', href: '/cj-products?category=Fitness%20Equipment', description: '69 fitness products', icon: '🏋️' },
+        { title: 'Yoga Equipment', href: '/cj-products?category=Yoga%20Equipment', description: '65 yoga products', icon: '🧘' },
+        { title: 'Nutrition & Supplements', href: '/cj-products?category=Nutrition', description: '60 nutrition products', icon: '🥗' },
+        { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural skincare & wellness', icon: '🛍️' },
+        { title: 'Roaming Packages', href: '/wellness-roaming-packages', description: 'Travel connectivity', icon: '✈️' },
+        { title: 'Travel Connected', href: '/travel-well-connected-store', description: 'Travel solutions', icon: '🌐' },
       ]
     },
     {

@@ -26,6 +26,12 @@ import {
 import { useAuth } from "@/components/AuthProvider";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { VolunteerForm } from "@/components/community/VolunteerForm";
+import { ProgramsList } from "@/components/community/ProgramsList";
+import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
+import { VolunteerForm } from "@/components/community/VolunteerForm";
+import { ProgramsList } from "@/components/community/ProgramsList";
+import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
 
 interface CommunityPost {
   id: string;
@@ -351,6 +357,12 @@ const WellnessCommunity = () => {
                 })}
               </div>
             )}
+          </div>
+
+          {/* Volunteer & Programs Section */}
+          <div className="mt-16 space-y-12">
+            <ProgramsList />
+            <VolunteerForm />
           </div>
         </div>
       </Section>
