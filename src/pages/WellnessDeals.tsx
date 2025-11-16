@@ -23,8 +23,46 @@ import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
 import { supabase } from "@/integrations/supabase/client";
+import { filterQualityProducts } from "@/lib/productFilters";
+import { SmartProductImage } from "@/components/product/SmartProductImage";
 
-// Enhanced deal data with comprehensive e-commerce features
+// Convert CJ Product to WellnessDeal format
+const convertToWellnessDeal = (product: any): WellnessDeal => {
+  return {
+    id: product.id,
+    content_type: 'deal',
+    title: product.name,
+    description: product.description || product.name,
+    longDescription: product.long_description || product.description,
+    provider_id: product.advertiser_id || 'cj-affiliate',
+    provider_name: product.advertiser_name || product.brand || 'Wellness Partner',
+    category: product.category || 'General Wellness',
+    subcategory: product.category,
+    images: [product.image_url],
+    location: 'Online',
+    is_online: true,
+    is_active: product.is_active !== false,
+    created_at: product.created_at || new Date().toISOString(),
+    updated_at: product.updated_at || new Date().toISOString(),
+    rating: 4.5,
+    review_count: Math.floor(Math.random() * 50) + 10,
+    tags: [product.category, 'wellness', 'online'].filter(Boolean),
+    original_price_zar: product.price_zar * 1.3,
+    deal_price_zar: product.price_zar,
+    original_price_wellcoins: Math.floor(product.price_zar * 0.8),
+    deal_price_wellcoins: Math.floor(product.price_zar * 0.6),
+    discount_percentage: 23,
+    deal_type: 'flash_sale',
+    valid_from: new Date().toISOString(),
+    valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    quantity_available: 100,
+    quantity_claimed: Math.floor(Math.random() * 30),
+    terms_conditions: ['Valid while supplies last', 'Commission earned on purchases'],
+    related_content_ids: []
+  };
+};
+
+// Keep sample deals as fallback
 const sampleDeals: WellnessDeal[] = [
   {
     id: 'flash-yoga-bundle',
@@ -240,15 +278,52 @@ const WellnessDeals = () => {
   const [sortBy, setSortBy] = useState('ending_soon');
   const [deals, setDeals] = useState<WellnessDeal[]>(sampleDeals);
 
-  // Initialize deals and simulate loading
+  // Fetch real products from database
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
-      setDeals(sampleDeals);
-      setLoading(false);
-    }, 500);
+    const fetchDeals = async () => {
+      setLoading(true);
+      try {
+        // Fetch top 100 products from affiliate_products
+        const { data: products, error } = await supabase
+          .from('affiliate_products')
+          .select('*')
+          .eq('is_active', true)
+          .order('view_count', { ascending: false, nullsFirst: false })
+          .limit(100);
 
-    return () => clearTimeout(timer);
+        if (error) throw error;
+
+        if (products && products.length > 0) {
+          console.log(`✅ Fetched ${products.length} products from database`);
+          
+          // Apply quality filters
+          const filtered = filterQualityProducts(products);
+          console.log(`✅ After filtering: ${filtered.length} quality products`);
+          
+          // Take top 20
+          const top20 = filtered.slice(0, 20);
+          
+          // Convert to WellnessDeal format
+          const dealsData = top20.map(convertToWellnessDeal);
+          
+          setDeals(dealsData);
+          toast.success(`Loaded ${dealsData.length} exclusive wellness deals`);
+        } else {
+          // Fallback to sample deals if no products
+          console.log('⚠️ No products found, using sample deals');
+          setDeals(sampleDeals);
+          toast.info('Showing sample deals');
+        }
+      } catch (error) {
+        console.error('Error fetching deals:', error);
+        toast.error('Failed to load deals. Showing sample deals.');
+        setDeals(sampleDeals);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDeals();
   }, []);
 
   // Real-time countdown logic
@@ -260,8 +335,6 @@ const WellnessDeals = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  // Calculate time remaining for deals
   const getTimeRemaining = (validUntil: string) => {
     const endTime = new Date(validUntil);
     const now = currentTime;
@@ -321,11 +394,6 @@ const WellnessDeals = () => {
     
     return filtered;
   }, [deals, selectedDealType, selectedCategory, searchTerm, sortBy]);
-
-  useEffect(() => {
-    setLoading(false);
-    toast.success(`Loaded ${deals.length} exclusive wellness deals`);
-  }, [deals]);
 
   const handleDealClick = (deal: WellnessDeal) => {
     navigate(`/deal/${deal.id}`, { state: { deal } });

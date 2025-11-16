@@ -33,7 +33,14 @@ export const SmartProductImage = ({
     return 'from-blue-400 via-indigo-400 to-purple-400';
   };
 
-  if (imageError || !src) {
+  // Check for broken image URLs
+  const isBrokenImage = src && (
+    src.toLowerCase().includes('no_imaged') ||
+    src.toLowerCase().includes('unavailable') ||
+    src.toLowerCase().includes('coming-soon')
+  );
+
+  if (imageError || !src || isBrokenImage) {
     return (
       <div className={`${className} flex items-center justify-center bg-gradient-to-br ${getCategoryGradient(category)}`}>
         <div className="text-center text-white">
