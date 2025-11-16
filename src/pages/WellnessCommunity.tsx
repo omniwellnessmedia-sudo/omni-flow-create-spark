@@ -29,9 +29,6 @@ import { format } from "date-fns";
 import { VolunteerForm } from "@/components/community/VolunteerForm";
 import { ProgramsList } from "@/components/community/ProgramsList";
 import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
-import { VolunteerForm } from "@/components/community/VolunteerForm";
-import { ProgramsList } from "@/components/community/ProgramsList";
-import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
 
 interface CommunityPost {
   id: string;
