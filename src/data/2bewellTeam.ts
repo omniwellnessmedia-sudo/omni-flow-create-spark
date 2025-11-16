@@ -13,19 +13,19 @@ export interface TeamMember {
 export const twoBeWellTeam: TeamMember[] = [
   {
     name: 'Zenith',
-    role: 'Co-Founder & Skincare Specialist',
+    role: 'Co-Founder',
     image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg',
-    bio: 'Passionate about natural ingredients and the healing power of plants. Zenith crafts each skincare product with love and scientific precision.',
-    specialties: ['Skincare Formulation', 'Essential Oils', 'Natural Preservatives', 'Product Development'],
+    bio: 'Passionate about natural ingredients and the healing power of plants, Zenith transforms botanical treasures into conscious skincare. With an artisan\'s touch and deep respect for nature, every product is crafted with love, intention, and scientific precision.',
+    specialties: ['Natural Skincare', 'Botanical Formulation', 'Essential Oils', 'Conscious Beauty'],
     email: 'zenith@2bewell.co.za',
     instagram: '@zenith_2bewell'
   },
   {
     name: 'Feroza',
-    role: 'Co-Founder & Nutrition Expert',
+    role: 'Co-Founder',
     image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/feroza%20begg%20-%20portrait.jpg',
-    bio: 'Believes in food as medicine and the power of plant-based nutrition. Feroza sources the finest superfoods and creates nourishing blends.',
-    specialties: ['Plant-Based Nutrition', 'Superfood Blends', 'Home Care', 'Wellness Coaching'],
+    bio: 'A true believer in food as medicine and the transformative power of plant-based living. Feroza carefully sources the finest superfoods and creates nourishing blends that support wellness from within, proving that nature provides everything we need to thrive.',
+    specialties: ['Plant-Based Wellness', 'Superfood Nutrition', 'Holistic Health', 'Natural Living'],
     email: 'feroza@2bewell.co.za',
     instagram: '@feroza_2bewell'
   }
