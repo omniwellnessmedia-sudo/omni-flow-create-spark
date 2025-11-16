@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/components/CartProvider';
@@ -139,10 +139,11 @@ function App() {
 
                   {/* E-commerce & Products */}
                   <Route path="/two-be-well" element={<TwoBeWell />} />
-                  <Route path="/two-be-well-shop" element={<TwoBeWellShop />} />
+                  <Route path="/twobewellshop" element={<TwoBeWellShop />} />
+                  <Route path="/two-be-well-shop" element={<Navigate to="/twobewellshop" replace />} />
                   <Route path="/2bewell" element={<TwoBeWell />} />
-          <Route path="/2bewell-shop" element={<TwoBeWellShop />} />
-          <Route path="/2bewell/shop" element={<TwoBeWellShop />} />
+                  <Route path="/2bewell-shop" element={<Navigate to="/twobewellshop" replace />} />
+                  <Route path="/2bewell/shop" element={<Navigate to="/twobewellshop" replace />} />
                   <Route path="/2bewell/product/:productId" element={<TwoBeWellProductDetail />} />
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
                   <Route path="/cj-products/:id" element={<CJProductDetail />} />

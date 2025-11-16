@@ -7,6 +7,7 @@ import AppTour from "@/components/ui/app-tour";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { IMAGES, getOmniLogo, getImageWithFallback } from "@/lib/images";
+import { CommunityCard } from "@/components/community/CommunityCard";
 import { 
   Sparkles, 
   Briefcase, 
@@ -63,11 +64,11 @@ const HeroSection = () => {
       badge: "Media"
     },
     {
-      title: "Wellness AI Tools",
-      description: "AI-powered wellness assistants",
-      href: "/ai-tools", 
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg",
-      badge: "AI Tools"
+      title: "2BeWell Natural Products",
+      description: "Handmade wellness essentials",
+      href: "/twobewellshop",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/12.png",
+      badge: "Shop"
     },
     {
       title: "Conscious Connections: Indigenous Wisdom + Healing",
@@ -355,57 +356,35 @@ const HeroSection = () => {
               </div>
             </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-8 gap-6 items-stretch">
-            {communityItems
-              .filter(item => item.tags?.includes(activeFilter))
-              .slice(0, showMoreCommunity ? 99 : 6)
-              .map((item, index) => (
-              <Link 
-                key={index} 
-                to={item.href} 
-                className={`group block ${
-                  item.orientation === 'portrait' ? 'md:col-span-2 lg:col-span-2' : 'md:col-span-3 lg:col-span-3'
-                }`}
-              >
-                <Card className="h-full overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                  <div className={`relative bg-gradient-to-br from-wellness-light/20 to-wellness-accent/10 ${
-                    item.orientation === 'portrait' ? 'aspect-[4/5]' : 'aspect-[21/9]'
-                  }`}>
-                     <img 
-                       src={item.image} 
-                       alt={item.title}
-                       loading="lazy"
-                       decoding="async"
-                       className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                     />
-                      <div className="absolute top-3 right-3">
-                        <span className="bg-white/90 backdrop-blur-sm text-wellness-primary text-xs px-2 py-1 rounded-full font-medium shadow-sm">
-                          {item.badge}
-                        </span>
-                      </div>
-                      {/* Gradient overlay for better text contrast */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            {/* Masonry grid layout - alternating portrait and landscape */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {communityItems
+                .filter(item => item.tags?.includes(activeFilter))
+                .slice(0, showMoreCommunity ? 99 : 6)
+                .map((item, index) => {
+                  // Define layout pattern: portrait, landscape(2 cols), landscape(2 cols), portrait, etc
+                  const layoutClasses = [
+                    'md:col-span-1', // Portrait
+                    'md:col-span-2', // Landscape
+                    'md:col-span-2', // Landscape  
+                    'md:col-span-1', // Portrait
+                    'md:col-span-1.5', // Landscape
+                    'md:col-span-1.5', // Landscape
+                  ];
+                  
+                  return (
+                    <div key={index} className={layoutClasses[index % layoutClasses.length] || 'md:col-span-1'}>
+                      <CommunityCard 
+                        item={item}
+                        orientation={(item.orientation as 'portrait' | 'landscape') || (index % 4 === 0 || index % 4 === 3 ? 'portrait' : 'landscape')}
+                      />
                     </div>
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-wellness-primary to-wellness-accent rounded-full flex items-center justify-center shrink-0">
-                          <span className="text-xs font-medium text-white">
-                            {item.author.charAt(0)}
-                          </span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-gray-900 mb-1 truncate group-hover:text-wellness-primary transition-colors">{item.title}</h3>
-                          <p className="text-sm text-gray-600 mb-2 line-clamp-2">{item.description}</p>
-                          <p className="text-xs text-gray-500 truncate">{item.author}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+                  );
+                })}
             </div>
+          </div>
 
-            {communityItems.filter(item => item.tags?.includes(activeFilter)).length > 6 && (
+          {communityItems.filter(item => item.tags?.includes(activeFilter)).length > 6 && (
               <div className="text-center mt-8">
                 <Button 
                   variant="outline" 
@@ -416,7 +395,6 @@ const HeroSection = () => {
                 </Button>
               </div>
             )}
-          </div>
         </div>
       </div>
 
