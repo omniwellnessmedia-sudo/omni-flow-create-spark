@@ -365,16 +365,23 @@ const CJAffiliateProducts = () => {
       <UnifiedNavigation />
       
       <main className="pt-20 pb-16">
-        {/* Hero Section - Modern Gradient Background */}
-        <section className="relative py-24 overflow-hidden">
-          {/* Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-omni-violet/10 via-background to-omni-orange/10" />
+        {/* Hero Section - Wellness Marketplace with Image Background */}
+        <section className="relative py-32 overflow-hidden">
+          {/* Background Image with Overlay */}
+          <div className="absolute inset-0">
+            <img 
+              src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1920"
+              alt="Wellness products background"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-background/85 backdrop-blur-sm" />
+          </div>
           
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-omni-violet/30 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute bottom-20 right-10 w-96 h-96 bg-omni-orange/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-omni-green/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+          {/* Decorative Gradient Orbs */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute top-20 left-10 w-96 h-96 bg-omni-violet/40 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-omni-orange/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-omni-green/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
           </div>
           
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -409,15 +416,6 @@ const CJAffiliateProducts = () => {
                 >
                   <RefreshCw className={`mr-2 w-5 h-5 ${syncing ? 'animate-spin' : ''}`} />
                   {syncing ? 'Syncing Products...' : 'Sync Products'}
-                </Button>
-                <Button 
-                  onClick={runConnectivityCheck} 
-                  size="lg" 
-                  variant="outline"
-                  className="glass-button hover-lift"
-                >
-                  <ExternalLink className="mr-2 w-5 h-5" />
-                  API Status
                 </Button>
                 <Button 
                   size="lg" 
