@@ -198,8 +198,6 @@ function App() {
                   <Route path="/web-development" element={<WebDevelopment />} />
                   <Route path="/social-media-strategy" element={<SocialMediaStrategy />} />
 
-                  {/* AI & Technology - Temporarily Hidden */}
-                  {/* <Route path="/ai-tools" element={<AITools />} /> */}
 
                   {/* Affiliate Marketplace */}
                   <Route path="/affiliate-marketplace" element={<AffiliateMarketplace />} />
