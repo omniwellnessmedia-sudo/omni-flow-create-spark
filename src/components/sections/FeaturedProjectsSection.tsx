@@ -14,13 +14,13 @@ const FeaturedProjectsSection = () => {
     {
       title: "Indigenous Wisdom & Healing",
       description: "Learning from traditional healers and documenting ancient wisdom for future generations.",
-      image: IMAGES.wellness.landmark,
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg",
       category: "Cultural Heritage"
     },
     {
       title: "Wellness Education & Growth",
       description: "Sharing knowledge and fostering growth through educational programs and community workshops.",
-      image: IMAGES.wellness.graduation,
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/_MG_0148.jpg",
       category: "Education & Development"
     }
   ];
