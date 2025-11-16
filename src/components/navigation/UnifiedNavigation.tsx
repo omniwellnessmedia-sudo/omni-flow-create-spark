@@ -105,15 +105,9 @@ const UnifiedNavigation = () => {
       title: 'Store',
       icon: Store,
       children: [
-        { title: 'Browse All Products', href: '/store', description: 'Browse all wellness products', icon: '🛒' },
-        { title: 'CJ Wellness Products', href: '/cj-products', description: '700+ Affiliate wellness products', icon: '✨' },
-        { title: 'General Wellness', href: '/cj-products?category=General%20Wellness', description: '359 wellness products', icon: '💊' },
-        { title: 'Fitness Equipment', href: '/cj-products?category=Fitness%20Equipment', description: '69 fitness products', icon: '🏋️' },
-        { title: 'Yoga Equipment', href: '/cj-products?category=Yoga%20Equipment', description: '65 yoga products', icon: '🧘' },
-        { title: 'Nutrition & Supplements', href: '/cj-products?category=Nutrition', description: '60 nutrition products', icon: '🥗' },
-        { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural skincare & wellness', icon: '🛍️' },
-        { title: 'Roaming Packages', href: '/wellness-roaming-packages', description: 'Travel connectivity', icon: '✈️' },
-        { title: 'Travel Connected', href: '/travel-well-connected-store', description: 'Travel solutions', icon: '🌐' },
+        { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural wellness products', icon: '🌿' },
+        { title: 'CJ Wellness Products', href: '/cj-affiliate-products', description: 'Curated wellness products', icon: '✨' },
+        { title: 'Travel Connectivity', href: '/travel-well-connected-store', description: 'eSIM & travel data', icon: '📱' },
       ]
     },
     {
@@ -283,7 +277,12 @@ const UnifiedNavigation = () => {
                   </SheetTitle>
                 </SheetHeader>
                 
-                <div className="mt-6 space-y-4">
+                {/* Mobile Search */}
+                <div className="mt-4 mb-2">
+                  <SearchAutocomplete />
+                </div>
+                
+                <div className="mt-4 space-y-4 overflow-y-auto max-h-[calc(100vh-200px)]">
                   {navigationItems.map((item) => (
                     <div key={item.title}>
                       {item.children ? (

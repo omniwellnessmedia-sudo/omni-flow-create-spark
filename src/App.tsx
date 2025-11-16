@@ -38,6 +38,7 @@ const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
 const TwoBeWell = React.lazy(() => import('@/pages/TwoBeWell'));
 const TravelWellConnectedStore = React.lazy(() => import('@/pages/TravelWellConnectedStore'));
+const WellnessRoamingPackages = React.lazy(() => import('@/pages/WellnessRoamingPackages'));
 const DataProducts = React.lazy(() => import('@/pages/DataProducts'));
 const ProductDetail = React.lazy(() => import('@/pages/ProductDetail'));
 const DealDetail = React.lazy(() => import('@/pages/DealDetail'));
@@ -157,6 +158,7 @@ function App() {
                   } />
                   <Route path="/wellness-deals" element={<WellnessDeals />} />
                   <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
+                  <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
                   <Route path="/data-products" element={<DataProducts />} />
                   <Route path="/product-detail/:id" element={<ProductDetail />} />
                   <Route path="/deal-detail/:id" element={<DealDetail />} />

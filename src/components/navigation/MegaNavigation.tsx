@@ -86,7 +86,7 @@ export const MegaNavigation = () => {
 
   return (
     <NavigationMenu className="hidden lg:flex">
-      <NavigationMenuList>
+      <NavigationMenuList className="flex-wrap">
         {/* Home */}
         <NavigationMenuItem>
           <Link to="/">
@@ -99,40 +99,42 @@ export const MegaNavigation = () => {
 
         {/* Wellness Mega Menu */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>
+          <NavigationMenuTrigger className="bg-background">
             <Heart className="mr-2 h-4 w-4" />
             Wellness
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid w-[800px] grid-cols-2 gap-6 p-6">
+            <div className="grid gap-3 p-6 w-[400px] lg:w-[600px] lg:grid-cols-2">
               {wellnessSections.map((section) => (
-                <div key={section.title}>
-                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                <div key={section.title} className="space-y-3">
+                  <h4 className="text-sm font-medium leading-none text-muted-foreground">
                     {section.title}
-                  </h3>
-                  <ul className="space-y-3">
+                  </h4>
+                  <ul className="space-y-2">
                     {section.items.map((item) => (
                       <li key={item.href}>
-                        <Link
-                          to={item.href}
-                          className={cn(
-                            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                            item.featured && "bg-primary/5 border border-primary/20"
-                          )}
-                        >
-                          <div className="flex items-center gap-2">
-                            {item.icon && <span className="text-lg">{item.icon}</span>}
-                            <div className="text-sm font-medium leading-none">
-                              {item.title}
-                              {item.featured && (
-                                <Sparkles className="inline ml-1 h-3 w-3 text-primary" />
-                              )}
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className={cn(
+                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                              item.featured && "bg-gradient-to-r from-primary/5 to-transparent"
+                            )}
+                          >
+                            <div className="flex items-center gap-2">
+                              {item.icon && <span className="text-lg">{item.icon}</span>}
+                              <div className="text-sm font-medium leading-none">
+                                {item.title}
+                                {item.featured && (
+                                  <span className="ml-2 text-xs text-primary">★</span>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            {item.description}
-                          </p>
-                        </Link>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
                       </li>
                     ))}
                   </ul>
@@ -144,35 +146,42 @@ export const MegaNavigation = () => {
 
         {/* Travel Mega Menu */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>
+          <NavigationMenuTrigger className="bg-background">
             <Plane className="mr-2 h-4 w-4" />
             Travel
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid w-[600px] p-6">
+            <div className="grid gap-3 p-6 w-[400px] lg:w-[500px]">
               {travelSections.map((section) => (
-                <div key={section.title}>
-                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                <div key={section.title} className="space-y-3">
+                  <h4 className="text-sm font-medium leading-none text-muted-foreground">
                     {section.title}
-                  </h3>
-                  <ul className="grid grid-cols-2 gap-3">
+                  </h4>
+                  <ul className="grid gap-2">
                     {section.items.map((item) => (
                       <li key={item.href}>
-                        <Link
-                          to={item.href}
-                          className={cn(
-                            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground",
-                            item.featured && "bg-primary/5 border border-primary/20"
-                          )}
-                        >
-                          <div className="flex items-center gap-2">
-                            {item.icon && <span className="text-lg">{item.icon}</span>}
-                            <div className="text-sm font-medium leading-none">{item.title}</div>
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            {item.description}
-                          </p>
-                        </Link>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className={cn(
+                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                              item.featured && "bg-gradient-to-r from-primary/5 to-transparent"
+                            )}
+                          >
+                            <div className="flex items-center gap-2">
+                              {item.icon && <span className="text-lg">{item.icon}</span>}
+                              <div className="text-sm font-medium leading-none">
+                                {item.title}
+                                {item.featured && (
+                                  <span className="ml-2 text-xs text-primary">★</span>
+                                )}
+                              </div>
+                            </div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
                       </li>
                     ))}
                   </ul>
@@ -184,42 +193,47 @@ export const MegaNavigation = () => {
 
         {/* Store Mega Menu */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>
+          <NavigationMenuTrigger className="bg-background">
             <Store className="mr-2 h-4 w-4" />
             Store
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid w-[700px] grid-cols-2 gap-6 p-6">
+            <div className="grid gap-3 p-6 w-[400px] lg:w-[700px] lg:grid-cols-2">
               {storeSections.map((section) => (
-                <div key={section.title}>
-                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                <div key={section.title} className="space-y-3">
+                  <h4 className="text-sm font-medium leading-none text-muted-foreground">
                     {section.title}
-                  </h3>
-                  <ul className="space-y-3">
+                  </h4>
+                  <ul className="space-y-2">
                     {section.items.map((item) => (
                       <li key={item.href}>
-                        <Link
-                          to={item.href}
-                          className={cn(
-                            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground",
-                            item.featured && "bg-primary/5 border border-primary/20"
-                          )}
-                        >
-                          <div className="flex items-center gap-2 justify-between">
-                            <div className="flex items-center gap-2">
-                              {item.icon && <span className="text-lg">{item.icon}</span>}
-                              <div className="text-sm font-medium leading-none">{item.title}</div>
-                            </div>
-                            {item.count && (
-                              <span className="text-xs text-muted-foreground">
-                                {item.count}
-                              </span>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className={cn(
+                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                              item.featured && "bg-gradient-to-r from-primary/5 to-transparent"
                             )}
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            {item.description}
-                          </p>
-                        </Link>
+                          >
+                            <div className="flex items-center gap-2 justify-between">
+                              <div className="flex items-center gap-2">
+                                {item.icon && <span className="text-lg">{item.icon}</span>}
+                                <div className="text-sm font-medium leading-none">
+                                  {item.title}
+                                  {item.featured && (
+                                    <span className="ml-2 text-xs text-primary">★</span>
+                                  )}
+                                </div>
+                              </div>
+                              {item.count && (
+                                <span className="text-xs text-muted-foreground">{item.count}</span>
+                              )}
+                            </div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
                       </li>
                     ))}
                   </ul>
@@ -231,32 +245,34 @@ export const MegaNavigation = () => {
 
         {/* Services Mega Menu */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger>
+          <NavigationMenuTrigger className="bg-background">
             <Briefcase className="mr-2 h-4 w-4" />
             Services
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid w-[500px] p-6">
+            <div className="grid gap-3 p-6 w-[400px]">
               {servicesSections.map((section) => (
-                <div key={section.title}>
-                  <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                <div key={section.title} className="space-y-3">
+                  <h4 className="text-sm font-medium leading-none text-muted-foreground">
                     {section.title}
-                  </h3>
-                  <ul className="grid grid-cols-2 gap-3">
+                  </h4>
+                  <ul className="space-y-2">
                     {section.items.map((item) => (
                       <li key={item.href}>
-                        <Link
-                          to={item.href}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
-                        >
-                          <div className="flex items-center gap-2">
-                            {item.icon && <span className="text-lg">{item.icon}</span>}
-                            <div className="text-sm font-medium leading-none">{item.title}</div>
-                          </div>
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            {item.description}
-                          </p>
-                        </Link>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="flex items-center gap-2">
+                              {item.icon && <span className="text-lg">{item.icon}</span>}
+                              <div className="text-sm font-medium leading-none">{item.title}</div>
+                            </div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
                       </li>
                     ))}
                   </ul>
@@ -264,27 +280,6 @@ export const MegaNavigation = () => {
               ))}
             </div>
           </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        {/* AI Tools - Temporarily Hidden */}
-        {/* <NavigationMenuItem>
-          <Link to="/ai-tools">
-            <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-              <Bot className="mr-2 h-4 w-4" />
-              AI Tools
-              <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">NEW</span>
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem> */}
-
-        {/* Community */}
-        <NavigationMenuItem>
-          <Link to="/wellness-community">
-            <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-              <Users className="mr-2 h-4 w-4" />
-              Community
-            </NavigationMenuLink>
-          </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
