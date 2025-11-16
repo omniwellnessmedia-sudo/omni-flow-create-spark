@@ -31,21 +31,10 @@ interface MegaNavSection {
 export const MegaNavigation = () => {
   const wellnessSections: MegaNavSection[] = [
     {
-      title: 'Browse Wellness',
-      items: [
-        { title: 'All Deals', href: '/wellness-deals', description: 'Discover wellness deals & offers', icon: '💊', featured: true },
-        { title: 'Spa & Beauty', href: '/wellness-deals?category=spa', description: 'Rejuvenating spa treatments', icon: '🧖‍♀️' },
-        { title: 'Fitness & Movement', href: '/wellness-deals?category=fitness', description: 'Active wellness programs', icon: '🏃‍♀️' },
-        { title: 'Mindfulness', href: '/wellness-deals?category=mindfulness', description: 'Meditation & mental wellness', icon: '🧘‍♀️' },
-        { title: 'Nutrition', href: '/wellness-deals?category=nutrition', description: 'Healthy eating & lifestyle', icon: '🥗' },
-      ]
-    },
-    {
       title: 'Wellness Marketplace',
       items: [
-        { title: 'Marketplace', href: '/wellness-marketplace', description: 'Book wellness services', icon: '🛒' },
+        { title: 'Wellness Exchange', href: '/wellness-exchange', description: 'Community marketplace', icon: '🔄', featured: true },
         { title: 'Provider Directory', href: '/provider-directory', description: 'Verified providers', icon: '👨‍⚕️' },
-        { title: 'Wellness Exchange', href: '/wellness-exchange', description: 'Community marketplace', icon: '🔄' },
       ]
     }
   ];

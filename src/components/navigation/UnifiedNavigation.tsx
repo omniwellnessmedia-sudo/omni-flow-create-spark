@@ -77,21 +77,10 @@ const UnifiedNavigation = () => {
       icon: Home,
     },
     {
-      title: 'Wellness',
-      icon: Heart,
-      children: [
-        { title: 'Browse Deals', href: '/wellness-deals', description: 'Discover wellness deals and offers', icon: '💊' },
-        { title: 'Spa & Beauty', href: '/wellness-deals?category=spa', description: 'Rejuvenating spa treatments', icon: '🧖‍♀️' },
-        { title: 'Fitness & Movement', href: '/wellness-deals?category=fitness', description: 'Active wellness programs', icon: '🏃‍♀️' },
-        { title: 'Mindfulness', href: '/wellness-deals?category=mindfulness', description: 'Meditation and mental wellness', icon: '🧘‍♀️' },
-        { title: 'Nutrition', href: '/wellness-deals?category=nutrition', description: 'Healthy eating and lifestyle', icon: '🥗' },
-      ]
-    },
-    {
       title: 'Wellness Exchange',
       icon: Users,
       children: [
-        { title: 'Marketplace', href: '/wellness-exchange/marketplace', description: 'Browse services', icon: '🛒' },
+        { title: 'Marketplace', href: '/wellness-exchange', description: 'Browse services', icon: '🛒' },
         { title: 'Wants', href: '/wellness-exchange/wants', description: 'Community requests', icon: '❤️' },
         { title: 'Community', href: '/wellness-exchange/community', description: 'Connect & share', icon: '👥' },
         { title: 'Search', href: '/wellness-exchange/search', description: 'Find services', icon: '🔍' },
