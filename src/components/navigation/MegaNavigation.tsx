@@ -104,10 +104,10 @@ export const MegaNavigation = () => {
             Wellness
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid gap-3 p-6 w-[400px] lg:w-[600px] lg:grid-cols-2">
+            <div className="grid gap-3 p-6 w-[400px] lg:w-[600px] lg:grid-cols-2 bg-background">
               {wellnessSections.map((section) => (
                 <div key={section.title} className="space-y-3">
-                  <h4 className="text-sm font-medium leading-none text-muted-foreground">
+                  <h4 className="text-sm font-semibold leading-none text-foreground/80 uppercase tracking-wide">
                     {section.title}
                   </h4>
                   <ul className="space-y-2">
@@ -117,13 +117,13 @@ export const MegaNavigation = () => {
                           <Link
                             to={item.href}
                             className={cn(
-                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                              item.featured && "bg-gradient-to-r from-primary/5 to-transparent"
+                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground hover:shadow-sm",
+                              item.featured && "bg-gradient-to-r from-primary/10 to-transparent border border-primary/20"
                             )}
                           >
                             <div className="flex items-center gap-2">
                               {item.icon && <span className="text-lg">{item.icon}</span>}
-                              <div className="text-sm font-medium leading-none">
+                              <div className="text-sm font-medium leading-none text-foreground">
                                 {item.title}
                                 {item.featured && (
                                   <span className="ml-2 text-xs text-primary">★</span>
@@ -151,10 +151,10 @@ export const MegaNavigation = () => {
             Travel
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid gap-3 p-6 w-[400px] lg:w-[500px]">
+            <div className="grid gap-3 p-6 w-[400px] lg:w-[500px] bg-background">
               {travelSections.map((section) => (
                 <div key={section.title} className="space-y-3">
-                  <h4 className="text-sm font-medium leading-none text-muted-foreground">
+                  <h4 className="text-sm font-semibold leading-none text-foreground/80 uppercase tracking-wide">
                     {section.title}
                   </h4>
                   <ul className="grid gap-2">
@@ -164,13 +164,13 @@ export const MegaNavigation = () => {
                           <Link
                             to={item.href}
                             className={cn(
-                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                              item.featured && "bg-gradient-to-r from-primary/5 to-transparent"
+                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground hover:shadow-sm",
+                              item.featured && "bg-gradient-to-r from-primary/10 to-transparent border border-primary/20"
                             )}
                           >
                             <div className="flex items-center gap-2">
                               {item.icon && <span className="text-lg">{item.icon}</span>}
-                              <div className="text-sm font-medium leading-none">
+                              <div className="text-sm font-medium leading-none text-foreground">
                                 {item.title}
                                 {item.featured && (
                                   <span className="ml-2 text-xs text-primary">★</span>
@@ -198,10 +198,10 @@ export const MegaNavigation = () => {
             Store
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid gap-3 p-6 w-[400px] lg:w-[700px] lg:grid-cols-2">
+            <div className="grid gap-3 p-6 w-[400px] lg:w-[700px] lg:grid-cols-2 bg-background">
               {storeSections.map((section) => (
                 <div key={section.title} className="space-y-3">
-                  <h4 className="text-sm font-medium leading-none text-muted-foreground">
+                  <h4 className="text-sm font-semibold leading-none text-foreground/80 uppercase tracking-wide">
                     {section.title}
                   </h4>
                   <ul className="space-y-2">
@@ -211,14 +211,14 @@ export const MegaNavigation = () => {
                           <Link
                             to={item.href}
                             className={cn(
-                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                              item.featured && "bg-gradient-to-r from-primary/5 to-transparent"
+                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground hover:shadow-sm",
+                              item.featured && "bg-gradient-to-r from-primary/10 to-transparent border border-primary/20"
                             )}
                           >
                             <div className="flex items-center gap-2 justify-between">
                               <div className="flex items-center gap-2">
                                 {item.icon && <span className="text-lg">{item.icon}</span>}
-                                <div className="text-sm font-medium leading-none">
+                                <div className="text-sm font-medium leading-none text-foreground">
                                   {item.title}
                                   {item.featured && (
                                     <span className="ml-2 text-xs text-primary">★</span>
@@ -226,7 +226,7 @@ export const MegaNavigation = () => {
                                 </div>
                               </div>
                               {item.count && (
-                                <span className="text-xs text-muted-foreground">{item.count}</span>
+                                <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">{item.count}</span>
                               )}
                             </div>
                             <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
@@ -250,10 +250,10 @@ export const MegaNavigation = () => {
             Services
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid gap-3 p-6 w-[400px]">
+            <div className="grid gap-3 p-6 w-[400px] bg-background">
               {servicesSections.map((section) => (
                 <div key={section.title} className="space-y-3">
-                  <h4 className="text-sm font-medium leading-none text-muted-foreground">
+                  <h4 className="text-sm font-semibold leading-none text-foreground/80 uppercase tracking-wide">
                     {section.title}
                   </h4>
                   <ul className="space-y-2">
@@ -262,11 +262,11 @@ export const MegaNavigation = () => {
                         <NavigationMenuLink asChild>
                           <Link
                             to={item.href}
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground hover:shadow-sm"
                           >
                             <div className="flex items-center gap-2">
                               {item.icon && <span className="text-lg">{item.icon}</span>}
-                              <div className="text-sm font-medium leading-none">{item.title}</div>
+                              <div className="text-sm font-medium leading-none text-foreground">{item.title}</div>
                             </div>
                             <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
                               {item.description}
