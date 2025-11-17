@@ -202,7 +202,7 @@ export default function AwinAffiliateProducts() {
               <input
                 id="product-upload"
                 type="file"
-                accept=".json"
+                accept=".json,.txt,application/json,text/plain"
                 onChange={handleFileUpload}
                 className="hidden"
               />
