@@ -2605,6 +2605,7 @@ export type Database = {
       }
     }
     Functions: {
+      auto_curate_awin_products: { Args: never; Returns: undefined }
       auto_curate_featured_products: { Args: never; Returns: undefined }
       check_contact_rate_limit: {
         Args: { submitter_email: string }
