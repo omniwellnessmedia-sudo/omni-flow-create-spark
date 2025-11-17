@@ -68,17 +68,19 @@ export default function AwinAffiliateProducts() {
   const handleSyncProducts = async (productsData: any[]) => {
     try {
       setSyncing(true);
+      console.log('[AWIN] Invoking sync with products:', productsData?.length);
       const { data, error } = await supabase.functions.invoke('sync-awin-products', {
         body: { products: productsData }
       });
 
-      if (error) throw error;
+      if (error) throw error as any;
 
-      toast.success(`Synced ${data.products_synced} Awin products successfully`);
+      console.log('[AWIN] Sync response:', data);
+      toast.success(`Synced ${data?.products_synced ?? productsData.length} products successfully`);
       await fetchProducts();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Sync error:', error);
-      toast.error('Failed to sync products');
+      toast.error(`Failed to sync products: ${error?.message ?? 'Unknown error'}`);
     } finally {
       setSyncing(false);
     }
@@ -89,17 +91,28 @@ export default function AwinAffiliateProducts() {
     if (!file) return;
 
     try {
+      console.log('[AWIN] Selected file:', { name: file.name, type: file.type, size: file.size });
       const text = await file.text();
-      const productsData = JSON.parse(text);
-      
-      if (!Array.isArray(productsData)) {
-        throw new Error('Invalid JSON format. Expected an array of products.');
+      console.log('[AWIN] File text length:', text.length);
+
+      let parsed: any;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        console.error('[AWIN] JSON parse failed:', e);
+        throw new Error('Could not parse JSON. Please ensure the file content is valid JSON.');
       }
 
+      const productsData = Array.isArray(parsed) ? parsed : parsed?.products;
+      if (!Array.isArray(productsData)) {
+        throw new Error('Invalid format. Provide an array of products or { "products": [...] }');
+      }
+
+      toast.message('Uploading...', { description: `Found ${productsData.length} products. Starting sync...` });
       await handleSyncProducts(productsData);
-    } catch (error) {
+    } catch (error: any) {
       console.error('File upload error:', error);
-      toast.error('Failed to parse product file. Please ensure it\'s valid JSON.');
+      toast.error(`Failed to parse product file: ${error?.message ?? 'Unknown error'}`);
     }
   };
 
