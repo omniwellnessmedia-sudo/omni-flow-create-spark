@@ -28,18 +28,19 @@ interface AffiliateProductCardProps {
 
 export const AffiliateProductCard = ({ product, currency = 'ZAR' }: AffiliateProductCardProps) => {
   const getPrice = () => {
-    if (currency === 'USD' && product.price_usd) return `$${product.price_usd}`;
-    if (currency === 'EUR' && product.price_eur) return `€${product.price_eur}`;
-    if (currency === 'ZAR' && product.price_zar) return `R${product.price_zar}`;
+    if (currency === 'USD' && product.price_usd) return `$${product.price_usd.toFixed(2)}`;
+    if (currency === 'EUR' && product.price_eur) return `€${product.price_eur.toFixed(2)}`;
+    if (currency === 'ZAR' && product.price_zar) return `R${product.price_zar.toFixed(2)}`;
     return 'Price varies';
   };
 
   const getCommissionBadge = () => {
     if (!product.commission_rate) return null;
+    const percentage = (product.commission_rate * 100).toFixed(0);
     return (
       <Badge variant="secondary" className="gap-1">
         <TrendingUp className="h-3 w-3" />
-        Earn {product.commission_rate}%
+        Earn {percentage}%
       </Badge>
     );
   };
@@ -69,15 +70,22 @@ export const AffiliateProductCard = ({ product, currency = 'ZAR' }: AffiliatePro
   return (
     <Card className="flex flex-col h-full">
       <CardHeader className="space-y-2">
-        {product.image_url && (
-          <div className="aspect-video w-full overflow-hidden rounded-md bg-muted">
+        <div className="aspect-video w-full overflow-hidden rounded-md bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+          {product.image_url ? (
             <img
               src={product.image_url}
               alt={product.name}
               className="h-full w-full object-cover transition-transform hover:scale-105"
             />
-          </div>
-        )}
+          ) : (
+            <div className="text-center p-4">
+              <div className="text-4xl mb-2">🎁</div>
+              <p className="text-sm text-muted-foreground font-medium">
+                {product.category || 'Product'}
+              </p>
+            </div>
+          )}
+        </div>
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="line-clamp-2 text-lg">{product.name}</CardTitle>
           {getCommissionBadge()}
