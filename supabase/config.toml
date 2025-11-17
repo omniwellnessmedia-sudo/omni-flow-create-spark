@@ -20,3 +20,6 @@ verify_jwt = true
 
 [functions.duda-delete-site]
 verify_jwt = true
+
+[functions.sync-awin-products]
+verify_jwt = false
