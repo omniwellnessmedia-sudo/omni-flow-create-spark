@@ -80,6 +80,7 @@ const AffiliateMarketplace = React.lazy(() => import('@/pages/AffiliateMarketpla
 const AffiliatePerformance = React.lazy(() => import('@/pages/admin/AffiliatePerformance'));
 const AffiliatePayouts = React.lazy(() => import('@/pages/admin/AffiliatePayouts'));
 const CJAffiliateProducts = React.lazy(() => import('@/pages/CJAffiliateProducts'));
+const AwinAffiliateProducts = React.lazy(() => import('@/pages/AwinAffiliateProducts'));
 const CJProductDetail = React.lazy(() => import('@/pages/CJProductDetail'));
 const StoreCollections = React.lazy(() => import('@/pages/StoreCollections'));
 const AdminTools = React.lazy(() => import('@/pages/admin/AdminTools'));
@@ -148,6 +149,7 @@ function App() {
                   <Route path="/2bewell/shop" element={<Navigate to="/twobewellshop" replace />} />
                   <Route path="/2bewell/product/:productId" element={<TwoBeWellProductDetail />} />
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
+                  <Route path="/awin-affiliate-products" element={<AwinAffiliateProducts />} />
                   <Route path="/cj-products/:id" element={<CJProductDetail />} />
                   <Route path="/store" element={<StoreCollections />} />
                   <Route path="/store/collections/:handle" element={<StoreCollections />} />
