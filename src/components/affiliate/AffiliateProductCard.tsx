@@ -19,14 +19,17 @@ interface AffiliateProduct {
   image_url: string | null;
   affiliate_url: string;
   is_active: boolean;
+  advertiser_name?: string | null;
+  brand?: string | null;
 }
 
 interface AffiliateProductCardProps {
   product: AffiliateProduct;
   currency?: 'USD' | 'ZAR' | 'EUR';
+  isPublicView?: boolean;
 }
 
-export const AffiliateProductCard = ({ product, currency = 'ZAR' }: AffiliateProductCardProps) => {
+export const AffiliateProductCard = ({ product, currency = 'ZAR', isPublicView = true }: AffiliateProductCardProps) => {
   const getPrice = () => {
     if (currency === 'USD' && product.price_usd) return `$${product.price_usd.toFixed(2)}`;
     if (currency === 'EUR' && product.price_eur) return `€${product.price_eur.toFixed(2)}`;
@@ -34,15 +37,28 @@ export const AffiliateProductCard = ({ product, currency = 'ZAR' }: AffiliatePro
     return 'Price varies';
   };
 
-  const getCommissionBadge = () => {
-    if (!product.commission_rate) return null;
-    const percentage = (product.commission_rate * 100).toFixed(0);
-    return (
-      <Badge variant="secondary" className="gap-1">
-        <TrendingUp className="h-3 w-3" />
-        Earn {percentage}%
-      </Badge>
-    );
+  const getBadge = () => {
+    // Show commission for internal/admin view
+    if (!isPublicView && product.commission_rate) {
+      const percentage = (product.commission_rate * 100).toFixed(0);
+      return (
+        <Badge variant="secondary" className="gap-1">
+          <TrendingUp className="h-3 w-3" />
+          Earn {percentage}%
+        </Badge>
+      );
+    }
+    
+    // Show trusted partner badge for public view
+    if (isPublicView && (product.advertiser_name || product.brand)) {
+      return (
+        <Badge variant="outline" className="gap-1">
+          From {product.advertiser_name || product.brand}
+        </Badge>
+      );
+    }
+    
+    return null;
   };
 
   const handleShopNow = async () => {
@@ -88,7 +104,7 @@ export const AffiliateProductCard = ({ product, currency = 'ZAR' }: AffiliatePro
         </div>
         <div className="flex items-start justify-between gap-2">
           <CardTitle className="line-clamp-2 text-lg">{product.name}</CardTitle>
-          {getCommissionBadge()}
+          {getBadge()}
         </div>
         {product.category && (
           <Badge variant="outline" className="w-fit">
@@ -108,7 +124,7 @@ export const AffiliateProductCard = ({ product, currency = 'ZAR' }: AffiliatePro
       <CardFooter className="flex items-center justify-between gap-4">
         <div className="text-2xl font-bold">{getPrice()}</div>
         <Button onClick={handleShopNow} className="gap-2">
-          Shop & Earn
+          {isPublicView ? 'View Product' : 'Shop & Earn'}
           <ExternalLink className="h-4 w-4" />
         </Button>
       </CardFooter>

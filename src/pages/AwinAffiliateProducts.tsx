@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/input";
 import { FilterSidebar } from "@/components/product/FilterSidebar";
 import { AffiliateProductCard } from "@/components/affiliate/AffiliateProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, Upload, RefreshCw } from "lucide-react";
+import { Search, Upload, RefreshCw, ShieldCheck, Heart, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useInView } from "react-intersection-observer";
+import { useUserRole } from "@/hooks/useUserRole";
+import { Badge } from "@/components/ui/badge";
 
 interface AwinProduct {
   id: string;
@@ -37,6 +39,8 @@ export default function AwinAffiliateProducts() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("featured");
   const [displayedCount, setDisplayedCount] = useState(24);
+  
+  const { userType, isAdmin } = useUserRole();
   
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0,
@@ -144,7 +148,10 @@ export default function AwinAffiliateProducts() {
         filtered.sort((a, b) => (b.price_zar || 0) - (a.price_zar || 0));
         break;
       case "commission":
-        filtered.sort((a, b) => (b.commission_rate || 0) - (a.commission_rate || 0));
+        // Only allow commission sorting for admins
+        if (isAdmin) {
+          filtered.sort((a, b) => (b.commission_rate || 0) - (a.commission_rate || 0));
+        }
         break;
       case "name":
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -192,34 +199,64 @@ export default function AwinAffiliateProducts() {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-6">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Badge variant="secondary" className="gap-1">
+                <Sparkles className="h-3 w-3" />
+                Curated by Omni Wellness
+              </Badge>
+            </div>
+            
             <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              Awin Wellness Products
+              Wellness Marketplace
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Curated wellness products from trusted Awin merchants with exclusive commission opportunities
+              Discover carefully vetted wellness products from our trusted partners. 
+              Each purchase supports Omni's mission to promote holistic health and conscious living.
             </p>
             
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Button onClick={fetchProducts} variant="outline" size="lg" className="gap-2">
-                <RefreshCw className="h-4 w-4" />
-                Refresh Products
-              </Button>
-              <label htmlFor="product-upload">
-                <Button asChild variant="default" size="lg" disabled={syncing} className="gap-2">
-                  <span className="cursor-pointer">
-                    <Upload className="h-4 w-4" />
-                    {syncing ? 'Syncing...' : 'Upload Products'}
-                  </span>
-                </Button>
-              </label>
-              <input
-                id="product-upload"
-                type="file"
-                accept=".json,.txt,application/json,text/plain"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
+            {/* Trust Signals */}
+            <div className="flex flex-wrap gap-6 justify-center pt-4">
+              <div className="flex items-center gap-2 text-sm">
+                <ShieldCheck className="h-5 w-5 text-primary" />
+                <span className="text-muted-foreground">Trusted Partners</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Heart className="h-5 w-5 text-primary" />
+                <span className="text-muted-foreground">Wellness Focused</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <span className="text-muted-foreground">Carefully Curated</span>
+              </div>
             </div>
+            
+            {/* Admin Controls */}
+            {isAdmin && (
+              <div className="pt-6 border-t border-border/40 mt-8">
+                <p className="text-sm text-muted-foreground mb-3">Admin Controls</p>
+                <div className="flex gap-4 justify-center flex-wrap">
+                  <Button onClick={fetchProducts} variant="outline" size="sm" className="gap-2">
+                    <RefreshCw className="h-4 w-4" />
+                    Refresh
+                  </Button>
+                  <label htmlFor="product-upload">
+                    <Button asChild variant="default" size="sm" disabled={syncing} className="gap-2">
+                      <span className="cursor-pointer">
+                        <Upload className="h-4 w-4" />
+                        {syncing ? 'Syncing...' : 'Upload Products'}
+                      </span>
+                    </Button>
+                  </label>
+                  <input
+                    id="product-upload"
+                    type="file"
+                    accept=".json,.txt,application/json,text/plain"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
         
@@ -258,7 +295,7 @@ export default function AwinAffiliateProducts() {
                   <option value="featured">Featured</option>
                   <option value="price-low">Price: Low to High</option>
                   <option value="price-high">Price: High to Low</option>
-                  <option value="commission">Commission Rate</option>
+                  {isAdmin && <option value="commission">Commission Rate</option>}
                   <option value="name">Name</option>
                 </select>
               </div>
@@ -267,12 +304,21 @@ export default function AwinAffiliateProducts() {
 
           {/* Products Grid */}
           <div className="flex-1">
+            {/* Transparency Disclaimer */}
+            <div className="mb-6 p-4 bg-muted/50 rounded-lg border border-border/50">
+              <p className="text-sm text-muted-foreground">
+                <strong className="text-foreground">Transparent Partnership:</strong> These products are from our carefully vetted partner brands. 
+                When you make a purchase, you'll be redirected to the partner's website to complete your order securely. 
+                A small commission from your purchase helps support Omni's wellness mission at no extra cost to you.
+              </p>
+            </div>
+
             {/* Search Bar */}
             <div className="mb-8">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                 <Input
-                  placeholder="Search products..."
+                  placeholder="Search wellness products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 h-12"
@@ -301,7 +347,12 @@ export default function AwinAffiliateProducts() {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredProducts.slice(0, displayedCount).map((product) => (
-                    <AffiliateProductCard key={product.id} product={product} currency="ZAR" />
+                    <AffiliateProductCard 
+                      key={product.id} 
+                      product={product} 
+                      currency="ZAR" 
+                      isPublicView={!isAdmin}
+                    />
                   ))}
                 </div>
                 {displayedCount < filteredProducts.length && (
@@ -322,10 +373,12 @@ export default function AwinAffiliateProducts() {
                 <p className="text-xl text-muted-foreground mb-4">No products found</p>
                 <p className="text-sm text-muted-foreground mb-6">
                   {products.length === 0 
-                    ? "Upload your Awin product feed to get started"
+                    ? isAdmin 
+                      ? "Upload your product feed to get started"
+                      : "Check back soon for curated wellness products"
                     : "Try adjusting your filters or search terms"}
                 </p>
-                {products.length === 0 && (
+                {products.length === 0 && isAdmin && (
                   <label htmlFor="product-upload-empty">
                     <Button asChild variant="default" disabled={syncing} className="gap-2">
                       <span className="cursor-pointer">
