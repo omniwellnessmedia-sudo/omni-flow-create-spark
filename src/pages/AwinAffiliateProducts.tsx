@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useInView } from "react-intersection-observer";
 import { useSecureUserRole } from "@/hooks/useSecureUserRole";
 import { Badge } from "@/components/ui/badge";
+import { filterQualityProducts } from "@/lib/productFilters";
 
 interface AwinProduct {
   id: string;
@@ -129,8 +130,20 @@ export default function AwinAffiliateProducts() {
         throw new Error('Invalid format. Provide an array of products or { "products": [...] }');
       }
 
-      toast.message('Uploading...', { description: `Found ${productsData.length} products. Starting sync...` });
-      await handleSyncProducts(productsData);
+      // Filter products for quality before uploading
+      const totalProducts = productsData.length;
+      const qualityProducts = filterQualityProducts(productsData);
+      const filteredOutCount = totalProducts - qualityProducts.length;
+
+      if (qualityProducts.length === 0) {
+        toast.error('No quality products found after filtering. Please check your product feed.');
+        return;
+      }
+
+      toast.message('Quality Filtered', { 
+        description: `${qualityProducts.length} of ${totalProducts} products passed quality checks (${filteredOutCount} filtered out). Starting sync...` 
+      });
+      await handleSyncProducts(qualityProducts);
     } catch (error: any) {
       console.error('File upload error:', error);
       toast.error(`Failed to parse product file: ${error?.message ?? 'Unknown error'}`);
