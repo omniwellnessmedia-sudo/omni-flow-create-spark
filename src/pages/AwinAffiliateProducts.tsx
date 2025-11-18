@@ -69,18 +69,35 @@ export default function AwinAffiliateProducts() {
     }
   };
 
-  const handleSyncProducts = async (productsData: any[]) => {
+  const handleSyncProducts = async (productsData?: any[]) => {
     try {
       setSyncing(true);
-      console.log('[AWIN] Invoking sync with products:', productsData?.length);
-      const { data, error } = await supabase.functions.invoke('sync-awin-products', {
-        body: { products: productsData }
-      });
+      
+      if (productsData) {
+        // Manual JSON upload sync
+        console.log('[AWIN] Invoking manual sync with products:', productsData?.length);
+        const { data, error } = await supabase.functions.invoke('sync-awin-products', {
+          body: { products: productsData }
+        });
 
-      if (error) throw error as any;
+        if (error) throw error as any;
+        console.log('[AWIN] Manual sync response:', data);
+        toast.success(`Synced ${data?.products_synced ?? productsData.length} products successfully`);
+      } else {
+        // Fetch from Awin API
+        console.log('[AWIN] Fetching products from Awin API...');
+        const { data, error } = await supabase.functions.invoke('fetch-awin-products');
 
-      console.log('[AWIN] Sync response:', data);
-      toast.success(`Synced ${data?.products_synced ?? productsData.length} products successfully`);
+        if (error) throw error as any;
+        console.log('[AWIN] API fetch response:', data);
+        
+        if (data?.success) {
+          toast.success(data.message || `Synced ${data?.products_synced || 0} products from Awin API`);
+        } else {
+          toast.warning(data?.message || 'Unable to fetch from Awin API');
+        }
+      }
+      
       await fetchProducts();
     } catch (error: any) {
       console.error('Sync error:', error);
@@ -239,11 +256,21 @@ export default function AwinAffiliateProducts() {
                     <RefreshCw className="h-4 w-4" />
                     Refresh
                   </Button>
+                  <Button 
+                    onClick={() => handleSyncProducts()} 
+                    variant="default" 
+                    size="sm" 
+                    disabled={syncing}
+                    className="gap-2"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+                    {syncing ? 'Fetching from API...' : 'Fetch from Awin API'}
+                  </Button>
                   <label htmlFor="product-upload">
-                    <Button asChild variant="default" size="sm" disabled={syncing} className="gap-2">
+                    <Button asChild variant="outline" size="sm" disabled={syncing} className="gap-2">
                       <span className="cursor-pointer">
                         <Upload className="h-4 w-4" />
-                        {syncing ? 'Syncing...' : 'Upload Products'}
+                        {syncing ? 'Uploading...' : 'Upload JSON'}
                       </span>
                     </Button>
                   </label>
