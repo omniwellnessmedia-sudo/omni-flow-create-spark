@@ -689,6 +689,93 @@ export type Database = {
           },
         ]
       }
+      conscious_media_interactions: {
+        Row: {
+          channel: string
+          consciousness_intent: string | null
+          id: string
+          interaction_type: string
+          practitioner_id: string | null
+          product_name: string
+          retreat_id: string | null
+          timestamp: string
+          user_id: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          wellness_category: string | null
+        }
+        Insert: {
+          channel: string
+          consciousness_intent?: string | null
+          id?: string
+          interaction_type: string
+          practitioner_id?: string | null
+          product_name: string
+          retreat_id?: string | null
+          timestamp?: string
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          wellness_category?: string | null
+        }
+        Update: {
+          channel?: string
+          consciousness_intent?: string | null
+          id?: string
+          interaction_type?: string
+          practitioner_id?: string | null
+          product_name?: string
+          retreat_id?: string | null
+          timestamp?: string
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          wellness_category?: string | null
+        }
+        Relationships: []
+      }
+      conscious_partner_values: {
+        Row: {
+          conscious_values: string[] | null
+          created_at: string | null
+          logo_url: string | null
+          partner_description: string | null
+          partner_id: string
+          partner_name: string
+          partner_website: string
+          south_african_commitment: string | null
+          updated_at: string | null
+          values_alignment_score: number | null
+        }
+        Insert: {
+          conscious_values?: string[] | null
+          created_at?: string | null
+          logo_url?: string | null
+          partner_description?: string | null
+          partner_id: string
+          partner_name: string
+          partner_website: string
+          south_african_commitment?: string | null
+          updated_at?: string | null
+          values_alignment_score?: number | null
+        }
+        Update: {
+          conscious_values?: string[] | null
+          created_at?: string | null
+          logo_url?: string | null
+          partner_description?: string | null
+          partner_id?: string
+          partner_name?: string
+          partner_website?: string
+          south_african_commitment?: string | null
+          updated_at?: string | null
+          values_alignment_score?: number | null
+        }
+        Relationships: []
+      }
       consumer_profiles: {
         Row: {
           created_at: string | null

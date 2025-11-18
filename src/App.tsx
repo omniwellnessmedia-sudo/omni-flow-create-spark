@@ -58,6 +58,7 @@ const BusinessConsulting = React.lazy(() => import('@/pages/BusinessConsulting')
 const MediaProduction = React.lazy(() => import('@/pages/MediaProduction'));
 const WebDevelopment = React.lazy(() => import('@/pages/WebDevelopment'));
 const SocialMediaStrategy = React.lazy(() => import('@/pages/SocialMediaStrategy'));
+const ConsciousMediaPartnershipPage = React.lazy(() => import('@/pages/ConsciousMediaPartnershipPage'));
 // const AITools = React.lazy(() => import('@/pages/AITools')); // Temporarily hidden
 const TourCategory = React.lazy(() => import('@/pages/TourCategory'));
 const TourDetail = React.lazy(() => import('@/pages/TourDetail'));
@@ -203,6 +204,7 @@ function App() {
                   <Route path="/media-production" element={<MediaProduction />} />
                   <Route path="/web-development" element={<WebDevelopment />} />
                   <Route path="/social-media-strategy" element={<SocialMediaStrategy />} />
+                  <Route path="/conscious-media-partnership" element={<ConsciousMediaPartnershipPage />} />
 
 
                   {/* Affiliate Marketplace */}
