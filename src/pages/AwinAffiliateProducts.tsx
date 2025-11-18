@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Upload, RefreshCw, ShieldCheck, Heart, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useInView } from "react-intersection-observer";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useSecureUserRole } from "@/hooks/useSecureUserRole";
 import { Badge } from "@/components/ui/badge";
 
 interface AwinProduct {
@@ -40,7 +40,7 @@ export default function AwinAffiliateProducts() {
   const [sortBy, setSortBy] = useState<string>("featured");
   const [displayedCount, setDisplayedCount] = useState(24);
   
-  const { userType, isAdmin } = useUserRole();
+  const { isAdmin } = useSecureUserRole();
   
   const { ref: loadMoreRef, inView } = useInView({
     threshold: 0,
