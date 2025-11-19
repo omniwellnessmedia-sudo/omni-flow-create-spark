@@ -24,7 +24,7 @@ const products: Product[] = [
     name: "Backdrop Stand Kit",
     description: "Professional backdrop support system. Lightweight aluminum frame with integrated clamps and sandbag stability. Easy setup and takedown for mobile documentation.",
     whyWeChoseThis: "Creates intentional settings for authentic documentary capture without digital manipulation. Respects the natural environment while supporting professional documentation practice.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-2-6x3m-lightweight-backdrop-stand-kit-clamps-sandbags-camerastuff-online-shop-667.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-2-6x3m-lightweight-backdrop-stand-kit-clamps-sandbags-camerastuff-online-shop-133.webp?v=1752090264&width=1540",
     productUrl: "https://camerastuff.co.za/products/neewer-26x3m-lightweight-backdrop-stand-kit-with-clamps-sandbags",
     channel: "retreat-documentation",
     imagePosition: 'left'
@@ -44,7 +44,7 @@ const products: Product[] = [
     name: "Neewer SNL660 45W Bi-Colour 2-Pack",
     description: "Compact bi-color LED panels (3200K-5600K) with 45W output. Lightweight, portable design with wireless remote and light stand compatibility. Ideal for intimate documentation spaces.",
     whyWeChoseThis: "Professional quality lighting without excessive heat. Perfect for long wellness sessions where practitioner comfort is essential. Two-pack allows flexible positioning in smaller retreat spaces.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-2-x-pack-snl660-45w-bi-colour-led-constant-light-panel-kit-camerastuff-online-shop-303.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-2-x-pack-snl660-45w-bi-colour-led-constant-light-panel-kit-camerastuff-online-shop-809.jpg?v=1738762359&width=840",
     productUrl: "https://camerastuff.co.za/products/neewer-2-x-pack-snl660-45w-bi-colour-led-constant-light-panel-kit",
     channel: "retreat-documentation",
     imagePosition: 'left'
@@ -54,7 +54,7 @@ const products: Product[] = [
     name: "Neewer 660 Pro 50W RGB WW Single Panel",
     description: "Individual 50W RGB variable-color LED panel. Full spectrum control (3200K-5600K), CRI 95+, wireless remote, light stand included. Flexible single-unit deployment.",
     whyWeChoseThis: "Ideal for one-on-one practitioner documentation and intimate retreat settings. Offers full professional control while remaining minimally intrusive in sacred spaces.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-660-pro-50w-rgb-ww-led-video-light-panel-camerastuff-online-shop-south-africa-2-358.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-660-pro-50w-rgb-ww-led-video-light-panel-camerastuff-online-shop-south-africa-1-975.webp?v=1752076268&width=640",
     productUrl: "https://camerastuff.co.za/products/neewer-660-pro-50w-rgb-ww-led-video-light-panel",
     channel: "practitioner-equipment",
     imagePosition: 'right'
