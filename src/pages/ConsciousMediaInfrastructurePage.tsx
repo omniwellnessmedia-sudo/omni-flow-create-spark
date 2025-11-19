@@ -1,247 +1,119 @@
-import { Section } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
-import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
-import { ExternalLink } from "lucide-react";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
+import { HeroHeader } from "@/components/conscious-media/HeroHeader";
 import { WhyCameraStuffSection } from "@/components/conscious-media/WhyCameraStuffSection";
+import { FeaturedProductCard } from "@/components/conscious-media/FeaturedProductCard";
 import { TestimonialsSection } from "@/components/conscious-media/TestimonialsSection";
-import { CreativeExamplesSection } from "@/components/conscious-media/CreativeExamplesSection";
-import SiteHeader from "@/components/SiteHeader";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  whyWeChoseThis: string;
-  imageUrl: string;
-  productUrl: string;
-  channel: string;
-  imagePosition: 'left' | 'right';
-}
-
-const products: Product[] = [
-  {
-    id: 1,
-    name: "Backdrop Stand Kit",
-    description: "Professional backdrop support system. Lightweight aluminum frame with integrated clamps and sandbag stability. Easy setup and takedown for mobile documentation.",
-    whyWeChoseThis: "Creates intentional settings for authentic documentary capture without digital manipulation. Respects the natural environment while supporting professional documentation practice.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-2-6x3m-lightweight-backdrop-stand-kit-clamps-sandbags-camerastuff-online-shop-133.webp?v=1752090264&width=1540",
-    productUrl: "https://camerastuff.co.za/products/neewer-26x3m-lightweight-backdrop-stand-kit-with-clamps-sandbags",
-    channel: "retreat-documentation",
-    imagePosition: 'left'
-  },
-  {
-    id: 2,
-    name: "Neewer 660 Pro II RGB WW 50W Panel (2-light kit)",
-    description: "Professional RGB variable-color LED panel system with 2 units, 50W each. Adjustable color temperature (3200K-5600K), CRI 95+, wireless remote control. Includes light stands and softboxes.",
-    whyWeChoseThis: "Enables natural-feeling lighting that respects wellness spaces. Variable color control allows documenters to match retreat environments rather than imposing artificial aesthetics. Generates minimal heat for long meditation sessions.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-rgb660-pro-ii-660-rgb-ww-50w-led-constant-light-panel-kit-two-lights-camerastuff-481.webp",
-    productUrl: "https://camerastuff.co.za/products/neewer-660-pro-ii-rgb-ww-50w-led-constant-light-panel-kit-two-lights",
-    channel: "practitioner-equipment",
-    imagePosition: 'right'
-  },
-  {
-    id: 3,
-    name: "Neewer SNL660 45W Bi-Colour 2-Pack",
-    description: "Compact bi-color LED panels (3200K-5600K) with 45W output. Lightweight, portable design with wireless remote and light stand compatibility. Ideal for intimate documentation spaces.",
-    whyWeChoseThis: "Professional quality lighting without excessive heat. Perfect for long wellness sessions where practitioner comfort is essential. Two-pack allows flexible positioning in smaller retreat spaces.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-2-x-pack-snl660-45w-bi-colour-led-constant-light-panel-kit-camerastuff-online-shop-809.jpg?v=1738762359&width=840",
-    productUrl: "https://camerastuff.co.za/products/neewer-2-x-pack-snl660-45w-bi-colour-led-constant-light-panel-kit",
-    channel: "retreat-documentation",
-    imagePosition: 'left'
-  },
-  {
-    id: 4,
-    name: "Neewer 660 Pro 50W RGB WW Single Panel",
-    description: "Individual 50W RGB variable-color LED panel. Full spectrum control (3200K-5600K), CRI 95+, wireless remote, light stand included. Flexible single-unit deployment.",
-    whyWeChoseThis: "Ideal for one-on-one practitioner documentation and intimate retreat settings. Offers full professional control while remaining minimally intrusive in sacred spaces.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-660-pro-50w-rgb-ww-led-video-light-panel-camerastuff-online-shop-south-africa-3-681.webp?v=1752076274&width=640",
-    productUrl: "https://camerastuff.co.za/products/neewer-660-pro-50w-rgb-ww-led-video-light-panel",
-    channel: "practitioner-equipment",
-    imagePosition: 'right'
-  },
-  {
-    id: 5,
-    name: "Backdrop Support Kit (280x300cm)",
-    description: "Heavy-duty backdrop system for large-scale documentation. 280x300cm coverage creates immersive, distraction-free settings. Durable construction, quick assembly, multiple backdrop compatibility.",
-    whyWeChoseThis: "Creates immersive visual settings that minimize distractions and frame the authentic retreat experience. Professional backdrop systems communicate respect for the practitioner and the documentation process.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/camerastuff-bgs-2-8x3a-backdrop-stand-support-kit-280x300cm-online-shop-south-africa-1-175.jpg?v=1752094995&width=1540",
-    productUrl: "https://camerastuff.co.za/products/camerastuff-bgs-28x3a-backdrop-stand-support-kit-280x300cm",
-    channel: "retreat-documentation",
-    imagePosition: 'left'
-  },
-  {
-    id: 6,
-    name: "Neewer CM5 2-Pack Lavalier Mics",
-    description: "Professional wired lavalier/lapel microphones (2-pack). Omnidirectional condenser pickup, 3.5mm connector, cable length 2.5m. Compact, unobtrusive design for interview and practitioner documentation.",
-    whyWeChoseThis: "Captures practitioner voices authentically without obtrusive boom equipment. Lavalier design respects physical space while ensuring clear audio—essential for consent-forward documentation.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-cm5-2-pack-wired-lavalier-lapel-omnidirectional-condenser-microphone-camerastuff-877.webp",
-    productUrl: "https://camerastuff.co.za/products/neewer-cm5-2-pack-wired-lavalier-lapel-omnidirectional-condenser-microphone",
-    channel: "practitioner-equipment",
-    imagePosition: 'right'
-  },
-  {
-    id: 7,
-    name: "Neewer NW-XJB02S Camera Sling Backpack",
-    description: "Professional camera sling backpack with ergonomic single-shoulder design. Multiple compartments, weatherproof material, compatible with DSLR/mirrorless and accessories. Enables hands-free mobility.",
-    whyWeChoseThis: "Portable design allows documenters to move freely and respectfully through retreat spaces. Professional carrying solution ensures equipment protection while maintaining retreat environment flow and participant trust.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-nw-xjb02s-sling-camera-backpack-bag-purple-camerastuff-online-shop-south-africa-2-576.webp",
-    productUrl: "https://camerastuff.co.za/products/neewer-nw-xjb02s-camera-sling-backpack-purple",
-    channel: "retreat-documentation",
-    imagePosition: 'left'
-  }
-];
-
-const ProductCard = ({ product }: { product: Product }) => {
-  const { generateAffiliateLink, trackAffiliateClick } = useConsciousAffiliate();
-
-  const handleClick = async () => {
-    const affiliateUrl = generateAffiliateLink({
-      productSlug: product.productUrl.split('/products/')[1],
-      channel: product.channel,
-    });
-
-    await trackAffiliateClick(
-      product.name,
-      product.channel,
-      affiliateUrl,
-      "conscious media infrastructure",
-      "media equipment"
-    );
-
-    window.open(affiliateUrl, '_blank');
-  };
-
-  const containerClass = product.imagePosition === 'right' 
-    ? "flex flex-col lg:flex-row-reverse gap-10 lg:gap-10 items-center"
-    : "flex flex-col lg:flex-row gap-10 lg:gap-10 items-center";
-
-  return (
-    <div className="py-12 lg:py-15 border-b border-border last:border-b-0">
-      <div className={containerClass}>
-        {/* Image */}
-        <div className="w-full lg:w-[45%] flex justify-center lg:justify-start">
-          <img
-            src={product.imageUrl}
-            alt={`${product.name} - Professional media equipment`}
-            className="w-full max-w-[500px] h-[400px] object-contain rounded-lg bg-muted/20 p-4"
-          />
-        </div>
-
-        {/* Text Content */}
-        <div className="w-full lg:w-[55%] space-y-4">
-          <h3 className="text-3xl lg:text-4xl font-bold text-foreground">
-            {product.name}
-          </h3>
-          
-          <p className="text-base text-foreground/80 leading-relaxed">
-            {product.description}
-          </p>
-          
-          <p className="text-sm italic text-muted-foreground leading-relaxed">
-            {product.whyWeChoseThis}
-          </p>
-          
-          <Button
-            onClick={handleClick}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-6"
-            size="lg"
-          >
-            View on CameraStuff
-            <ExternalLink className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { FooterCTA } from "@/components/conscious-media/FooterCTA";
 
 const ConsciousMediaInfrastructurePage = () => {
-  const { generateAffiliateLink, trackAffiliateClick } = useConsciousAffiliate();
-
-  const handleMainCTAClick = async () => {
-    const affiliateUrl = "https://www.camerastuff.co.za/?a_aid=omniwellnessmedia";
-    
-    await trackAffiliateClick(
-      "CameraStuff Main Store",
-      "general-browse",
-      affiliateUrl,
-      "conscious media infrastructure footer",
-      "media equipment"
-    );
-
-    window.open(affiliateUrl, '_blank');
-  };
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <SiteHeader />
-      
-      {/* Hero Section */}
-      <div className="relative py-32 lg:py-40 overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Business%20Consulting/DSC00124.jpg"
-            alt="Conscious Media Documentation"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background"></div>
-        </div>
-        
-        {/* Content */}
-        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center space-y-6">
-          <h1 className="text-4xl lg:text-6xl font-bold text-foreground drop-shadow-lg">
-            Conscious Media Infrastructure
-          </h1>
-          <p className="text-lg lg:text-xl text-foreground/90 max-w-2xl mx-auto drop-shadow-md">
-            Handpicked equipment for authentic storytelling
-          </p>
-          <p className="text-sm lg:text-base text-muted-foreground max-w-3xl mx-auto">
-            Professional tools that respect sacred spaces, honor participants, and support documenters who create with intention
-          </p>
-        </div>
-      </div>
-
-      {/* Why CameraStuff Section */}
+      <UnifiedNavigation />
+      <HeroHeader />
       <WhyCameraStuffSection />
+      
+      {/* Product 1: Godox Professional Lighting System */}
+      <FeaturedProductCard
+        audienceBadge="For Retreat Centers & Institutions"
+        productName="Godox Professional Lighting System"
+        priceRange="R35,000 - R65,000"
+        whatItIncludes="Professional Godox strobes (AD300 or AD400 Pro), large parabolic umbrellas, diffusion covers, heavy-duty light stands, and protective carrying cases. Complete studio-grade system for documenting transformative moments with broadcast-quality clarity."
+        whyWeChose="Your participants are sharing sacred practices. Your documentation must honor that trust with professional quality that captures authentic emotion without intrusion. This system creates cinema-grade lighting that feels natural—participants forget the equipment exists, yet every frame radiates intentional beauty. When you're documenting healing journeys, quality isn't vanity—it's respect."
+        whoShouldGet={[
+          "✓ Retreat centers documenting 10+ programs annually",
+          "✓ Educational institutions teaching transformative practices",
+          "✓ Research teams capturing longitudinal wellness studies",
+          "✓ Professional documentary crews telling conscious stories"
+        ]}
+        ctaText="Explore Professional Lighting →"
+        ctaLink="https://camerastuff.co.za/collections/lighting?a_aid=omniwellnessmedia"
+        imageUrl="https://camerastuff.co.za/cdn/shop/files/godox-ad300-pro-ttl-pocket-flash-head-only-camerastuff-online-shop-south-africa-1-877.webp?v=1738763010&width=1540"
+        imageAlt="Godox professional lighting system with strobes and accessories"
+        imageOnRight={false}
+      />
 
-      {/* Products Section */}
-      <Section size="large">
-        <div className="max-w-6xl mx-auto">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </Section>
+      {/* Product 2: Studio Backdrop System */}
+      <FeaturedProductCard
+        audienceBadge="For Retreat Operators & Content Studios"
+        productName="Studio Backdrop System with Reeling"
+        priceRange="R25,000 - R45,000"
+        whatItIncludes="Professional 2.75m seamless paper backdrop system with ceiling/wall mounting rails, multiple color options, and motorized or manual reeling. Transforms any space into an intentional setting that honors your work without overwhelming your participants."
+        whyWeChose="Sacred practices deserve intentional settings. A professional backdrop communicates 'we value this work' while creating visual consistency that participants remember. Your footage becomes timeless—no distracting backgrounds, no visual chaos, just focus on the practice itself. When someone watches your content years later, they see the teaching, not the clutter."
+        whoShouldGet={[
+          "✓ Yoga studios creating signature teaching content",
+          "✓ Retreat centers building their visual brand identity",
+          "✓ Wellness educators packaging online courses",
+          "✓ Practitioners documenting certification programs"
+        ]}
+        ctaText="Browse Backdrop Systems →"
+        ctaLink="https://camerastuff.co.za/collections/backdrops?a_aid=omniwellnessmedia"
+        imageUrl="https://camerastuff.co.za/cdn/shop/files/camerastuff-bgs-2-8x3a-backdrop-stand-support-kit-280x300cm-online-shop-south-africa-1-175.jpg?v=1752094995&width=1540"
+        imageAlt="Professional backdrop stand system with canvas"
+        imageOnRight={true}
+      />
 
-      {/* Testimonials Section */}
+      {/* Product 3: Godox LED Lighting Kit */}
+      <FeaturedProductCard
+        audienceBadge="For Documenters & Educators"
+        productName="Godox Professional LED Lighting Kit"
+        priceRange="R18,000 - R28,000"
+        whatItIncludes="Godox Litemon or SL-series professional LED panels (190W-230W), flicker-free constant lighting, professional light stands, large diffusion umbrellas, and road-ready carrying cases. Silent operation, zero heat generation, perfect for capturing long meditation sessions or multi-hour workshops without participant discomfort."
+        whyWeChose="Conscious documentation requires invisible support. No flash. No heat. No noise. Just steady, natural-feeling light that allows practitioners to stay present while you capture their authentic practice. LED technology means you can document 4-hour plant medicine ceremonies or full-day retreats without interrupting the sacred container. Quality light = quality respect."
+        whoShouldGet={[
+          "✓ Wellness videographers building documentary portfolios",
+          "✓ Meditation retreat documenters capturing silent practice",
+          "✓ Educational videographers filming immersive programs",
+          "✓ Practitioners creating teaching content while maintaining sacred space"
+        ]}
+        ctaText="Shop LED Lighting Kits →"
+        ctaLink="https://camerastuff.co.za/collections/lighting?a_aid=omniwellnessmedia"
+        imageUrl="https://camerastuff.co.za/cdn/shop/files/godox-sl60iid-led-video-light-camerastuff-online-shop-south-africa-2-286.jpg?v=1738765110&width=1540"
+        imageAlt="Godox professional LED lighting panel with stand"
+        imageOnRight={false}
+      />
+
+      {/* Product 4: Professional Wireless Audio Kit */}
+      <FeaturedProductCard
+        audienceBadge="For All Conscious Documenters"
+        productName="Professional Wireless Audio Kit"
+        priceRange="R3,500 - R8,000"
+        whatItIncludes="Neewer wireless lavalier microphone system with transmitter, receiver, charging case, and all adapters. Crystal-clear audio up to 50m range with reliable transmission. Captures wisdom without visible boom mics or tangled cables interrupting the visual frame."
+        whyWeChose="Great wisdom deserves to be heard clearly. When a teacher shares a breakthrough insight during a ceremony, or a participant describes their healing journey—muddy audio is disrespectful to their story. Professional audio captures every word with clarity, allowing your audience to truly receive the teaching. Invisible equipment, visible impact. Your content becomes shareable, quotable, transformative—because people can actually hear it."
+        whoShouldGet={[
+          "✓ Everyone conducting video interviews or testimonials",
+          "✓ Practitioners recording teaching content or guided meditations",
+          "✓ Documentary teams capturing ceremony wisdom",
+          "✓ Anyone whose content includes spoken wisdom worth preserving"
+        ]}
+        ctaText="Browse Audio Solutions →"
+        ctaLink="https://camerastuff.co.za/collections/microphones?a_aid=omniwellnessmedia"
+        imageUrl="https://camerastuff.co.za/cdn/shop/files/neewer-cm5-2-pack-wired-lavalier-lapel-omnidirectional-condenser-microphone-camerastuff-877.webp?v=1738763082&width=1540"
+        imageAlt="Neewer wireless lavalier microphone kit"
+        imageOnRight={true}
+      />
+
+      {/* Product 5: Professional Camera Backpack */}
+      <FeaturedProductCard
+        audienceBadge="For Mobile Conscious Documenters"
+        productName="Professional Gear Backpack & Accessories"
+        priceRange="R2,000 - R5,500"
+        whatItIncludes="Professional camera sling or backpack with weatherproof construction, customizable padded compartments, quick-access design, adjustable shoulder/chest straps, rain cover, and organizational accessories. Protects thousands of rands of equipment while keeping you mobile and respectful in retreat spaces."
+        whyWeChose="Documentary work is movement. You're following ceremonies through forests, capturing sunrise practices, documenting multi-location workshops. Your gear needs protection, but your hands need freedom to honor the space. A professional backpack becomes invisible—it just works. You move with respect, your equipment stays safe, and participants never see you fumbling with bags. Professional organization = professional presence."
+        whoShouldGet={[
+          "✓ Documentary crews working in nature or multi-location retreats",
+          "✓ Traveling practitioners capturing content across venues",
+          "✓ Educators documenting field programs and outdoor workshops",
+          "✓ Anyone carrying camera equipment through sacred or sensitive spaces"
+        ]}
+        ctaText="Explore Gear & Accessories →"
+        ctaLink="https://camerastuff.co.za/collections/bags-cases?a_aid=omniwellnessmedia"
+        imageUrl="https://camerastuff.co.za/cdn/shop/files/neewer-nw-xjb02s-sling-camera-backpack-bag-purple-camerastuff-online-shop-south-africa-2-576.webp?v=1738763030&width=1540"
+        imageAlt="Professional camera sling backpack"
+        imageOnRight={false}
+      />
+
       <TestimonialsSection />
-
-      {/* Creative Examples Section */}
-      <CreativeExamplesSection />
-
-      {/* Enhanced Footer CTA Section */}
-      <Section className="bg-muted py-12 lg:py-15 mt-0">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Ready to Build Your Conscious Media Infrastructure?
-          </h2>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            All equipment handpicked to support respectful, authentic, professional 
-            storytelling. Partnered with CameraStuff—proudly South African since 2006—
-            supporting local creative infrastructure and accessible professional tools.
-          </p>
-          <Button
-            onClick={handleMainCTAClick}
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
-          >
-            Explore CameraStuff
-            <ExternalLink className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </Section>
+      <FooterCTA />
     </div>
   );
 };
