@@ -118,11 +118,11 @@ const ProductCard = ({ product }: { product: Product }) => {
     <div className="py-12 lg:py-15 border-b border-border last:border-b-0">
       <div className={containerClass}>
         {/* Image */}
-        <div className="w-full lg:w-[45%]">
+        <div className="w-full lg:w-[45%] flex justify-center lg:justify-start">
           <img
             src={product.imageUrl}
             alt={`${product.name} - Professional media equipment`}
-            className="w-full max-w-[500px] aspect-[4/3] object-cover rounded-lg shadow-lg"
+            className="w-full max-w-[500px] h-[375px] object-cover rounded-lg shadow-lg"
           />
         </div>
 
@@ -174,16 +174,30 @@ const ConsciousMediaInfrastructurePage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <Section className="py-12 lg:py-15">
-        <div className="max-w-6xl mx-auto text-center space-y-4">
-          <h1 className="text-4xl lg:text-5xl font-bold text-foreground">
+      <div className="relative py-24 lg:py-32 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Business%20Consulting/DSC00124.jpg"
+            alt="Conscious Media Documentation"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background"></div>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center space-y-6">
+          <h1 className="text-4xl lg:text-6xl font-bold text-foreground drop-shadow-lg">
             Conscious Media Infrastructure
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg lg:text-xl text-foreground/90 max-w-2xl mx-auto drop-shadow-md">
             Handpicked equipment for authentic storytelling
           </p>
+          <p className="text-sm lg:text-base text-muted-foreground max-w-3xl mx-auto">
+            Professional tools that respect sacred spaces, honor participants, and support documenters who create with intention
+          </p>
         </div>
-      </Section>
+      </div>
 
       {/* Why CameraStuff Section */}
       <WhyCameraStuffSection />
