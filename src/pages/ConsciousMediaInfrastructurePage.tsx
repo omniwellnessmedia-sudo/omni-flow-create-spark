@@ -29,7 +29,7 @@ const ConsciousMediaInfrastructurePage = () => {
         ]}
         ctaText="Explore Professional Bundles on CameraStuff →"
         ctaLink="https://camerastuff.co.za/collections/all?a_aid=omniwellnessmedia"
-        imageUrl="https://www.camerastuff.co.za/cdn/shop/products/7360_5.jpg?v=1656311903"
+        imageUrl="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=800&fit=crop"
         imageAlt="Godox professional lighting system with strobes and modifiers"
         imageOnRight={false}
       />
@@ -49,7 +49,7 @@ const ConsciousMediaInfrastructurePage = () => {
         ]}
         ctaText="Browse Backdrop Systems on CameraStuff →"
         ctaLink="https://camerastuff.co.za/collections/backdrops?a_aid=omniwellnessmedia"
-        imageUrl="https://www.camerastuff.co.za/cdn/shop/products/7353_5.jpg?v=1656311751"
+        imageUrl="https://images.unsplash.com/photo-1598387993281-cecf8b71a8f8?w=800&h=800&fit=crop"
         imageAlt="Professional backdrop system with ceiling mount and canvas rolls"
         imageOnRight={true}
       />
