@@ -69,7 +69,7 @@ const ConsciousMediaInfrastructurePage = () => {
         ]}
         ctaText="Shop LED Lighting Kits on CameraStuff →"
         ctaLink="https://camerastuff.co.za/collections/lighting?a_aid=omniwellnessmedia"
-        imageUrl="https://www.camerastuff.co.za/cdn/shop/products/6754_5.jpg?v=1656304813"
+        imageUrl="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&h=800&fit=crop"
         imageAlt="Godox LED continuous lighting panel with stand and diffuser"
         imageOnRight={false}
       />
@@ -89,7 +89,7 @@ const ConsciousMediaInfrastructurePage = () => {
         ]}
         ctaText="Browse Audio Solutions on CameraStuff →"
         ctaLink="https://camerastuff.co.za/collections/microphones?a_aid=omniwellnessmedia"
-        imageUrl="https://www.camerastuff.co.za/cdn/shop/products/7336_5.jpg?v=1656311484"
+        imageUrl="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800&h=800&fit=crop"
         imageAlt="Neewer wireless lavalier microphone system with transmitter and receiver"
         imageOnRight={true}
       />
