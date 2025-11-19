@@ -34,11 +34,18 @@ export const WhyCameraStuffSection = () => {
           <div className="w-full lg:w-[40%] space-y-8">
             {/* CameraStuff Logo */}
             <div className="flex justify-center lg:justify-start">
-              <img 
-                src="https://camerastuff.co.za/wp-content/uploads/2023/01/camerastuff-logo-green.png"
-                alt="CameraStuff Logo"
-                className="h-12 lg:h-14"
-              />
+              <a 
+                href="https://www.camerastuff.co.za/shop/omniwellnessmedia?a_aid=omniwellnessmedia&a_bid=a42a1cc9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-80"
+              >
+                <img 
+                  src="https://camerastuff.co.za/wp-content/uploads/2023/01/camerastuff-logo-green.png"
+                  alt="CameraStuff Logo"
+                  className="h-16 lg:h-20 w-auto object-contain"
+                />
+              </a>
             </div>
 
             {/* Review Card */}
