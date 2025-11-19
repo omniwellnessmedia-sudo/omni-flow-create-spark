@@ -116,6 +116,7 @@ const UnifiedNavigation = () => {
       children: [
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic business development', icon: '💼' },
         { title: 'Media Production', href: '/media-production', description: 'Content creation services', icon: '🎬' },
+        { title: 'Conscious Media Infrastructure', href: '/conscious-media-infrastructure', description: 'Handpicked media equipment', icon: '📷' },
         { title: 'Web Development', href: '/web-development', description: 'Digital solutions', icon: '💻' },
         { title: 'Provider Directory', href: '/provider-directory', description: 'Discover wellness providers', icon: '👥' },
       ]

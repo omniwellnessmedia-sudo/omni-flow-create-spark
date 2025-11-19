@@ -5,7 +5,7 @@ import { ExternalLink } from "lucide-react";
 import { WhyCameraStuffSection } from "@/components/conscious-media/WhyCameraStuffSection";
 import { TestimonialsSection } from "@/components/conscious-media/TestimonialsSection";
 import { CreativeExamplesSection } from "@/components/conscious-media/CreativeExamplesSection";
-import SiteHeader from "@/components/SiteHeader";
+import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 
 interface Product {
   id: number;
@@ -175,7 +175,7 @@ const ConsciousMediaInfrastructurePage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <SiteHeader />
+      <UnifiedNavigation />
       
       {/* Hero Section */}
       <div className="relative py-32 lg:py-40 overflow-hidden">
