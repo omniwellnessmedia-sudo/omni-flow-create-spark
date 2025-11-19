@@ -2,6 +2,9 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
 import { ExternalLink } from "lucide-react";
+import { WhyCameraStuffSection } from "@/components/conscious-media/WhyCameraStuffSection";
+import { TestimonialsSection } from "@/components/conscious-media/TestimonialsSection";
+import { CreativeExamplesSection } from "@/components/conscious-media/CreativeExamplesSection";
 
 interface Product {
   id: number;
@@ -119,7 +122,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           <img
             src={product.imageUrl}
             alt={`${product.name} - Professional media equipment`}
-            className="w-full aspect-[4/3] object-cover rounded-lg shadow-lg"
+            className="w-full max-w-[500px] aspect-[4/3] object-cover rounded-lg shadow-lg"
           />
         </div>
 
@@ -182,6 +185,9 @@ const ConsciousMediaInfrastructurePage = () => {
         </div>
       </Section>
 
+      {/* Why CameraStuff Section */}
+      <WhyCameraStuffSection />
+
       {/* Products Section */}
       <Section size="large">
         <div className="max-w-6xl mx-auto">
@@ -191,15 +197,22 @@ const ConsciousMediaInfrastructurePage = () => {
         </div>
       </Section>
 
-      {/* Footer CTA Section */}
-      <Section className="bg-muted py-12 lg:py-15 mt-12 lg:mt-15">
+      {/* Testimonials Section */}
+      <TestimonialsSection />
+
+      {/* Creative Examples Section */}
+      <CreativeExamplesSection />
+
+      {/* Enhanced Footer CTA Section */}
+      <Section className="bg-muted py-12 lg:py-15 mt-0">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Ready to Document Your Wellness Journey?
+            Ready to Build Your Conscious Media Infrastructure?
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            All equipment handpicked to support conscious, respectful, authentic storytelling. 
-            CameraStuff is proudly South African since 2006, supporting local creative infrastructure.
+            All equipment handpicked to support respectful, authentic, professional 
+            storytelling. Partnered with CameraStuff—proudly South African since 2006—
+            supporting local creative infrastructure and accessible professional tools.
           </p>
           <Button
             onClick={handleMainCTAClick}

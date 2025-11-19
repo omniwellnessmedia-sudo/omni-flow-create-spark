@@ -78,6 +78,8 @@ export const MegaNavigation = () => {
       items: [
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic growth', icon: '📊' },
         { title: 'Media Production', href: '/media-production', description: 'Video & content', icon: '🎬' },
+        { title: 'Media Equipment Guide', href: '/conscious-media-infrastructure', description: 'Conscious storytelling equipment', icon: '📷' },
+        { title: 'CameraStuff Partnership', href: '/conscious-media-partnership', description: 'South African creative supplier', icon: '🤝' },
         { title: 'Social Media Strategy', href: '/social-media-strategy', description: 'Digital marketing', icon: '📱' },
         { title: 'Web Development', href: '/web-development', description: 'Websites & apps', icon: '💻' },
       ]
