@@ -93,7 +93,7 @@ export const WhyCameraStuffSection = () => {
                     src="https://camerastuff.postaffiliatepro.com/accounts/default1/nbo4em5ndkg/a42a1cc9.jpg"
                     alt="CameraStuff Shop"
                     title="CameraStuff Shop"
-                    className="h-32 lg:h-40 w-auto object-contain mx-auto"
+                    className="h-20 w-auto object-contain mx-auto rounded-lg"
                   />
                 </a>
                 <img 

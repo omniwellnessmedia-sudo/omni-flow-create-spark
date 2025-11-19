@@ -53,7 +53,7 @@ export const FeaturedProductCard = ({
             <img
               src={imageUrl}
               alt={imageAlt}
-              className="w-full h-[600px] lg:h-[700px] object-contain bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-8"
+              className="w-full h-[380px] object-cover rounded-xl shadow-lg"
             />
           </div>
 
