@@ -54,7 +54,7 @@ const products: Product[] = [
     name: "Neewer 660 Pro 50W RGB WW Single Panel",
     description: "Individual 50W RGB variable-color LED panel. Full spectrum control (3200K-5600K), CRI 95+, wireless remote, light stand included. Flexible single-unit deployment.",
     whyWeChoseThis: "Ideal for one-on-one practitioner documentation and intimate retreat settings. Offers full professional control while remaining minimally intrusive in sacred spaces.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-660-pro-50w-rgb-ww-led-video-light-panel-camerastuff-online-shop-south-africa-1-975.webp?v=1752076268&width=640",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-660-pro-50w-rgb-ww-led-video-light-panel-camerastuff-online-shop-south-africa-3-681.webp?v=1752076274&width=640",
     productUrl: "https://camerastuff.co.za/products/neewer-660-pro-50w-rgb-ww-led-video-light-panel",
     channel: "practitioner-equipment",
     imagePosition: 'right'
@@ -64,7 +64,7 @@ const products: Product[] = [
     name: "Backdrop Support Kit (280x300cm)",
     description: "Heavy-duty backdrop system for large-scale documentation. 280x300cm coverage creates immersive, distraction-free settings. Durable construction, quick assembly, multiple backdrop compatibility.",
     whyWeChoseThis: "Creates immersive visual settings that minimize distractions and frame the authentic retreat experience. Professional backdrop systems communicate respect for the practitioner and the documentation process.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/camerastuff-bgs-2-8x3a-backdrop-stand-support-kit-280x300cm-online-shop-south-africa-2-358.png",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/camerastuff-bgs-2-8x3a-backdrop-stand-support-kit-280x300cm-online-shop-south-africa-1-175.jpg?v=1752094995&width=1540",
     productUrl: "https://camerastuff.co.za/products/camerastuff-bgs-28x3a-backdrop-stand-support-kit-280x300cm",
     channel: "retreat-documentation",
     imagePosition: 'left'
