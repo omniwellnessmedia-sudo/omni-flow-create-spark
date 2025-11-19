@@ -123,7 +123,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           <img
             src={product.imageUrl}
             alt={`${product.name} - Professional media equipment`}
-            className="w-full max-w-[500px] h-[700px] object-cover rounded-lg shadow-lg"
+            className="w-full max-w-[500px] h-[400px] object-contain rounded-lg bg-muted/20 p-4"
           />
         </div>
 
