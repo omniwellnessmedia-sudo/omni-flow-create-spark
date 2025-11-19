@@ -1,80 +1,64 @@
-import { Quote } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface Testimonial {
   quote: string;
   author: string;
-  title: string;
-  equipment: string;
+  details: string;
 }
 
 const testimonials: Testimonial[] = [
   {
-    quote: "The backdrop stand system transformed how we document our retreats. It's professional-grade but respectful of the sacred space. Our participants feel honored, not exposed.",
-    author: "Sarah M.",
-    title: "Yoga Retreat Facilitator, Cape Town",
-    equipment: "Backdrop Stand Kit + 660 Pro II Panels"
+    quote: "The professional lighting system transformed how we document our retreats. It's broadcast-quality but feels natural to our participants. They don't feel exposed—they feel honored.",
+    author: "Sarah M., Yoga Retreat Facilitator",
+    details: "Uses: LED Lighting Kit + Backdrop System"
   },
   {
-    quote: "As a researcher documenting wellness interventions, I needed equipment that wouldn't intimidate participants. These tools let me capture authentic moments while respecting consent and comfort.",
-    author: "Dr. James K.",
-    title: "UWC Wellness Research Fellow",
-    equipment: "SNL660 Panels + CM5 Lavalier Mics"
+    quote: "As a UWC researcher documenting wellness interventions, I needed equipment that wouldn't intimidate participants. This gear is professional-grade but invisible—it captures authentic moments while respecting consent.",
+    author: "Dr. James K., Wellness Research Fellow",
+    details: "Uses: LED Kit + Audio Kit"
   },
   {
-    quote: "The Godox panels give broadcast-quality light without the heat. For documenters capturing long meditation sessions, that matters. CameraStuff's warranty and local support made the decision easy.",
-    author: "Amara L.",
-    title: "Documentary Filmmaker, Conscious Content",
-    equipment: "660 Pro II + Camera Backpack"
+    quote: "As a documentary filmmaker, I appreciate that Omni curates equipment with consciousness in mind. They're not just recommending gear—they're recommending tools that match values I actually care about.",
+    author: "Amara L., Conscious Content Creator",
+    details: "Uses: Complete system (all 5 products)"
   }
 ];
 
 export const TestimonialsSection = () => {
   return (
-    <div className="py-16 lg:py-20 px-6 border-t-2 border-border">
-      <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-12 lg:mb-16 space-y-3">
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Conscious Practitioners Share Their Experience
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Real documenters, real work, authentic feedback
-          </p>
-        </div>
-
-        {/* Testimonial Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section className="bg-purple-50/50 py-16 lg:py-20 px-10 lg:px-20 border-t-2 border-border">
+      <div className="max-w-[1400px] mx-auto">
+        <h2 className="text-3xl lg:text-4xl font-bold text-center text-foreground mb-3">
+          Conscious Practitioners Share Their Experience
+        </h2>
+        <p className="text-lg text-muted-foreground text-center mb-12 lg:mb-16">
+          Real documenters, real work, authentic feedback
+        </p>
+        
+        <div className="grid md:grid-cols-3 gap-10">
           {testimonials.map((testimonial, index) => (
-            <div 
-              key={index}
-              className="bg-background rounded-lg p-8 shadow-sm border-l-4 border-primary hover:shadow-md transition-shadow"
-            >
-              <Quote className="w-8 h-8 text-primary/30 mb-4" />
-              
-              <p className="text-base italic text-foreground/90 leading-relaxed mb-6">
-                "{testimonial.quote}"
-              </p>
-              
-              <div className="space-y-2">
-                <p className="font-bold text-sm text-foreground">
-                  {testimonial.author}
+            <Card key={index} className="bg-white border-l-[5px] border-l-primary shadow-sm">
+              <CardContent className="pt-8 pb-8 px-8">
+                <p className="text-base text-foreground/90 italic leading-relaxed mb-5">
+                  "{testimonial.quote}"
                 </p>
-                <p className="text-xs text-muted-foreground">
-                  {testimonial.title}
-                </p>
-                <p className="text-xs text-muted-foreground pt-3 border-t border-border">
-                  Uses: {testimonial.equipment}
-                </p>
-              </div>
-            </div>
+                <div>
+                  <p className="font-bold text-sm text-foreground">
+                    {testimonial.author}
+                  </p>
+                  <p className="text-[13px] text-muted-foreground mt-3">
+                    {testimonial.details}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
 
-        {/* Note for updating with real testimonials */}
-        <p className="text-center text-xs text-muted-foreground mt-8 italic">
-          Template testimonials - replace with real customer reviews as collected
+        <p className="text-center text-sm text-muted-foreground mt-8 italic">
+          * Template testimonials - to be replaced with real customer reviews
         </p>
       </div>
-    </div>
+    </section>
   );
 };
