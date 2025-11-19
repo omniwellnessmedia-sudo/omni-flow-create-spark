@@ -109,7 +109,7 @@ const ConsciousMediaInfrastructurePage = () => {
         ]}
         ctaText="Explore Gear & Accessories on CameraStuff →"
         ctaLink="https://camerastuff.co.za/collections/bags-cases?a_aid=omniwellnessmedia"
-        imageUrl="https://www.camerastuff.co.za/cdn/shop/products/7115_5.jpg?v=1656308685"
+        imageUrl="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&h=800&fit=crop"
         imageAlt="Professional camera backpack with weatherproof construction and compartments"
         imageOnRight={false}
       />
