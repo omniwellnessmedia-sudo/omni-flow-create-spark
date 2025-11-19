@@ -36,16 +36,24 @@ export const WhyCameraStuffSection = () => {
             <div className="flex justify-center lg:justify-start">
               <a 
                 href="https://www.camerastuff.co.za/shop/omniwellnessmedia?a_aid=omniwellnessmedia&a_bid=a42a1cc9"
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_top"
                 className="transition-opacity hover:opacity-80"
               >
                 <img 
-                  src="https://camerastuff.co.za/wp-content/uploads/2023/01/camerastuff-logo-green.png"
-                  alt="CameraStuff Logo"
-                  className="h-16 lg:h-20 w-auto object-contain"
+                  src="https://camerastuff.postaffiliatepro.com/accounts/default1/nbo4em5ndkg/a42a1cc9.jpg"
+                  alt="CameraStuff Shop"
+                  title="CameraStuff Shop"
+                  className="h-32 lg:h-40 w-auto object-contain rounded-lg"
                 />
               </a>
+              <img 
+                style={{ border: 0 }} 
+                src="https://camerastuff.postaffiliatepro.com/scripts/nio4em5ndkg?a_aid=omniwellnessmedia&a_bid=a42a1cc9" 
+                width="1" 
+                height="1" 
+                alt="" 
+                className="hidden"
+              />
             </div>
 
             {/* Review Card */}
