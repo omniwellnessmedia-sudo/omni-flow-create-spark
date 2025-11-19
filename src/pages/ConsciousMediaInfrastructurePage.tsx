@@ -206,8 +206,19 @@ const ConsciousMediaInfrastructurePage = () => {
       {/* Why CameraStuff Section */}
       <WhyCameraStuffSection />
 
-      {/* Products Section */}
-      <Section size="large">
+      {/* Featured Equipment Section */}
+      <Section size="large" className="bg-background">
+        <div className="max-w-6xl mx-auto mb-16 text-center">
+          <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">
+            Featured Equipment
+          </p>
+          <h2 className="text-3xl lg:text-[40px] font-bold text-[#1a1a1a] mb-4">
+            Professional Tools for Conscious Practice
+          </h2>
+          <p className="text-base text-[#666666] max-w-3xl mx-auto leading-relaxed">
+            Each piece of equipment is selected for its ability to enable authentic storytelling while supporting South African creative infrastructure.
+          </p>
+        </div>
         <div className="max-w-6xl mx-auto">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
