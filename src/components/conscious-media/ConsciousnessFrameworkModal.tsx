@@ -8,9 +8,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Users, Shield, Heart, Info } from "lucide-react";
+import type { ReactNode } from "react";
 
 interface FrameworkSection {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
 }
