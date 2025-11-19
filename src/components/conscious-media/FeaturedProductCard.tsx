@@ -49,16 +49,20 @@ export const FeaturedProductCard = ({
       <div className="max-w-[1400px] mx-auto">
         <div className={containerClass}>
           {/* Product Image */}
-          <div className="lg:w-[45%]">
+          <div className="lg:w-[50%]">
             <img
               src={imageUrl}
               alt={imageAlt}
               className="w-full h-[600px] lg:h-[700px] object-contain bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-8"
+              onError={(e) => {
+                console.error('Image failed to load:', imageUrl);
+                e.currentTarget.style.display = 'block';
+              }}
             />
           </div>
 
           {/* Product Information */}
-          <div className="lg:w-[55%] flex flex-col justify-center">
+          <div className="lg:w-[50%] flex flex-col justify-center">
             <div className="inline-block mb-4">
               <span className="font-bold text-xs text-primary uppercase bg-purple-50 px-3 py-2 rounded-md">
                 {audienceBadge}
