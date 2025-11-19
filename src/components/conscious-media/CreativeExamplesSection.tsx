@@ -11,7 +11,7 @@ const examples: CreativeExample[] = [
     category: "RETREAT DOCUMENTATION",
     title: "Capturing Sacred Retreats Authentically",
     description: "Professional documentation that respects the retreat space. This is how consciousness meets technique.",
-    imageUrl: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Business%20Consulting/DSC00124.jpg",
+    imageUrl: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg",
     imageAlt: "Professional retreat documentation showing conscious media approach"
   },
   {
@@ -25,7 +25,7 @@ const examples: CreativeExample[] = [
     category: "EDUCATIONAL PROGRAMS",
     title: "Learning + Documenting Together",
     description: "Capture immersive learning moments. This is why conscious media infrastructure matters for education.",
-    imageUrl: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/feroza%20begg%20-%20portrait.jpg",
+    imageUrl: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/CPTCHA_BEACH_LIONSHEAD_MARCH_SHOOT%2002_OMNI-20.jpg",
     imageAlt: "Educational program documentation"
   }
 ];
