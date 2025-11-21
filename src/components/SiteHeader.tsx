@@ -47,7 +47,7 @@ const SiteHeader = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1 lg:max-w-4xl lg:mx-4">
+          <div className="hidden lg:flex lg:items-center lg:justify-center lg:flex-1 lg:mx-2">
             <MegaNavigation />
           </div>
 

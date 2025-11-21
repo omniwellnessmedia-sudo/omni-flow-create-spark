@@ -368,6 +368,88 @@ export const products: EnhancedProduct[] = [
     ],
     channel: "retreat-documentation",
     imagePosition: 'left'
+  },
+  {
+    id: 18,
+    name: "Neewer NK-ST300 3x2.45m Paper Backdrop Stand",
+    description: "Heavy-duty paper backdrop stand system supporting rolls up to 2.45m wide. Adjustable height, stable tripod base, quick-release mechanism. Professional backdrop presentation without permanent installation.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3x245m-paper-backdrop-stand-camerastuff-online-shop-south-africa-1-903.jpg?v=1738758733&width=640",
+    productUrl: "https://camerastuff.co.za/products/neewer-nk-st300-3x245m-paper-backdrop-stand",
+    category: 'studio',
+    skillLevel: 'intermediate',
+    curator: 'zenith',
+    curatorQuote: "Paper rolls. Color options. Clean aesthetic. Studio versatility. Quick swaps. Professional presentation without permanent commitment.",
+    whyYouNeedThis: "Versatile backdrop system that enables quick color changes for different wellness aesthetics.",
+    perfectFor: [
+      "Studio with multiple aesthetics",
+      "Photography and video mixing",
+      "Product and portrait work",
+      "Color-themed wellness content"
+    ],
+    channel: "studio-versatility",
+    imagePosition: 'right'
+  },
+  {
+    id: 19,
+    name: "Neewer BH40C RGB Esthetician Double LED Kit",
+    description: "Specialized dual-arm LED lighting system designed for beauty and esthetician work. RGB color control, adjustable brightness, flexible gooseneck arms, desktop mount included. Perfect for close-up beauty and wellness content.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-with-stand-camerastuff-online-shop-south-africa-1-937.jpg?v=1738758747&width=640",
+    productUrl: "https://camerastuff.co.za/products/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-with-stand",
+    category: 'studio',
+    skillLevel: 'professional',
+    curator: 'ferozza',
+    curatorQuote: "Beauty work. Skincare content. Close-up precision. Adjustable angles. Flattering lighting. Esthetician standard without salon cost.",
+    whyYouNeedThis: "Salon-quality lighting for beauty and skincare content that showcases transformations professionally.",
+    perfectFor: [
+      "Beauty and skincare documentation",
+      "Esthetician content creators",
+      "Close-up wellness procedures",
+      "Transformation before/after content"
+    ],
+    salesFunnelCTA: "Building a beauty wellness brand? Omni can elevate your visual identity",
+    channel: "beauty-wellness",
+    imagePosition: 'left'
+  },
+  {
+    id: 20,
+    name: "Neewer GL1C 48W RGBWW Streaming LED Panel",
+    description: "Compact streaming-optimized LED panel with desktop mount. 48W RGBWW output, app control, multiple lighting effects, adjustable brightness and color temperature. Designed for content creators and streamers.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgbww-streaming-led-constant-light-panel-with-desktop-mount-camerastuff-online-shop-south-africa-1-103.jpg?v=1738758750&width=640",
+    productUrl: "https://camerastuff.co.za/products/neewer-gl1c-48w-rgbww-streaming-led-constant-light-panel-with-desktop-mount",
+    category: 'vlogging',
+    skillLevel: 'beginner',
+    curator: 'chad',
+    curatorQuote: "Streaming setup. Online classes. Desktop content. App control. Wellness coaching online. Professional look for virtual sessions.",
+    whyYouNeedThis: "Professional streaming setup for online wellness coaching and virtual classes.",
+    perfectFor: [
+      "Online wellness coaching",
+      "Virtual yoga classes",
+      "Meditation livestreams",
+      "Desktop content creation"
+    ],
+    salesFunnelCTA: "Going virtual? Let Omni design your online wellness studio",
+    channel: "virtual-wellness",
+    imagePosition: 'right'
+  },
+  {
+    id: 21,
+    name: "Neewer SL90 12W RGBWW Mini LED Panel",
+    description: "Ultra-compact 12W RGBWW LED panel. Pocket-sized, magnetic mounting, rechargeable battery, full color control. Perfect for travel creators and on-the-go lighting needs.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgbww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-1-507.jpg?v=1738758752&width=640",
+    productUrl: "https://camerastuff.co.za/products/neewer-sl90-12w-rgbww-mini-led-constant-light-panel",
+    category: 'travel',
+    skillLevel: 'beginner',
+    curator: 'ferozza',
+    curatorQuote: "Pocket-sized. Emergency fill light. Travel essential. Magnetic mount. Always-ready lighting. Never miss a moment for lack of light.",
+    whyYouNeedThis: "Emergency lighting solution that fits in your pocket and saves unexpected moments.",
+    perfectFor: [
+      "Travel wellness creators",
+      "Emergency fill lighting",
+      "Compact travel kits",
+      "Spontaneous content capture"
+    ],
+    channel: "travel-essentials",
+    imagePosition: 'left'
   }
 ];
 
