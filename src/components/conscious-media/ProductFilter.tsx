@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { X } from "lucide-react";
 import { UseCase, Curator, SkillLevel } from "@/data/consciousMediaProducts";
+import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
 
 interface ProductFilterProps {
   selectedCategory: UseCase | 'all';
@@ -25,7 +26,39 @@ export const ProductFilter = ({
   onResetFilters,
   resultCount,
 }: ProductFilterProps) => {
+  const { trackProductView } = useConsciousAffiliate();
   const hasActiveFilters = selectedCategory !== 'all' || selectedCurator !== 'all' || selectedSkillLevel !== 'all';
+
+  const handleCategoryChange = async (category: UseCase | 'all') => {
+    onCategoryChange(category);
+    await trackProductView(
+      `Filter: Category - ${category}`,
+      'conscious_media_infrastructure_filter',
+      'category_filter'
+    );
+  };
+
+  const handleCuratorClick = async (curator: Curator | 'all') => {
+    onCuratorChange(curator);
+    if (curator !== 'all') {
+      await trackProductView(
+        `Filter: Curator - ${curator}`,
+        'conscious_media_infrastructure_filter',
+        'curator_filter'
+      );
+    }
+  };
+
+  const handleSkillLevelClick = async (level: SkillLevel | 'all') => {
+    onSkillLevelChange(level);
+    if (level !== 'all') {
+      await trackProductView(
+        `Filter: Skill Level - ${level}`,
+        'conscious_media_infrastructure_filter',
+        'skill_level_filter'
+      );
+    }
+  };
 
   return (
     <div className="space-y-8 pb-8 border-b border-border">
@@ -55,7 +88,7 @@ export const ProductFilter = ({
         <label className="text-sm font-medium text-foreground uppercase tracking-wider">
           What are you creating?
         </label>
-        <Tabs value={selectedCategory} onValueChange={(value) => onCategoryChange(value as UseCase | 'all')} className="w-full">
+        <Tabs value={selectedCategory} onValueChange={(value) => handleCategoryChange(value as UseCase | 'all')} className="w-full">
           <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 h-auto gap-2 bg-muted p-1">
             <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               All Equipment
@@ -87,28 +120,28 @@ export const ProductFilter = ({
             <Badge
               variant={selectedCurator === 'all' ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
-              onClick={() => onCuratorChange('all')}
+              onClick={() => handleCuratorClick('all')}
             >
               All
             </Badge>
             <Badge
               variant={selectedCurator === 'ferozza' ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
-              onClick={() => onCuratorChange('ferozza')}
+              onClick={() => handleCuratorClick('ferozza')}
             >
               Ferozza
             </Badge>
             <Badge
               variant={selectedCurator === 'chad' ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
-              onClick={() => onCuratorChange('chad')}
+              onClick={() => handleCuratorClick('chad')}
             >
               Chad
             </Badge>
             <Badge
               variant={selectedCurator === 'zenith' ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
-              onClick={() => onCuratorChange('zenith')}
+              onClick={() => handleCuratorClick('zenith')}
             >
               Zenith
             </Badge>
@@ -124,28 +157,28 @@ export const ProductFilter = ({
             <Badge
               variant={selectedSkillLevel === 'all' ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
-              onClick={() => onSkillLevelChange('all')}
+              onClick={() => handleSkillLevelClick('all')}
             >
               All
             </Badge>
             <Badge
               variant={selectedSkillLevel === 'beginner' ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
-              onClick={() => onSkillLevelChange('beginner')}
+              onClick={() => handleSkillLevelClick('beginner')}
             >
               Beginner
             </Badge>
             <Badge
               variant={selectedSkillLevel === 'intermediate' ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
-              onClick={() => onSkillLevelChange('intermediate')}
+              onClick={() => handleSkillLevelClick('intermediate')}
             >
               Intermediate
             </Badge>
             <Badge
               variant={selectedSkillLevel === 'professional' ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
-              onClick={() => onSkillLevelChange('professional')}
+              onClick={() => handleSkillLevelClick('professional')}
             >
               Professional
             </Badge>

@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, MessageCircle } from "lucide-react";
+import { ExternalLink, MessageCircle, Package } from "lucide-react";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
 import { EnhancedProduct, curatorProfiles } from "@/data/consciousMediaProducts";
+import { useState } from "react";
 
 interface SimplifiedProductCardProps {
   product: EnhancedProduct;
@@ -12,6 +13,8 @@ interface SimplifiedProductCardProps {
 export const SimplifiedProductCard = ({ product, imagePosition = 'left' }: SimplifiedProductCardProps) => {
   const { generateAffiliateLink, trackAffiliateClick } = useConsciousAffiliate();
   const curator = curatorProfiles[product.curator];
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
 
   const handleViewProduct = async () => {
     const affiliateUrl = generateAffiliateLink({
@@ -41,11 +44,32 @@ export const SimplifiedProductCard = ({ product, imagePosition = 'left' }: Simpl
       <div className={containerClass}>
         {/* Image */}
         <div className="w-full lg:w-[40%] flex-shrink-0">
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full h-[350px] object-contain rounded-lg bg-muted/30 p-6"
-          />
+          <div className="relative w-full h-[350px] bg-muted/30 rounded-lg p-6 flex items-center justify-center">
+            {imageLoading && !imageError && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="animate-pulse text-muted-foreground">
+                  <Package size={48} />
+                </div>
+              </div>
+            )}
+            {imageError ? (
+              <div className="flex flex-col items-center justify-center text-muted-foreground">
+                <Package size={48} className="mb-2" />
+                <p className="text-sm">Image unavailable</p>
+              </div>
+            ) : (
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className={`w-full h-full object-contain transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                onLoad={() => setImageLoading(false)}
+                onError={() => {
+                  setImageError(true);
+                  setImageLoading(false);
+                }}
+              />
+            )}
+          </div>
         </div>
 
         {/* Content */}

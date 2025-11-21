@@ -374,23 +374,23 @@ export const products: EnhancedProduct[] = [
 export const curatorProfiles = {
   ferozza: {
     name: "Ferozza",
-    title: "Field Documentation Specialist",
-    expertise: "Retreat & Community Filming",
-    bio: "14+ retreats documented across South Africa. Specializes in authentic, participatory wellness documentation in challenging field conditions.",
-    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Omni%20wellness%20team.jpg"
+    title: "Content Creator & Vlogger",
+    expertise: "Mobile & Compact Gear",
+    bio: "Specializes in portable, high-quality gear for creators on the move. Focuses on equipment that balances portability with professional results.",
+    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Feroza%20Portrait.jpg"
   },
   chad: {
-    name: "Chad Cupido",
-    title: "Strategic Media Director",
-    expertise: "Business Development & Brand Positioning",
-    bio: "Founder of Omni Wellness Media. Focuses on ROI-driven equipment choices and professional brand credibility through conscious media.",
-    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/HUMAN%20ANIMAL_CHAD-3.jpg"
+    name: "Chad",
+    title: "Head of Media & Strategy",
+    expertise: "Studio & Professional Production",
+    bio: "Expert in studio setups and professional media production. Guides teams toward equipment that delivers consistent, broadcast-quality results.",
+    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Chad%20and%20cow_OMNI_BWC.jpg"
   },
   zenith: {
     name: "Zenith",
-    title: "Production Coordinator",
-    expertise: "Workflow Optimization & Logistics",
-    bio: "Manages 15+ monthly shoots. Specializes in equipment efficiency, production logistics, and streamlined creative workflows.",
-    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Omni%20wellness%20community%20project%201.JPG"
+    title: "Administration & Project Coordination",
+    expertise: "Practical & Beginner-Friendly Solutions",
+    bio: "Focuses on accessible, user-friendly equipment that empowers newcomers to start their content creation journey with confidence.",
+    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg"
   }
 };
