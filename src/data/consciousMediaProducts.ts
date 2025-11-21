@@ -31,7 +31,7 @@ export const products: EnhancedProduct[] = [
     category: 'vlogging',
     skillLevel: 'beginner',
     curator: 'ferozza',
-    curatorQuote: "I started documenting retreat healing circles with just my phone and this kit. The light saved me in dim community spaces, and the mic picked up every whispered intention. If you're ready to share your wellness journey but think you need expensive cameras—start here. This is how I began.",
+    curatorQuote: "All-in-one starter kit. Mobile creators. Budget-friendly. Gets you filming immediately without overwhelming choices.",
     whyYouNeedThis: "Transform your smartphone into a professional storytelling tool without overwhelming complexity or cost.",
     perfectFor: [
       "Wellness vloggers starting out",
@@ -52,7 +52,7 @@ export const products: EnhancedProduct[] = [
     category: 'vlogging',
     skillLevel: 'beginner',
     curator: 'chad',
-    curatorQuote: "Here's what changed when we invested in proper ring lights: clients started asking if we were 'real production professionals.' This single piece of equipment elevated how people perceived our entire brand. If you're doing wellness consultations, testimonials, or healing sessions on camera—this signals expertise.",
+    curatorQuote: "Professional lighting = professional perception. Testimonials. Consultations. Beauty content. Instantly elevates your brand credibility.",
     whyYouNeedThis: "Professional lighting instantly communicates credibility and creates flattering, trust-building visuals.",
     perfectFor: [
       "Online wellness consultations",
@@ -73,7 +73,7 @@ export const products: EnhancedProduct[] = [
     category: 'vlogging',
     skillLevel: 'intermediate',
     curator: 'ferozza',
-    curatorQuote: "I film 8-hour retreat days entirely on my phone. This handle eliminated the shaky footage and hand fatigue that made me look amateur. Now I move through yoga sessions, garden tours, and community gatherings with the stability of a cinema camera. Your hands will thank you.",
+    curatorQuote: "Stability for mobile filming. Long shoots. Active documentation. Eliminates shaky footage and hand fatigue. Professional smartphone cinematography.",
     whyYouNeedThis: "Stabilize smartphone footage and eliminate fatigue during long documentation sessions.",
     perfectFor: [
       "All-day retreat filming",
@@ -93,7 +93,7 @@ export const products: EnhancedProduct[] = [
     category: 'studio',
     skillLevel: 'professional',
     curator: 'chad',
-    curatorQuote: "When you're pitching wellness content to broadcasters or corporate wellness programs, they look at your lighting first. This light meets broadcast standards without the R50,000 rental fees. It's paid for itself three times over in contracts we won because our demo reels looked 'TV ready.'",
+    curatorQuote: "Broadcast-quality lighting. Corporate pitches. High-budget productions. Professional studio standard without rental costs.",
     whyYouNeedThis: "Broadcast-quality lighting that opens doors to high-budget wellness media opportunities.",
     perfectFor: [
       "Professional studio recordings",
@@ -114,7 +114,7 @@ export const products: EnhancedProduct[] = [
     category: 'studio',
     skillLevel: 'professional',
     curator: 'ferozza',
-    curatorQuote: "We used this to light a traditional healer's sacred space without flooding the room with clinical brightness. The focused beam created reverence—like natural light streaming through a cave opening. When your subject matter is sacred, clinical lighting feels disrespectful. This tool honors the space.",
+    curatorQuote: "Artistic lighting control. Sacred spaces. Dramatic effects. Focused beams. Honors intimate environments without clinical brightness.",
     whyYouNeedThis: "Create artistic, respectful lighting that enhances sacred and intimate wellness spaces.",
     perfectFor: [
       "Traditional healing documentation",
@@ -134,7 +134,7 @@ export const products: EnhancedProduct[] = [
     category: 'vlogging',
     skillLevel: 'intermediate',
     curator: 'zenith',
-    curatorQuote: "I coordinate logistics for 15+ shoots monthly. This cage eliminated 2 hours of setup per session—no more juggling separate tripods, mics, and lights. When you're managing tight schedules and multiple locations, gear that mounts everything in one system saves your sanity. And your schedule.",
+    curatorQuote: "Modular system. Efficient setup. Multiple locations. Everything mounts together. Saves hours in production logistics.",
     whyYouNeedThis: "Modular smartphone system that streamlines setup and increases production efficiency.",
     perfectFor: [
       "Multi-location shoot days",
@@ -154,7 +154,7 @@ export const products: EnhancedProduct[] = [
     category: 'studio',
     skillLevel: 'intermediate',
     curator: 'ferozza',
-    curatorQuote: "Traditional softboxes create harsh shadows that make wellness practitioners look tired. This lantern wraps light around the subject naturally—like sunlight filtering through tree leaves. When you're filming healing work, harsh lighting feels aggressive. This feels gentle. That matters.",
+    curatorQuote: "Soft, gentle lighting. Interviews. Portraits. 360° wrap-around light. Flattering for wellness practitioners. Non-aggressive aesthetic.",
     whyYouNeedThis: "Soft, non-aggressive lighting that complements the gentle nature of wellness work.",
     perfectFor: [
       "Interview and testimonial work",
@@ -174,7 +174,7 @@ export const products: EnhancedProduct[] = [
     category: 'travel',
     skillLevel: 'intermediate',
     curator: 'chad',
-    curatorQuote: "We lost our first documentary interview to wind noise. Never again. This lavalier mic captures voices clearly without boom poles that intimidate participants. When you're filming authentic stories, your gear needs to disappear. This does. And the audio is broadcast-quality.",
+    curatorQuote: "Unobtrusive audio. Documentary interviews. Clear vocal capture. Disappears on clothing. Professional sound without intimidating equipment.",
     whyYouNeedThis: "Unobtrusive, professional audio capture that maintains intimacy in documentary settings.",
     perfectFor: [
       "Documentary interviews",
@@ -195,7 +195,7 @@ export const products: EnhancedProduct[] = [
     category: 'travel',
     skillLevel: 'beginner',
     curator: 'ferozza',
-    curatorQuote: "This bag survived dust storms at Valley of Plenty, coastal humidity, and 14-hour retreat shoots across South Africa. When you're documenting real wellness work in unpredictable environments, your gear needs military-grade protection. This delivers. And it's fast-access when moments happen quickly.",
+    curatorQuote: "Durable protection. Field documentation. All-weather. Quick access. Outdoor wellness events. Equipment stays safe in unpredictable environments.",
     whyYouNeedThis: "Field-tested protection for equipment during unpredictable outdoor wellness documentation.",
     perfectFor: [
       "Retreat and field documentation",
@@ -215,7 +215,7 @@ export const products: EnhancedProduct[] = [
     category: 'film-production',
     skillLevel: 'professional',
     curator: 'zenith',
-    curatorQuote: "Clients ask why we use a clapperboard for wellness content. Because it signals 'we're professionals making something that matters.' It organizes footage for efficient editing, syncs audio perfectly, and communicates production seriousness. If you're pitching serious projects, this detail separates amateurs from pros.",
+    curatorQuote: "Professional organization. Multi-camera sync. Efficient editing workflow. Signals production credibility. Serious projects need serious tools.",
     whyYouNeedThis: "Professional production organization that signals credibility to clients and streamlines post-production.",
     perfectFor: [
       "Multi-camera productions",
@@ -238,7 +238,7 @@ export const products: EnhancedProduct[] = [
     category: 'studio',
     skillLevel: 'intermediate',
     curator: 'zenith',
-    curatorQuote: "We set this up in 15 minutes at community centers with zero backdrops. Instant professional environment. When you're documenting wellness work in borrowed spaces, this transforms 'makeshift' into 'intentional.' Clients notice the difference immediately.",
+    curatorQuote: "Quick setup. Borrowed spaces. Mobile studios. Creates intentional environments. Professional presentation in any location.",
     whyYouNeedThis: "Create intentional, distraction-free settings in any borrowed or temporary space.",
     perfectFor: [
       "Mobile studio setups",
@@ -258,7 +258,7 @@ export const products: EnhancedProduct[] = [
     category: 'studio',
     skillLevel: 'professional',
     curator: 'ferozza',
-    curatorQuote: "I use these for 8-hour meditation shoots. Zero heat buildup—practitioners stay comfortable. The RGB lets me match sunset lighting during evening sessions without artificial looks. When wellness spaces have specific energetic qualities, generic lighting destroys them. This respects the space.",
+    curatorQuote: "Variable color control. Long sessions. Minimal heat. Matches natural lighting. Respects wellness space energy without artificial look.",
     whyYouNeedThis: "Match natural lighting conditions in wellness spaces without disrupting the environment's energy.",
     perfectFor: [
       "Long meditation sessions",
@@ -278,7 +278,7 @@ export const products: EnhancedProduct[] = [
     category: 'travel',
     skillLevel: 'intermediate',
     curator: 'ferozza',
-    curatorQuote: "These fit in my backpack for mountain retreat filming. Full professional lighting in a portable package. I've filmed healing circles in caves, forest ceremonies, and cliffside yoga—this kit goes everywhere and performs like studio lights.",
+    curatorQuote: "Portable. Remote locations. Backpack-friendly. Professional lighting quality. Outdoor events. Studio performance in travel package.",
     whyYouNeedThis: "Professional-quality portable lighting that doesn't compromise on performance.",
     perfectFor: [
       "Remote retreat locations",
@@ -298,7 +298,7 @@ export const products: EnhancedProduct[] = [
     category: 'studio',
     skillLevel: 'intermediate',
     curator: 'chad',
-    curatorQuote: "Single-light setups look amateur. This panel plus natural window light? Instantly professional. When you're building your wellness practice and can't afford full studio kits, this one light elevates your entire visual brand. It's the difference between 'side hustle' and 'serious practitioner.'",
+    curatorQuote: "Affordable professional quality. Single-light solution. Natural light pairing. Elevates brand perception. Starting practitioners.",
     whyYouNeedThis: "Affordable professional lighting that transforms your visual credibility immediately.",
     perfectFor: [
       "Starting wellness professionals",
@@ -318,7 +318,7 @@ export const products: EnhancedProduct[] = [
     category: 'studio',
     skillLevel: 'professional',
     curator: 'chad',
-    curatorQuote: "We use this for full-body movement documentation—yoga flows, dance therapy, somatic healing. The large format means practitioners move freely without worrying about frame edges. Professional scale communicates 'this is serious work.' That matters when clients are investing in transformation.",
+    curatorQuote: "Large-format. Movement practices. Full-body capture. Yoga flows. Professional scale. Practitioners move freely without frame constraints.",
     whyYouNeedThis: "Large-format professional backdrop for movement-based wellness documentation.",
     perfectFor: [
       "Yoga and movement filming",
@@ -338,7 +338,7 @@ export const products: EnhancedProduct[] = [
     category: 'travel',
     skillLevel: 'beginner',
     curator: 'zenith',
-    curatorQuote: "Two-person interviews with one purchase. These mics disappear on clothing but capture crystal-clear audio. When you're filming practitioner dialogues or healer consultations, boom mics feel intrusive. These respect the intimacy while delivering professional sound.",
+    curatorQuote: "Two-person setup. Intimate conversations. Discreet. Professional audio. Practitioner dialogues. Respect personal space.",
     whyYouNeedThis: "Discreet, professional audio capture for intimate wellness conversations.",
     perfectFor: [
       "Two-person interviews",
@@ -358,7 +358,7 @@ export const products: EnhancedProduct[] = [
     category: 'travel',
     skillLevel: 'beginner',
     curator: 'ferozza',
-    curatorQuote: "This bag lets me move through retreat spaces without looking like 'the camera person.' Sling design means I'm present as a participant while ready to capture moments. When you're documenting sacred work, you can't separate yourself with giant equipment bags. This bag respects the flow.",
+    curatorQuote: "Participant-documenter balance. Quick access. Non-intrusive. Retreat filming. Maintains presence while capturing moments.",
     whyYouNeedThis: "Respectful, mobile camera storage that maintains your presence in wellness spaces.",
     perfectFor: [
       "Retreat participant-documenters",
