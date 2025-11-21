@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Filter, X } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { X } from "lucide-react";
 import { UseCase, Curator, SkillLevel } from "@/data/consciousMediaProducts";
 
 interface ProductFilterProps {
@@ -24,107 +25,132 @@ export const ProductFilter = ({
   onResetFilters,
   resultCount,
 }: ProductFilterProps) => {
-  const categories = [
-    { value: 'all' as const, label: 'All Equipment' },
-    { value: 'vlogging' as UseCase, label: 'For Vlogging' },
-    { value: 'studio' as UseCase, label: 'For Studios' },
-    { value: 'travel' as UseCase, label: 'For Travel' },
-    { value: 'film-production' as UseCase, label: 'For Film Production' },
-  ];
-
-  const curators = [
-    { value: 'all' as const, label: 'All Curators' },
-    { value: 'ferozza' as Curator, label: "Ferozza's Picks" },
-    { value: 'chad' as Curator, label: "Chad's Picks" },
-    { value: 'zenith' as Curator, label: "Zenith's Picks" },
-  ];
-
-  const skillLevels = [
-    { value: 'all' as const, label: 'All Levels' },
-    { value: 'beginner' as SkillLevel, label: 'Beginner' },
-    { value: 'intermediate' as SkillLevel, label: 'Intermediate' },
-    { value: 'professional' as SkillLevel, label: 'Professional' },
-  ];
-
   const hasActiveFilters = selectedCategory !== 'all' || selectedCurator !== 'all' || selectedSkillLevel !== 'all';
 
   return (
-    <div className="space-y-6 pb-8 border-b border-border">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Filter Equipment</h3>
+    <div className="space-y-8 pb-8 border-b border-border">
+      {/* Header with Result Count */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h3 className="text-lg font-semibold text-foreground mb-1">Filter Equipment</h3>
+          <p className="text-sm text-muted-foreground">
+            Showing <span className="font-semibold text-foreground">{resultCount}</span> {resultCount === 1 ? 'product' : 'products'}
+          </p>
         </div>
         {hasActiveFilters && (
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={onResetFilters}
             className="text-muted-foreground hover:text-foreground"
           >
             <X className="w-4 h-4 mr-1" />
-            Reset Filters
+            Reset All
           </Button>
         )}
       </div>
 
-      {/* Use Case Filter */}
+      {/* Use Case Tabs - Primary Filter */}
       <div className="space-y-3">
-        <label className="text-sm font-medium text-foreground">Use Case</label>
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <Badge
-              key={category.value}
-              variant={selectedCategory === category.value ? "default" : "outline"}
-              className="cursor-pointer hover:bg-primary/10 transition-colors"
-              onClick={() => onCategoryChange(category.value)}
-            >
-              {category.label}
-            </Badge>
-          ))}
-        </div>
+        <label className="text-sm font-medium text-foreground uppercase tracking-wider">
+          What are you creating?
+        </label>
+        <Tabs value={selectedCategory} onValueChange={(value) => onCategoryChange(value as UseCase | 'all')} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 h-auto gap-2 bg-muted p-1">
+            <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              All Equipment
+            </TabsTrigger>
+            <TabsTrigger value="vlogging" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Vlogging
+            </TabsTrigger>
+            <TabsTrigger value="studio" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Studio
+            </TabsTrigger>
+            <TabsTrigger value="travel" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Travel
+            </TabsTrigger>
+            <TabsTrigger value="film-production" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Film Production
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
-      {/* Curator Filter */}
-      <div className="space-y-3">
-        <label className="text-sm font-medium text-foreground">Team Curator</label>
-        <div className="flex flex-wrap gap-2">
-          {curators.map((curator) => (
+      {/* Secondary Filters */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Team Curator Filter */}
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-foreground uppercase tracking-wider">
+            Team Curator
+          </label>
+          <div className="flex flex-wrap gap-2">
             <Badge
-              key={curator.value}
-              variant={selectedCurator === curator.value ? "default" : "outline"}
-              className="cursor-pointer hover:bg-primary/10 transition-colors"
-              onClick={() => onCuratorChange(curator.value)}
+              variant={selectedCurator === 'all' ? "default" : "outline"}
+              className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
+              onClick={() => onCuratorChange('all')}
             >
-              {curator.label}
+              All
             </Badge>
-          ))}
-        </div>
-      </div>
-
-      {/* Skill Level Filter */}
-      <div className="space-y-3">
-        <label className="text-sm font-medium text-foreground">Skill Level</label>
-        <div className="flex flex-wrap gap-2">
-          {skillLevels.map((level) => (
             <Badge
-              key={level.value}
-              variant={selectedSkillLevel === level.value ? "default" : "outline"}
-              className="cursor-pointer hover:bg-primary/10 transition-colors"
-              onClick={() => onSkillLevelChange(level.value)}
+              variant={selectedCurator === 'ferozza' ? "default" : "outline"}
+              className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
+              onClick={() => onCuratorChange('ferozza')}
             >
-              {level.label}
+              Ferozza
             </Badge>
-          ))}
+            <Badge
+              variant={selectedCurator === 'chad' ? "default" : "outline"}
+              className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
+              onClick={() => onCuratorChange('chad')}
+            >
+              Chad
+            </Badge>
+            <Badge
+              variant={selectedCurator === 'zenith' ? "default" : "outline"}
+              className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
+              onClick={() => onCuratorChange('zenith')}
+            >
+              Zenith
+            </Badge>
+          </div>
         </div>
-      </div>
 
-      {/* Result Count */}
-      <div className="pt-2">
-        <p className="text-sm text-muted-foreground">
-          Showing <span className="font-semibold text-foreground">{resultCount}</span> products
-        </p>
+        {/* Skill Level Filter */}
+        <div className="space-y-3">
+          <label className="text-sm font-medium text-foreground uppercase tracking-wider">
+            Experience Level
+          </label>
+          <div className="flex flex-wrap gap-2">
+            <Badge
+              variant={selectedSkillLevel === 'all' ? "default" : "outline"}
+              className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
+              onClick={() => onSkillLevelChange('all')}
+            >
+              All
+            </Badge>
+            <Badge
+              variant={selectedSkillLevel === 'beginner' ? "default" : "outline"}
+              className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
+              onClick={() => onSkillLevelChange('beginner')}
+            >
+              Beginner
+            </Badge>
+            <Badge
+              variant={selectedSkillLevel === 'intermediate' ? "default" : "outline"}
+              className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
+              onClick={() => onSkillLevelChange('intermediate')}
+            >
+              Intermediate
+            </Badge>
+            <Badge
+              variant={selectedSkillLevel === 'professional' ? "default" : "outline"}
+              className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
+              onClick={() => onSkillLevelChange('professional')}
+            >
+              Professional
+            </Badge>
+          </div>
+        </div>
       </div>
     </div>
   );

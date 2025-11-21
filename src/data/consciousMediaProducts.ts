@@ -26,7 +26,7 @@ export const products: EnhancedProduct[] = [
     id: 1,
     name: "Neewer PA045 Vlogging Kit with LED Light/Selfie Stick/Tripod/Mic",
     description: "All-in-one mobile content creation kit. Includes adjustable LED light, extendable selfie stick, sturdy tripod, and professional microphone. Perfect for smartphone filmmakers starting their wellness journey.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-pa045-vlogging-kit-with-led-lightselfie-stick-tripodmic-for-smartphones-camerastuff-online-shop-south-africa-1-154.jpg?v=1738932849&width=640",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-pa045-vlogging-kit-led-light-selfie-stick-tripod-mic-smartphones-camerastuff-472.webp?v=1750338026&width=640",
     productUrl: "https://camerastuff.co.za/products/neewer-pa045-vlogging-kit-with-led-lightselfie-stick-tripodmic-for-smartphones",
     category: 'vlogging',
     skillLevel: 'beginner',
@@ -377,20 +377,20 @@ export const curatorProfiles = {
     title: "Field Documentation Specialist",
     expertise: "Retreat & Community Filming",
     bio: "14+ retreats documented across South Africa. Specializes in authentic, participatory wellness documentation in challenging field conditions.",
-    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/team-ferozza.jpg"
+    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Omni%20wellness%20team.jpg"
   },
   chad: {
     name: "Chad Cupido",
     title: "Strategic Media Director",
     expertise: "Business Development & Brand Positioning",
     bio: "Founder of Omni Wellness Media. Focuses on ROI-driven equipment choices and professional brand credibility through conscious media.",
-    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/team-chad.jpg"
+    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/HUMAN%20ANIMAL_CHAD-3.jpg"
   },
   zenith: {
     name: "Zenith",
     title: "Production Coordinator",
     expertise: "Workflow Optimization & Logistics",
     bio: "Manages 15+ monthly shoots. Specializes in equipment efficiency, production logistics, and streamlined creative workflows.",
-    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/team-zenith.jpg"
+    avatar: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Omni%20wellness%20community%20project%201.JPG"
   }
 };
