@@ -109,7 +109,7 @@ const MegaNavigation = () => {
 
   return (
     <NavigationMenu className="w-full">
-      <NavigationMenuList className="flex-wrap gap-0.5 justify-center">
+      <NavigationMenuList className="flex-nowrap gap-1 justify-center">
         {megaMenuItems.map((menuItem, index) => (
           <NavigationMenuItem key={index}>
             <NavigationMenuTrigger className="text-[10px] lg:text-xs px-1.5 lg:px-2 py-1 h-auto whitespace-nowrap">
