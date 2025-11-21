@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { useProviderRoles } from "@/hooks/useProviderRoles";
 
 interface ProviderRole {
   provider_id: string;
@@ -41,7 +42,8 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(false); // Set to false to avoid blocking
+  const [loading, setLoading] = useState(false);
+  const { roles: dbRoles, loading: rolesLoading } = useProviderRoles(user?.id || null);
 
   useEffect(() => {
     let mounted = true;
@@ -92,35 +94,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await supabase.auth.signOut();
   };
 
-  // Provider role functions for future Sandy/provider authentication
+  // Provider role functions - now using secure database table
   const getProviderRoles = (): ProviderRole[] => {
     if (!user) return [];
-    
-    // Check user metadata for provider roles
-    const providerRoles = user.user_metadata?.provider_roles || [];
-    
-    // Hardcoded roles for Sandy (temporary until proper DB setup)
-    const sandyProviderRoles: ProviderRole[] = [];
-    if (user.email === 'sandy@druyogacapetown.co.za') {
-      sandyProviderRoles.push({
-        provider_id: 'sandy-mitchell',
-        provider_name: 'Sandy Mitchell - Dru Yoga Cape Town',
-        role: 'owner',
-        permissions: ['view_profile', 'edit_profile', 'manage_bookings', 'view_analytics', 'manage_services']
-      });
-    }
-    
-    // Admin access
-    if (user.email === 'admin@omniwellness.co.za') {
-      sandyProviderRoles.push({
-        provider_id: 'sandy-mitchell',
-        provider_name: 'Sandy Mitchell - Dru Yoga Cape Town',
-        role: 'manager',
-        permissions: ['view_profile', 'edit_profile', 'manage_bookings', 'view_analytics']
-      });
-    }
-    
-    return [...providerRoles, ...sandyProviderRoles];
+    return dbRoles;
   };
 
   const isProvider = (providerId?: string): boolean => {
