@@ -86,8 +86,8 @@ export const MegaNavigation = () => {
   ];
 
   return (
-    <NavigationMenu className="hidden lg:flex w-full overflow-x-auto">
-      <NavigationMenuList className="flex-nowrap whitespace-nowrap gap-1">
+    <NavigationMenu className="hidden lg:flex">
+      <NavigationMenuList className="flex-wrap">
         {/* Home */}
         <NavigationMenuItem>
           <Link to="/">
