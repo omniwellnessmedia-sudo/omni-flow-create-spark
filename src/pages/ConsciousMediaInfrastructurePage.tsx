@@ -10,10 +10,12 @@ import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import { ProductFilter } from "@/components/conscious-media/ProductFilter";
 import { CuratorCard } from "@/components/conscious-media/CuratorCard";
 import { SimplifiedProductCard } from "@/components/conscious-media/SimplifiedProductCard";
+import { FilmProductionComingSoon } from "@/components/conscious-media/FilmProductionComingSoon";
+import { Separator } from "@/components/ui/separator";
 import { products, curatorProfiles, UseCase, Curator, SkillLevel } from "@/data/consciousMediaProducts";
 
 const ConsciousMediaInfrastructurePage = () => {
-  const { trackAffiliateClick } = useConsciousAffiliate();
+  const { trackAffiliateClick, trackProductView } = useConsciousAffiliate();
   
   const [selectedCategory, setSelectedCategory] = useState<UseCase | 'all'>('all');
   const [selectedCurator, setSelectedCurator] = useState<Curator | 'all'>('all');
@@ -59,6 +61,14 @@ const ConsciousMediaInfrastructurePage = () => {
     window.open(affiliateUrl, '_blank');
   };
 
+  const handleConsultationClick = async () => {
+    await trackProductView(
+      'Equipment Consultation Request',
+      'conscious_media_infrastructure_consultation',
+      'consultation_request'
+    );
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -94,7 +104,7 @@ const ConsciousMediaInfrastructurePage = () => {
       </div>
 
       {/* Meet Your Curators Section */}
-      <Section size="large" className="bg-muted">
+      <Section size="large" className="bg-muted/50">
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="text-center space-y-4">
             <p className="text-sm font-bold text-primary uppercase tracking-wider">
@@ -127,8 +137,36 @@ const ConsciousMediaInfrastructurePage = () => {
         </div>
       </Section>
 
+      <Separator className="my-0" />
+
       {/* Why CameraStuff Section */}
-      <WhyCameraStuffSection />
+      <Section size="large" className="bg-primary/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-background rounded-2xl p-8 lg:p-12 border-2 border-primary/10 shadow-sm">
+            <h3 className="text-2xl font-bold mb-4">Why CameraStuff?</h3>
+            <div className="grid md:grid-cols-2 gap-6 text-sm leading-relaxed text-muted-foreground">
+              <div>
+                <p className="mb-4">
+                  We've partnered with <strong className="text-foreground">CameraStuff</strong> because they share our values of supporting local creative infrastructure in South Africa. Since 2006, they've been making professional media equipment accessible to creators across the country.
+                </p>
+                <p>
+                  Every product we recommend is chosen with conscious content creation in mind—gear that helps tell authentic stories respectfully and professionally.
+                </p>
+              </div>
+              <div>
+                <p className="mb-4">
+                  <strong className="text-foreground">Omni Wellness Media doesn't sell equipment.</strong> Instead, we guide you toward tools that align with our conscious media framework. When you purchase through our links, we earn a small commission that supports our work in community development and conscious content creation.
+                </p>
+                <p>
+                  <strong className="text-foreground">Need personalized advice?</strong> We're here to help you choose the right equipment for your unique storytelling journey.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Separator className="my-0" />
 
       {/* Equipment Recommendations Section */}
       <Section size="large" className="bg-background">
@@ -173,6 +211,13 @@ const ConsciousMediaInfrastructurePage = () => {
             resultCount={filteredProducts.length}
           />
 
+          {/* Film Production Coming Soon */}
+          {selectedCategory === 'film-production' && filteredProducts.length === 1 && (
+            <div className="mb-12">
+              <FilmProductionComingSoon />
+            </div>
+          )}
+
           {/* Products List */}
           <div>
             {displayedProducts.map((product, index) => (
@@ -209,7 +254,7 @@ const ConsciousMediaInfrastructurePage = () => {
           )}
 
           {/* Consultation CTA */}
-          <div className="bg-muted border border-border rounded-xl p-8 text-center space-y-4 mt-12">
+          <div className="bg-muted/30 border-2 border-primary/10 rounded-xl p-8 text-center space-y-4 mt-12">
             <MessageCircle className="w-12 h-12 text-primary mx-auto" />
             <h3 className="text-2xl font-bold text-foreground">
               Need Help Choosing the Right Equipment?
@@ -218,7 +263,10 @@ const ConsciousMediaInfrastructurePage = () => {
               Every wellness project is unique. Let's talk about what you're creating and help you make the right choices for your specific needs and budget.
             </p>
             <Button
-              onClick={() => window.location.href = '/contact'}
+              onClick={() => {
+                handleConsultationClick();
+                window.location.href = '/contact';
+              }}
               size="lg"
               className="mt-4"
             >
@@ -228,11 +276,76 @@ const ConsciousMediaInfrastructurePage = () => {
         </div>
       </Section>
 
+      <Separator className="my-0" />
+
       {/* Testimonials Section */}
-      <TestimonialsSection />
+      <Section size="large" className="bg-background">
+        <div className="max-w-6xl mx-auto space-y-12">
+          <h2 className="text-3xl font-bold text-center">From Our Community</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-muted/50 p-6 rounded-lg border border-border shadow-sm">
+              <p className="text-muted-foreground italic mb-4">
+                "Working with Omni helped us choose equipment that truly serves our mission of authentic storytelling in our community. They understand that tools should support the story, not overshadow it."
+              </p>
+              <p className="font-semibold">— Local Content Creator</p>
+            </div>
+            <div className="bg-muted/50 p-6 rounded-lg border border-border shadow-sm">
+              <p className="text-muted-foreground italic mb-4">
+                "The conscious media approach changed how I think about my setup. It's not about having the most expensive gear—it's about having the right tools for respectful, professional storytelling."
+              </p>
+              <p className="font-semibold">— Wellness Practitioner</p>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Separator className="my-0" />
 
       {/* Creative Examples Section */}
-      <CreativeExamplesSection />
+      <Section size="large" className="bg-muted/30">
+        <div className="max-w-6xl mx-auto text-center space-y-12">
+          <div>
+            <h2 className="text-3xl font-bold mb-4">Built for Conscious Content</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Every piece of equipment in our recommendations has been chosen to support the kind of authentic, respectful storytelling that makes a real difference in communities.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="space-y-3 bg-background p-6 rounded-lg border border-border shadow-sm">
+              <div className="w-16 h-16 bg-primary/10 rounded-full mx-auto flex items-center justify-center">
+                <span className="text-2xl">🎥</span>
+              </div>
+              <h3 className="font-bold">Community Stories</h3>
+              <p className="text-sm text-muted-foreground">
+                Document real journeys, preserve cultural narratives, and amplify underheard voices with gear that respects your subjects.
+              </p>
+            </div>
+            
+            <div className="space-y-3 bg-background p-6 rounded-lg border border-border shadow-sm">
+              <div className="w-16 h-16 bg-primary/10 rounded-full mx-auto flex items-center justify-center">
+                <span className="text-2xl">🌱</span>
+              </div>
+              <h3 className="font-bold">Wellness Content</h3>
+              <p className="text-sm text-muted-foreground">
+                Capture healing modalities, educational workshops, and wellness practices with equipment that maintains authenticity.
+              </p>
+            </div>
+            
+            <div className="space-y-3 bg-background p-6 rounded-lg border border-border shadow-sm">
+              <div className="w-16 h-16 bg-primary/10 rounded-full mx-auto flex items-center justify-center">
+                <span className="text-2xl">📢</span>
+              </div>
+              <h3 className="font-bold">Advocacy & Education</h3>
+              <p className="text-sm text-muted-foreground">
+                Create content that drives awareness, inspires action, and builds movements with tools chosen for impact.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Separator className="my-0" />
 
       {/* Footer CTA Section */}
       <Section className="bg-muted py-16 lg:py-20 mt-0">

@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Curator } from "@/data/consciousMediaProducts";
+import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
 
 interface CuratorCardProps {
   name: string;
@@ -22,6 +23,17 @@ export const CuratorCard = ({
   curatorId,
   onViewPicks,
 }: CuratorCardProps) => {
+  const { trackProductView } = useConsciousAffiliate();
+
+  const handleViewPicks = async () => {
+    await trackProductView(
+      `Curator Picks: ${name}`,
+      'conscious_media_infrastructure_curator',
+      'view_curator_picks'
+    );
+    onViewPicks(curatorId);
+  };
+
   return (
     <Card className="p-6 hover:shadow-lg transition-all duration-300">
       <div className="flex flex-col items-center text-center space-y-4">
@@ -41,7 +53,7 @@ export const CuratorCard = ({
         <p className="text-sm text-foreground/80 leading-relaxed">{bio}</p>
 
         <Button
-          onClick={() => onViewPicks(curatorId)}
+          onClick={handleViewPicks}
           variant="outline"
           className="w-full mt-4"
         >
