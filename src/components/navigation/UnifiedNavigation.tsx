@@ -161,34 +161,31 @@ const UnifiedNavigation = () => {
           : 'bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/70'
       }`}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+        <div className="container mx-auto px-2 sm:px-4">
+        <div className="flex h-16 items-center justify-between gap-2">
           {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3">
+          <div className="flex items-center flex-shrink-0">
+            <Link to="/" className="flex items-center gap-2">
               <img 
                 {...getOmniLogo()} 
                 alt="Omni Wellness Media" 
-                className="h-10 w-10 object-contain rounded-lg border border-primary/20 p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
+                className="h-8 w-8 object-contain"
               />
-              <div className="hidden sm:block">
-                <span className="font-bold text-lg bg-gradient-primary bg-clip-text text-transparent">
-                  Omni
-                </span>
-                <span className="text-xs text-muted-foreground ml-1 hidden lg:inline">
-                  Wellness
-                </span>
-              </div>
+              <span className="font-bold text-base bg-gradient-primary bg-clip-text text-transparent whitespace-nowrap">
+                Omni
+              </span>
             </Link>
           </div>
 
-          {/* Search Bar - Desktop */}
-          <div className="hidden md:flex flex-1 max-w-md mx-4">
-            <SearchAutocomplete />
+          {/* Desktop Mega Navigation */}
+          <div className="hidden lg:flex flex-1 justify-center">
+            <MegaNavigation />
           </div>
 
-          {/* Desktop Mega Navigation */}
-          <MegaNavigation />
+          {/* Search Bar - Desktop */}
+          <div className="hidden md:flex flex-1 max-w-xs">
+            <SearchAutocomplete />
+          </div>
 
           {/* User Actions */}
           <div className="flex items-center space-x-2">
