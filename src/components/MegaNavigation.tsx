@@ -108,22 +108,22 @@ const MegaNavigation = () => {
   ];
 
   return (
-    <NavigationMenu className="max-w-full">
-      <NavigationMenuList className="flex-wrap gap-1">
+    <NavigationMenu className="w-full">
+      <NavigationMenuList className="flex-wrap gap-0.5 justify-center">
         {megaMenuItems.map((menuItem, index) => (
           <NavigationMenuItem key={index}>
-            <NavigationMenuTrigger className="text-xs xl:text-sm px-2 py-1 h-auto whitespace-nowrap">
-              OMNI {menuItem.title.replace('Omni Wellness ', '')}
+            <NavigationMenuTrigger className="text-[10px] lg:text-xs px-1.5 lg:px-2 py-1 h-auto whitespace-nowrap">
+              {menuItem.title.replace('Omni Wellness ', '').toUpperCase()}
             </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid gap-2 p-4 w-[350px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
+            <NavigationMenuContent className="z-50">
+              <ul className="grid gap-2 p-4 w-[350px] md:w-[400px] md:grid-cols-2 lg:w-[500px] bg-background border shadow-lg">
                 {menuItem.items.map((item, i) => (
                   <li key={i}>
                     <NavigationMenuLink asChild>
                       <Link
                         to={item.href}
                         className={cn(
-                          "group flex h-10 items-center justify-start rounded-md bg-transparent px-3 font-medium outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-sm",
+                          "group flex h-10 items-center justify-start rounded-md bg-background px-3 font-medium outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-sm",
                           location.pathname === item.href ? "text-primary" : ""
                         )}
                       >
