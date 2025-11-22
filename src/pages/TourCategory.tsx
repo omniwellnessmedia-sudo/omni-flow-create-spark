@@ -117,7 +117,7 @@ const TourCategory = () => {
             name: 'Weekend Retreats',
             slug: 'weekend-retreats',
             description: 'Perfect short getaways for busy schedules',
-            image_url: IMAGES.tours.coastal
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg'
           }
         };
 
@@ -152,22 +152,22 @@ const TourCategory = () => {
           },
           {
             id: '2',
-            title: 'Winter Wine Country Wellness Weekend',
+            title: '4th Annual Omni Wellness Retreat',
             slug: 'winter-wine-country-wellness',
-            subtitle: 'Luxury weekend retreat in Stellenbosch with spa, yoga, and wine',
-            duration: '2 days / 1 night',
-            max_participants: 8,
-            price_from: 1850,
-            destination: 'Stellenbosch Wine Country, Western Cape',
-            hero_image_url: IMAGES.tours.nature,
+            subtitle: 'Rejuvenate and Renew in the Serene Greyton Eco Lodge',
+            duration: '4 days / 3 nights',
+            max_participants: 30,
+            price_from: 3000,
+            destination: 'Greyton Eco Lodge, Greyton, South Africa',
+            hero_image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg',
             difficulty_level: 'beginner',
             highlights: [
-              'Luxury wine estate accommodation',
-              'Daily yoga with Chad in vineyard settings',
-              'Private wine tastings with sommelier',
-              'Spa treatments with local botanicals',
-              'Farm-to-table gourmet meals',
-              'Professional photography included'
+              'Daily yoga with indigenous wellness practices',
+              'NIA Dance Immersion workshops',
+              'Traditional braai with live music',
+              'Indigenous walk and cultural exploration',
+              'Wholesome plant-based meals',
+              'Professional wellness guides included'
             ],
             category: {
               name: placeholderCategory.name,

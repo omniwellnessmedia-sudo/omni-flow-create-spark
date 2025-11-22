@@ -35,17 +35,17 @@ const ToursRetreatsPreview = () => {
     highlights: ['Hybrid technology', 'Muizenberg beach location', 'Community-focused approach']
   }, {
     id: '3',
-    title: 'Winter Wine Country Wellness Weekend',
-    subtitle: 'Luxury weekend retreat in Stellenbosch with spa treatments, yoga, and wine tastings',
-    duration: '2 days / 1 night',
-    maxParticipants: 8,
-    priceFrom: 2850,
-    destination: 'Stellenbosch Wine Country, Western Cape',
+    title: '4th Annual Omni Wellness Retreat',
+    subtitle: 'Rejuvenate and Renew in the Serene Greyton Eco Lodge',
+    duration: '4 days / 3 nights',
+    maxParticipants: 30,
+    priceFrom: 3000,
+    destination: 'Greyton Eco Lodge, Greyton, South Africa',
     category: 'Weekend Retreats',
     slug: 'winter-wine-country-wellness',
     categorySlug: 'weekend-retreats',
-    image: IMAGES.wellness.retreat,
-    highlights: ['Luxury wine estate accommodation', 'Private wine tastings', 'Professional photography included']
+    image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg',
+    highlights: ['Daily yoga sessions', 'NIA Dance Immersion', 'Traditional braai & live music']
   }];
   return <div className="py-16">
       <div className="text-center mb-12" data-tour="tours">
