@@ -45,13 +45,7 @@ const MegaNavigation = () => {
     {
       title: 'Omni Wellness Travel',
       items: [
-        { name: 'All Tours & Retreats', href: '/tours-retreats', icon: '🏞️' },
-        { name: 'Wellness Retreats', href: '/tour-category/wellness-retreats', icon: '🧘‍♀️' },
-        { name: 'Weekend Getaways', href: '/tour-category/weekend-retreats', icon: '🌄' },
-        { name: 'Conscious Living', href: '/tour-category/conscious-living', icon: '🌿' },
-        { name: 'Winter Wellness', href: '/tour-category/winter-wellness', icon: '❄️' },
-        { name: 'Indigenous Wisdom', href: '/tour-category/indigenous-wisdom', icon: '🏺' },
-        { name: 'Study Abroad Programs', href: '/tour-category/study-abroad', icon: '🎓' },
+        { name: 'Annual Omni Wellness Retreat', href: '/tour-category/weekend-retreats', icon: '🧘‍♀️' },
         { name: '2BeWell Community', href: '/two-be-well', icon: '💝' }
       ]
     },
@@ -60,10 +54,7 @@ const MegaNavigation = () => {
       items: [
         { name: 'Travel Well Connected', href: '/travel-well-connected-store', icon: '🌐' },
         { name: 'Travel Services', href: '/wellness-roaming-packages', icon: '📱' },
-        { name: 'Data Products', href: '/data-products', icon: '📊' },
-        { name: 'Device Compatibility', href: '/device-compatibility', icon: '📱' },
-        { name: 'Technical Overview', href: '/technical-overview', icon: '⚙️' },
-        { name: '2BeWell Shop', href: '/two-be-well-shop', icon: '🛍️' }
+        { name: '2BeWell Shop', href: '/twobewellshop', icon: '🛍️' }
       ]
     },
     {

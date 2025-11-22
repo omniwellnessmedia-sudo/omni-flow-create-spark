@@ -9,32 +9,6 @@ import { IMAGES } from '@/lib/images';
 const ToursRetreatsPreview = () => {
   const featuredTours = [{
     id: '1',
-    title: 'Conscious Connections: Indigenous Wisdom + Healing',
-    subtitle: 'A transformative 10-day journey blending ancient wisdom with modern wellness',
-    duration: '10 days / 9 nights',
-    maxParticipants: 16,
-    priceFrom: 6500,
-    destination: 'Cape Town & Western Cape, South Africa',
-    category: 'Indigenous Wisdom',
-    slug: 'conscious-connections-indigenous-wisdom-healing',
-    categorySlug: 'indigenous-wisdom',
-    image: IMAGES.wellness.meditation,
-    highlights: ['Learn from authentic Khoisan knowledge keepers', 'Traditional fynbos medicine', 'Ancient rock art sites']
-  }, {
-    id: '2',
-    title: 'FACT Wellness Hybrid Classes',
-    subtitle: 'Innovative yoga, QiGong, Pilates, and meditation experiences',
-    duration: 'Ongoing weekly classes',
-    maxParticipants: 20,
-    priceFrom: 75,
-    destination: 'Muizenberg, Cape Town',
-    category: 'Wellness Retreats',
-    slug: 'fact-wellness-hybrid-classes',
-    categorySlug: 'wellness-retreats',
-    image: IMAGES.wellness.yoga,
-    highlights: ['Hybrid technology', 'Muizenberg beach location', 'Community-focused approach']
-  }, {
-    id: '3',
     title: '4th Annual Omni Wellness Retreat',
     subtitle: 'Rejuvenate and Renew in the Serene Greyton Eco Lodge',
     duration: '4 days / 3 nights',
@@ -44,7 +18,7 @@ const ToursRetreatsPreview = () => {
     category: 'Weekend Retreats',
     slug: 'winter-wine-country-wellness',
     categorySlug: 'weekend-retreats',
-    image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg',
+    image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg',
     highlights: ['Daily yoga sessions', 'NIA Dance Immersion', 'Traditional braai & live music']
   }];
   return <div className="py-16">

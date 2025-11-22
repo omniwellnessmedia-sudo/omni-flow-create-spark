@@ -10,8 +10,8 @@ const badges = [
   },
   {
     icon: Shield,
-    title: 'Secure Checkout',
-    description: 'Via CJ Affiliate',
+    title: 'Secure Payment',
+    description: 'Trusted checkout',
     color: 'text-blue-600'
   },
   {

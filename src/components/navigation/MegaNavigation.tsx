@@ -43,11 +43,7 @@ export const MegaNavigation = () => {
     {
       title: 'Tours & Retreats',
       items: [
-        { title: 'All Retreats', href: '/tours-retreats', description: 'Wellness travel experiences', icon: '🏞️', featured: true },
-        { title: 'Weekend Getaways', href: '/tour-category/weekend-retreats', description: 'Short wellness breaks', icon: '🌄' },
-        { title: 'Wellness Retreats', href: '/tour-category/wellness-retreats', description: 'Transformative experiences', icon: '🧘' },
-        { title: 'Indigenous Wisdom', href: '/tour-category/indigenous-wisdom', description: 'Cultural healing tours', icon: '🪶' },
-        { title: 'Study Abroad', href: '/tour-category/study-abroad', description: 'Educational programs', icon: '🎓' },
+        { title: 'Annual Omni Wellness Retreat', href: '/tour-category/weekend-retreats', description: 'Transformative 4-day retreat', icon: '🧘‍♀️', featured: true },
       ]
     }
   ];
@@ -58,16 +54,6 @@ export const MegaNavigation = () => {
       items: [
         { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural wellness products', icon: '🌿', featured: true },
         { title: 'Travel Connectivity', href: '/travel-well-connected-store', description: 'eSIM & data packages', icon: '📱' },
-        { title: 'CJ Affiliate Products', href: '/cj-affiliate-products', description: 'Curated wellness', icon: '⭐' },
-      ]
-    },
-    {
-      title: 'Top Categories',
-      items: [
-        { title: 'General Wellness', href: '/cj-affiliate-products?category=General+Wellness', description: 'Holistic health', count: 359 },
-        { title: 'Fitness Equipment', href: '/cj-affiliate-products?category=Fitness+Equipment', description: 'Home gym gear', count: 69 },
-        { title: 'Yoga Equipment', href: '/cj-affiliate-products?category=Yoga+Equipment', description: 'Mats & props', count: 65 },
-        { title: 'Nutrition', href: '/cj-affiliate-products?category=Nutrition+and+Supplements', description: 'Supplements', count: 60 },
       ]
     }
   ];

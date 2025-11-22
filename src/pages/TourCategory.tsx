@@ -117,7 +117,7 @@ const TourCategory = () => {
             name: 'Weekend Retreats',
             slug: 'weekend-retreats',
             description: 'Perfect short getaways for busy schedules',
-            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg'
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_20241010_175744.jpg'
           }
         };
 
@@ -127,30 +127,6 @@ const TourCategory = () => {
         // Create placeholder tours
         const placeholderTours: Tour[] = [
           {
-            id: '1',
-            title: 'Conscious Connections: Indigenous Wisdom + Healing',
-            slug: 'conscious-connections-indigenous-wisdom-healing',
-            subtitle: 'Ancient traditions for personal and collective transformation',
-            duration: '10 days / 9 nights',
-            max_participants: 16,
-            price_from: 3850,
-            destination: 'Cape Town & Western Cape, South Africa',
-            hero_image_url: IMAGES.wellness.landmark,
-            difficulty_level: 'moderate',
-            highlights: [
-              'Learn from authentic Khoisan knowledge keepers',
-              'Traditional fynbos medicine harvesting',
-              'Ancient rock art sites in Cederberg',
-              'Ocean therapy and coastal healing',
-              'Small group experience (max 16)',
-              'Take home custom herbal remedies'
-            ],
-            category: {
-              name: placeholderCategory.name,
-              slug: placeholderCategory.slug
-            }
-          },
-          {
             id: '2',
             title: '4th Annual Omni Wellness Retreat',
             slug: 'winter-wine-country-wellness',
@@ -159,7 +135,7 @@ const TourCategory = () => {
             max_participants: 30,
             price_from: 3000,
             destination: 'Greyton Eco Lodge, Greyton, South Africa',
-            hero_image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg',
+            hero_image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg',
             difficulty_level: 'beginner',
             highlights: [
               'Daily yoga with indigenous wellness practices',

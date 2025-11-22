@@ -94,10 +94,7 @@ const UnifiedNavigation = () => {
       title: 'Travel',
       icon: Plane,
       children: [
-        { title: 'All Retreats', href: '/tours-retreats', description: 'Wellness travel experiences', icon: '🏞️' },
-        { title: 'Weekend Getaways', href: '/tour-category/weekend-retreats', description: 'Short wellness breaks', icon: '🌄' },
-        { title: 'Wellness Retreats', href: '/tour-category/wellness-retreats', description: 'Transformative experiences', icon: '🧘‍♀️' },
-        { title: 'Study Abroad', href: '/tour-category/study-abroad', description: 'Educational wellness programs', icon: '🎓' },
+        { title: 'Annual Omni Wellness Retreat', href: '/tour-category/weekend-retreats', description: 'Transformative 4-day retreat', icon: '🧘‍♀️' },
         { title: '2BeWell Community', href: '/two-be-well', description: 'Join our wellness community', icon: '💝' },
       ]
     },
@@ -106,7 +103,6 @@ const UnifiedNavigation = () => {
       icon: Store,
       children: [
         { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural wellness products', icon: '🌿' },
-        { title: 'CJ Wellness Products', href: '/cj-affiliate-products', description: 'Curated wellness products', icon: '✨' },
         { title: 'Travel Connectivity', href: '/travel-well-connected-store', description: 'eSIM & travel data', icon: '📱' },
       ]
     },
