@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink, MessageCircle, Package } from "lucide-react";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
 import { EnhancedProduct, curatorProfiles } from "@/data/consciousMediaProducts";
+import { ProductImageGallery } from "@/components/product/ProductImageGallery";
 import { useState } from "react";
 
 interface SimplifiedProductCardProps {
@@ -42,34 +43,42 @@ export const SimplifiedProductCard = ({ product, imagePosition = 'left' }: Simpl
   return (
     <div className="py-10 border-b border-border last:border-b-0">
       <div className={containerClass}>
-        {/* Image */}
+        {/* Image or Gallery */}
         <div className="w-full lg:w-[40%] flex-shrink-0">
-          <div className="relative w-full h-[350px] bg-muted/30 rounded-lg p-6 flex items-center justify-center">
-            {imageLoading && !imageError && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="animate-pulse text-muted-foreground">
-                  <Package size={48} />
+          {product.imageGallery && product.imageGallery.length > 1 ? (
+            <ProductImageGallery
+              images={product.imageGallery}
+              productName={product.name}
+              category={product.category}
+            />
+          ) : (
+            <div className="relative w-full h-[350px] bg-muted/30 rounded-lg p-6 flex items-center justify-center">
+              {imageLoading && !imageError && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="animate-pulse text-muted-foreground">
+                    <Package size={48} />
+                  </div>
                 </div>
-              </div>
-            )}
-            {imageError ? (
-              <div className="flex flex-col items-center justify-center text-muted-foreground">
-                <Package size={48} className="mb-2" />
-                <p className="text-sm">Image unavailable</p>
-              </div>
-            ) : (
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className={`w-full h-full object-contain transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
-                onLoad={() => setImageLoading(false)}
-                onError={() => {
-                  setImageError(true);
-                  setImageLoading(false);
-                }}
-              />
-            )}
-          </div>
+              )}
+              {imageError ? (
+                <div className="flex flex-col items-center justify-center text-muted-foreground">
+                  <Package size={48} className="mb-2" />
+                  <p className="text-sm">Image unavailable</p>
+                </div>
+              ) : (
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className={`w-full h-full object-contain transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                  onLoad={() => setImageLoading(false)}
+                  onError={() => {
+                    setImageError(true);
+                    setImageLoading(false);
+                  }}
+                />
+              )}
+            </div>
+          )}
         </div>
 
         {/* Content */}

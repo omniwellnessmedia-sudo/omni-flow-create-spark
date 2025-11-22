@@ -7,6 +7,7 @@ export interface EnhancedProduct {
   name: string;
   description: string;
   imageUrl: string;
+  imageGallery?: string[];
   productUrl: string;
   price?: number;
   category: UseCase;
@@ -47,7 +48,12 @@ export const products: EnhancedProduct[] = [
     id: 2,
     name: "BL MicroPro 10 Bi-Colour LED Ring Light (Head Only)",
     description: "Professional 10-inch bi-color LED ring light. Adjustable color temperature (3200K-5600K), dimmable output, eliminates harsh shadows. Creates the signature beauty lighting for wellness content, testimonials, and intimate sessions.",
-    imageUrl: "/src/assets/products/bl-micropro-ringlight.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/bl-micropro-10-bi-colour-led-ring-light-head-only-camerastuff-online-shop-south-891.webp?v=1752089859&width=1540",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/bl-micropro-10-bi-colour-led-ring-light-head-only-camerastuff-online-shop-south-891.webp?v=1752089859&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/bl-micropro-10-bi-colour-led-ring-light-head-only-camerastuff-online-shop-south-955.webp?v=1752089863&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/bl-micropro-10-bi-colour-led-ring-light-head-only-camerastuff-online-shop-south-905.webp?v=1752089867&width=1540"
+    ],
     productUrl: "https://camerastuff.co.za/products/bl-micropro-10-bi-colour-led-ring-light-head-only",
     category: 'vlogging',
     skillLevel: 'beginner',
@@ -68,7 +74,16 @@ export const products: EnhancedProduct[] = [
     id: 3,
     name: "Neewer PA046 360° Rotatable Side Handle for Phone Cages",
     description: "Ergonomic 360° rotating handle for smartphone camera rigs. Cold shoe mount for accessories, multiple 1/4\" threads, comfortable grip. Transforms phones into cinema-style handheld cameras.",
-    imageUrl: "/src/assets/products/neewer-pa046-handle.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-pa046-360-rotatable-side-handle-top-handle-phone-cages-camerastuff-online-shop-595.webp?v=1758821958&width=1540",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa046-360-rotatable-side-handle-top-handle-phone-cages-camerastuff-online-shop-595.webp?v=1758821958&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa046-360-rotatable-side-handle-top-handle-phone-cages-camerastuff-online-shop-158.webp?v=1758821962&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa046-360-rotatable-side-handle-top-handle-phone-cages-camerastuff-online-shop-515.webp?v=1758821967&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa046-360-rotatable-side-handle-top-handle-phone-cages-camerastuff-online-shop-542.webp?v=1758821970&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa046-360-rotatable-side-handle-top-handle-phone-cages-camerastuff-online-shop-173.webp?v=1758821978&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa046-360-rotatable-side-handle-top-handle-phone-cages-camerastuff-online-shop-332.webp?v=1758821982&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa046-360-rotatable-side-handle-top-handle-phone-cages-camerastuff-online-shop-546.webp?v=1758821986&width=1540"
+    ],
     productUrl: "https://camerastuff.co.za/products/neewer-pa046-360-rotatable-side-handletop-handle-for-phone-cages",
     category: 'vlogging',
     skillLevel: 'intermediate',
@@ -88,7 +103,15 @@ export const products: EnhancedProduct[] = [
     id: 4,
     name: "Godox SZ150R 150W RGB-WW Zoomable COB LED Video Light",
     description: "Professional 150W COB LED with full RGB color control. Zoomable beam (15-45°), wireless control, CRI 96+, TLCI 97+. Film-grade lighting for serious studio setups.",
-    imageUrl: "/src/assets/products/godox-sz150r-light.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/godox-sz150r-150w-rgb-ww-zoomable-cob-led-video-light-monolight-camerastuff-online-shop-612.webp?v=1752069558&width=640",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/godox-sz150r-150w-rgb-ww-zoomable-cob-led-video-light-monolight-camerastuff-online-shop-612.webp?v=1752069558&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-sz150r-150w-rgb-ww-zoomable-cob-led-video-light-monolight-camerastuff-online-shop-362.webp?v=1752069562&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-sz150r-150w-rgb-ww-zoomable-cob-led-video-light-monolight-camerastuff-online-shop-134.webp?v=1752069570&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-sz150r-150w-rgb-ww-zoomable-cob-led-video-light-monolight-camerastuff-online-shop-595.webp?v=1752069573&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-sz150r-150w-rgb-ww-zoomable-cob-led-video-light-monolight-camerastuff-online-shop-485.webp?v=1752069579&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-sz150r-150w-rgb-ww-zoomable-cob-led-video-light-monolight-camerastuff-online-shop-423.webp?v=1743590747&width=640"
+    ],
     productUrl: "https://camerastuff.co.za/products/godox-sz150r-150w-rgb-ww-zoomable-cob-led-video-light-monolight",
     category: 'studio',
     skillLevel: 'professional',
@@ -109,7 +132,13 @@ export const products: EnhancedProduct[] = [
     id: 5,
     name: "Neewer LS-39 Optical Snoot Projector with 20° Lens",
     description: "Creative lighting modifier for precise beam control. 20° optical snoot creates dramatic spotlighting effects, textures, and patterns. For documenters who want cinematic, artistic lighting.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-ls-39-optical-snoot-projector-with-20-degree-lens-camerastuff-online-shop-south-africa-1-819.jpg?v=1738758734&width=640",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-ls-39-optical-snoot-projector-20-degree-lens-camerastuff-online-shop-south-africa-1-144.webp?v=1752089020&width=1280",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ls-39-optical-snoot-projector-20-degree-lens-camerastuff-online-shop-south-africa-1-144.webp?v=1752089020&width=1280",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ls-39-optical-snoot-projector-20-degree-lens-camerastuff-online-shop-south-africa-3-937.webp?v=1752089027&width=1280",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ls-39-optical-snoot-projector-20-degree-lens-camerastuff-online-shop-south-africa-5-730.webp?v=1752089035&width=1280",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ls-39-optical-snoot-projector-20-degree-lens-camerastuff-online-shop-south-africa-7-920.webp?v=1752089042&width=1280"
+    ],
     productUrl: "https://camerastuff.co.za/products/neewer-ls-39-optical-snoot-projector-with-20-degree-lens",
     category: 'studio',
     skillLevel: 'professional',
@@ -129,7 +158,14 @@ export const products: EnhancedProduct[] = [
     id: 6,
     name: "Neewer PA021/PA033 Handheld Cage for Samsung S23 Ultra",
     description: "Professional smartphone cage with filter thread adapter, cold shoe mounts, and ergonomic grip. Transforms Samsung S23 Ultra into a modular cinema camera system.",
-    imageUrl: "/src/assets/products/neewer-pa021-cage.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-pa021-pa033-handheld-cage-filter-thread-adapter-samsung-s23-ultra-camerastuff-777.webp?v=1738785819&width=1540",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa021-pa033-handheld-cage-filter-thread-adapter-samsung-s23-ultra-camerastuff-777.webp?v=1738785819&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa021-pa033-handheld-cage-filter-thread-adapter-samsung-s23-ultra-camerastuff-542.webp?v=1738785822&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa021-pa033-handheld-cage-filter-thread-adapter-samsung-s23-ultra-camerastuff-444.webp?v=1738785826&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa021-pa033-handheld-cage-filter-thread-adapter-samsung-s23-ultra-camerastuff-799.webp?v=1738785834&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-pa021-pa033-handheld-cage-filter-thread-adapter-samsung-s23-ultra-camerastuff-808.webp?v=1738785845&width=1540"
+    ],
     productUrl: "https://camerastuff.co.za/products/neewer-pa021pa033-handheld-cage-with-filter-thread-adapter-for-samsung-s23-ultra",
     category: 'vlogging',
     skillLevel: 'intermediate',
@@ -149,7 +185,16 @@ export const products: EnhancedProduct[] = [
     id: 7,
     name: "Neewer NS7L 30cm Mini Quick-Release Lantern Softbox",
     description: "Portable lantern softbox for 360° soft, diffused lighting. Quick-release design, 30cm diameter. Creates flattering, wrap-around light for interviews and close-up wellness content.",
-    imageUrl: "/src/assets/products/neewer-ns7l-softbox.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-hs60b-hs60c-camerastuff-online-shop-378.webp?v=1752098137&width=1540",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-hs60b-hs60c-camerastuff-online-shop-378.webp?v=1752098137&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-hs60b-hs60c-camerastuff-online-shop-427.webp?v=1752098140&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-hs60b-hs60c-camerastuff-online-shop-962.webp?v=1752098143&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-hs60b-hs60c-camerastuff-online-shop-756.webp?v=1752098147&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-hs60b-hs60c-camerastuff-online-shop-469.webp?v=1752098153&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-hs60b-hs60c-camerastuff-online-shop-610.webp?v=1752098156&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-hs60b-hs60c-camerastuff-online-shop-525.webp?v=1752098159&width=1540"
+    ],
     productUrl: "https://camerastuff.co.za/products/neewer-ns7l-30cm-mini-quick-release-lantern-softbox-for-hs60bhs60c",
     category: 'studio',
     skillLevel: 'intermediate',
@@ -169,7 +214,15 @@ export const products: EnhancedProduct[] = [
     id: 8,
     name: "Godox LMS-60G Lavalier Microphone",
     description: "Professional omnidirectional lavalier microphone. Clear vocal capture, minimal handling noise, lightweight clip-on design. Essential for documentary-style wellness interviews.",
-    imageUrl: "/src/assets/products/godox-lms-60g-lavalier.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-1-337.webp?v=1752080234&width=640",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-1-337.webp?v=1752080234&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-2-414.webp?v=1752080237&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-3-477.webp?v=1752080240&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-4-405.webp?v=1752080243&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-5-970.webp?v=1752080246&width=640",
+      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-10-135.webp?v=1752080260&width=640"
+    ],
     productUrl: "https://camerastuff.co.za/products/godox-lms-60g-lavalier-microphone",
     category: 'travel',
     skillLevel: 'intermediate',
@@ -190,7 +243,7 @@ export const products: EnhancedProduct[] = [
     id: 9,
     name: "Camerastuff 900D Tactical Shoulder Sling Camera Bag",
     description: "Durable 900D tactical camera bag with quick-access sling design. Weatherproof material, padded compartments, tripod straps. Protects equipment during field documentation.",
-    imageUrl: "/src/assets/products/900d-tactical-camera-bag.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/camerastuff-900d-tactical-shoulder-sling-camera-bag-online-shop-south-africa-1.jpg?v=1758821597&width=1280",
     productUrl: "https://camerastuff.co.za/products/camerastuff-900d-tactical-shoulder-sling-camera-bag",
     category: 'travel',
     skillLevel: 'beginner',
@@ -210,7 +263,11 @@ export const products: EnhancedProduct[] = [
     id: 10,
     name: "Camerastuff ICB-04 Clapper Board 30x25cm Acrylic - Black",
     description: "Professional acrylic clapperboard for film production. Clear scene identification, sync reference for audio/video. Essential for organized, professional wellness film projects.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/camerastuff-icb-04-clapper-board-30x25cm-acrylic-black-camerastuff-online-shop-south-africa-1-713.jpg?v=1738758745&width=640",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/camerastuff-icb-04-clapper-board-30x25cm-acrylic-black-online-shop-south-africa-1-386.jpg?v=1758820955&width=1280",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/camerastuff-icb-04-clapper-board-30x25cm-acrylic-black-online-shop-south-africa-1-386.jpg?v=1758820955&width=1280",
+      "https://camerastuff.co.za/cdn/shop/files/camerastuff-icb-04-clapper-board-30x25cm-acrylic-black-online-shop-south-africa-2-222.jpg?v=1758820958&width=1280"
+    ],
     productUrl: "https://camerastuff.co.za/products/camerastuff-icb-04-clapper-board-30x25cm-acrylic-black",
     category: 'film-production',
     skillLevel: 'professional',
@@ -373,7 +430,15 @@ export const products: EnhancedProduct[] = [
     id: 18,
     name: "Neewer NK-ST300 3x2.45m Paper Backdrop Stand",
     description: "Heavy-duty paper backdrop stand system supporting rolls up to 2.45m wide. Adjustable height, stable tripod base, quick-release mechanism. Professional backdrop presentation without permanent installation.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3x245m-paper-backdrop-stand-camerastuff-online-shop-south-africa-1-903.jpg?v=1738758733&width=640",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3-x2-45m-backdrop-stand-camerastuff-online-shop-south-africa-1-142.webp?v=1752098078&width=1540",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3-x2-45m-backdrop-stand-camerastuff-online-shop-south-africa-1-142.webp?v=1752098078&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3-x2-45m-backdrop-stand-camerastuff-online-shop-south-africa-2-233.webp?v=1752098081&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3-x2-45m-backdrop-stand-camerastuff-online-shop-south-africa-3-727.webp?v=1752098084&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3-x2-45m-backdrop-stand-camerastuff-online-shop-south-africa-5-988.webp?v=1752098091&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3-x2-45m-backdrop-stand-camerastuff-online-shop-south-africa-6-479.webp?v=1752098094&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-nk-st300-3-x2-45m-backdrop-stand-camerastuff-online-shop-south-africa-8-635.webp?v=1752098100&width=1540"
+    ],
     productUrl: "https://camerastuff.co.za/products/neewer-nk-st300-3x245m-paper-backdrop-stand",
     category: 'studio',
     skillLevel: 'intermediate',
@@ -393,7 +458,17 @@ export const products: EnhancedProduct[] = [
     id: 19,
     name: "Neewer BH40C RGB Esthetician Double LED Kit",
     description: "Specialized dual-arm LED lighting system designed for beauty and esthetician work. RGB color control, adjustable brightness, flexible gooseneck arms, desktop mount included. Perfect for close-up beauty and wellness content.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-with-stand-camerastuff-online-shop-south-africa-1-937.jpg?v=1738758747&width=640",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-497.webp?v=1750337486&width=1540",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-497.webp?v=1750337486&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-882.webp?v=1750337490&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-328.webp?v=1750337494&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-998.webp?v=1750337498&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-609.webp?v=1750337505&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-930.webp?v=1750337509&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-841.webp?v=1750337513&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-stand-camerastuff-online-shop-501.webp?v=1750337516&width=1540"
+    ],
     productUrl: "https://camerastuff.co.za/products/neewer-bh40c-rgb-esthetician-double-led-constant-light-kit-with-stand",
     category: 'studio',
     skillLevel: 'professional',
@@ -414,7 +489,17 @@ export const products: EnhancedProduct[] = [
     id: 20,
     name: "Neewer GL1C 48W RGBWW Streaming LED Panel",
     description: "Compact streaming-optimized LED panel with desktop mount. 48W RGBWW output, app control, multiple lighting effects, adjustable brightness and color temperature. Designed for content creators and streamers.",
-    imageUrl: "/src/assets/products/neewer-gl1c-panel.webp",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-508.jpg?v=1743595520&width=1540",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-508.jpg?v=1743595520&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-114.webp?v=1743595524&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-106.webp?v=1743595527&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-721.webp?v=1743595530&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-283.webp?v=1743595538&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-142.webp?v=1743595541&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-460.webp?v=1743595544&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-gl1c-48w-rgb-ww-streaming-led-constant-light-panel-desktop-mount-camerastuff-132.webp?v=1743595547&width=1540"
+    ],
     productUrl: "https://camerastuff.co.za/products/neewer-gl1c-48w-rgbww-streaming-led-constant-light-panel-with-desktop-mount",
     category: 'vlogging',
     skillLevel: 'beginner',
@@ -435,7 +520,15 @@ export const products: EnhancedProduct[] = [
     id: 21,
     name: "Neewer SL90 12W RGBWW Mini LED Panel",
     description: "Ultra-compact 12W RGBWW LED panel. Pocket-sized, magnetic mounting, rechargeable battery, full color control. Perfect for travel creators and on-the-go lighting needs.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgbww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-1-507.jpg?v=1738758752&width=640",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-729.webp?v=1752089431&width=1540",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-729.webp?v=1752089431&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-970.webp?v=1752089439&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-623.webp?v=1752089464&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-337.webp?v=1752089457&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-988.webp?v=1752089450&width=1540",
+      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-286.webp?v=1752089442&width=1540"
+    ],
     productUrl: "https://camerastuff.co.za/products/neewer-sl90-12w-rgbww-mini-led-constant-light-panel",
     category: 'travel',
     skillLevel: 'beginner',
