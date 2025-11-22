@@ -44,7 +44,7 @@ const ToursRetreatsPreview = () => {
     category: 'Weekend Retreats',
     slug: 'winter-wine-country-wellness',
     categorySlug: 'weekend-retreats',
-    image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg',
+    image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/Omni%20Wellness%20Retreat.jpg',
     highlights: ['Daily yoga sessions', 'NIA Dance Immersion', 'Traditional braai & live music']
   }];
   return <div className="py-16">
