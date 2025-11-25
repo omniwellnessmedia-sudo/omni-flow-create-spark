@@ -180,8 +180,8 @@ const UnifiedNavigation = () => {
             </Link>
           </div>
 
-          {/* Search Bar - Desktop */}
-          <div className="hidden md:flex flex-1 max-w-md mx-4">
+          {/* Search Bar - Desktop - Compact */}
+          <div className="hidden md:flex flex-1 max-w-xs mx-4">
             <SearchAutocomplete />
           </div>
 
