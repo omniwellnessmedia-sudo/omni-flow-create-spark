@@ -207,58 +207,6 @@ serve(async (req) => {
       );
     }
 
-      if (!searchResponse.ok) {
-        console.error('Viator search error:', await searchResponse.text());
-        throw new Error(`Viator search API returned ${searchResponse.status}`);
-      }
-
-      const searchResults = await searchResponse.json();
-      const products = searchResults.products || [];
-
-      console.log(`Found ${products.length} tours from Viator`);
-
-      // Cache all products in database
-      const toursToCache = products.map((product: ViatorProduct) => ({
-        viator_product_code: product.productCode,
-        title: product.title,
-        description: product.description || '',
-        duration: product.productOptions?.[0]?.duration?.fixedDurationInMinutes 
-          ? `${Math.floor(product.productOptions[0].duration.fixedDurationInMinutes / 60)} hours`
-          : product.duration || 'Varies',
-        price_from: product.pricing?.summary?.fromPrice || 0,
-        currency: product.pricing?.currency || 'USD',
-        location: product.location?.name || location || 'Cape Town',
-        category: product.tags?.[0]?.tagName || category || 'Tour',
-        rating: product.reviews?.combinedAverageRating || 0,
-        review_count: product.reviews?.totalReviews || 0,
-        image_url: product.images?.[0]?.imageSource || '',
-        booking_url: `https://www.viator.com/tours/${product.productCode}`,
-        availability: 'Available',
-        highlights: product.productOptions || [],
-        last_synced_at: new Date().toISOString(),
-        is_active: true,
-      }));
-
-      if (toursToCache.length > 0) {
-        const { error: bulkUpsertError } = await supabase
-          .from('viator_tours')
-          .upsert(toursToCache, { onConflict: 'viator_product_code' });
-
-        if (bulkUpsertError) {
-          console.error('Error bulk caching tours:', bulkUpsertError);
-        }
-      }
-
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          count: products.length,
-          tours: toursToCache 
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     // Action: Get cached tours from database
     if (action === 'get_cached_tours') {
       let query = supabase
