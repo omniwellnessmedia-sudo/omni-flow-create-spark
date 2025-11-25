@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { ArrowLeft, Filter, Grid, List, MapPin, Clock, Users, Star, Heart, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -38,6 +38,12 @@ interface Category {
 
 const TourCategory = () => {
   const { category } = useParams();
+  
+  // Redirect weekend-retreats category to the retreat detail page
+  if (category === 'weekend-retreats') {
+    return <Navigate to="/tour-detail/winter-wine-country-wellness" replace />;
+  }
+  
   const [tours, setTours] = useState<Tour[]>([]);
   const [categoryInfo, setCategoryInfo] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
