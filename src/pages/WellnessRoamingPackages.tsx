@@ -75,7 +75,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.9,
             duration: '1 hour',
             includes: ['Door-to-door service', 'Wellness kit', 'Peace of mind guarantee'],
-            image_url: IMAGES.tours.capeTown
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg'
           },
           {
             id: '2',
@@ -89,7 +89,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.7,
             duration: 'Per day',
             includes: ['Insurance', 'Unlimited mileage', 'Roadside assistance'],
-            image_url: IMAGES.tours.adventure
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Tours/muizenberg%20cave%20tours/muizenberg%20cave%20%20view%201.jpg'
           },
           
           // Accommodation Services
@@ -105,7 +105,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.8,
             duration: 'Per night',
             includes: ['Breakfast', 'Wi-Fi', 'Airport shuttle'],
-            image_url: IMAGES.wellness.retreat
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat3%20portrait.jpg'
           },
           {
             id: '4',
@@ -119,7 +119,7 @@ const WellnessRoamingPackages = () => {
             rating: 5.0,
             duration: 'Per night',
             includes: ['All meals', 'Daily yoga', 'Spa access', 'Healing sessions'],
-            image_url: IMAGES.wellness.retreat2
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg'
           },
 
           // Experience Services
@@ -135,7 +135,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.6,
             duration: '6 hours',
             includes: ['Wine tastings', 'Gourmet lunch', 'Transportation', 'Guide'],
-            image_url: IMAGES.tours.scenic
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg'
           },
           {
             id: '6',
@@ -149,7 +149,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.8,
             duration: '4 hours',
             includes: ['Professional guide', 'Snacks', 'Water', 'First aid'],
-            image_url: IMAGES.tours.hiking
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg'
           },
 
           // Technology Services
@@ -165,7 +165,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.5,
             duration: '30 days access',
             includes: ['App license', 'Premium features', 'Customer support'],
-            image_url: IMAGES.ai.tools
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/khoe%20indigenous%20language%20heritage%20experience%206.jpg'
           },
           {
             id: '8',
@@ -179,7 +179,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.3,
             duration: '30 days',
             includes: ['SIM card', 'Activation', 'Customer support'],
-            image_url: IMAGES.wellness.deals
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/khoe%20indigenous%20language%20heritage%20experience%207.jpg'
           },
 
           // Insurance & Safety
@@ -195,7 +195,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.9,
             duration: 'Trip duration',
             includes: ['24/7 support', 'Emergency evacuation', 'Pre-existing conditions'],
-            image_url: IMAGES.products.essentials
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg'
           },
           {
             id: '10',
@@ -209,7 +209,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.4,
             duration: 'Trip duration',
             includes: ['Device rental', 'Emergency monitoring', 'Mobile app'],
-            image_url: IMAGES.ai.interface
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg'
           },
 
           // Wellness Specific Services
@@ -225,7 +225,7 @@ const WellnessRoamingPackages = () => {
             rating: 5.0,
             duration: '3 hours',
             includes: ['Healing session', 'Herbal kit', 'Cultural guide', 'Certificate'],
-            image_url: IMAGES.wellness.meditation
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/feroza%20begg%20-%20portrait.jpg'
           },
           {
             id: '12',
@@ -239,7 +239,7 @@ const WellnessRoamingPackages = () => {
             rating: 4.9,
             duration: '2 hours',
             includes: ['Sound session', 'Meditation guide', 'Herbal tea', 'Take-home audio'],
-            image_url: IMAGES.wellness.yoga
+            image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/chad%20cupido%20portrait.jpg'
           }
         ];
 

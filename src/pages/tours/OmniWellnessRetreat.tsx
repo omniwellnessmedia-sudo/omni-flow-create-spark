@@ -15,6 +15,9 @@ const OmniWellnessRetreat = () => {
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_20241010_175744.jpg',
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg',
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/_MG_0152.jpg',
+    'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg',
+    'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg',
+    'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%201.jpg',
   ];
 
   return (
@@ -154,14 +157,77 @@ const OmniWellnessRetreat = () => {
             <div className="lg:col-span-2 space-y-12">
               {/* About */}
               <div>
-                <h2 className="text-3xl font-bold text-foreground mb-4">About This Experience</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  Join us for a deeply transformative journey at the 2026 Omni Wellness Retreat, set amidst the serene and 
-                  enchanting Greyton Eco Lodge. As winter wraps the land in its gentle embrace, we invite you to retreat 
-                  within, to a space where mind, body, and soul come into harmonious balance. Hosted by Omni Wellness Media 
-                  in collaboration with Olive Tree Realty, this retreat promises not just relaxation, but a profound 
-                  reconnection with your inner self and the ancient rhythms of nature.
+                <h2 className="text-3xl font-bold text-foreground mb-6">Transform Your Life in 4 Sacred Days</h2>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                  This isn't just a retreat—it's a journey home to yourself. In the heart of South Africa's most sacred healing valley, 
+                  you'll disconnect from the noise of modern life and reconnect with your deepest truth. Guided by indigenous wisdom 
+                  keepers and certified wellness practitioners, you'll experience profound shifts in body, mind, and spirit.
                 </p>
+                
+                <div className="grid sm:grid-cols-2 gap-4 mb-8">
+                  <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
+                    <h4 className="font-semibold text-foreground mb-2">Authentic Indigenous Wisdom</h4>
+                    <p className="text-sm text-muted-foreground">Learn from Khoe cultural experts who carry ancestral knowledge</p>
+                  </div>
+                  <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
+                    <h4 className="font-semibold text-foreground mb-2">Transformative Movement</h4>
+                    <p className="text-sm text-muted-foreground">NIA Dance Immersion awakens joy and releases stuck energy</p>
+                  </div>
+                  <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
+                    <h4 className="font-semibold text-foreground mb-2">Sacred Land Connection</h4>
+                    <p className="text-sm text-muted-foreground">Walk ancient paths and feel the earth's healing power</p>
+                  </div>
+                  <div className="bg-primary/5 rounded-lg p-4 border border-primary/10">
+                    <h4 className="font-semibold text-foreground mb-2">Plant-Based Nourishment</h4>
+                    <p className="text-sm text-muted-foreground">Experience how conscious eating transforms your energy</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sacred Land Context */}
+              <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl p-8 border border-primary/10">
+                <h2 className="text-3xl font-bold text-foreground mb-6">The Sacred Land of Greyton</h2>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+                      Indigenous Khoe Heritage
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed pl-4">
+                      Greyton rests on ancestral lands of the Khoe people, who have inhabited this region for thousands of years. 
+                      The area's indigenous name reflects its spiritual significance as a place of healing waters and sacred mountains. 
+                      Our retreat honors this heritage by incorporating traditional Khoe wellness practices, indigenous plant knowledge, 
+                      and respectful cultural exchange guided by local wisdom keepers.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+                      The Healing Valley
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed pl-4">
+                      Nestled in the Riviersonderend Mountains, Greyton has long been recognized as a place of natural healing. 
+                      The crisp mountain air, mineral-rich springs, and diverse fynbos ecosystem create a unique environment that 
+                      has drawn healers and seekers for generations. The valley's microclimate supports over 1,500 plant species, 
+                      many used traditionally for healing—knowledge that will be shared during our indigenous walks.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold text-foreground mb-3 flex items-center gap-2">
+                      <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+                      A Living Wellness Tradition
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed pl-4">
+                      The Greyton Eco Lodge sits within this living landscape, designed to harmonize with nature while providing 
+                      modern comfort. Our approach blends ancient indigenous wisdom with contemporary wellness practices, creating 
+                      a transformative experience that honors the past while embracing the present. Here, you'll walk where ancestors 
+                      walked, breathe where healers breathed, and discover your own healing journey in this sacred space.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Detailed Itinerary */}
@@ -204,171 +270,187 @@ const OmniWellnessRetreat = () => {
                   </div>
 
                   {/* Day 1 - Day Activities */}
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary text-primary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-lg flex-shrink-0">
-                          1
+                  <div className="relative pl-16">
+                    <div className="absolute left-0 flex items-center justify-center w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-lg ring-4 ring-primary/20">
+                      <span className="font-bold text-lg">2</span>
+                    </div>
+                    <Card className="border-l-4 border-l-primary shadow-md hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                          <h3 className="text-2xl font-bold text-foreground">Wellness Sessions & Activities</h3>
+                          <Badge variant="secondary" className="w-fit">Day 1 • Throughout Day</Badge>
                         </div>
-                        <div className="flex-1">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
-                            <h3 className="text-xl font-semibold text-foreground">Wellness Sessions and Activities</h3>
-                            <Badge variant="outline">Day 1 - Throughout Day</Badge>
+                        <p className="text-muted-foreground leading-relaxed mb-4">
+                          Embrace a day filled with nourishing activities designed to rejuvenate your entire being. Begin with 
+                          gentle yoga that opens your body, move into guided meditations that quiet your mind, and surrender to 
+                          the ecstatic freedom of NIA Dance Immersion. Each practice builds upon the last, creating a symphony 
+                          of healing that resonates through every cell of your body.
+                        </p>
+                        <div className="grid sm:grid-cols-2 gap-3 bg-muted/30 rounded-lg p-4">
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Yoga Sessions - Open your body to healing energy (all levels)</span>
                           </div>
-                          <p className="text-muted-foreground mb-4">
-                            Embrace a day filled with nourishing activities designed to rejuvenate and uplift. Begin with 
-                            gentle yoga sessions, move into guided meditations, and experience the joy of NIA Dance Immersion.
-                          </p>
-                          <div className="grid sm:grid-cols-2 gap-2">
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Yoga Sessions (all levels)
-                            </div>
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Guided Meditation
-                            </div>
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              NIA Dance Immersion
-                            </div>
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Smoothie Talk - Plant-based nutrition
-                            </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Guided Meditation - Journey deep within to your center</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">NIA Dance Immersion - Ecstatic movement awakens joy</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Smoothie Talk - Discover how plant-based nutrition transforms</span>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
 
                   {/* Day 1 - Evening */}
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-primary text-primary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-lg flex-shrink-0">
-                          1
+                  <div className="relative pl-16">
+                    <div className="absolute left-0 flex items-center justify-center w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-lg ring-4 ring-primary/20">
+                      <span className="font-bold text-lg">3</span>
+                    </div>
+                    <Card className="border-l-4 border-l-primary shadow-md hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                          <h3 className="text-2xl font-bold text-foreground">Traditional Braai & Live Music</h3>
+                          <Badge variant="secondary" className="w-fit">Day 1 • Evening</Badge>
                         </div>
-                        <div className="flex-1">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
-                            <h3 className="text-xl font-semibold text-foreground">Evening Braai with Live Music</h3>
-                            <Badge variant="outline">Day 1 - Evening</Badge>
+                        <p className="text-muted-foreground leading-relaxed mb-4">
+                          As twilight paints the sky in shades of gold and violet, gather around the sacred fire for a traditional 
+                          South African braai. The aroma of flame-kissed vegetables and plant-based delights fills the air. This is 
+                          more than a meal—it's communion. Share stories, laughter, and deep connection with your new soul family 
+                          while live musicians weave melodies that touch the heart. Under a canopy of stars, feel yourself becoming 
+                          part of something larger, more ancient, more true.
+                        </p>
+                        <div className="grid sm:grid-cols-2 gap-3 bg-muted/30 rounded-lg p-4">
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Traditional Braai - Sacred fire ceremony with conscious cuisine</span>
                           </div>
-                          <p className="text-muted-foreground mb-4">
-                            As the day transitions into evening, gather around for a traditional braai, a South African 
-                            barbecue that tantalises the taste buds. Accompanied by live music, this communal meal is a 
-                            time to connect, laugh, and share stories under the stars.
-                          </p>
-                          <div className="space-y-2">
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Traditional South African Braai
-                            </div>
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Live Music Performance
-                            </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Live Music - Soul-stirring melodies under the stars</span>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
 
                   {/* Day 2 - Morning */}
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-secondary text-secondary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-lg flex-shrink-0">
-                          2
+                  <div className="relative pl-16">
+                    <div className="absolute left-0 flex items-center justify-center w-12 h-12 bg-secondary text-secondary-foreground rounded-full shadow-lg ring-4 ring-secondary/20">
+                      <span className="font-bold text-lg">4</span>
+                    </div>
+                    <Card className="border-l-4 border-l-secondary shadow-md hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                          <h3 className="text-2xl font-bold text-foreground">Sunrise Awakening</h3>
+                          <Badge variant="secondary" className="w-fit">Day 2 • 7:00 AM</Badge>
                         </div>
-                        <div className="flex-1">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
-                            <h3 className="text-xl font-semibold text-foreground">Morning Wellness Activity</h3>
-                            <Badge variant="outline">Day 2 - 7:00 AM</Badge>
+                        <p className="text-muted-foreground leading-relaxed mb-4">
+                          The second day begins as nature intended—with the sun. Rise before the world awakens and step into 
+                          the soft morning light. Whether you choose sunrise yoga that stretches your awakening body, a walking 
+                          meditation through dew-kissed paths, or simply sitting in sacred silence watching the sky transform, 
+                          this morning practice is your personal ceremony. Feel the day's potential flowing through you, clean 
+                          and bright and full of promise.
+                        </p>
+                        <div className="grid sm:grid-cols-2 gap-3 bg-muted/30 rounded-lg p-4">
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Sunrise Yoga - Awaken your body with the sun's first light</span>
                           </div>
-                          <p className="text-muted-foreground mb-4">
-                            Rise with the sun and engage in a refreshing morning wellness activity. Whether it's a sunrise 
-                            yoga session, a guided meditation, or a nature walk, this activity is designed to energise and 
-                            prepare you for the day ahead.
-                          </p>
-                          <div className="space-y-2">
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Morning Yoga - Enhance mood and boost productivity
-                            </div>
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Nature Walk - Absorb fresh morning air
-                            </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Nature Walk - Absorb the mountain's healing morning energy</span>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
 
                   {/* Day 2 - Mid Morning */}
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-secondary text-secondary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-lg flex-shrink-0">
-                          2
+                  <div className="relative pl-16">
+                    <div className="absolute left-0 flex items-center justify-center w-12 h-12 bg-secondary text-secondary-foreground rounded-full shadow-lg ring-4 ring-secondary/20">
+                      <span className="font-bold text-lg">5</span>
+                    </div>
+                    <Card className="border-l-4 border-l-secondary shadow-md hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                          <h3 className="text-2xl font-bold text-foreground">Indigenous Walk with Khoe Wisdom Keepers</h3>
+                          <Badge variant="secondary" className="w-fit">Day 2 • 9:00 AM</Badge>
                         </div>
-                        <div className="flex-1">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
-                            <h3 className="text-xl font-semibold text-foreground">Indigenous Walk and Cultural Exploration</h3>
-                            <Badge variant="outline">Day 2 - 9:00 AM</Badge>
+                        <p className="text-muted-foreground leading-relaxed mb-4">
+                          Walk where your ancestors walked. Led by Khoe indigenous wisdom keepers, this sacred journey takes you 
+                          deep into the heart of the land's living memory. Learn to see the healing plants that sustained generations, 
+                          hear stories older than written words, and participate in ceremonies that bridge past and present. Feel the 
+                          earth speak through your feet. This isn't tourism—it's homecoming. You'll discover plant medicines used for 
+                          millennia, understand the spiritual significance of the landscape, and carry forward ancestral knowledge that 
+                          our modern world desperately needs.
+                        </p>
+                        <div className="grid sm:grid-cols-2 gap-3 bg-muted/30 rounded-lg p-4">
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Indigenous Plant Medicine - Learn ancestral healing knowledge</span>
                           </div>
-                          <p className="text-muted-foreground mb-4">
-                            Step into the footsteps of the ancestors with an indigenous walk guided by local experts. Learn 
-                            about the rich cultural heritage of the area, participate in traditional practices, and gain a 
-                            deeper understanding of the land's historical and spiritual significance.
-                          </p>
-                          <div className="space-y-2">
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Indigenous Walk - Traverse sacred paths
-                            </div>
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Cultural Practices - Traditional hands-on activities
-                            </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Cultural Ceremonies - Participate in sacred traditions</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Sacred Landscape Walk - Connect with living ancestral memory</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Wisdom Keepers - Direct teaching from Khoe cultural experts</span>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
 
                   {/* Day 2 - Farewell */}
-                  <Card>
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-secondary text-secondary-foreground rounded-full h-12 w-12 flex items-center justify-center font-bold text-lg flex-shrink-0">
-                          2
+                  <div className="relative pl-16">
+                    <div className="absolute left-0 flex items-center justify-center w-12 h-12 bg-secondary text-secondary-foreground rounded-full shadow-lg ring-4 ring-secondary/20">
+                      <span className="font-bold text-lg">6</span>
+                    </div>
+                    <Card className="border-l-4 border-l-secondary shadow-md hover:shadow-lg transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                          <h3 className="text-2xl font-bold text-foreground">Closing Circle & Integration</h3>
+                          <Badge variant="secondary" className="w-fit">Day 2 • 12:00 PM</Badge>
                         </div>
-                        <div className="flex-1">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
-                            <h3 className="text-xl font-semibold text-foreground">Lunch and Farewell</h3>
-                            <Badge variant="outline">Day 2 - 12:00 PM</Badge>
+                        <p className="text-muted-foreground leading-relaxed mb-4">
+                          As your journey reaches completion, gather one final time in sacred circle. Share the nourishment of 
+                          a conscious final meal, exchange the gifts you've discovered within yourself, and set intentions for 
+                          carrying this transformation home. This isn't goodbye—it's a new beginning. You're not leaving the 
+                          same person who arrived. The retreat may end, but your awakening has only begun.
+                        </p>
+                        <div className="grid sm:grid-cols-2 gap-3 bg-muted/30 rounded-lg p-4">
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Wholesome Plant-based Lunch - Final conscious meal together</span>
                           </div>
-                          <p className="text-muted-foreground mb-4">
-                            Gather for a nourishing lunch that fuels your body and soul. Afterward, enjoy a guided tour of 
-                            the lodge's surroundings, reflecting on the experiences of the weekend. As the retreat comes to 
-                            a close, feel rejuvenated, inspired, and deeply connected.
-                          </p>
-                          <div className="space-y-2">
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Wholesome Plant-based Lunch
-                            </div>
-                            <div className="flex items-center text-sm">
-                              <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-                              Guided Tour of Lodge Surroundings
-                            </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Closing Circle - Share insights and set intentions</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Integration Practice - Tools to carry transformation home</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Guided Tour - Final connection with sacred land</span>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               </div>
 
@@ -423,8 +505,77 @@ const OmniWellnessRetreat = () => {
                       <p className="text-sm text-muted-foreground">Ensure you are added to our WhatsApp group for updates and notifications.</p>
                     </CardContent>
                   </Card>
+              </div>
+
+              {/* Testimonials - What Past Participants Say */}
+              <div className="bg-gradient-to-br from-secondary/5 to-accent/5 rounded-2xl p-8 border border-secondary/10">
+                <h2 className="text-3xl font-bold text-foreground mb-6 text-center">What Past Participants Say</h2>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <Card className="bg-background/50 backdrop-blur border-secondary/20">
+                    <CardContent className="p-6">
+                      <div className="flex mb-3">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 fill-primary" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                          </svg>
+                        ))}
+                      </div>
+                      <p className="text-muted-foreground italic mb-4 text-sm leading-relaxed">
+                        "This retreat changed my life. The combination of indigenous wisdom, movement, and the sacred land 
+                        of Greyton opened something in me I didn't know was closed. I returned home transformed, carrying 
+                        ancestral knowledge that now guides my daily practice."
+                      </p>
+                      <div className="border-t border-border pt-3">
+                        <p className="font-semibold text-foreground text-sm">Sarah M.</p>
+                        <p className="text-xs text-muted-foreground">Cape Town</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-background/50 backdrop-blur border-secondary/20">
+                    <CardContent className="p-6">
+                      <div className="flex mb-3">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 fill-primary" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                          </svg>
+                        ))}
+                      </div>
+                      <p className="text-muted-foreground italic mb-4 text-sm leading-relaxed">
+                        "The NIA Dance sessions were pure joy. I haven't felt that free in my body in decades. And the 
+                        indigenous walk with the wisdom keepers was profoundly moving—learning about the land's true history 
+                        and connecting with ancestral practices that modern wellness has forgotten."
+                      </p>
+                      <div className="border-t border-border pt-3">
+                        <p className="font-semibold text-foreground text-sm">Michael T.</p>
+                        <p className="text-xs text-muted-foreground">Johannesburg</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-background/50 backdrop-blur border-secondary/20">
+                    <CardContent className="p-6">
+                      <div className="flex mb-3">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 fill-primary" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                          </svg>
+                        ))}
+                      </div>
+                      <p className="text-muted-foreground italic mb-4 text-sm leading-relaxed">
+                        "I came seeking rest and found my purpose. The plant-based meals, the yoga, the ceremonies, the 
+                        soul family I discovered—everything aligned to create the most transformative 4 days of my life. 
+                        I'm already planning to return next year."
+                      </p>
+                      <div className="border-t border-border pt-3">
+                        <p className="font-semibold text-foreground text-sm">Thandi N.</p>
+                        <p className="text-xs text-muted-foreground">Durban</p>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
+            </div>
             </div>
 
             {/* Right Column - Booking Sidebar */}
