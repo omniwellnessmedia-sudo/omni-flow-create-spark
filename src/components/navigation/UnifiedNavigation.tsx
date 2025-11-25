@@ -95,6 +95,7 @@ const UnifiedNavigation = () => {
       icon: Plane,
       children: [
         { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Transformative 4-day retreat', icon: '🧘‍♀️' },
+        { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: 'Sacred indigenous journey with Chief Kingsley', icon: '⛰️' },
         { title: '2BeWell Community', href: '/two-be-well', description: 'Join our wellness community', icon: '💝' },
       ]
     },
@@ -114,6 +115,7 @@ const UnifiedNavigation = () => {
         { title: 'Media Production', href: '/media-production', description: 'Content creation services', icon: '🎬' },
         { title: 'Conscious Media Infrastructure', href: '/conscious-media-infrastructure', description: 'Handpicked media equipment', icon: '📷' },
         { title: 'Web Development', href: '/web-development', description: 'Digital solutions', icon: '💻' },
+        { title: 'UWC Human-Animal Program', href: '/programs/uwc-human-animal', description: 'Academic short course (Jan 2026)', icon: '🎓' },
         { title: 'Provider Directory', href: '/provider-directory', description: 'Discover wellness providers', icon: '👥' },
       ]
     },

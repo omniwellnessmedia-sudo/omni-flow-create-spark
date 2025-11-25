@@ -35,7 +35,47 @@ const Checkout = () => {
     setBillingInfo(prev => ({ ...prev, [field]: value }));
   };
 
+  const validateBillingInfo = () => {
+    const { firstName, lastName, email, phone, address, city, postalCode, province } = billingInfo;
+    
+    if (!firstName || !lastName || !email || !phone || !address || !city || !postalCode || !province) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required billing fields.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    // Phone validation (basic South African format)
+    const phoneRegex = /^[0-9]{10}$/;
+    const cleanPhone = phone.replace(/[\s-]/g, '');
+    if (!phoneRegex.test(cleanPhone)) {
+      toast({
+        title: "Invalid Phone Number",
+        description: "Please enter a valid 10-digit phone number.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleWellCoinsPayment = async () => {
+    if (!validateBillingInfo()) return;
+
     // Handle WellCoins payment
     toast({
       title: "Order Placed Successfully!",
@@ -209,10 +249,18 @@ const Checkout = () => {
                   
                   {paymentMethod === "paypal" && (
                     <div className="mt-4 p-4 border rounded-lg bg-blue-50">
-                      <p className="text-sm text-blue-700 mb-4">
-                        Complete your secure payment with PayPal below.
-                      </p>
-                      <PayPalCheckout />
+                      {!validateBillingInfo() ? (
+                        <p className="text-sm text-amber-700">
+                          Please complete all billing information above before proceeding to payment.
+                        </p>
+                      ) : (
+                        <>
+                          <p className="text-sm text-blue-700 mb-4">
+                            Complete your secure payment with PayPal below.
+                          </p>
+                          <PayPalCheckout />
+                        </>
+                      )}
                     </div>
                   )}
                   
