@@ -60,6 +60,8 @@ serve(async (req) => {
 
     const { action, productCode, location, category } = await req.json();
 
+    console.log('Viator API action:', action, 'with API key length:', viatorApiKey.length);
+
     // Action: Fetch specific product details
     if (action === 'fetch_product') {
       if (!productCode) {
@@ -74,15 +76,17 @@ serve(async (req) => {
         {
           method: 'GET',
           headers: {
-            'Accept': 'application/json',
+            'Accept': 'application/json;version=2.0',
+            'Accept-Language': 'en-US',
             'exp-api-key': viatorApiKey,
           },
         }
       );
 
       if (!response.ok) {
-        console.error('Viator API error:', await response.text());
-        throw new Error(`Viator API returned ${response.status}`);
+        const errorText = await response.text();
+        console.error('Viator API error:', response.status, errorText);
+        throw new Error(`Viator API returned ${response.status}: ${errorText}`);
       }
 
       const product: ViatorProduct = await response.json();
@@ -125,33 +129,83 @@ serve(async (req) => {
 
     // Action: Search and sync tours from Viator
     if (action === 'search_tours') {
-      // Search for tours in South Africa (Cape Town specifically)
+      // Use a minimal search request
       const searchBody = {
-        filtering: {
-          destination: location || 'Cape Town',
-          ...(category && { tags: [category] }),
-        },
-        pagination: {
-          offset: 0,
-          limit: 20,
-        },
-        sorting: {
-          sortBy: 'POPULARITY',
-        },
+        searchTerm: location || 'Cape Town',
+        currency: 'USD',
       };
+
+      console.log('Viator search request:', JSON.stringify(searchBody));
 
       const searchResponse = await fetch(
         'https://api.viator.com/partner/products/search',
         {
           method: 'POST',
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Accept': 'application/json;version=2.0',
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Accept-Language': 'en-US',
             'exp-api-key': viatorApiKey,
           },
           body: JSON.stringify(searchBody),
         }
       );
+
+      const responseText = await searchResponse.text();
+      console.log('Viator response status:', searchResponse.status);
+      console.log('Viator response:', responseText);
+
+      if (!searchResponse.ok) {
+        console.error('Viator search error:', responseText);
+        throw new Error(`Viator search API returned ${searchResponse.status}: ${responseText}`);
+      }
+
+      const searchResults = JSON.parse(responseText);
+      const products = searchResults.products || [];
+
+      console.log(`Found ${products.length} tours from Viator`);
+
+      // Cache all products in database
+      const toursToCache = products.map((product: ViatorProduct) => ({
+        viator_product_code: product.productCode,
+        title: product.title,
+        description: product.description || '',
+        duration: product.productOptions?.[0]?.duration?.fixedDurationInMinutes 
+          ? `${Math.floor(product.productOptions[0].duration.fixedDurationInMinutes / 60)} hours`
+          : product.duration || 'Varies',
+        price_from: product.pricing?.summary?.fromPrice || 0,
+        currency: product.pricing?.currency || 'USD',
+        location: product.location?.name || location || 'Cape Town',
+        category: product.tags?.[0]?.tagName || category || 'Tour',
+        rating: product.reviews?.combinedAverageRating || 0,
+        review_count: product.reviews?.totalReviews || 0,
+        image_url: product.images?.[0]?.imageSource || '',
+        booking_url: `https://www.viator.com/tours/${product.productCode}`,
+        availability: 'Available',
+        highlights: product.productOptions || [],
+        last_synced_at: new Date().toISOString(),
+        is_active: true,
+      }));
+
+      if (toursToCache.length > 0) {
+        const { error: bulkUpsertError } = await supabase
+          .from('viator_tours')
+          .upsert(toursToCache, { onConflict: 'viator_product_code' });
+
+        if (bulkUpsertError) {
+          console.error('Error bulk caching tours:', bulkUpsertError);
+        }
+      }
+
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          count: products.length,
+          tours: toursToCache 
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
       if (!searchResponse.ok) {
         console.error('Viator search error:', await searchResponse.text());
