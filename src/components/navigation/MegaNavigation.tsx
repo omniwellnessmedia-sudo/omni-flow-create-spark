@@ -43,7 +43,7 @@ export const MegaNavigation = () => {
     {
       title: 'Tours & Retreats',
       items: [
-        { title: 'Annual Omni Wellness Retreat', href: '/tour-category/weekend-retreats', description: 'Transformative 4-day retreat', icon: '🧘‍♀️', featured: true },
+        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Transformative 4-day retreat', icon: '🧘‍♀️', featured: true },
       ]
     }
   ];

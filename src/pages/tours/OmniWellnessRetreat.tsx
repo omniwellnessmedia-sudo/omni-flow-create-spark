@@ -37,9 +37,9 @@ const OmniWellnessRetreat = () => {
         
         {/* Navigation */}
         <div className="absolute top-6 left-4 z-20">
-          <Link to="/tour-category/weekend-retreats" className="inline-flex items-center text-white/90 hover:text-white bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full transition-all hover:bg-black/40">
+          <Link to="/" className="inline-flex items-center text-white/90 hover:text-white bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full transition-all hover:bg-black/40">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Weekend Retreats
+            Back to Home
           </Link>
         </div>
         
@@ -184,6 +184,15 @@ const OmniWellnessRetreat = () => {
                 </div>
               </div>
 
+              {/* Retreat Experience Image */}
+              <div className="rounded-2xl overflow-hidden shadow-2xl my-8">
+                <img 
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg"
+                  alt="Retreat participants in wellness activity"
+                  className="w-full h-[400px] object-cover"
+                />
+              </div>
+
               {/* Sacred Land Context */}
               <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl p-8 border border-primary/10">
                 <h2 className="text-3xl font-bold text-foreground mb-6">The Sacred Land of Greyton</h2>
@@ -227,6 +236,24 @@ const OmniWellnessRetreat = () => {
                       walked, breathe where healers breathed, and discover your own healing journey in this sacred space.
                     </p>
                   </div>
+                </div>
+              </div>
+
+              {/* Sacred Land Visual */}
+              <div className="grid md:grid-cols-2 gap-6 my-8">
+                <div className="rounded-xl overflow-hidden shadow-lg">
+                  <img 
+                    src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/_MG_0152.jpg"
+                    alt="Greyton mountain landscape"
+                    className="w-full h-64 object-cover"
+                  />
+                </div>
+                <div className="rounded-xl overflow-hidden shadow-lg">
+                  <img 
+                    src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg"
+                    alt="Indigenous cultural experience"
+                    className="w-full h-64 object-cover"
+                  />
                 </div>
               </div>
 
@@ -304,37 +331,19 @@ const OmniWellnessRetreat = () => {
                             <span className="text-sm">Smoothie Talk - Discover how plant-based nutrition transforms</span>
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Day 1 - Evening */}
-                  <div className="relative pl-16">
-                    <div className="absolute left-0 flex items-center justify-center w-12 h-12 bg-primary text-primary-foreground rounded-full shadow-lg ring-4 ring-primary/20">
-                      <span className="font-bold text-lg">3</span>
-                    </div>
-                    <Card className="border-l-4 border-l-primary shadow-md hover:shadow-lg transition-shadow">
-                      <CardContent className="p-6">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-                          <h3 className="text-2xl font-bold text-foreground">Traditional Braai & Live Music</h3>
-                          <Badge variant="secondary" className="w-fit">Day 1 • Evening</Badge>
+                        <div className="mt-4 rounded-lg overflow-hidden">
+                          <img 
+                            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%201.jpg"
+                            alt="Wellness yoga session"
+                            className="w-full h-48 object-cover"
+                          />
                         </div>
-                        <p className="text-muted-foreground leading-relaxed mb-4">
-                          As twilight paints the sky in shades of gold and violet, gather around the sacred fire for a traditional 
-                          South African braai. The aroma of flame-kissed vegetables and plant-based delights fills the air. This is 
-                          more than a meal—it's communion. Share stories, laughter, and deep connection with your new soul family 
-                          while live musicians weave melodies that touch the heart. Under a canopy of stars, feel yourself becoming 
-                          part of something larger, more ancient, more true.
-                        </p>
-                        <div className="grid sm:grid-cols-2 gap-3 bg-muted/30 rounded-lg p-4">
-                          <div className="flex items-start gap-2">
-                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                            <span className="text-sm">Traditional Braai - Sacred fire ceremony with conscious cuisine</span>
-                          </div>
-                          <div className="flex items-start gap-2">
-                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                            <span className="text-sm">Live Music - Soul-stirring melodies under the stars</span>
-                          </div>
+                        <div className="mt-4 rounded-lg overflow-hidden">
+                          <img 
+                            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_20241010_175744.jpg"
+                            alt="Traditional braai gathering"
+                            className="w-full h-48 object-cover"
+                          />
                         </div>
                       </CardContent>
                     </Card>
@@ -408,6 +417,13 @@ const OmniWellnessRetreat = () => {
                             <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                             <span className="text-sm">Wisdom Keepers - Direct teaching from Khoe cultural experts</span>
                           </div>
+                        </div>
+                        <div className="mt-4 rounded-lg overflow-hidden">
+                          <img 
+                            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg"
+                            alt="Indigenous cultural walk"
+                            className="w-full h-48 object-cover"
+                          />
                         </div>
                       </CardContent>
                     </Card>
@@ -507,6 +523,15 @@ const OmniWellnessRetreat = () => {
                   </Card>
               </div>
 
+              {/* Community Experience Visual */}
+              <div className="rounded-2xl overflow-hidden shadow-2xl my-12">
+                <img 
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat3%20portrait.jpg"
+                  alt="Retreat community gathering"
+                  className="w-full h-[500px] object-cover"
+                />
+              </div>
+
               {/* Testimonials - What Past Participants Say */}
               <div className="bg-gradient-to-br from-secondary/5 to-accent/5 rounded-2xl p-8 border border-secondary/10">
                 <h2 className="text-3xl font-bold text-foreground mb-6 text-center">What Past Participants Say</h2>
@@ -573,6 +598,31 @@ const OmniWellnessRetreat = () => {
                       </div>
                     </CardContent>
                   </Card>
+                </div>
+              </div>
+
+              {/* Experience Highlights Gallery */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 my-12">
+                <div className="rounded-lg overflow-hidden shadow-md">
+                  <img 
+                    src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg"
+                    alt="Retreat activity"
+                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="rounded-lg overflow-hidden shadow-md">
+                  <img 
+                    src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg"
+                    alt="Community connection"
+                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="rounded-lg overflow-hidden shadow-md">
+                  <img 
+                    src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/khoe%20indigenous%20language%20heritage%20experience%206.jpg"
+                    alt="Indigenous heritage"
+                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
               </div>
             </div>

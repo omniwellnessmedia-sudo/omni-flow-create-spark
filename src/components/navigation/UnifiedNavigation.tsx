@@ -94,7 +94,7 @@ const UnifiedNavigation = () => {
       title: 'Travel',
       icon: Plane,
       children: [
-        { title: 'Annual Omni Wellness Retreat', href: '/tour-category/weekend-retreats', description: 'Transformative 4-day retreat', icon: '🧘‍♀️' },
+        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Transformative 4-day retreat', icon: '🧘‍♀️' },
         { title: '2BeWell Community', href: '/two-be-well', description: 'Join our wellness community', icon: '💝' },
       ]
     },
