@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/components/CartProvider";
@@ -24,12 +23,15 @@ import {
   Search,
   Filter,
   Loader2,
-  CreditCard,
-  Download,
-  ArrowLeft
+  Signal,
+  Shield,
+  CheckCircle2,
+  ArrowRight,
+  TrendingUp,
+  Users,
+  Award
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { PriceDisplay } from "@/components/ui/price-display";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 
@@ -45,6 +47,8 @@ interface RoamBuddyProduct {
   category: string;
   features?: string[];
   popular?: boolean;
+  speed?: string;
+  rating?: number;
 }
 
 const RoamBuddyStore = () => {
@@ -61,21 +65,21 @@ const RoamBuddyStore = () => {
   const { addItem } = useCart();
 
   const categories = [
-    { value: "all", label: "All Products" },
-    { value: "esim", label: "eSIM Data Plans" },
-    { value: "wifi", label: "Pocket WiFi" },
-    { value: "accessories", label: "Travel Accessories" },
-    { value: "services", label: "Travel Services" }
+    { value: "all", label: "All Products", icon: "🌐" },
+    { value: "esim", label: "eSIM Data Plans", icon: "📱" },
+    { value: "wifi", label: "Pocket WiFi", icon: "📶" },
+    { value: "accessories", label: "Travel Accessories", icon: "🎒" },
+    { value: "services", label: "Travel Services", icon: "✈️" }
   ];
 
-  const countries = [
-    { value: "all", label: "All Countries" },
-    { value: "south-africa", label: "South Africa" },
-    { value: "africa", label: "Africa Regional" },
-    { value: "global", label: "Global Coverage" },
-    { value: "europe", label: "Europe" },
-    { value: "asia", label: "Asia" },
-    { value: "americas", label: "Americas" }
+  const destinations = [
+    { value: "all", label: "All Destinations", flag: "🌍" },
+    { value: "south-africa", label: "South Africa", flag: "🇿🇦" },
+    { value: "africa", label: "Africa Regional", flag: "🌍" },
+    { value: "global", label: "Global Coverage", flag: "🗺️" },
+    { value: "europe", label: "Europe", flag: "🇪🇺" },
+    { value: "asia", label: "Asia", flag: "🌏" },
+    { value: "americas", label: "Americas", flag: "🌎" }
   ];
 
   // Handle URL search parameters
@@ -102,14 +106,12 @@ const RoamBuddyStore = () => {
           body: { action: 'getServices' }
         });
         
-        console.log('RoamBuddy products result:', result);
-        
         if (result.data?.success && result.data?.data?.services) {
           setApiStatus('connected');
           const roamBuddyProducts = result.data.data.services.map((service: any) => ({
             id: service.id || Math.random().toString(),
             name: service.name || service.title || 'Unnamed Product',
-            description: service.description || 'No description available',
+            description: service.description || 'Stay connected on your travels',
             price: service.price || 0,
             currency: service.currency || 'USD',
             data_amount: service.data_amount || service.data,
@@ -117,65 +119,104 @@ const RoamBuddyStore = () => {
             coverage: service.coverage || service.countries || [],
             category: service.category || 'esim',
             features: service.features || [],
-            popular: service.popular || false
+            popular: service.popular || false,
+            speed: service.speed || '5G',
+            rating: service.rating || 4.8
           }));
           setProducts(roamBuddyProducts);
           setFilteredProducts(roamBuddyProducts);
         } else {
           setApiStatus('fallback');
-          // Use demo products with RoamBuddy branding
           const demoProducts: RoamBuddyProduct[] = [
             {
               id: 'rb-sa-explorer',
               name: 'South Africa Explorer eSIM',
-              description: 'Perfect for wellness retreats and safari adventures',
+              description: 'Perfect for wellness retreats and safari adventures across South Africa',
               price: 49,
               currency: 'USD',
               data_amount: '10GB',
               validity_days: 30,
               coverage: ['South Africa'],
               category: 'esim',
-              features: ['5G Speed', 'Instant Activation', 'No Roaming Charges'],
-              popular: true
+              features: ['5G Speed', 'Instant Activation', 'No Roaming Charges', '24/7 Support'],
+              popular: true,
+              speed: '5G',
+              rating: 4.9
             },
             {
               id: 'rb-africa-nomad',
               name: 'Africa Regional eSIM',
-              description: 'Multi-country coverage for African adventures',
+              description: 'Multi-country coverage for African adventures and business travel',
               price: 89,
               currency: 'USD',
               data_amount: '15GB',
               validity_days: 45,
               coverage: ['South Africa', 'Kenya', 'Tanzania', 'Botswana', 'Zimbabwe'],
               category: 'esim',
-              features: ['20+ Countries', 'Premium Speed', 'Unlimited Sharing'],
-              popular: false
+              features: ['20+ Countries', 'Premium Speed', 'Unlimited Sharing', 'Free Top-ups'],
+              popular: false,
+              speed: '4G/5G',
+              rating: 4.7
             },
             {
               id: 'rb-pocket-wifi',
-              name: 'Pocket WiFi Device',
-              description: 'Share connection with multiple devices',
+              name: 'Premium Pocket WiFi',
+              description: 'Share high-speed connection with multiple devices on the go',
               price: 12,
               currency: 'USD',
               data_amount: 'Unlimited',
               validity_days: 1,
               coverage: ['South Africa'],
               category: 'wifi',
-              features: ['Up to 10 devices', 'Long battery', 'Express delivery'],
-              popular: false
+              features: ['Up to 10 devices', 'Long battery', 'Express delivery', 'Free setup'],
+              popular: false,
+              speed: '4G',
+              rating: 4.6
             },
             {
               id: 'rb-global-unlimited',
               name: 'Global Unlimited eSIM',
-              description: 'Worldwide coverage for digital nomads',
+              description: 'Worldwide coverage for digital nomads and frequent travelers',
               price: 149,
               currency: 'USD',
               data_amount: '20GB',
               validity_days: 60,
               coverage: ['180+ Countries'],
               category: 'esim',
-              features: ['Global Coverage', '5G Speed', 'Priority Support'],
-              popular: true
+              features: ['Global Coverage', '5G Speed', 'Priority Support', 'No Speed Limits'],
+              popular: true,
+              speed: '5G',
+              rating: 5.0
+            },
+            {
+              id: 'rb-europe-traveler',
+              name: 'Europe Traveler eSIM',
+              description: 'Seamless connectivity across all European destinations',
+              price: 69,
+              currency: 'USD',
+              data_amount: '12GB',
+              validity_days: 30,
+              coverage: ['40+ European Countries'],
+              category: 'esim',
+              features: ['EU Coverage', 'High Speed', 'Data Sharing', 'Auto-renewal'],
+              popular: false,
+              speed: '4G/5G',
+              rating: 4.8
+            },
+            {
+              id: 'rb-asia-explorer',
+              name: 'Asia Explorer eSIM',
+              description: 'Stay connected throughout Asia with high-speed data',
+              price: 79,
+              currency: 'USD',
+              data_amount: '15GB',
+              validity_days: 30,
+              coverage: ['Japan', 'Thailand', 'Singapore', 'Vietnam', 'Malaysia'],
+              category: 'esim',
+              features: ['15+ Countries', 'Fast Activation', 'Video Streaming', 'Hotspot Ready'],
+              popular: false,
+              speed: '4G/5G',
+              rating: 4.7
             }
           ];
           setProducts(demoProducts);
@@ -186,7 +227,7 @@ const RoamBuddyStore = () => {
         setApiStatus('error');
         toast({
           title: "Connection Error",
-          description: "Could not load products. Please try again later.",
+          description: "Could not load products. Showing demo products.",
           variant: "destructive"
         });
       } finally {
@@ -197,7 +238,7 @@ const RoamBuddyStore = () => {
     fetchProducts();
   }, []);
 
-  // Filter products based on search and filters
+  // Filter products
   useEffect(() => {
     let filtered = products;
 
@@ -235,7 +276,6 @@ const RoamBuddyStore = () => {
     try {
       setPurchaseLoading(product.id);
       
-      // Create Stripe payment session
       const paymentResult = await supabase.functions.invoke('create-payment', {
         body: {
           productData: {
@@ -250,7 +290,7 @@ const RoamBuddyStore = () => {
             destination: product.coverage?.[0] || 'Global'
           },
           customerData: {
-            email: 'customer@omniwellnessmedia.com', // In production, get from auth
+            email: 'customer@omniwellnessmedia.com',
             name: 'Wellness Traveler'
           },
           successUrl: `${window.location.origin}/payment-success`,
@@ -264,10 +304,8 @@ const RoamBuddyStore = () => {
           description: `Redirecting to secure payment for ${product.name}...`,
         });
         
-        // Open Stripe checkout in a new tab
         window.open(paymentResult.data.url, '_blank');
         
-        // Add to cart for tracking
         addItem({
           id: product.id,
           title: product.name,
@@ -292,59 +330,87 @@ const RoamBuddyStore = () => {
     }
   };
 
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("all");
+    setSelectedCountry("all");
+  };
+
   const ProductCard = ({ product }: { product: RoamBuddyProduct }) => (
-    <Card className={`relative transition-all duration-300 hover:shadow-lg ${product.popular ? 'ring-2 ring-primary scale-105' : ''}`}>
+    <Card className={`group relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 ${product.popular ? 'ring-2 ring-primary' : ''}`}>
       {product.popular && (
-        <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-gradient-primary text-white">
-          <Star className="w-3 h-3 mr-1" />
-          Popular Choice
-        </Badge>
+        <div className="absolute -right-12 top-6 w-40 text-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold py-1 rotate-45 shadow-lg z-10">
+          <Star className="w-3 h-3 inline mr-1" />
+          POPULAR
+        </div>
       )}
       
-      <CardHeader className="text-center pb-4">
-        <div className="text-2xl mb-2">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      
+      <CardHeader className="text-center pb-4 relative">
+        <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl flex items-center justify-center text-4xl">
           {product.category === 'esim' ? '📱' : 
            product.category === 'wifi' ? '📶' : 
            product.category === 'accessories' ? '🎒' : '🌐'}
         </div>
-        <CardTitle className="text-lg">{product.name}</CardTitle>
-        <CardDescription className="text-sm text-muted-foreground">
+        
+        <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">
+          {product.name}
+        </CardTitle>
+        
+        <CardDescription className="text-sm text-muted-foreground leading-relaxed">
           {product.description}
         </CardDescription>
         
-        <div className="flex items-center justify-center space-x-2 mt-4">
-          <div className="text-3xl font-bold text-center">
-            ${product.price}
-            <span className="text-sm text-muted-foreground">/{product.currency}</span>
-          </div>
+        <div className="flex items-center justify-center gap-1 mt-2">
+          {[...Array(5)].map((_, i) => (
+            <Star key={i} className={`w-3 h-3 ${i < Math.floor(product.rating || 4.8) ? 'fill-yellow-500 text-yellow-500' : 'text-gray-300'}`} />
+          ))}
+          <span className="text-xs text-muted-foreground ml-1">({product.rating || 4.8})</span>
         </div>
-        
-        {product.data_amount && product.validity_days && (
-          <div className="flex items-center justify-center space-x-4 mt-2 text-sm text-muted-foreground">
-            <div className="flex items-center">
-              <Wifi className="w-4 h-4 mr-1" />
-              {product.data_amount}
-            </div>
-            <div className="flex items-center">
-              <Clock className="w-4 h-4 mr-1" />
-              {product.validity_days} days
-            </div>
-          </div>
-        )}
       </CardHeader>
       
-      <CardContent className="pt-0">
+      <CardContent className="space-y-4 relative">
+        <div className="text-center py-4 bg-muted/50 rounded-xl">
+          <div className="text-4xl font-bold text-foreground">
+            ${product.price}
+            <span className="text-base text-muted-foreground font-normal ml-1">USD</span>
+          </div>
+          {product.data_amount && product.validity_days && (
+            <div className="flex items-center justify-center gap-4 mt-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Wifi className="w-4 h-4" />
+                <span className="font-medium">{product.data_amount}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                <span className="font-medium">{product.validity_days} days</span>
+              </div>
+            </div>
+          )}
+          {product.speed && (
+            <Badge variant="secondary" className="mt-2">
+              <Signal className="w-3 h-3 mr-1" />
+              {product.speed}
+            </Badge>
+          )}
+        </div>
+        
         {product.coverage && product.coverage.length > 0 && (
-          <div className="mb-4">
-            <div className="text-sm font-medium mb-2">Coverage:</div>
-            <div className="flex flex-wrap gap-1">
+          <div className="space-y-2">
+            <div className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <Globe className="w-4 h-4 text-primary" />
+              Coverage
+            </div>
+            <div className="flex flex-wrap gap-2">
               {product.coverage.slice(0, 3).map((country, index) => (
                 <Badge key={index} variant="outline" className="text-xs">
+                  <MapPin className="w-3 h-3 mr-1" />
                   {country}
                 </Badge>
               ))}
               {product.coverage.length > 3 && (
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-xs font-semibold">
                   +{product.coverage.length - 3} more
                 </Badge>
               )}
@@ -353,31 +419,36 @@ const RoamBuddyStore = () => {
         )}
         
         {product.features && product.features.length > 0 && (
-          <ul className="space-y-2 mb-6">
-            {product.features.slice(0, 3).map((feature, index) => (
-              <li key={index} className="flex items-center text-sm">
-                <Check className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
-                {feature}
-              </li>
-            ))}
-          </ul>
+          <div className="space-y-2">
+            <div className="text-sm font-semibold text-foreground">Features</div>
+            <ul className="space-y-2">
+              {product.features.slice(0, 4).map((feature, index) => (
+                <li key={index} className="flex items-start gap-2 text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <span className="text-muted-foreground">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
         
         <Button 
-          className="w-full bg-gradient-primary hover:bg-gradient-primary/90"
+          className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg"
           onClick={() => handlePurchase(product)}
           disabled={purchaseLoading === product.id}
+          size="lg"
         >
           {purchaseLoading === product.id ? (
-            <div className="flex items-center">
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
               Processing...
             </div>
           ) : (
-            <>
-              <ShoppingCart className="w-4 h-4 mr-2" />
+            <div className="flex items-center gap-2">
+              <ShoppingCart className="w-4 h-4" />
               Buy Now
-            </>
+              <ArrowRight className="w-4 h-4" />
+            </div>
           )}
         </Button>
       </CardContent>
@@ -385,46 +456,88 @@ const RoamBuddyStore = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5">
+    <div className="min-h-screen bg-background">
       <UnifiedNavigation />
       
-      {/* Header */}
-      <section className="relative py-12 px-4 pt-24">
-        <div className="container mx-auto">
-          <div className={`inline-flex items-center px-4 py-2 rounded-full mb-6 ${
-            apiStatus === 'connected' ? 'bg-green-100 text-green-700' : 
-            apiStatus === 'checking' ? 'bg-yellow-100 text-yellow-700' : 
-            'bg-blue-100 text-blue-700'
-          }`}>
-            <Globe className="w-4 h-4 mr-2" />
-            <span className="text-sm font-medium">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background pt-24 pb-16">
+        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+        <div className="container mx-auto px-4 relative">
+          <div className="max-w-4xl mx-auto text-center space-y-6">
+            <Badge className={`${
+              apiStatus === 'connected' ? 'bg-green-500/20 text-green-700 border-green-500/30' : 
+              apiStatus === 'checking' ? 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30' : 
+              'bg-blue-500/20 text-blue-700 border-blue-500/30'
+            } backdrop-blur-sm px-4 py-2`}>
+              <Globe className="w-4 h-4 mr-2" />
               {apiStatus === 'connected' ? 'Live RoamBuddy Products ✓' : 
                apiStatus === 'checking' ? 'Loading RoamBuddy Store...' : 
                'RoamBuddy Demo Store'}
-            </span>
+            </Badge>
+            
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+              Travel Connected<br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">Stay Unlimited</span>
+            </h1>
+            
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Premium eSIM data plans and connectivity solutions for modern travelers. 
+              Instant activation, global coverage, unbeatable prices.
+            </p>
+            
+            <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto pt-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary">180+</div>
+                <div className="text-sm text-muted-foreground">Countries</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary">50K+</div>
+                <div className="text-sm text-muted-foreground">Happy Travelers</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary">4.9★</div>
+                <div className="text-sm text-muted-foreground">User Rating</div>
+              </div>
+            </div>
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-primary bg-clip-text text-transparent">
-            RoamBuddy Travel Store
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl">
-            Stay connected worldwide with premium eSIM data plans, pocket WiFi devices, 
-            and travel accessories. Powered by RoamBuddy's global network.
-          </p>
         </div>
       </section>
 
-      {/* Filters */}
-      <section className="py-8 px-4 bg-muted/30">
-        <div className="container mx-auto">
+      {/* Trust Badges */}
+      <section className="py-8 bg-muted/30 border-y">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Shield className="w-5 h-5 text-primary" />
+              <span>Secure Payments</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="w-5 h-5 text-primary" />
+              <span>Instant Activation</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              <span>24/7 Support</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Award className="w-5 h-5 text-primary" />
+              <span>Best Price Guarantee</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Filters Section */}
+      <section className="py-8 bg-background sticky top-0 z-10 border-b shadow-sm">
+        <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-4">
-            <div>
-              <Label htmlFor="search">Search Products</Label>
+            <div className="space-y-2">
+              <Label htmlFor="search" className="text-sm font-medium">Search Products</Label>
               <div className="relative">
                 <Search className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
                 <Input
                   id="search"
-                  placeholder="Search..."
+                  placeholder="Search by name or destination..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -432,8 +545,8 @@ const RoamBuddyStore = () => {
               </div>
             </div>
             
-            <div>
-              <Label htmlFor="category">Category</Label>
+            <div className="space-y-2">
+              <Label htmlFor="category" className="text-sm font-medium">Category</Label>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger>
                   <SelectValue />
@@ -441,23 +554,29 @@ const RoamBuddyStore = () => {
                 <SelectContent>
                   {categories.map(category => (
                     <SelectItem key={category.value} value={category.value}>
-                      {category.label}
+                      <span className="flex items-center gap-2">
+                        <span>{category.icon}</span>
+                        {category.label}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             
-            <div>
-              <Label htmlFor="country">Coverage</Label>
+            <div className="space-y-2">
+              <Label htmlFor="country" className="text-sm font-medium">Destination</Label>
               <Select value={selectedCountry} onValueChange={setSelectedCountry}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {countries.map(country => (
-                    <SelectItem key={country.value} value={country.value}>
-                      {country.label}
+                  {destinations.map(dest => (
+                    <SelectItem key={dest.value} value={dest.value}>
+                      <span className="flex items-center gap-2">
+                        <span>{dest.flag}</span>
+                        {dest.label}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -465,9 +584,13 @@ const RoamBuddyStore = () => {
             </div>
             
             <div className="flex items-end">
-              <Button variant="outline" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                onClick={clearFilters}
+              >
                 <Filter className="w-4 h-4 mr-2" />
-                Clear Filters
+                Clear All Filters
               </Button>
             </div>
           </div>
@@ -478,41 +601,62 @@ const RoamBuddyStore = () => {
       <section className="py-16 px-4">
         <div className="container mx-auto">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              <span className="ml-2 text-lg">Loading products...</span>
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
+              <p className="text-lg text-muted-foreground">Loading premium connectivity solutions...</p>
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-2xl font-bold mb-2">No Products Found</h3>
+              <p className="text-muted-foreground mb-6">Try adjusting your filters or search criteria</p>
+              <Button onClick={clearFilters}>Clear Filters</Button>
             </div>
           ) : (
             <>
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold">
-                  {filteredProducts.length} Products Available
-                </h2>
-                <div className="text-sm text-muted-foreground">
-                  Powered by RoamBuddy Global Network
+                <div>
+                  <h2 className="text-3xl font-bold">Available Products</h2>
+                  <p className="text-muted-foreground">Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}</p>
                 </div>
+                <Badge variant="outline" className="text-sm">
+                  <TrendingUp className="w-4 h-4 mr-1" />
+                  Best Sellers
+                </Badge>
               </div>
               
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
-              
-              {filteredProducts.length === 0 && (
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">🔍</div>
-                  <h3 className="text-xl font-semibold mb-2">No products found</h3>
-                  <p className="text-muted-foreground">
-                    Try adjusting your search or filter criteria
-                  </p>
-                </div>
-              )}
             </>
           )}
         </div>
       </section>
-      
+
+      {/* CTA Section */}
+      <section className="py-16 px-4 bg-gradient-to-r from-primary/10 to-primary/5">
+        <div className="container mx-auto text-center max-w-3xl">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Need Help Choosing?
+          </h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            Our travel connectivity experts are here to help you find the perfect plan for your journey.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-primary hover:bg-primary/90">
+              <Users className="w-5 h-5 mr-2" />
+              Talk to an Expert
+            </Button>
+            <Button size="lg" variant="outline">
+              <Shield className="w-5 h-5 mr-2" />
+              View All Plans
+            </Button>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
