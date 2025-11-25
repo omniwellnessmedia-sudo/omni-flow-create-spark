@@ -26,3 +26,6 @@ verify_jwt = false
 
 [functions.fetch-awin-products]
 verify_jwt = false
+
+[functions.viator-tours]
+verify_jwt = false
