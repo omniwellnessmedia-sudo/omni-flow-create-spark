@@ -96,7 +96,7 @@ const ToursRetreatsPreview = () => {
                   </div>
                 </div>}
 
-              <Link to={`/tours-retreats/${tour.categorySlug}/${tour.slug}`}>
+              <Link to="/tour-detail/winter-wine-country-wellness">
                 <Button className="w-full group-hover:bg-primary/90">
                   View Details
                   <ArrowRight className="ml-2 h-4 w-4" />
