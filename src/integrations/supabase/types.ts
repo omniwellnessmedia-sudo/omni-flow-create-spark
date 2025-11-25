@@ -2531,6 +2531,81 @@ export type Database = {
           },
         ]
       }
+      viator_tours: {
+        Row: {
+          availability: string | null
+          booking_url: string | null
+          cancellation_policy: string | null
+          category: string | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          duration: string | null
+          exclusions: Json | null
+          highlights: Json | null
+          id: string
+          image_url: string | null
+          inclusions: Json | null
+          is_active: boolean | null
+          last_synced_at: string | null
+          location: string | null
+          price_from: number | null
+          rating: number | null
+          review_count: number | null
+          title: string
+          updated_at: string | null
+          viator_product_code: string
+        }
+        Insert: {
+          availability?: string | null
+          booking_url?: string | null
+          cancellation_policy?: string | null
+          category?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          duration?: string | null
+          exclusions?: Json | null
+          highlights?: Json | null
+          id?: string
+          image_url?: string | null
+          inclusions?: Json | null
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          location?: string | null
+          price_from?: number | null
+          rating?: number | null
+          review_count?: number | null
+          title: string
+          updated_at?: string | null
+          viator_product_code: string
+        }
+        Update: {
+          availability?: string | null
+          booking_url?: string | null
+          cancellation_policy?: string | null
+          category?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          duration?: string | null
+          exclusions?: Json | null
+          highlights?: Json | null
+          id?: string
+          image_url?: string | null
+          inclusions?: Json | null
+          is_active?: boolean | null
+          last_synced_at?: string | null
+          location?: string | null
+          price_from?: number | null
+          rating?: number | null
+          review_count?: number | null
+          title?: string
+          updated_at?: string | null
+          viator_product_code?: string
+        }
+        Relationships: []
+      }
       want_responses: {
         Row: {
           created_at: string
