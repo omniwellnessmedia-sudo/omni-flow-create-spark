@@ -72,7 +72,61 @@ const corsHeaders = {
 const ROAMBUDDY_API_URL = Deno.env.get('ROAMBUDDY_API_URL') || 'https://api.worldroambuddy.com:3001/api/v1'
 const ROAMBUDDY_USERNAME = Deno.env.get('ROAMBUDDY_USERNAME')
 const ROAMBUDDY_PASSWORD = Deno.env.get('ROAMBUDDY_PASSWORD')
-const ROAMBUDDY_ACCESS_TOKEN = Deno.env.get('ROAMBUDDY_ACCESS_TOKEN')
+let ROAMBUDDY_ACCESS_TOKEN = Deno.env.get('ROAMBUDDY_ACCESS_TOKEN')
+
+// Token refresh function
+async function refreshAccessToken(): Promise<string> {
+  console.log('Refreshing RoamBuddy access token...');
+  const response = await fetch(`${ROAMBUDDY_API_URL}/wl-account/authenticate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      username: ROAMBUDDY_USERNAME,
+      password: ROAMBUDDY_PASSWORD
+    })
+  });
+
+  if (!response.ok) {
+    console.error('Failed to refresh token:', await response.text());
+    throw new Error('Failed to refresh access token');
+  }
+
+  const data = await response.json();
+  ROAMBUDDY_ACCESS_TOKEN = data.token;
+  console.log('Token refreshed successfully');
+  return data.token;
+}
+
+// Authenticated request helper
+async function makeAuthenticatedRequest(endpoint: string, options: RequestInit = {}) {
+  console.log(`Making authenticated request to: ${endpoint}`);
+  
+  // Try with current token
+  let response = await fetch(`${ROAMBUDDY_API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+      ...options.headers
+    }
+  });
+
+  // If 401, refresh token and retry
+  if (response.status === 401) {
+    console.log('Token expired, refreshing...');
+    const newToken = await refreshAccessToken();
+    response = await fetch(`${ROAMBUDDY_API_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        'Authorization': `Bearer ${newToken}`,
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    });
+  }
+
+  return response;
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -228,13 +282,7 @@ async function handleAuthenticate() {
 // Get all products with wellness enhancement
 async function handleGetAllProducts() {
   try {
-    const response = await fetch(`${ROAMBUDDY_API_URL}/products/all`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
-      }
-    })
+    const response = await makeAuthenticatedRequest('/products/all');
 
     if (response.ok) {
       const data = await response.json()
@@ -267,13 +315,7 @@ async function handleGetAllProducts() {
 // Get countries with wellness travel info
 async function handleGetCountries() {
   try {
-    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/countries`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
-      }
-    })
+    const response = await makeAuthenticatedRequest('/whitelabel-dashboard/countries');
 
     if (response.ok) {
       const data = await response.json()
@@ -704,11 +746,7 @@ async function handleFallbackServices(params: ServiceParams) {
 // Additional API endpoints with proper error handling
 async function handleGetProductById(productId: string) {
   try {
-    const response = await fetch(`${ROAMBUDDY_API_URL}/products/${productId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+    const response = await makeAuthenticatedRequest(`/products/${productId}`);
       }
     })
 
@@ -752,11 +790,7 @@ async function handleGetProductsPagination(params: PaginationParams) {
       searchStr: searchStr
     })
 
-    const response = await fetch(`${ROAMBUDDY_API_URL}/products/pagination?${queryParams}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+    const response = await makeAuthenticatedRequest(`/products/pagination?${queryParams}`);
       }
     })
 
@@ -806,11 +840,7 @@ async function handleTrackOrder(orderId: string) {
 
 async function handleGetOrderedEsims(params: Record<string, unknown>) {
   try {
-    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/esims`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+    const response = await makeAuthenticatedRequest('/whitelabel-dashboard/esims');
       }
     })
 
@@ -842,11 +872,7 @@ async function handleGetOrderedEsims(params: Record<string, unknown>) {
 
 async function handleGetEsimDetails(iccid: string) {
   try {
-    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/esims/details/${iccid}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+    const response = await makeAuthenticatedRequest(`/whitelabel-dashboard/esims/details/${iccid}`);
       }
     })
 
@@ -880,11 +906,10 @@ async function handleActivateEsim(params: EsimParams) {
   try {
     const { iccid } = params
     
-    const response = await fetch(`${ROAMBUDDY_API_URL}/products/esim/activate`, {
+    const response = await makeAuthenticatedRequest('/products/esim/activate', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+      body: JSON.stringify({ iccid })
+    });
       },
       body: JSON.stringify({ iccid })
     })
@@ -917,11 +942,7 @@ async function handleActivateEsim(params: EsimParams) {
 
 async function handleValidateEsim(iccid: string) {
   try {
-    const response = await fetch(`${ROAMBUDDY_API_URL}/products/esim/validate/${iccid}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+    const response = await makeAuthenticatedRequest(`/products/esim/validate/${iccid}`);
       }
     })
 
@@ -969,13 +990,7 @@ async function handleGetWalletTransactions(params: WalletTransactionParams) {
       end_date: end_date
     })
 
-    const response = await fetch(`${ROAMBUDDY_API_URL}/wallet/transactions/pagination?${queryParams}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
-      }
-    })
+    const response = await makeAuthenticatedRequest(`/wallet/transactions/pagination?${queryParams}`);
 
     const data = await response.json()
     if (response.ok) {
@@ -1005,11 +1020,7 @@ async function handleGetWalletTransactions(params: WalletTransactionParams) {
 
 async function handleGetPlanStatics() {
   try {
-    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/plan/statics`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+    const response = await makeAuthenticatedRequest('/whitelabel-dashboard/plan/statics');
       }
     })
 
