@@ -64,13 +64,13 @@ export default function ESIMStore() {
     try {
       setLoading(true);
       const { data, error } = await supabase.functions.invoke('roambuddy-api', {
-        body: { action: 'get_all_products' }
+        body: { action: 'getAllProducts' }
       });
 
       if (error) throw error;
 
-      if (data?.products) {
-        const formattedProducts = data.products.map((p: any) => ({
+      if (data?.success && data?.data) {
+        const formattedProducts = data.data.map((p: any) => ({
           id: p.id,
           name: p.name || p.productName,
           dataAmount: p.data || '1GB',
