@@ -129,10 +129,16 @@ serve(async (req) => {
 
     // Action: Search and sync tours from Viator
     if (action === 'search_tours') {
-      // Use a minimal search request
       const searchBody = {
-        searchTerm: location || 'Cape Town',
+        filtering: {
+          destination: 21781, // Cape Town destination ID
+          tags: [21200, 21207, 21221] // Spas, Wellness & Fitness, Yoga & Meditation
+        },
         currency: 'USD',
+        pagination: {
+          start: 1,
+          count: 20
+        }
       };
 
       console.log('Viator search request:', JSON.stringify(searchBody));
@@ -143,6 +149,7 @@ serve(async (req) => {
           method: 'POST',
           headers: {
             'Accept': 'application/json;version=2.0',
+            'Accept-Encoding': 'gzip',
             'Content-Type': 'application/json;charset=UTF-8',
             'Accept-Language': 'en-US',
             'exp-api-key': viatorApiKey,
