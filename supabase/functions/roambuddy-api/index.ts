@@ -747,8 +747,6 @@ async function handleFallbackServices(params: ServiceParams) {
 async function handleGetProductById(productId: string) {
   try {
     const response = await makeAuthenticatedRequest(`/products/${productId}`);
-      }
-    })
 
     const data = await response.json()
     if (response.ok) {
@@ -791,8 +789,6 @@ async function handleGetProductsPagination(params: PaginationParams) {
     })
 
     const response = await makeAuthenticatedRequest(`/products/pagination?${queryParams}`);
-      }
-    })
 
     const data = await response.json()
     if (response.ok) {
@@ -841,8 +837,6 @@ async function handleTrackOrder(orderId: string) {
 async function handleGetOrderedEsims(params: Record<string, unknown>) {
   try {
     const response = await makeAuthenticatedRequest('/whitelabel-dashboard/esims');
-      }
-    })
 
     const data = await response.json()
     if (response.ok) {
@@ -873,8 +867,6 @@ async function handleGetOrderedEsims(params: Record<string, unknown>) {
 async function handleGetEsimDetails(iccid: string) {
   try {
     const response = await makeAuthenticatedRequest(`/whitelabel-dashboard/esims/details/${iccid}`);
-      }
-    })
 
     const data = await response.json()
     if (response.ok) {
@@ -910,9 +902,6 @@ async function handleActivateEsim(params: EsimParams) {
       method: 'POST',
       body: JSON.stringify({ iccid })
     });
-      },
-      body: JSON.stringify({ iccid })
-    })
 
     const data = await response.json()
     if (response.ok) {
@@ -943,8 +932,6 @@ async function handleActivateEsim(params: EsimParams) {
 async function handleValidateEsim(iccid: string) {
   try {
     const response = await makeAuthenticatedRequest(`/products/esim/validate/${iccid}`);
-      }
-    })
 
     const data = await response.json()
     if (response.ok) {
@@ -1021,8 +1008,6 @@ async function handleGetWalletTransactions(params: WalletTransactionParams) {
 async function handleGetPlanStatics() {
   try {
     const response = await makeAuthenticatedRequest('/whitelabel-dashboard/plan/statics');
-      }
-    })
 
     const data = await response.json()
     if (response.ok) {
