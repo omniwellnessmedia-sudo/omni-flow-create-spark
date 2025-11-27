@@ -35,7 +35,7 @@ const ConsciousMediaInfrastructurePage = () => {
   });
   
   const [selectedSkillLevel, setSelectedSkillLevel] = useState<SkillLevel | 'all'>(() => {
-    const param = searchParams.get('skill');
+    const param = searchParams.get('skillLevel');
     return (param && ['beginner', 'intermediate', 'professional'].includes(param)) 
       ? param as SkillLevel 
       : 'all';
@@ -48,7 +48,7 @@ const ConsciousMediaInfrastructurePage = () => {
     const params = new URLSearchParams();
     if (selectedCategory !== 'all') params.set('category', selectedCategory);
     if (selectedCurator !== 'all') params.set('curator', selectedCurator);
-    if (selectedSkillLevel !== 'all') params.set('skill', selectedSkillLevel);
+    if (selectedSkillLevel !== 'all') params.set('skillLevel', selectedSkillLevel);
     setSearchParams(params, { replace: true });
   }, [selectedCategory, selectedCurator, selectedSkillLevel, setSearchParams]);
 
