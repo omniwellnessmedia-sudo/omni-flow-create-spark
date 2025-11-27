@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
@@ -16,11 +17,40 @@ import { products, curatorProfiles, UseCase, Curator, SkillLevel } from "@/data/
 
 const ConsciousMediaInfrastructurePage = () => {
   const { trackAffiliateClick, trackProductView } = useConsciousAffiliate();
+  const [searchParams, setSearchParams] = useSearchParams();
   
-  const [selectedCategory, setSelectedCategory] = useState<UseCase | 'all'>('all');
-  const [selectedCurator, setSelectedCurator] = useState<Curator | 'all'>('all');
-  const [selectedSkillLevel, setSelectedSkillLevel] = useState<SkillLevel | 'all'>('all');
+  // Initialize filters from URL parameters
+  const [selectedCategory, setSelectedCategory] = useState<UseCase | 'all'>(() => {
+    const param = searchParams.get('category');
+    return (param && ['vlogging', 'studio', 'travel', 'film-production'].includes(param)) 
+      ? param as UseCase 
+      : 'all';
+  });
+  
+  const [selectedCurator, setSelectedCurator] = useState<Curator | 'all'>(() => {
+    const param = searchParams.get('curator');
+    return (param && ['ferozza', 'chad', 'zenith'].includes(param)) 
+      ? param as Curator 
+      : 'all';
+  });
+  
+  const [selectedSkillLevel, setSelectedSkillLevel] = useState<SkillLevel | 'all'>(() => {
+    const param = searchParams.get('skill');
+    return (param && ['beginner', 'intermediate', 'professional'].includes(param)) 
+      ? param as SkillLevel 
+      : 'all';
+  });
+  
   const [displayCount, setDisplayCount] = useState(6);
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (selectedCategory !== 'all') params.set('category', selectedCategory);
+    if (selectedCurator !== 'all') params.set('curator', selectedCurator);
+    if (selectedSkillLevel !== 'all') params.set('skill', selectedSkillLevel);
+    setSearchParams(params, { replace: true });
+  }, [selectedCategory, selectedCurator, selectedSkillLevel, setSearchParams]);
 
   // Filter products based on selections
   const filteredProducts = useMemo(() => {
