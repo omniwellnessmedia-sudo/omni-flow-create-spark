@@ -125,9 +125,14 @@ const RoamBuddyStore = () => {
           }));
           setProducts(roamBuddyProducts);
           setFilteredProducts(roamBuddyProducts);
-        } else {
-          setApiStatus('fallback');
-          const demoProducts: RoamBuddyProduct[] = [
+          } else {
+            console.log('RoamBuddy API did not return services, using demo mode');
+            setApiStatus('fallback');
+            toast({
+              title: "Demo Mode Active",
+              description: "Showing sample products. API connection needs configuration.",
+            });
+            const demoProducts: RoamBuddyProduct[] = [
             {
               id: 'rb-sa-explorer',
               name: 'South Africa Explorer eSIM',
@@ -223,13 +228,49 @@ const RoamBuddyStore = () => {
           setFilteredProducts(demoProducts);
         }
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching RoamBuddy products:', error);
         setApiStatus('error');
         toast({
-          title: "Connection Error",
-          description: "Could not load products. Showing demo products.",
+          title: "⚠️ Connection Error",
+          description: "Could not connect to RoamBuddy API. Showing demo products for browsing.",
           variant: "destructive"
         });
+        
+        // Load demo products as fallback
+        const demoProducts: RoamBuddyProduct[] = [
+          {
+            id: 'rb-sa-explorer',
+            name: 'South Africa Explorer eSIM',
+            description: 'Perfect for wellness retreats and safari adventures across South Africa',
+            price: 49,
+            currency: 'USD',
+            data_amount: '10GB',
+            validity_days: 30,
+            coverage: ['South Africa'],
+            category: 'esim',
+            features: ['5G Speed', 'Instant Activation', 'No Roaming Charges', '24/7 Support'],
+            popular: true,
+            speed: '5G',
+            rating: 4.9
+          },
+          {
+            id: 'rb-global-unlimited',
+            name: 'Global Unlimited eSIM',
+            description: 'Worldwide coverage for digital nomads and frequent travelers',
+            price: 149,
+            currency: 'USD',
+            data_amount: '20GB',
+            validity_days: 60,
+            coverage: ['180+ Countries'],
+            category: 'esim',
+            features: ['Global Coverage', '5G Speed', 'Priority Support', 'No Speed Limits'],
+            popular: true,
+            speed: '5G',
+            rating: 5.0
+          },
+        ];
+        setProducts(demoProducts);
+        setFilteredProducts(demoProducts);
       } finally {
         setLoading(false);
       }
@@ -465,7 +506,8 @@ const RoamBuddyStore = () => {
         <div className="container mx-auto px-4 relative">
           <div className="max-w-4xl mx-auto text-center space-y-6">
             <Badge className={`${
-              apiStatus === 'connected' ? 'bg-green-500/20 text-green-700 border-green-500/30' : 
+              apiStatus === 'connected' ? 'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30' : 
+              apiStatus === 'fallback' ? 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30' :
               apiStatus === 'checking' ? 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30' : 
               'bg-blue-500/20 text-blue-700 border-blue-500/30'
             } backdrop-blur-sm px-4 py-2`}>

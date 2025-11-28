@@ -271,7 +271,8 @@ export default function ViatorWellnessExperiences() {
         return category === selectedCategory;
       });
 
-  const handleExperienceClick = async (experience: WellnessExperience) => {
+  const handleExperienceClick = (experience: WellnessExperience, e: React.MouseEvent) => {
+    e.preventDefault();
     // Link to partner shop for curated collections
     const affiliateUrl = generateAffiliateLink({
       productSlug: '', // Empty for partner shop home
@@ -281,7 +282,7 @@ export default function ViatorWellnessExperiences() {
       affiliateProgram: 'viator'
     });
 
-    await trackAffiliateClick(
+    trackAffiliateClick(
       experience.name,
       'viator_wellness_experiences',
       affiliateUrl,
@@ -289,11 +290,10 @@ export default function ViatorWellnessExperiences() {
       experience.category,
       'viator'
     );
-
-    window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
   };
 
-  const handleApiTourClick = async (tour: any) => {
+  const handleApiTourClick = (tour: any, e: React.MouseEvent) => {
+    e.preventDefault();
     // Link to partner shop for all tours
     const affiliateUrl = generateAffiliateLink({
       productSlug: '', // Empty for partner shop home
@@ -302,7 +302,7 @@ export default function ViatorWellnessExperiences() {
       affiliateProgram: 'viator'
     });
 
-    await trackAffiliateClick(
+    trackAffiliateClick(
       tour.title,
       'viator_wellness_api',
       affiliateUrl,
@@ -310,9 +310,13 @@ export default function ViatorWellnessExperiences() {
       tour.category,
       'viator'
     );
-
-    window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
   };
+
+  const partnerShopUrl = generateAffiliateLink({
+    productSlug: '',
+    channel: 'viator_partner_shop',
+    affiliateProgram: 'viator'
+  });
 
   return (
     <>
@@ -334,28 +338,15 @@ export default function ViatorWellnessExperiences() {
               Every experience is vetted for authenticity, safety, and genuine healing potential.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="text-lg px-8">
-                <Sparkles className="w-5 h-5 mr-2" />
-                Explore Experiences
+              <Button size="lg" className="text-lg px-8" asChild>
+                <a href={partnerShopUrl} target="_blank" rel="noopener noreferrer">
+                  <Globe className="w-5 h-5 mr-2" />
+                  View Our Partner Shop
+                </a>
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="text-lg px-8"
-                onClick={syncViatorTours}
-                disabled={syncing}
-              >
-                {syncing ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Syncing...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="w-5 h-5 mr-2" />
-                    Sync Latest Tours
-                  </>
-                )}
+              <Button size="lg" variant="outline" className="text-lg px-8">
+                <Sparkles className="w-5 h-5 mr-2" />
+                Explore Curated Picks
               </Button>
             </div>
           </div>
@@ -573,11 +564,18 @@ export default function ViatorWellnessExperiences() {
                             <p className="text-xl font-bold text-primary">ZAR {experience.priceFrom}</p>
                           </div>
                           <Button 
-                            onClick={() => handleExperienceClick(experience)}
+                            asChild
                             className="group/btn"
                           >
-                            Book on Viator
-                            <ExternalLink className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
+                            <a
+                              href={partnerShopUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => handleExperienceClick(experience, e)}
+                            >
+                              Book on Viator
+                              <ExternalLink className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
+                            </a>
                           </Button>
                         </div>
                       </div>
@@ -652,12 +650,19 @@ export default function ViatorWellnessExperiences() {
                                 </p>
                               </div>
                               <Button 
-                                onClick={() => handleApiTourClick(tour)}
+                                asChild
                                 size="lg"
                                 className="gap-2"
                               >
-                                Book on Viator
-                                <ExternalLink className="w-4 h-4" />
+                                <a
+                                  href={partnerShopUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => handleApiTourClick(tour, e)}
+                                >
+                                  Book on Viator
+                                  <ExternalLink className="w-4 h-4" />
+                                </a>
                               </Button>
                             </div>
                           </div>

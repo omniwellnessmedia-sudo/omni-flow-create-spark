@@ -129,19 +129,20 @@ serve(async (req) => {
 
     // Action: Search and sync tours from Viator
     if (action === 'search_tours') {
+      // Try broader search first (all Cape Town tours), then narrow if too many results
       const searchBody = {
         filtering: {
           destination: 21781, // Cape Town destination ID
-          tags: [21200, 21207, 21221] // Spas, Wellness & Fitness, Yoga & Meditation
+          // Removing wellness-specific tags to get broader results
         },
         currency: 'USD',
         pagination: {
           start: 1,
-          count: 20
+          count: 50 // Increased count for better selection
         }
       };
 
-      console.log('Viator search request:', JSON.stringify(searchBody));
+      console.log('Viator search request (broad):', JSON.stringify(searchBody));
 
       const searchResponse = await fetch(
         'https://api.viator.com/partner/products/search',
@@ -171,6 +172,42 @@ serve(async (req) => {
       const products = searchResults.products || [];
 
       console.log(`Found ${products.length} tours from Viator`);
+
+      // If no results with broad search, try a fallback search for all destinations
+      if (products.length === 0) {
+        console.log('No results from Cape Town, trying global search...');
+        const fallbackSearchBody = {
+          filtering: {
+            tags: [21200, 21207, 21221] // Wellness tags only
+          },
+          currency: 'USD',
+          pagination: {
+            start: 1,
+            count: 30
+          }
+        };
+
+        const fallbackResponse = await fetch(
+          'https://api.viator.com/partner/products/search',
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json;version=2.0',
+              'Accept-Encoding': 'gzip',
+              'Content-Type': 'application/json;charset=UTF-8',
+              'Accept-Language': 'en-US',
+              'exp-api-key': viatorApiKey,
+            },
+            body: JSON.stringify(fallbackSearchBody),
+          }
+        );
+
+        if (fallbackResponse.ok) {
+          const fallbackResults = await fallbackResponse.json();
+          products.push(...(fallbackResults.products || []));
+          console.log(`Found ${products.length} tours from fallback search`);
+        }
+      }
 
       // Cache all products in database
       const toursToCache = products.map((product: ViatorProduct) => ({
