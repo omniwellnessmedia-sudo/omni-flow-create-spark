@@ -8,11 +8,12 @@ import { Check, Users, BookOpen, Award, GraduationCap, Heart, Building, Calendar
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
 import { Link } from 'react-router-dom';
 
-// Import generated images
-import uwcHero from '@/assets/uwc-hero.jpg';
-import uwcFieldwork from '@/assets/uwc-fieldwork.jpg';
-import uwcCampus from '@/assets/uwc-campus.jpg';
-import drSharynSpicer from '@/assets/dr-sharyn-spicer.jpg';
+// Use existing Supabase storage images
+const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
+const uwcHero = `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`;
+const uwcFieldwork = `${STORAGE_BASE}/General%20Images/community%20outing%202.jpg`;
+const uwcCampus = `${STORAGE_BASE}/General%20Images/Wellness%20retreat%202.jpg`;
+const drSharynSpicer = `${STORAGE_BASE}/General%20Images/feroza%20begg%20-%20portrait.jpg`;
 
 export default function UWCHumanAnimalProgram() {
   const [selectedImage, setSelectedImage] = useState(0);
