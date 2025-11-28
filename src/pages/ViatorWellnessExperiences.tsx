@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,11 +6,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Sparkles, Heart, Globe, Shield, ExternalLink, 
-  Leaf, Users, Mountain, Waves, Lightbulb, MapPin
+  Leaf, Users, Mountain, Waves, Lightbulb, MapPin, RefreshCw, Loader2
 } from 'lucide-react';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface WellnessExperience {
   id: string;
@@ -30,7 +33,11 @@ interface WellnessExperience {
 
 export default function ViatorWellnessExperiences() {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [apiTours, setApiTours] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const { generateAffiliateLink, trackAffiliateClick } = useConsciousAffiliate();
+  const { toast } = useToast();
 
   const curators = [
     {
@@ -149,9 +156,82 @@ export default function ViatorWellnessExperiences() {
     },
   ];
 
+  // Fetch Viator tours from API
+  useEffect(() => {
+    fetchViatorTours();
+  }, []);
+
+  const fetchViatorTours = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.functions.invoke('viator-tours', {
+        body: { action: 'get_cached_tours', category: 'wellness' }
+      });
+
+      if (error) throw error;
+
+      if (data?.tours && data.tours.length > 0) {
+        setApiTours(data.tours);
+      } else {
+        // Database empty, trigger sync
+        console.log('No cached tours found, triggering sync...');
+        await syncViatorTours();
+      }
+    } catch (error) {
+      console.error('Error fetching Viator tours:', error);
+      toast({
+        title: "Unable to load tours",
+        description: "Using curated picks only. Please try syncing.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const syncViatorTours = async () => {
+    try {
+      setSyncing(true);
+      toast({
+        title: "Syncing wellness experiences...",
+        description: "This may take a moment.",
+      });
+
+      const { data, error } = await supabase.functions.invoke('viator-tours', {
+        body: { action: 'search_tours' }
+      });
+
+      if (error) throw error;
+
+      if (data?.cachedTours) {
+        setApiTours(data.cachedTours);
+        toast({
+          title: "Sync complete!",
+          description: `Loaded ${data.cachedTours.length} wellness experiences.`,
+        });
+      }
+    } catch (error) {
+      console.error('Error syncing Viator tours:', error);
+      toast({
+        title: "Sync failed",
+        description: "Could not sync with Viator. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const filteredExperiences = selectedCategory === 'all' 
     ? experiences 
     : experiences.filter(exp => exp.category === selectedCategory);
+
+  const filteredApiTours = selectedCategory === 'all' 
+    ? apiTours 
+    : apiTours.filter(tour => {
+        const category = tour.category?.toLowerCase();
+        return category === selectedCategory;
+      });
 
   const handleExperienceClick = async (experience: WellnessExperience) => {
     const affiliateUrl = generateAffiliateLink({
@@ -159,6 +239,7 @@ export default function ViatorWellnessExperiences() {
       channel: 'viator_wellness_experiences',
       wellnessCategory: experience.category,
       consciousnessIntent: experience.consciousnessIntent,
+      affiliateProgram: 'viator',
     });
 
     await trackAffiliateClick(
@@ -166,7 +247,28 @@ export default function ViatorWellnessExperiences() {
       'viator_wellness_experiences',
       affiliateUrl,
       experience.consciousnessIntent,
-      experience.category
+      experience.category,
+      'viator'
+    );
+
+    window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleApiTourClick = async (tour: any) => {
+    const affiliateUrl = generateAffiliateLink({
+      productSlug: tour.viator_product_code,
+      channel: 'viator_wellness_experiences',
+      wellnessCategory: tour.category,
+      affiliateProgram: 'viator',
+    });
+
+    await trackAffiliateClick(
+      tour.title,
+      'viator_wellness_experiences',
+      affiliateUrl,
+      undefined,
+      tour.category,
+      'viator'
     );
 
     window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
@@ -196,8 +298,24 @@ export default function ViatorWellnessExperiences() {
                 <Sparkles className="w-5 h-5 mr-2" />
                 Explore Experiences
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8">
-                Talk to Our Team
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="text-lg px-8"
+                onClick={syncViatorTours}
+                disabled={syncing}
+              >
+                {syncing ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Syncing...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-5 h-5 mr-2" />
+                    Sync Latest Tours
+                  </>
+                )}
               </Button>
             </div>
           </div>
@@ -341,8 +459,17 @@ export default function ViatorWellnessExperiences() {
               </TabsList>
 
               <TabsContent value={selectedCategory} className="mt-0">
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredExperiences.map((experience) => (
+                {/* Curator Picks Section */}
+                <div className="mb-16">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-2xl font-bold">Team Curated Picks</h3>
+                    <Badge variant="secondary">
+                      <Heart className="w-3 h-3 mr-1" />
+                      Hand-Selected
+                    </Badge>
+                  </div>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filteredExperiences.map((experience) => (
                     <Card 
                       key={experience.id} 
                       className="group overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col"
@@ -423,8 +550,90 @@ export default function ViatorWellnessExperiences() {
                         </div>
                       </div>
                     </Card>
-                  ))}
+                    ))}
+                  </div>
                 </div>
+
+                {/* API Tours Section */}
+                {loading ? (
+                  <div>
+                    <h3 className="text-2xl font-bold mb-6">More Wellness Experiences</h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <Card key={i} className="overflow-hidden">
+                          <Skeleton className="w-full aspect-[4/3]" />
+                          <div className="p-6 space-y-4">
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-6 w-3/4" />
+                            <Skeleton className="h-20 w-full" />
+                            <Skeleton className="h-10 w-full" />
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : filteredApiTours.length > 0 ? (
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-2xl font-bold">More Wellness Experiences</h3>
+                      <Badge variant="outline">
+                        <Globe className="w-3 h-3 mr-1" />
+                        {filteredApiTours.length} Available
+                      </Badge>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {filteredApiTours.map((tour) => (
+                        <Card 
+                          key={tour.id} 
+                          className="group overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col"
+                        >
+                          <div className="aspect-[4/3] overflow-hidden bg-muted">
+                            <img
+                              src={tour.image_url || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'}
+                              alt={tour.title}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                          </div>
+
+                          <div className="p-6 flex-1 flex flex-col gap-4">
+                            <div className="flex items-center justify-between text-xs text-muted-foreground">
+                              <span className="flex items-center gap-1">
+                                <MapPin className="w-3 h-3" />
+                                {tour.location || 'Cape Town'}
+                              </span>
+                              <span>{tour.duration || 'Varies'}</span>
+                            </div>
+
+                            <h3 className="text-xl font-bold leading-tight line-clamp-2">
+                              {tour.title}
+                            </h3>
+
+                            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 flex-1">
+                              {tour.description}
+                            </p>
+
+                            <div className="flex items-center justify-between pt-4 border-t">
+                              <div>
+                                <p className="text-xs text-muted-foreground">From</p>
+                                <p className="text-2xl font-bold text-primary">
+                                  {tour.currency} {tour.price_from || 'TBD'}
+                                </p>
+                              </div>
+                              <Button 
+                                onClick={() => handleApiTourClick(tour)}
+                                size="lg"
+                                className="gap-2"
+                              >
+                                Book on Viator
+                                <ExternalLink className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </TabsContent>
             </Tabs>
           </div>
