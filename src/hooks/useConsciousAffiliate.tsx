@@ -7,15 +7,33 @@ interface AffiliateParams {
   wellnessCategory?: string;
   retreatId?: string;
   consciousnessIntent?: string;
+  affiliateProgram?: 'camerastuff' | 'viator';
 }
 
 export const useConsciousAffiliate = () => {
   const { user } = useAuth();
 
   const generateAffiliateLink = (params: AffiliateParams): string => {
-    const { productSlug, channel, wellnessCategory, retreatId } = params;
-    const baseUrl = "https://camerastuff.co.za/products";
+    const { productSlug, channel, wellnessCategory, retreatId, affiliateProgram = 'camerastuff' } = params;
     
+    // Generate URLs based on affiliate program
+    if (affiliateProgram === 'viator') {
+      // Viator booking URL - productSlug should be the Viator product code
+      const viatorParams = new URLSearchParams({
+        pid: "P00092419", // Omni Wellness Viator partner ID
+        mcid: "42383",
+        medium: "link",
+      });
+      
+      if (wellnessCategory) {
+        viatorParams.set("wellness_category", wellnessCategory);
+      }
+      
+      return `https://www.viator.com/tours/${productSlug}?${viatorParams.toString()}`;
+    }
+    
+    // Default: CameraStuff
+    const baseUrl = "https://camerastuff.co.za/products";
     const urlParams = new URLSearchParams({
       a_aid: "omniwellnessmedia",
       channel: channel,
@@ -55,7 +73,8 @@ export const useConsciousAffiliate = () => {
     channel: string,
     destinationUrl: string,
     consciousnessIntent?: string,
-    wellnessCategory?: string
+    wellnessCategory?: string,
+    affiliateProgram: 'camerastuff' | 'viator' = 'camerastuff'
   ) => {
     try {
       // Generate unique click ID
@@ -66,7 +85,7 @@ export const useConsciousAffiliate = () => {
         .from("affiliate_clicks")
         .insert({
           click_id: clickId,
-          affiliate_program_id: "camerastuff",
+          affiliate_program_id: affiliateProgram,
           destination_url: destinationUrl,
           referrer_url: window.location.href,
           user_id: user?.id || null,
@@ -96,8 +115,10 @@ export const useConsciousAffiliate = () => {
       }
 
       // Store click ID in sessionStorage for conversion tracking
-      sessionStorage.setItem("last_camerastuff_click_id", clickId);
-      sessionStorage.setItem("last_camerastuff_channel", channel);
+      const storageKey = `last_${affiliateProgram}_click_id`;
+      const channelKey = `last_${affiliateProgram}_channel`;
+      sessionStorage.setItem(storageKey, clickId);
+      sessionStorage.setItem(channelKey, channel);
 
       return clickId;
     } catch (error) {
