@@ -18,18 +18,23 @@ export const useConsciousAffiliate = () => {
     
     // Generate URLs based on affiliate program
     if (affiliateProgram === 'viator') {
-      // Viator booking URL - productSlug should be the Viator product code
+      // Viator Partner Shop URL with proper affiliate parameters
       const viatorParams = new URLSearchParams({
-        pid: "P00092419", // Omni Wellness Viator partner ID
-        mcid: "42383",
         medium: "link",
+        medium_version: "shop",
+        campaign: "omni-wellness",
       });
       
       if (wellnessCategory) {
         viatorParams.set("wellness_category", wellnessCategory);
       }
       
-      return `https://www.viator.com/tours/${productSlug}?${viatorParams.toString()}`;
+      // If productSlug is provided, link to specific product, otherwise to partner shop home
+      const baseUrl = productSlug 
+        ? `https://www.viator.com/tours/${productSlug}`
+        : "https://www.viator.com/partner-shop/omniwellnessmedia/";
+      
+      return `${baseUrl}?${viatorParams.toString()}`;
     }
     
     // Default: CameraStuff
