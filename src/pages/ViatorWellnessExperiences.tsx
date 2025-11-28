@@ -19,12 +19,10 @@ interface WellnessExperience {
   id: string;
   name: string;
   location: string;
-  duration: string;
-  priceFrom: string;
+  priceFrom: number;
   image: string;
   category: string;
   curatorName: string;
-  curatorAvatar: string;
   whyWeChoseIt: string;
   whoShouldGo: string[];
   viatorProductCode: string;
@@ -65,94 +63,134 @@ export default function ViatorWellnessExperiences() {
 
   const experiences: WellnessExperience[] = [
     {
-      id: 'bali-spa-retreat',
-      name: 'Sacred Balinese Spa Ritual',
-      location: 'Ubud, Bali',
-      duration: '3 hours',
-      priceFrom: 'USD 120',
-      image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800',
-      category: 'spa',
-      curatorName: 'Zenith Yassin',
-      curatorAvatar: curators[0].avatar,
-      whyWeChoseIt: 'This isn\'t just a spa treatment—it\'s a deeply spiritual experience rooted in Balinese Hindu traditions. The therapists are trained healers who understand energy work and incorporate prayers and blessings.',
-      whoShouldGo: ['Stressed professionals', 'Spiritual seekers', 'Anyone needing deep relaxation'],
-      viatorProductCode: 'BALI-SPA-001',
-      consciousnessIntent: 'spiritual_healing',
+      id: "viator-snorkeling-1",
+      name: "Kelp Forest Snorkeling in Cape Town",
+      location: "Cape Town, South Africa",
+      priceFrom: 975,
+      image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80",
+      category: "adventure",
+      curatorName: "Zenith",
+      whyWeChoseIt: "Immersing in the kelp forests connects you with marine biodiversity in a meditative, weightless environment. The oceanic experience promotes mindfulness while supporting local eco-tourism.",
+      whoShouldGo: ["Ocean lovers", "Adventure seekers", "Eco-conscious travelers"],
+      viatorProductCode: "",
+      consciousnessIntent: "nature_connection"
     },
     {
-      id: 'kyoto-meditation',
-      name: 'Zen Meditation with Buddhist Monk',
-      location: 'Kyoto, Japan',
-      duration: '2 hours',
-      priceFrom: 'USD 85',
-      image: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=800',
-      category: 'meditation',
-      curatorName: 'Chad Cupido',
-      curatorAvatar: curators[1].avatar,
-      whyWeChoseIt: 'Learning meditation from an actual Buddhist monk in a centuries-old temple offers authentic wisdom you won\'t find in any app. The cultural and spiritual depth is unmatched.',
-      whoShouldGo: ['Meditation beginners', 'Experienced practitioners', 'Culture enthusiasts'],
-      viatorProductCode: 'KYOTO-ZEN-001',
-      consciousnessIntent: 'mindfulness_practice',
+      id: "viator-surf-1",
+      name: "Private Surf Lessons Muizenberg",
+      location: "Muizenberg, Cape Town",
+      priceFrom: 510,
+      image: "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&q=80",
+      category: "adventure",
+      curatorName: "Chad",
+      whyWeChoseIt: "Surfing cultivates presence, balance, and respect for nature's power. Muizenberg's gentle waves make it ideal for beginners seeking flow state experiences.",
+      whoShouldGo: ["Beginners welcome", "Active wellness seekers", "Ocean enthusiasts"],
+      viatorProductCode: "",
+      consciousnessIntent: "flow_state"
     },
     {
-      id: 'swiss-alps-yoga',
-      name: 'Mountain Yoga & Breathwork',
-      location: 'Interlaken, Switzerland',
-      duration: '4 hours',
-      priceFrom: 'USD 150',
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
-      category: 'nature',
-      curatorName: 'Abbi Berkovitz',
-      curatorAvatar: curators[2].avatar,
-      whyWeChoseIt: 'There\'s something profoundly healing about practicing yoga surrounded by the Swiss Alps. The pristine air, the mountain energy, and expert instruction create a transformative experience.',
-      whoShouldGo: ['Yoga practitioners', 'Nature lovers', 'Adventure seekers'],
-      viatorProductCode: 'SWISS-YOGA-001',
-      consciousnessIntent: 'nature_connection',
+      id: "viator-marine-1",
+      name: "Marine Big 5 Safari with Transport",
+      location: "Cape Town, South Africa",
+      priceFrom: 3160,
+      image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&q=80",
+      category: "ocean",
+      curatorName: "Abbi",
+      whyWeChoseIt: "Witnessing whales, sharks, seals, dolphins, and penguins in their natural habitat fosters deep respect for marine ecosystems and our interconnectedness with all life.",
+      whoShouldGo: ["Wildlife enthusiasts", "Conscious travelers", "Photography lovers"],
+      viatorProductCode: "",
+      consciousnessIntent: "ecological_awareness"
     },
     {
-      id: 'thai-wellness',
-      name: 'Traditional Thai Healing & Herbs',
-      location: 'Chiang Mai, Thailand',
-      duration: '5 hours',
-      priceFrom: 'USD 95',
-      image: 'https://images.unsplash.com/photo-1540206395-68808572332f?w=800',
-      category: 'cultural',
-      curatorName: 'Chad Cupido',
-      curatorAvatar: curators[1].avatar,
-      whyWeChoseIt: 'This experience goes beyond typical tourism—you learn from local healers who\'ve practiced for generations. The herbal medicine wisdom is practical and applicable to modern life.',
-      whoShouldGo: ['Herbalism enthusiasts', 'Holistic health seekers', 'Cultural learners'],
-      viatorProductCode: 'THAI-HEAL-001',
-      consciousnessIntent: 'traditional_medicine',
+      id: "viator-kayak-1",
+      name: "Atlantic Outlook Kayak Tour Cape Town",
+      location: "Cape Town, South Africa",
+      priceFrom: 600,
+      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&q=80",
+      category: "ocean",
+      curatorName: "Zenith",
+      whyWeChoseIt: "Kayaking provides low-impact cardio while connecting you with the ocean's rhythm. The Atlantic perspectives offer both adventure and meditative solitude.",
+      whoShouldGo: ["Active wellness seekers", "Ocean lovers", "Photography enthusiasts"],
+      viatorProductCode: "",
+      consciousnessIntent: "meditative_movement"
     },
     {
-      id: 'iceland-thermal',
-      name: 'Geothermal Spa & Sound Healing',
-      location: 'Reykjavik, Iceland',
-      duration: '3 hours',
-      priceFrom: 'USD 140',
-      image: 'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800',
-      category: 'spa',
-      curatorName: 'Zenith Yassin',
-      curatorAvatar: curators[0].avatar,
-      whyWeChoseIt: 'Iceland\'s geothermal waters have healing minerals that you can\'t replicate anywhere else. Combined with traditional sound healing, it\'s a unique multi-sensory wellness experience.',
-      whoShouldGo: ['Wellness travelers', 'Sound healing enthusiasts', 'Nature spa lovers'],
-      viatorProductCode: 'ICELAND-SPA-001',
-      consciousnessIntent: 'elemental_healing',
+      id: "viator-whale-1",
+      name: "Whale Watching Tour in Hermanus with Hotel Pickup",
+      location: "Hermanus, South Africa",
+      priceFrom: 3733,
+      image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&q=80",
+      category: "ocean",
+      curatorName: "Chad",
+      whyWeChoseIt: "Hermanus offers world-class whale watching during migration season. The experience of these gentle giants promotes humility and wonder—key wellness qualities.",
+      whoShouldGo: ["Nature enthusiasts", "Families", "Conscious travelers"],
+      viatorProductCode: "",
+      consciousnessIntent: "awe_and_wonder"
     },
     {
-      id: 'peru-ayahuasca',
-      name: 'Sacred Plant Ceremony (Legal & Guided)',
-      location: 'Cusco, Peru',
-      duration: '8 hours',
-      priceFrom: 'USD 250',
-      image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800',
-      category: 'cultural',
-      curatorName: 'Chad Cupido',
-      curatorAvatar: curators[1].avatar,
-      whyWeChoseIt: 'For those seeking deep spiritual work, this ceremony with licensed shamans offers authentic healing in its traditional context. Safety, legality, and cultural respect are paramount.',
-      whoShouldGo: ['Experienced spiritual seekers', 'Those ready for deep healing', 'Respectful participants only'],
-      viatorProductCode: 'PERU-PLANT-001',
-      consciousnessIntent: 'spiritual_transformation',
+      id: "viator-catamaran-1",
+      name: "1 Hour Coastal Catamaran Cruise from Cape Town",
+      location: "Cape Town, South Africa",
+      priceFrom: 370,
+      image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80",
+      category: "ocean",
+      curatorName: "Abbi",
+      whyWeChoseIt: "Sunset sailing combines the therapeutic effects of water, gentle movement, and the day's transition into evening—perfect for reflection and relaxation.",
+      whoShouldGo: ["Sunset lovers", "Couples", "Anyone seeking peaceful moments"],
+      viatorProductCode: "",
+      consciousnessIntent: "relaxation"
+    },
+    {
+      id: "viator-ebike-1",
+      name: "Cape Town eBike City Tour",
+      location: "Cape Town, South Africa",
+      priceFrom: 1500,
+      image: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&q=80",
+      category: "adventure",
+      curatorName: "Chad",
+      whyWeChoseIt: "eBike tours combine physical activity with cultural exploration, allowing you to cover more ground without exhaustion. Perfect for mindful urban wellness.",
+      whoShouldGo: ["Active explorers", "Culture enthusiasts", "Eco-conscious travelers"],
+      viatorProductCode: "",
+      consciousnessIntent: "urban_wellness"
+    },
+    {
+      id: "viator-skydive-1",
+      name: "Sky Diving Cape Town",
+      location: "Cape Town, South Africa",
+      priceFrom: 6523,
+      image: "https://images.unsplash.com/photo-1541689592655-f5f52825a3b8?auto=format&fit=crop&q=80",
+      category: "adventure",
+      curatorName: "Zenith",
+      whyWeChoseIt: "Skydiving offers a profound confrontation with fear and exhilaration. The adrenaline rush followed by the serene descent creates a unique mindfulness opportunity.",
+      whoShouldGo: ["Thrill seekers", "Personal growth enthusiasts", "Courage cultivators"],
+      viatorProductCode: "",
+      consciousnessIntent: "courage_and_presence"
+    },
+    {
+      id: "viator-rock-climb-1",
+      name: "Half-Day Rock-Climbing on Table Mountain",
+      location: "Table Mountain, Cape Town",
+      priceFrom: 3000,
+      image: "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&q=80",
+      category: "adventure",
+      curatorName: "Abbi",
+      whyWeChoseIt: "Rock climbing on Table Mountain combines physical challenge with breathtaking views. Each move requires full presence and trust—both in yourself and your guide.",
+      whoShouldGo: ["Adventure seekers", "Fitness enthusiasts", "Those conquering fears"],
+      viatorProductCode: "",
+      consciousnessIntent: "strength_and_trust"
+    },
+    {
+      id: "viator-paraglide-1",
+      name: "Paragliding in Cape Town (Icarus)",
+      location: "Cape Town, South Africa",
+      priceFrom: 1600,
+      image: "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&q=80",
+      category: "adventure",
+      curatorName: "Chad",
+      whyWeChoseIt: "Paragliding offers bird's-eye perspectives that shift your relationship with earth and sky. The experience of flight is both liberating and humbling.",
+      whoShouldGo: ["Adventure seekers", "Perspective shifters", "Those seeking freedom"],
+      viatorProductCode: "",
+      consciousnessIntent: "liberation_and_perspective"
     },
   ];
 
@@ -234,12 +272,13 @@ export default function ViatorWellnessExperiences() {
       });
 
   const handleExperienceClick = async (experience: WellnessExperience) => {
+    // Link to partner shop for curated collections
     const affiliateUrl = generateAffiliateLink({
-      productSlug: experience.viatorProductCode,
+      productSlug: '', // Empty for partner shop home
       channel: 'viator_wellness_experiences',
       wellnessCategory: experience.category,
       consciousnessIntent: experience.consciousnessIntent,
-      affiliateProgram: 'viator',
+      affiliateProgram: 'viator'
     });
 
     await trackAffiliateClick(
@@ -255,18 +294,19 @@ export default function ViatorWellnessExperiences() {
   };
 
   const handleApiTourClick = async (tour: any) => {
+    // Link to partner shop for all tours
     const affiliateUrl = generateAffiliateLink({
-      productSlug: tour.viator_product_code,
-      channel: 'viator_wellness_experiences',
-      wellnessCategory: tour.category,
-      affiliateProgram: 'viator',
+      productSlug: '', // Empty for partner shop home
+      channel: 'viator_wellness_api',
+      wellnessCategory: tour.category || 'wellness',
+      affiliateProgram: 'viator'
     });
 
     await trackAffiliateClick(
       tour.title,
-      'viator_wellness_experiences',
+      'viator_wellness_api',
       affiliateUrl,
-      undefined,
+      'wellness_exploration',
       tour.category,
       'viator'
     );
@@ -438,23 +478,15 @@ export default function ViatorWellnessExperiences() {
             <h2 className="text-4xl font-bold mb-12 text-center">Curated Wellness Experiences</h2>
 
             <Tabs defaultValue="all" className="w-full" onValueChange={setSelectedCategory}>
-              <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-5 mb-12">
+              <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-3 mb-12">
                 <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="spa">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Spa
+                <TabsTrigger value="ocean">
+                  <Waves className="w-4 h-4 mr-2" />
+                  Ocean
                 </TabsTrigger>
-                <TabsTrigger value="meditation">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Meditation
-                </TabsTrigger>
-                <TabsTrigger value="nature">
+                <TabsTrigger value="adventure">
                   <Mountain className="w-4 h-4 mr-2" />
-                  Nature
-                </TabsTrigger>
-                <TabsTrigger value="cultural">
-                  <Globe className="w-4 h-4 mr-2" />
-                  Cultural
+                  Adventure
                 </TabsTrigger>
               </TabsList>
 
@@ -485,13 +517,10 @@ export default function ViatorWellnessExperiences() {
 
                       {/* Card Content */}
                       <div className="p-6 flex-1 flex flex-col gap-4">
-                        {/* Location & Duration */}
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            {experience.location}
-                          </span>
-                          <span>{experience.duration}</span>
+                        {/* Location */}
+                        <div className="flex items-center text-xs text-muted-foreground">
+                          <MapPin className="w-3 h-3 mr-1" />
+                          {experience.location}
                         </div>
 
                         {/* Title */}
@@ -502,9 +531,12 @@ export default function ViatorWellnessExperiences() {
                         {/* Curator */}
                         <div className="flex items-center gap-2">
                           <Avatar className="w-6 h-6">
-                            <AvatarImage src={experience.curatorAvatar} alt={experience.curatorName} />
+                            <AvatarImage 
+                              src={curators.find(c => c.name.includes(experience.curatorName))?.avatar} 
+                              alt={experience.curatorName} 
+                            />
                             <AvatarFallback className="text-xs">
-                              {experience.curatorName.split(' ').map(n => n[0]).join('')}
+                              {experience.curatorName.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
                           <span className="text-xs text-muted-foreground">
@@ -538,7 +570,7 @@ export default function ViatorWellnessExperiences() {
                         <div className="mt-auto pt-4 border-t flex items-center justify-between">
                           <div>
                             <p className="text-xs text-muted-foreground">From</p>
-                            <p className="text-xl font-bold text-primary">{experience.priceFrom}</p>
+                            <p className="text-xl font-bold text-primary">ZAR {experience.priceFrom}</p>
                           </div>
                           <Button 
                             onClick={() => handleExperienceClick(experience)}
