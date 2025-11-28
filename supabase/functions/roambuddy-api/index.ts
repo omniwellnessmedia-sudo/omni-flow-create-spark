@@ -129,13 +129,23 @@ async function makeAuthenticatedRequest(endpoint: string, options: RequestInit =
 }
 
 serve(async (req) => {
+  // Startup logging
+  console.log('🚀 RoamBuddy API function started');
+  console.log('📍 API URL:', ROAMBUDDY_API_URL);
+  console.log('✅ Credentials configured:', {
+    hasApiUrl: !!ROAMBUDDY_API_URL,
+    hasUsername: !!ROAMBUDDY_USERNAME,
+    hasPassword: !!ROAMBUDDY_PASSWORD,
+    hasToken: !!ROAMBUDDY_ACCESS_TOKEN
+  });
+
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
     const { action, data = {} } = await req.json()
-    console.log('Travel Well Connected API action:', action, 'data:', data)
+    console.log('🎯 RoamBuddy API action:', action, 'data:', data)
 
     // Initialize Supabase client
     const supabase = createClient(
@@ -146,6 +156,17 @@ serve(async (req) => {
     switch (action) {
       case 'test':
         return handleTest()
+      
+      case 'healthCheck':
+        return new Response(
+          JSON.stringify({ 
+            success: true, 
+            status: 'healthy',
+            message: 'RoamBuddy API function is running',
+            timestamp: new Date().toISOString()
+          }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
       
       case 'authenticate':
         return await handleAuthenticate()
@@ -203,12 +224,18 @@ serve(async (req) => {
     }
 
   } catch (error) {
-    console.error('Travel Well Connected API Error:', error)
+    console.error('❌ RoamBuddy API Error:', error)
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    })
     return new Response(
       JSON.stringify({ 
         success: false, 
         error: 'Internal server error', 
-        details: error.message 
+        details: error.message,
+        timestamp: new Date().toISOString()
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 

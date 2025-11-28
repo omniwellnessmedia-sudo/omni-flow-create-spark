@@ -60,9 +60,48 @@ const RoamBuddyStore = () => {
   const [selectedCountry, setSelectedCountry] = useState("all");
   const [apiStatus, setApiStatus] = useState<string>('checking');
   const [purchaseLoading, setPurchaseLoading] = useState<string | null>(null);
+  const [testingConnection, setTestingConnection] = useState(false);
   
   const { toast } = useToast();
   const { addItem } = useCart();
+
+  const testApiConnection = async () => {
+    try {
+      setTestingConnection(true);
+      console.log('Testing RoamBuddy API connection...');
+      
+      const result = await supabase.functions.invoke('roambuddy-api', {
+        body: { action: 'test' }
+      });
+      
+      console.log('API Test Result:', result);
+      
+      if (result.data?.success) {
+        setApiStatus('connected');
+        toast({
+          title: "✅ API Connected",
+          description: "RoamBuddy API is configured and ready!",
+        });
+      } else {
+        setApiStatus('error');
+        toast({
+          title: "⚠️ API Configuration Issue",
+          description: result.data?.message || "API credentials need attention",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error('API test error:', error);
+      setApiStatus('error');
+      toast({
+        title: "❌ Connection Failed",
+        description: "Could not reach RoamBuddy API",
+        variant: "destructive"
+      });
+    } finally {
+      setTestingConnection(false);
+    }
+  };
 
   const categories = [
     { value: "all", label: "All Products", icon: "🌐" },
@@ -505,17 +544,39 @@ const RoamBuddyStore = () => {
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
         <div className="container mx-auto px-4 relative">
           <div className="max-w-4xl mx-auto text-center space-y-6">
-            <Badge className={`${
-              apiStatus === 'connected' ? 'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30' : 
-              apiStatus === 'fallback' ? 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30' :
-              apiStatus === 'checking' ? 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30' : 
-              'bg-blue-500/20 text-blue-700 border-blue-500/30'
-            } backdrop-blur-sm px-4 py-2`}>
-              <Globe className="w-4 h-4 mr-2" />
-              {apiStatus === 'connected' ? 'Live RoamBuddy Products ✓' : 
-               apiStatus === 'checking' ? 'Loading RoamBuddy Store...' : 
-               'RoamBuddy Demo Store'}
-            </Badge>
+            <div className="flex flex-col items-center gap-3">
+              <Badge className={`${
+                apiStatus === 'connected' ? 'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30' : 
+                apiStatus === 'fallback' ? 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30' :
+                apiStatus === 'checking' ? 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30' : 
+                'bg-blue-500/20 text-blue-700 border-blue-500/30'
+              } backdrop-blur-sm px-4 py-2`}>
+                <Globe className="w-4 h-4 mr-2" />
+                {apiStatus === 'connected' ? 'Live RoamBuddy Products ✓' : 
+                 apiStatus === 'checking' ? 'Loading RoamBuddy Store...' : 
+                 'RoamBuddy Demo Store'}
+              </Badge>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={testApiConnection}
+                disabled={testingConnection}
+                className="gap-2"
+              >
+                {testingConnection ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Testing Connection...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    Test API Connection
+                  </>
+                )}
+              </Button>
+            </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
               Travel Connected<br />
