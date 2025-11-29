@@ -29,8 +29,24 @@ const RoamBuddyStore = () => {
 
   const loadProducts = async () => {
     const result = await getAllProducts();
-    if (result?.products) {
-      setApiProducts(result.products);
+    console.log('RoamBuddy API result:', result);
+    
+    if (result && result.data && Array.isArray(result.data)) {
+      // Map API products to our format
+      const mappedProducts = result.data.map((product: any) => ({
+        id: product.id || `product-${Date.now()}-${Math.random()}`,
+        name: product.name || product.title || 'eSIM Plan',
+        price: product.price || product.amount || 0,
+        description: product.description || 'Stay connected worldwide',
+        dataAmount: product.data_amount || product.dataAmount || '1GB',
+        validity: product.validity_days ? `${product.validity_days} days` : (product.validity || '30 days'),
+        coverage: product.coverage || product.countries || ['Global'],
+        destination: product.destination || (product.coverage && product.coverage[0]) || 'Global',
+        speed: product.speed || '4G/5G',
+        wellnessFeatures: product.wellness_features || [],
+        peaceOfMindScore: product.peace_of_mind_score || calculatePeaceOfMindScore(product)
+      }));
+      setApiProducts(mappedProducts);
     }
   };
 

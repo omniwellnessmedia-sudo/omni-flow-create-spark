@@ -309,18 +309,43 @@ async function handleAuthenticate() {
 // Get all products with wellness enhancement
 async function handleGetAllProducts() {
   try {
-    const response = await makeAuthenticatedRequest('/products/all');
+    // Always authenticate first to get fresh token
+    console.log('Authenticating before fetching products...');
+    const authResponse = await fetch(`${ROAMBUDDY_API_URL}/wl-account/authenticate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: ROAMBUDDY_USERNAME,
+        password: ROAMBUDDY_PASSWORD
+      })
+    });
+
+    if (!authResponse.ok) {
+      throw new Error('Authentication failed');
+    }
+
+    const authData = await authResponse.json();
+    const freshToken = authData.data?.auth_token || authData.data?.access_token;
+    console.log('Fresh token obtained for products request');
+
+    // Use fresh token for products request
+    const response = await fetch(`${ROAMBUDDY_API_URL}/products/all`, {
+      headers: {
+        'Authorization': `Bearer ${freshToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      console.log('Get all products response:', data)
+      const data = await response.json();
+      console.log('Get all products response:', data);
       
       // Enhance products with wellness features
       const enhancedProducts = Array.isArray(data) ? data.map(product => ({
         ...product,
         wellness_features: getWellnessFeatures(product),
         peace_of_mind_score: calculatePeaceOfMindScore(product)
-      })) : []
+      })) : [];
 
       return new Response(
         JSON.stringify({ 
@@ -329,24 +354,49 @@ async function handleGetAllProducts() {
           message: 'Products fetched successfully with wellness enhancements'
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     } else {
-      throw new Error(`Failed to fetch products: ${response.status}`)
+      throw new Error(`Failed to fetch products: ${response.status}`);
     }
   } catch (error) {
-    console.error('Get products error:', error)
-    return await handleFallbackProducts()
+    console.error('Get products error:', error);
+    return await handleFallbackProducts();
   }
 }
 
 // Get countries with wellness travel info
 async function handleGetCountries() {
   try {
-    const response = await makeAuthenticatedRequest('/whitelabel-dashboard/countries');
+    // Always authenticate first to get fresh token
+    console.log('Authenticating before fetching countries...');
+    const authResponse = await fetch(`${ROAMBUDDY_API_URL}/wl-account/authenticate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: ROAMBUDDY_USERNAME,
+        password: ROAMBUDDY_PASSWORD
+      })
+    });
+
+    if (!authResponse.ok) {
+      throw new Error('Authentication failed');
+    }
+
+    const authData = await authResponse.json();
+    const freshToken = authData.data?.auth_token || authData.data?.access_token;
+    console.log('Fresh token obtained for countries request');
+
+    // Use fresh token for countries request
+    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/countries`, {
+      headers: {
+        'Authorization': `Bearer ${freshToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      console.log('Get countries response:', data)
+      const data = await response.json();
+      console.log('Get countries response:', data);
 
       // Enhance countries with wellness travel information
       const enhancedCountries = Array.isArray(data) ? data.map(country => ({
@@ -355,7 +405,7 @@ async function handleGetCountries() {
         popular_wellness_activities: getWellnessActivities(country),
         mental_health_resources: getMentalHealthResources(country),
         emergency_contacts: getEmergencyContacts(country)
-      })) : []
+      })) : [];
 
       return new Response(
         JSON.stringify({ 
@@ -364,13 +414,13 @@ async function handleGetCountries() {
           message: 'Countries fetched with wellness travel information'
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     } else {
-      throw new Error(`Failed to fetch countries: ${response.status}`)
+      throw new Error(`Failed to fetch countries: ${response.status}`);
     }
   } catch (error) {
-    console.error('Get countries error:', error)
-    return await handleFallbackCountries()
+    console.error('Get countries error:', error);
+    return await handleFallbackCountries();
   }
 }
 
