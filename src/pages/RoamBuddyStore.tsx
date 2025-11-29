@@ -9,13 +9,18 @@ import { RoamBuddyTestimonials } from '@/components/roambuddy/RoamBuddyTestimoni
 import { SIMActivation } from '@/components/roambuddy/SIMActivation';
 import { DeviceCompatibility } from '@/components/roambuddy/DeviceCompatibility';
 import { RoamBuddyPartnershipSection } from '@/components/roambuddy/RoamBuddyPartnershipSection';
+import { RoamBuddyCheckoutModal } from '@/components/roambuddy/RoamBuddyCheckoutModal';
 import { curatedESIMPicks, curatorProfiles } from '@/data/roamBuddyProducts';
 import { useRoamBuddyAPI, RoamBuddyProduct } from '@/hooks/useRoamBuddyAPI';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
-import { Award, Shield, Loader2 } from 'lucide-react';
+import { Award, Shield, Loader2, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const RoamBuddyStore = () => {
   const [apiProducts, setApiProducts] = useState<RoamBuddyProduct[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<RoamBuddyProduct | null>(null);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const { getAllProducts, loading, error } = useRoamBuddyAPI();
   const { trackProductView, trackAffiliateClick } = useConsciousAffiliate();
   const searchRef = useRef<HTMLDivElement>(null);
@@ -50,20 +55,34 @@ const RoamBuddyStore = () => {
     }
   };
 
-  const handleProductSelect = async (product: any) => {
-    const productName = typeof product === 'string' ? product : product.name;
-    const destinationUrl = 'https://www.roambuddy.world/searchPlan';
-    
+  const handleProductSelect = async (product: RoamBuddyProduct) => {
     await trackAffiliateClick(
-      productName,
+      product.name,
       'roambuddy-store',
-      destinationUrl,
+      '/roambuddy-store',
       'Stay connected during wellness travel',
       'connectivity',
       'roambuddy'
     );
 
-    window.open(destinationUrl, '_blank', 'noopener,noreferrer');
+    setSelectedProduct(product);
+    setShowCheckoutModal(true);
+  };
+
+  const handleCountrySelect = (country: string) => {
+    console.log('Selected country:', country);
+    setSelectedCountry(country);
+    // Scroll to products section
+    setTimeout(() => {
+      const productsSection = document.querySelector('[data-products-section]');
+      if (productsSection) {
+        productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
+  const clearCountryFilter = () => {
+    setSelectedCountry(null);
   };
 
   const calculatePeaceOfMindScore = (product: any): number => {
@@ -108,9 +127,7 @@ const RoamBuddyStore = () => {
       {/* Country Search Section */}
       <div ref={searchRef}>
         <CountrySearch 
-          onCountrySelect={(country) => {
-            console.log('Selected country:', country);
-          }}
+          onCountrySelect={handleCountrySelect}
           onCheckCompatibility={scrollToCompatibility}
         />
       </div>
@@ -179,7 +196,16 @@ const RoamBuddyStore = () => {
                   peaceOfMindScore={pick.peaceOfMindScore}
                   isFeatured={true}
                   curatorNote={`${curator.name}: "${pick.whyWeChoseIt}"`}
-                  onSelect={() => handleProductSelect({ id: pick.id, name: pick.name })}
+                  onSelect={() => handleProductSelect({
+                    id: pick.id,
+                    name: pick.name,
+                    price: 2500,
+                    description: pick.wellnessAngle,
+                    dataAmount: pick.dataAmount,
+                    validity: pick.validity,
+                    coverage: [pick.destination],
+                    destination: pick.destination,
+                  })}
                 />
               );
             })}
@@ -188,15 +214,29 @@ const RoamBuddyStore = () => {
       </section>
 
       {/* All Connectivity Options */}
-      <section className="py-16 bg-background">
+      <section className="py-16 bg-background" data-products-section>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              All Connectivity Options
+              {selectedCountry ? `eSIM Plans for ${selectedCountry}` : 'All Connectivity Options'}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Explore our complete range of global eSIM plans powered by RoamBuddy
+              {selectedCountry 
+                ? `Stay connected during your journey to ${selectedCountry}`
+                : 'Explore our complete range of global eSIM plans powered by RoamBuddy'}
             </p>
+            {selectedCountry && (
+              <div className="mt-4 flex justify-center">
+                <Badge 
+                  variant="secondary" 
+                  className="px-4 py-2 text-sm cursor-pointer hover:bg-secondary/80"
+                  onClick={clearCountryFilter}
+                >
+                  {selectedCountry}
+                  <X className="ml-2 h-3 w-3" />
+                </Badge>
+              </div>
+            )}
           </div>
 
           {loading ? (
@@ -210,31 +250,50 @@ const RoamBuddyStore = () => {
                 Unable to load real-time products. Please try again later.
               </p>
             </div>
-          ) : apiProducts.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-              {apiProducts.slice(0, 12).map((product) => (
-                <RoamBuddyProductCard
-                  key={product.id}
-                  planName={product.name}
-                  destination={product.destination}
-                  dataAmount={product.dataAmount}
-                  validity={product.validity}
-                  coverage={product.coverage}
-                  price={product.price}
-                  speed="4G/5G"
-                  wellnessFeatures={getWellnessFeatures(product)}
-                  peaceOfMindScore={calculatePeaceOfMindScore(product)}
-                  onSelect={() => handleProductSelect(product)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground">
-                Check back soon for available eSIM plans in your destination.
-              </p>
-            </div>
-          )}
+          ) : (() => {
+            const filteredProducts = selectedCountry 
+              ? apiProducts.filter(p => 
+                  p.destination?.toLowerCase().includes(selectedCountry.toLowerCase()) ||
+                  p.coverage?.some(c => c.toLowerCase().includes(selectedCountry.toLowerCase()))
+                )
+              : apiProducts;
+
+            return filteredProducts.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                {filteredProducts.slice(0, 12).map((product) => (
+                  <RoamBuddyProductCard
+                    key={product.id}
+                    planName={product.name}
+                    destination={product.destination}
+                    dataAmount={product.dataAmount}
+                    validity={product.validity}
+                    coverage={product.coverage}
+                    price={product.price}
+                    speed="4G/5G"
+                    wellnessFeatures={getWellnessFeatures(product)}
+                    peaceOfMindScore={calculatePeaceOfMindScore(product)}
+                    onSelect={() => handleProductSelect(product)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground mb-4">
+                  {selectedCountry 
+                    ? `No eSIM plans available for ${selectedCountry} yet.`
+                    : 'Check back soon for available eSIM plans in your destination.'}
+                </p>
+                {selectedCountry && (
+                  <button 
+                    onClick={clearCountryFilter}
+                    className="text-primary hover:underline"
+                  >
+                    View all destinations
+                  </button>
+                )}
+              </div>
+            );
+          })()}
         </div>
       </section>
 
@@ -291,6 +350,16 @@ const RoamBuddyStore = () => {
           </div>
         </div>
       </section>
+
+      {/* Checkout Modal */}
+      <RoamBuddyCheckoutModal
+        product={selectedProduct}
+        isOpen={showCheckoutModal}
+        onClose={() => {
+          setShowCheckoutModal(false);
+          setSelectedProduct(null);
+        }}
+      />
 
       <Footer />
     </div>
