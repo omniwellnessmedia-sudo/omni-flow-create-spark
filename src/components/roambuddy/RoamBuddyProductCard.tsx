@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PeaceOfMindScore } from "./PeaceOfMindScore";
 import { useCurrencyConverter } from "@/hooks/useCurrencyConverter";
+import { Globe } from "lucide-react";
 
 interface RoamBuddyProductCardProps {
   planName: string;
@@ -36,7 +37,6 @@ export const RoamBuddyProductCard = ({
   onSelect
 }: RoamBuddyProductCardProps) => {
   const { formatZAR, formatUSD, convertZARToUSD } = useCurrencyConverter();
-  const { Globe } = require('lucide-react');
 
   return (
     <Card className="hover:shadow-lg transition-all duration-300 group overflow-hidden">
