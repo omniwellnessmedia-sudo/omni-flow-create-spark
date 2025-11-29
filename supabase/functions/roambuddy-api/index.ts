@@ -101,11 +101,11 @@ async function refreshAccessToken(): Promise<string> {
 async function makeAuthenticatedRequest(endpoint: string, options: RequestInit = {}) {
   console.log(`Making authenticated request to: ${endpoint}`);
   
-  // Try with current token
+  // Try with current token (NO Bearer prefix per RoamBuddy API docs)
   let response = await fetch(`${ROAMBUDDY_API_URL}${endpoint}`, {
     ...options,
     headers: {
-      'Authorization': `Bearer ${ROAMBUDDY_ACCESS_TOKEN}`,
+      'Authorization': ROAMBUDDY_ACCESS_TOKEN,
       'Content-Type': 'application/json',
       ...options.headers
     }
@@ -118,7 +118,7 @@ async function makeAuthenticatedRequest(endpoint: string, options: RequestInit =
     response = await fetch(`${ROAMBUDDY_API_URL}${endpoint}`, {
       ...options,
       headers: {
-        'Authorization': `Bearer ${newToken}`,
+        'Authorization': newToken,
         'Content-Type': 'application/json',
         ...options.headers
       }
@@ -309,8 +309,8 @@ async function handleAuthenticate() {
 // Get all products with wellness enhancement
 async function handleGetAllProducts() {
   try {
-    // Always authenticate first to get fresh token
-    console.log('Authenticating before fetching products...');
+    // Step 1: Authenticate to get fresh token
+    console.log('Authenticating with RoamBuddy API...');
     const authResponse = await fetch(`${ROAMBUDDY_API_URL}/wl-account/authenticate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -321,79 +321,63 @@ async function handleGetAllProducts() {
     });
 
     if (!authResponse.ok) {
-      throw new Error('Authentication failed');
+      const errorText = await authResponse.text();
+      console.error('Authentication failed:', errorText);
+      throw new Error(`Authentication failed: ${authResponse.status}`);
     }
 
     const authData = await authResponse.json();
     console.log('Auth response structure:', JSON.stringify(authData, null, 2));
     
-    // Try multiple possible token locations
-    const freshToken = authData.token || authData.data?.token || authData.data?.auth_token || authData.data?.access_token || authData.access_token;
+    // Extract token from response (auth_token is the fresh token per API docs)
+    const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || authData.access_token || authData.token || authData.data?.token;
     
-    if (!freshToken) {
+    if (!token) {
       console.error('No token found in auth response:', authData);
       throw new Error('Authentication succeeded but no token received');
     }
     
-    console.log('Fresh token obtained for products request');
+    console.log('Token obtained, fetching products from /products/all...');
 
-    // Try multiple possible product endpoints
-    const productEndpoints = [
-      '/wl-account/products',
-      '/products/all',
-      '/esim/packages',
-      '/products'
-    ];
-    
-    let response = null;
-    let lastError = null;
-    
-    for (const endpoint of productEndpoints) {
-      try {
-        console.log(`Trying products endpoint: ${endpoint}`);
-        response = await fetch(`${ROAMBUDDY_API_URL}${endpoint}`, {
-          headers: {
-            'Authorization': `Bearer ${freshToken}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (response.ok) {
-          console.log(`Successfully fetched products from: ${endpoint}`);
-          break;
-        } else {
-          const errorText = await response.text();
-          console.log(`Endpoint ${endpoint} failed with status ${response.status}: ${errorText}`);
-          lastError = errorText;
-        }
-      } catch (err) {
-        console.log(`Endpoint ${endpoint} threw error:`, err.message);
-        lastError = err.message;
+    // Step 2: Fetch products using correct endpoint (NO Bearer prefix!)
+    const response = await fetch(`${ROAMBUDDY_API_URL}/products/all`, {
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
       }
+    });
+    
+    const responseText = await response.text();
+    console.log('Products API response status:', response.status);
+    console.log('Products API response:', responseText.substring(0, 500));
+
+    if (!response.ok) {
+      console.error('Products API failed:', response.status, responseText);
+      throw new Error(`Products API failed: ${response.status} - ${responseText}`);
     }
 
-    if (response && response.ok) {
-      const data = await response.json();
-      console.log('Get all products response:', data);
-      
-      // Enhance products with wellness features
-      const enhancedProducts = Array.isArray(data) ? data.map(product => ({
-        ...product,
-        wellness_features: getWellnessFeatures(product),
-        peace_of_mind_score: calculatePeaceOfMindScore(product)
-      })) : [];
+    const data = JSON.parse(responseText);
+    
+    // Handle different response structures
+    const products = Array.isArray(data) ? data : (data.data || data.products || []);
+    console.log(`Successfully fetched ${products.length} products`);
+    
+    // Enhance products with wellness features
+    const enhancedProducts = products.map(product => ({
+      ...product,
+      wellness_features: getWellnessFeatures(product),
+      peace_of_mind_score: calculatePeaceOfMindScore(product)
+    }));
 
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          data: enhancedProducts,
-          message: 'Products fetched successfully with wellness enhancements'
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    } else {
-      throw new Error(`Failed to fetch products: ${response.status}`);
-    }
+    return new Response(
+      JSON.stringify({ 
+        success: true, 
+        data: enhancedProducts,
+        count: enhancedProducts.length,
+        message: 'Products fetched successfully with wellness enhancements'
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   } catch (error) {
     console.error('Get products error:', error);
     return await handleFallbackProducts();
@@ -403,8 +387,8 @@ async function handleGetAllProducts() {
 // Get countries with wellness travel info
 async function handleGetCountries() {
   try {
-    // Always authenticate first to get fresh token
-    console.log('Authenticating before fetching countries...');
+    // Step 1: Authenticate to get fresh token
+    console.log('Authenticating with RoamBuddy API for countries...');
     const authResponse = await fetch(`${ROAMBUDDY_API_URL}/wl-account/authenticate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -415,81 +399,65 @@ async function handleGetCountries() {
     });
 
     if (!authResponse.ok) {
-      throw new Error('Authentication failed');
+      const errorText = await authResponse.text();
+      console.error('Authentication failed:', errorText);
+      throw new Error(`Authentication failed: ${authResponse.status}`);
     }
 
     const authData = await authResponse.json();
     console.log('Auth response for countries:', JSON.stringify(authData, null, 2));
     
-    // Try multiple possible token locations
-    const freshToken = authData.token || authData.data?.token || authData.data?.auth_token || authData.data?.access_token || authData.access_token;
+    // Extract token from response
+    const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || authData.access_token || authData.token || authData.data?.token;
     
-    if (!freshToken) {
+    if (!token) {
       console.error('No token found in auth response:', authData);
       throw new Error('Authentication succeeded but no token received');
     }
     
-    console.log('Fresh token obtained for countries request');
+    console.log('Token obtained, fetching countries from /whitelabel-dashboard/countries...');
 
-    // Try multiple possible country endpoints
-    const countryEndpoints = [
-      '/wl-account/countries',
-      '/whitelabel-dashboard/countries',
-      '/esim/countries',
-      '/countries'
-    ];
-    
-    let response = null;
-    let lastError = null;
-    
-    for (const endpoint of countryEndpoints) {
-      try {
-        console.log(`Trying countries endpoint: ${endpoint}`);
-        response = await fetch(`${ROAMBUDDY_API_URL}${endpoint}`, {
-          headers: {
-            'Authorization': `Bearer ${freshToken}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (response.ok) {
-          console.log(`Successfully fetched countries from: ${endpoint}`);
-          break;
-        } else {
-          const errorText = await response.text();
-          console.log(`Endpoint ${endpoint} failed with status ${response.status}: ${errorText}`);
-          lastError = errorText;
-        }
-      } catch (err) {
-        console.log(`Endpoint ${endpoint} threw error:`, err.message);
-        lastError = err.message;
+    // Step 2: Fetch countries using correct endpoint (NO Bearer prefix!)
+    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/countries`, {
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
       }
+    });
+    
+    const responseText = await response.text();
+    console.log('Countries API response status:', response.status);
+    console.log('Countries API response:', responseText.substring(0, 500));
+
+    if (!response.ok) {
+      console.error('Countries API failed:', response.status, responseText);
+      throw new Error(`Countries API failed: ${response.status} - ${responseText}`);
     }
 
-    if (response && response.ok) {
-      const data = await response.json();
-      console.log('Get countries response:', data);
+    const data = JSON.parse(responseText);
+    
+    // Handle different response structures
+    const countries = Array.isArray(data) ? data : (data.data || data.countries || []);
+    console.log(`Successfully fetched ${countries.length} countries`);
 
-      // Enhance countries with wellness travel information
-      const enhancedCountries = Array.isArray(data) ? data.map(country => ({
-        ...country,
-        wellness_rating: getWellnessRating(country),
-        popular_wellness_activities: getWellnessActivities(country),
-        mental_health_resources: getMentalHealthResources(country),
-        emergency_contacts: getEmergencyContacts(country)
-      })) : [];
+    // Enhance countries with wellness travel information
+    const enhancedCountries = countries.map(country => ({
+      ...country,
+      wellness_rating: getWellnessRating(country),
+      popular_wellness_activities: getWellnessActivities(country),
+      mental_health_resources: getMentalHealthResources(country),
+      emergency_contacts: getEmergencyContacts(country)
+    }));
 
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          data: enhancedCountries,
-          message: 'Countries fetched with wellness travel information'
-        }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    } else {
-      throw new Error(`Failed to fetch countries: ${response.status}`);
-    }
+    return new Response(
+      JSON.stringify({ 
+        success: true, 
+        data: enhancedCountries,
+        count: enhancedCountries.length,
+        message: 'Countries fetched with wellness travel information'
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   } catch (error) {
     console.error('Get countries error:', error);
     return await handleFallbackCountries();
@@ -625,62 +593,128 @@ async function handleGetServicesForDestination(params: ServiceParams) {
   }
 }
 
-// Enhanced order creation with wellness features
+// Enhanced order creation with wellness features (2-step process per RoamBuddy API)
 async function handleCreateOrder(orderData: OrderData, supabase: ReturnType<typeof createClient>) {
   try {
-    console.log('Creating Travel Well Connected order:', orderData)
+    console.log('Creating RoamBuddy order (2-step process):', orderData);
 
-    // Store order in database with wellness enhancements
-    const { data: order, error: orderError } = await supabase
-      .from('tour_bookings')
-      .insert([
-        {
-          tour_id: orderData.product_id || 'travel-well-connected',
-          user_id: orderData.user_id || '00000000-0000-0000-0000-000000000000',
-          contact_name: orderData.customer_name || 'Wellness Traveler',
-          contact_email: orderData.customer_email || 'traveler@travelwellconnected.com',
-          total_price: orderData.amount || 0,
-          booking_date: new Date().toISOString().split('T')[0],
-          participants: 1,
-          status: 'pending',
-          payment_status: 'pending',
-          roambuddy_services: {
-            product_name: orderData.product_name,
-            destination: orderData.destination,
-            currency: orderData.currency,
-            wellness_features: true,
-            peace_of_mind_included: true
-          }
-        }
-      ])
-      .select()
+    // Step 1: Authenticate to get token
+    const authResponse = await fetch(`${ROAMBUDDY_API_URL}/wl-account/authenticate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: ROAMBUDDY_USERNAME,
+        password: ROAMBUDDY_PASSWORD
+      })
+    });
 
-    if (orderError) {
-      console.error('Database order error:', orderError)
+    if (!authResponse.ok) {
+      throw new Error('Authentication failed for order creation');
     }
 
-    const orderId = `TWC_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const authData = await authResponse.json();
+    const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || authData.access_token || authData.token || authData.data?.token;
     
+    if (!token) {
+      throw new Error('No token received from authentication');
+    }
+
+    // Step 2: Request order from RoamBuddy API
+    console.log('Requesting order with plan_id:', orderData.product_id);
+    const requestResponse = await fetch(`${ROAMBUDDY_API_URL}/products/orders/request`, {
+      method: 'POST',
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        plan_id: parseInt(orderData.product_id || '0') 
+      })
+    });
+
+    const requestData = await requestResponse.json();
+    console.log('Order request response:', requestData);
+
+    if (!requestResponse.ok) {
+      throw new Error(`Order request failed: ${JSON.stringify(requestData)}`);
+    }
+
+    const roambuddyOrderId = requestData.order_id || requestData.data?.order_id;
+    
+    if (!roambuddyOrderId) {
+      throw new Error('No order_id received from order request');
+    }
+
+    // Step 3: Complete the order
+    console.log('Completing order with order_id:', roambuddyOrderId);
+    const completeResponse = await fetch(`${ROAMBUDDY_API_URL}/products/orders/complete`, {
+      method: 'POST',
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        order_id: roambuddyOrderId 
+      })
+    });
+
+    const completeData = await completeResponse.json();
+    console.log('Order complete response:', completeData);
+
+    if (!completeResponse.ok) {
+      throw new Error(`Order completion failed: ${JSON.stringify(completeData)}`);
+    }
+
+    // Step 4: Store order in Supabase database
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert([
+        {
+          product_id: orderData.product_id,
+          product_name: orderData.product_name || 'RoamBuddy eSIM',
+          product_type: 'esim',
+          customer_name: orderData.customer_name || 'Wellness Traveler',
+          customer_email: orderData.customer_email || 'traveler@omniwellnessmedia.com',
+          amount: orderData.amount || 0,
+          currency: orderData.currency || 'USD',
+          destination: orderData.destination,
+          status: 'completed',
+          roambuddy_order_id: roambuddyOrderId,
+          order_number: `RB-${Date.now()}`,
+          notes: JSON.stringify({
+            wellness_features: true,
+            peace_of_mind_included: true,
+            roambuddy_response: completeData
+          })
+        }
+      ])
+      .select();
+
+    if (orderError) {
+      console.error('Database order error:', orderError);
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true,
         data: {
-          order_id: orderId,
-          status: 'pending',
+          order_id: roambuddyOrderId,
+          status: 'completed',
           product_name: orderData.product_name,
           amount: orderData.amount,
           currency: orderData.currency,
           customer_email: orderData.customer_email,
           wellness_features_included: true,
           peace_of_mind_guarantee: true,
-          message: 'Travel Well Connected order created successfully'
+          roambuddy_data: completeData,
+          message: 'RoamBuddy order created and completed successfully'
         }
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    );
     
   } catch (error) {
-    console.error('Create order error:', error)
+    console.error('Create order error:', error);
     return new Response(
       JSON.stringify({ 
         success: false, 
@@ -688,7 +722,7 @@ async function handleCreateOrder(orderData: OrderData, supabase: ReturnType<type
         details: error.message 
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
-    )
+    );
   }
 }
 
