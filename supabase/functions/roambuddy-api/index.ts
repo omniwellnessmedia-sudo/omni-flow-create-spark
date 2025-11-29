@@ -92,9 +92,11 @@ async function refreshAccessToken(): Promise<string> {
   }
 
   const data = await response.json();
-  ROAMBUDDY_ACCESS_TOKEN = data.token;
+  const token = data.data?.access_token || data.access_token || data.data?.auth_token || data.token;
+  ROAMBUDDY_ACCESS_TOKEN = token;
   console.log('Token refreshed successfully');
-  return data.token;
+  console.log('Using token type:', token?.substring(0, 20) + '...');
+  return token;
 }
 
 // Authenticated request helper
@@ -329,15 +331,18 @@ async function handleGetAllProducts() {
     const authData = await authResponse.json();
     console.log('Auth response structure:', JSON.stringify(authData, null, 2));
     
-    // Extract token from response (auth_token is the fresh token per API docs)
-    const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || authData.access_token || authData.token || authData.data?.token;
+    // Extract token from response (prioritize access_token per RoamBuddy API docs)
+    const token = authData.data?.access_token || authData.access_token || authData.data?.auth_token || authData.auth_token || authData.token || authData.data?.token;
     
     if (!token) {
       console.error('No token found in auth response:', authData);
       throw new Error('Authentication succeeded but no token received');
     }
     
-    console.log('Token obtained, fetching products from /products/all...');
+    console.log('✅ Token obtained for products request');
+    console.log('📝 Using token:', token.substring(0, 30) + '...');
+    console.log('Token type: access_token (prioritized)');
+    console.log('Fetching products from /products/all...');
 
     // Step 2: Fetch products using correct endpoint (NO Bearer prefix!)
     const response = await fetch(`${ROAMBUDDY_API_URL}/products/all`, {
@@ -407,15 +412,18 @@ async function handleGetCountries() {
     const authData = await authResponse.json();
     console.log('Auth response for countries:', JSON.stringify(authData, null, 2));
     
-    // Extract token from response
-    const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || authData.access_token || authData.token || authData.data?.token;
+    // Extract token from response (prioritize access_token per RoamBuddy API docs)
+    const token = authData.data?.access_token || authData.access_token || authData.data?.auth_token || authData.auth_token || authData.token || authData.data?.token;
     
     if (!token) {
       console.error('No token found in auth response:', authData);
       throw new Error('Authentication succeeded but no token received');
     }
     
-    console.log('Token obtained, fetching countries from /whitelabel-dashboard/countries...');
+    console.log('✅ Token obtained for countries request');
+    console.log('📝 Using token:', token.substring(0, 30) + '...');
+    console.log('Token type: access_token (prioritized)');
+    console.log('Fetching countries from /whitelabel-dashboard/countries...');
 
     // Step 2: Fetch countries using correct endpoint (NO Bearer prefix!)
     const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/countries`, {
