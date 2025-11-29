@@ -539,69 +539,101 @@ const RoamBuddyStore = () => {
     <div className="min-h-screen bg-background">
       <UnifiedNavigation />
       
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background pt-24 pb-16">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-        <div className="container mx-auto px-4 relative">
-          <div className="max-w-4xl mx-auto text-center space-y-6">
-            <div className="flex flex-col items-center gap-3">
-              <Badge className={`${
-                apiStatus === 'connected' ? 'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30' : 
-                apiStatus === 'fallback' ? 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30' :
-                apiStatus === 'checking' ? 'bg-yellow-500/20 text-yellow-700 border-yellow-500/30' : 
-                'bg-blue-500/20 text-blue-700 border-blue-500/30'
-              } backdrop-blur-sm px-4 py-2`}>
-                <Globe className="w-4 h-4 mr-2" />
-                {apiStatus === 'connected' ? 'Live RoamBuddy Products ✓' : 
-                 apiStatus === 'checking' ? 'Loading RoamBuddy Store...' : 
-                 'RoamBuddy Demo Store'}
+      {/* Immersive Hero Section */}
+      <section className="relative h-[75vh] md:h-[85vh] overflow-hidden">
+        <img 
+          src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg"
+          alt="Global Connectivity"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 via-blue-800/70 to-purple-900/80" />
+        
+        {/* Hero Content */}
+        <div className="relative z-10 container mx-auto h-full flex items-center px-4">
+          <div className="max-w-4xl text-white">
+            <div className="flex flex-wrap gap-2 mb-6">
+              <Badge className="bg-white/20 text-white border-white/30 backdrop-blur-sm">
+                <Globe className="w-4 h-4 mr-1" />
+                180+ Countries
               </Badge>
-              
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={testApiConnection}
-                disabled={testingConnection}
-                className="gap-2"
+              <Badge 
+                variant={apiStatus === 'connected' ? 'default' : 'secondary'} 
+                className={`${apiStatus === 'connected' ? 'bg-green-600' : apiStatus === 'error' ? 'bg-red-600' : 'bg-yellow-600'} text-white border-none`}
               >
-                {testingConnection ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Testing Connection...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    Test API Connection
-                  </>
-                )}
-              </Button>
+                {apiStatus === 'checking' && '🔄 Checking Connection'}
+                {apiStatus === 'connected' && '✅ Live Inventory'}
+                {apiStatus === 'fallback' && '📦 Demo Mode'}
+                {apiStatus === 'error' && '⚠️ API Offline'}
+              </Badge>
+              {apiStatus !== 'connected' && (
+                <Button 
+                  size="sm" 
+                  variant="ghost"
+                  onClick={testApiConnection}
+                  disabled={testingConnection}
+                  className="border-white/30 text-white hover:bg-white/20"
+                >
+                  {testingConnection ? <Loader2 className="w-4 h-4 animate-spin" /> : '🔌 Test Connection'}
+                </Button>
+              )}
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-              Travel Connected<br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">Stay Unlimited</span>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              Stay Connected,<br />
+              <span className="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent">
+                Stay Well
+              </span>
             </h1>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Premium eSIM data plans and connectivity solutions for modern travelers. 
-              Instant activation, global coverage, unbeatable prices.
+            <p className="text-xl md:text-2xl text-white/90 mb-4">
+              Premium eSIM & Travel Connectivity Solutions
+            </p>
+            <p className="text-lg mb-8 text-white/80 max-w-2xl">
+              Instant activation • 5G speeds • 24/7 support • No contracts • Global coverage for conscious travelers
             </p>
             
-            <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto pt-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">180+</div>
-                <div className="text-sm text-muted-foreground">Countries</div>
+            <div className="flex flex-wrap gap-4">
+              <Button size="lg" className="bg-white text-primary hover:bg-white/90">
+                <Smartphone className="w-5 h-5 mr-2" />
+                Browse eSIM Plans
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20">
+                <MapPin className="w-5 h-5 mr-2" />
+                Find by Destination
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Overlay */}
+        <div className="absolute bottom-8 left-0 right-0 z-10">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                <div className="text-3xl font-bold text-white">180+</div>
+                <div className="text-sm text-white/80">Countries</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">50K+</div>
-                <div className="text-sm text-muted-foreground">Happy Travelers</div>
+              <div className="text-center p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                <div className="text-3xl font-bold text-white">5G</div>
+                <div className="text-sm text-white/80">Speed</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">4.9★</div>
-                <div className="text-sm text-muted-foreground">User Rating</div>
+              <div className="text-center p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                <div className="text-3xl font-bold text-white">24/7</div>
+                <div className="text-sm text-white/80">Support</div>
+              </div>
+              <div className="text-center p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                <div className="text-3xl font-bold text-white">4.9★</div>
+                <div className="text-sm text-white/80">Rating</div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block">
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-3 bg-white/50 rounded-full" />
           </div>
         </div>
       </section>
