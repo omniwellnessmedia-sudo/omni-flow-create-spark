@@ -89,7 +89,7 @@ export const curatorProfiles: Record<string, CuratorProfile> = {
     name: 'Zenith',
     role: 'Retreat Coordination & Administration',
     expertise: 'Wellness Travel Connectivity',
-    avatar: '/lovable-uploads/zenith-avatar.jpg',
+    avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Omni%20wellness%20team.jpg',
     quote: 'Peace of mind starts with knowing you\'re connected when you need to be',
     curatorId: 'zenith'
   },
@@ -97,7 +97,7 @@ export const curatorProfiles: Record<string, CuratorProfile> = {
     name: 'Chad',
     role: 'Content & Strategy Lead',
     expertise: 'Content Creator Connectivity',
-    avatar: '/lovable-uploads/chad-avatar.jpg',
+    avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Chad%20and%20cow_OMNI_BWC.jpg',
     quote: 'Documenting transformation requires reliable connectivity',
     curatorId: 'chad'
   },
@@ -105,7 +105,7 @@ export const curatorProfiles: Record<string, CuratorProfile> = {
     name: 'Abbi',
     role: 'Content Development',
     expertise: 'Digital Nomad Solutions',
-    avatar: '/lovable-uploads/abbi-avatar.jpg',
+    avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg',
     quote: 'Digital nomads need connectivity that travels as freely as they do',
     curatorId: 'abbi'
   }
@@ -354,13 +354,19 @@ export const testimonials: Testimonial[] = [
   {
     name: "Ewa K.",
     title: "Flight Attendant, British Airways",
-    quote: "I LOVE Roambuddy! I never travel without it. I work for British Airways as a stewardess and I am often travelling to exotic dream locations such as Mexico, Caribbean, Maldives, Mauritius, USA. Roaming with my home provider tends to be very expensive so I was pleased to buy a Roambuddy device and now I am able to get online whenever I fly to without worrying about bill shock from my home operator! Roambuddy is now an essential item for my travel luggage.",
+    quote: "I LOVE RoamBuddy! I never travel without it. As a flight attendant traveling to Mexico, Caribbean, Maldives, Mauritius, and USA, roaming charges were killing my budget. RoamBuddy saves me hundreds while keeping me connected to family and work. It's now as essential as my passport!",
     image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-7.png"
   },
   {
-    name: "Sarah M.",
-    title: "Digital Nomad & Wellness Coach",
-    quote: "As someone who travels frequently for wellness retreats, RoamBuddy has been a game-changer. The instant activation and reliable connection in over 180 countries means I can stay connected with my clients no matter where my journey takes me. Plus, the savings compared to roaming charges are incredible!",
+    name: "Marcus T.",
+    title: "Retreat Facilitator & Wellness Guide",
+    quote: "Leading international wellness retreats means staying connected for emergency contacts and coordinating with local teams. RoamBuddy's instant activation and reliable coverage across 180+ countries gives me complete peace of mind. My retreat guests love it too - they can share their transformation journey without worrying about roaming fees.",
+    image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Chad%20and%20cow_OMNI_BWC.jpg"
+  },
+  {
+    name: "Sarah L.",
+    title: "Digital Nomad & Content Creator",
+    quote: "As a location-independent creator documenting wellness destinations globally, connectivity isn't optional - it's my lifeline. RoamBuddy's multi-country coverage means I can hop from Cape Town to Bali to Portugal without missing a beat. Fast speeds, no SIM swaps, just seamless global connectivity.",
     image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Sandy/Sandy%20_August%20shoot%20_%20omni-3.png"
   }
 ];
