@@ -115,19 +115,21 @@ const RoamBuddyStore = () => {
         />
       </div>
 
-      {/* Wellness Curators Section */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Award className="h-6 w-6 text-primary" />
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                Meet Your Wellness Curators
-              </h2>
+      {/* Wellness Curators Section - Enhanced */}
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--accent),0.1),transparent_70%)]" />
+        
+        <div className="relative container mx-auto px-4">
+          <div className="text-center mb-16 space-y-4">
+            <div className="inline-block px-6 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full mb-4">
+              <p className="text-sm font-semibold text-primary uppercase tracking-widest">Meet Your Guides</p>
             </div>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Our team of wellness travel experts have personally curated these eSIM picks 
-              to ensure you stay mindfully connected on your journey.
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Curated by Wellness Travel Experts
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our team has personally selected these connectivity solutions for conscious travelers
             </p>
           </div>
           
@@ -139,22 +141,28 @@ const RoamBuddyStore = () => {
         </div>
       </section>
 
-      {/* Editor's Picks Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Shield className="h-6 w-6 text-primary" />
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                Editor's Picks - Curated eSIMs
-              </h2>
+      {/* Editor's Picks Section - Enhanced */}
+      <section className="relative py-24 overflow-hidden bg-gradient-to-br from-muted/50 to-background">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--primary),0.08),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(var(--accent),0.08),transparent_50%)]" />
+        
+        <div className="relative container mx-auto px-4">
+          <div className="text-center mb-16 space-y-4">
+            <div className="inline-block px-6 py-2 bg-gradient-to-r from-yellow-500/10 to-amber-500/10 rounded-full mb-4">
+              <p className="text-sm font-semibold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent uppercase tracking-widest">
+                <Award className="w-4 h-4 inline mr-2" />
+                Handpicked for You
+              </p>
             </div>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Hand-selected connectivity plans for wellness-focused travelers
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Editor's Top Connectivity Picks
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Specially curated eSIM plans for retreat attendees, digital nomads, and conscious travelers
             </p>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {curatedESIMPicks.map((pick) => {
               const curator = curatorProfiles[pick.curator];
               return (

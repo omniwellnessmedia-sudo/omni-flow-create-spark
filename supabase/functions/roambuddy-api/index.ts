@@ -325,18 +325,54 @@ async function handleGetAllProducts() {
     }
 
     const authData = await authResponse.json();
-    const freshToken = authData.data?.auth_token || authData.data?.access_token;
+    console.log('Auth response structure:', JSON.stringify(authData, null, 2));
+    
+    // Try multiple possible token locations
+    const freshToken = authData.token || authData.data?.token || authData.data?.auth_token || authData.data?.access_token || authData.access_token;
+    
+    if (!freshToken) {
+      console.error('No token found in auth response:', authData);
+      throw new Error('Authentication succeeded but no token received');
+    }
+    
     console.log('Fresh token obtained for products request');
 
-    // Use fresh token for products request
-    const response = await fetch(`${ROAMBUDDY_API_URL}/products/all`, {
-      headers: {
-        'Authorization': `Bearer ${freshToken}`,
-        'Content-Type': 'application/json'
+    // Try multiple possible product endpoints
+    const productEndpoints = [
+      '/wl-account/products',
+      '/products/all',
+      '/esim/packages',
+      '/products'
+    ];
+    
+    let response = null;
+    let lastError = null;
+    
+    for (const endpoint of productEndpoints) {
+      try {
+        console.log(`Trying products endpoint: ${endpoint}`);
+        response = await fetch(`${ROAMBUDDY_API_URL}${endpoint}`, {
+          headers: {
+            'Authorization': `Bearer ${freshToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          console.log(`Successfully fetched products from: ${endpoint}`);
+          break;
+        } else {
+          const errorText = await response.text();
+          console.log(`Endpoint ${endpoint} failed with status ${response.status}: ${errorText}`);
+          lastError = errorText;
+        }
+      } catch (err) {
+        console.log(`Endpoint ${endpoint} threw error:`, err.message);
+        lastError = err.message;
       }
-    });
+    }
 
-    if (response.ok) {
+    if (response && response.ok) {
       const data = await response.json();
       console.log('Get all products response:', data);
       
@@ -383,18 +419,54 @@ async function handleGetCountries() {
     }
 
     const authData = await authResponse.json();
-    const freshToken = authData.data?.auth_token || authData.data?.access_token;
+    console.log('Auth response for countries:', JSON.stringify(authData, null, 2));
+    
+    // Try multiple possible token locations
+    const freshToken = authData.token || authData.data?.token || authData.data?.auth_token || authData.data?.access_token || authData.access_token;
+    
+    if (!freshToken) {
+      console.error('No token found in auth response:', authData);
+      throw new Error('Authentication succeeded but no token received');
+    }
+    
     console.log('Fresh token obtained for countries request');
 
-    // Use fresh token for countries request
-    const response = await fetch(`${ROAMBUDDY_API_URL}/whitelabel-dashboard/countries`, {
-      headers: {
-        'Authorization': `Bearer ${freshToken}`,
-        'Content-Type': 'application/json'
+    // Try multiple possible country endpoints
+    const countryEndpoints = [
+      '/wl-account/countries',
+      '/whitelabel-dashboard/countries',
+      '/esim/countries',
+      '/countries'
+    ];
+    
+    let response = null;
+    let lastError = null;
+    
+    for (const endpoint of countryEndpoints) {
+      try {
+        console.log(`Trying countries endpoint: ${endpoint}`);
+        response = await fetch(`${ROAMBUDDY_API_URL}${endpoint}`, {
+          headers: {
+            'Authorization': `Bearer ${freshToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          console.log(`Successfully fetched countries from: ${endpoint}`);
+          break;
+        } else {
+          const errorText = await response.text();
+          console.log(`Endpoint ${endpoint} failed with status ${response.status}: ${errorText}`);
+          lastError = errorText;
+        }
+      } catch (err) {
+        console.log(`Endpoint ${endpoint} threw error:`, err.message);
+        lastError = err.message;
       }
-    });
+    }
 
-    if (response.ok) {
+    if (response && response.ok) {
       const data = await response.json();
       console.log('Get countries response:', data);
 
