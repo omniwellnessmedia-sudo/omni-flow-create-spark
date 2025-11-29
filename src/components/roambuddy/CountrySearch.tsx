@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Smartphone } from "lucide-react";
-import { countries } from "@/data/roamBuddyProducts";
+import { Search, Smartphone, Loader2 } from "lucide-react";
+import { useRoamBuddyAPI } from "@/hooks/useRoamBuddyAPI";
 
 interface CountrySearchProps {
   onCountrySelect: (country: string) => void;
@@ -13,6 +13,35 @@ interface CountrySearchProps {
 export const CountrySearch = ({ onCountrySelect, onCheckCompatibility }: CountrySearchProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAll, setShowAll] = useState(false);
+  const [countries, setCountries] = useState<Array<{ name: string; code: string; flag: string }>>([]);
+  const { getCountries, loading } = useRoamBuddyAPI();
+
+  useEffect(() => {
+    loadCountries();
+  }, []);
+
+  const loadCountries = async () => {
+    const result = await getCountries();
+    if (result?.data) {
+      // Transform API countries to include flags
+      const countriesWithFlags = result.data.map((country: any) => ({
+        name: country.name || country.country_name,
+        code: country.code || country.country_code || country.iso2,
+        flag: getCountryFlag(country.code || country.country_code || country.iso2)
+      }));
+      setCountries(countriesWithFlags);
+    }
+  };
+
+  const getCountryFlag = (code: string): string => {
+    if (!code || code.length !== 2) return '🌍';
+    
+    const codePoints = code
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  };
 
   const filteredCountries = countries.filter(country =>
     country.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -60,31 +89,40 @@ export const CountrySearch = ({ onCountrySelect, onCheckCompatibility }: Country
             </TabsList>
 
             <TabsContent value="country" className="space-y-6">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {displayedCountries.map((country) => (
-                  <button
-                    key={country.code}
-                    onClick={() => onCountrySelect(country.name)}
-                    className="flex items-center gap-3 p-4 bg-background rounded-lg border border-border hover:border-primary hover:shadow-md transition-all duration-200 text-left group"
-                  >
-                    <span className="text-3xl">{country.flag}</span>
-                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                      {country.name}
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              {!showAll && filteredCountries.length > 12 && (
-                <div className="text-center mt-6">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowAll(true)}
-                    className="px-8"
-                  >
-                    Show All Countries ({filteredCountries.length})
-                  </Button>
+              {loading ? (
+                <div className="flex items-center justify-center py-16">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  <span className="ml-3 text-muted-foreground">Loading countries...</span>
                 </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {displayedCountries.map((country) => (
+                      <button
+                        key={country.code}
+                        onClick={() => onCountrySelect(country.name)}
+                        className="flex items-center gap-3 p-4 bg-background rounded-lg border border-border hover:border-primary hover:shadow-md transition-all duration-200 text-left group"
+                      >
+                        <span className="text-3xl">{country.flag}</span>
+                        <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                          {country.name}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {!showAll && filteredCountries.length > 12 && (
+                    <div className="text-center mt-6">
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowAll(true)}
+                        className="px-8"
+                      >
+                        Show All Countries ({filteredCountries.length})
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </TabsContent>
 

@@ -52,6 +52,10 @@ export const useRoamBuddyAPI = () => {
     return callAPI('getDestinations');
   };
 
+  const getCountries = async () => {
+    return callAPI('getCountries');
+  };
+
   const getWellnessPackages = async (params?: {
     destination?: string;
     wellness_type?: string;
@@ -90,6 +94,7 @@ export const useRoamBuddyAPI = () => {
     getAllProducts,
     getServices,
     getDestinations,
+    getCountries,
     getWellnessPackages,
     createOrder,
     getOrderedEsims,
