@@ -12,10 +12,13 @@ export const RoamBuddyHero = ({ onGetStarted, onActivate }: RoamBuddyHeroProps) 
   return (
     <section className="relative h-[75vh] min-h-[500px] bg-cover bg-center overflow-hidden">
       <img
-        src={IMAGES.locations.capeTown1}
+        src={IMAGES.tours.capeTown}
         alt="Stay Connected Worldwide"
         className="w-full h-full object-cover object-center"
         loading="eager"
+        onError={(e) => {
+          e.currentTarget.src = IMAGES.locations.capeTown2;
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
       
