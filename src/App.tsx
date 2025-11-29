@@ -69,6 +69,7 @@ const OmniWellnessRetreat = React.lazy(() => import('@/pages/tours/OmniWellnessR
 const GreatMotherCaveTour = React.lazy(() => import('@/pages/tours/GreatMotherCaveTour'));
 const ViatorWellnessExperiences = React.lazy(() => import('@/pages/ViatorWellnessExperiences'));
 const ESIMStore = React.lazy(() => import('@/pages/ESIMStore'));
+const TravelWellConnectedESIM = React.lazy(() => import('@/pages/TravelWellConnectedESIM'));
 const UWCHumanAnimalProgram = React.lazy(() => import('@/pages/programs/UWCHumanAnimalProgram'));
 const CSRImpact = React.lazy(() => import('@/pages/CSRImpact'));
 const PartnersDirectory = React.lazy(() => import('@/pages/PartnersDirectory'));
@@ -210,6 +211,7 @@ function App() {
             <Route path="/csr-impact" element={<CSRImpact />} />
             <Route path="/viator-wellness-experiences" element={<ViatorWellnessExperiences />} />
             <Route path="/esim-store" element={<ESIMStore />} />
+            <Route path="/travel-well-connected" element={<TravelWellConnectedESIM />} />
 
                   {/* Business Services */}
                   <Route path="/business-consulting" element={<BusinessConsulting />} />

@@ -7,7 +7,7 @@ interface AffiliateParams {
   wellnessCategory?: string;
   retreatId?: string;
   consciousnessIntent?: string;
-  affiliateProgram?: 'camerastuff' | 'viator';
+  affiliateProgram?: 'camerastuff' | 'viator' | 'roambuddy';
 }
 
 export const useConsciousAffiliate = () => {
@@ -35,6 +35,20 @@ export const useConsciousAffiliate = () => {
         : "https://www.viator.com/partner-shop/omniwellnessmedia/";
       
       return `${baseUrl}?${viatorParams.toString()}`;
+    }
+    
+    if (affiliateProgram === 'roambuddy') {
+      // RoamBuddy affiliate URL
+      const roambuddyParams = new URLSearchParams({
+        ref: "omniwellness",
+        channel: channel,
+      });
+      
+      if (wellnessCategory) {
+        roambuddyParams.set("wellness_category", wellnessCategory);
+      }
+      
+      return `https://www.worldroambuddy.com?${roambuddyParams.toString()}`;
     }
     
     // Default: CameraStuff
@@ -79,7 +93,7 @@ export const useConsciousAffiliate = () => {
     destinationUrl: string,
     consciousnessIntent?: string,
     wellnessCategory?: string,
-    affiliateProgram: 'camerastuff' | 'viator' = 'camerastuff'
+    affiliateProgram: 'camerastuff' | 'viator' | 'roambuddy' = 'camerastuff'
   ) => {
     try {
       // Generate unique click ID
