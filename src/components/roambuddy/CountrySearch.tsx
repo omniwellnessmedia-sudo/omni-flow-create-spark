@@ -22,13 +22,19 @@ export const CountrySearch = ({ onCountrySelect, onCheckCompatibility }: Country
 
   const loadCountries = async () => {
     const result = await getCountries();
+    console.log('Countries API result:', result);
     if (result?.data) {
       // Transform API countries to include flags
-      const countriesWithFlags = result.data.map((country: any) => ({
-        name: country.name || country.country_name,
-        code: country.code || country.country_code || country.iso2,
-        flag: getCountryFlag(country.code || country.country_code || country.iso2)
-      }));
+      const countriesWithFlags = result.data.map((country: any) => {
+        const countryCode = country.country_code || country.iso2 || country.code;
+        console.log('Processing country:', country.country_name || country.name, 'Code:', countryCode);
+        return {
+          name: country.country_name || country.name,
+          code: countryCode,
+          flag: getCountryFlag(countryCode)
+        };
+      });
+      console.log('Countries with flags:', countriesWithFlags.slice(0, 5));
       setCountries(countriesWithFlags);
     }
   };
