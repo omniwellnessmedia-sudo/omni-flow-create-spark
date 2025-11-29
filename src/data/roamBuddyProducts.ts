@@ -20,6 +20,19 @@ export interface CuratorProfile {
   curatorId: 'zenith' | 'chad' | 'abbi';
 }
 
+export interface Country {
+  code: string;
+  name: string;
+  flag: string;
+}
+
+export interface Testimonial {
+  name: string;
+  title: string;
+  quote: string;
+  image: string;
+}
+
 export const curatedESIMPicks: CuratedESIMPick[] = [
   {
     id: 'pick-sa-retreat',
@@ -140,4 +153,52 @@ export const destinationCategories = [
   { id: 'europe', label: '🇪🇺 Europe', description: 'From Portuguese retreats to Alpine healing' },
   { id: 'asia', label: '🌏 Asia', description: 'Thailand wellness, Bali retreats, and beyond' },
   { id: 'global', label: '🌐 Global', description: 'Unlimited world coverage for location-independent wellness' }
+];
+
+export const countries: Country[] = [
+  { code: 'KE', name: 'Kenya', flag: '🇰🇪' },
+  { code: 'GB', name: 'United Kingdom', flag: '🇬🇧' },
+  { code: 'US', name: 'United States', flag: '🇺🇸' },
+  { code: 'ZA', name: 'South Africa', flag: '🇿🇦' },
+  { code: 'AE', name: 'United Arab Emirates', flag: '🇦🇪' },
+  { code: 'FR', name: 'France', flag: '🇫🇷' },
+  { code: 'UG', name: 'Uganda', flag: '🇺🇬' },
+  { code: 'TZ', name: 'Tanzania', flag: '🇹🇿' },
+  { code: 'NG', name: 'Nigeria', flag: '🇳🇬' },
+  { code: 'NL', name: 'Netherlands', flag: '🇳🇱' },
+  { code: 'CN', name: 'China', flag: '🇨🇳' },
+  { code: 'IN', name: 'India', flag: '🇮🇳' },
+  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
+  { code: 'IT', name: 'Italy', flag: '🇮🇹' },
+  { code: 'ES', name: 'Spain', flag: '🇪🇸' },
+  { code: 'AU', name: 'Australia', flag: '🇦🇺' },
+  { code: 'CA', name: 'Canada', flag: '🇨🇦' },
+  { code: 'JP', name: 'Japan', flag: '🇯🇵' },
+  { code: 'BR', name: 'Brazil', flag: '🇧🇷' },
+  { code: 'MX', name: 'Mexico', flag: '🇲🇽' },
+  { code: 'TH', name: 'Thailand', flag: '🇹🇭' },
+  { code: 'SG', name: 'Singapore', flag: '🇸🇬' },
+  { code: 'MY', name: 'Malaysia', flag: '🇲🇾' },
+  { code: 'ID', name: 'Indonesia', flag: '🇮🇩' },
+  { code: 'PH', name: 'Philippines', flag: '🇵🇭' },
+  { code: 'VN', name: 'Vietnam', flag: '🇻🇳' },
+  { code: 'EG', name: 'Egypt', flag: '🇪🇬' },
+  { code: 'MA', name: 'Morocco', flag: '🇲🇦' },
+  { code: 'GH', name: 'Ghana', flag: '🇬🇭' },
+  { code: 'ET', name: 'Ethiopia', flag: '🇪🇹' },
+];
+
+export const testimonials: Testimonial[] = [
+  {
+    name: "Ewa K.",
+    title: "Flight Attendant, British Airways",
+    quote: "I LOVE Roambuddy! I never travel without it. I work for British Airways as a stewardess and I am often travelling to exotic dream locations such as Mexico, Caribbean, Maldives, Mauritius, USA. Roaming with my home provider tends to be very expensive so I was pleased to buy a Roambuddy device and now I am able to get online whenever I fly to without worrying about bill shock from my home operator! Roambuddy is now an essential item for my travel luggage.",
+    image: "/placeholder.svg"
+  },
+  {
+    name: "Sarah M.",
+    title: "Digital Nomad & Wellness Coach",
+    quote: "As someone who travels frequently for wellness retreats, RoamBuddy has been a game-changer. The instant activation and reliable connection in over 180 countries means I can stay connected with my clients no matter where my journey takes me. Plus, the savings compared to roaming charges are incredible!",
+    image: "/placeholder.svg"
+  }
 ];

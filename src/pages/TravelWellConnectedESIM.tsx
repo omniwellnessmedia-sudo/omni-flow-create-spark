@@ -28,16 +28,17 @@ const TravelWellConnectedESIM = () => {
     }
   };
 
-  const handleProductSelect = async (productName: string) => {
+  const handleProductSelect = async (product: any) => {
+    const productName = typeof product === 'string' ? product : product.name;
     await trackAffiliateClick(
       productName,
       'roambuddy_esim',
-      'https://www.worldroambuddy.com',
+      'https://www.roambuddy.world/searchPlan',
       'wellness_connectivity',
       'travel_connectivity',
       'roambuddy'
     );
-    window.open('https://www.worldroambuddy.com', '_blank', 'noopener,noreferrer');
+    window.open('https://www.roambuddy.world/searchPlan', '_blank', 'noopener,noreferrer');
   };
 
   const calculatePeaceOfMindScore = (product: any): number => {
@@ -116,19 +117,17 @@ const TravelWellConnectedESIM = () => {
             return (
               <RoamBuddyProductCard
                 key={pick.id}
-                name={pick.name}
+                planName={pick.name}
+                destination={pick.destination}
                 dataAmount={pick.dataAmount}
                 validity={pick.validity}
-                coverage={pick.destination}
+                coverage={pick.whoShouldGet}
                 peaceOfMindScore={pick.peaceOfMindScore}
-                wellnessFeatures={[
-                  `Recommended by ${curator.name}`,
-                  pick.whyWeChoseIt.slice(0, 80) + '...',
-                  ...pick.whoShouldGet.slice(0, 2)
-                ]}
+                wellnessFeatures={[pick.wellnessAngle]}
                 isFeatured={true}
+                curatorNote={`${curator.name}: "${pick.whyWeChoseIt}"`}
                 price={2500}
-                onSelect={() => handleProductSelect(pick.name)}
+                onSelect={() => handleProductSelect({ id: pick.id, name: pick.name })}
               />
             );
           })}
@@ -159,14 +158,15 @@ const TravelWellConnectedESIM = () => {
                   apiProducts.slice(0, 6).map((product, index) => (
                     <RoamBuddyProductCard
                       key={index}
-                      name={product.name || 'eSIM Package'}
+                      planName={product.name || 'eSIM Package'}
+                      destination={product.destination}
                       dataAmount={product.dataAmount}
                       validity={product.validity}
-                      coverage={product.destination || destination}
+                      coverage={product.coverage}
                       peaceOfMindScore={calculatePeaceOfMindScore(product)}
                       wellnessFeatures={getWellnessFeatures(product)}
                       price={product.price || 2500}
-                      onSelect={() => handleProductSelect(product.name)}
+                      onSelect={() => handleProductSelect(product)}
                     />
                   ))
                 ) : (

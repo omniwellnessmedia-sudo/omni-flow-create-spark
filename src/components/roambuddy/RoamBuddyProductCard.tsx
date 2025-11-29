@@ -5,50 +5,63 @@ import { PeaceOfMindScore } from "./PeaceOfMindScore";
 import { useCurrencyConverter } from "@/hooks/useCurrencyConverter";
 
 interface RoamBuddyProductCardProps {
-  name: string;
+  planName: string;
+  destination?: string;
   dataAmount?: string;
   validity?: string;
-  coverage?: string;
+  coverage?: string[];
   speed?: string;
   price?: number;
   peaceOfMindScore?: number;
   wellnessFeatures?: string[];
   isFeatured?: boolean;
   isPopular?: boolean;
+  curatorNote?: string;
   onSelect?: () => void;
 }
 
 export const RoamBuddyProductCard = ({
-  name,
+  planName,
+  destination,
   dataAmount,
   validity,
   coverage,
-  speed = '5G',
+  speed = '4G/5G',
   price = 0,
   peaceOfMindScore = 85,
   wellnessFeatures = [],
   isFeatured = false,
   isPopular = false,
+  curatorNote,
   onSelect
 }: RoamBuddyProductCardProps) => {
   const { formatZAR, formatUSD, convertZARToUSD } = useCurrencyConverter();
+  const { Globe } = require('lucide-react');
 
   return (
-    <Card className="p-6 hover:shadow-xl transition-all duration-300 relative overflow-hidden">
-      {(isFeatured || isPopular) && (
-        <div className="absolute top-4 right-4">
-          <Badge variant={isFeatured ? "default" : "secondary"}>
-            {isFeatured ? "Editor's Pick" : "Popular"}
-          </Badge>
+    <Card className="hover:shadow-lg transition-all duration-300 group overflow-hidden">
+      <div className="p-6 space-y-4">
+        {(isFeatured || isPopular) && (
+          <div className="flex gap-2">
+            {isFeatured && (
+              <Badge className="bg-yellow-500 text-black font-semibold">Editor's Pick</Badge>
+            )}
+            {isPopular && (
+              <Badge className="bg-primary font-semibold">Popular</Badge>
+            )}
+          </div>
+        )}
+        
+        {/* Product Image/Icon */}
+        <div className="w-full h-32 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg flex items-center justify-center mb-4">
+          <Globe className="h-16 w-16 text-primary opacity-50 group-hover:opacity-100 transition-opacity" />
         </div>
-      )}
 
-      <div className="space-y-4">
         <div>
-          <h3 className="text-xl font-bold text-foreground mb-2">
-            📱 {name}
-          </h3>
-          <div className="border-t-2 border-primary/20 w-full"></div>
+          <h3 className="text-lg font-bold text-foreground mb-1">{planName}</h3>
+          {destination && (
+            <p className="text-sm text-muted-foreground">{destination}</p>
+          )}
         </div>
 
         {peaceOfMindScore && (
@@ -68,10 +81,10 @@ export const RoamBuddyProductCard = ({
               <p className="font-semibold text-foreground">{validity}</p>
             </div>
           )}
-          {coverage && (
-            <div>
+          {coverage && coverage.length > 0 && (
+            <div className="col-span-2">
               <span className="text-muted-foreground">Coverage:</span>
-              <p className="font-semibold text-foreground">{coverage}</p>
+              <p className="font-semibold text-foreground">{coverage.join(', ')}</p>
             </div>
           )}
           {speed && (
@@ -101,6 +114,12 @@ export const RoamBuddyProductCard = ({
             {formatUSD(convertZARToUSD(price))} / {formatZAR(price)}
           </p>
         </div>
+
+        {curatorNote && (
+          <div className="bg-muted/50 p-3 rounded-lg text-xs italic text-muted-foreground">
+            {curatorNote}
+          </div>
+        )}
 
         <Button 
           onClick={onSelect}
