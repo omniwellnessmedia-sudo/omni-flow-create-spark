@@ -252,10 +252,20 @@ const RoamBuddyStore = () => {
             </div>
           ) : (() => {
             const filteredProducts = selectedCountry 
-              ? apiProducts.filter(p => 
-                  p.destination?.toLowerCase().includes(selectedCountry.toLowerCase()) ||
-                  p.coverage?.some(c => c.toLowerCase().includes(selectedCountry.toLowerCase()))
-                )
+              ? apiProducts.filter(p => {
+                  const countryLower = selectedCountry.toLowerCase();
+                  const matchesDestination = p.destination?.toLowerCase().includes(countryLower);
+                  const matchesCoverage = p.coverage?.some(c => {
+                    // Handle both string and object formats
+                    if (typeof c === 'string') {
+                      return c.toLowerCase().includes(countryLower);
+                    } else if (c && typeof c === 'object' && 'country_name' in c) {
+                      return c.country_name?.toLowerCase().includes(countryLower);
+                    }
+                    return false;
+                  });
+                  return matchesDestination || matchesCoverage;
+                })
               : apiProducts;
 
             return filteredProducts.length > 0 ? (
@@ -267,7 +277,9 @@ const RoamBuddyStore = () => {
                     destination={product.destination}
                     dataAmount={product.dataAmount}
                     validity={product.validity}
-                    coverage={product.coverage}
+                    coverage={product.coverage?.map(c => 
+                      typeof c === 'string' ? c : c.country_name
+                    ) || []}
                     price={product.price}
                     speed="4G/5G"
                     wellnessFeatures={getWellnessFeatures(product)}
