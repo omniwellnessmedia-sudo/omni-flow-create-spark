@@ -263,11 +263,7 @@ function App() {
                       <RoamBuddyIntegrationTest />
                     </ProtectedRoute>
                   } />
-                  <Route path="/roambuddy-store" element={
-                    <ProtectedRoute requireAdmin={true}>
-                      <RoamBuddyStore />
-                    </ProtectedRoute>
-                  } />
+                  <Route path="/roambuddy-store" element={<RoamBuddyStore />} />
                   <Route path="/admin/affiliate-performance" element={
                     <ProtectedRoute requireAdmin={true}>
                       <AffiliatePerformance />
