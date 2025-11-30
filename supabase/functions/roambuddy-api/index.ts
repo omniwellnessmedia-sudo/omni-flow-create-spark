@@ -68,6 +68,30 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Generate flag emoji from 2-letter ISO country code
+function getCountryFlag(code: string): string {
+  if (!code || code.length < 2) return '🌍';
+  
+  // Handle special non-standard codes
+  const codeMap: Record<string, string> = {
+    'US-HI': 'US',  // Hawaii → US flag
+    'IC': 'ES',     // Canary Islands → Spain flag
+    'AN': 'NL',     // Netherlands Antilles → Netherlands flag
+    'XK': 'XK',     // Kosovo (has its own flag emoji)
+  };
+  
+  let isoCode = codeMap[code.trim()] || code.trim().substring(0, 2).toUpperCase();
+  
+  try {
+    const codePoints = isoCode
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  } catch {
+    return '🌍';
+  }
+}
+
 // Travel Well Connected API configuration (RoamBuddy backend)
 const ROAMBUDDY_API_URL = Deno.env.get('ROAMBUDDY_API_URL') || 'https://api.worldroambuddy.com:3001/api/v1'
 const ROAMBUDDY_USERNAME = Deno.env.get('ROAMBUDDY_USERNAME')
@@ -448,14 +472,20 @@ async function handleGetCountries() {
     const countries = Array.isArray(data) ? data : (data.data || data.countries || []);
     console.log(`Successfully fetched ${countries.length} countries`);
 
-    // Enhance countries with wellness travel information
-    const enhancedCountries = countries.map(country => ({
-      ...country,
-      wellness_rating: getWellnessRating(country),
-      popular_wellness_activities: getWellnessActivities(country),
-      mental_health_resources: getMentalHealthResources(country),
-      emergency_contacts: getEmergencyContacts(country)
-    }));
+    // Enhance countries with wellness travel information and flags
+    const enhancedCountries = countries.map(country => {
+      const countryCode = country.country_code || country.iso2 || country.code;
+      return {
+        ...country,
+        name: country.country_name || country.name,
+        code: countryCode,
+        flag: getCountryFlag(countryCode),
+        wellness_rating: getWellnessRating(country),
+        popular_wellness_activities: getWellnessActivities(country),
+        mental_health_resources: getMentalHealthResources(country),
+        emergency_contacts: getEmergencyContacts(country)
+      };
+    });
 
     return new Response(
       JSON.stringify({ 
