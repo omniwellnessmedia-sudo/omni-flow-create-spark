@@ -41,7 +41,7 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
         customer_email: customerEmail,
         product_name: product.name,
         amount: product.price,
-        currency: 'ZAR',
+        currency: product.priceIsUSD ? 'USD' : 'ZAR',
         destination: product.destination,
       };
 
@@ -116,7 +116,12 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                 <div className="pt-4 border-t border-border">
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">Total Price:</span>
-                    <PriceDisplay price={product.price} size="lg" />
+                    <PriceDisplay 
+                      price={product.price} 
+                      size="lg" 
+                      priceIsUSD={product.priceIsUSD}
+                      primaryCurrency={product.priceIsUSD ? 'USD' : 'ZAR'}
+                    />
                   </div>
                 </div>
               </div>
@@ -160,12 +165,17 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                   <PayPalScriptProvider options={PAYPAL_OPTIONS}>
                     <PayPalButtons
                       createOrder={(data, actions) => {
+                        const priceValue = product.priceIsUSD 
+                          ? product.price.toFixed(2) 
+                          : (product.price / 100).toFixed(2);
+                        const currencyCode = product.priceIsUSD ? 'USD' : 'ZAR';
+                        
                         return actions.order.create({
                           intent: 'CAPTURE',
                           purchase_units: [{
                             amount: {
-                              value: (product.price / 100).toFixed(2),
-                              currency_code: 'ZAR',
+                              value: priceValue,
+                              currency_code: currencyCode,
                             },
                             description: `${product.name} - ${product.destination}`,
                           }],

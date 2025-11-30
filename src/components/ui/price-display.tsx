@@ -6,6 +6,7 @@ interface PriceDisplayProps {
   price: number;
   showBothCurrencies?: boolean;
   primaryCurrency?: 'ZAR' | 'USD';
+  priceIsUSD?: boolean;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
 }
@@ -14,10 +15,11 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({
   price,
   showBothCurrencies = true,
   primaryCurrency = 'ZAR',
+  priceIsUSD = false,
   className = '',
   size = 'md'
 }) => {
-  const { formatZAR, formatUSD, convertZARToUSD, isLoading } = useCurrencyConverter();
+  const { formatZAR, formatUSD, convertZARToUSD, exchangeRates, isLoading } = useCurrencyConverter();
 
   if (isLoading) {
     return (
@@ -27,8 +29,9 @@ export const PriceDisplay: React.FC<PriceDisplayProps> = ({
     );
   }
 
-  const zarPrice = price;
-  const usdPrice = convertZARToUSD(price);
+  // If price is already in USD, convert to ZAR; otherwise convert ZAR to USD
+  const zarPrice = priceIsUSD ? price * (exchangeRates?.USD || 18.50) : price;
+  const usdPrice = priceIsUSD ? price : convertZARToUSD(price);
 
   const sizeClasses = {
     sm: 'text-sm',
