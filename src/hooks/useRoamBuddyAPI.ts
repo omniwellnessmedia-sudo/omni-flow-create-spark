@@ -7,6 +7,7 @@ export interface RoamBuddyProduct {
   name: string;
   description?: string;
   price: number;
+  priceIsUSD?: boolean;
   dataAmount?: string;
   validity?: string;
   coverage?: (string | { country_name: string; country_code: string; [key: string]: any })[];

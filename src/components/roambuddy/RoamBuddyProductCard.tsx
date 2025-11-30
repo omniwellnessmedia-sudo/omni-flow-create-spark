@@ -13,6 +13,7 @@ interface RoamBuddyProductCardProps {
   coverage?: string[];
   speed?: string;
   price?: number;
+  priceIsUSD?: boolean;
   peaceOfMindScore?: number;
   wellnessFeatures?: string[];
   isFeatured?: boolean;
@@ -29,6 +30,7 @@ export const RoamBuddyProductCard = ({
   coverage,
   speed = '4G/5G',
   price = 0,
+  priceIsUSD = false,
   peaceOfMindScore = 85,
   wellnessFeatures = [],
   isFeatured = false,
@@ -36,7 +38,11 @@ export const RoamBuddyProductCard = ({
   curatorNote,
   onSelect
 }: RoamBuddyProductCardProps) => {
-  const { formatZAR, formatUSD, convertZARToUSD } = useCurrencyConverter();
+  const { formatZAR, formatUSD, convertZARToUSD, exchangeRates } = useCurrencyConverter();
+
+  // Calculate display prices based on whether price is already in USD
+  const displayPriceUSD = priceIsUSD ? price : convertZARToUSD(price);
+  const displayPriceZAR = priceIsUSD ? price * (exchangeRates?.USD || 18.50) : price;
 
   return (
     <Card className="group relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl bg-gradient-to-br from-background to-background/95">
@@ -132,12 +138,12 @@ export const RoamBuddyProductCard = ({
             <div>
               <p className="text-sm text-muted-foreground mb-1">From</p>
               <p className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                {formatUSD(convertZARToUSD(price))}
+                {formatUSD(displayPriceUSD)}
               </p>
             </div>
             <div className="text-right">
               <p className="text-xs text-muted-foreground">or</p>
-              <p className="text-lg font-semibold text-foreground/70">{formatZAR(price)}</p>
+              <p className="text-lg font-semibold text-foreground/70">{formatZAR(displayPriceZAR)}</p>
             </div>
           </div>
 
