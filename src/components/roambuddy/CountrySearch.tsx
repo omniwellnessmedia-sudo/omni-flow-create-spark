@@ -14,22 +14,28 @@ export const CountrySearch = ({ onCountrySelect, onCheckCompatibility }: Country
   const [searchQuery, setSearchQuery] = useState("");
   const [showAll, setShowAll] = useState(false);
   const [countries, setCountries] = useState<Array<{ name: string; code: string; flag: string }>>([]);
-  const { getCountries, loading } = useRoamBuddyAPI();
+  const [countriesLoading, setCountriesLoading] = useState(false);
+  const { getCountries } = useRoamBuddyAPI();
 
   useEffect(() => {
     loadCountries();
   }, []);
 
   const loadCountries = async () => {
-    const result = await getCountries();
-    if (result?.data) {
-      // API now returns complete country objects with flags
-      const countriesWithFlags = result.data.map((country: any) => ({
-        name: country.name || country.country_name,
-        code: country.code || country.country_code,
-        flag: country.flag || '🌍'
-      }));
-      setCountries(countriesWithFlags);
+    setCountriesLoading(true);
+    try {
+      const result = await getCountries();
+      if (result?.data && Array.isArray(result.data)) {
+        // API now returns complete country objects with flags
+        const countriesWithFlags = result.data.map((country: any) => ({
+          name: country.name || country.country_name,
+          code: country.code || country.country_code,
+          flag: country.flag || "🌍",
+        }));
+        setCountries(countriesWithFlags);
+      }
+    } finally {
+      setCountriesLoading(false);
     }
   };
 
@@ -79,7 +85,7 @@ export const CountrySearch = ({ onCountrySelect, onCheckCompatibility }: Country
             </TabsList>
 
             <TabsContent value="country" className="space-y-6">
-              {loading ? (
+              {countriesLoading ? (
                 <div className="flex items-center justify-center py-16">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   <span className="ml-3 text-muted-foreground">Loading countries...</span>
