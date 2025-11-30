@@ -38,23 +38,33 @@ const RoamBuddyStore = () => {
     
     if (result && result.data && Array.isArray(result.data)) {
       // Map API products to our format
-      const mappedProducts = result.data.map((product: any) => ({
-        id: product.id || `product-${Date.now()}-${Math.random()}`,
-        name: product.name || product.title || 'eSIM Plan',
-        // Price is in USD - parse the string to number
-        price: parseFloat(product.price) || product.amount || 0,
-        priceIsUSD: true, // Flag that price is already in USD
-        description: product.description || 'Stay connected worldwide',
-        // API returns just "1", we need to append "GB"
-        dataAmount: product.data ? `${product.data}GB` : (product.data_amount || product.dataAmount || '1GB'),
-        // API returns just "7", we need to append "days"
-        validity: product.validity ? `${product.validity} days` : (product.validity_days ? `${product.validity_days} days` : '30 days'),
-        coverage: product.coverage || product.countries || ['Global'],
-        destination: product.destination || product.region || (product.countries?.[0]?.country_name) || 'Global',
-        speed: product.speed || '4G/5G',
-        wellnessFeatures: product.wellness_features || [],
-        peaceOfMindScore: product.peace_of_mind_score || calculatePeaceOfMindScore(product)
-      }));
+      const mappedProducts = result.data.map((product: any) => {
+        // Extract country names and codes from countries array
+        const countries = product.countries || [];
+        const countryNames = countries.map((c: any) => 
+          typeof c === 'string' ? c : c.country_name
+        );
+        const primaryCountryCode = countries[0]?.country_code;
+
+        return {
+          id: product.id || `product-${Date.now()}-${Math.random()}`,
+          name: product.name || product.title || 'eSIM Plan',
+          // Price is in USD - parse the string to number
+          price: parseFloat(product.price) || product.amount || 0,
+          priceIsUSD: true, // Flag that price is already in USD
+          description: product.description || 'Stay connected worldwide',
+          // API returns just "1", we need to append "GB"
+          dataAmount: product.data ? `${product.data}GB` : (product.data_amount || product.dataAmount || '1GB'),
+          // API returns just "7", we need to append "days"
+          validity: product.validity ? `${product.validity} days` : (product.validity_days ? `${product.validity_days} days` : '30 days'),
+          coverage: countryNames.length > 0 ? countryNames : ['Global'],
+          primaryCountryCode: primaryCountryCode,
+          destination: product.destination || product.region || countryNames[0] || 'Global',
+          speed: product.speed || '4G/5G',
+          wellnessFeatures: product.wellness_features || [],
+          peaceOfMindScore: product.peace_of_mind_score || calculatePeaceOfMindScore(product)
+        };
+      });
       setApiProducts(mappedProducts);
     }
   };
@@ -263,15 +273,9 @@ const RoamBuddyStore = () => {
               ? apiProducts.filter(p => {
                   const countryLower = selectedCountry.toLowerCase();
                   const matchesDestination = p.destination?.toLowerCase().includes(countryLower);
-                  const matchesCoverage = p.coverage?.some(c => {
-                    // Handle both string and object formats
-                    if (typeof c === 'string') {
-                      return c.toLowerCase().includes(countryLower);
-                    } else if (c && typeof c === 'object' && 'country_name' in c) {
-                      return c.country_name?.toLowerCase().includes(countryLower);
-                    }
-                    return false;
-                  });
+                  const matchesCoverage = p.coverage?.some((c: string) => 
+                    c.toLowerCase().includes(countryLower)
+                  );
                   return matchesDestination || matchesCoverage;
                 })
               : apiProducts;
@@ -285,9 +289,8 @@ const RoamBuddyStore = () => {
                     destination={product.destination}
                     dataAmount={product.dataAmount}
                     validity={product.validity}
-                    coverage={product.coverage?.map(c => 
-                      typeof c === 'string' ? c : c.country_name
-                    ) || []}
+                    coverage={Array.isArray(product.coverage) ? product.coverage : []}
+                    primaryCountryCode={product.primaryCountryCode}
                     price={product.price}
                     priceIsUSD={product.priceIsUSD}
                     speed="4G/5G"

@@ -11,6 +11,7 @@ interface RoamBuddyProductCardProps {
   dataAmount?: string;
   validity?: string;
   coverage?: string[];
+  primaryCountryCode?: string;
   speed?: string;
   price?: number;
   priceIsUSD?: boolean;
@@ -28,6 +29,7 @@ export const RoamBuddyProductCard = ({
   dataAmount,
   validity,
   coverage,
+  primaryCountryCode,
   speed = '4G/5G',
   price = 0,
   priceIsUSD = false,
@@ -43,6 +45,16 @@ export const RoamBuddyProductCard = ({
   // Calculate display prices based on whether price is already in USD
   const displayPriceUSD = priceIsUSD ? price : convertZARToUSD(price);
   const displayPriceZAR = priceIsUSD ? price * (exchangeRates?.USD || 18.50) : price;
+
+  // Get country flag emoji
+  const getCountryFlag = (countryCode?: string): string => {
+    if (!countryCode) return '🌍';
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  };
 
   return (
     <Card className="group relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl bg-gradient-to-br from-background to-background/95">
@@ -67,10 +79,13 @@ export const RoamBuddyProductCard = ({
           </div>
         )}
         
-        {/* Product Image/Icon - Enhanced */}
-        <div className="relative w-full h-40 bg-gradient-to-br from-primary/20 via-accent/10 to-primary/5 rounded-xl flex items-center justify-center mb-4 overflow-hidden">
+        {/* Product Image/Icon - Enhanced with Country Flag */}
+        <div className="relative w-full h-40 bg-gradient-to-br from-primary/20 via-accent/10 to-primary/5 rounded-xl flex flex-col items-center justify-center mb-4 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary),0.2),transparent_70%)]" />
-          <Globe className="relative h-20 w-20 text-primary opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
+          <div className="relative text-6xl mb-2 group-hover:scale-110 transition-all duration-500">
+            {getCountryFlag(primaryCountryCode)}
+          </div>
+          <Globe className="relative h-8 w-8 text-primary/60 group-hover:text-primary transition-all duration-500" />
         </div>
 
         <div className="space-y-2">

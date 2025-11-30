@@ -10,8 +10,12 @@ export interface RoamBuddyProduct {
   priceIsUSD?: boolean;
   dataAmount?: string;
   validity?: string;
-  coverage?: (string | { country_name: string; country_code: string; [key: string]: any })[];
+  coverage?: string[];
+  primaryCountryCode?: string;
   destination?: string;
+  speed?: string;
+  wellnessFeatures?: string[];
+  peaceOfMindScore?: number;
 }
 
 export const useRoamBuddyAPI = () => {
