@@ -41,12 +41,16 @@ const RoamBuddyStore = () => {
       const mappedProducts = result.data.map((product: any) => ({
         id: product.id || `product-${Date.now()}-${Math.random()}`,
         name: product.name || product.title || 'eSIM Plan',
-        price: product.price || product.amount || 0,
+        // Price is in USD - parse the string to number
+        price: parseFloat(product.price) || product.amount || 0,
+        priceIsUSD: true, // Flag that price is already in USD
         description: product.description || 'Stay connected worldwide',
-        dataAmount: product.data_amount || product.dataAmount || '1GB',
-        validity: product.validity_days ? `${product.validity_days} days` : (product.validity || '30 days'),
+        // API returns just "1", we need to append "GB"
+        dataAmount: product.data ? `${product.data}GB` : (product.data_amount || product.dataAmount || '1GB'),
+        // API returns just "7", we need to append "days"
+        validity: product.validity ? `${product.validity} days` : (product.validity_days ? `${product.validity_days} days` : '30 days'),
         coverage: product.coverage || product.countries || ['Global'],
-        destination: product.destination || (product.coverage && product.coverage[0]) || 'Global',
+        destination: product.destination || product.region || (product.countries?.[0]?.country_name) || 'Global',
         speed: product.speed || '4G/5G',
         wellnessFeatures: product.wellness_features || [],
         peaceOfMindScore: product.peace_of_mind_score || calculatePeaceOfMindScore(product)
@@ -182,6 +186,8 @@ const RoamBuddyStore = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {curatedESIMPicks.map((pick) => {
               const curator = curatorProfiles[pick.curator];
+              // Use reasonable default price for curated picks
+              const defaultPrice = 15;
               return (
                 <RoamBuddyProductCard
                   key={pick.id}
@@ -190,7 +196,8 @@ const RoamBuddyStore = () => {
                   dataAmount={pick.dataAmount}
                   validity={pick.validity}
                   coverage={pick.whoShouldGet}
-                  price={2500}
+                  price={defaultPrice}
+                  priceIsUSD={true}
                   speed="4G/5G"
                   wellnessFeatures={[pick.wellnessAngle]}
                   peaceOfMindScore={pick.peaceOfMindScore}
@@ -199,7 +206,8 @@ const RoamBuddyStore = () => {
                   onSelect={() => handleProductSelect({
                     id: pick.id,
                     name: pick.name,
-                    price: 2500,
+                    price: defaultPrice,
+                    priceIsUSD: true,
                     description: pick.wellnessAngle,
                     dataAmount: pick.dataAmount,
                     validity: pick.validity,
@@ -281,6 +289,7 @@ const RoamBuddyStore = () => {
                       typeof c === 'string' ? c : c.country_name
                     ) || []}
                     price={product.price}
+                    priceIsUSD={product.priceIsUSD}
                     speed="4G/5G"
                     wellnessFeatures={getWellnessFeatures(product)}
                     peaceOfMindScore={calculatePeaceOfMindScore(product)}
