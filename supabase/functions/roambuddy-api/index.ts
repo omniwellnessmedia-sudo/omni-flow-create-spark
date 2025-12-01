@@ -219,6 +219,44 @@ serve(async (req) => {
         return await handleGetProductsPagination(data)
       
       case 'createOrder':
+        // Require authentication for order creation to prevent abuse
+        const authHeader = req.headers.get('Authorization');
+        if (!authHeader) {
+          return new Response(
+            JSON.stringify({ 
+              success: false, 
+              error: 'Authentication required for order creation',
+              message: 'Please sign in to create orders'
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+          );
+        }
+
+        // Verify the JWT token
+        const supabaseAuth = createClient(
+          Deno.env.get('SUPABASE_URL') ?? '',
+          Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+          {
+            global: {
+              headers: { Authorization: authHeader },
+            },
+          }
+        );
+
+        const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+        
+        if (authError || !user) {
+          return new Response(
+            JSON.stringify({ 
+              success: false, 
+              error: 'Invalid authentication',
+              message: 'Please sign in again to create orders'
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+          );
+        }
+
+        console.log('✅ User authenticated for order creation:', user.id);
         return await handleCreateOrder(data, supabase)
       
       case 'trackOrder':

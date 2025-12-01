@@ -56,11 +56,39 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      global: {
+        headers: { Authorization: req.headers.get('Authorization')! },
+      },
+    });
 
     const { action, productCode, location, category } = await req.json();
 
     console.log('Viator API action:', action, 'with API key length:', viatorApiKey.length);
+
+    // Only allow 'get_cached_tours' without authentication
+    if (action !== 'get_cached_tours') {
+      // Verify user is authenticated and has admin role for write operations
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        return new Response(
+          JSON.stringify({ error: 'Unauthorized - admin access required' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Check admin status using the secure is_admin function
+      const { data: isAdmin, error: adminError } = await supabase
+        .rpc('is_admin', { user_id: user.id });
+
+      if (adminError || !isAdmin) {
+        return new Response(
+          JSON.stringify({ error: 'Admin access required for this operation' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
 
     // Action: Fetch specific product details
     if (action === 'fetch_product') {
