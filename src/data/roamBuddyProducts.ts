@@ -87,26 +87,26 @@ export const curatedESIMPicks: CuratedESIMPick[] = [
 export const curatorProfiles: Record<string, CuratorProfile> = {
   ferozza: {
     name: 'Ferozza',
-    role: 'Content Creator & Vlogger',
-    expertise: 'Mobile & Compact Gear',
+    role: 'Digital Nomad & Travel Content Creator',
+    expertise: 'Global Connectivity Solutions',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Feroza%20Portrait.jpg',
-    quote: 'Specializes in portable, high-quality gear for creators on the move. Focuses on equipment that balances portability with professional results.',
+    quote: 'As someone always on the move, I know the stress of staying connected abroad. I recommend eSIM plans that give you reliable data without the roaming bill shock.',
     curatorId: 'ferozza'
   },
   chad: {
     name: 'Chad',
     role: 'Head of Media & Strategy',
-    expertise: 'Studio & Professional Production',
+    expertise: 'Business Travel & Remote Production',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Chad%20and%20cow_OMNI_BWC.jpg',
-    quote: 'Expert in studio setups and professional media production. Guides teams toward equipment that delivers consistent, broadcast-quality results.',
+    quote: 'When you\'re filming on location or coordinating international projects, connectivity isn\'t optional. I choose plans that keep teams connected without compromise.',
     curatorId: 'chad'
   },
   zenith: {
     name: 'Zenith',
-    role: 'Administration & Project Coordination',
-    expertise: 'Practical & Beginner-Friendly Solutions',
+    role: 'Travel Coordinator & Wellness Guide',
+    expertise: 'Stress-Free Travel Setup',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg',
-    quote: 'Focuses on accessible, user-friendly equipment that empowers newcomers to start their content creation journey with confidence.',
+    quote: 'First-time international travelers shouldn\'t worry about SIM cards. I recommend the simplest, most reliable eSIM options so you can focus on your wellness journey.',
     curatorId: 'zenith'
   }
 };

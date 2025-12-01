@@ -46,14 +46,10 @@ export const RoamBuddyProductCard = ({
   const displayPriceUSD = priceIsUSD ? price : convertZARToUSD(price);
   const displayPriceZAR = priceIsUSD ? price * (exchangeRates?.USD || 18.50) : price;
 
-  // Get country flag emoji
-  const getCountryFlag = (countryCode?: string): string => {
-    if (!countryCode) return '🌍';
-    const codePoints = countryCode
-      .toUpperCase()
-      .split('')
-      .map(char => 127397 + char.charCodeAt(0));
-    return String.fromCodePoint(...codePoints);
+  // Get country code display
+  const getCountryCodeDisplay = (countryCode?: string): string => {
+    if (!countryCode) return 'GLOBAL';
+    return countryCode.toUpperCase();
   };
 
   return (
@@ -79,12 +75,12 @@ export const RoamBuddyProductCard = ({
           </div>
         )}
         
-        {/* Product Image/Icon - Enhanced with Country Flag */}
+        {/* Product Image/Icon - Enhanced with Country Code */}
         <div className="relative w-full h-40 bg-gradient-to-br from-primary/20 via-accent/10 to-primary/5 rounded-xl flex flex-col items-center justify-center mb-4 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary),0.2),transparent_70%)]" />
-          <div className="relative text-6xl mb-2 group-hover:scale-110 transition-all duration-500">
-            {getCountryFlag(primaryCountryCode)}
-          </div>
+          <Badge variant="secondary" className="relative text-2xl px-6 py-2 font-bold mb-3 group-hover:scale-110 transition-all duration-500">
+            {getCountryCodeDisplay(primaryCountryCode)}
+          </Badge>
           <Globe className="relative h-8 w-8 text-primary/60 group-hover:text-primary transition-all duration-500" />
         </div>
 
@@ -152,7 +148,7 @@ export const RoamBuddyProductCard = ({
           <div className="flex items-baseline justify-between bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4">
             <div>
               <p className="text-sm text-muted-foreground mb-1">From</p>
-              <p className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <p className="text-3xl font-bold text-primary">
                 {formatUSD(displayPriceUSD)}
               </p>
             </div>
