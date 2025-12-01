@@ -1,7 +1,7 @@
 export interface CuratedESIMPick {
   id: string;
   name: string;
-  curator: 'zenith' | 'chad' | 'abbi';
+  curator: 'zenith' | 'chad' | 'ferozza';
   whyWeChoseIt: string;
   whoShouldGet: string[];
   wellnessAngle: string;
@@ -17,7 +17,7 @@ export interface CuratorProfile {
   expertise: string;
   avatar: string;
   quote: string;
-  curatorId: 'zenith' | 'chad' | 'abbi';
+  curatorId: 'zenith' | 'chad' | 'ferozza';
 }
 
 export interface Country {
@@ -61,7 +61,7 @@ export const curatedESIMPicks: CuratedESIMPick[] = [
   {
     id: 'pick-global-zen',
     name: 'Global Zen Connectivity',
-    curator: 'abbi',
+    curator: 'ferozza',
     whyWeChoseIt: "For digital nomads attending wellness events worldwide - no country-hopping SIM swaps. One eSIM covers your entire conscious travel journey.",
     whoShouldGet: ['Digital nomads', 'Frequent travelers', 'Location-independent workers'],
     wellnessAngle: 'digital_nomad_wellness',
@@ -85,29 +85,29 @@ export const curatedESIMPicks: CuratedESIMPick[] = [
 ];
 
 export const curatorProfiles: Record<string, CuratorProfile> = {
-  zenith: {
-    name: 'Zenith',
-    role: 'Retreat Coordination & Administration',
-    expertise: 'Wellness Travel Connectivity',
-    avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Omni%20wellness%20team.jpg',
-    quote: 'Peace of mind starts with knowing you\'re connected when you need to be',
-    curatorId: 'zenith'
+  ferozza: {
+    name: 'Ferozza',
+    role: 'Content Creator & Vlogger',
+    expertise: 'Mobile & Compact Gear',
+    avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Feroza%20Portrait.jpg',
+    quote: 'Specializes in portable, high-quality gear for creators on the move. Focuses on equipment that balances portability with professional results.',
+    curatorId: 'ferozza'
   },
   chad: {
     name: 'Chad',
-    role: 'Content & Strategy Lead',
-    expertise: 'Content Creator Connectivity',
+    role: 'Head of Media & Strategy',
+    expertise: 'Studio & Professional Production',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Chad%20and%20cow_OMNI_BWC.jpg',
-    quote: 'Documenting transformation requires reliable connectivity',
+    quote: 'Expert in studio setups and professional media production. Guides teams toward equipment that delivers consistent, broadcast-quality results.',
     curatorId: 'chad'
   },
-  abbi: {
-    name: 'Abbi',
-    role: 'Content Development',
-    expertise: 'Digital Nomad Solutions',
-    avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg',
-    quote: 'Digital nomads need connectivity that travels as freely as they do',
-    curatorId: 'abbi'
+  zenith: {
+    name: 'Zenith',
+    role: 'Administration & Project Coordination',
+    expertise: 'Practical & Beginner-Friendly Solutions',
+    avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg',
+    quote: 'Focuses on accessible, user-friendly equipment that empowers newcomers to start their content creation journey with confidence.',
+    curatorId: 'zenith'
   }
 };
 
