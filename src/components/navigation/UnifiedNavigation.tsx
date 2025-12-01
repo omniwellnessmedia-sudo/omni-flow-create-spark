@@ -104,7 +104,8 @@ const UnifiedNavigation = () => {
       icon: Store,
       children: [
         { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural wellness products', icon: '🌿' },
-        { title: 'Travel Connectivity', href: '/travel-well-connected-store', description: 'eSIM & travel data', icon: '📱' },
+        { title: 'RoamBuddy Store', href: '/roambuddy-store', description: 'Travel eSIM & connectivity', icon: '🌍' },
+        { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'eSIM & travel data', icon: '📱' },
       ]
     },
     {
