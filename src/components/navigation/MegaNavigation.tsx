@@ -53,7 +53,8 @@ export const MegaNavigation = () => {
       title: 'Shop',
       items: [
         { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural wellness products', icon: '🌿', featured: true },
-        { title: 'Travel Connectivity', href: '/travel-well-connected-store', description: 'eSIM & data packages', icon: '📱' },
+        { title: 'RoamBuddy Store', href: '/roambuddy-store', description: 'Travel eSIM & connectivity', icon: '🌍' },
+        { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'eSIM & data packages', icon: '📱' },
       ]
     }
   ];
