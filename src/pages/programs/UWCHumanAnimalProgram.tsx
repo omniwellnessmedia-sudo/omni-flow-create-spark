@@ -1,739 +1,732 @@
-import React, { useState } from 'react';
-import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
-import Footer from '@/components/Footer';
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Check, Users, BookOpen, Award, GraduationCap, Heart, Building, Calendar, DollarSign, Target, ArrowLeft, Share2, ChevronRight } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import Footer from '@/components/Footer';
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
-import { Link } from 'react-router-dom';
+import { 
+  GraduationCap, 
+  Heart, 
+  Globe, 
+  Users, 
+  Calendar, 
+  MapPin, 
+  Award,
+  BookOpen,
+  Leaf,
+  Brain,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Building2,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Home,
+  Clock,
+  CheckCircle2,
+  Star,
+  Microscope,
+  Activity
+} from 'lucide-react';
 
-// Use existing Supabase storage images
-const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
-const uwcHero = `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`;
-const uwcFieldwork = `${STORAGE_BASE}/General%20Images/community%20outing%202.jpg`;
-const uwcCampus = `${STORAGE_BASE}/General%20Images/Wellness%20retreat%202.jpg`;
-const drSharynSpicer = `${STORAGE_BASE}/General%20Images/feroza%20begg%20-%20portrait.jpg`;
+// Import images
+import horseCare1 from '@/assets/programs/tufcat-horse-care-1.jpg';
+import horseCare2 from '@/assets/programs/tufcat-horse-care-2.jpg';
+import horseCare3 from '@/assets/programs/tufcat-horse-care-3.jpg';
+import horseCare4 from '@/assets/programs/tufcat-horse-care-4.jpg';
+import accommodationBedroom from '@/assets/programs/tufcat-accommodation-bedroom.jpg';
+import accommodationKitchen from '@/assets/programs/tufcat-accommodation-kitchen.jpg';
+import community1 from '@/assets/programs/tufcat-community-1.jpg';
+import sanctuary1 from '@/assets/programs/tufcat-sanctuary-1.jpg';
+import sanctuary2 from '@/assets/programs/tufcat-sanctuary-2.jpg';
 
-export default function UWCHumanAnimalProgram() {
-  const [selectedImage, setSelectedImage] = useState(0);
-  const heroImages = [uwcHero, uwcFieldwork, uwcCampus];
+const UWCHumanAnimalProgram = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const heroImages = [
+    horseCare1,
+    horseCare2,
+    horseCare3,
+    horseCare4,
+    community1
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
+
+  const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+  const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length);
+
+  const academicPillars = [
+    {
+      icon: Heart,
+      title: "Animal-Assisted Therapy & Empathy Development",
+      description: "Biometric measurement of HRV, cortisol, and empathy indicators through human-animal interactions",
+      color: "from-rose-500 to-pink-600"
+    },
+    {
+      icon: Leaf,
+      title: "Indigenous Knowledge & African Healing Practices",
+      description: "Integration of traditional African wellness practices with evidence-based therapeutic approaches",
+      color: "from-emerald-500 to-green-600"
+    },
+    {
+      icon: Globe,
+      title: "Environmental Sustainability & Permaculture",
+      description: "Hands-on learning in sustainable farming, food security, and ecological stewardship",
+      color: "from-blue-500 to-cyan-600"
+    },
+    {
+      icon: Users,
+      title: "Wellness Education & Community Regeneration",
+      description: "Zone-based community placements in Khayelitsha, Mitchells Plain, Gugulethu, and Delft",
+      color: "from-amber-500 to-orange-600"
+    },
+    {
+      icon: Brain,
+      title: "Conscious Leadership & Social Innovation",
+      description: "Developing change agents who lead with empathy, purpose, and community-centered values",
+      color: "from-purple-500 to-violet-600"
+    }
+  ];
+
+  const researchInnovations = [
+    {
+      icon: Activity,
+      title: "Biometric Integration",
+      description: "Wearable devices tracking HRV, sleep quality, and stress indicators throughout the program"
+    },
+    {
+      icon: MapPin,
+      title: "Geofenced Community Zones",
+      description: "Targeted placements in Khayelitsha, Mitchells Plain, Gugulethu, and Delft communities"
+    },
+    {
+      icon: Heart,
+      title: "Dual-Benefit Model",
+      description: "Simultaneous measurement of handler stress reduction and equine welfare indicators"
+    },
+    {
+      icon: TrendingUp,
+      title: "Real-Time Data Pipeline",
+      description: "Continuous feedback loops from biometric data directly into curriculum refinement"
+    }
+  ];
 
   const partners = [
-    { name: 'UWC', logo: '🎓', role: 'Academic Institution' },
-    { name: 'Beauty Without Cruelty SA', logo: '🐰', role: 'Animal Rights' },
-    { name: 'Eduponics', logo: '🌱', role: 'Urban Farming' },
-    { name: 'Gorachouqua Khoi Nation', logo: '🏔️', role: 'Indigenous Knowledge' },
-    { name: 'Dr. Phil-afel Foundation', logo: '💚', role: 'Youth Development' },
-    { name: 'TUFCAT Sanctuary', logo: '🐾', role: 'Animal Welfare' },
-    { name: 'Soul Restoration Wellness', logo: '🧘', role: 'Holistic Health' },
-    { name: 'Valley of Plenty', logo: '🌾', role: 'Community Farming' },
+    {
+      name: "University of the Western Cape",
+      role: "Academic Institution & Research Supervision",
+      description: "NQF Level 7-8 accreditation and academic oversight"
+    },
+    {
+      name: "Cart Horse Protection Association",
+      role: "Equine Welfare & Community Liaison",
+      description: "Expertise in working horse welfare and community engagement"
+    },
+    {
+      name: "TUFCAT Farm & Brands Consortium",
+      role: "Field Site Operations",
+      description: "7-hectare living classroom with sanctuary animals and accommodation"
+    },
+    {
+      name: "Dr. Phil-afel Foundation",
+      role: "Section 18A Funding Partner",
+      description: "Tax-deductible sponsorship and scholarship support"
+    },
+    {
+      name: "EduPonics",
+      role: "Urban Farming & Food Security",
+      description: "Sustainable agriculture training and community gardens"
+    },
+    {
+      name: "Omni Wellness Media",
+      role: "Platform & Data Integration",
+      description: "Digital infrastructure and biometric data management"
+    }
+  ];
+
+  const teamMembers = [
+    {
+      name: "Prof. Sharyn Spicer",
+      role: "Academic Supervision",
+      description: "Overseeing research methodology and academic standards"
+    },
+    {
+      name: "Dr. Megan White",
+      role: "Cart Horse Protection Association",
+      description: "Equine welfare expertise and community liaison"
+    },
+    {
+      name: "Chad Cupido",
+      role: "Research Design Lead",
+      description: "TUFCAT/PhD candidate leading research design and implementation"
+    },
+    {
+      name: "Leigh Tucker",
+      role: "Funder Alignment Lead",
+      description: "UWC International Relations and strategic partnerships"
+    },
+    {
+      name: "Wendy Walton",
+      role: "Geofencing & Life Skills Integration",
+      description: "Community zone coordination and practical skills development"
+    },
+    {
+      name: "Tumelo Ncube",
+      role: "Technology-Enabled Measurement",
+      description: "RPL Pathway development and biometric data systems"
+    }
+  ];
+
+  const timeline = [
+    { date: "November 2025", event: "MOU Finalization", status: "current" },
+    { date: "February 13, 2026", event: "HABRI Grant Submission Deadline", status: "upcoming" },
+    { date: "May 2026", event: "HABRI Funding Decision", status: "upcoming" },
+    { date: "June 2026", event: "First Cohort Launch", status: "upcoming" }
+  ];
+
+  const galleryImages = [
+    { src: horseCare1, alt: "Horse care and therapy session" },
+    { src: horseCare2, alt: "Human-animal interaction" },
+    { src: horseCare3, alt: "Community engagement" },
+    { src: horseCare4, alt: "Equine welfare program" },
+    { src: sanctuary1, alt: "Sanctuary animals" },
+    { src: sanctuary2, alt: "Animal sanctuary" },
+    { src: community1, alt: "Community outreach" },
+    { src: accommodationBedroom, alt: "Student accommodation" }
   ];
 
   return (
-    <>
-      <UnifiedNavigation />
-      
-      {/* Hero Section with Image Gallery */}
-      <section className="relative h-[75vh] md:h-[85vh] overflow-hidden">
-        <img 
-          src={heroImages[selectedImage]}
-          alt="UWC Human-Animal Program"
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
-        
-        {/* Navigation Overlay */}
-        <div className="absolute top-6 left-6 z-10">
-          <Link to="/">
-            <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-          </Link>
-        </div>
-
-        <div className="absolute top-6 right-6 z-10 flex gap-2">
-          <Button variant="ghost" size="icon" className="text-white hover:bg-white/20">
-            <Share2 className="h-4 w-4" />
-          </Button>
+    <div className="min-h-screen bg-background">
+      {/* Hero Section - Full Height with Image Carousel */}
+      <section className="relative h-screen min-h-[700px] overflow-hidden">
+        {/* Background Image Carousel */}
+        <div className="absolute inset-0">
+          {heroImages.map((img, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <img 
+                src={img} 
+                alt={`Program highlight ${index + 1}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 container mx-auto h-full flex items-center px-4">
-          <div className="max-w-3xl text-white">
-            <Badge className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-              UWC Short Course • NQF Level 7-8 • Pilot January 2026
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Animals, Society & Violence Prevention in Post-Apartheid South Africa
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-4">
-              University of the Western Cape Short Course
-            </p>
-            <p className="text-lg mb-8 text-white/80 max-w-2xl">
-              40 Contact Hours • 10 SAQA Credits • Research-Based Learning • Fieldwork Immersion
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90">
-                Apply for Pilot Program
-                <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20">
-                Download Curriculum
-              </Button>
+        <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 max-w-6xl mx-auto">
+          <Badge className="mb-6 bg-primary/20 text-primary-foreground border-primary/30 backdrop-blur-sm px-4 py-2 text-sm">
+            <GraduationCap className="w-4 h-4 mr-2" />
+            UWC × TUFCAT Consortium • HABRI-Funded Research • June 2026
+          </Badge>
+          
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            Animal-Assisted Therapy Research,{' '}
+            <span className="text-primary">Violence Prevention</span>{' '}
+            & African Wellness
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl">
+            International Partnership Programme combining evidence-based therapy with indigenous knowledge systems
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Heart className="mr-2 h-5 w-5" />
+              Express Interest
+            </Button>
+            <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20">
+              <BookOpen className="mr-2 h-5 w-5" />
+              Download Prospectus
+            </Button>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-white">
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-primary">R70K</div>
+              <div className="text-sm text-white/70">Per Student</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-primary">20-25</div>
+              <div className="text-sm text-white/70">Students Per Cohort</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-primary">NQF 7-8</div>
+              <div className="text-sm text-white/70">Academic Level</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-primary">10</div>
+              <div className="text-sm text-white/70">SAQA Credits</div>
             </div>
           </div>
         </div>
 
-        {/* Image Gallery Navigation */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex gap-2">
+        {/* Navigation Arrows */}
+        <button 
+          onClick={prevImage}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        <button 
+          onClick={nextImage}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+
+        {/* Image Indicators */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {heroImages.map((_, index) => (
             <button
               key={index}
-              onClick={() => setSelectedImage(index)}
+              onClick={() => setCurrentImageIndex(index)}
               className={`w-3 h-3 rounded-full transition-all ${
-                selectedImage === index 
-                  ? 'bg-white w-8' 
-                  : 'bg-white/50 hover:bg-white/70'
+                index === currentImageIndex ? 'bg-primary w-8' : 'bg-white/50 hover:bg-white/70'
               }`}
-              aria-label={`View image ${index + 1}`}
             />
           ))}
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block">
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
-            <div className="w-1 h-3 bg-white/50 rounded-full" />
-          </div>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+          <ChevronDown className="w-8 h-8 text-white/60" />
         </div>
       </section>
 
       {/* Breadcrumb */}
-      <div className="container mx-auto px-4 py-4">
-        <BreadcrumbNav 
-          items={[
-            { label: 'Home', href: '/' },
-            { label: 'Programs', href: '/programs' },
-            { label: 'UWC Human-Animal Program' }
-          ]}
-        />
+      <div className="bg-muted/30 border-b">
+        <div className="container mx-auto px-4 py-4">
+          <BreadcrumbNav 
+            items={[
+              { label: 'Programs', href: '/programs' },
+              { label: 'UWC Human-Animal Interaction', href: '/programs/uwc-human-animal' }
+            ]}
+          />
+        </div>
       </div>
 
-      {/* Research Question */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-green-50">
+      {/* Research Question Section */}
+      <section className="py-20 bg-gradient-to-b from-background to-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <Target className="w-12 h-12 text-primary mx-auto mb-6" />
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Core Research Question</h2>
-            <p className="text-xl md:text-2xl text-muted-foreground italic mb-8 leading-relaxed">
-              "Can healthy and cruelty-free human-animal relations lead to better food security 
-              and violence prevention in post-apartheid South Africa?"
-            </p>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              This pioneering short course examines the intersection of animal welfare, social justice, 
-              and community well-being through academic theory, practical fieldwork, and indigenous wisdom.
+            <Badge className="mb-6 bg-primary/10 text-primary">
+              <Microscope className="w-4 h-4 mr-2" />
+              Core Research Question
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-foreground">
+              How can Animal-Assisted Therapy transform occupational wellness and violence prevention in post-apartheid South Africa?
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              This pioneering international partnership programme combines rigorous academic research with hands-on experiential learning. 
+              Students will participate as co-researchers, contributing to groundbreaking studies on the therapeutic benefits of 
+              human-animal interaction while developing practical skills in community wellness and sustainable development.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Program Overview */}
+      {/* Academic Pillars */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Program Structure</h2>
-            
-            <div className="grid md:grid-cols-3 gap-6 mb-16">
-              <Card className="hover:shadow-xl transition-all hover:-translate-y-1">
-                <CardHeader>
-                  <GraduationCap className="w-12 h-12 text-blue-600 mb-3" />
-                  <CardTitle className="text-xl">Academic Rigor</CardTitle>
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary">
+              <BookOpen className="w-4 h-4 mr-2" />
+              Academic Framework
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Five Core Academic Pillars
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Our interdisciplinary curriculum integrates evidence-based research with indigenous knowledge systems
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {academicPillars.map((pillar, index) => (
+              <Card key={index} className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-0 bg-card">
+                <CardHeader className="pb-4">
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${pillar.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                    <pillar.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <CardTitle className="text-xl">{pillar.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3 text-sm">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>NQF Level 7-8 certification</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>10 SAQA credits</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>40 contact hours over 4 weeks</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <span>Research project component</span>
-                    </li>
-                  </ul>
+                  <p className="text-muted-foreground">{pillar.description}</p>
                 </CardContent>
               </Card>
-
-              <Card className="hover:shadow-xl transition-all hover:-translate-y-1">
-                <CardHeader>
-                  <Heart className="w-12 h-12 text-green-600 mb-3" />
-                  <CardTitle className="text-xl">Fieldwork Focus</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 text-sm">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>TUFCAT sanctuary immersion</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Gorachouqua community engagement</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Valley of Plenty visits</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Youth advocate workshops</span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-xl transition-all hover:-translate-y-1">
-                <CardHeader>
-                  <Users className="w-12 h-12 text-purple-600 mb-3" />
-                  <CardTitle className="text-xl">Pilot Cohort</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 text-sm">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                      <span>15-20 students (January 2026)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                      <span>4 scholarships for local students</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                      <span>Diverse backgrounds encouraged</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                      <span>Alumni network access</span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* 4-Week Curriculum */}
-            <h3 className="text-2xl md:text-3xl font-bold mb-8 text-center">4-Week Curriculum Breakdown</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="border-l-4 border-l-blue-500 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BookOpen className="w-5 h-5" />
-                    Week 1: Theoretical Foundations (10 hours)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 text-sm">
-                  <div>
-                    <h4 className="font-semibold mb-2">Violence Prevention Frameworks</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Introduction to violence as a public health issue, intersectionality theory, 
-                      and the Link between animal cruelty and interpersonal violence.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Food Security & Ethics</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Plant-based nutrition science, ethical food systems, and sustainable agriculture 
-                      in the South African context.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Post-Apartheid Social Context</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Historical trauma, socio-economic inequality, and structural violence in contemporary SA.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-green-500 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Users className="w-5 h-5" />
-                    Week 2: Applied Practice (10 hours)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 text-sm">
-                  <div>
-                    <h4 className="font-semibold mb-2">Animal Welfare Interventions</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Cruelty-free advocacy methods, community education strategies, and ethical leadership.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Workshop Facilitation Skills</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Training youth as advocates, designing age-appropriate curricula, and trauma-informed pedagogy.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Urban Farming Practicum</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Hands-on experience with eduponics systems, permaculture design, and community food gardens.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-purple-500 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Heart className="w-5 h-5" />
-                    Week 3: Fieldwork Immersion (15 hours)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 text-sm">
-                  <div>
-                    <h4 className="font-semibold mb-2">TUFCAT Sanctuary Experience</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Multi-day immersion at The Urgent Force Cat sanctuary, observing rescue operations, 
-                      rehabilitation protocols, and community outreach programs.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Community Engagement</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Work directly with Valley of Plenty, Hanover Park youth, and Gorachouqua elders 
-                      on real-world projects addressing food insecurity and violence prevention.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Indigenous Knowledge Systems</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Learning from Chief Kingsley about Khoi relationships with animals, land stewardship, 
-                      and holistic well-being.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-orange-500 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Award className="w-5 h-5" />
-                    Week 4: Research & Integration (5 hours)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 text-sm">
-                  <div>
-                    <h4 className="font-semibold mb-2">Research Project Development</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Students design and begin implementation of original research addressing the 
-                      core question in their chosen community context.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Presentation & Peer Review</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Share research proposals, receive feedback from faculty and partners, 
-                      and refine methodologies.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Action Planning</h4>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Create personal action plans for continued advocacy, community involvement, 
-                      and knowledge dissemination beyond the course.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Faculty & Leadership */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Program Structure */}
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Program Faculty & Leadership</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Learn from distinguished experts in animal welfare, psychology, and social justice
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary">
+              <Calendar className="w-4 h-4 mr-2" />
+              Program Structure
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Flexible Learning Pathways
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="text-center p-6 bg-card border-0 shadow-lg">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                <BookOpen className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Academic Modules</h3>
+              <p className="text-muted-foreground text-sm">Short courses (3-6 weeks) or semester exchanges with NQF Level 7-8 accreditation</p>
+            </Card>
+
+            <Card className="text-center p-6 bg-card border-0 shadow-lg">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                <MapPin className="w-8 h-8 text-emerald-500" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Experiential Learning</h3>
+              <p className="text-muted-foreground text-sm">Fieldwork at 7-hectare Tufcat Farm + zone-based community placements</p>
+            </Card>
+
+            <Card className="text-center p-6 bg-card border-0 shadow-lg">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-500/10 flex items-center justify-center">
+                <Microscope className="w-8 h-8 text-blue-500" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Research Participation</h3>
+              <p className="text-muted-foreground text-sm">Biometric + qualitative measurement with students as co-researchers</p>
+            </Card>
+
+            <Card className="text-center p-6 bg-card border-0 shadow-lg">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-500/10 flex items-center justify-center">
+                <Globe className="w-8 h-8 text-purple-500" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Blended Delivery</h3>
+              <p className="text-muted-foreground text-sm">On-campus + field immersion + digital reflection labs</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Research Innovation */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <Badge className="mb-4 bg-primary/10 text-primary">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Research Innovation
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                Cutting-Edge Biometric Research
+              </h2>
+              <p className="text-muted-foreground mb-8">
+                Our programme pioneers the integration of wearable technology with therapeutic animal interactions, 
+                creating a unique dual-benefit research model that measures outcomes for both human participants and animal welfare.
               </p>
+
+              <div className="space-y-6">
+                {researchInnovations.map((item, index) => (
+                  <div key={index} className="flex gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <item.icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                      <p className="text-muted-foreground text-sm">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Dr. Sharyn Spicer - Featured with Image */}
-              <Card className="md:col-span-2 hover:shadow-xl transition-all">
-                <CardContent className="pt-8">
-                  <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                    <div className="w-32 h-32 rounded-full overflow-hidden flex-shrink-0 border-4 border-blue-600/20">
-                      <img 
-                        src={drSharynSpicer}
-                        alt="Dr. Sharyn Spicer"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1 text-center md:text-left">
-                      <h3 className="font-bold text-2xl mb-2">Dr. Sharyn Spicer</h3>
-                      <p className="text-base text-blue-600 mb-3 font-medium">Academic Director & Lead Facilitator</p>
-                      <p className="text-base text-muted-foreground leading-relaxed">
-                        Academic oversight and research methodology guidance. Expert in violence prevention 
-                        and social justice frameworks in post-apartheid contexts. Dr. Spicer brings decades 
-                        of experience in interdisciplinary research and community-based interventions.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
 
-              <Card className="hover:shadow-lg transition-all">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                      <Users className="w-8 h-8 text-green-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Chad Cupido</h3>
-                      <p className="text-sm text-green-600 mb-2 font-medium">Executive Director | Omni Wellness Media</p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Program operations, media production, and community partnership coordination. 
-                        Leads fieldwork experiences and conscious media documentation.
-                      </p>
-                    </div>
+            <div className="relative">
+              <img 
+                src={horseCare2} 
+                alt="Research in action" 
+                className="rounded-2xl shadow-2xl"
+              />
+              <div className="absolute -bottom-6 -left-6 bg-card p-6 rounded-xl shadow-xl border">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Target className="w-6 h-6 text-primary" />
                   </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-all">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                      <Building className="w-8 h-8 text-purple-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Tumelo Ncube</h3>
-                      <p className="text-sm text-purple-600 mb-2 font-medium">Operations Lead | Technical Systems</p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Manages logistics, scheduling, and digital infrastructure. Ensures seamless 
-                        coordination between academic institution, partners, and fieldwork sites.
-                      </p>
-                    </div>
+                  <div>
+                    <div className="text-2xl font-bold text-foreground">USD $195K</div>
+                    <div className="text-sm text-muted-foreground">HABRI Grant Target</div>
                   </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-all">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                      <Heart className="w-8 h-8 text-orange-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Chief Kingsley</h3>
-                      <p className="text-sm text-orange-600 mb-2 font-medium">Indigenous Protocols Advisor | Gorachouqua Nation</p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Ensures culturally respectful engagement with Khoi traditions and sacred sites. 
-                        Shares indigenous knowledge systems throughout the program.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-all">
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                      <GraduationCap className="w-8 h-8 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Dr. Erika Lemmer</h3>
-                      <p className="text-sm text-blue-600 mb-2 font-medium">Academic Supervisor</p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Provides academic mentorship and research guidance to students throughout 
-                        the program, with expertise in companion animal studies.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Fieldwork Visual Section */}
+      {/* Fieldwork & Accommodation */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary">
+              <Home className="w-4 h-4 mr-2" />
+              Fieldwork & Accommodation
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Tufcat Farm Living Classroom
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              A 7-hectare sanctuary providing immersive learning experiences with comfortable student accommodation
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="overflow-hidden border-0 shadow-lg">
+              <img src={accommodationBedroom} alt="Student bedroom" className="w-full h-48 object-cover" />
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-2">Comfortable Accommodation</h3>
+                <p className="text-muted-foreground text-sm">Cozy private and shared bedrooms in a safe, trauma-informed environment</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden border-0 shadow-lg">
+              <img src={accommodationKitchen} alt="Kitchen facilities" className="w-full h-48 object-cover" />
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-2">Fully-Equipped Kitchen</h3>
+                <p className="text-muted-foreground text-sm">Modern kitchen facilities supporting plant-based nutrition education</p>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden border-0 shadow-lg">
+              <img src={sanctuary1} alt="Sanctuary animals" className="w-full h-48 object-cover" />
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-2">Animal Sanctuary</h3>
+                <p className="text-muted-foreground text-sm">Daily interaction with rescued animals in therapeutic settings</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Section */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="rounded-2xl overflow-hidden shadow-2xl">
-                <img 
-                  src={uwcFieldwork}
-                  alt="Fieldwork Experience"
-                  className="w-full h-[400px] object-cover"
-                />
-              </div>
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Immersive Fieldwork Experience</h2>
-                <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                  Experience hands-on learning in real community settings across Cape Town. Work directly 
-                  with animal welfare organizations, urban farming initiatives, and indigenous communities 
-                  to understand the practical applications of course concepts.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <Check className="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-base">Multi-day sanctuary immersion at TUFCAT</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Check className="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-base">Community engagement in Hanover Park and Valley of Plenty</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Check className="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-base">Indigenous knowledge sessions with Gorachouqua elders</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary">
+              <Users className="w-4 h-4 mr-2" />
+              Leadership Team
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Faculty & Research Leadership
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {teamMembers.map((member, index) => (
+              <Card key={index} className="p-6 bg-card border-0 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 mx-auto">
+                  <span className="text-2xl font-bold text-primary">
+                    {member.name.split(' ').map(n => n[0]).join('')}
+                  </span>
+                </div>
+                <div className="text-center">
+                  <h3 className="font-bold text-lg text-foreground">{member.name}</h3>
+                  <p className="text-primary text-sm font-medium mb-2">{member.role}</p>
+                  <p className="text-muted-foreground text-sm">{member.description}</p>
+                </div>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Partner Consortium */}
-      <section className="py-20 bg-gradient-subtle">
+      <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Partner Consortium</h2>
-            <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-              Collaborating with leading organizations in animal welfare and social development
-            </p>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {partners.map((partner, index) => (
-                <Card key={index} className="hover:shadow-md transition-all hover:-translate-y-1">
-                  <CardContent className="flex flex-col items-center justify-center p-6 text-center">
-                    <div className="text-4xl mb-3">{partner.logo}</div>
-                    <p className="font-medium text-sm mb-1">{partner.name}</p>
-                    <p className="text-xs text-muted-foreground">{partner.role}</p>
-                  </CardContent>
-                </Card>
-              ))}
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary">
+              <Building2 className="w-4 h-4 mr-2" />
+              Partner Consortium
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Strategic Partnership Network
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {partners.map((partner, index) => (
+              <Card key={index} className="p-6 bg-card border-0 shadow-lg">
+                <h3 className="font-bold text-lg text-foreground mb-1">{partner.name}</h3>
+                <p className="text-primary text-sm font-medium mb-3">{partner.role}</p>
+                <p className="text-muted-foreground text-sm">{partner.description}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Investment & Timeline */}
+      <section className="py-20 bg-gradient-to-b from-primary/5 to-background">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Investment */}
+            <div>
+              <Badge className="mb-4 bg-primary/10 text-primary">
+                <Award className="w-4 h-4 mr-2" />
+                Investment
+              </Badge>
+              <h2 className="text-3xl font-bold text-foreground mb-6">
+                Program Investment
+              </h2>
+              
+              <Card className="p-8 bg-card border-0 shadow-xl mb-6">
+                <div className="text-center mb-6">
+                  <div className="text-5xl font-bold text-primary mb-2">R70,000</div>
+                  <div className="text-muted-foreground">Per Student (First Cohort)</div>
+                </div>
+                
+                <Separator className="my-6" />
+                
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Cohort Size</span>
+                    <span className="font-semibold">20-25 students</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">SA Scholarships</span>
+                    <span className="font-semibold">20% of places</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">HABRI Grant</span>
+                    <span className="font-semibold">USD $195K (~R3.5M)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Tax Deductibility</span>
+                    <span className="font-semibold">Section 18A</span>
+                  </div>
+                </div>
+              </Card>
+
+              <div className="flex flex-wrap gap-4">
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Heart className="mr-2 h-4 w-4" />
+                  Sponsor a Student
+                </Button>
+                <Button variant="outline">
+                  <Building2 className="mr-2 h-4 w-4" />
+                  Become a Partner
+                </Button>
+              </div>
             </div>
 
-            {/* Campus Image */}
-            <div className="mt-16 rounded-2xl overflow-hidden shadow-2xl">
-              <img 
-                src={uwcCampus}
-                alt="University of the Western Cape Campus"
-                className="w-full h-[400px] object-cover"
-              />
+            {/* Timeline */}
+            <div>
+              <Badge className="mb-4 bg-primary/10 text-primary">
+                <Clock className="w-4 h-4 mr-2" />
+                Timeline
+              </Badge>
+              <h2 className="text-3xl font-bold text-foreground mb-6">
+                Program Timeline
+              </h2>
+
+              <div className="space-y-6">
+                {timeline.map((item, index) => (
+                  <div key={index} className="flex gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        item.status === 'current' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                      }`}>
+                        {item.status === 'current' ? (
+                          <Star className="w-5 h-5" />
+                        ) : (
+                          <CheckCircle2 className="w-5 h-5" />
+                        )}
+                      </div>
+                      {index < timeline.length - 1 && (
+                        <div className="w-0.5 h-full bg-border mt-2" />
+                      )}
+                    </div>
+                    <div className="pb-8">
+                      <div className="text-sm text-primary font-medium">{item.date}</div>
+                      <div className="font-semibold text-foreground">{item.event}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Investment & Enrollment */}
+      {/* Image Gallery */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Investment & Enrollment</h2>
-            
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Card className="hover:shadow-xl transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-2xl">
-                    <DollarSign className="w-6 h-6 text-green-600" />
-                    Funding Needed
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p className="text-3xl font-bold text-green-600 mb-2">R180,000 Total</p>
-                    <p className="text-sm text-muted-foreground">For pilot cohort of 15-20 students</p>
-                  </div>
-                  
-                  <div className="space-y-3 pt-4 border-t">
-                    <div className="flex justify-between">
-                      <span className="text-sm">UWC Accreditation & Credits</span>
-                      <span className="font-semibold">R90,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm">Local Student Scholarships (4)</span>
-                      <span className="font-semibold">R40,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm">Fieldwork & Transport</span>
-                      <span className="font-semibold">R25,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm">Materials & Documentation</span>
-                      <span className="font-semibold">R15,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm">Partner Stipends & Admin</span>
-                      <span className="font-semibold">R10,000</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-primary/10 text-primary">
+              Gallery
+            </Badge>
+            <h2 className="text-3xl font-bold text-foreground">
+              Program Gallery
+            </h2>
+          </div>
 
-              <Card className="hover:shadow-xl transition-shadow">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-2xl">
-                    <Calendar className="w-6 h-6 text-blue-600" />
-                    Pilot Timeline
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full bg-blue-600 mt-2" />
-                      <div>
-                        <p className="font-semibold">November 2025</p>
-                        <p className="text-sm text-muted-foreground">Applications Open</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full bg-blue-600 mt-2" />
-                      <div>
-                        <p className="font-semibold">December 2025</p>
-                        <p className="text-sm text-muted-foreground">Student Selection & Onboarding</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full bg-green-600 mt-2" />
-                      <div>
-                        <p className="font-semibold">January 2026</p>
-                        <p className="text-sm text-muted-foreground">Pilot Program Launch (4 weeks)</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full bg-purple-600 mt-2" />
-                      <div>
-                        <p className="font-semibold">February 2026</p>
-                        <p className="text-sm text-muted-foreground">Research Projects & Alumni Network</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                <Users className="mr-2 h-5 w-5" />
-                Express Interest in Enrollment
-              </Button>
-              <Button size="lg" variant="outline">
-                <Heart className="mr-2 h-5 w-5" />
-                Sponsor a Local Student
-              </Button>
-              <Button size="lg" variant="outline">
-                <Building className="mr-2 h-5 w-5" />
-                Partner with Us
-              </Button>
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {galleryImages.map((image, index) => (
+              <div key={index} className="aspect-square overflow-hidden rounded-xl group cursor-pointer">
+                <img 
+                  src={image.src} 
+                  alt={image.alt}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Expected Outcomes */}
-      <section className="py-20 bg-gradient-to-br from-green-50 via-white to-blue-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">What You'll Gain</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Transform your understanding and create lasting impact
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card className="hover:shadow-xl transition-all">
-                <CardHeader>
-                  <Award className="w-12 h-12 text-blue-600 mb-3" />
-                  <CardTitle className="text-xl">Credentials</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0" />
-                      <span>UWC Short Course Certificate</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0" />
-                      <span>10 SAQA credits (NQF 7-8)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0" />
-                      <span>Research project publication opportunity</span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-xl transition-all">
-                <CardHeader>
-                  <Target className="w-12 h-12 text-green-600 mb-3" />
-                  <CardTitle className="text-xl">Career Pathways</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
-                      <span>Animal welfare advocacy roles</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
-                      <span>Community development positions</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-green-600 mt-1 flex-shrink-0" />
-                      <span>Violence prevention programming</span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-xl transition-all">
-                <CardHeader>
-                  <Heart className="w-12 h-12 text-purple-600 mb-3" />
-                  <CardTitle className="text-xl">Personal Growth</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-purple-600 mt-1 flex-shrink-0" />
-                      <span>Expanded worldview and empathy</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-purple-600 mt-1 flex-shrink-0" />
-                      <span>Indigenous wisdom integration</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-purple-600 mt-1 flex-shrink-0" />
-                      <span>Lifelong alumni network</span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+            Ready to Transform Lives Through Human-Animal Connection?
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+            Join us in pioneering research that bridges African wellness traditions with evidence-based therapy
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button size="lg" className="bg-primary hover:bg-primary/90">
+              <Heart className="mr-2 h-5 w-5" />
+              Express Interest
+            </Button>
+            <Button size="lg" variant="outline">
+              <BookOpen className="mr-2 h-5 w-5" />
+              Download Full Prospectus
+            </Button>
+            <Button size="lg" variant="outline">
+              <Users className="mr-2 h-5 w-5" />
+              Partner With Us
+            </Button>
           </div>
         </div>
       </section>
 
       <Footer />
-    </>
+    </div>
   );
-}
+};
+
+export default UWCHumanAnimalProgram;
