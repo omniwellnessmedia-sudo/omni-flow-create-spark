@@ -31,24 +31,37 @@ import {
   Activity
 } from 'lucide-react';
 
-// Image URLs (using uploaded images)
+// Image URLs - Cart Horse, TUFCAT, and Valley of Plenty community
 const heroImages = [
-  "/lovable-uploads/482325347_1198932732239807_143306161811243658_n.jpg",
-  "/lovable-uploads/558852709_1243815057772392_7668626230595706187_n.jpg",
-  "/lovable-uploads/565111747_1249493680537863_2087503467128195421_n.jpg",
-  "/lovable-uploads/565941732_1251461607007737_6890680042161126307_n.jpg",
-  "/lovable-uploads/547230382_1363593685773710_4169595945775668111_n.jpg"
+  "https://carthorse.org.za/wp/wp-content/uploads/2021/03/History-of-cart-horses-in-the-Cape.jpg",
+  "https://carthorse.org.za/wp/wp-content/uploads/2022/08/Equine-Welfare-Training-Course-CHA.jpg",
+  "https://carthorse.org.za/wp/wp-content/uploads/2022/08/cart-horse-donkeys-equine-training.jpg",
+  "/lovable-uploads/547230382_1363593685773710_4169595945775668111_n-2.jpg",
+  "/lovable-uploads/585868855_1429203929212685_6885647248657070604_n.jpg"
+];
+
+const cartHorseImages = [
+  "https://carthorse.org.za/wp/wp-content/uploads/2021/03/History-of-cart-horses-in-the-Cape.jpg",
+  "https://carthorse.org.za/wp/wp-content/uploads/2022/08/cart-horse-donkeys-equine-training.jpg",
+  "https://carthorse.org.za/wp/wp-content/uploads/2022/08/Equine-Welfare-Training-Course-CHA.jpg"
+];
+
+const tufcatImages = [
+  "https://www.tufcat.co.za/wp-content/uploads/2021/01/Freckles-Speckles.jpg",
+  "https://www.tufcat.co.za/wp-content/uploads/2021/01/IMG-20210123-WA0002.jpg"
 ];
 
 const accommodationImages = {
-  bedroom: "/lovable-uploads/536268543_1347914427341636_1998936286569467143_n.jpg",
-  kitchen: "/lovable-uploads/542040370_1353140630152349_287216765193985309_n.jpg"
+  bedroom: "/lovable-uploads/536268543_1347914427341636_1998936286569467143_n-2.jpg",
+  kitchen: "/lovable-uploads/556098599_1378021897664222_4748312450378726214_n-2.jpg",
+  living: "/lovable-uploads/555728551_1378021847664227_1071983310888780042_n-2.jpg"
 };
 
-const sanctuaryImages = [
-  "/lovable-uploads/556098599_1378021897664222_4748312450378726214_n.jpg",
-  "/lovable-uploads/555728551_1378021847664227_1071983310888780042_n.jpg"
-];
+const animalCareImages = {
+  vetCare: "/lovable-uploads/573883488_1410644557735289_7908845877500205254_n.jpg",
+  volunteer: "/lovable-uploads/547235882_1363651465767932_6536218706891973805_n.jpg",
+  animals: "/lovable-uploads/547230382_1363593685773710_4169595945775668111_n-2.jpg"
+};
 
 const UWCHumanAnimalProgram = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -85,7 +98,7 @@ const UWCHumanAnimalProgram = () => {
     {
       icon: Users,
       title: "Wellness Education & Community Regeneration",
-      description: "Zone-based community placements in Khayelitsha, Mitchells Plain, Gugulethu, and Delft",
+      description: "Valley of Plenty community model in Hanover Park with sustainable development initiatives",
       color: "from-amber-500 to-orange-600"
     },
     {
@@ -104,8 +117,8 @@ const UWCHumanAnimalProgram = () => {
     },
     {
       icon: MapPin,
-      title: "Geofenced Community Zones",
-      description: "Targeted placements in Khayelitsha, Mitchells Plain, Gugulethu, and Delft communities"
+      title: "Valley of Plenty Integration",
+      description: "Community placements in Hanover Park's Valley of Plenty sustainable development zone"
     },
     {
       icon: Heart,
@@ -193,14 +206,16 @@ const UWCHumanAnimalProgram = () => {
   ];
 
   const galleryImages = [
-    { src: heroImages[0], alt: "Horse care and therapy session" },
-    { src: heroImages[1], alt: "Human-animal interaction" },
-    { src: heroImages[2], alt: "Community engagement" },
-    { src: heroImages[3], alt: "Equine welfare program" },
-    { src: sanctuaryImages[0], alt: "Sanctuary animals" },
-    { src: sanctuaryImages[1], alt: "Animal sanctuary" },
-    { src: heroImages[4], alt: "Community outreach" },
-    { src: accommodationImages.bedroom, alt: "Student accommodation" }
+    { src: cartHorseImages[0], alt: "Cart Horse Protection Association - History" },
+    { src: cartHorseImages[1], alt: "Equine training program" },
+    { src: cartHorseImages[2], alt: "Equine Welfare Training Course" },
+    { src: tufcatImages[0], alt: "TUFCAT rescue cats" },
+    { src: tufcatImages[1], alt: "TUFCAT animal sanctuary" },
+    { src: animalCareImages.vetCare, alt: "Veterinary care in action" },
+    { src: animalCareImages.volunteer, alt: "Volunteer with animals" },
+    { src: accommodationImages.bedroom, alt: "Student accommodation" },
+    { src: accommodationImages.kitchen, alt: "Living facilities" },
+    { src: animalCareImages.animals, alt: "Animal therapy sessions" }
   ];
 
   return (
@@ -487,10 +502,10 @@ const UWCHumanAnimalProgram = () => {
               Fieldwork & Accommodation
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Tufcat Farm Living Classroom
+              Valley of Plenty Living Classroom
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              A 7-hectare sanctuary providing immersive learning experiences with comfortable student accommodation
+            <p className="text-muted-foreground max-w-3xl mx-auto">
+              Located in Hanover Park, Valley of Plenty is a community-driven sustainable development initiative providing immersive learning experiences with comfortable student accommodation
             </p>
           </div>
 
@@ -512,10 +527,10 @@ const UWCHumanAnimalProgram = () => {
             </Card>
 
             <Card className="overflow-hidden border-0 shadow-lg">
-              <img src={sanctuaryImages[0]} alt="Sanctuary animals" className="w-full h-48 object-cover" />
+              <img src={animalCareImages.vetCare} alt="Veterinary care" className="w-full h-48 object-cover" />
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-2">Animal Sanctuary</h3>
-                <p className="text-muted-foreground text-sm">Daily interaction with rescued animals in therapeutic settings</p>
+                <h3 className="font-bold text-lg mb-2">Animal Welfare Practice</h3>
+                <p className="text-muted-foreground text-sm">Hands-on veterinary care and therapeutic animal interaction</p>
               </CardContent>
             </Card>
           </div>
