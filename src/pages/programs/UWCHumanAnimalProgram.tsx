@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import Footer from '@/components/Footer';
+import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
 import { 
   GraduationCap, 
@@ -220,6 +221,8 @@ const UWCHumanAnimalProgram = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <UnifiedNavigation />
+      
       {/* Hero Section - Full Height with Image Carousel */}
       <section className="relative h-screen min-h-[700px] overflow-hidden">
         {/* Background Image Carousel */}
