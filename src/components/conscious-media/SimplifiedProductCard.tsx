@@ -19,7 +19,7 @@ export const SimplifiedProductCard = ({ product, imagePosition = 'left' }: Simpl
 
   const handleViewProduct = async () => {
     const affiliateUrl = generateAffiliateLink({
-      productSlug: product.productUrl.split('/products/')[1],
+      fullProductUrl: product.productUrl,
       channel: product.channel,
       wellnessCategory: "media equipment",
       consciousnessIntent: "conscious media infrastructure",

@@ -2,7 +2,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 
 interface AffiliateParams {
-  productSlug: string;
+  productSlug?: string;
+  fullProductUrl?: string;
   channel: string;
   wellnessCategory?: string;
   retreatId?: string;
@@ -14,7 +15,7 @@ export const useConsciousAffiliate = () => {
   const { user } = useAuth();
 
   const generateAffiliateLink = (params: AffiliateParams): string => {
-    const { productSlug, channel, wellnessCategory, retreatId, affiliateProgram = 'camerastuff' } = params;
+    const { productSlug, fullProductUrl, channel, wellnessCategory, retreatId, affiliateProgram = 'camerastuff' } = params;
     
     // Generate URLs based on affiliate program
     if (affiliateProgram === 'viator') {
@@ -52,7 +53,9 @@ export const useConsciousAffiliate = () => {
     }
     
     // Default: CameraStuff
-    const baseUrl = "https://camerastuff.co.za/products";
+    // Use full URL if provided, otherwise construct from slug
+    const baseProductUrl = fullProductUrl || `https://camerastuff.co.za/products/${productSlug}`;
+    
     const urlParams = new URLSearchParams({
       a_aid: "omniwellnessmedia",
       channel: channel,
@@ -65,7 +68,9 @@ export const useConsciousAffiliate = () => {
       urlParams.set("retreat_id", retreatId);
     }
 
-    return `${baseUrl}/${productSlug}?${urlParams.toString()}`;
+    // Append params to existing URL, handling existing query strings
+    const separator = baseProductUrl.includes('?') ? '&' : '?';
+    return `${baseProductUrl}${separator}${urlParams.toString()}`;
   };
 
   const trackProductView = async (
