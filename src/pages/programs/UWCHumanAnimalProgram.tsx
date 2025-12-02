@@ -31,27 +31,27 @@ import {
   Activity
 } from 'lucide-react';
 
-// Import images
-import horseCare1 from '@/assets/programs/tufcat-horse-care-1.jpg';
-import horseCare2 from '@/assets/programs/tufcat-horse-care-2.jpg';
-import horseCare3 from '@/assets/programs/tufcat-horse-care-3.jpg';
-import horseCare4 from '@/assets/programs/tufcat-horse-care-4.jpg';
-import accommodationBedroom from '@/assets/programs/tufcat-accommodation-bedroom.jpg';
-import accommodationKitchen from '@/assets/programs/tufcat-accommodation-kitchen.jpg';
-import community1 from '@/assets/programs/tufcat-community-1.jpg';
-import sanctuary1 from '@/assets/programs/tufcat-sanctuary-1.jpg';
-import sanctuary2 from '@/assets/programs/tufcat-sanctuary-2.jpg';
+// Image URLs (using uploaded images)
+const heroImages = [
+  "/lovable-uploads/482325347_1198932732239807_143306161811243658_n.jpg",
+  "/lovable-uploads/558852709_1243815057772392_7668626230595706187_n.jpg",
+  "/lovable-uploads/565111747_1249493680537863_2087503467128195421_n.jpg",
+  "/lovable-uploads/565941732_1251461607007737_6890680042161126307_n.jpg",
+  "/lovable-uploads/547230382_1363593685773710_4169595945775668111_n.jpg"
+];
+
+const accommodationImages = {
+  bedroom: "/lovable-uploads/536268543_1347914427341636_1998936286569467143_n.jpg",
+  kitchen: "/lovable-uploads/542040370_1353140630152349_287216765193985309_n.jpg"
+};
+
+const sanctuaryImages = [
+  "/lovable-uploads/556098599_1378021897664222_4748312450378726214_n.jpg",
+  "/lovable-uploads/555728551_1378021847664227_1071983310888780042_n.jpg"
+];
 
 const UWCHumanAnimalProgram = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const heroImages = [
-    horseCare1,
-    horseCare2,
-    horseCare3,
-    horseCare4,
-    community1
-  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -193,14 +193,14 @@ const UWCHumanAnimalProgram = () => {
   ];
 
   const galleryImages = [
-    { src: horseCare1, alt: "Horse care and therapy session" },
-    { src: horseCare2, alt: "Human-animal interaction" },
-    { src: horseCare3, alt: "Community engagement" },
-    { src: horseCare4, alt: "Equine welfare program" },
-    { src: sanctuary1, alt: "Sanctuary animals" },
-    { src: sanctuary2, alt: "Animal sanctuary" },
-    { src: community1, alt: "Community outreach" },
-    { src: accommodationBedroom, alt: "Student accommodation" }
+    { src: heroImages[0], alt: "Horse care and therapy session" },
+    { src: heroImages[1], alt: "Human-animal interaction" },
+    { src: heroImages[2], alt: "Community engagement" },
+    { src: heroImages[3], alt: "Equine welfare program" },
+    { src: sanctuaryImages[0], alt: "Sanctuary animals" },
+    { src: sanctuaryImages[1], alt: "Animal sanctuary" },
+    { src: heroImages[4], alt: "Community outreach" },
+    { src: accommodationImages.bedroom, alt: "Student accommodation" }
   ];
 
   return (
@@ -458,7 +458,7 @@ const UWCHumanAnimalProgram = () => {
 
             <div className="relative">
               <img 
-                src={horseCare2} 
+                src={heroImages[1]} 
                 alt="Research in action" 
                 className="rounded-2xl shadow-2xl"
               />
@@ -496,7 +496,7 @@ const UWCHumanAnimalProgram = () => {
 
           <div className="grid md:grid-cols-3 gap-6">
             <Card className="overflow-hidden border-0 shadow-lg">
-              <img src={accommodationBedroom} alt="Student bedroom" className="w-full h-48 object-cover" />
+              <img src={accommodationImages.bedroom} alt="Student bedroom" className="w-full h-48 object-cover" />
               <CardContent className="p-6">
                 <h3 className="font-bold text-lg mb-2">Comfortable Accommodation</h3>
                 <p className="text-muted-foreground text-sm">Cozy private and shared bedrooms in a safe, trauma-informed environment</p>
@@ -504,7 +504,7 @@ const UWCHumanAnimalProgram = () => {
             </Card>
 
             <Card className="overflow-hidden border-0 shadow-lg">
-              <img src={accommodationKitchen} alt="Kitchen facilities" className="w-full h-48 object-cover" />
+              <img src={accommodationImages.kitchen} alt="Kitchen facilities" className="w-full h-48 object-cover" />
               <CardContent className="p-6">
                 <h3 className="font-bold text-lg mb-2">Fully-Equipped Kitchen</h3>
                 <p className="text-muted-foreground text-sm">Modern kitchen facilities supporting plant-based nutrition education</p>
@@ -512,7 +512,7 @@ const UWCHumanAnimalProgram = () => {
             </Card>
 
             <Card className="overflow-hidden border-0 shadow-lg">
-              <img src={sanctuary1} alt="Sanctuary animals" className="w-full h-48 object-cover" />
+              <img src={sanctuaryImages[0]} alt="Sanctuary animals" className="w-full h-48 object-cover" />
               <CardContent className="p-6">
                 <h3 className="font-bold text-lg mb-2">Animal Sanctuary</h3>
                 <p className="text-muted-foreground text-sm">Daily interaction with rescued animals in therapeutic settings</p>
