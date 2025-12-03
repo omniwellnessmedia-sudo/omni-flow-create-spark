@@ -18,33 +18,46 @@ import {
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
 const images = {
+  // Core programme images
   hero: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`,
   volunteer: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230717-WA0065.jpg`,
   fieldwork1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
   fieldwork2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
+  // Cart Horse images
   cartHorse1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/587383422_1285925536894677_4345595592711419953_n.jpg`,
   cartHorse2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/574087632_1263656015788296_8646920016236566402_n.jpg`,
   cartHorse3: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
+  // TUFCAT images
   tufcat1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556100985_1378021790997566_6773851859108767885_n.jpg`,
-  community: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
   accommodation: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547230382_1363593685773710_4169595945775668111_n.jpg`,
   kitchen: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
   living: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`,
   workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
-  // Cape Town stock images for destination context
+  // Community & Dr. Phil-afel images (from Omni storage)
+  community: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
+  empowerment: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
+  empowerment2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
+  khoe: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
+  khoe2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
+  roze: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/ROZE.jpg`,
+  // Omni Media images
+  omniTeam: `${STORAGE_BASE}/Omni%20wellness%20team.jpg`,
+  humanAnimal1: `${STORAGE_BASE}/HUMAN%20ANIMAL_CHAD-3.jpg`,
+  humanAnimal2: `${STORAGE_BASE}/HUMAN%20ANIMAL_CHAD-4.jpg`,
+  chadBwc: `${STORAGE_BASE}/Chad%20and%20cow_OMNI_BWC.jpg`,
+  retreat1: `${STORAGE_BASE}/OMNI_OLIVETREE_RETREAT_2024.jpg`,
+  retreat2: `${STORAGE_BASE}/OMNI_OLIVETREE_RETREAT_2024-5.jpg`,
+  landmark: `${STORAGE_BASE}/OMNI_LANDMARK%20FOUNDATION_IMAGES_JUNE%202024-2.jpg`,
+  graduation: `${STORAGE_BASE}/OMNI_KALK%20BAY_%20GRADUATION-8.jpg`,
+  // Cape Town destination images
   tableMountain: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&q=80",
   winelands: "https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=800&q=80",
   coastline: "https://images.unsplash.com/photo-1576485375217-d6a95e34d043?w=800&q=80",
   sunset: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?w=800&q=80",
-  // Partner images
-  cartHorseHero: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=800&q=80",
-  catSanctuary: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800&q=80",
-  urbanGarden: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80",
-  uwcCampus: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80",
-  mediaProduction: "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800&q=80"
+  uwcCampus: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80"
 };
 
-const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.fieldwork1, images.tufcat1];
+const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.humanAnimal1, images.tufcat1];
 
 // Partner data
 const partners = [
@@ -108,9 +121,9 @@ const partners = [
     icon: Sprout,
     color: 'from-green-500 to-emerald-600',
     bgColor: 'bg-green-50 dark:bg-green-950/30',
-    heroImage: images.community,
-    gallery: [images.community, images.workshop],
-    story: `The Dr. Phil-afel Foundation emerged from the heart of Hanover Park—one of Cape Town's most challenged communities—with a radical vision: transform barren spaces into thriving gardens of abundance. Their "Valley of Plenty" and "Where Rainbows Meet" projects have brought food security, community healing, and hope to thousands of residents.`,
+    heroImage: images.empowerment,
+    gallery: [images.empowerment, images.empowerment2, images.khoe, images.community],
+    story: `The Dr. Phil-afel Foundation emerged from the heart of Hanover Park—one of Cape Town's most challenged communities—with a radical vision: transform barren spaces into thriving gardens of abundance. Their "Valley of Plenty" and "Where Rainbows Meet" projects have brought food security, community healing, and hope to thousands of residents through the Rainbow Roots Program and Early Childhood Development initiatives.`,
     roleInProgramme: `As our **City Twin Partner**, Dr. Phil-afel provides the crucial community integration component during Weeks 7-8. Students work alongside local practitioners learning Indigenous Knowledge Systems, participate in urban agriculture projects, and understand how wellness interventions can heal communities affected by generational trauma.`,
     stats: [
       { value: '500+', label: 'Families Fed' },
@@ -134,8 +147,8 @@ const partners = [
     icon: GradCap,
     color: 'from-blue-500 to-indigo-600',
     bgColor: 'bg-blue-50 dark:bg-blue-950/30',
-    heroImage: images.uwcCampus,
-    gallery: [images.uwcCampus],
+    heroImage: images.graduation,
+    gallery: [images.graduation, images.retreat1],
     story: `Founded during apartheid to serve "non-white" students, UWC has evolved into a beacon of academic excellence with a deep commitment to social justice. The Psychology Department brings world-class research methodology and community psychology expertise, while the broader university provides the academic framework for this groundbreaking programme.`,
     roleInProgramme: `UWC is the **academic backbone** of the programme, providing official accreditation (NQF Level 7-8, 10 SAQA credits), research supervision, and the scholarly rigour that ensures your work meets publication standards. Opening and closing weeks take place on campus, connecting you to the broader academic community.`,
     stats: [
@@ -160,8 +173,8 @@ const partners = [
     icon: Film,
     color: 'from-primary to-secondary',
     bgColor: 'bg-primary/5 dark:bg-primary/10',
-    heroImage: images.mediaProduction,
-    gallery: [images.mediaProduction],
+    heroImage: images.humanAnimal1,
+    gallery: [images.humanAnimal1, images.humanAnimal2, images.chadBwc, images.omniTeam],
     story: `Omni Wellness Media is a conscious content company bridging wellness, outreach, and media to empower South Africa's journey to health and consciousness. With expertise in documentary production, biometric research technology, and community storytelling, Omni brings the technical and creative infrastructure that makes this programme possible.`,
     roleInProgramme: `As **Programme Coordinator**, Omni handles all operational logistics, manages enrollment, provides biometric data collection technology, and documents your journey through professional media production. Chad Cupido's PhD research is directly informed by student discoveries, ensuring your work contributes to academic advancement.`,
     stats: [
@@ -815,63 +828,131 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
-      {/* Your Wellness Journey */}
-      <section id="journey" className="py-24 scroll-mt-20">
+      {/* Your Wellness Journey - Premium Redesign */}
+      <section id="journey" className="py-24 scroll-mt-20 bg-gradient-to-b from-background via-muted/20 to-background">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
-              <Calendar className="w-3.5 h-3.5 mr-2" />
+          <div className="text-center mb-20">
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-6 py-2">
+              <Calendar className="w-4 h-4 mr-2" />
               Your 10-Week Transformation
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              The Journey Awaits
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+              The Journey <span className="text-primary">Awaits</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              From arrival to graduation, every moment is designed for your growth
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              From arrival to graduation, every moment is designed for your growth. 
+              Experience a carefully crafted journey through Cape Town's most transformative spaces.
             </p>
           </div>
 
-          <div className="max-w-6xl mx-auto space-y-24">
-            {journeyPhases.map((phase, idx) => (
-              <div key={idx} className={`grid lg:grid-cols-2 gap-12 items-center ${idx % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
-                <div className={idx % 2 === 1 ? 'lg:order-2' : ''}>
-                  <div className="relative">
-                    <img 
-                      src={phase.image}
-                      alt={phase.title}
-                      className="w-full aspect-[4/3] object-cover rounded-3xl shadow-2xl"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <Badge className="bg-primary text-primary-foreground px-4 py-2 text-sm font-bold">
-                        {phase.phase}
-                      </Badge>
-                    </div>
-                    <div className="absolute bottom-4 right-4 bg-background/95 backdrop-blur px-4 py-2 rounded-xl shadow-lg">
-                      <div className="flex items-center gap-2 text-sm">
-                        <MapPin className="w-4 h-4 text-primary" />
-                        <span className="font-medium text-foreground">{phase.location}</span>
-                      </div>
+          {/* Timeline Visual */}
+          <div className="relative max-w-7xl mx-auto">
+            {/* Central Timeline Line */}
+            <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-secondary to-primary transform -translate-x-1/2 rounded-full" />
+            
+            <div className="space-y-16 lg:space-y-0">
+              {journeyPhases.map((phase, idx) => (
+                <div key={idx} className={`relative lg:mb-32 last:mb-0`}>
+                  {/* Timeline Node */}
+                  <div className="hidden lg:flex absolute left-1/2 top-12 transform -translate-x-1/2 z-20">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-xl ring-4 ring-background">
+                      <span className="text-white font-bold text-lg">{idx + 1}</span>
                     </div>
                   </div>
-                </div>
-                
-                <div className={idx % 2 === 1 ? 'lg:order-1' : ''}>
-                  <h3 className="text-3xl font-bold text-foreground mb-2">{phase.title}</h3>
-                  <p className="text-lg text-primary font-medium mb-4">{phase.subtitle}</p>
-                  <p className="text-muted-foreground leading-relaxed mb-6">{phase.description}</p>
-                  <div className="space-y-3">
-                    {phase.highlights.map((highlight, i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="w-4 h-4 text-primary" />
+
+                  <div className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-start ${idx % 2 === 1 ? '' : 'lg:direction-rtl'}`}>
+                    {/* Image Side */}
+                    <div className={`${idx % 2 === 0 ? 'lg:pr-12' : 'lg:pl-12 lg:order-2'}`}>
+                      <div className="relative group">
+                        {/* Main Image */}
+                        <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+                          <img 
+                            src={phase.image}
+                            alt={phase.title}
+                            className="w-full aspect-[4/3] object-cover transform group-hover:scale-105 transition-transform duration-700"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                          
+                          {/* Phase Badge */}
+                          <div className="absolute top-6 left-6">
+                            <Badge className="bg-white/95 text-primary px-5 py-2.5 text-base font-bold shadow-lg backdrop-blur">
+                              {phase.phase}
+                            </Badge>
+                          </div>
+                          
+                          {/* Location Badge */}
+                          <div className="absolute bottom-6 left-6 right-6">
+                            <div className="bg-white/95 backdrop-blur px-5 py-3 rounded-2xl shadow-lg">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                                  <MapPin className="w-5 h-5 text-primary" />
+                                </div>
+                                <div>
+                                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Location</p>
+                                  <p className="font-bold text-foreground">{phase.location}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <span className="text-foreground">{highlight}</span>
+
+                        {/* Decorative Elements */}
+                        <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-primary/10 rounded-3xl -z-10" />
+                        <div className="absolute -top-4 -left-4 w-24 h-24 bg-secondary/10 rounded-3xl -z-10" />
                       </div>
-                    ))}
+                    </div>
+                    
+                    {/* Content Side */}
+                    <div className={`${idx % 2 === 0 ? 'lg:pl-12 lg:text-left' : 'lg:pr-12 lg:order-1 lg:text-right'} flex flex-col justify-center pt-8 lg:pt-12`}>
+                      {/* Mobile Phase Number */}
+                      <div className="lg:hidden w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-6 shadow-lg">
+                        <span className="text-white font-bold">{idx + 1}</span>
+                      </div>
+
+                      <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-3">{phase.title}</h3>
+                      <p className="text-xl text-primary font-medium mb-6 italic">{phase.subtitle}</p>
+                      <p className="text-muted-foreground leading-relaxed mb-8 text-lg">{phase.description}</p>
+                      
+                      {/* Highlights Grid */}
+                      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 ${idx % 2 === 1 ? 'lg:justify-items-end' : ''}`}>
+                        {phase.highlights.map((highlight, i) => (
+                          <div 
+                            key={i} 
+                            className={`flex items-start gap-3 p-4 bg-background rounded-xl border border-border hover:border-primary/30 hover:shadow-md transition-all ${idx % 2 === 1 ? 'lg:flex-row-reverse lg:text-right' : ''}`}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                              <Check className="w-4 h-4 text-primary" />
+                            </div>
+                            <span className="text-foreground text-sm font-medium">{highlight}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Journey Summary */}
+          <div className="mt-24 max-w-4xl mx-auto">
+            <div className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 rounded-3xl p-8 md:p-12 border border-border text-center">
+              <h3 className="text-2xl font-bold text-foreground mb-4">Your Transformation Timeline</h3>
+              <div className="grid grid-cols-5 gap-4 mb-8">
+                {journeyPhases.map((phase, idx) => (
+                  <div key={idx} className="text-center">
+                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-2">
+                      <span className="text-primary font-bold">{idx + 1}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground font-medium">{phase.phase}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                <Heart className="mr-2 h-5 w-5" />
+                Begin Your Journey
+              </Button>
+            </div>
           </div>
         </div>
       </section>
