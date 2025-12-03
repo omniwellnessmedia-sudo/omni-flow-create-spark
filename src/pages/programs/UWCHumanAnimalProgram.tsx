@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import Footer from '@/components/Footer';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
@@ -10,7 +11,8 @@ import {
   Building2, Clock, Check, Target, Star, Coffee, Utensils, Home, Camera, Sparkles,
   ChevronDown, ChevronRight, FileText, Briefcase, HelpCircle, ArrowRight, Download,
   Mail, Phone, Shield, TrendingUp, Lightbulb, TreePine, HandHeart, Mountain,
-  Waves, Sun, Play, Video, Plane, Building, DollarSign, CreditCard, Gift
+  Waves, Sun, Play, Video, Plane, Building, DollarSign, CreditCard, Gift,
+  PawPrint, Cat, Sprout, GraduationCap as GradCap, Film, ExternalLink, Handshake
 } from 'lucide-react';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
@@ -33,10 +35,150 @@ const images = {
   tableMountain: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&q=80",
   winelands: "https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=800&q=80",
   coastline: "https://images.unsplash.com/photo-1576485375217-d6a95e34d043?w=800&q=80",
-  sunset: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?w=800&q=80"
+  sunset: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?w=800&q=80",
+  // Partner images
+  cartHorseHero: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=800&q=80",
+  catSanctuary: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800&q=80",
+  urbanGarden: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80",
+  uwcCampus: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80",
+  mediaProduction: "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800&q=80"
 };
 
 const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.fieldwork1, images.tufcat1];
+
+// Partner data
+const partners = [
+  {
+    id: 'carthorse',
+    name: 'Cart Horse Protection Association',
+    shortName: 'Cart Horse',
+    tagline: 'Giving a Voice to Those Who Can\'t Speak',
+    icon: PawPrint,
+    color: 'from-amber-500 to-orange-600',
+    bgColor: 'bg-amber-50 dark:bg-amber-950/30',
+    heroImage: images.cartHorse1,
+    gallery: [images.cartHorse1, images.cartHorse2, images.cartHorse3],
+    story: `Since 1995, the Cart Horse Protection Association has been Cape Town's leading voice for working equine welfare. From their Recovery & Rehabilitation Centre in Epping, they provide vital veterinary care, handler education, and community outreach that transforms lives—both human and horse.`,
+    roleInProgramme: `As our **primary research partner**, Cart Horse provides the unique field environment where students witness the profound bond between working horses and their handlers. During Weeks 3-4, you'll conduct real biometric research, interview handlers, and collect data that contributes directly to HABRI-funded global studies on the human-animal bond in occupational settings.`,
+    stats: [
+      { value: '29+', label: 'Years of Service' },
+      { value: '7,000+', label: 'Horses Helped Annually' },
+      { value: '2,500+', label: 'Handler Trainings' }
+    ],
+    keyPeople: [
+      { name: 'Dr. Megan White', role: 'Senior Veterinarian & Field Guide' }
+    ],
+    website: 'https://carthorse.org.za/',
+    ctas: [
+      { label: 'Visit Cart Horse', url: 'https://carthorse.org.za/', primary: true },
+      { label: 'Volunteer', url: 'https://carthorse.org.za/volunteer' }
+    ]
+  },
+  {
+    id: 'tufcat',
+    name: 'TUFCAT - UWC Feral Cat Project',
+    shortName: 'TUFCAT',
+    tagline: '21 Years of Compassion on Campus',
+    icon: Cat,
+    color: 'from-violet-500 to-purple-600',
+    bgColor: 'bg-violet-50 dark:bg-violet-950/30',
+    heroImage: images.tufcat1,
+    gallery: [images.tufcat1, images.accommodation, images.kitchen, images.living],
+    story: `What started as a small initiative to care for feral cats on UWC campus has blossomed into a 7-hectare sanctuary of hope. TUFCAT now provides trauma-informed care for multiple species, runs community vet assistance programmes, and operates a working organic farm that feeds both animals and humans.`,
+    roleInProgramme: `TUFCAT is your **home base** for the entire 10-week programme. Wake each morning surrounded by rescued animals, participate in daily sanctuary routines, and learn sustainable farming practices. During Weeks 5-6, you'll immerse in therapeutic animal interactions and discover how healing happens naturally in this unique environment.`,
+    stats: [
+      { value: '21+', label: 'Years Operating' },
+      { value: '7 ha', label: 'Sanctuary Size' },
+      { value: '500+', label: 'Animals Rescued' }
+    ],
+    keyPeople: [
+      { name: 'Leigh Tucker', role: 'Founder & Sanctuary Director' }
+    ],
+    website: 'https://www.tufcat.co.za/',
+    ctas: [
+      { label: 'Visit TUFCAT', url: 'https://www.tufcat.co.za/', primary: true },
+      { label: 'Support the Sanctuary', url: 'https://www.tufcat.co.za/donate' }
+    ]
+  },
+  {
+    id: 'drphilafel',
+    name: 'Dr. Phil-afel Foundation',
+    shortName: 'Dr. Phil-afel',
+    tagline: 'From Cape Flats to Valley of Plenty',
+    icon: Sprout,
+    color: 'from-green-500 to-emerald-600',
+    bgColor: 'bg-green-50 dark:bg-green-950/30',
+    heroImage: images.community,
+    gallery: [images.community, images.workshop],
+    story: `The Dr. Phil-afel Foundation emerged from the heart of Hanover Park—one of Cape Town's most challenged communities—with a radical vision: transform barren spaces into thriving gardens of abundance. Their "Valley of Plenty" and "Where Rainbows Meet" projects have brought food security, community healing, and hope to thousands of residents.`,
+    roleInProgramme: `As our **City Twin Partner**, Dr. Phil-afel provides the crucial community integration component during Weeks 7-8. Students work alongside local practitioners learning Indigenous Knowledge Systems, participate in urban agriculture projects, and understand how wellness interventions can heal communities affected by generational trauma.`,
+    stats: [
+      { value: '500+', label: 'Families Fed' },
+      { value: '12', label: 'Community Gardens' },
+      { value: '50+', label: 'Youth Employed' }
+    ],
+    keyPeople: [
+      { name: 'Wendy Walton', role: 'Community Bridge & IKS Practitioner' }
+    ],
+    website: 'https://www.drphilafel.foundation/',
+    ctas: [
+      { label: 'Visit Dr. Phil-afel', url: 'https://www.drphilafel.foundation/', primary: true },
+      { label: 'Support Valley of Plenty', url: 'https://www.drphilafel.foundation/donate' }
+    ]
+  },
+  {
+    id: 'uwc',
+    name: 'University of the Western Cape',
+    shortName: 'UWC',
+    tagline: 'Where Scholarship Meets Service',
+    icon: GradCap,
+    color: 'from-blue-500 to-indigo-600',
+    bgColor: 'bg-blue-50 dark:bg-blue-950/30',
+    heroImage: images.uwcCampus,
+    gallery: [images.uwcCampus],
+    story: `Founded during apartheid to serve "non-white" students, UWC has evolved into a beacon of academic excellence with a deep commitment to social justice. The Psychology Department brings world-class research methodology and community psychology expertise, while the broader university provides the academic framework for this groundbreaking programme.`,
+    roleInProgramme: `UWC is the **academic backbone** of the programme, providing official accreditation (NQF Level 7-8, 10 SAQA credits), research supervision, and the scholarly rigour that ensures your work meets publication standards. Opening and closing weeks take place on campus, connecting you to the broader academic community.`,
+    stats: [
+      { value: '1960', label: 'Founded' },
+      { value: '23,000+', label: 'Students' },
+      { value: 'Top 1000', label: 'World Ranking' }
+    ],
+    keyPeople: [
+      { name: 'Prof. Sharyn Spicer', role: 'Academic Director, Psychology Dept.' }
+    ],
+    website: 'https://www.uwc.ac.za/',
+    ctas: [
+      { label: 'Explore UWC', url: 'https://www.uwc.ac.za/', primary: true },
+      { label: 'Psychology Department', url: 'https://www.uwc.ac.za/faculties/faculty-of-community-and-health-sciences/departments/psychology' }
+    ]
+  },
+  {
+    id: 'omni',
+    name: 'Omni Wellness Media',
+    shortName: 'Omni',
+    tagline: 'Where Wellness Meets Media',
+    icon: Film,
+    color: 'from-primary to-secondary',
+    bgColor: 'bg-primary/5 dark:bg-primary/10',
+    heroImage: images.mediaProduction,
+    gallery: [images.mediaProduction],
+    story: `Omni Wellness Media is a conscious content company bridging wellness, outreach, and media to empower South Africa's journey to health and consciousness. With expertise in documentary production, biometric research technology, and community storytelling, Omni brings the technical and creative infrastructure that makes this programme possible.`,
+    roleInProgramme: `As **Programme Coordinator**, Omni handles all operational logistics, manages enrollment, provides biometric data collection technology, and documents your journey through professional media production. Chad Cupido's PhD research is directly informed by student discoveries, ensuring your work contributes to academic advancement.`,
+    stats: [
+      { value: '500+', label: 'Hours Documented' },
+      { value: '10+', label: 'Biometric Devices' },
+      { value: '3', label: 'Research Papers' }
+    ],
+    keyPeople: [
+      { name: 'Chad Cupido', role: 'Head of Media & Research Partner' }
+    ],
+    website: '/',
+    ctas: [
+      { label: 'About Omni', url: '/', primary: true },
+      { label: 'Partner With Us', url: '/contact' }
+    ]
+  }
+];
 
 const UWCHumanAnimalProgram = () => {
   const [activeSection, setActiveSection] = useState('overview');
@@ -44,6 +186,7 @@ const UWCHumanAnimalProgram = () => {
   const [heroIndex, setHeroIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [openModule, setOpenModule] = useState<number>(0);
+  const [activePartner, setActivePartner] = useState('carthorse');
 
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > window.innerHeight - 80);
@@ -60,6 +203,7 @@ const UWCHumanAnimalProgram = () => {
 
   const navItems = [
     { id: 'overview', label: 'Overview' },
+    { id: 'partners', label: 'Our Partners' },
     { id: 'journey', label: 'Your Journey' },
     { id: 'destination', label: 'Cape Town' },
     { id: 'guides', label: 'Your Guides' },
@@ -366,6 +510,262 @@ const UWCHumanAnimalProgram = () => {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Partners Section */}
+      <section id="partners" className="py-24 bg-muted/30 scroll-mt-20 overflow-hidden">
+        <div className="container mx-auto px-4">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <Handshake className="w-3.5 h-3.5 mr-2" />
+              The Partnership
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Five Partners, One Vision
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              This programme brings together leading organizations in animal welfare, community development, 
+              academic research, and conscious media to create an unprecedented learning experience.
+            </p>
+          </div>
+
+          {/* Partner Logo Trust Bar */}
+          <div className="flex flex-wrap justify-center items-center gap-8 mb-16 py-8 border-y border-border">
+            {partners.map((partner) => (
+              <button
+                key={partner.id}
+                onClick={() => {
+                  setActivePartner(partner.id);
+                  document.getElementById('partner-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+                className={`flex items-center gap-3 px-6 py-3 rounded-xl transition-all ${
+                  activePartner === partner.id 
+                    ? 'bg-primary text-primary-foreground shadow-lg scale-105' 
+                    : 'bg-background border border-border hover:border-primary/30 hover:shadow-md'
+                }`}
+              >
+                <partner.icon className="w-5 h-5" />
+                <span className="font-medium text-sm">{partner.shortName}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Journey Map Visual */}
+          <div className="max-w-5xl mx-auto mb-16">
+            <h3 className="text-xl font-bold text-center mb-8 text-foreground">Your Journey Through Our Partners</h3>
+            <div className="relative">
+              {/* Connection Line */}
+              <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-violet-500 via-green-500 via-blue-500 to-primary transform -translate-y-1/2 rounded-full opacity-30" />
+              
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                {[
+                  { partner: partners[3], weeks: 'Weeks 1-2', label: 'Foundation' },
+                  { partner: partners[0], weeks: 'Weeks 3-4', label: 'Field Research' },
+                  { partner: partners[1], weeks: 'Weeks 5-6', label: 'Sanctuary Life' },
+                  { partner: partners[2], weeks: 'Weeks 7-8', label: 'Community' },
+                  { partner: partners[3], weeks: 'Weeks 9-10', label: 'Graduation' }
+                ].map((item, idx) => (
+                  <div 
+                    key={idx}
+                    className="relative text-center group cursor-pointer"
+                    onClick={() => setActivePartner(item.partner.id)}
+                  >
+                    <div className={`w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-br ${item.partner.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform relative z-10`}>
+                      <item.partner.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <Badge className="mb-2 bg-background border-border text-xs">{item.weeks}</Badge>
+                    <p className="font-semibold text-foreground text-sm">{item.partner.shortName}</p>
+                    <p className="text-xs text-muted-foreground">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Partner Tabs Content */}
+          <div id="partner-tabs" className="scroll-mt-24">
+            <Tabs value={activePartner} onValueChange={setActivePartner} className="w-full">
+              <TabsList className="w-full flex-wrap h-auto p-2 bg-background border border-border rounded-2xl mb-8">
+                {partners.map((partner) => (
+                  <TabsTrigger 
+                    key={partner.id} 
+                    value={partner.id}
+                    className="flex-1 min-w-[140px] py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-xl"
+                  >
+                    <partner.icon className="w-4 h-4 mr-2" />
+                    <span className="hidden sm:inline">{partner.shortName}</span>
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+              {partners.map((partner) => (
+                <TabsContent key={partner.id} value={partner.id} className="mt-0">
+                  <div className={`${partner.bgColor} rounded-3xl overflow-hidden border border-border`}>
+                    {/* Partner Hero */}
+                    <div className="relative h-64 md:h-96">
+                      <img 
+                        src={partner.heroImage} 
+                        alt={partner.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-8">
+                        <div className="flex items-center gap-4 mb-3">
+                          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${partner.color} flex items-center justify-center shadow-lg`}>
+                            <partner.icon className="w-7 h-7 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="text-2xl md:text-3xl font-bold text-white">{partner.name}</h3>
+                            <p className="text-white/80 font-medium">{partner.tagline}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Partner Content */}
+                    <div className="p-8 md:p-12">
+                      <div className="grid lg:grid-cols-3 gap-8">
+                        {/* Main Story */}
+                        <div className="lg:col-span-2 space-y-6">
+                          <div>
+                            <h4 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                              <Heart className="w-5 h-5 text-primary" />
+                              The Story
+                            </h4>
+                            <p className="text-muted-foreground leading-relaxed">{partner.story}</p>
+                          </div>
+                          
+                          <div>
+                            <h4 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                              <Target className="w-5 h-5 text-primary" />
+                              Role in Your Journey
+                            </h4>
+                            <p className="text-muted-foreground leading-relaxed" 
+                               dangerouslySetInnerHTML={{ __html: partner.roleInProgramme.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary">$1</strong>') }} 
+                            />
+                          </div>
+
+                          {/* Image Gallery */}
+                          {partner.gallery.length > 1 && (
+                            <div className="grid grid-cols-3 gap-3">
+                              {partner.gallery.slice(0, 3).map((img, idx) => (
+                                <img 
+                                  key={idx}
+                                  src={img} 
+                                  alt={`${partner.name} gallery ${idx + 1}`}
+                                  className="w-full aspect-square object-cover rounded-xl shadow-md hover:scale-105 transition-transform cursor-pointer"
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Sidebar */}
+                        <div className="space-y-6">
+                          {/* Impact Stats */}
+                          <Card className="border-border">
+                            <CardContent className="p-6">
+                              <h4 className="font-bold text-foreground mb-4 flex items-center gap-2">
+                                <TrendingUp className="w-5 h-5 text-primary" />
+                                Impact
+                              </h4>
+                              <div className="space-y-4">
+                                {partner.stats.map((stat, idx) => (
+                                  <div key={idx} className="text-center p-3 bg-muted/50 rounded-xl">
+                                    <div className="text-2xl font-bold text-primary">{stat.value}</div>
+                                    <div className="text-xs text-muted-foreground">{stat.label}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          {/* Key People */}
+                          <Card className="border-border">
+                            <CardContent className="p-6">
+                              <h4 className="font-bold text-foreground mb-4 flex items-center gap-2">
+                                <Users className="w-5 h-5 text-primary" />
+                                Your Contact
+                              </h4>
+                              {partner.keyPeople.map((person, idx) => (
+                                <div key={idx} className="flex items-center gap-3">
+                                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                                    <span className="text-primary font-bold">
+                                      {person.name.split(' ').map(n => n[0]).join('')}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <p className="font-semibold text-foreground">{person.name}</p>
+                                    <p className="text-sm text-muted-foreground">{person.role}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </CardContent>
+                          </Card>
+
+                          {/* CTAs */}
+                          <div className="space-y-3">
+                            {partner.ctas.map((cta, idx) => (
+                              <Button 
+                                key={idx}
+                                variant={cta.primary ? "default" : "outline"}
+                                className="w-full"
+                                asChild
+                              >
+                                <a href={cta.url} target={cta.url.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
+                                  <ExternalLink className="w-4 h-4 mr-2" />
+                                  {cta.label}
+                                </a>
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+
+          {/* Combined Impact Stats */}
+          <div className="mt-16 bg-gradient-to-br from-primary/10 via-background to-secondary/10 rounded-3xl p-8 md:p-12 border border-border">
+            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">The Power of Partnership</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[
+                { value: '50+', label: 'Years Combined Experience' },
+                { value: '8,000+', label: 'Animals Helped Annually' },
+                { value: '2,500+', label: 'Community Members Served' },
+                { value: '5', label: 'World-Class Organizations' }
+              ].map((stat, idx) => (
+                <div key={idx} className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold text-primary mb-2">{stat.value}</div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Partnership Quote */}
+            <div className="mt-12 text-center max-w-3xl mx-auto">
+              <blockquote className="text-lg md:text-xl italic text-muted-foreground leading-relaxed">
+                "When organizations unite around a shared vision of healing—for animals, communities, and 
+                the humans who connect them—something magical happens. This programme is proof that 
+                collaboration creates transformation."
+              </blockquote>
+              <p className="mt-4 font-semibold text-foreground">— Prof. Sharyn Spicer, Academic Director</p>
+            </div>
+          </div>
+
+          {/* Partner CTA */}
+          <div className="mt-12 text-center">
+            <p className="text-muted-foreground mb-4">Interested in becoming a programme partner?</p>
+            <Button variant="outline" size="lg" className="rounded-xl">
+              <Handshake className="mr-2 h-5 w-5" />
+              Partnership Enquiries
+            </Button>
           </div>
         </div>
       </section>
