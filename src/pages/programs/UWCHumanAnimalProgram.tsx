@@ -1,53 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import Footer from '@/components/Footer';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import { 
-  GraduationCap, 
-  Heart, 
-  Globe, 
-  Users, 
-  Calendar, 
-  MapPin, 
-  Award,
-  BookOpen,
-  Leaf,
-  Brain,
-  Building2,
-  Clock,
-  Check,
-  Target,
-  Star,
-  Coffee,
-  Utensils,
-  Home,
-  Camera,
-  Sparkles,
-  ChevronDown,
-  FileText,
-  Briefcase,
-  ClipboardCheck,
-  HelpCircle,
-  ArrowRight,
-  Download,
-  Mail,
-  Phone,
-  Shield,
-  TrendingUp,
-  Lightbulb,
-  Stethoscope,
-  TreePine,
-  HandHeart
+  GraduationCap, Heart, Globe, Users, Calendar, MapPin, Award, BookOpen, Leaf, Brain,
+  Building2, Clock, Check, Target, Star, Coffee, Utensils, Home, Camera, Sparkles,
+  ChevronDown, ChevronRight, FileText, Briefcase, HelpCircle, ArrowRight, Download,
+  Mail, Phone, Shield, TrendingUp, Lightbulb, TreePine, HandHeart, Mountain,
+  Waves, Sun, Play, Video, Plane, Building, DollarSign, CreditCard, Gift
 } from 'lucide-react';
 
-// Image URLs from Supabase storage
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
 const images = {
   hero: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`,
+  volunteer: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230717-WA0065.jpg`,
+  fieldwork1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
+  fieldwork2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
   cartHorse1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/587383422_1285925536894677_4345595592711419953_n.jpg`,
   cartHorse2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/574087632_1263656015788296_8646920016236566402_n.jpg`,
   cartHorse3: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
@@ -56,33 +28,43 @@ const images = {
   accommodation: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547230382_1363593685773710_4169595945775668111_n.jpg`,
   kitchen: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
   living: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`,
-  volunteer: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230717-WA0065.jpg`,
-  fieldwork1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
-  fieldwork2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20250729_124830.jpg`,
-  workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`
+  workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
+  // Cape Town stock images for destination context
+  tableMountain: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&q=80",
+  winelands: "https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=800&q=80",
+  coastline: "https://images.unsplash.com/photo-1576485375217-d6a95e34d043?w=800&q=80",
+  sunset: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?w=800&q=80"
 };
+
+const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.fieldwork1, images.tufcat1];
 
 const UWCHumanAnimalProgram = () => {
   const [activeSection, setActiveSection] = useState('overview');
   const [isSticky, setIsSticky] = useState(false);
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openModule, setOpenModule] = useState<number>(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const heroHeight = window.innerHeight * 0.85;
-      setIsSticky(window.scrollY > heroHeight - 60);
-    };
+    const handleScroll = () => setIsSticky(window.scrollY > window.innerHeight - 80);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroGallery.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   const navItems = [
     { id: 'overview', label: 'Overview' },
-    { id: 'curriculum', label: 'Curriculum' },
-    { id: 'requirements', label: 'Requirements' },
-    { id: 'outcomes', label: 'Outcomes' },
-    { id: 'careers', label: 'Careers' },
-    { id: 'faculty', label: 'Faculty' },
-    { id: 'apply', label: 'Apply' }
+    { id: 'journey', label: 'Your Journey' },
+    { id: 'destination', label: 'Cape Town' },
+    { id: 'guides', label: 'Your Guides' },
+    { id: 'pricing', label: 'Investment' },
+    { id: 'apply', label: 'Apply Now' }
   ];
 
   const scrollToSection = (sectionId: string) => {
@@ -90,993 +72,587 @@ const UWCHumanAnimalProgram = () => {
     const element = document.getElementById(sectionId);
     if (element) {
       const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+      window.scrollTo({ top: element.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
     }
   };
 
-  const programModules = [
+  const journeyPhases = [
     {
-      phase: "Module 1: Week 1-2",
-      title: "Foundations of Animal-Assisted Therapy",
-      location: "UWC Campus & TUFCAT",
-      icon: BookOpen,
+      phase: "Weeks 1-2",
+      title: "Arrival & Foundation",
+      subtitle: "Land, breathe, and begin your transformation",
+      location: "UWC Campus & TUFCAT Sanctuary",
       image: images.accommodation,
-      academicContent: [
-        "Theoretical frameworks: AAT, AAI, and One Health approaches",
-        "History and evolution of human-animal bond research",
-        "Research methodology and ethics in animal studies",
-        "Introduction to biometric measurement (HRV, cortisol)",
-        "South African context: Post-apartheid wellness challenges"
-      ],
-      practicalContent: [
-        "Campus orientation and cohort bonding",
-        "Biometric device calibration and baseline measurements",
-        "Introduction to TUFCAT sanctuary operations",
-        "Meet the animals: Initial therapeutic interactions"
-      ],
-      assessment: "Literature review assignment (2,000 words)",
-      included: ["Accommodation", "All meals", "Course materials", "Biometric devices"]
+      description: "Your journey begins as you touch down in Cape Town. After settling into your accommodation at TUFCAT's peaceful sanctuary, you'll join an opening ceremony that honors the land and welcomes you into our learning community. These first weeks are about grounding—learning the foundational theories while your body and mind adjust to this new rhythm of life.",
+      highlights: ["Welcome ceremony with indigenous blessing", "First encounters with sanctuary animals", "Biometric device setup & baseline measurements", "Evening fireside discussions under African stars"]
     },
     {
-      phase: "Module 2: Week 3-4",
-      title: "Equine Welfare & Occupational Stress Research",
+      phase: "Weeks 3-4",
+      title: "Into the Field",
+      subtitle: "Meet the horses that will teach you empathy",
       location: "Cart Horse Protection Association",
-      icon: Heart,
       image: images.cartHorse1,
-      academicContent: [
-        "Equine behaviour and welfare assessment protocols",
-        "Occupational stress theory and measurement",
-        "Handler-animal relationship dynamics",
-        "Dual-benefit research methodology",
-        "Working animal ethics and policy"
-      ],
-      practicalContent: [
-        "Field placement at Cart Horse Protection",
-        "Handler interviews and relationship observations",
-        "Equine welfare assessments in community settings",
-        "Biometric data collection from handlers and horses"
-      ],
-      assessment: "Field research report with biometric data analysis",
-      included: ["Transport", "Field equipment", "Expert mentorship", "Community meals"]
+      description: "Step into the world of working horses and the compassionate handlers who care for them. In the dusty township streets of Cape Town's Cape Flats, you'll discover how the bond between human and horse reveals profound truths about stress, resilience, and healing. This isn't observation—it's participation. You'll collect real data that contributes to global research.",
+      highlights: ["Daily field visits to Cart Horse communities", "Handler interviews and relationship mapping", "Biometric data collection in real-world settings", "Community lunches with local families"]
     },
     {
-      phase: "Module 3: Week 5-6",
-      title: "Sanctuary Management & Therapeutic Interactions",
+      phase: "Weeks 5-6",
+      title: "Sanctuary Immersion",
+      subtitle: "Where healing happens naturally",
       location: "TUFCAT Farm & Sanctuary",
-      icon: Leaf,
       image: images.tufcat1,
-      academicContent: [
-        "Animal sanctuary best practices and management",
-        "Therapeutic animal selection and training",
-        "Small animal behaviour and welfare",
-        "Sustainable farming and permaculture integration",
-        "Trauma-informed animal care approaches"
-      ],
-      practicalContent: [
-        "Daily animal care routines and feeding",
-        "Therapeutic interaction facilitation practice",
-        "Sanctuary management shadowing",
-        "Organic farming and permaculture workshops"
-      ],
-      assessment: "Therapeutic interaction design portfolio",
-      included: ["Farm accommodation", "Organic meals", "Hands-on training"]
+      description: "Immerse yourself in the daily rhythms of sanctuary life. Wake with the animals, tend the gardens, and discover how therapeutic interactions unfold organically. You'll learn sustainable farming practices while deepening your understanding of trauma-informed animal care.",
+      highlights: ["Daily animal care routines", "Therapeutic interaction facilitation", "Organic farming & permaculture workshops", "Sunset meditation with rescue animals"]
     },
     {
-      phase: "Module 4: Week 7-8",
-      title: "Community Integration & Indigenous Knowledge",
+      phase: "Weeks 7-8",
+      title: "Community Integration",
+      subtitle: "Where ancient wisdom meets modern research",
       location: "Valley of Plenty, Hanover Park",
-      icon: Users,
       image: images.community,
-      academicContent: [
-        "Indigenous Knowledge Systems and African healing traditions",
-        "Community-based participatory research methods",
-        "Food security and urban agriculture",
-        "Violence prevention through wellness interventions",
-        "Decolonizing therapeutic frameworks"
-      ],
-      practicalContent: [
-        "Community placement in Hanover Park",
-        "Urban farming and food garden projects",
-        "Traditional healing practices observation",
-        "Community wellness programme participation"
-      ],
-      assessment: "Community case study with IKS integration",
-      included: ["Community meals", "Cultural experiences", "Local guides", "Safety orientation"]
+      description: "Enter the heart of community wellness in Hanover Park. Work alongside local practitioners learning Indigenous Knowledge Systems that have sustained communities for generations. Plant gardens, share meals, and understand how wellness interventions can transform lives.",
+      highlights: ["Community placement in urban gardens", "Traditional healing practices observation", "Food security & urban farming projects", "Community wellness programme participation"]
     },
     {
-      phase: "Module 5: Week 9-10",
-      title: "Research Synthesis & Professional Development",
+      phase: "Weeks 9-10",
+      title: "Research & Celebration",
+      subtitle: "Share your discoveries with the world",
       location: "UWC Campus",
-      icon: Target,
       image: images.volunteer,
-      academicContent: [
-        "Data analysis: Quantitative and qualitative methods",
-        "Research writing and publication standards",
-        "Academic presentation skills",
-        "Career development in AAT and related fields",
-        "Research ethics and integrity"
-      ],
-      practicalContent: [
-        "Biometric data interpretation workshops",
-        "Individual research paper development",
-        "Oral presentation preparation",
-        "Professional networking events",
-        "Certificate ceremony and graduation"
-      ],
-      assessment: "Final research paper (3,000-5,000 words) + Oral defence",
-      included: ["Research support", "Publication guidance", "Networking", "Certificate"]
+      description: "Synthesize your experiences into meaningful research. With expert guidance, craft your findings into a paper worthy of publication. Present to faculty, fellow students, and community partners. Celebrate your transformation at the graduation ceremony—you'll leave as a changed person, ready to change the world.",
+      highlights: ["Research paper development & mentorship", "Oral presentation preparation", "Professional networking events", "Certificate ceremony & graduation celebration"]
     }
   ];
 
-  const entryRequirements = {
-    academic: [
-      "Honours degree (NQF Level 8) in Psychology, Social Work, Counselling, Education, or related health/social science field",
-      "OR Bachelor's degree with minimum 3 years relevant professional experience",
-      "Academic transcripts demonstrating research capability",
-      "English language proficiency (IELTS 6.0 / TOEFL 80 or equivalent)"
-    ],
-    professional: [
-      "Demonstrated interest in animal welfare and/or community development",
-      "Clear criminal record (requirement for working with vulnerable populations)",
-      "Valid passport for international applicants",
-      "Medical fitness certificate for fieldwork participation"
-    ],
-    ideal: [
-      "Mental health professionals seeking AAT specialization",
-      "Animal welfare practitioners wanting therapeutic frameworks",
-      "Community development workers expanding their toolkit",
-      "International students seeking African-context research experience",
-      "Educators developing trauma-informed approaches"
-    ]
-  };
-
-  const learningOutcomes = [
+  const facilitators = [
     {
-      icon: Brain,
-      title: "Apply AAT Frameworks",
-      description: "Design and implement Animal-Assisted Therapy interventions in diverse therapeutic settings"
+      name: "Prof. Sharyn Spicer",
+      role: "Your Academic Anchor",
+      quote: "I've spent 30 years studying how communities heal. This programme is where all that learning comes alive—and I can't wait to see what you discover.",
+      expertise: ["Research Methodology", "Community Psychology", "Participatory Methods"],
+      funFact: "Ask her about the time a horse taught her more about psychology than any textbook"
     },
     {
-      icon: TrendingUp,
-      title: "Conduct Biometric Research",
-      description: "Collect, analyse, and interpret HRV and cortisol data using validated research protocols"
+      name: "Chad Cupido",
+      role: "Your Research Partner",
+      quote: "Every morning with the animals teaches me something new. My PhD research is directly shaped by what students discover—you'll be contributing to real science.",
+      expertise: ["Biometric Systems", "Human-Animal Bond", "Media Documentation"],
+      funFact: "He's filmed over 500 hours of animal interactions and still gets emotional"
     },
     {
-      icon: Leaf,
-      title: "Integrate Indigenous Knowledge",
-      description: "Synthesize African wellness traditions with evidence-based therapeutic approaches"
+      name: "Dr. Megan White",
+      role: "Your Field Guide",
+      quote: "The horses have a way of showing us who we really are. Are you ready to meet yourself?",
+      expertise: ["Equine Welfare", "Working Animals", "Handler Support"],
+      funFact: "She's been called the 'Horse Whisperer of Cape Town' by colleagues"
     },
     {
-      icon: Heart,
-      title: "Assess Animal Welfare",
-      description: "Evaluate animal welfare in therapeutic, working, and sanctuary contexts"
-    },
-    {
-      icon: Users,
-      title: "Design Community Programmes",
-      description: "Develop sustainable, community-based intervention programmes"
-    },
-    {
-      icon: FileText,
-      title: "Contribute to Research",
-      description: "Produce publishable academic research contributing to the AAT evidence base"
-    },
-    {
-      icon: Lightbulb,
-      title: "Lead with Empathy",
-      description: "Demonstrate trauma-informed, conscious leadership in wellness contexts"
-    },
-    {
-      icon: Globe,
-      title: "Work Cross-Culturally",
-      description: "Navigate diverse cultural contexts with sensitivity and competence"
-    }
-  ];
-
-  const careerPathways = [
-    {
-      title: "Animal-Assisted Therapy Practitioner",
-      settings: ["Private practice", "Rehabilitation centres", "Mental health facilities"],
-      icon: HandHeart
-    },
-    {
-      title: "Equine Welfare Officer",
-      settings: ["Animal welfare organizations", "Working animal projects", "Sanctuaries"],
-      icon: Heart
-    },
-    {
-      title: "Community Development Specialist",
-      settings: ["NGOs", "Government programmes", "International development"],
-      icon: Users
-    },
-    {
-      title: "Research Coordinator",
-      settings: ["Universities", "Research institutions", "NGO research units"],
-      icon: BookOpen
-    },
-    {
-      title: "Mental Health Programme Developer",
-      settings: ["Healthcare organizations", "Schools", "Corporate wellness"],
-      icon: Brain
-    },
-    {
-      title: "Wellness Tourism Facilitator",
-      settings: ["Retreat centres", "Eco-lodges", "Tourism companies"],
-      icon: TreePine
-    }
-  ];
-
-  const applicationSteps = [
-    {
-      step: 1,
-      title: "Expression of Interest",
-      timeline: "Now - 31 March 2026",
-      description: "Submit the online interest form to receive the full programme information pack and application materials.",
-      action: "Express Interest"
-    },
-    {
-      step: 2,
-      title: "Application Submission",
-      timeline: "By 31 March 2026",
-      description: "Submit complete application including academic transcripts, CV, motivation letter (500 words), and two professional references.",
-      action: "Download Application Form"
-    },
-    {
-      step: 3,
-      title: "Selection Interview",
-      timeline: "April 2026",
-      description: "30-minute video interview with the programme team to discuss your background, motivations, and fit with programme objectives.",
-      action: null
-    },
-    {
-      step: 4,
-      title: "Acceptance & Deposit",
-      timeline: "By 30 April 2026",
-      description: "Successful applicants receive offer letters. R20,000 deposit required to secure your place in the cohort.",
-      action: null
-    },
-    {
-      step: 5,
-      title: "Pre-Programme Preparation",
-      timeline: "May 2026",
-      description: "Receive reading list, logistics information, and pre-arrival orientation materials. Complete any visa requirements.",
-      action: null
-    },
-    {
-      step: 6,
-      title: "Programme Commences",
-      timeline: "June 2026",
-      description: "Arrive at UWC Campus for orientation week. Your 10-week transformative journey begins.",
-      action: null
+      name: "Wendy Walton",
+      role: "Your Community Bridge",
+      quote: "Hanover Park isn't just where I work—it's where my heart lives. Welcome to my community.",
+      expertise: ["Indigenous Knowledge", "Urban Agriculture", "Community Healing"],
+      funFact: "Her urban gardens have fed over 500 families this year alone"
     }
   ];
 
   const faqs = [
-    {
-      question: "Is this programme accredited?",
-      answer: "Yes, this is a University of the Western Cape Short Course aligned to NQF Level 7-8, carrying 10 SAQA credits. Upon successful completion, you receive a UWC certificate recognized by South African Qualifications Authority. The programme also contributes toward potential future postgraduate study."
-    },
-    {
-      question: "Can international students apply?",
-      answer: "Absolutely! We welcome international students and have designed the programme with global participants in mind. International students will need a valid passport and may require a study visa (we provide supporting documentation). The programme fee is inclusive of accommodation and meals, making budgeting straightforward."
-    },
-    {
-      question: "What accommodation is provided?",
-      answer: "Students stay at TUFCAT Field Station during field placements, with comfortable shared rooms in a trauma-informed, wellness-focused environment. Campus-based accommodation is arranged for the first and final weeks. All accommodation is included in the programme fee."
-    },
-    {
-      question: "Is financial aid or bursaries available?",
-      answer: "Partial bursaries may be available for qualifying South African students. We are actively seeking funding partnerships to support students from underserved communities. International students should explore funding options through their home institutions or professional associations."
-    },
-    {
-      question: "What is the daily schedule like?",
-      answer: "Typical days include morning animal care or field activities (7:00-12:00), lunch and rest period (12:00-14:00), afternoon academic sessions (14:00-17:00), and evening reflection/personal time. Schedules vary by phase and location. Weekends include structured activities and free time."
-    },
-    {
-      question: "Do I need prior experience with animals?",
-      answer: "No prior animal experience is required, though it is beneficial. The programme includes comprehensive training in animal handling, welfare assessment, and therapeutic interaction. What's most important is your willingness to learn and engage with animals respectfully."
-    },
-    {
-      question: "What research output can I expect?",
-      answer: "Students produce a substantial research paper (3,000-5,000 words) suitable for submission to peer-reviewed journals. Outstanding papers will be supported for publication with faculty co-authorship. All students contribute data to our longitudinal HABRI-funded research project."
-    },
-    {
-      question: "Is the fieldwork physically demanding?",
-      answer: "Field placements involve moderate physical activity including walking, standing, and animal handling. You should be comfortable spending extended periods outdoors in varying weather conditions. Please disclose any physical limitations in your application so we can discuss accommodations."
-    }
+    { question: "Is this programme accredited?", answer: "Yes! This is a University of the Western Cape Short Course aligned to NQF Level 7-8, carrying 10 SAQA credits. You'll receive a UWC certificate recognized by South African Qualifications Authority." },
+    { question: "Can international students apply?", answer: "Absolutely! We welcome global participants. International students need a valid passport and may require a study visa (we provide documentation). The fee includes accommodation and meals, making budgeting straightforward." },
+    { question: "What accommodation is provided?", answer: "Students stay at TUFCAT Field Station in comfortable shared rooms within a trauma-informed, wellness-focused environment. Campus-based accommodation is arranged for opening and closing weeks. All included in your fee!" },
+    { question: "Is financial aid available?", answer: "Partial bursaries may be available for qualifying South African students. We're actively seeking funding partnerships to support students from underserved communities. International students should explore home institution funding." },
+    { question: "Do I need animal experience?", answer: "No prior animal experience required! We provide comprehensive training in animal handling, welfare assessment, and therapeutic interaction. What matters most is your willingness to learn and engage respectfully." },
+    { question: "What research output can I expect?", answer: "You'll produce a substantial research paper (3,000-5,000 words) suitable for peer-reviewed publication. Outstanding papers receive faculty co-authorship support. All students contribute to our HABRI-funded longitudinal project." }
   ];
-
-  const teamMembers = [
-    {
-      name: "Prof. Sharyn Spicer",
-      role: "Academic Director",
-      organization: "University of the Western Cape",
-      bio: "Leading research methodology and academic standards. Expert in community psychology and participatory research approaches in post-apartheid South Africa."
-    },
-    {
-      name: "Dr. Megan White",
-      role: "Equine Welfare Lead",
-      organization: "Cart Horse Protection Association",
-      bio: "Over 20 years experience in working animal welfare. Specialist in handler-animal relationships and community-based equine welfare programmes."
-    },
-    {
-      name: "Chad Cupido",
-      role: "Research Design Lead",
-      organization: "TUFCAT / Omni Wellness Media",
-      bio: "PhD candidate in human-animal interaction. Leading research design, biometric data systems, and programme media documentation."
-    },
-    {
-      name: "Leigh Tucker",
-      role: "International Partnerships",
-      organization: "UWC International Relations",
-      bio: "Strategic partnerships and funder alignment specialist. Connecting the programme with global AAT research networks and funding bodies."
-    },
-    {
-      name: "Wendy Walton",
-      role: "Community Integration Lead",
-      organization: "Valley of Plenty",
-      bio: "Community zone coordinator with deep roots in Hanover Park. Expert in sustainable development and indigenous knowledge integration."
-    },
-    {
-      name: "Tumelo Ncube",
-      role: "Technology & Systems Lead",
-      organization: "Omni Wellness Media",
-      bio: "Biometric systems architect and data pipeline developer. Ensuring research data integrity and technological infrastructure."
-    }
-  ];
-
-  const academicPillars = [
-    {
-      icon: Heart,
-      title: "Animal-Assisted Therapy & Empathy Development",
-      description: "Biometric measurement of HRV, cortisol, and empathy through human-animal interactions"
-    },
-    {
-      icon: Leaf,
-      title: "Indigenous Knowledge Systems",
-      description: "Integration of African wellness practices with evidence-based therapeutic approaches"
-    },
-    {
-      icon: Globe,
-      title: "Environmental Sustainability",
-      description: "Hands-on permaculture, food security, and ecological stewardship"
-    },
-    {
-      icon: Users,
-      title: "Wellness Education & Community Regeneration",
-      description: "Valley of Plenty model: sustainable development in Hanover Park"
-    },
-    {
-      icon: Brain,
-      title: "Conscious Leadership",
-      description: "Developing change agents who lead with empathy and community-centered values"
-    }
-  ];
-
-  const whatsIncluded = [
-    { icon: Home, label: "Accommodation", detail: "10 weeks included" },
-    { icon: Utensils, label: "All Meals", detail: "Farm-fresh organic" },
-    { icon: Camera, label: "Research Equipment", detail: "Biometric devices" },
-    { icon: Coffee, label: "Field Transport", detail: "All site visits" },
-    { icon: BookOpen, label: "Course Materials", detail: "All readings" },
-    { icon: Award, label: "UWC Certificate", detail: "10 SAQA credits" }
-  ];
-
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [openModule, setOpenModule] = useState<number>(0);
 
   return (
     <div className="min-h-screen bg-background">
       <UnifiedNavigation />
       
-      {/* Hero Section */}
-      <section className="relative h-[85vh] overflow-hidden">
-        <img 
-          src={images.hero}
-          alt="Animal-Assisted Therapy research programme"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/70 to-transparent" />
+      {/* Immersive Hero Section */}
+      <section className="relative h-screen overflow-hidden bg-black">
+        {heroGallery.map((img, idx) => (
+          <img 
+            key={idx}
+            src={img}
+            alt="Programme experience"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${idx === heroIndex ? 'opacity-100' : 'opacity-0'}`}
+          />
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
         
-        <div className="relative z-10 container mx-auto h-full flex items-end pb-16 px-4">
-          <div className="max-w-3xl">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Badge className="bg-primary text-primary-foreground">
-                <GraduationCap className="w-3 h-3 mr-1.5" />
-                UWC Short Course
+        <div className="relative z-10 container mx-auto h-full flex flex-col justify-end pb-16 px-4">
+          <div className="max-w-4xl">
+            <div className="flex flex-wrap gap-2 mb-6">
+              <Badge className="bg-white/20 backdrop-blur text-white border-0 px-4 py-1.5">
+                <Plane className="w-3.5 h-3.5 mr-2" />
+                Wellness Study Abroad
               </Badge>
-              <Badge variant="outline" className="bg-background/80 backdrop-blur border-border">
-                NQF Level 7-8 • 10 SAQA Credits
-              </Badge>
-              <Badge variant="outline" className="bg-background/80 backdrop-blur border-border">
-                June 2026
+              <Badge className="bg-primary/90 text-primary-foreground border-0 px-4 py-1.5">
+                June 2026 • 10 Weeks
               </Badge>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-foreground leading-tight">
-              Animal-Assisted Therapy Research & African Wellness
+            
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 text-white leading-[1.1]">
+              Where Research<br/>Meets <span className="text-primary">Transformation</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl">
-              A transformative 10-week immersive programme combining rigorous academic research 
-              with hands-on experiential learning in Animal-Assisted Therapy, Indigenous Knowledge Systems, 
-              and community wellness.
+            
+            <p className="text-lg md:text-xl lg:text-2xl text-white/90 mb-8 max-w-3xl font-light leading-relaxed">
+              A life-changing 10-week journey into Animal-Assisted Therapy, Indigenous Wisdom, 
+              and African Wellness in beautiful Cape Town, South Africa.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                <Heart className="mr-2 h-4 w-4" />
-                Express Interest
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+              {[
+                { icon: MapPin, label: "Cape Town, SA" },
+                { icon: Calendar, label: "June 2026" },
+                { icon: Clock, label: "10 Weeks" },
+                { icon: Award, label: "UWC Certified" }
+              ].map((item, idx) => (
+                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+                    <item.icon className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-white font-medium text-sm">{item.label}</span>
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex flex-wrap gap-4">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-xl">
+                <Heart className="mr-2 h-5 w-5" />
+                Start Your Journey
               </Button>
-              <Button size="lg" variant="outline" className="bg-background/80 backdrop-blur border-border">
-                <Download className="mr-2 h-4 w-4" />
-                Download Prospectus
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg rounded-xl backdrop-blur">
+                <Phone className="mr-2 h-5 w-5" />
+                Book a Discovery Call
+              </Button>
+              <Button size="lg" variant="ghost" className="text-white hover:bg-white/10 px-8 py-6 text-lg rounded-xl">
+                <Play className="mr-2 h-5 w-5" />
+                Watch Video
               </Button>
             </div>
+          </div>
+
+          {/* Hero Gallery Navigation */}
+          <div className="absolute bottom-8 right-8 flex gap-2">
+            {heroGallery.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setHeroIndex(idx)}
+                className={`w-2.5 h-2.5 rounded-full transition-all ${idx === heroIndex ? 'bg-white w-8' : 'bg-white/40 hover:bg-white/60'}`}
+              />
+            ))}
           </div>
         </div>
       </section>
 
       {/* Sticky Navigation */}
-      <nav className={`border-b border-border bg-background/95 backdrop-blur-sm z-40 transition-all ${isSticky ? 'sticky top-0 shadow-sm' : ''}`}>
+      <nav className={`border-b border-border bg-background/95 backdrop-blur-sm z-50 transition-all ${isSticky ? 'fixed top-0 left-0 right-0 shadow-md' : ''}`}>
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-1 overflow-x-auto py-3 scrollbar-hide">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`px-4 py-2 text-sm font-medium whitespace-nowrap rounded-full transition-colors ${
-                  activeSection === item.id 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+          <div className="flex items-center justify-between py-3">
+            <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`px-4 py-2 text-sm font-medium whitespace-nowrap rounded-full transition-colors ${
+                    activeSection === item.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <Button size="sm" className="hidden md:flex bg-primary hover:bg-primary/90">
+              Apply Now <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
           </div>
         </div>
       </nav>
 
-      {/* Quick Stats */}
-      <section className="border-b border-border bg-muted/30">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-primary">R70,000</div>
-              <div className="text-xs md:text-sm text-muted-foreground">All-Inclusive Fee</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-primary">10 Weeks</div>
-              <div className="text-xs md:text-sm text-muted-foreground">Immersive Programme</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-primary">NQF 7-8</div>
-              <div className="text-xs md:text-sm text-muted-foreground">Academic Level</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-primary">10</div>
-              <div className="text-xs md:text-sm text-muted-foreground">SAQA Credits</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-primary">20-25</div>
-              <div className="text-xs md:text-sm text-muted-foreground">Cohort Size</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-primary">3</div>
-              <div className="text-xs md:text-sm text-muted-foreground">Field Sites</div>
-            </div>
+      {/* Quick Stats Banner */}
+      <section className="py-6 bg-muted/50 border-b border-border">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+            {[
+              { value: "R70,000", label: "All-Inclusive" },
+              { value: "10 Weeks", label: "Full Immersion" },
+              { value: "20-25", label: "Cohort Size" },
+              { value: "3 Sites", label: "Field Locations" },
+              { value: "10 Credits", label: "SAQA Accredited" }
+            ].map((stat, idx) => (
+              <div key={idx} className="text-center">
+                <div className="text-2xl md:text-3xl font-bold text-primary">{stat.value}</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wide">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Overview Section */}
-      <section id="overview" className="py-20 bg-background scroll-mt-20">
+      <section id="overview" className="py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-              <div>
-                <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                  <Sparkles className="w-3 h-3 mr-1.5" />
-                  Programme Overview
-                </Badge>
-                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">
-                  Pioneering Research in Human-Animal Interaction
-                </h2>
-                <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                  This groundbreaking programme offers a unique opportunity to engage in cutting-edge research 
-                  while making a tangible impact on communities and animals. Delivered in partnership with 
-                  the University of the Western Cape, TUFCAT Sanctuary, Cart Horse Protection Association, 
-                  and Valley of Plenty, you'll gain both academic credentials and practical experience.
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <GraduationCap className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">For Students & Graduates</h4>
-                      <p className="text-sm text-muted-foreground">Gain hands-on research experience while contributing to groundbreaking studies in AAT. Perfect for those seeking specialization in this emerging field.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Building2 className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">For Professionals</h4>
-                      <p className="text-sm text-muted-foreground">Enhance your practice with specialized AAT training. Ideal for psychologists, social workers, counsellors, and animal welfare practitioners.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Globe className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">For International Participants</h4>
-                      <p className="text-sm text-muted-foreground">Experience African wellness traditions while conducting research in a unique post-apartheid context. Build global networks in the AAT field.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="relative">
-                <img 
-                  src={images.fieldwork1}
-                  alt="Fieldwork experience"
-                  className="rounded-3xl shadow-2xl w-full aspect-[4/3] object-cover"
-                />
-                <div className="absolute -bottom-6 -left-6 bg-background p-4 rounded-2xl shadow-xl border border-border max-w-[200px]">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Award className="w-5 h-5 text-primary" />
-                    </div>
-                    <div className="text-sm font-semibold text-foreground">HABRI Funded</div>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Contributing to global AAT research evidence</p>
-                </div>
-              </div>
+            <div className="text-center mb-16">
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+                <Sparkles className="w-3.5 h-3.5 mr-2" />
+                More Than a Course
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                This Is Your Transformation
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Imagine waking up on a 7-hectare sanctuary, surrounded by rescued animals, in one of the 
+                world's most beautiful cities. This isn't just education—it's a journey that will change 
+                how you see yourself, your work, and your impact on the world.
+              </p>
             </div>
 
-            {/* Core Research Question */}
-            <div className="bg-muted/50 rounded-3xl p-8 md:p-12 text-center border border-border">
-              <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
-                <Target className="w-3 h-3 mr-1.5" />
-                Core Research Question
-              </Badge>
-              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-foreground leading-tight">
-                How can Animal-Assisted Therapy transform occupational wellness and violence prevention 
-                in post-apartheid South Africa?
-              </h3>
-              <p className="text-muted-foreground max-w-3xl mx-auto">
-                Students participate as co-researchers, collecting biometric data and contributing to 
-                longitudinal studies that will shape the future of AAT practice in Africa and beyond.
-              </p>
+            <div className="grid lg:grid-cols-3 gap-8 mb-16">
+              {[
+                { 
+                  icon: GraduationCap, 
+                  title: "For Students", 
+                  description: "Gain hands-on research experience while contributing to groundbreaking AAT studies. Perfect for those seeking specialization in this emerging field.",
+                  highlight: "UWC-certified qualification"
+                },
+                { 
+                  icon: Briefcase, 
+                  title: "For Professionals", 
+                  description: "Enhance your practice with specialized AAT training. Ideal for psychologists, social workers, counsellors, and animal welfare practitioners.",
+                  highlight: "CPD-accredited content"
+                },
+                { 
+                  icon: Globe, 
+                  title: "For Global Seekers", 
+                  description: "Experience African wellness traditions while conducting research in a unique post-apartheid context. Build international networks.",
+                  highlight: "Study abroad experience"
+                }
+              ].map((item, idx) => (
+                <Card key={idx} className="border-border hover:shadow-xl hover:border-primary/30 transition-all group">
+                  <CardContent className="p-8">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <item.icon className="w-7 h-7 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-3">{item.title}</h3>
+                    <p className="text-muted-foreground mb-4 leading-relaxed">{item.description}</p>
+                    <Badge variant="outline" className="bg-primary/5 border-primary/20 text-primary text-xs">
+                      {item.highlight}
+                    </Badge>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Key Programme Features */}
+            <div className="bg-gradient-to-br from-primary/5 via-background to-secondary/5 rounded-3xl p-8 md:p-12 border border-border">
+              <h3 className="text-2xl font-bold text-center mb-8 text-foreground">What Makes This Programme Unique</h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { icon: Heart, title: "Real Research", desc: "Contribute to HABRI-funded studies" },
+                  { icon: Leaf, title: "Indigenous Wisdom", desc: "Learn African healing traditions" },
+                  { icon: Home, title: "Full Immersion", desc: "Live on a working sanctuary" },
+                  { icon: Award, title: "Publication Ready", desc: "Graduate with publishable research" }
+                ].map((feature, idx) => (
+                  <div key={idx} className="text-center">
+                    <div className="w-16 h-16 rounded-2xl bg-background border border-border flex items-center justify-center mx-auto mb-4 shadow-sm">
+                      <feature.icon className="w-8 h-8 text-primary" />
+                    </div>
+                    <h4 className="font-semibold text-foreground mb-1">{feature.title}</h4>
+                    <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Five Pillars */}
-      <section className="py-16 bg-muted/30 border-y border-border">
+      {/* Destination Section - Cape Town */}
+      <section id="destination" className="py-24 bg-muted/30 scroll-mt-20 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl font-bold text-foreground">Five Core Academic Pillars</h2>
-            <p className="text-muted-foreground mt-2">The interdisciplinary foundation of our programme</p>
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <MapPin className="w-3.5 h-3.5 mr-2" />
+              Your Study Abroad Destination
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Experience Cape Town
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Where mountain meets ocean, and ancient wisdom meets cutting-edge research
+            </p>
           </div>
-          <div className="grid md:grid-cols-5 gap-4 max-w-6xl mx-auto">
-            {academicPillars.map((pillar, index) => (
-              <div key={index} className="text-center p-6 rounded-2xl bg-background border border-border hover:shadow-lg hover:border-primary/20 transition-all">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                  <pillar.icon className="w-6 h-6 text-primary" />
+
+          {/* Image Collage */}
+          <div className="grid grid-cols-4 gap-3 max-w-6xl mx-auto mb-12">
+            <img src={images.tableMountain} alt="Table Mountain" className="col-span-2 row-span-2 w-full h-full object-cover rounded-2xl shadow-lg" />
+            <img src={images.coastline} alt="Cape coastline" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <img src={images.fieldwork1} alt="Fieldwork" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <img src={images.winelands} alt="Cape Winelands" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <img src={images.cartHorse1} alt="Cart Horse work" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+          </div>
+
+          {/* Destination Highlights */}
+          <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {[
+              { icon: Mountain, title: "Table Mountain", desc: "World Heritage Site in your backyard" },
+              { icon: Sun, title: "Winter Sun", desc: "15-22°C during your June-August stay" },
+              { icon: Waves, title: "Coastal Beauty", desc: "Muizenberg beach just 20 minutes away" },
+              { icon: TreePine, title: "Wine Country", desc: "Weekend vineyard excursions included" }
+            ].map((item, idx) => (
+              <div key={idx} className="text-center p-6 bg-background rounded-2xl border border-border hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <item.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="font-semibold mb-2 text-sm text-foreground">{pillar.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{pillar.description}</p>
+                <h4 className="font-semibold text-foreground mb-1">{item.title}</h4>
+                <p className="text-sm text-muted-foreground">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Curriculum Section */}
-      <section id="curriculum" className="py-20 bg-background scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                <Calendar className="w-3 h-3 mr-1.5" />
-                10-Week Curriculum
-              </Badge>
-              <h2 className="text-3xl font-bold text-foreground">Programme Modules & Itinerary</h2>
-              <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
-                Each module combines theoretical foundations with practical field experience across our three partner sites
-              </p>
-            </div>
-            
-            <div className="space-y-4">
-              {programModules.map((module, index) => (
-                <Collapsible key={index} open={openModule === index} onOpenChange={() => setOpenModule(openModule === index ? -1 : index)}>
-                  <div className="bg-muted/30 rounded-2xl overflow-hidden border border-border hover:border-primary/20 transition-colors">
-                    <CollapsibleTrigger className="w-full">
-                      <div className="grid md:grid-cols-4 items-center">
-                        <div className="relative h-48 md:h-full md:min-h-[180px]">
-                          <img 
-                            src={module.image}
-                            alt={module.title}
-                            className="absolute inset-0 w-full h-full object-cover"
-                          />
-                          <div className="absolute top-3 left-3">
-                            <Badge className="bg-background/90 backdrop-blur text-foreground border-0 font-semibold text-xs">
-                              {module.phase}
-                            </Badge>
-                          </div>
-                        </div>
-                        <div className="md:col-span-3 p-6 text-left">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-start gap-4">
-                              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                <module.icon className="w-5 h-5 text-primary" />
-                              </div>
-                              <div>
-                                <h3 className="text-lg font-bold text-foreground">{module.title}</h3>
-                                <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1">
-                                  <MapPin className="w-3.5 h-3.5" />
-                                  {module.location}
-                                </p>
-                              </div>
-                            </div>
-                            <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${openModule === index ? 'rotate-180' : ''}`} />
-                          </div>
-                        </div>
-                      </div>
-                    </CollapsibleTrigger>
-                    
-                    <CollapsibleContent>
-                      <div className="px-6 pb-6 md:pl-[calc(25%+1.5rem)]">
-                        <div className="grid md:grid-cols-2 gap-6 pt-4 border-t border-border">
-                          <div>
-                            <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                              <BookOpen className="w-4 h-4 text-primary" />
-                              Academic Content
-                            </h4>
-                            <ul className="space-y-2">
-                              {module.academicContent.map((item, i) => (
-                                <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                                  <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                              <Stethoscope className="w-4 h-4 text-primary" />
-                              Practical Experience
-                            </h4>
-                            <ul className="space-y-2">
-                              {module.practicalContent.map((item, i) => (
-                                <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                                  <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                        <div className="mt-6 pt-4 border-t border-border flex flex-wrap items-center justify-between gap-4">
-                          <div>
-                            <span className="text-xs text-muted-foreground uppercase tracking-wide">Assessment:</span>
-                            <p className="text-sm font-medium text-foreground">{module.assessment}</p>
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {module.included.map((item, i) => (
-                              <Badge key={i} variant="secondary" className="text-xs font-normal">
-                                {item}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </CollapsibleContent>
-                  </div>
-                </Collapsible>
-              ))}
-            </div>
-
-            {/* Assessment Summary */}
-            <div className="mt-12 bg-primary/5 rounded-2xl p-8 border border-primary/10">
-              <h3 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <ClipboardCheck className="w-5 h-5 text-primary" />
-                Assessment Overview
-              </h3>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-semibold text-foreground mb-3">Continuous Assessment (60%)</h4>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" />Weekly reflection journals</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" />Biometric data collection reports</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" />Field observation portfolios</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" />Group research presentations</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground mb-3">Final Assessment (40%)</h4>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" />Individual research paper (3,000-5,000 words)</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" />Oral defence presentation</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-primary" />Practical competency demonstration</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Entry Requirements */}
-      <section id="requirements" className="py-20 bg-muted/30 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                <FileText className="w-3 h-3 mr-1.5" />
-                Admission Criteria
-              </Badge>
-              <h2 className="text-3xl font-bold text-foreground">Entry Requirements</h2>
-              <p className="text-muted-foreground mt-3">
-                Who should apply and what you need to join our programme
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-foreground">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <GraduationCap className="w-5 h-5 text-primary" />
-                    </div>
-                    Academic Requirements
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {entryRequirements.academic.map((req, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm">
-                        <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                        <span className="text-muted-foreground">{req}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-foreground">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Shield className="w-5 h-5 text-primary" />
-                    </div>
-                    Professional Requirements
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {entryRequirements.professional.map((req, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm">
-                        <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                        <span className="text-muted-foreground">{req}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="mt-8 bg-background rounded-2xl p-8 border border-border">
-              <h3 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                <Users className="w-5 h-5 text-primary" />
-                Ideal Candidates
-              </h3>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {entryRequirements.ideal.map((candidate, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
-                    <ArrowRight className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span className="text-sm text-foreground">{candidate}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Learning Outcomes */}
-      <section id="outcomes" className="py-20 bg-background scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                <Target className="w-3 h-3 mr-1.5" />
-                Programme Outcomes
-              </Badge>
-              <h2 className="text-3xl font-bold text-foreground">Learning Outcomes</h2>
-              <p className="text-muted-foreground mt-3">
-                Upon successful completion, you will be able to:
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {learningOutcomes.map((outcome, index) => (
-                <div key={index} className="p-6 rounded-2xl bg-muted/30 border border-border hover:border-primary/20 hover:shadow-lg transition-all">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                    <outcome.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-semibold mb-2 text-foreground">{outcome.title}</h3>
-                  <p className="text-sm text-muted-foreground">{outcome.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Career Prospects */}
-      <section id="careers" className="py-20 bg-muted/30 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                <Briefcase className="w-3 h-3 mr-1.5" />
-                Career Development
-              </Badge>
-              <h2 className="text-3xl font-bold text-foreground">Career Pathways</h2>
-              <p className="text-muted-foreground mt-3">
-                This programme opens doors to diverse career opportunities in growing fields
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {careerPathways.map((career, index) => (
-                <Card key={index} className="border-border hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                      <career.icon className="w-6 h-6 text-primary" />
-                    </div>
-                    <h3 className="font-bold text-foreground mb-3">{career.title}</h3>
-                    <div className="space-y-1">
-                      {career.settings.map((setting, i) => (
-                        <p key={i} className="text-sm text-muted-foreground flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                          {setting}
-                        </p>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            <div className="mt-12 bg-background rounded-2xl p-8 border border-border">
-              <div className="grid md:grid-cols-3 gap-8 text-center">
-                <div>
-                  <div className="text-3xl font-bold text-primary mb-2">Growing Field</div>
-                  <p className="text-sm text-muted-foreground">AAT is one of the fastest-growing therapeutic modalities globally</p>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary mb-2">First in Africa</div>
-                  <p className="text-sm text-muted-foreground">Be among the first practitioners with African AAT research credentials</p>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary mb-2">Publication Ready</div>
-                  <p className="text-sm text-muted-foreground">Graduate with research suitable for peer-reviewed publication</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Meet Our Partners */}
-      <section className="py-20 bg-background">
+      {/* Your Wellness Journey */}
+      <section id="journey" className="py-24 scroll-mt-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-              <Building2 className="w-3 h-3 mr-1.5" />
-              Partner Consortium
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <Calendar className="w-3.5 h-3.5 mr-2" />
+              Your 10-Week Transformation
             </Badge>
-            <h2 className="text-3xl font-bold text-foreground">Meet Our Partners</h2>
-            <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">
-              Three organizations united to create Africa's first Animal-Assisted Therapy research programme
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              The Journey Awaits
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              From arrival to graduation, every moment is designed for your growth
             </p>
           </div>
 
-          {/* Cart Horse Protection */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20 max-w-6xl mx-auto">
-            <div className="relative">
-              <img 
-                src={images.cartHorse1}
-                alt="Cart Horse Protection Association"
-                className="rounded-3xl shadow-2xl w-full aspect-[4/3] object-cover"
-              />
-              <div className="absolute -bottom-4 -right-4 bg-primary text-primary-foreground px-4 py-2 rounded-xl font-medium text-sm shadow-lg">
-                Since 1995
-              </div>
-            </div>
-            <div>
-              <Badge className="mb-4 bg-primary/10 text-primary">Equine Welfare & Community Liaison</Badge>
-              <h3 className="text-2xl font-bold mb-4 text-foreground">Cart Horse Protection Association</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Since 1995, the Cart Horse Protection Association has protected working horses in Cape Town's 
-                most vulnerable communities. Their expertise in equine welfare, handler relationships, and 
-                community engagement forms the foundation of our animal-assisted therapy research.
-              </p>
-              <div className="space-y-3">
-                {["Equine welfare assessment protocols", "Handler-animal relationship research", "Working animal therapy models", "Community engagement expertise"].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                    <span className="text-foreground">{item}</span>
+          <div className="max-w-6xl mx-auto space-y-24">
+            {journeyPhases.map((phase, idx) => (
+              <div key={idx} className={`grid lg:grid-cols-2 gap-12 items-center ${idx % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
+                <div className={idx % 2 === 1 ? 'lg:order-2' : ''}>
+                  <div className="relative">
+                    <img 
+                      src={phase.image}
+                      alt={phase.title}
+                      className="w-full aspect-[4/3] object-cover rounded-3xl shadow-2xl"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <Badge className="bg-primary text-primary-foreground px-4 py-2 text-sm font-bold">
+                        {phase.phase}
+                      </Badge>
+                    </div>
+                    <div className="absolute bottom-4 right-4 bg-background/95 backdrop-blur px-4 py-2 rounded-xl shadow-lg">
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="w-4 h-4 text-primary" />
+                        <span className="font-medium text-foreground">{phase.location}</span>
+                      </div>
+                    </div>
                   </div>
-                ))}
+                </div>
+                
+                <div className={idx % 2 === 1 ? 'lg:order-1' : ''}>
+                  <h3 className="text-3xl font-bold text-foreground mb-2">{phase.title}</h3>
+                  <p className="text-lg text-primary font-medium mb-4">{phase.subtitle}</p>
+                  <p className="text-muted-foreground leading-relaxed mb-6">{phase.description}</p>
+                  <div className="space-y-3">
+                    {phase.highlights.map((highlight, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="w-4 h-4 text-primary" />
+                        </div>
+                        <span className="text-foreground">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Meet Your Guides */}
+      <section id="guides" className="py-24 bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-amber-950/20 dark:to-orange-950/20 scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <Users className="w-3.5 h-3.5 mr-2" />
+              Meet Your Guides
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              The People Who'll Walk Beside You
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              More than instructors—they're mentors, guides, and fellow seekers
+            </p>
           </div>
 
-          {/* TUFCAT */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-20 max-w-6xl mx-auto">
-            <div className="lg:order-2 relative">
-              <img 
-                src={images.tufcat1}
-                alt="TUFCAT Farm & Sanctuary"
-                className="rounded-3xl shadow-2xl w-full aspect-[4/3] object-cover"
-              />
-              <div className="absolute -bottom-4 -left-4 bg-primary text-primary-foreground px-4 py-2 rounded-xl font-medium text-sm shadow-lg">
-                7 Hectares
-              </div>
-            </div>
-            <div className="lg:order-1">
-              <Badge className="mb-4 bg-primary/10 text-primary">Field Site Operations</Badge>
-              <h3 className="text-2xl font-bold mb-4 text-foreground">TUFCAT Farm & Sanctuary</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                TUFCAT provides the 7-hectare living classroom where students experience hands-on animal care, 
-                sustainable farming, and therapeutic animal interactions. The sanctuary houses rescued animals 
-                central to our research and serves as the primary accommodation site.
-              </p>
-              <div className="space-y-3">
-                {["Animal sanctuary management", "Therapeutic animal interactions", "Sustainable farming practices", "Student accommodation"].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                    <span className="text-foreground">{item}</span>
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {facilitators.map((person, idx) => (
+              <Card key={idx} className="border-border hover:shadow-xl transition-all overflow-hidden group">
+                <CardContent className="p-8">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center flex-shrink-0">
+                      <span className="text-primary font-bold text-xl">
+                        {person.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-foreground">{person.name}</h4>
+                      <p className="text-primary font-medium">{person.role}</p>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
+                  
+                  <blockquote className="text-muted-foreground italic mb-6 pl-4 border-l-2 border-primary/30">
+                    "{person.quote}"
+                  </blockquote>
+                  
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {person.expertise.map((exp, i) => (
+                      <Badge key={i} variant="outline" className="bg-muted/50 text-xs">
+                        {exp}
+                      </Badge>
+                    ))}
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground italic">
+                    <Sparkles className="w-3.5 h-3.5 inline mr-1.5 text-primary" />
+                    {person.funFact}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
-          {/* Valley of Plenty */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-            <div className="relative">
-              <img 
-                src={images.community}
-                alt="Valley of Plenty Community"
-                className="rounded-3xl shadow-2xl w-full aspect-[4/3] object-cover"
-              />
-              <div className="absolute -bottom-4 -right-4 bg-primary text-primary-foreground px-4 py-2 rounded-xl font-medium text-sm shadow-lg">
-                Hanover Park
+          <div className="text-center mt-12">
+            <Button variant="outline" size="lg" className="rounded-xl">
+              <Video className="mr-2 h-5 w-5" />
+              Watch Our Team Introduction Video
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <DollarSign className="w-3.5 h-3.5 mr-2" />
+              Your Investment
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Pricing That Works For You
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              All-inclusive packages designed for different needs and budgets
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
+            {/* Early Bird */}
+            <Card className="border-border hover:shadow-xl transition-all relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <Badge className="bg-green-500 text-white border-0 px-4">Save R7,000</Badge>
               </div>
-            </div>
-            <div>
-              <Badge className="mb-4 bg-primary/10 text-primary">Community Development Model</Badge>
-              <h3 className="text-2xl font-bold mb-4 text-foreground">Valley of Plenty</h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Located in Hanover Park, Valley of Plenty demonstrates sustainable community development in action. 
-                Students participate in urban farming, food security initiatives, and community wellness programs 
-                while learning Indigenous Knowledge Systems from local practitioners.
-              </p>
-              <div className="space-y-3">
-                {["Urban permaculture training", "Community food security", "Indigenous Knowledge integration", "Grassroots development models"].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                    <span className="text-foreground">{item}</span>
-                  </div>
-                ))}
+              <CardContent className="p-8 pt-10">
+                <h3 className="text-xl font-bold text-foreground mb-1">Early Bird</h3>
+                <p className="text-sm text-muted-foreground mb-6">Apply by Dec 2025</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-foreground">R63,000</span>
+                  <span className="text-muted-foreground ml-2">≈ $3,400 USD</span>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {["Everything in Full Programme", "Priority cohort placement", "Pre-programme mentorship call", "Welcome gift pack"].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <span className="text-foreground">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button className="w-full" variant="outline">Apply Early</Button>
+                <p className="text-xs text-center text-muted-foreground mt-3">Deadline: 31 December 2025</p>
+              </CardContent>
+            </Card>
+
+            {/* Full Programme - Featured */}
+            <Card className="border-primary shadow-xl relative scale-105 z-10">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <Badge className="bg-primary text-primary-foreground border-0 px-4">Most Popular</Badge>
+              </div>
+              <CardContent className="p-8 pt-10">
+                <h3 className="text-xl font-bold text-foreground mb-1">Full Programme</h3>
+                <p className="text-sm text-muted-foreground mb-6">Individual Students</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-primary">R70,000</span>
+                  <span className="text-muted-foreground ml-2">≈ $3,800 USD</span>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {["10 weeks accommodation at TUFCAT", "All meals (organic, farm-fresh)", "Field transport to all sites", "Biometric research equipment", "UWC certificate (10 SAQA credits)", "Publication support"].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm">
+                      <Check className="w-5 h-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button className="w-full bg-primary hover:bg-primary/90">Reserve Your Spot</Button>
+              </CardContent>
+            </Card>
+
+            {/* University Partners */}
+            <Card className="border-border hover:shadow-xl transition-all">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-foreground mb-1">University Partners</h3>
+                <p className="text-sm text-muted-foreground mb-6">Institutional Pricing</p>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-foreground">Custom</span>
+                  <span className="text-muted-foreground block text-sm mt-1">Contact for group rates</span>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {["Custom cohort arrangements", "Credit transfer support", "Faculty exchange options", "Research collaboration", "Branded certificates"].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm">
+                      <Check className="w-5 h-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button className="w-full" variant="outline">
+                  <Building className="mr-2 h-4 w-4" />
+                  Partner With Us
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Payment Options */}
+          <div className="bg-muted/50 rounded-3xl p-8 max-w-4xl mx-auto border border-border">
+            <h3 className="text-xl font-bold text-center mb-6 text-foreground">Flexible Payment Options</h3>
+            <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div className="p-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <CreditCard className="w-6 h-6 text-primary" />
+                </div>
+                <div className="text-2xl font-bold text-primary">R20,000</div>
+                <div className="text-sm text-muted-foreground">Deposit to secure place</div>
+              </div>
+              <div className="p-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <Calendar className="w-6 h-6 text-primary" />
+                </div>
+                <div className="text-2xl font-bold text-primary">3 Installments</div>
+                <div className="text-sm text-muted-foreground">Spread over 3 months</div>
+              </div>
+              <div className="p-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <Gift className="w-6 h-6 text-primary" />
+                </div>
+                <div className="text-2xl font-bold text-primary">Bursaries</div>
+                <div className="text-sm text-muted-foreground">Limited partial funding</div>
               </div>
             </div>
           </div>
@@ -1087,11 +663,18 @@ const UWCHumanAnimalProgram = () => {
       <section className="py-16 bg-muted/30 border-y border-border">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <h3 className="text-xl font-bold text-center mb-8 text-foreground">What's Included in Your R70,000 Investment</h3>
+            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Everything Included in Your Investment</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {whatsIncluded.map((item, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-14 h-14 rounded-2xl bg-background border border-border flex items-center justify-center mx-auto mb-3">
+              {[
+                { icon: Home, label: "Accommodation", detail: "10 weeks" },
+                { icon: Utensils, label: "All Meals", detail: "Farm-fresh organic" },
+                { icon: Camera, label: "Equipment", detail: "Biometric devices" },
+                { icon: Coffee, label: "Transport", detail: "All field sites" },
+                { icon: BookOpen, label: "Materials", detail: "Full course pack" },
+                { icon: Award, label: "Certificate", detail: "UWC accredited" }
+              ].map((item, idx) => (
+                <div key={idx} className="text-center">
+                  <div className="w-14 h-14 rounded-2xl bg-background border border-border flex items-center justify-center mx-auto mb-3 shadow-sm">
                     <item.icon className="w-7 h-7 text-primary" />
                   </div>
                   <div className="font-medium text-foreground text-sm">{item.label}</div>
@@ -1103,325 +686,238 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
-      {/* Accommodation Gallery */}
-      <section className="py-20 bg-background">
+      {/* For Universities Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-900 to-indigo-900 text-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-              <Home className="w-3 h-3 mr-1.5" />
-              Accommodation
-            </Badge>
-            <h2 className="text-3xl font-bold text-foreground">TUFCAT Field Station</h2>
-            <p className="text-muted-foreground mt-3">
-              Comfortable accommodation in a trauma-informed, wellness-focused environment
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto">
-            <img 
-              src={images.accommodation}
-              alt="TUFCAT accommodation"
-              className="rounded-2xl aspect-[4/3] object-cover shadow-lg hover:shadow-xl transition-shadow"
-            />
-            <img 
-              src={images.kitchen}
-              alt="Community kitchen"
-              className="rounded-2xl aspect-[4/3] object-cover shadow-lg hover:shadow-xl transition-shadow"
-            />
-            <img 
-              src={images.living}
-              alt="Living space"
-              className="rounded-2xl aspect-[4/3] object-cover shadow-lg hover:shadow-xl transition-shadow"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership Team */}
-      <section id="faculty" className="py-20 bg-muted/30 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                <Award className="w-3 h-3 mr-1.5" />
-                Leadership
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+            <div>
+              <Badge className="bg-white/20 text-white border-0 mb-4 px-4 py-1.5">
+                <Building2 className="w-3.5 h-3.5 mr-2" />
+                For Universities
               </Badge>
-              <h2 className="text-3xl font-bold text-foreground">Programme Leadership Team</h2>
-              <p className="text-muted-foreground mt-3">
-                Expert faculty from academia, animal welfare, and community development
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Partner With Us</h2>
+              <p className="text-white/80 text-lg leading-relaxed mb-6">
+                Integrate this programme into your study abroad offerings, exchange programmes, 
+                or postgraduate pathways. We provide full academic support, credit transfer 
+                documentation, and custom cohort arrangements.
               </p>
+              <div className="flex flex-wrap gap-4">
+                <Button className="bg-white text-blue-900 hover:bg-white/90">
+                  <Download className="mr-2 h-4 w-4" />
+                  Download Partnership Prospectus
+                </Button>
+                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                  <Phone className="mr-2 h-4 w-4" />
+                  Schedule Faculty Call
+                </Button>
+              </div>
             </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {teamMembers.map((member, index) => (
-                <Card key={index} className="border-border hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                      <span className="text-primary font-bold text-lg">
-                        {member.name.split(' ').map(n => n[0]).join('')}
-                      </span>
-                    </div>
-                    <h4 className="font-bold text-foreground">{member.name}</h4>
-                    <p className="text-sm text-primary font-medium">{member.role}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{member.organization}</p>
-                    <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{member.bio}</p>
-                  </CardContent>
-                </Card>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { icon: Globe, title: "Study Abroad Ready" },
+                { icon: Award, title: "Credit Transfer" },
+                { icon: Users, title: "Custom Cohorts" },
+                { icon: FileText, title: "Full Documentation" }
+              ].map((item, idx) => (
+                <div key={idx} className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center">
+                  <item.icon className="w-8 h-8 mx-auto mb-3 text-white/80" />
+                  <span className="font-medium">{item.title}</span>
+                </div>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Application Process */}
-      <section id="apply" className="py-20 bg-background scroll-mt-20">
+      {/* For Sponsors - With Embedded Proposal */}
+      <section className="py-24 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                <ClipboardCheck className="w-3 h-3 mr-1.5" />
-                How to Apply
-              </Badge>
-              <h2 className="text-3xl font-bold text-foreground">Application Process</h2>
-              <p className="text-muted-foreground mt-3">
-                Your journey to joining our programme in six clear steps
-              </p>
-            </div>
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <Gift className="w-3.5 h-3.5 mr-2" />
+              For Sponsors & Funders
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Invest in Future Change-Makers
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Support students from underserved communities to access this transformative experience. 
+              Your sponsorship directly funds bursaries, equipment, and community impact.
+            </p>
+          </div>
 
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border hidden md:block" />
-              
-              <div className="space-y-6">
-                {applicationSteps.map((step, index) => (
-                  <div key={index} className="relative flex gap-6">
-                    <div className="hidden md:flex flex-col items-center">
-                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-bold z-10 ${
-                        index === 0 ? 'bg-primary text-primary-foreground' : 'bg-muted border border-border text-foreground'
-                      }`}>
-                        {step.step}
-                      </div>
-                    </div>
-                    <Card className="flex-1 border-border hover:shadow-md transition-shadow">
-                      <CardContent className="p-6">
-                        <div className="flex flex-wrap items-start justify-between gap-4">
-                          <div>
-                            <Badge variant="outline" className="mb-2 text-xs">{step.timeline}</Badge>
-                            <h3 className="text-lg font-bold text-foreground">{step.title}</h3>
-                            <p className="text-sm text-muted-foreground mt-2">{step.description}</p>
-                          </div>
-                          {step.action && (
-                            <Button variant={index === 0 ? "default" : "outline"} size="sm">
-                              {step.action}
-                              <ArrowRight className="w-4 h-4 ml-2" />
-                            </Button>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
+          {/* Embedded Gamma Proposal */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="bg-background rounded-2xl shadow-xl overflow-hidden border border-border">
+              <div className="p-4 bg-muted/50 border-b border-border flex items-center gap-3">
+                <FileText className="w-5 h-5 text-primary" />
+                <span className="font-medium text-foreground">Research & Innovation Platform Proposal</span>
               </div>
+              <iframe 
+                src="https://gamma.app/embed/3lz7fc000368av4" 
+                style={{ width: '100%', height: '500px' }}
+                allow="fullscreen" 
+                title="The Human-Animal Bond in Action: A UWC-Led Research and Innovation Platform"
+                className="w-full"
+              />
             </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 px-8">
+              <Heart className="mr-2 h-5 w-5" />
+              Sponsor a Student
+            </Button>
+            <Button size="lg" variant="outline" className="px-8">
+              <Building2 className="mr-2 h-5 w-5" />
+              Corporate Partnership
+            </Button>
+            <Button size="lg" variant="outline" className="px-8">
+              <Download className="mr-2 h-5 w-5" />
+              Download Funding Proposal
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Investment & Funding */}
-      <section className="py-20 bg-muted/30">
+      {/* Pre-Enrollment Section */}
+      <section id="apply" className="py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5 scroll-mt-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                <Star className="w-3 h-3 mr-1.5" />
-                Investment
-              </Badge>
-              <h2 className="text-3xl font-bold text-foreground">Programme Investment</h2>
-            </div>
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-primary text-primary-foreground border-0 px-4 py-1.5">
+              <Sparkles className="w-3.5 h-3.5 mr-2" />
+              Limited to 20-25 Students
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Ready to Begin?
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Applications for June 2026 are now open. Here's how to join us.
+            </p>
+          </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-foreground">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <GraduationCap className="w-5 h-5 text-primary" />
-                    </div>
-                    Student Investment
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-bold text-primary mb-2">R70,000</div>
-                  <p className="text-muted-foreground text-sm mb-4">Per student, all-inclusive</p>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">10 weeks accommodation at TUFCAT</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">All meals (organic, farm-fresh)</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">Field transport to all sites</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">Biometric research equipment</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">All course materials & readings</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">UWC certificate (10 SAQA credits)</span>
-                    </li>
-                  </ul>
-                  <div className="mt-6 p-4 bg-muted/50 rounded-xl">
-                    <p className="text-sm text-muted-foreground">
-                      <strong className="text-foreground">Payment plan available:</strong> R20,000 deposit + 2 instalments of R25,000
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+          {/* Application Steps */}
+          <div className="grid md:grid-cols-4 gap-4 max-w-5xl mx-auto mb-16">
+            {[
+              { num: "1", title: "Express Interest", desc: "Fill out our quick form", active: true, cta: "Get Started" },
+              { num: "2", title: "Book a Call", desc: "Speak with our team", active: false, cta: "Schedule" },
+              { num: "3", title: "Apply", desc: "Submit your documents", active: false, cta: "Apply Now" },
+              { num: "4", title: "Secure Your Spot", desc: "Pay deposit to confirm", active: false, cta: null }
+            ].map((step, idx) => (
+              <div key={idx} className={`p-6 rounded-2xl text-center transition-all ${step.active ? 'bg-primary text-primary-foreground shadow-lg scale-105' : 'bg-background border border-border hover:shadow-md'}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold ${step.active ? 'bg-white/20' : 'bg-primary/10 text-primary'}`}>
+                  {step.num}
+                </div>
+                <h3 className={`font-bold mb-2 ${step.active ? 'text-white' : 'text-foreground'}`}>{step.title}</h3>
+                <p className={`text-sm mb-4 ${step.active ? 'text-white/80' : 'text-muted-foreground'}`}>{step.desc}</p>
+                {step.cta && (
+                  <Button size="sm" variant={step.active ? "secondary" : "outline"} className={step.active ? 'bg-white text-primary hover:bg-white/90' : ''}>
+                    {step.cta} <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
 
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3 text-foreground">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Star className="w-5 h-5 text-primary" />
-                    </div>
-                    Research Funding
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-bold text-primary mb-2">$195,000</div>
-                  <p className="text-muted-foreground text-sm mb-4">HABRI grant target over 3 years</p>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">Biometric research equipment</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">Longitudinal data collection</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">International research collaboration</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">Publication support for students</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span className="text-muted-foreground">Programme sustainability</span>
-                    </li>
-                  </ul>
-                  <div className="mt-6 p-4 bg-muted/50 rounded-xl">
-                    <p className="text-sm text-muted-foreground">
-                      <strong className="text-foreground">Contributing to global AAT evidence base</strong> through rigorous, peer-reviewed research
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+          {/* Primary CTA */}
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-border shadow-xl">
+              <CardContent className="p-8 md:p-12 text-center">
+                <h3 className="text-2xl font-bold text-foreground mb-3">Not sure if this is right for you?</h3>
+                <p className="text-muted-foreground mb-8">
+                  Book a free 20-minute discovery call with our team. No pressure, just conversation.
+                </p>
+                <div className="flex flex-wrap justify-center gap-4">
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 px-8">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Book a Discovery Call
+                  </Button>
+                  <Button size="lg" variant="outline" className="px-8">
+                    <Mail className="mr-2 h-5 w-5" />
+                    Email Us a Question
+                  </Button>
+                </div>
+                <p className="text-sm text-muted-foreground mt-6">
+                  Or reach out directly: <a href="mailto:info@omniwellness.co.za" className="text-primary hover:underline">info@omniwellness.co.za</a>
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
       {/* FAQs */}
-      <section className="py-20 bg-background">
+      <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-                <HelpCircle className="w-3 h-3 mr-1.5" />
-                FAQs
-              </Badge>
-              <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
-            </div>
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <HelpCircle className="w-3.5 h-3.5 mr-2" />
+              Common Questions
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+              Frequently Asked Questions
+            </h2>
+          </div>
 
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <Collapsible key={index} open={openFaq === index} onOpenChange={() => setOpenFaq(openFaq === index ? null : index)}>
-                  <Card className="border-border">
-                    <CollapsibleTrigger className="w-full">
-                      <CardContent className="p-6 flex items-center justify-between">
-                        <h3 className="font-semibold text-foreground text-left">{faq.question}</h3>
-                        <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform flex-shrink-0 ml-4 ${openFaq === index ? 'rotate-180' : ''}`} />
-                      </CardContent>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <CardContent className="px-6 pb-6 pt-0">
-                        <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
-                      </CardContent>
-                    </CollapsibleContent>
-                  </Card>
-                </Collapsible>
-              ))}
-            </div>
+          <div className="max-w-3xl mx-auto space-y-4">
+            {faqs.map((faq, idx) => (
+              <Collapsible key={idx} open={openFaq === idx} onOpenChange={() => setOpenFaq(openFaq === idx ? null : idx)}>
+                <div className="bg-background rounded-xl border border-border overflow-hidden">
+                  <CollapsibleTrigger className="w-full p-6 flex items-center justify-between text-left">
+                    <span className="font-semibold text-foreground pr-4">{faq.question}</span>
+                    <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform flex-shrink-0 ${openFaq === idx ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div className="px-6 pb-6 pt-0">
+                      <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
+                    </div>
+                  </CollapsibleContent>
+                </div>
+              </Collapsible>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Accreditation Bar */}
-      <section className="py-12 bg-muted/30 border-y border-border">
+      <section className="py-12 bg-background border-t border-border">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-2xl bg-background border border-border flex items-center justify-center mx-auto mb-2">
-                <GraduationCap className="w-8 h-8 text-primary" />
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+            {[
+              { label: "University of the Western Cape", badge: "Academic Partner" },
+              { label: "NQF Level 7-8", badge: "Academic Level" },
+              { label: "10 SAQA Credits", badge: "Accredited" },
+              { label: "HABRI", badge: "Research Partner" }
+            ].map((item, idx) => (
+              <div key={idx} className="text-center">
+                <div className="font-bold text-foreground">{item.label}</div>
+                <Badge variant="outline" className="mt-1 text-xs">{item.badge}</Badge>
               </div>
-              <p className="text-sm font-medium text-foreground">UWC Accredited</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-2xl bg-background border border-border flex items-center justify-center mx-auto mb-2">
-                <Award className="w-8 h-8 text-primary" />
-              </div>
-              <p className="text-sm font-medium text-foreground">NQF Level 7-8</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-2xl bg-background border border-border flex items-center justify-center mx-auto mb-2">
-                <Shield className="w-8 h-8 text-primary" />
-              </div>
-              <p className="text-sm font-medium text-foreground">10 SAQA Credits</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-2xl bg-background border border-border flex items-center justify-center mx-auto mb-2">
-                <Globe className="w-8 h-8 text-primary" />
-              </div>
-              <p className="text-sm font-medium text-foreground">HABRI Research Partner</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 bg-primary text-primary-foreground">
+      <section className="py-24 bg-gradient-to-r from-primary to-primary/80 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Begin Your Journey in June 2026
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            Your Transformation Starts Here
           </h2>
-          <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-            Join the first cohort of this groundbreaking programme and contribute to pioneering research 
-            in Animal-Assisted Therapy and African wellness.
+          <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
+            Join 20-25 extraordinary individuals on a journey that will change 
+            how you see animals, communities, and yourself.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button size="lg" className="bg-background text-foreground hover:bg-background/90">
+            <Button size="lg" className="bg-white text-primary hover:bg-white/90 px-8 py-6 text-lg">
               <Heart className="mr-2 h-5 w-5" />
-              Express Interest Now
+              Start Your Journey
             </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
-              <Mail className="mr-2 h-5 w-5" />
-              Contact Programme Team
+            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg">
+              <Download className="mr-2 h-5 w-5" />
+              Download Prospectus
             </Button>
           </div>
-          <p className="text-sm opacity-70 mt-8">
-            Questions? Email us at <span className="underline">uwc-aat@omniwellness.co.za</span>
-          </p>
         </div>
       </section>
 
