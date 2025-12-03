@@ -68,6 +68,15 @@ const PARTNER_ACCESS_CODE = 'UWC2026';
 
 const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.humanAnimal1, images.tufcat1];
 
+// Partner logos
+const partnerLogos = {
+  carthorse: 'https://carthorse.org.za/wp/wp-content/uploads/2021/02/Cart-Horse-Logo-Blue-Square.png',
+  tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
+  drphilafel: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
+  uwc: 'https://www.uwc.ac.za/Style%20Library/images/UWC-Logo.png',
+  omni: `${STORAGE_BASE}/Omni%20wellness%20team.jpg`
+};
+
 // Partner data
 const partners = [
   {
@@ -76,6 +85,7 @@ const partners = [
     shortName: 'Cart Horse',
     tagline: 'Giving a Voice to Those Who Can\'t Speak',
     icon: PawPrint,
+    logo: partnerLogos.carthorse,
     color: 'from-amber-500 to-orange-600',
     bgColor: 'bg-amber-50 dark:bg-amber-950/30',
     heroImage: images.cartHorse1,
@@ -102,6 +112,7 @@ const partners = [
     shortName: 'TUFCAT',
     tagline: '21 Years of Compassion on Campus',
     icon: Cat,
+    logo: partnerLogos.tufcat,
     color: 'from-violet-500 to-purple-600',
     bgColor: 'bg-violet-50 dark:bg-violet-950/30',
     heroImage: images.tufcat1,
@@ -128,6 +139,7 @@ const partners = [
     shortName: 'Dr. Phil-afel',
     tagline: 'From Cape Flats to Valley of Plenty',
     icon: Sprout,
+    logo: partnerLogos.drphilafel,
     color: 'from-green-500 to-emerald-600',
     bgColor: 'bg-green-50 dark:bg-green-950/30',
     heroImage: images.empowerment,
@@ -154,6 +166,7 @@ const partners = [
     shortName: 'UWC',
     tagline: 'Where Scholarship Meets Service',
     icon: GradCap,
+    logo: partnerLogos.uwc,
     color: 'from-blue-500 to-indigo-600',
     bgColor: 'bg-blue-50 dark:bg-blue-950/30',
     heroImage: images.graduation,
@@ -180,6 +193,7 @@ const partners = [
     shortName: 'Omni',
     tagline: 'Where Wellness Meets Media',
     icon: Film,
+    logo: partnerLogos.omni,
     color: 'from-primary to-secondary',
     bgColor: 'bg-primary/5 dark:bg-primary/10',
     heroImage: images.humanAnimal1,
@@ -297,6 +311,7 @@ const UWCHumanAnimalProgram = () => {
     { id: 'partners', label: 'Our Partners' },
     { id: 'journey', label: 'Your Journey' },
     { id: 'qualification', label: 'Requirements' },
+    { id: 'getting-ready', label: 'Preparation' },
     { id: 'destination', label: 'Cape Town' },
     { id: 'guides', label: 'Your Guides' },
     { id: 'pricing', label: 'Investment' },
@@ -664,7 +679,7 @@ const UWCHumanAnimalProgram = () => {
           </div>
 
           {/* Partner Logo Trust Bar */}
-          <div className="flex flex-wrap justify-center items-center gap-8 mb-16 py-8 border-y border-border">
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 mb-16 py-8 border-y border-border">
             {partners.map((partner) => (
               <button
                 key={partner.id}
@@ -672,14 +687,23 @@ const UWCHumanAnimalProgram = () => {
                   setActivePartner(partner.id);
                   document.getElementById('partner-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className={`flex items-center gap-3 px-6 py-3 rounded-xl transition-all ${
+                className={`group relative p-4 rounded-2xl transition-all ${
                   activePartner === partner.id 
-                    ? 'bg-primary text-primary-foreground shadow-lg scale-105' 
-                    : 'bg-background border border-border hover:border-primary/30 hover:shadow-md'
+                    ? 'bg-primary/10 ring-2 ring-primary shadow-lg scale-105' 
+                    : 'bg-background border border-border hover:border-primary/30 hover:shadow-md hover:scale-102'
                 }`}
               >
-                <partner.icon className="w-5 h-5" />
-                <span className="font-medium text-sm">{partner.shortName}</span>
+                <img 
+                  src={partner.logo} 
+                  alt={partner.name}
+                  className="h-12 md:h-16 w-auto object-contain grayscale group-hover:grayscale-0 transition-all"
+                  style={{ maxWidth: '120px' }}
+                />
+                <span className={`absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs font-medium px-2 py-0.5 rounded-full transition-opacity ${
+                  activePartner === partner.id ? 'bg-primary text-primary-foreground opacity-100' : 'bg-muted text-muted-foreground opacity-0 group-hover:opacity-100'
+                }`}>
+                  {partner.shortName}
+                </span>
               </button>
             ))}
           </div>
@@ -1394,6 +1418,190 @@ const UWCHumanAnimalProgram = () => {
                   <div className="text-xs text-muted-foreground">{item.detail}</div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Getting Ready Guide Section */}
+      <section id="getting-ready" className="py-24 scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <Briefcase className="w-3.5 h-3.5 mr-2" />
+              Preparation Guide
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Getting Ready for Your Journey
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Everything you need to prepare for 10 transformative weeks in Cape Town
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto mb-16">
+            {/* Pre-Arrival Checklist */}
+            <Card className="border-border hover:shadow-xl transition-all">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Check className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">Pre-Arrival Checklist</h3>
+                </div>
+                <div className="space-y-4">
+                  {[
+                    { title: 'Valid Passport', desc: '6+ months validity beyond programme end' },
+                    { title: 'South African Visa', desc: 'Study visa recommended for 10+ weeks' },
+                    { title: 'Travel Insurance', desc: 'Medical coverage including animal interaction' },
+                    { title: 'Vaccinations', desc: 'Standard travel vaccines, tetanus booster' },
+                    { title: 'Academic Portfolio', desc: 'CV, transcripts, research interests document' },
+                    { title: 'Personal Journal', desc: 'For fieldwork reflections & research notes' }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex gap-3 p-3 bg-muted/50 rounded-xl">
+                      <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-foreground">{item.title}</p>
+                        <p className="text-sm text-muted-foreground">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* What to Pack */}
+            <Card className="border-border hover:shadow-xl transition-all">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Briefcase className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">What to Pack</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { category: 'Clothing', items: 'Layered clothing, rain jacket, closed-toe shoes for farm work, sun hat' },
+                    { category: 'Tech', items: 'Laptop, smartphone, portable charger, universal adapter (Type M)' },
+                    { category: 'Field Work', items: 'Sunscreen SPF50, insect repellent, reusable water bottle' },
+                    { category: 'Personal', items: 'Medications, toiletries (eco-friendly preferred), comfortable sleepwear' }
+                  ].map((item, idx) => (
+                    <div key={idx} className="p-4 bg-muted/30 rounded-xl">
+                      <p className="font-semibold text-primary text-sm mb-1">{item.category}</p>
+                      <p className="text-sm text-muted-foreground">{item.items}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Recommended Gear from Partners */}
+          <div className="max-w-6xl mx-auto">
+            <h3 className="text-2xl font-bold text-center mb-4 text-foreground">
+              Recommended Gear from Our Partners
+            </h3>
+            <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">
+              Document your journey and stay connected with these curated recommendations from our CameraStuff and RoamBuddy partnerships
+            </p>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* CameraStuff Products */}
+              <Card className="border-border hover:shadow-xl transition-all group overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 flex items-center justify-center relative overflow-hidden">
+                  <img 
+                    src="https://camerastuff.co.za/cdn/shop/files/neewer-pa045-vlogging-kit-led-light-selfie-stick-tripod-mic-smartphones-camerastuff-472.webp?v=1750338026&width=640"
+                    alt="Neewer Vlogging Kit"
+                    className="h-40 object-contain group-hover:scale-110 transition-transform"
+                  />
+                  <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">CameraStuff</Badge>
+                </div>
+                <CardContent className="p-6">
+                  <h4 className="font-bold text-foreground mb-2">Neewer PA045 Vlogging Kit</h4>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    All-in-one mobile content kit with LED light, selfie stick, tripod & mic. Perfect for documenting your fieldwork journey.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-primary font-bold">From R1,200</span>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href="https://camerastuff.co.za/products/neewer-pa045-vlogging-kit-with-led-lightselfie-stick-tripodmic-for-smartphones?a_aid=omniwellnessmedia&channel=uwc-program" target="_blank" rel="noopener noreferrer">
+                        <Camera className="w-4 h-4 mr-2" />
+                        View
+                      </a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border hover:shadow-xl transition-all group overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900/30 dark:to-purple-900/30 flex items-center justify-center relative overflow-hidden">
+                  <img 
+                    src="https://camerastuff.co.za/cdn/shop/files/bl-micropro-10-bi-colour-led-ring-light-head-only-camerastuff-online-shop-south-891.webp?v=1752089859&width=1540"
+                    alt="Ring Light"
+                    className="h-40 object-contain group-hover:scale-110 transition-transform"
+                  />
+                  <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">CameraStuff</Badge>
+                </div>
+                <CardContent className="p-6">
+                  <h4 className="font-bold text-foreground mb-2">BL MicroPro 10 Ring Light</h4>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Professional bi-colour LED ring light for interviews, testimonials & video calls back home.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-primary font-bold">From R850</span>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href="https://camerastuff.co.za/products/bl-micropro-10-bi-colour-led-ring-light-head-only?a_aid=omniwellnessmedia&channel=uwc-program" target="_blank" rel="noopener noreferrer">
+                        <Camera className="w-4 h-4 mr-2" />
+                        View
+                      </a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* RoamBuddy eSIM */}
+              <Card className="border-border hover:shadow-xl transition-all group overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/30 dark:to-cyan-900/30 flex items-center justify-center relative overflow-hidden">
+                  <div className="text-center">
+                    <div className="w-20 h-20 mx-auto mb-2 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center">
+                      <Globe className="w-10 h-10 text-white" />
+                    </div>
+                    <span className="text-lg font-bold text-teal-700 dark:text-teal-300">South Africa eSIM</span>
+                  </div>
+                  <Badge className="absolute top-3 left-3 bg-teal-600 text-white">RoamBuddy</Badge>
+                </div>
+                <CardContent className="p-6">
+                  <h4 className="font-bold text-foreground mb-2">South Africa eSIM Data Plans</h4>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Stay connected throughout your 10-week journey. Instant activation, no physical SIM needed.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-primary font-bold">From $5 USD</span>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href="/roambuddy-store" rel="noopener noreferrer">
+                        <Globe className="w-4 h-4 mr-2" />
+                        Browse
+                      </a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* More CTA */}
+            <div className="text-center mt-10 flex flex-wrap justify-center gap-4">
+              <Button variant="outline" size="lg" asChild>
+                <a href="/conscious-media-infrastructure" rel="noopener noreferrer">
+                  <Camera className="w-5 h-5 mr-2" />
+                  More CameraStuff Gear
+                </a>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <a href="/roambuddy-store" rel="noopener noreferrer">
+                  <Globe className="w-5 h-5 mr-2" />
+                  Browse eSIM Plans
+                </a>
+              </Button>
             </div>
           </div>
         </div>
