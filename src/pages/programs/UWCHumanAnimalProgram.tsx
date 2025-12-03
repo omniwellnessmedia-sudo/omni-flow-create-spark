@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Input } from '@/components/ui/input';
 import Footer from '@/components/Footer';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import { 
@@ -12,7 +13,8 @@ import {
   ChevronDown, ChevronRight, FileText, Briefcase, HelpCircle, ArrowRight, Download,
   Mail, Phone, Shield, TrendingUp, Lightbulb, TreePine, HandHeart, Mountain,
   Waves, Sun, Play, Video, Plane, Building, DollarSign, CreditCard, Gift,
-  PawPrint, Cat, Sprout, GraduationCap as GradCap, Film, ExternalLink, Handshake
+  PawPrint, Cat, Sprout, GraduationCap as GradCap, Film, ExternalLink, Handshake,
+  Activity, Lock, Timer
 } from 'lucide-react';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
@@ -33,7 +35,8 @@ const images = {
   kitchen: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
   living: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`,
   workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
-  // Community & Dr. Phil-afel images (from Omni storage)
+  // Community & Dr. Phil-afel / Valley of Plenty images
+  valleyOfPlenty: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
   community: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
   empowerment: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
   empowerment2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
@@ -56,6 +59,12 @@ const images = {
   sunset: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?w=800&q=80",
   uwcCampus: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80"
 };
+
+// Programme constants
+const PROGRAMME_START_DATE = new Date('2026-06-01');
+const PROGRAMME_FEE_ZAR = 70000;
+const PROGRAMME_FEE_USD = 3850; // Approximate conversion
+const PARTNER_ACCESS_CODE = 'UWC2026';
 
 const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.humanAnimal1, images.tufcat1];
 
@@ -157,7 +166,7 @@ const partners = [
       { value: 'Top 1000', label: 'World Ranking' }
     ],
     keyPeople: [
-      { name: 'Prof. Sharyn Spicer', role: 'Academic Director, Psychology Dept.' }
+      { name: 'Dr. Sharyn Spicer', role: 'Academic Director, Psychology Dept.' }
     ],
     website: 'https://www.uwc.ac.za/',
     ctas: [
@@ -193,6 +202,64 @@ const partners = [
   }
 ];
 
+// Countdown timer hook
+const useCountdown = (targetDate: Date) => {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const difference = targetDate.getTime() - new Date().getTime();
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60)
+        });
+      }
+    };
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
+    return () => clearInterval(timer);
+  }, [targetDate]);
+
+  return timeLeft;
+};
+
+// Pulse animation component
+const PulseMeter = () => {
+  const [pulse, setPulse] = useState(72);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPulse(prev => Math.max(60, Math.min(90, prev + (Math.random() - 0.5) * 8)));
+    }, 1500);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-3 bg-primary/10 rounded-xl px-4 py-2 border border-primary/20">
+      <Activity className="w-5 h-5 text-primary animate-pulse" />
+      <div className="flex items-baseline gap-1">
+        <span className="text-2xl font-bold text-primary">{Math.round(pulse)}</span>
+        <span className="text-xs text-muted-foreground">BPM</span>
+      </div>
+      <div className="flex gap-0.5">
+        {[...Array(5)].map((_, i) => (
+          <div 
+            key={i} 
+            className="w-1 bg-primary rounded-full animate-pulse"
+            style={{ 
+              height: `${12 + Math.random() * 12}px`,
+              animationDelay: `${i * 0.1}s`
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const UWCHumanAnimalProgram = () => {
   const [activeSection, setActiveSection] = useState('overview');
   const [isSticky, setIsSticky] = useState(false);
@@ -200,6 +267,11 @@ const UWCHumanAnimalProgram = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [openModule, setOpenModule] = useState<number>(0);
   const [activePartner, setActivePartner] = useState('carthorse');
+  const [showCurrency, setShowCurrency] = useState<'ZAR' | 'USD'>('ZAR');
+  const [partnerAccessCode, setPartnerAccessCode] = useState('');
+  const [isPartnerAuthenticated, setIsPartnerAuthenticated] = useState(false);
+  
+  const countdown = useCountdown(PROGRAMME_START_DATE);
 
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > window.innerHeight - 80);
@@ -214,10 +286,17 @@ const UWCHumanAnimalProgram = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handlePartnerAccess = () => {
+    if (partnerAccessCode.toUpperCase() === PARTNER_ACCESS_CODE) {
+      setIsPartnerAuthenticated(true);
+    }
+  };
+
   const navItems = [
     { id: 'overview', label: 'Overview' },
     { id: 'partners', label: 'Our Partners' },
     { id: 'journey', label: 'Your Journey' },
+    { id: 'qualification', label: 'Requirements' },
     { id: 'destination', label: 'Cape Town' },
     { id: 'guides', label: 'Your Guides' },
     { id: 'pricing', label: 'Investment' },
@@ -283,7 +362,7 @@ const UWCHumanAnimalProgram = () => {
 
   const facilitators = [
     {
-      name: "Prof. Sharyn Spicer",
+      name: "Dr. Sharyn Spicer",
       role: "Your Academic Anchor",
       quote: "I've spent 30 years studying how communities heal. This programme is where all that learning comes alive—and I can't wait to see what you discover.",
       expertise: ["Research Methodology", "Community Psychology", "Participatory Methods"],
@@ -359,6 +438,28 @@ const UWCHumanAnimalProgram = () => {
               and African Wellness in beautiful Cape Town, South Africa.
             </p>
 
+            {/* Countdown Timer */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
+                <Timer className="w-5 h-5 text-primary" />
+                <span className="text-white/70 text-sm mr-2">Programme starts in:</span>
+                <div className="flex gap-3">
+                  {[
+                    { value: countdown.days, label: 'D' },
+                    { value: countdown.hours, label: 'H' },
+                    { value: countdown.minutes, label: 'M' },
+                    { value: countdown.seconds, label: 'S' }
+                  ].map((item, i) => (
+                    <div key={i} className="text-center">
+                      <div className="text-xl font-bold text-white tabular-nums">{String(item.value).padStart(2, '0')}</div>
+                      <div className="text-[10px] text-white/60 uppercase">{item.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <PulseMeter />
+            </div>
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
               {[
                 { icon: MapPin, label: "Cape Town, SA" },
@@ -428,12 +529,29 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </nav>
 
-      {/* Quick Stats Banner */}
+      {/* Quick Stats Banner with Currency Toggle */}
       <section className="py-6 bg-muted/50 border-b border-border">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            {/* Currency Toggle */}
+            <div className="flex items-center gap-2 bg-background rounded-full p-1 border border-border">
+              <button 
+                onClick={() => setShowCurrency('ZAR')}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${showCurrency === 'ZAR' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                🇿🇦 ZAR
+              </button>
+              <button 
+                onClick={() => setShowCurrency('USD')}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${showCurrency === 'USD' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                🇺🇸 USD
+              </button>
+            </div>
+            
+            {/* Stats */}
             {[
-              { value: "R70,000", label: "All-Inclusive" },
+              { value: showCurrency === 'ZAR' ? `R${PROGRAMME_FEE_ZAR.toLocaleString()}` : `$${PROGRAMME_FEE_USD.toLocaleString()}`, label: "All-Inclusive" },
               { value: "10 Weeks", label: "Full Immersion" },
               { value: "20-25", label: "Cohort Size" },
               { value: "3 Sites", label: "Field Locations" },
@@ -768,7 +886,7 @@ const UWCHumanAnimalProgram = () => {
                 the humans who connect them—something magical happens. This programme is proof that 
                 collaboration creates transformation."
               </blockquote>
-              <p className="mt-4 font-semibold text-foreground">— Prof. Sharyn Spicer, Academic Director</p>
+              <p className="mt-4 font-semibold text-foreground">— Dr. Sharyn Spicer, Academic Director</p>
             </div>
           </div>
 
@@ -824,6 +942,120 @@ const UWCHumanAnimalProgram = () => {
                 <p className="text-sm text-muted-foreground">{item.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Entry Requirements & Qualification Guidelines */}
+      <section id="qualification" className="py-24 scroll-mt-20 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+              <Shield className="w-3.5 h-3.5 mr-2" />
+              Entry Requirements
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Who Should Apply?
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Clear qualification guidelines to ensure the best experience for all participants
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
+            {/* Academic Requirements */}
+            <Card className="border-border hover:shadow-xl transition-all">
+              <CardContent className="p-8">
+                <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6">
+                  <GraduationCap className="w-7 h-7 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-4">Academic Qualifications</h3>
+                <ul className="space-y-3">
+                  {[
+                    { req: "Bachelor's degree (completed or final year)", level: "Required" },
+                    { req: "Honours or Master's in Psychology, Social Work, or related field", level: "Preferred" },
+                    { req: "Minimum 60% academic average", level: "Required" },
+                    { req: "English proficiency (IELTS 6.0+ or equivalent)", level: "International students" }
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <span className="text-foreground">{item.req}</span>
+                        <Badge variant="outline" className="ml-2 text-xs">{item.level}</Badge>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Professional Experience */}
+            <Card className="border-border hover:shadow-xl transition-all">
+              <CardContent className="p-8">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-6">
+                  <Briefcase className="w-7 h-7 text-amber-600" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-4">Professional Background</h3>
+                <ul className="space-y-3">
+                  {[
+                    { req: "Working professionals in mental health, social services, or animal welfare", level: "Welcome" },
+                    { req: "No prior animal-assisted therapy experience needed", level: "Training provided" },
+                    { req: "Interest in research methodology and data collection", level: "Essential" },
+                    { req: "Willingness to engage in immersive field experiences", level: "Essential" }
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <span className="text-foreground">{item.req}</span>
+                        <Badge variant="outline" className="ml-2 text-xs">{item.level}</Badge>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Ideal Candidates */}
+          <div className="bg-background rounded-3xl p-8 md:p-12 border border-border max-w-5xl mx-auto">
+            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Ideal Candidates Include</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                { icon: GraduationCap, title: "Postgraduate Students", desc: "Psychology, Social Work, Counselling, Occupational Therapy" },
+                { icon: Heart, title: "Healthcare Practitioners", desc: "Therapists, Counsellors, Psychologists seeking AAT specialization" },
+                { icon: Globe, title: "International Researchers", desc: "Study abroad students from partner universities worldwide" }
+              ].map((item, idx) => (
+                <div key={idx} className="text-center p-6 bg-muted/50 rounded-2xl">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <item.icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <h4 className="font-semibold text-foreground mb-2">{item.title}</h4>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Application Documents */}
+          <div className="mt-12 max-w-4xl mx-auto">
+            <h3 className="text-xl font-bold text-center mb-6 text-foreground">Required Documents</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                "Academic transcripts",
+                "CV/Resume",
+                "Motivation letter",
+                "2 Reference letters",
+                "Valid passport (international)",
+                "English proficiency proof",
+                "Professional registration (if applicable)",
+                "Portfolio (optional)"
+              ].map((doc, idx) => (
+                <div key={idx} className="flex items-center gap-2 bg-background rounded-lg p-3 border border-border">
+                  <FileText className="w-4 h-4 text-primary flex-shrink-0" />
+                  <span className="text-sm text-foreground">{doc}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -1118,7 +1350,7 @@ const UWCHumanAnimalProgram = () => {
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
                   <CreditCard className="w-6 h-6 text-primary" />
                 </div>
-                <div className="text-2xl font-bold text-primary">R20,000</div>
+              <div className="text-2xl font-bold text-primary">{showCurrency === 'ZAR' ? 'R20,000' : '$1,100'}</div>
                 <div className="text-sm text-muted-foreground">Deposit to secure place</div>
               </div>
               <div className="p-4">
@@ -1210,7 +1442,7 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
-      {/* For Sponsors - With Embedded Proposal */}
+      {/* For Sponsors - With Embedded Proposal (Partner Access Gated) */}
       <section className="py-24 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -1227,21 +1459,59 @@ const UWCHumanAnimalProgram = () => {
             </p>
           </div>
 
-          {/* Embedded Gamma Proposal */}
+          {/* Partner Access Gated Proposal */}
           <div className="max-w-4xl mx-auto mb-12">
-            <div className="bg-background rounded-2xl shadow-xl overflow-hidden border border-border">
-              <div className="p-4 bg-muted/50 border-b border-border flex items-center gap-3">
-                <FileText className="w-5 h-5 text-primary" />
-                <span className="font-medium text-foreground">Research & Innovation Platform Proposal</span>
+            {!isPartnerAuthenticated ? (
+              <Card className="border-border shadow-xl">
+                <CardContent className="p-8 md:p-12 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                    <Lock className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground mb-3">Partner Access Required</h3>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                    This detailed proposal is available exclusively for university partners and potential funders. 
+                    Enter your partner access code to view the full research and innovation platform proposal.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
+                    <Input 
+                      type="text"
+                      placeholder="Enter partner code (e.g., UWC2026)"
+                      value={partnerAccessCode}
+                      onChange={(e) => setPartnerAccessCode(e.target.value)}
+                      className="flex-1"
+                      onKeyDown={(e) => e.key === 'Enter' && handlePartnerAccess()}
+                    />
+                    <Button onClick={handlePartnerAccess} className="bg-primary hover:bg-primary/90">
+                      <Lock className="w-4 h-4 mr-2" />
+                      Access
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-4">
+                    Don't have an access code? <a href="mailto:info@omniwellness.co.za" className="text-primary hover:underline">Contact us</a> to request partner access.
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="bg-background rounded-2xl shadow-xl overflow-hidden border border-border">
+                <div className="p-4 bg-muted/50 border-b border-border flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <FileText className="w-5 h-5 text-primary" />
+                    <span className="font-medium text-foreground">Research & Innovation Platform Proposal</span>
+                  </div>
+                  <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+                    <Check className="w-3 h-3 mr-1" />
+                    Partner Access
+                  </Badge>
+                </div>
+                <iframe 
+                  src="https://gamma.app/embed/3lz7fc000368av4" 
+                  style={{ width: '100%', height: '500px' }}
+                  allow="fullscreen" 
+                  title="The Human-Animal Bond in Action: A UWC-Led Research and Innovation Platform"
+                  className="w-full"
+                />
               </div>
-              <iframe 
-                src="https://gamma.app/embed/3lz7fc000368av4" 
-                style={{ width: '100%', height: '500px' }}
-                allow="fullscreen" 
-                title="The Human-Animal Bond in Action: A UWC-Led Research and Innovation Platform"
-                className="w-full"
-              />
-            </div>
+            )}
           </div>
 
           <div className="flex flex-wrap justify-center gap-4">
