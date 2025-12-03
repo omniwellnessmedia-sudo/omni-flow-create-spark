@@ -27,19 +27,22 @@ import {
   Sparkles
 } from 'lucide-react';
 
-// Image URLs
+// Image URLs from Supabase storage
+const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
+
 const images = {
-  hero: "/lovable-uploads/uwc-hero-cart-horse.jpg",
-  cartHorse1: "https://carthorse.org.za/wp/wp-content/uploads/2022/08/Equine-Welfare-Training-Course-CHA.jpg",
-  cartHorse2: "https://carthorse.org.za/wp/wp-content/uploads/2022/08/cart-horse-donkeys-equine-training.jpg",
-  tufcat1: "https://www.tufcat.co.za/wp-content/uploads/2021/01/Freckles-Speckles.jpg",
-  community: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/%20community-images**%20(Workshop%20Photos)/_MG_9481-2.jpg",
-  accommodation: "/lovable-uploads/536268543_1347914427341636_1998936286569467143_n-2.jpg",
-  kitchen: "/lovable-uploads/556098599_1378021897664222_4748312450378726214_n-2.jpg",
-  living: "/lovable-uploads/555728551_1378021847664227_1071983310888780042_n-2.jpg",
-  vetCare: "/lovable-uploads/573883488_1410644557735289_7908845877500205254_n.jpg",
-  volunteer: "/lovable-uploads/547235882_1363651465767932_6536218706891973805_n.jpg",
-  workshop: "/lovable-uploads/585868855_1429203929212685_6885647248657070604_n.jpg"
+  hero: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/558852709_1243815057772392_7668626230595706187_n.jpg`,
+  cartHorse1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/587383422_1285925536894677_4345595592711419953_n.jpg`,
+  cartHorse2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/574087632_1263656015788296_8646920016236566402_n.jpg`,
+  cartHorse3: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
+  tufcat1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556100985_1378021790997566_6773851859108767885_n.jpg`,
+  community: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
+  accommodation: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547230382_1363593685773710_4169595945775668111_n.jpg`,
+  kitchen: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
+  living: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`,
+  volunteer: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547235882_1363651465767932_6536218706891973805_n.jpg`,
+  volunteer2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
+  workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`
 };
 
 const UWCHumanAnimalProgram = () => {
