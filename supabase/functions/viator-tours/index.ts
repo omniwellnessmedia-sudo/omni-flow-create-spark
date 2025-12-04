@@ -66,8 +66,9 @@ serve(async (req) => {
 
     console.log('Viator API action:', action, 'with API key length:', viatorApiKey.length);
 
-    // Only allow 'get_cached_tours' without authentication
-    if (action !== 'get_cached_tours') {
+    // Allow 'get_cached_tours' and 'search_tours' without authentication for public access
+    // Admin operations like 'fetch_product' still require authentication
+    if (action !== 'get_cached_tours' && action !== 'search_tours') {
       // Verify user is authenticated and has admin role for write operations
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       
@@ -157,22 +158,23 @@ serve(async (req) => {
 
     // Action: Search and sync tours from Viator
     if (action === 'search_tours') {
-      // Try broader search first (all Cape Town tours), then narrow if too many results
-      const searchBody = {
+      const products: ViatorProduct[] = [];
+      
+      // Search 1: South Africa destination (destination ID 318)
+      const saSearchBody = {
         filtering: {
-          destination: 21781, // Cape Town destination ID
-          // Removing wellness-specific tags to get broader results
+          destination: 318, // South Africa destination ID
         },
         currency: 'USD',
         pagination: {
           start: 1,
-          count: 50 // Increased count for better selection
+          count: 30
         }
       };
 
-      console.log('Viator search request (broad):', JSON.stringify(searchBody));
+      console.log('Viator search request (South Africa):', JSON.stringify(saSearchBody));
 
-      const searchResponse = await fetch(
+      const saResponse = await fetch(
         'https://api.viator.com/partner/products/search',
         {
           method: 'POST',
@@ -183,59 +185,100 @@ serve(async (req) => {
             'Accept-Language': 'en-US',
             'exp-api-key': viatorApiKey,
           },
-          body: JSON.stringify(searchBody),
+          body: JSON.stringify(saSearchBody),
         }
       );
 
-      const responseText = await searchResponse.text();
-      console.log('Viator response status:', searchResponse.status);
-      console.log('Viator response:', responseText);
+      const saResponseText = await saResponse.text();
+      console.log('SA response status:', saResponse.status);
+      console.log('SA response preview:', saResponseText.substring(0, 500));
 
-      if (!searchResponse.ok) {
-        console.error('Viator search error:', responseText);
-        throw new Error(`Viator search API returned ${searchResponse.status}: ${responseText}`);
+      if (saResponse.ok) {
+        const saResults = JSON.parse(saResponseText);
+        products.push(...(saResults.products || []));
+        console.log(`Found ${saResults.products?.length || 0} tours from South Africa`);
       }
 
-      const searchResults = JSON.parse(responseText);
-      const products = searchResults.products || [];
-
-      console.log(`Found ${products.length} tours from Viator`);
-
-      // If no results with broad search, try a fallback search for all destinations
-      if (products.length === 0) {
-        console.log('No results from Cape Town, trying global search...');
-        const fallbackSearchBody = {
-          filtering: {
-            tags: [21200, 21207, 21221] // Wellness tags only
-          },
-          currency: 'USD',
-          pagination: {
-            start: 1,
-            count: 30
-          }
-        };
-
-        const fallbackResponse = await fetch(
-          'https://api.viator.com/partner/products/search',
-          {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json;version=2.0',
-              'Accept-Encoding': 'gzip',
-              'Content-Type': 'application/json;charset=UTF-8',
-              'Accept-Language': 'en-US',
-              'exp-api-key': viatorApiKey,
-            },
-            body: JSON.stringify(fallbackSearchBody),
-          }
-        );
-
-        if (fallbackResponse.ok) {
-          const fallbackResults = await fallbackResponse.json();
-          products.push(...(fallbackResults.products || []));
-          console.log(`Found ${products.length} tours from fallback search`);
+      // Search 2: Wellness/Spa tags globally
+      const wellnessSearchBody = {
+        filtering: {
+          tags: [21911] // Spa & Wellness tag
+        },
+        currency: 'USD',
+        pagination: {
+          start: 1,
+          count: 20
         }
+      };
+
+      console.log('Viator search request (Wellness):', JSON.stringify(wellnessSearchBody));
+
+      const wellnessResponse = await fetch(
+        'https://api.viator.com/partner/products/search',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json;version=2.0',
+            'Accept-Encoding': 'gzip',
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Accept-Language': 'en-US',
+            'exp-api-key': viatorApiKey,
+          },
+          body: JSON.stringify(wellnessSearchBody),
+        }
+      );
+
+      if (wellnessResponse.ok) {
+        const wellnessResults = await wellnessResponse.json();
+        // Add unique products
+        const existingCodes = new Set(products.map(p => p.productCode));
+        for (const product of wellnessResults.products || []) {
+          if (!existingCodes.has(product.productCode)) {
+            products.push(product);
+          }
+        }
+        console.log(`Found ${wellnessResults.products?.length || 0} wellness tours`);
       }
+
+      // Search 3: Nature & Wildlife
+      const natureSearchBody = {
+        filtering: {
+          tags: [11889] // Nature & Wildlife tag
+        },
+        currency: 'USD',
+        pagination: {
+          start: 1,
+          count: 20
+        }
+      };
+
+      const natureResponse = await fetch(
+        'https://api.viator.com/partner/products/search',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json;version=2.0',
+            'Accept-Encoding': 'gzip',
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Accept-Language': 'en-US',
+            'exp-api-key': viatorApiKey,
+          },
+          body: JSON.stringify(natureSearchBody),
+        }
+      );
+
+      if (natureResponse.ok) {
+        const natureResults = await natureResponse.json();
+        const existingCodes = new Set(products.map(p => p.productCode));
+        for (const product of natureResults.products || []) {
+          if (!existingCodes.has(product.productCode)) {
+            products.push(product);
+          }
+        }
+        console.log(`Found ${natureResults.products?.length || 0} nature tours`);
+      }
+
+      console.log(`Total unique tours found: ${products.length}`);
 
       // Cache all products in database
       const toursToCache = products.map((product: ViatorProduct) => ({

@@ -28,7 +28,7 @@ verify_jwt = true
 verify_jwt = false
 
 [functions.viator-tours]
-verify_jwt = true
+verify_jwt = false
 
 [functions.roambuddy-api]
 verify_jwt = false
