@@ -65,6 +65,7 @@ const PROGRAMME_START_DATE = new Date('2026-06-01');
 const PROGRAMME_FEE_ZAR = 70000;
 const PROGRAMME_FEE_USD = 3850; // Approximate conversion
 const PARTNER_ACCESS_CODE = 'UWC2026';
+const DEMO_ACCESS_CODE = 'DEMO2026';
 
 const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.humanAnimal1, images.tufcat1];
 
@@ -302,7 +303,8 @@ const UWCHumanAnimalProgram = () => {
   }, []);
 
   const handlePartnerAccess = () => {
-    if (partnerAccessCode.toUpperCase() === PARTNER_ACCESS_CODE) {
+    const code = partnerAccessCode.toUpperCase();
+    if (code === PARTNER_ACCESS_CODE || code === DEMO_ACCESS_CODE) {
       setIsPartnerAuthenticated(true);
     }
   };
