@@ -68,14 +68,14 @@ const PARTNER_ACCESS_CODE = 'UWC2026';
 
 const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.humanAnimal1, images.tufcat1];
 
-// Partner logos - using reliable external and Supabase URLs
+// Partner logos - using Supabase storage for reliability
 const partnerLogos = {
-  carthorse: 'https://carthorse.org.za/wp/wp-content/uploads/2021/02/Cart-Horse-Logo-Blue-Square.png',
-  tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
-  drphilafel: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png',
-  valleyOfPlenty: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png',
-  uwc: 'https://www.uwc.ac.za/Style%20Library/images/UWC-Logo.png',
-  omni: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png'
+  carthorse: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/cart-horse-favicon-black.png`,
+  tufcat: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/TT%20Logo%20no%20background.png`,
+  drphilafel: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
+  valleyOfPlenty: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
+  uwc: 'https://www.uwc.ac.za/Style%20Library/images/UWC-Logo.png', // Using official UWC logo
+  omni: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`
 };
 
 // Partner data
@@ -688,7 +688,7 @@ const UWCHumanAnimalProgram = () => {
                   setActivePartner(partner.id);
                   document.getElementById('partner-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className={`group relative p-4 rounded-2xl transition-all ${
+                className={`group relative p-4 rounded-2xl transition-all min-w-[100px] min-h-[80px] flex items-center justify-center ${
                   activePartner === partner.id 
                     ? 'bg-primary/10 ring-2 ring-primary shadow-lg scale-105' 
                     : 'bg-background border border-border hover:border-primary/30 hover:shadow-md hover:scale-102'
@@ -697,11 +697,22 @@ const UWCHumanAnimalProgram = () => {
                 <img 
                   src={partner.logo} 
                   alt={partner.name}
-                  className="h-12 md:h-16 w-auto object-contain grayscale group-hover:grayscale-0 transition-all"
-                  style={{ maxWidth: '120px' }}
+                  className="h-12 md:h-16 w-auto object-contain transition-all max-w-[100px]"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    // Show fallback icon when image fails
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
                 />
-                <span className={`absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs font-medium px-2 py-0.5 rounded-full transition-opacity ${
-                  activePartner === partner.id ? 'bg-primary text-primary-foreground opacity-100' : 'bg-muted text-muted-foreground opacity-0 group-hover:opacity-100'
+                <div 
+                  className={`hidden w-12 h-12 rounded-xl bg-gradient-to-br ${partner.color} items-center justify-center`}
+                >
+                  <partner.icon className="w-6 h-6 text-white" />
+                </div>
+                <span className={`absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
+                  activePartner === partner.id ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
                 }`}>
                   {partner.shortName}
                 </span>
@@ -711,12 +722,12 @@ const UWCHumanAnimalProgram = () => {
 
           {/* Journey Map Visual */}
           <div className="max-w-5xl mx-auto mb-16">
-            <h3 className="text-xl font-bold text-center mb-8 text-foreground">Your Journey Through Our Partners</h3>
+            <h3 className="text-2xl font-bold text-center mb-10 text-foreground">Your Journey Through Our Partners</h3>
             <div className="relative">
               {/* Connection Line */}
-              <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-violet-500 via-green-500 via-blue-500 to-primary transform -translate-y-1/2 rounded-full opacity-30" />
+              <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-1 bg-gradient-to-r from-amber-500 via-violet-500 via-green-500 via-blue-500 to-primary rounded-full opacity-40" />
               
-              <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
                 {[
                   { partner: partners[3], weeks: 'Weeks 1-2', label: 'Foundation' },
                   { partner: partners[0], weeks: 'Weeks 3-4', label: 'Field Research' },
@@ -726,15 +737,17 @@ const UWCHumanAnimalProgram = () => {
                 ].map((item, idx) => (
                   <div 
                     key={idx}
-                    className="relative text-center group cursor-pointer"
+                    className="relative text-center group cursor-pointer p-4 rounded-2xl hover:bg-muted/50 transition-all"
                     onClick={() => setActivePartner(item.partner.id)}
                   >
-                    <div className={`w-16 h-16 mx-auto mb-3 rounded-2xl bg-gradient-to-br ${item.partner.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform relative z-10`}>
-                      <item.partner.icon className="w-8 h-8 text-white" />
+                    <div className={`w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${item.partner.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform relative z-10`}>
+                      <item.partner.icon className="w-10 h-10 text-white" />
                     </div>
-                    <Badge className="mb-2 bg-background border-border text-xs">{item.weeks}</Badge>
-                    <p className="font-semibold text-foreground text-sm">{item.partner.shortName}</p>
-                    <p className="text-xs text-muted-foreground">{item.label}</p>
+                    <div className="mb-2 inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                      {item.weeks}
+                    </div>
+                    <p className="font-bold text-foreground text-base mb-1">{item.partner.shortName}</p>
+                    <p className="text-sm text-muted-foreground">{item.label}</p>
                   </div>
                 ))}
               </div>
