@@ -135,7 +135,6 @@ const RoamBuddyStore = () => {
       {/* Hero Section */}
       <RoamBuddyHero 
         onGetStarted={scrollToSearch}
-        onActivate={scrollToActivation}
       />
 
       {/* Country Search Section */}
@@ -327,10 +326,10 @@ const RoamBuddyStore = () => {
       {/* Testimonials Section */}
       <RoamBuddyTestimonials />
 
-      {/* SIM Activation */}
-      <div ref={activationRef}>
+      {/* SIM Activation - Hidden for now */}
+      {/* <div ref={activationRef}>
         <SIMActivation />
-      </div>
+      </div> */}
 
       {/* Device Compatibility */}
       <div ref={compatibilityRef}>
