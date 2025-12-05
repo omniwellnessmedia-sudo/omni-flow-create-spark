@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Mail, Instagram, CheckCircle, Heart, Leaf, Sparkles, Star } from "lucide-react";
 import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
 // Images from Supabase Storage
-const productsHero = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/3.jpg";
+const productsHero = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images%20(2BeWell%20Products)/3.png";
 const ferozaPortrait = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/feroza%20begg%20-%20portrait.jpg";
 const zenithPortrait = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg";
 

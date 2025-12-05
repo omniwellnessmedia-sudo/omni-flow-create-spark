@@ -67,7 +67,7 @@ const HeroSection = () => {
       title: "2BeWell Natural Products",
       description: "Handmade wellness essentials",
       href: "/twobewellshop",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/12.png",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images%20(2BeWell%20Products)/12.png",
       badge: "Shop"
     },
     {

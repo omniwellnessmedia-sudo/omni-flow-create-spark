@@ -5,11 +5,11 @@ export const wellnessImages = {
   services: {
     yoga: `${SUPABASE_STORAGE_BASE}General%20Images/Wellness%20retreat3%20portrait.jpg`,
     meditation: `${SUPABASE_STORAGE_BASE}General%20Images/Wellness%20retreat%202.jpg`,
-    nutrition: `${SUPABASE_STORAGE_BASE}community-images**%20(Workshop%20Photos)/Khoe%20meisie_Omni-2.jpg`,
+    nutrition: `${SUPABASE_STORAGE_BASE}%20community-images%20(Workshop%20Photos)/Khoe%20meisie_Omni-2.jpg`,
     healing: `${SUPABASE_STORAGE_BASE}General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg`,
     fitness: `${SUPABASE_STORAGE_BASE}General%20Images/community%20outing%202.jpg`,
     tour: `${SUPABASE_STORAGE_BASE}General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`,
-    workshop: `${SUPABASE_STORAGE_BASE}community-images**%20(Workshop%20Photos)/Khoe%20meisie_Omni-2.jpg`,
+    workshop: `${SUPABASE_STORAGE_BASE}%20community-images%20(Workshop%20Photos)/Khoe%20meisie_Omni-2.jpg`,
     retreat: `${SUPABASE_STORAGE_BASE}General%20Images/Wellness%20retreat%202.jpg`,
   },
   heroes: {
@@ -24,8 +24,8 @@ export const wellnessImages = {
     zenith: `${SUPABASE_STORAGE_BASE}General%20Images/Zenith_TNT_OMNI-9.jpg`,
   },
   logos: {
-    drPhilFoundation: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png',
-    beautyWithoutCruelty: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/Bwc%20logo.JPG',
+    drPhilFoundation: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png',
+    beautyWithoutCruelty: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/Bwc%20logo.JPG',
   }
 };
 
