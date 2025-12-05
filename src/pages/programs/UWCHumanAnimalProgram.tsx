@@ -69,7 +69,7 @@ const DEMO_ACCESS_CODE = 'DEMO2026';
 
 const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.humanAnimal1, images.tufcat1];
 
-// Partner logos - using verified Supabase storage URLs
+// Partner logos - using Supabase storage URLs with external fallbacks
 const partnerLogos = {
   carthorse: 'https://carthorse.org.za/wp/wp-content/uploads/2021/02/Cart-Horse-Logo-Blue-Square.png',
   tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
@@ -78,6 +78,9 @@ const partnerLogos = {
   uwc: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/UWC-Crest.png`,
   omni: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`
 };
+
+// Fallback placeholder for broken images
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1551884170-09fb70a3a2ed?w=800&q=80";
 
 // Additional TUFCAT sanctuary images
 const tufcatGallery = [
