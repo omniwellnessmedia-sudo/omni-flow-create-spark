@@ -5,29 +5,21 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import VideoShowcaseSection from "@/components/sections/VideoShowcaseSection";
 import MissionSection from "@/components/sections/MissionSection";
 import ToursRetreatsPreview from "@/components/sections/ToursRetreatsPreview";
-import AIToolsPreview from "@/components/sections/AIToolsPreview";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import WellnessHumansSection from "@/components/sections/WellnessHumansSection";
 import PartnersSection from "@/components/sections/PartnersSection";
 import FacebookFeedSection from "@/components/sections/FacebookFeedSection";
 import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
-import { getFeaturedProducts } from "@/data/twoBeWellProducts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { AddToCartButton } from "@/components/cart/AddToCartButton";
-import { ArrowRight, Leaf } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import WhatIsOmniSection from "@/components/sections/WhatIsOmniSection";
 
 const Index = () => {
-  const featuredProducts = getFeaturedProducts().slice(0, 4);
-
   return (
     <div className="min-h-screen">
       <UnifiedNavigation />
       <main>
         <HeroSection />
+        <WhatIsOmniSection />
         <MissionSection />
         
         {/* 2BeWell Featured Section */}
