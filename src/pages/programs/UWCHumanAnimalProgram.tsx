@@ -69,15 +69,24 @@ const DEMO_ACCESS_CODE = 'DEMO2026';
 
 const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.humanAnimal1, images.tufcat1];
 
-// Partner logos - using Supabase storage for reliability
+// Partner logos - using verified Supabase storage URLs
 const partnerLogos = {
   carthorse: 'https://carthorse.org.za/wp/wp-content/uploads/2021/02/Cart-Horse-Logo-Blue-Square.png',
   tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
   drphilafel: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
   valleyOfPlenty: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
-  uwc: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/uwc-logo.png`,
+  uwc: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/UWC-Crest.png`,
   omni: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`
 };
+
+// Additional TUFCAT sanctuary images
+const tufcatGallery = [
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230807_093722.jpg`,
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1713679843832.jpg`,
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1713679840761.jpg`,
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1713679813612.jpg`,
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230907-WA0016.jpg`
+];
 
 // Feature images for "What Makes This Unique" section
 const featureImages = {
@@ -87,11 +96,13 @@ const featureImages = {
   publication: images.graduation
 };
 
-// Candidate persona images
+// Candidate persona images - using actual programme photos
 const candidateImages = {
-  students: images.graduation,
+  students: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
   practitioners: images.cartHorse2,
-  researchers: images.retreat1
+  researchers: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230717-WA0065.jpg`,
+  volunteers: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/560581362_1396149479184797_833395091101970838_n.jpg`,
+  community: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230929_170146.jpg`
 };
 
 // Partner data
@@ -132,8 +143,8 @@ const partners = [
     logo: partnerLogos.tufcat,
     color: 'from-violet-500 to-purple-600',
     bgColor: 'bg-violet-50 dark:bg-violet-950/30',
-    heroImage: images.tufcat1,
-    gallery: [images.tufcat1, images.accommodation, images.kitchen, images.living],
+    heroImage: tufcatGallery[0],
+    gallery: [...tufcatGallery, images.accommodation, images.kitchen, images.living],
     story: `What started as a small initiative to care for feral cats on UWC campus has blossomed into a 7-hectare sanctuary of hope. TUFCAT now provides trauma-informed care for multiple species, runs community vet assistance programmes, and operates a working organic farm that feeds both animals and humans.`,
     roleInProgramme: `TUFCAT is your **home base** for the entire 10-week programme. Wake each morning surrounded by rescued animals, participate in daily sanctuary routines, and learn sustainable farming practices. During Weeks 5-6, you'll immerse in therapeutic animal interactions and discover how healing happens naturally in this unique environment.`,
     stats: [
