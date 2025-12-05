@@ -17,14 +17,15 @@ export const SimplifiedProductCard = ({ product, imagePosition = 'left' }: Simpl
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
 
-  const handleViewProduct = async () => {
-    const affiliateUrl = generateAffiliateLink({
-      fullProductUrl: product.productUrl,
-      channel: product.channel,
-      wellnessCategory: "media equipment",
-      consciousnessIntent: "conscious media infrastructure",
-    });
+  // Pre-compute affiliate URL for anchor tag (fixes iOS Safari popup blocker)
+  const affiliateUrl = generateAffiliateLink({
+    fullProductUrl: product.productUrl,
+    channel: product.channel,
+    wellnessCategory: "media equipment",
+    consciousnessIntent: "conscious media infrastructure",
+  });
 
+  const handleViewProduct = async () => {
     await trackAffiliateClick(
       product.name,
       product.channel,
@@ -32,8 +33,6 @@ export const SimplifiedProductCard = ({ product, imagePosition = 'left' }: Simpl
       "conscious media infrastructure",
       "media equipment"
     );
-
-    window.open(affiliateUrl, '_blank');
   };
 
   const containerClass = imagePosition === 'right' 
@@ -138,19 +137,29 @@ export const SimplifiedProductCard = ({ product, imagePosition = 'left' }: Simpl
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3 pt-2">
             <Button
-              onClick={handleViewProduct}
+              asChild
               className="flex-1 min-w-[200px]"
+              onClick={handleViewProduct}
             >
-              View on CameraStuff
-              <ExternalLink className="ml-2 h-4 w-4" />
+              <a 
+                href={affiliateUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center"
+              >
+                View on CameraStuff
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </a>
             </Button>
             <Button
+              asChild
               variant="outline"
               className="flex-1 min-w-[200px]"
-              onClick={() => window.location.href = '/contact'}
             >
-              <MessageCircle className="mr-2 h-4 w-4" />
-              Need Help Choosing?
+              <a href="/contact">
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Need Help Choosing?
+              </a>
             </Button>
           </div>
 

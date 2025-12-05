@@ -77,18 +77,16 @@ const ConsciousMediaInfrastructurePage = () => {
     setDisplayCount(prev => Math.min(prev + 6, filteredProducts.length));
   };
 
+  const mainAffiliateUrl = "https://www.camerastuff.co.za/?a_aid=omniwellnessmedia";
+
   const handleMainCTAClick = async () => {
-    const affiliateUrl = "https://www.camerastuff.co.za/?a_aid=omniwellnessmedia";
-    
     await trackAffiliateClick(
       "CameraStuff Main Store",
       "general-browse",
-      affiliateUrl,
+      mainAffiliateUrl,
       "conscious media infrastructure footer",
       "media equipment"
     );
-
-    window.open(affiliateUrl, '_blank');
   };
 
   const handleConsultationClick = async () => {
@@ -389,12 +387,19 @@ const ConsciousMediaInfrastructurePage = () => {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Button
-              onClick={handleMainCTAClick}
+              asChild
               size="lg"
               className="text-lg px-8"
+              onClick={handleMainCTAClick}
             >
-              Browse CameraStuff
-              <ExternalLink className="ml-2 h-5 w-5" />
+              <a 
+                href={mainAffiliateUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                Browse CameraStuff
+                <ExternalLink className="ml-2 h-5 w-5" />
+              </a>
             </Button>
             <Button
               onClick={() => window.location.href = '/contact'}
