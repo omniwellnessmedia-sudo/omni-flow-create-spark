@@ -68,7 +68,7 @@ export const MegaNavigation = () => {
         { title: 'Conscious Media Infrastructure', href: '/conscious-media-infrastructure', description: 'Handpicked media equipment', icon: '📷' },
         { title: 'Social Media Strategy', href: '/social-media-strategy', description: 'Digital marketing', icon: '📱' },
         { title: 'Web Development', href: '/web-development', description: 'Websites & apps', icon: '💻' },
-        { title: 'UWC Human-Animal Program', href: '/programs/uwc-human-animal', description: 'Academic short course (Jan 2026)', icon: '🎓' },
+        // UWC Human-Animal Program hidden from public navigation - accessible via direct URL for private sharing
       ]
     }
   ];

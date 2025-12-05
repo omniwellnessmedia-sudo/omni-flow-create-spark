@@ -21,6 +21,7 @@ const RoamBuddyStore = () => {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<RoamBuddyProduct | null>(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState<'USD' | 'ZAR'>('USD');
   const { getAllProducts, loading, error } = useRoamBuddyAPI();
   const { trackProductView, trackAffiliateClick } = useConsciousAffiliate();
   const searchRef = useRef<HTMLDivElement>(null);
@@ -142,6 +143,8 @@ const RoamBuddyStore = () => {
         <CountrySearch 
           onCountrySelect={handleCountrySelect}
           onCheckCompatibility={scrollToCompatibility}
+          selectedCurrency={selectedCurrency}
+          onCurrencyChange={setSelectedCurrency}
         />
       </div>
 
