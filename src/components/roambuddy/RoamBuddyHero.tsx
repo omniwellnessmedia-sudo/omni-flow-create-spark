@@ -61,14 +61,6 @@ export const RoamBuddyHero = ({ onGetStarted, onActivate }: RoamBuddyHeroProps) 
               >
                 Order an eSIM
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline"
-                onClick={onActivate}
-                className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm px-8 py-6 text-lg"
-              >
-                Activate SIM
-              </Button>
             </div>
           </div>
         </div>
