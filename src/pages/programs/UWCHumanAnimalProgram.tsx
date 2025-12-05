@@ -88,6 +88,14 @@ const tufcatGallery = [
   `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230907-WA0016.jpg`
 ];
 
+// Cart Horse gallery images from Supabase storage
+const cartHorseGallery = [
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/589898659_1285925556894675_521226922354987204_n.jpg`,
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565111747_1249493680537863_2087503467128195421_n.jpg`,
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/558852709_1243815057772392_7668626230595706187_n.jpg`
+];
+
 // Feature images for "What Makes This Unique" section
 const featureImages = {
   research: images.humanAnimal1,
@@ -116,8 +124,8 @@ const partners = [
     logo: partnerLogos.carthorse,
     color: 'from-amber-500 to-orange-600',
     bgColor: 'bg-amber-50 dark:bg-amber-950/30',
-    heroImage: images.cartHorse1,
-    gallery: [images.cartHorse1, images.cartHorse2, images.cartHorse3],
+    heroImage: cartHorseGallery[0],
+    gallery: cartHorseGallery,
     story: `Since 1995, the Cart Horse Protection Association has been Cape Town's leading voice for working equine welfare. From their Recovery & Rehabilitation Centre in Epping, they provide vital veterinary care, handler education, and community outreach that transforms lives—both human and horse.`,
     roleInProgramme: `As our **primary research partner**, Cart Horse provides the unique field environment where students witness the profound bond between working horses and their handlers. During Weeks 3-4, you'll conduct real biometric research, interview handlers, and collect data that contributes directly to HABRI-funded global studies on the human-animal bond in occupational settings.`,
     stats: [
