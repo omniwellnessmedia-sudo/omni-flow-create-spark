@@ -35,14 +35,14 @@ const images = {
   kitchen: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
   living: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`,
   workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
-  // Community & Dr. Phil-afel / Valley of Plenty images
-  valleyOfPlenty: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
-  community: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
-  empowerment: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
-  empowerment2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
-  khoe: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
-  khoe2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
-  roze: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/ROZE.jpg`,
+  // Community & Dr. Phil-afel / Valley of Plenty images - fixed URL encoding
+  valleyOfPlenty: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
+  community: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
+  empowerment: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
+  empowerment2: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
+  khoe: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
+  khoe2: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
+  roze: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/ROZE.jpg`,
   // Omni Media images
   omniTeam: `${STORAGE_BASE}/Omni%20wellness%20team.jpg`,
   humanAnimal1: `${STORAGE_BASE}/HUMAN%20ANIMAL_CHAD-3.jpg`,
@@ -71,12 +71,27 @@ const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.hu
 
 // Partner logos - using Supabase storage for reliability
 const partnerLogos = {
-  carthorse: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/cart-horse-favicon-black.png`,
-  tufcat: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/TT%20Logo%20no%20background.png`,
+  carthorse: 'https://carthorse.org.za/wp/wp-content/uploads/2021/02/Cart-Horse-Logo-Blue-Square.png',
+  tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
   drphilafel: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
   valleyOfPlenty: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
-  uwc: 'https://www.uwc.ac.za/Style%20Library/images/UWC-Logo.png', // Using official UWC logo
+  uwc: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/uwc-logo.png`,
   omni: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`
+};
+
+// Feature images for "What Makes This Unique" section
+const featureImages = {
+  research: images.humanAnimal1,
+  indigenous: images.khoe,
+  immersion: images.accommodation,
+  publication: images.graduation
+};
+
+// Candidate persona images
+const candidateImages = {
+  students: images.graduation,
+  practitioners: images.cartHorse2,
+  researchers: images.retreat1
 };
 
 // Partner data
@@ -639,22 +654,30 @@ const UWCHumanAnimalProgram = () => {
               ))}
             </div>
 
-            {/* Key Programme Features */}
-            <div className="bg-gradient-to-br from-primary/5 via-background to-secondary/5 rounded-3xl p-8 md:p-12 border border-border">
-              <h3 className="text-2xl font-bold text-center mb-8 text-foreground">What Makes This Programme Unique</h3>
+            {/* Key Programme Features - Visual Cards */}
+            <div className="rounded-3xl p-8 md:p-12">
+              <h3 className="text-2xl font-bold text-center mb-10 text-foreground">What Makes This Programme Unique</h3>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                  { icon: Heart, title: "Real Research", desc: "Contribute to HABRI-funded studies" },
-                  { icon: Leaf, title: "Indigenous Wisdom", desc: "Learn African healing traditions" },
-                  { icon: Home, title: "Full Immersion", desc: "Live on a working sanctuary" },
-                  { icon: Award, title: "Publication Ready", desc: "Graduate with publishable research" }
+                  { image: featureImages.research, title: "Real Research", desc: "Contribute to HABRI-funded global studies on human-animal bonds", icon: Heart },
+                  { image: featureImages.indigenous, title: "Indigenous Wisdom", desc: "Learn African healing traditions & Indigenous Knowledge Systems", icon: Leaf },
+                  { image: featureImages.immersion, title: "Full Immersion", desc: "Live on a working 7-hectare sanctuary for 10 weeks", icon: Home },
+                  { image: featureImages.publication, title: "Publication Ready", desc: "Graduate with research meeting publication standards", icon: Award }
                 ].map((feature, idx) => (
-                  <div key={idx} className="text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-background border border-border flex items-center justify-center mx-auto mb-4 shadow-sm">
-                      <feature.icon className="w-8 h-8 text-primary" />
+                  <div key={idx} className="group relative h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
+                    <img 
+                      src={feature.image} 
+                      alt={feature.title}
+                      className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center mb-3">
+                        <feature.icon className="w-5 h-5 text-white" />
+                      </div>
+                      <h4 className="font-bold text-white text-lg mb-1">{feature.title}</h4>
+                      <p className="text-sm text-white/80">{feature.desc}</p>
                     </div>
-                    <h4 className="font-semibold text-foreground mb-1">{feature.title}</h4>
-                    <p className="text-sm text-muted-foreground">{feature.desc}</p>
                   </div>
                 ))}
               </div>
@@ -681,8 +704,8 @@ const UWCHumanAnimalProgram = () => {
             </p>
           </div>
 
-          {/* Partner Logo Trust Bar */}
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 mb-16 py-8 border-y border-border">
+          {/* Partner Logo Trust Bar - Enhanced with larger logos */}
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 mb-16 py-10 bg-background/50 backdrop-blur rounded-3xl border border-border shadow-sm">
             {partners.map((partner) => (
               <button
                 key={partner.id}
@@ -690,31 +713,32 @@ const UWCHumanAnimalProgram = () => {
                   setActivePartner(partner.id);
                   document.getElementById('partner-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className={`group relative p-4 rounded-2xl transition-all min-w-[100px] min-h-[80px] flex items-center justify-center ${
+                className={`group relative p-5 rounded-2xl transition-all flex flex-col items-center justify-center gap-3 min-w-[120px] ${
                   activePartner === partner.id 
-                    ? 'bg-primary/10 ring-2 ring-primary shadow-lg scale-105' 
-                    : 'bg-background border border-border hover:border-primary/30 hover:shadow-md hover:scale-102'
+                    ? 'bg-primary/10 ring-2 ring-primary shadow-xl scale-105' 
+                    : 'bg-muted/30 hover:bg-muted/50 hover:shadow-lg hover:scale-102'
                 }`}
               >
-                <img 
-                  src={partner.logo} 
-                  alt={partner.name}
-                  className="h-12 md:h-16 w-auto object-contain transition-all max-w-[100px]"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                    // Show fallback icon when image fails
-                    const fallback = target.nextElementSibling as HTMLElement;
-                    if (fallback) fallback.style.display = 'flex';
-                  }}
-                />
-                <div 
-                  className={`hidden w-12 h-12 rounded-xl bg-gradient-to-br ${partner.color} items-center justify-center`}
-                >
-                  <partner.icon className="w-6 h-6 text-white" />
+                <div className="w-20 h-20 rounded-2xl bg-white shadow-md flex items-center justify-center p-2 overflow-hidden">
+                  <img 
+                    src={partner.logo} 
+                    alt={partner.name}
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                  <div 
+                    className={`hidden w-full h-full rounded-xl bg-gradient-to-br ${partner.color} items-center justify-center`}
+                  >
+                    <partner.icon className="w-8 h-8 text-white" />
+                  </div>
                 </div>
-                <span className={`absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
-                  activePartner === partner.id ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                <span className={`text-sm font-semibold whitespace-nowrap transition-colors ${
+                  activePartner === partner.id ? 'text-primary' : 'text-foreground'
                 }`}>
                   {partner.shortName}
                 </span>
@@ -722,14 +746,17 @@ const UWCHumanAnimalProgram = () => {
             ))}
           </div>
 
-          {/* Journey Map Visual */}
-          <div className="max-w-5xl mx-auto mb-16">
-            <h3 className="text-2xl font-bold text-center mb-10 text-foreground">Your Journey Through Our Partners</h3>
+          {/* Journey Map Visual - Enhanced with Partner Images */}
+          <div className="max-w-6xl mx-auto mb-16">
+            <h3 className="text-2xl font-bold text-center mb-4 text-foreground">Your Journey Through Our Partners</h3>
+            <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Follow the transformative path through five world-class organizations over 10 weeks
+            </p>
             <div className="relative">
               {/* Connection Line */}
-              <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-1 bg-gradient-to-r from-amber-500 via-violet-500 via-green-500 via-blue-500 to-primary rounded-full opacity-40" />
+              <div className="hidden lg:block absolute top-24 left-[10%] right-[10%] h-1.5 bg-gradient-to-r from-amber-500 via-violet-500 via-green-500 via-blue-500 to-primary rounded-full opacity-60" />
               
-              <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
                 {[
                   { partner: partners[3], weeks: 'Weeks 1-2', label: 'Foundation' },
                   { partner: partners[0], weeks: 'Weeks 3-4', label: 'Field Research' },
@@ -739,15 +766,43 @@ const UWCHumanAnimalProgram = () => {
                 ].map((item, idx) => (
                   <div 
                     key={idx}
-                    className="relative text-center group cursor-pointer p-4 rounded-2xl hover:bg-muted/50 transition-all"
+                    className="relative text-center group cursor-pointer"
                     onClick={() => setActivePartner(item.partner.id)}
                   >
-                    <div className={`w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${item.partner.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform relative z-10`}>
-                      <item.partner.icon className="w-10 h-10 text-white" />
+                    {/* Partner Image Circle */}
+                    <div className="relative mx-auto mb-4 z-10">
+                      <div className={`w-24 h-24 md:w-28 md:h-28 mx-auto rounded-full overflow-hidden ring-4 ring-background shadow-xl group-hover:scale-110 transition-transform duration-300 ${
+                        activePartner === item.partner.id ? 'ring-primary ring-offset-2 ring-offset-background' : ''
+                      }`}>
+                        <img 
+                          src={item.partner.heroImage} 
+                          alt={item.partner.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-t ${item.partner.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
+                      </div>
+                      {/* Step Number Badge */}
+                      <div className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-gradient-to-br ${item.partner.color} flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
+                        {idx + 1}
+                      </div>
                     </div>
-                    <div className="mb-2 inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                    
+                    {/* Partner Logo Mini */}
+                    <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-white shadow-md p-1.5 flex items-center justify-center">
+                      <img 
+                        src={item.partner.logo} 
+                        alt={item.partner.shortName}
+                        className="w-full h-full object-contain"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                    
+                    <Badge className={`mb-2 ${activePartner === item.partner.id ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary border-primary/20'}`}>
                       {item.weeks}
-                    </div>
+                    </Badge>
                     <p className="font-bold text-foreground text-base mb-1">{item.partner.shortName}</p>
                     <p className="text-sm text-muted-foreground">{item.label}</p>
                   </div>
@@ -759,15 +814,25 @@ const UWCHumanAnimalProgram = () => {
           {/* Partner Tabs Content */}
           <div id="partner-tabs" className="scroll-mt-24">
             <Tabs value={activePartner} onValueChange={setActivePartner} className="w-full">
-              <TabsList className="w-full flex-wrap h-auto p-2 bg-background border border-border rounded-2xl mb-8">
+              <TabsList className="w-full flex-wrap h-auto p-3 bg-muted/30 border border-border rounded-3xl mb-10 gap-2">
                 {partners.map((partner) => (
                   <TabsTrigger 
                     key={partner.id} 
                     value={partner.id}
-                    className="flex-1 min-w-[140px] py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-xl"
+                    className={`flex-1 min-w-[130px] py-4 px-5 rounded-2xl flex items-center gap-3 transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:${partner.color} data-[state=active]:text-white data-[state=active]:shadow-lg`}
                   >
-                    <partner.icon className="w-4 h-4 mr-2" />
-                    <span className="hidden sm:inline">{partner.shortName}</span>
+                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center overflow-hidden">
+                      <img 
+                        src={partner.logo} 
+                        alt={partner.shortName}
+                        className="w-6 h-6 object-contain"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                    <span className="font-semibold hidden sm:inline">{partner.shortName}</span>
                   </TabsTrigger>
                 ))}
               </TabsList>
@@ -902,17 +967,43 @@ const UWCHumanAnimalProgram = () => {
             </Tabs>
           </div>
 
-          {/* Combined Impact Stats */}
-          <div className="mt-16 bg-gradient-to-br from-primary/10 via-background to-secondary/10 rounded-3xl p-8 md:p-12 border border-border">
-            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">The Power of Partnership</h3>
+          {/* Combined Impact Stats - Enhanced with Partner Logos */}
+          <div className="mt-16 bg-gradient-to-br from-primary/10 via-background to-secondary/10 rounded-3xl p-8 md:p-12 border border-border overflow-hidden">
+            <h3 className="text-2xl font-bold text-center mb-6 text-foreground">The Power of Partnership</h3>
+            
+            {/* Partner Logos Row */}
+            <div className="flex flex-wrap justify-center items-center gap-6 mb-10 py-6 border-y border-border/50">
+              {partners.map((partner, idx) => (
+                <div key={partner.id} className="flex items-center gap-2">
+                  <div className="w-12 h-12 rounded-xl bg-white shadow-sm p-2 flex items-center justify-center">
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.shortName}
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  {idx < partners.length - 1 && (
+                    <span className="text-primary/30 text-2xl font-light ml-4">+</span>
+                  )}
+                </div>
+              ))}
+            </div>
+            
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
-                { value: '50+', label: 'Years Combined Experience' },
-                { value: '8,000+', label: 'Animals Helped Annually' },
-                { value: '2,500+', label: 'Community Members Served' },
-                { value: '5', label: 'World-Class Organizations' }
+                { value: '50+', label: 'Years Combined Experience', icon: Clock },
+                { value: '8,000+', label: 'Animals Helped Annually', icon: Heart },
+                { value: '2,500+', label: 'Community Members Served', icon: Users },
+                { value: '5', label: 'World-Class Organizations', icon: Building2 }
               ].map((stat, idx) => (
-                <div key={idx} className="text-center">
+                <div key={idx} className="text-center group">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                    <stat.icon className="w-6 h-6 text-primary" />
+                  </div>
                   <div className="text-3xl md:text-4xl font-bold text-primary mb-2">{stat.value}</div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </div>
@@ -1056,21 +1147,57 @@ const UWCHumanAnimalProgram = () => {
             </Card>
           </div>
 
-          {/* Ideal Candidates */}
-          <div className="bg-background rounded-3xl p-8 md:p-12 border border-border max-w-5xl mx-auto">
-            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Ideal Candidates Include</h3>
-            <div className="grid md:grid-cols-3 gap-6">
+          {/* Ideal Candidates - Visual Persona Cards */}
+          <div className="max-w-5xl mx-auto">
+            <h3 className="text-2xl font-bold text-center mb-10 text-foreground">Ideal Candidates Include</h3>
+            <div className="grid md:grid-cols-3 gap-8">
               {[
-                { icon: GraduationCap, title: "Postgraduate Students", desc: "Psychology, Social Work, Counselling, Occupational Therapy" },
-                { icon: Heart, title: "Healthcare Practitioners", desc: "Therapists, Counsellors, Psychologists seeking AAT specialization" },
-                { icon: Globe, title: "International Researchers", desc: "Study abroad students from partner universities worldwide" }
+                { 
+                  image: candidateImages.students, 
+                  title: "Postgraduate Students", 
+                  desc: "Psychology, Social Work, Counselling, Occupational Therapy",
+                  highlight: "Earn 10 SAQA credits",
+                  icon: GraduationCap
+                },
+                { 
+                  image: candidateImages.practitioners, 
+                  title: "Healthcare Practitioners", 
+                  desc: "Therapists, Counsellors, Psychologists seeking AAT specialization",
+                  highlight: "CPD-accredited",
+                  icon: Heart
+                },
+                { 
+                  image: candidateImages.researchers, 
+                  title: "International Researchers", 
+                  desc: "Study abroad students from partner universities worldwide",
+                  highlight: "Global network access",
+                  icon: Globe
+                }
               ].map((item, idx) => (
-                <div key={idx} className="text-center p-6 bg-muted/50 rounded-2xl">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                    <item.icon className="w-6 h-6 text-primary" />
+                <div key={idx} className="group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
+                  {/* Background Image */}
+                  <div className="aspect-[4/5] relative">
+                    <img 
+                      src={item.image} 
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
+                    
+                    {/* Icon Badge */}
+                    <div className="absolute top-4 right-4 w-12 h-12 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center">
+                      <item.icon className="w-6 h-6 text-white" />
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <Badge className="mb-3 bg-primary/90 text-primary-foreground border-0">
+                        {item.highlight}
+                      </Badge>
+                      <h4 className="font-bold text-white text-xl mb-2">{item.title}</h4>
+                      <p className="text-white/80 text-sm">{item.desc}</p>
+                    </div>
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
                 </div>
               ))}
             </div>
