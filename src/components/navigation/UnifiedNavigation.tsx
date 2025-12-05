@@ -116,7 +116,7 @@ const UnifiedNavigation = () => {
         { title: 'Media Production', href: '/media-production', description: 'Content creation services', icon: '🎬' },
         { title: 'Conscious Media Infrastructure', href: '/conscious-media-infrastructure', description: 'Handpicked media equipment', icon: '📷' },
         { title: 'Web Development', href: '/web-development', description: 'Digital solutions', icon: '💻' },
-        { title: 'UWC Human-Animal Program', href: '/programs/uwc-human-animal', description: 'Academic short course (Jan 2026)', icon: '🎓' },
+        // UWC Human-Animal Program hidden from public navigation - accessible via direct URL for private sharing
         { title: 'Provider Directory', href: '/provider-directory', description: 'Discover wellness providers', icon: '👥' },
       ]
     },
@@ -165,11 +165,9 @@ const UnifiedNavigation = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3">
-              <img 
-                {...getOmniLogo()} 
-                alt="Omni Wellness Media" 
-                className="h-10 w-10 object-contain rounded-lg border border-primary/20 p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
-              />
+              <div className="h-10 w-10 rounded-lg border border-primary/20 p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                <span className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent">O</span>
+              </div>
               <div className="hidden sm:block">
                 <span className="font-bold text-lg bg-gradient-primary bg-clip-text text-transparent">
                   Omni
