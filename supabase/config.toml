@@ -32,3 +32,9 @@ verify_jwt = false
 
 [functions.roambuddy-api]
 verify_jwt = false
+
+[functions.paypal-payment]
+verify_jwt = true
+
+[functions.track-affiliate-click]
+verify_jwt = false
