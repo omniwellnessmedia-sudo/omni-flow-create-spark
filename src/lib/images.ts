@@ -97,7 +97,7 @@ const CORE = {
     roze: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/ROZE.jpg`,
   },
   logos: {
-    omniPrimary: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06%281%29.png`,
+    omniPrimary: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`,
     omniIcon: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
     bwc: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/Bwc%20logo.JPG`,
     drPhil1: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-01.png`,
