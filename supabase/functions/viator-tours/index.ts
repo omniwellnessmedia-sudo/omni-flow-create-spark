@@ -6,6 +6,19 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+interface ViatorImageVariant {
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface ViatorImage {
+  imageSource?: string;
+  caption?: string;
+  isCover?: boolean;
+  variants?: ViatorImageVariant[];
+}
+
 interface ViatorProduct {
   productCode: string;
   title: string;
@@ -27,10 +40,7 @@ interface ViatorProduct {
       fixedDurationInMinutes?: number;
     };
   }>;
-  images?: Array<{
-    imageSource?: string;
-    caption?: string;
-  }>;
+  images?: ViatorImage[];
   reviews?: {
     combinedAverageRating?: number;
     totalReviews?: number;
@@ -42,6 +52,29 @@ interface ViatorProduct {
     tagName?: string;
   }>;
 }
+
+// Helper function to extract best image URL from Viator image variants
+const extractImageUrl = (images?: ViatorImage[]): string => {
+  if (!images || images.length === 0) return '';
+  
+  // Try to find cover image first, then use first image
+  const coverImage = images.find(img => img.isCover) || images[0];
+  
+  // If no variants, return empty (imageSource alone doesn't provide a usable URL)
+  if (!coverImage.variants || coverImage.variants.length === 0) return '';
+  
+  // Prefer larger sizes for better quality
+  const preferredWidths = [720, 540, 480, 400, 360, 240];
+  
+  for (const width of preferredWidths) {
+    const variant = coverImage.variants.find(v => v.width === width);
+    if (variant?.url) return variant.url;
+  }
+  
+  // Fall back to largest available variant
+  const sortedVariants = [...coverImage.variants].sort((a, b) => b.width - a.width);
+  return sortedVariants[0]?.url || '';
+};
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -121,9 +154,9 @@ serve(async (req) => {
       const product: ViatorProduct = await response.json();
 
       // Cache in database
-      // Get actual image URL, filtering out SUPPLIER_PROVIDED
-      const rawImageUrl = product.images?.[0]?.imageSource || '';
-      const imageUrl = (rawImageUrl && rawImageUrl !== 'SUPPLIER_PROVIDED') ? rawImageUrl : '';
+      // Extract proper image URL from variants array
+      const imageUrl = extractImageUrl(product.images);
+      console.log(`Product ${product.productCode} image URL:`, imageUrl || 'no image found');
       
       const tourData = {
         viator_product_code: product.productCode,
@@ -139,7 +172,7 @@ serve(async (req) => {
         rating: product.reviews?.combinedAverageRating || 0,
         review_count: product.reviews?.totalReviews || 0,
         image_url: imageUrl,
-        booking_url: `https://www.viator.com/partner-shop/omniwellnessmedia/?productCode=${product.productCode}&medium=link&medium_version=shop&campaign=omni-wellness`,
+        booking_url: `https://www.viator.com/tours/${product.productCode}?mcid=42383&pid=P00233614&medium=api&campaign=omni-wellness`,
         availability: 'Available',
         highlights: product.productOptions || [],
         last_synced_at: new Date().toISOString(),
@@ -286,9 +319,8 @@ serve(async (req) => {
 
       // Cache all products in database
       const toursToCache = products.map((product: ViatorProduct) => {
-        // Get actual image URL, filtering out SUPPLIER_PROVIDED
-        const rawImageUrl = product.images?.[0]?.imageSource || '';
-        const imageUrl = (rawImageUrl && rawImageUrl !== 'SUPPLIER_PROVIDED') ? rawImageUrl : '';
+        // Extract proper image URL from variants array
+        const imageUrl = extractImageUrl(product.images);
         
         return {
           viator_product_code: product.productCode,
@@ -304,13 +336,15 @@ serve(async (req) => {
           rating: product.reviews?.combinedAverageRating || 0,
           review_count: product.reviews?.totalReviews || 0,
           image_url: imageUrl,
-          booking_url: `https://www.viator.com/partner-shop/omniwellnessmedia/?productCode=${product.productCode}&medium=link&medium_version=shop&campaign=omni-wellness`,
+          booking_url: `https://www.viator.com/tours/${product.productCode}?mcid=42383&pid=P00233614&medium=api&campaign=omni-wellness`,
           availability: 'Available',
           highlights: product.productOptions || [],
           last_synced_at: new Date().toISOString(),
           is_active: true,
         };
       });
+      
+      console.log('Sample tour images:', toursToCache.slice(0, 3).map(t => ({ code: t.viator_product_code, image: t.image_url })));
 
       if (toursToCache.length > 0) {
         const { error: bulkUpsertError } = await supabase

@@ -126,28 +126,28 @@ interface ViatorTour {
   category: string;
 }
 
-// Curator profiles for travel experiences
+// Curator profiles for travel experiences - matching CameraStuff design
 const curatorProfiles = {
   zenith: {
     name: "Zenith",
-    role: "Travel Coordinator & Wellness Guide",
-    image: `${STORAGE_BASE}/team-photos/zenith.jpg`,
-    quote: "Travel should nourish your soul, not just tick boxes. I curate experiences that create lasting transformation.",
-    expertise: ["Wellness Retreats", "Mindful Travel", "Group Coordination"]
+    title: "Travel Coordinator & Wellness Guide",
+    expertise: "Wellness Retreats • Mindful Travel • Group Coordination",
+    bio: "Travel should nourish your soul, not just tick boxes. I curate experiences that create lasting transformation.",
+    avatar: `${STORAGE_BASE}/team-photos/zenith.jpg`
   },
   chad: {
     name: "Chad",
-    role: "Head of Media & Strategy",
-    image: `${STORAGE_BASE}/team-photos/chad.jpg`,
-    quote: "The best adventures are those that change your perspective and connect you to something greater.",
-    expertise: ["Adventure Travel", "Documentary Journeys", "Cultural Immersion"]
+    title: "Head of Media & Strategy",
+    expertise: "Adventure Travel • Documentary Journeys • Cultural Immersion",
+    bio: "The best adventures are those that change your perspective and connect you to something greater.",
+    avatar: `${STORAGE_BASE}/team-photos/chad.jpg`
   },
   abbi: {
     name: "Abbi",
-    role: "Content Developer",
-    image: `${STORAGE_BASE}/team-photos/abbi.jpg`,
-    quote: "Every destination has a story to tell. I help travelers find the experiences that resonate with their journey.",
-    expertise: ["Eco-Tourism", "Local Experiences", "Sustainable Travel"]
+    title: "Content Developer",
+    expertise: "Eco-Tourism • Local Experiences • Sustainable Travel",
+    bio: "Every destination has a story to tell. I help travelers find the experiences that resonate with their journey.",
+    avatar: `${STORAGE_BASE}/team-photos/abbi.jpg`
   }
 };
 
@@ -452,23 +452,44 @@ const TravelWellConnectedStore = () => {
     );
   };
 
-  const CuratorCard = ({ curator }: { curator: typeof curatorProfiles.zenith & { id: string } }) => (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300">
-      <div className="h-32 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-        <div className="w-20 h-20 rounded-full bg-primary/10 border-4 border-background flex items-center justify-center text-2xl font-bold text-primary">
-          {curator.name.charAt(0)}
+  // Travel Curator Card - matching CameraStuff design
+  const TravelCuratorCard = ({ curator, curatorId }: { curator: typeof curatorProfiles.zenith; curatorId: string }) => (
+    <Card className="p-6 hover:shadow-lg transition-all duration-300">
+      <div className="flex flex-col items-center text-center space-y-4">
+        <div className="w-24 h-24 rounded-full border-4 border-primary/20 overflow-hidden bg-primary/10 flex items-center justify-center">
+          <img 
+            src={curator.avatar} 
+            alt={curator.name}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+              (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-2xl font-bold text-primary">${curator.name.charAt(0)}</span>`;
+            }}
+          />
         </div>
+
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-foreground">{curator.name}</h3>
+          <p className="text-sm font-medium text-primary">{curator.title}</p>
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">{curator.expertise}</p>
+        </div>
+
+        <p className="text-sm text-foreground/80 leading-relaxed">"{curator.bio}"</p>
+
+        <Button
+          variant="outline"
+          className="w-full mt-4"
+          onClick={() => {
+            trackProductView(
+              `Travel Curator Picks: ${curator.name}`,
+              'travel_well_connected_curator',
+              'view_curator_picks'
+            );
+          }}
+        >
+          See {curator.name}'s Picks
+        </Button>
       </div>
-      <CardContent className="pt-4 text-center">
-        <h3 className="font-bold text-lg">{curator.name}</h3>
-        <p className="text-sm text-muted-foreground mb-3">{curator.role}</p>
-        <p className="text-sm italic text-muted-foreground mb-4">"{curator.quote}"</p>
-        <div className="flex flex-wrap gap-1 justify-center">
-          {curator.expertise.map((exp, i) => (
-            <Badge key={i} variant="secondary" className="text-xs">{exp}</Badge>
-          ))}
-        </div>
-      </CardContent>
     </Card>
   );
 
@@ -559,7 +580,7 @@ const TravelWellConnectedStore = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {Object.entries(curatorProfiles).map(([id, curator]) => (
-              <CuratorCard key={id} curator={{ ...curator, id }} />
+              <TravelCuratorCard key={id} curator={curator} curatorId={id} />
             ))}
           </div>
         </div>
