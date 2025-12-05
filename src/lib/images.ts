@@ -41,75 +41,75 @@ const CORE = {
     chief: `${SUPABASE_URL}/provider-images/Chief_Hennie_van_Wyk_001_2.slideshow.jpg`,
   },
   locations: {
-    view1: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/_MG_0220.jpg`,
-    view2: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/_MG_0235.jpg`,
-    coastal: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/image00004.jpeg`,
+    view1: `${SUPABASE_URL}/location-images%20(Cape%20Town%20Locations)/_MG_0220.jpg`,
+    view2: `${SUPABASE_URL}/location-images%20(Cape%20Town%20Locations)/_MG_0235.jpg`,
+    coastal: `${SUPABASE_URL}/location-images%20(Cape%20Town%20Locations)/image00004.jpeg`,
     capeTown1: `${SUPABASE_URL}/provider-images/IMG_20241010_142332.jpg`,
     capeTown2: `${SUPABASE_URL}/provider-images/IMG_20241010_174621.jpg`,
     capeTown3: `${SUPABASE_URL}/provider-images/IMG_20241026_100612.jpg`,
-    capeTown4: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/IMG_20241026_111216.jpg`,
-    capeTown5: `${SUPABASE_URL}/location-images**%20(Cape%20Town%20Locations)/IMG_20241026_123154.jpg`,
+    capeTown4: `${SUPABASE_URL}/location-images%20(Cape%20Town%20Locations)/IMG_20241026_111216.jpg`,
+    capeTown5: `${SUPABASE_URL}/location-images%20(Cape%20Town%20Locations)/IMG_20241026_123154.jpg`,
     sunrise: `${SUPABASE_URL}/provider-images/IMG_20250117_060441.jpg`,
   },
   products: {
     // PRIMARY BRAND ASSETS
-    logo: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/2%20be%20well%20NEW%20LOGO_OMNI.png`,
+    logo: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/2%20be%20well%20NEW%20LOGO_OMNI.png`,
     
     // SKINCARE PRODUCTS (unique, no repetitions)
-    lipBalm: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/3.png`, // Bottle 3
-    faceSerum: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/12.png`, // Bottle 12
-    bodyButter: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-7.jpg`, // Hero product shot
-    bodyButterLavender: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`, // Lifestyle product variation
+    lipBalm: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/3.png`, // Bottle 3
+    faceSerum: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/12.png`, // Bottle 12
+    bodyButter: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/OMNI_2BeWell-7.jpg`, // Hero product shot
+    bodyButterLavender: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`, // Lifestyle product variation
     
     // CLEANING PRODUCTS
-    allPurposeCleaner: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/all%20purpose%20cleaner%20stock.png`,
-    sprayBottle: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/Minimal%20Natural%20spray%20Instagram%20post.png`,
+    allPurposeCleaner: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/all%20purpose%20cleaner%20stock.png`,
+    sprayBottle: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/Minimal%20Natural%20spray%20Instagram%20post.png`,
     
     // SUPPLEMENTS & WELLNESS TOOLS
-    supplementBottle: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/ChatGPT%20Image%20Jul%201%2C%202025%2C%2002_16_46%20PM.png`,
-    ashwagandha: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/ChatGPT%20Image%20Jul%201%2C%202025%2C%2002_16_46%20PM.png`, // Use existing supplement image
-    jadeRoller: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%205.png`, // Use existing product image
+    supplementBottle: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/ChatGPT%20Image%20Jul%201%2C%202025%2C%2002_16_46%20PM.png`,
+    ashwagandha: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/ChatGPT%20Image%20Jul%201%2C%202025%2C%2002_16_46%20PM.png`, // Use existing supplement image
+    jadeRoller: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/post%205.png`, // Use existing product image
     
     // GIFT SETS & DIGITAL PRODUCTS
-    giftSet: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/ChatGPT%20Image%20Jun%2024%2C%202025%2C%2009_26_31%20AM.png`,
-    ebookBundle: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%207.png`, // Use existing product image for digital
+    giftSet: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/ChatGPT%20Image%20Jun%2024%2C%202025%2C%2009_26_31%20AM.png`,
+    ebookBundle: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/post%207.png`, // Use existing product image for digital
     
     // LIFESTYLE & MARKETING ASSETS
-    productShot1: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`, // Lifestyle shot
-    lifestyleHero: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%208.png`, // Use existing lifestyle image
-    socialPost1: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%205.png`,
-    socialPost2: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%207.png`,
-    socialPost3: `${SUPABASE_URL}/product-images**%20(2BeWell%20Products)/post%208.png`,
+    productShot1: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/OMNI_2BeWell-8.jpg`, // Lifestyle shot
+    lifestyleHero: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/post%208.png`, // Use existing lifestyle image
+    socialPost1: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/post%205.png`,
+    socialPost2: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/post%207.png`,
+    socialPost3: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/post%208.png`,
   },
   community: {
-    empowerment: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
-    empowerment2: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
-    empowerment3: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-6.jpg`,
-    empowerment4: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-8.jpg`,
-    empowerment5: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-9.jpg`,
-    khoe: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
-    khoe2: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-3.jpg`,
-    khoe3: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-4.jpg`,
-    khoe4: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
-    khoe5: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-6.jpg`,
-    khoe6: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/Khoe%20meisie_Omni-3.jpg`,
-    khoe7: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/Khoe%20meisie_Omni-7.jpg`,
-    roze: `${SUPABASE_URL}/%20community-images**%20(Workshop%20Photos)/ROZE.jpg`,
+    empowerment: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
+    empowerment2: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
+    empowerment3: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-6.jpg`,
+    empowerment4: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-8.jpg`,
+    empowerment5: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-9.jpg`,
+    khoe: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
+    khoe2: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-3.jpg`,
+    khoe3: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-4.jpg`,
+    khoe4: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
+    khoe5: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-6.jpg`,
+    khoe6: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/Khoe%20meisie_Omni-3.jpg`,
+    khoe7: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/Khoe%20meisie_Omni-7.jpg`,
+    roze: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/ROZE.jpg`,
   },
   logos: {
-    omniPrimary: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`,
-    omniIcon: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
-    bwc: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/Bwc%20logo.JPG`,
-    drPhil1: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-01.png`,
-    drPhil2: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
-    amor: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/1April2025_Amor%20logo%20png.png`,
-    apex: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/APEXAdvocacy_logo_blackonwhitebubble-01.png`,
-    gorachouqua: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/Gorachouqua-Logo-300x300.png`,
-    kai: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/Kai%20Logo%20BW.png`,
-    muddyRambler: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/Muddy%20Rambler%20Logo%20Square%20White.png`,
-    muizKitchen: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/muiz-kitchen-logo3.jpg`,
-    valleyOfPlenty: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
-    tt: `${SUPABASE_URL}/partner-logos**%20(Brand%20Assets)/TT%20Logo%20no%20background.png`,
+    omniPrimary: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`,
+    omniIcon: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
+    bwc: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/Bwc%20logo.JPG`,
+    drPhil1: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-01.png`,
+    drPhil2: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
+    amor: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/1April2025_Amor%20logo%20png.png`,
+    apex: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/APEXAdvocacy_logo_blackonwhitebubble-01.png`,
+    gorachouqua: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/Gorachouqua-Logo-300x300.png`,
+    kai: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/Kai%20Logo%20BW.png`,
+    muddyRambler: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/Muddy%20Rambler%20Logo%20Square%20White.png`,
+    muizKitchen: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/muiz-kitchen-logo3.jpg`,
+    valleyOfPlenty: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
+    tt: `${SUPABASE_URL}/partner-logos%20(Brand%20Assets)/TT%20Logo%20no%20background.png`,
   },
 };
 

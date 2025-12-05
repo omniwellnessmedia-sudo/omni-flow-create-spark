@@ -25,6 +25,8 @@ export const CountrySearch = ({ onCountrySelect, onCheckCompatibility }: Country
     setCountriesLoading(true);
     try {
       const result = await getCountries();
+      console.log('Countries API result:', result);
+      
       if (result?.data && Array.isArray(result.data)) {
         // API now returns complete country objects with flags
         const countriesWithFlags = result.data.map((country: any) => ({
@@ -32,8 +34,13 @@ export const CountrySearch = ({ onCountrySelect, onCheckCompatibility }: Country
           code: country.code || country.country_code,
           flag: country.flag || "🌍",
         }));
+        console.log('Processed countries:', countriesWithFlags.length);
         setCountries(countriesWithFlags);
+      } else {
+        console.error('Invalid countries response:', result);
       }
+    } catch (err) {
+      console.error('Error loading countries:', err);
     } finally {
       setCountriesLoading(false);
     }
