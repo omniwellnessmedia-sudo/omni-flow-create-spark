@@ -111,7 +111,7 @@ const cartHorseGallery = [
 const featureImages = {
   research: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/573883488_1410644557735289_7908845877500205254_n.jpg`,
   indigenous: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/573873211_1410644467735298_1144516536869352175_n.jpg`,
-  immersion: images.immersion,
+  immersion: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
   publication: images.publication
 };
 
