@@ -845,63 +845,189 @@ const UWCHumanAnimalProgram = () => {
           </div>
 
           {/* Journey Map Visual - Enhanced with Partner Images */}
-          <div className="max-w-6xl mx-auto mb-16">
-            <h3 className="text-2xl font-bold text-center mb-4 text-foreground">Your Journey Through Our Partners</h3>
-            <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-              Follow the transformative path through five world-class organizations over 10 weeks
-            </p>
-            <div className="relative">
-              {/* Connection Line */}
-              <div className="hidden lg:block absolute top-24 left-[10%] right-[10%] h-1.5 bg-gradient-to-r from-amber-500 via-violet-500 via-green-500 via-blue-500 to-primary rounded-full opacity-60" />
+          {/* Interactive Journey Roadmap */}
+          <div className="max-w-7xl mx-auto mb-20 px-4">
+            <div className="text-center mb-16">
+              <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
+                <MapPin className="w-4 h-4 mr-2" />
+                Your 10-Week Journey
+              </Badge>
+              <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Your Journey Through Our Partners
+              </h3>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Follow the transformative path through five world-class organizations
+              </p>
+            </div>
+            
+            {/* Desktop Roadmap */}
+            <div className="hidden lg:block relative">
+              {/* Animated Connection Path */}
+              <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 z-0">
+                <svg className="w-full h-24" viewBox="0 0 1200 100" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="roadGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+                      <stop offset="25%" stopColor="#f59e0b" stopOpacity="0.8" />
+                      <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.8" />
+                      <stop offset="75%" stopColor="#22c55e" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.8" />
+                    </linearGradient>
+                  </defs>
+                  <path 
+                    d="M 50 50 Q 200 20, 300 50 T 500 50 T 700 50 T 900 50 T 1150 50" 
+                    fill="none" 
+                    stroke="url(#roadGradient)" 
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    className="drop-shadow-lg"
+                  />
+                  {/* Animated dots along path */}
+                  <circle r="8" fill="white" className="drop-shadow-md">
+                    <animateMotion dur="6s" repeatCount="indefinite">
+                      <mpath href="#animPath" />
+                    </animateMotion>
+                  </circle>
+                  <path id="animPath" d="M 50 50 Q 200 20, 300 50 T 500 50 T 700 50 T 900 50 T 1150 50" fill="none" />
+                </svg>
+              </div>
               
-              <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+              <div className="grid grid-cols-5 gap-6 relative z-10">
                 {[
-                  { partner: partners[3], weeks: 'Weeks 1-2', label: 'Foundation' },
-                  { partner: partners[0], weeks: 'Weeks 3-4', label: 'Field Research' },
-                  { partner: partners[1], weeks: 'Weeks 5-6', label: 'Sanctuary Life' },
-                  { partner: partners[2], weeks: 'Weeks 7-8', label: 'Community' },
-                  { partner: partners[3], weeks: 'Weeks 9-10', label: 'Graduation' }
-                ].map((item, idx) => (
-                  <div 
-                    key={idx}
-                    className="relative text-center group cursor-pointer"
-                    onClick={() => setActivePartner(item.partner.id)}
-                  >
-                    {/* Partner Image Circle */}
-                    <div className="relative mx-auto mb-4 z-10">
-                      <div className={`w-24 h-24 md:w-28 md:h-28 mx-auto rounded-full overflow-hidden ring-4 ring-background shadow-xl group-hover:scale-110 transition-transform duration-300 ${
-                        activePartner === item.partner.id ? 'ring-primary ring-offset-2 ring-offset-background' : ''
+                  { partner: partners[3], weeks: 'Weeks 1-2', label: 'Foundation', icon: GradCap },
+                  { partner: partners[0], weeks: 'Weeks 3-4', label: 'Field Research', icon: PawPrint },
+                  { partner: partners[1], weeks: 'Weeks 5-6', label: 'Sanctuary Life', icon: Cat },
+                  { partner: partners[2], weeks: 'Weeks 7-8', label: 'Community', icon: Sprout },
+                  { partner: partners[3], weeks: 'Weeks 9-10', label: 'Graduation', icon: Award }
+                ].map((item, idx) => {
+                  const IconComponent = item.icon;
+                  const isActive = activePartner === item.partner.id;
+                  return (
+                    <div 
+                      key={idx}
+                      className="relative text-center group cursor-pointer"
+                      onClick={() => {
+                        setActivePartner(item.partner.id);
+                        document.getElementById('partner-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                    >
+                      {/* Main Card */}
+                      <div className={`relative p-6 rounded-3xl transition-all duration-500 ${
+                        isActive 
+                          ? 'bg-gradient-to-br from-primary/20 to-primary/5 shadow-2xl scale-105 ring-2 ring-primary' 
+                          : 'bg-card/80 backdrop-blur-sm hover:bg-card shadow-lg hover:shadow-xl hover:scale-102'
                       }`}>
-                        <ImageWithFallback 
-                          src={item.partner.heroImage} 
-                          alt={item.partner.name}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className={`absolute inset-0 bg-gradient-to-t ${item.partner.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
-                      </div>
-                      {/* Step Number Badge */}
-                      <div className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-gradient-to-br ${item.partner.color} flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
-                        {idx + 1}
+                        {/* Step Number */}
+                        <div className={`absolute -top-4 -right-2 w-10 h-10 rounded-full bg-gradient-to-br ${item.partner.color} flex items-center justify-center text-white font-bold text-lg shadow-lg ring-4 ring-background z-20`}>
+                          {idx + 1}
+                        </div>
+                        
+                        {/* Partner Logo - Large */}
+                        <div className={`w-24 h-24 mx-auto mb-5 rounded-2xl bg-white shadow-xl p-3 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:scale-110 ${
+                          isActive ? 'ring-4 ring-primary/30' : ''
+                        }`}>
+                          <PartnerLogo 
+                            logo={item.partner.logo} 
+                            name={item.partner.name}
+                            shortName={item.partner.shortName}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        
+                        {/* Partner Image Preview */}
+                        <div className="relative w-full h-32 mb-4 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300">
+                          <ImageWithFallback 
+                            src={item.partner.heroImage} 
+                            alt={item.partner.name}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className={`absolute inset-0 bg-gradient-to-t ${item.partner.color} opacity-30 group-hover:opacity-50 transition-opacity`} />
+                          {/* Icon Overlay */}
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                              <IconComponent className="w-7 h-7 text-primary" />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Info */}
+                        <Badge className={`mb-3 ${isActive ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary border-primary/20'}`}>
+                          {item.weeks}
+                        </Badge>
+                        <h4 className="font-bold text-foreground text-lg mb-1">{item.partner.shortName}</h4>
+                        <p className="text-sm text-muted-foreground">{item.label}</p>
+                        
+                        {/* Hover Arrow */}
+                        <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ArrowRight className="w-5 h-5 mx-auto text-primary animate-pulse" />
+                        </div>
                       </div>
                     </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Mobile Roadmap */}
+            <div className="lg:hidden space-y-4">
+              {[
+                { partner: partners[3], weeks: 'Weeks 1-2', label: 'Foundation', icon: GradCap },
+                { partner: partners[0], weeks: 'Weeks 3-4', label: 'Field Research', icon: PawPrint },
+                { partner: partners[1], weeks: 'Weeks 5-6', label: 'Sanctuary Life', icon: Cat },
+                { partner: partners[2], weeks: 'Weeks 7-8', label: 'Community', icon: Sprout },
+                { partner: partners[3], weeks: 'Weeks 9-10', label: 'Graduation', icon: Award }
+              ].map((item, idx) => {
+                const IconComponent = item.icon;
+                const isActive = activePartner === item.partner.id;
+                return (
+                  <div 
+                    key={idx}
+                    className={`relative flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all duration-300 ${
+                      isActive 
+                        ? 'bg-gradient-to-r from-primary/20 to-primary/5 shadow-lg ring-2 ring-primary' 
+                        : 'bg-card/80 hover:bg-card shadow-md'
+                    }`}
+                    onClick={() => {
+                      setActivePartner(item.partner.id);
+                      document.getElementById('partner-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                  >
+                    {/* Step Number & Line */}
+                    <div className="flex flex-col items-center">
+                      <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${item.partner.color} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
+                        {idx + 1}
+                      </div>
+                      {idx < 4 && (
+                        <div className={`w-1 h-8 mt-2 bg-gradient-to-b ${item.partner.color} opacity-40 rounded-full`} />
+                      )}
+                    </div>
                     
-                    {/* Partner Logo Mini */}
-                    <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-white shadow-md p-1.5 flex items-center justify-center">
+                    {/* Logo */}
+                    <div className="w-16 h-16 rounded-xl bg-white shadow-md p-2 flex items-center justify-center flex-shrink-0">
                       <PartnerLogo 
                         logo={item.partner.logo} 
                         name={item.partner.name}
                         shortName={item.partner.shortName}
+                        className="w-full h-full object-contain"
                       />
                     </div>
                     
-                    <Badge className={`mb-2 ${activePartner === item.partner.id ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary border-primary/20'}`}>
-                      {item.weeks}
-                    </Badge>
-                    <p className="font-bold text-foreground text-base mb-1">{item.partner.shortName}</p>
-                    <p className="text-sm text-muted-foreground">{item.label}</p>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <Badge className={`mb-1 text-xs ${isActive ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary'}`}>
+                        {item.weeks}
+                      </Badge>
+                      <h4 className="font-bold text-foreground truncate">{item.partner.shortName}</h4>
+                      <p className="text-sm text-muted-foreground">{item.label}</p>
+                    </div>
+                    
+                    {/* Icon */}
+                    <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${item.partner.color} flex items-center justify-center text-white flex-shrink-0`}>
+                      <IconComponent className="w-5 h-5" />
+                    </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
 
