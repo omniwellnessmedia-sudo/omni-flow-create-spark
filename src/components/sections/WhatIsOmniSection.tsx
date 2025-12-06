@@ -12,54 +12,67 @@ const thoughtBubbles = [
 
 export const WhatIsOmniSection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hoveredBubble, setHoveredBubble] = useState<number | null>(null);
 
   return (
-    <section className="relative py-24 overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.05),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--accent)/0.05),transparent_50%)]" />
+    <section className="relative py-16 md:py-20 overflow-hidden bg-gradient-to-b from-muted/50 via-background to-muted/30">
+      {/* Enhanced background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.08),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--accent)/0.08),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,hsl(var(--primary)/0.02),transparent)]" />
       
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Header with thought bubbles */}
-          <div className="text-center mb-12 relative">
-            {/* Floating thought bubbles */}
-            <div className="absolute inset-0 pointer-events-none">
+          {/* Header with interactive thought bubbles */}
+          <div className="text-center mb-10 relative">
+            {/* Floating interactive thought bubbles */}
+            <div className="absolute inset-0 pointer-events-auto">
               {thoughtBubbles.map((bubble, index) => (
                 <div
                   key={index}
+                  onMouseEnter={() => setHoveredBubble(index)}
+                  onMouseLeave={() => setHoveredBubble(null)}
                   className={cn(
-                    "absolute hidden md:flex items-center gap-2 px-4 py-2 rounded-full",
-                    "bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg",
-                    "animate-float opacity-0",
-                    index % 2 === 0 ? "left-0 lg:left-[5%]" : "right-0 lg:right-[5%]"
+                    "absolute hidden md:flex items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer",
+                    "bg-background/90 backdrop-blur-md border-2 shadow-xl",
+                    "animate-float opacity-0 transition-all duration-300",
+                    hoveredBubble === index 
+                      ? "border-primary scale-110 shadow-primary/30 bg-primary/5" 
+                      : "border-border/60 hover:border-primary/50 hover:scale-105",
+                    index % 2 === 0 ? "left-0 lg:left-[3%]" : "right-0 lg:right-[3%]"
                   )}
                   style={{
-                    top: `${15 + index * 18}%`,
+                    top: `${10 + index * 18}%`,
                     animationDelay: bubble.delay,
                     animationFillMode: "forwards",
                   }}
                 >
-                  <bubble.icon className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-medium text-foreground/80">{bubble.text}</span>
+                  <bubble.icon className={cn(
+                    "h-4 w-4 transition-colors duration-300",
+                    hoveredBubble === index ? "text-primary" : "text-primary/70"
+                  )} />
+                  <span className={cn(
+                    "text-sm font-semibold transition-colors duration-300",
+                    hoveredBubble === index ? "text-primary" : "text-foreground/80"
+                  )}>{bubble.text}</span>
                 </div>
               ))}
             </div>
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/15 border-2 border-primary/30 mb-6 shadow-lg shadow-primary/10 hover:scale-105 transition-transform duration-300 cursor-default">
               <MessageCircle className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Meet the Founder</span>
+              <span className="text-sm font-bold text-primary">Meet the Founder</span>
             </div>
             
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              What is{" "}
-              <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5">
+              <span className="text-foreground">What is </span>
+              <span className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent drop-shadow-sm">
                 Omni Wellness Media
               </span>
-              ?
+              <span className="text-foreground">?</span>
             </h2>
             
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed">
               Hear from Chad Cupido as he introduces our mission to bridge wellness, 
               outreach & media — empowering South Africa's journey to health & consciousness.
             </p>
