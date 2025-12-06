@@ -110,10 +110,36 @@ const featureImages = {
 // Candidate persona images - using actual programme photos
 const candidateImages = {
   students: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
+  students2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0018.jpg`,
   practitioners: images.cartHorse2,
   researchers: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230717-WA0065.jpg`,
   volunteers: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/560581362_1396149479184797_833395091101970838_n.jpg`,
   community: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230929_170146.jpg`
+};
+
+// Image with fallback component
+const ImageWithFallback = ({ src, alt, className, fallback = FALLBACK_IMAGE }: { 
+  src: string; 
+  alt: string; 
+  className?: string;
+  fallback?: string;
+}) => {
+  const [imgSrc, setImgSrc] = React.useState(src);
+  const [hasError, setHasError] = React.useState(false);
+  
+  return (
+    <img
+      src={hasError ? fallback : imgSrc}
+      alt={alt}
+      className={className}
+      onError={() => {
+        if (!hasError) {
+          setHasError(true);
+          setImgSrc(fallback);
+        }
+      }}
+    />
+  );
 };
 
 // Partner data
