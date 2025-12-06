@@ -9,13 +9,17 @@ const PartnersSection = () => {
     { name: "2beWell All Natural", logo: IMAGES.partners.twoBeWell, description: "Natural Wellness Products" },
     { name: "APEX Advocacy", logo: IMAGES.partners.apex, description: "Legal Advocacy Services" },
     { name: "MBS Mzansi Business Services", logo: IMAGES.partners.mbs, description: "Business Solutions" },
-    { name: "Dr. Phil-Afei", logo: IMAGES.partners.drPhil, description: "Healthcare Services" },
+    { name: "Dr. Phil-Afei Foundation", logo: IMAGES.partners.drPhil, description: "Community Healthcare" },
     { name: "Amor Foundation", logo: IMAGES.partners.amor, description: "Community Support" },
-    { name: "Baboon Conservation", logo: IMAGES.partners.baboonConservation, description: "Wildlife Protection" },
+    { name: "Beauty Without Cruelty", logo: IMAGES.partners.bwc, description: "Ethical Living" },
     { name: "Kai Cape Nature Cubs", logo: IMAGES.partners.kai, description: "Environmental Education" },
+    { name: "Cart Horse Protection", logo: IMAGES.partners.cartHorse, description: "Animal Welfare" },
     { name: "Travel & Tours Cape Town", logo: IMAGES.partners.travelTours, description: "Adventure Travel" },
-    { name: "Omni Wellness", logo: IMAGES.omni.logo, description: "Holistic Wellness Platform" },
-    { name: "Sandy Mitchell Yoga", logo: IMAGES.logos.omniIcon, description: "Yoga & Breathwork" }
+    { name: "Valley of Plenty", logo: IMAGES.partners.valleyOfPlenty, description: "Urban Agriculture" },
+    { name: "Muddy Rambler", logo: IMAGES.partners.muddyRambler, description: "Nature Adventures" },
+    { name: "UWC", logo: IMAGES.partners.uwc, description: "Academic Partner" },
+    { name: "Gorachouqua", logo: IMAGES.partners.gorachouqua, description: "Indigenous Heritage" },
+    { name: "Muizenberg Kitchen", logo: IMAGES.partners.muizKitchen, description: "Community Kitchen" },
   ];
 
   useEffect(() => {
