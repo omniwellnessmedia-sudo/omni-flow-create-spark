@@ -109,7 +109,7 @@ const cartHorseGallery = [
 
 // Feature images for "What Makes This Unique" section - all unique
 const featureImages = {
-  research: images.research,
+  research: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/573883488_1410644557735289_7908845877500205254_n.jpg`,
   indigenous: images.indigenous,
   immersion: images.immersion,
   publication: images.publication
