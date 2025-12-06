@@ -60,12 +60,13 @@ const images = {
   immersion: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240623_113740.jpg`,
   wellness: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240712_125316.jpg`,
   therapy: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240901_122548.jpg`,
-  // Cape Town destination images - using actual storage images
-  tableMountain: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240912_150945.jpg`,
-  winelands: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20241002_162340.jpg`,
-  coastline: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20250729_124830.jpg`,
-  sunset: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20220529-WA0007.jpg`,
-  uwcCampus: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/Sans%20titre-163.jpg`
+  // Western Cape travel & destination images
+  muizenberg: `${STORAGE_BASE}/Tours/muizenberg%20cave%20tours/muizenberg%20cave%20%20view%201.jpg`,
+  gardenRoute: `${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`,
+  capeTown: `${STORAGE_BASE}/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg`,
+  winelands: `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`,
+  coastline: `${STORAGE_BASE}/General%20Images/community%20outing%202.jpg`,
+  wellnessRetreat: `${STORAGE_BASE}/General%20Images/Wellness%20retreat%202.jpg`
 };
 
 // Programme constants
@@ -1252,38 +1253,38 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
-      {/* Destination Section - Cape Town */}
+      {/* Travel Experiences Section - Best of Western Cape */}
       <section id="destination" className="py-24 bg-muted/30 scroll-mt-20 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
-              <MapPin className="w-3.5 h-3.5 mr-2" />
-              Your Study Abroad Destination
+              <Plane className="w-3.5 h-3.5 mr-2" />
+              Explore Beyond the Classroom
             </Badge>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Experience Cape Town
+              Best of the Western Cape
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Where mountain meets ocean, and ancient wisdom meets cutting-edge research
+              Weekend adventures and cultural excursions to make your study abroad experience unforgettable
             </p>
           </div>
 
           {/* Image Collage */}
           <div className="grid grid-cols-4 gap-3 max-w-6xl mx-auto mb-12">
-            <ImageWithFallback src={images.tableMountain} alt="Table Mountain" className="col-span-2 row-span-2 w-full h-full object-cover rounded-2xl shadow-lg" />
-            <ImageWithFallback src={images.coastline} alt="Cape coastline" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
-            <ImageWithFallback src={images.fieldwork1} alt="Fieldwork" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.muizenberg} alt="Muizenberg caves and coastline" className="col-span-2 row-span-2 w-full h-full object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.gardenRoute} alt="Garden Route adventure" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.capeTown} alt="Indigenous cultural tour" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
             <ImageWithFallback src={images.winelands} alt="Cape Winelands" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
-            <ImageWithFallback src={images.cartHorse1} alt="Cart Horse work" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.coastline} alt="Coastal community outing" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
           </div>
 
-          {/* Destination Highlights */}
+          {/* Travel Highlights */}
           <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {[
-              { icon: Mountain, title: "Table Mountain", desc: "World Heritage Site in your backyard" },
-              { icon: Sun, title: "Winter Sun", desc: "15-22°C during your June-August stay" },
-              { icon: Waves, title: "Coastal Beauty", desc: "Muizenberg beach just 20 minutes away" },
-              { icon: TreePine, title: "Wine Country", desc: "Weekend vineyard excursions included" }
+              { icon: Waves, title: "Muizenberg", desc: "Surf culture, colourful beach huts & iconic cave tours" },
+              { icon: MapPin, title: "Garden Route", desc: "Coastal forests, whale watching & adventure activities" },
+              { icon: TreePine, title: "Winelands", desc: "Stellenbosch & Franschhoek vineyard day trips" },
+              { icon: Mountain, title: "Cape Town", desc: "Table Mountain, V&A Waterfront & vibrant city life" }
             ].map((item, idx) => (
               <div key={idx} className="text-center p-6 bg-background rounded-2xl border border-border hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
