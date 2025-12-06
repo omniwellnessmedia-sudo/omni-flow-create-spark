@@ -296,7 +296,7 @@ const partners = [
     color: 'from-blue-500 to-indigo-600',
     bgColor: 'bg-blue-50 dark:bg-blue-950/30',
     heroImage: `${STORAGE_BASE}/General%20Images/uwc%20university%20of%20the%20western%20cape.jpg`,
-    gallery: [`${STORAGE_BASE}/General%20Images/uwc%20university%20of%20the%20western%20cape.jpg`, `${STORAGE_BASE}/General%20Images/UWC-Life-Science-Building-2.jpg`, images.retreat1],
+    gallery: [images.graduation, images.retreat1],
     story: `Founded during apartheid to serve "non-white" students, UWC has evolved into a beacon of academic excellence with a deep commitment to social justice. The Psychology Department brings world-class research methodology and community psychology expertise, while the broader university provides the academic framework for this groundbreaking programme.`,
     roleInProgramme: `UWC is the **academic backbone** of the programme, providing official accreditation (NQF Level 7-8, 10 SAQA credits), research supervision, and the scholarly rigour that ensures your work meets publication standards. Opening and closing weeks take place on campus, connecting you to the broader academic community.`,
     stats: [
