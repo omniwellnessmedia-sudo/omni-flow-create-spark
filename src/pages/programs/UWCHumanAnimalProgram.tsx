@@ -268,8 +268,12 @@ const partners = [
     logo: partnerLogos.drphilafel,
     color: 'from-green-500 to-emerald-600',
     bgColor: 'bg-green-50 dark:bg-green-950/30',
-    heroImage: `${STORAGE_BASE}/%20community-images%2A%2A%20(Workshop%20Photos)/_MG_9481-2.jpg`,
-    gallery: [images.empowerment, images.empowerment2, images.khoe, images.community],
+    heroImage: `${STORAGE_BASE}/Dr.%20Phil-afel/TVOP_Women%20empowerment_abuse%20awareness%20workshop_tvop_omni_Dr%20Phil-5.png`,
+    gallery: [
+      `${STORAGE_BASE}/Dr.%20Phil-afel/20230421-DSC04904.jpg`,
+      `${STORAGE_BASE}/Dr.%20Phil-afel/20230421-DSC05083-2.jpg`,
+      `${STORAGE_BASE}/Dr.%20Phil-afel/Valley_of%20plenty_childrens%20workshop.jpg`
+    ],
     story: `The Dr. Phil-afel Foundation emerged from the heart of Hanover Park—one of Cape Town's most challenged communities—with a radical vision: transform barren spaces into thriving gardens of abundance. Their "Valley of Plenty" and "Where Rainbows Meet" projects have brought food security, community healing, and hope to thousands of residents through the Rainbow Roots Program and Early Childhood Development initiatives.`,
     roleInProgramme: `As our **City Twin Partner**, Dr. Phil-afel provides the crucial community integration component during Weeks 7-8. Students work alongside local practitioners learning Indigenous Knowledge Systems, participate in urban agriculture projects, and understand how wellness interventions can heal communities affected by generational trauma.`,
     stats: [
