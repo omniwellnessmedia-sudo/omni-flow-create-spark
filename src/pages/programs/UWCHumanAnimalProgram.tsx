@@ -35,14 +35,14 @@ const images = {
   kitchen: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
   living: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`,
   workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
-// Community & Dr. Phil-afel / Valley of Plenty images - using consistent path encoding
-  valleyOfPlenty: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
-  community: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
-  empowerment: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
-  empowerment2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
-  khoe: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
-  khoe2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
-  roze: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/ROZE.jpg`,
+// Community & Dr. Phil-afel / Valley of Plenty images - using Tufcat fallbacks for reliability
+  valleyOfPlenty: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`,
+  community: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`,
+  empowerment: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547230382_1363593685773710_4169595945775668111_n.jpg`,
+  empowerment2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
+  khoe: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/574087632_1263656015788296_8646920016236566402_n.jpg`,
+  khoe2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
+  roze: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
   // Omni Media images
   omniTeam: `${STORAGE_BASE}/Omni%20wellness%20team.jpg`,
   humanAnimal1: `${STORAGE_BASE}/HUMAN%20ANIMAL_CHAD-3.jpg`,
@@ -99,10 +99,10 @@ const cartHorseGallery = [
   `${STORAGE_BASE}/Tufcat%20and%20Carthorse/558852709_1243815057772392_7668626230595706187_n.jpg`
 ];
 
-// Feature images for "What Makes This Unique" section
+// Feature images for "What Makes This Unique" section - using reliable Tufcat images
 const featureImages = {
   research: images.humanAnimal1,
-  indigenous: images.khoe,
+  indigenous: images.cartHorse2,
   immersion: images.accommodation,
   publication: images.graduation
 };
@@ -541,7 +541,7 @@ const UWCHumanAnimalProgram = () => {
       {/* Immersive Hero Section */}
       <section className="relative h-screen overflow-hidden bg-black">
         {heroGallery.map((img, idx) => (
-          <img 
+          <ImageWithFallback 
             key={idx}
             src={img}
             alt="Programme experience"
@@ -766,7 +766,7 @@ const UWCHumanAnimalProgram = () => {
                   { image: featureImages.publication, title: "Publication Ready", desc: "Graduate with research meeting publication standards", icon: Award }
                 ].map((feature, idx) => (
                   <div key={idx} className="group relative h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
-                    <img 
+                    <ImageWithFallback 
                       src={feature.image} 
                       alt={feature.title}
                       className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
@@ -864,7 +864,7 @@ const UWCHumanAnimalProgram = () => {
                       <div className={`w-24 h-24 md:w-28 md:h-28 mx-auto rounded-full overflow-hidden ring-4 ring-background shadow-xl group-hover:scale-110 transition-transform duration-300 ${
                         activePartner === item.partner.id ? 'ring-primary ring-offset-2 ring-offset-background' : ''
                       }`}>
-                        <img 
+                        <ImageWithFallback 
                           src={item.partner.heroImage} 
                           alt={item.partner.name}
                           className="w-full h-full object-cover"
@@ -925,7 +925,7 @@ const UWCHumanAnimalProgram = () => {
                   <div className={`${partner.bgColor} rounded-3xl overflow-hidden border border-border`}>
                     {/* Partner Hero */}
                     <div className="relative h-64 md:h-96">
-                      <img 
+                      <ImageWithFallback 
                         src={partner.heroImage} 
                         alt={partner.name}
                         className="w-full h-full object-cover"
@@ -971,7 +971,7 @@ const UWCHumanAnimalProgram = () => {
                           {partner.gallery.length > 1 && (
                             <div className="grid grid-cols-3 gap-3">
                               {partner.gallery.slice(0, 3).map((img, idx) => (
-                                <img 
+                                <ImageWithFallback 
                                   key={idx}
                                   src={img} 
                                   alt={`${partner.name} gallery ${idx + 1}`}
@@ -1129,11 +1129,11 @@ const UWCHumanAnimalProgram = () => {
 
           {/* Image Collage */}
           <div className="grid grid-cols-4 gap-3 max-w-6xl mx-auto mb-12">
-            <img src={images.tableMountain} alt="Table Mountain" className="col-span-2 row-span-2 w-full h-full object-cover rounded-2xl shadow-lg" />
-            <img src={images.coastline} alt="Cape coastline" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
-            <img src={images.fieldwork1} alt="Fieldwork" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
-            <img src={images.winelands} alt="Cape Winelands" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
-            <img src={images.cartHorse1} alt="Cart Horse work" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.tableMountain} alt="Table Mountain" className="col-span-2 row-span-2 w-full h-full object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.coastline} alt="Cape coastline" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.fieldwork1} alt="Fieldwork" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.winelands} alt="Cape Winelands" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
+            <ImageWithFallback src={images.cartHorse1} alt="Cart Horse work" className="w-full aspect-square object-cover rounded-2xl shadow-lg" />
           </div>
 
           {/* Destination Highlights */}
@@ -1256,7 +1256,7 @@ const UWCHumanAnimalProgram = () => {
                 <div key={idx} className="group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
                   {/* Background Image */}
                   <div className="aspect-[4/5] relative">
-                    <img 
+                    <ImageWithFallback 
                       src={item.image} 
                       alt={item.title}
                       className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
@@ -1344,7 +1344,7 @@ const UWCHumanAnimalProgram = () => {
                       <div className="relative group">
                         {/* Main Image */}
                         <div className="relative overflow-hidden rounded-3xl shadow-2xl">
-                          <img 
+                          <ImageWithFallback 
                             src={phase.image}
                             alt={phase.title}
                             className="w-full aspect-[4/3] object-cover transform group-hover:scale-105 transition-transform duration-700"
