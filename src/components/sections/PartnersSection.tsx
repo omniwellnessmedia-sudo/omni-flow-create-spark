@@ -15,7 +15,7 @@ const PartnersSection = () => {
     { name: "Kai Cape Nature Cubs", logo: IMAGES.partners.kai, description: "Environmental Education" },
     { name: "Travel & Tours Cape Town", logo: IMAGES.partners.travelTours, description: "Adventure Travel" },
     { name: "Omni Wellness", logo: IMAGES.omni.logo, description: "Holistic Wellness Platform" },
-    { name: "Sandy Mitchell Yoga", logo: IMAGES.sandy.profile, description: "Yoga & Breathwork" }
+    { name: "Sandy Mitchell Yoga", logo: IMAGES.logos.omniIcon, description: "Yoga & Breathwork" }
   ];
 
   useEffect(() => {
@@ -47,10 +47,11 @@ const PartnersSection = () => {
                   index % partners.length === currentIndex ? 'ring-4 ring-primary ring-opacity-50' : ''
                 }`}
               >
-                <img 
+              <img 
                   src={partner.logo} 
                   alt={partner.name}
                   className="max-w-full max-h-16 object-contain mb-2"
+                  onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
                 />
                 <h3 className="font-semibold text-xs text-center px-2">{partner.name}</h3>
               </div>
@@ -66,6 +67,7 @@ const PartnersSection = () => {
                 src={partners[currentIndex].logo} 
                 alt={partners[currentIndex].name}
                 className="max-w-full max-h-full object-contain"
+                onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
               />
             </div>
             <h3 className="font-heading font-bold text-2xl mb-2">{partners[currentIndex].name}</h3>

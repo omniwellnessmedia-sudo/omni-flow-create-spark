@@ -231,6 +231,7 @@ const HeroSection = () => {
             src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/muizenberg%20cave%20view%202.jpg"
             alt="Muizenberg Cave View - Spiritual Wellness Journey"
             className="w-full h-full object-cover"
+            onError={(e) => { e.currentTarget.src = IMAGES.locations.view1; }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
         </div>
@@ -312,6 +313,7 @@ const HeroSection = () => {
                           src={item.image} 
                           alt={item.title}
                           className="w-full h-full object-cover opacity-80"
+                          onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
                         />
                         <div className="absolute top-3 left-3">
                           <span className="bg-wellness-primary text-white text-xs px-2 py-1 rounded-full">
