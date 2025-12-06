@@ -36,9 +36,19 @@ const tourSteps: TourConfig = {
       }
     },
     {
+      id: 'partners',
+      title: 'Our Partner Network',
+      content: 'We collaborate with incredible organizations including 2BeWell, APEX Advocacy, Cart Horse Protection, UWC, Valley of Plenty, and many more conscious businesses across South Africa.',
+      position: 'center',
+      action: {
+        label: 'Meet Our Partners',
+        link: '/about'
+      }
+    },
+    {
       id: 'retreat',
-      title: 'Annual Omni Wellness Retreat',
-      content: 'Join our flagship wellness retreat featuring wine country exploration, nature immersion, and transformative wellness experiences in South Africa\'s most beautiful locations.',
+      title: '4th Annual Omni Wellness Retreat',
+      content: 'Join our flagship wellness retreat featuring wine country exploration, nature immersion, and transformative wellness experiences at the beautiful Greyton Eco Lodge.',
       position: 'center',
       action: {
         label: 'Explore Retreat',
@@ -46,9 +56,19 @@ const tourSteps: TourConfig = {
       }
     },
     {
+      id: 'cave-tour',
+      title: 'Great Mother Cave Tour',
+      content: 'Experience a sacred indigenous journey with Chief Kingsley exploring ancient rock art, medicinal plants, and the spiritual heritage of the First People of the Cape.',
+      position: 'center',
+      action: {
+        label: 'Discover the Cave',
+        link: '/tours/great-mother-cave-tour'
+      }
+    },
+    {
       id: 'programs',
       title: 'UWC Human-Animal Program',
-      content: 'A pioneering academic programme combining animal-assisted therapy research, indigenous knowledge, and community wellness. Launching June 2026.',
+      content: 'A pioneering academic programme combining animal-assisted therapy research, indigenous knowledge, and community wellness with partners like Cart Horse Protection and TUFCAT.',
       position: 'center',
       action: {
         label: 'Learn More',
@@ -67,7 +87,7 @@ const tourSteps: TourConfig = {
     },
     {
       id: 'complete',
-      title: 'Ready to Begin?',
+      title: 'Ready to Begin Your Journey?',
       content: 'Explore our services, book a retreat, or connect with us to start your conscious wellness journey. We\'re here to help you transform and thrive.',
       position: 'center',
       action: {

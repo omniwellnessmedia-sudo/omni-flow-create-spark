@@ -97,13 +97,13 @@ const CORE = {
     roze: `${SUPABASE_URL}/%20community-images%20(Workshop%20Photos)/ROZE.jpg`,
   },
   logos: {
-    // Omni brand logos
+    // Omni brand logos - files are in root of provider-images bucket
     omniPrimary: `${SUPABASE_URL}/OMNI%20LOGO%20FA-06(1)%20(1).png`,
     omniHorizontal: `${SUPABASE_URL}/Omni%20Horizontal%20Logo-07.png`,
     omniIcon: `${SUPABASE_URL}/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
     omniWhite: `${SUPABASE_URL}/omni%20brand%20white%20logo%20for%20black%20transparent.png`,
     
-    // Partner logos from storage bucket
+    // Partner logos - files are in root of provider-images bucket (from screenshot)
     twoBeWell: `${SUPABASE_URL}/product-images%20(2BeWell%20Products)/2%20be%20well%20NEW%20LOGO_OMNI.png`,
     amor: `${SUPABASE_URL}/1April2025_Amor%20logo%20png.png`,
     apex: `${SUPABASE_URL}/APEXAdvocacy_logo_blackonwhitebubble-01.png`,
@@ -122,6 +122,7 @@ const CORE = {
     valleyOfPlenty: `${SUPABASE_URL}/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
     tt: `${SUPABASE_URL}/TT%20Logo%20no%20background.png`,
     uwc: `${SUPABASE_URL}/UWC-Crest.png`,
+    tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
   },
 };
 
