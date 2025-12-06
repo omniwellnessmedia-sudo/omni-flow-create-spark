@@ -61,7 +61,7 @@ const images = {
   wellness: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240712_125316.jpg`,
   therapy: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240901_122548.jpg`,
   // Western Cape travel & destination images
-  muizenberg: `${STORAGE_BASE}/General%20Images/khoe%20indigenous%20language%20heritage%20experience%206.jpg`,
+  muizenberg: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1713679813612.jpg`,
   gardenRoute: `${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`,
   capeTown: `${STORAGE_BASE}/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg`,
   winelands: `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`,
