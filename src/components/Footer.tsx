@@ -3,7 +3,8 @@ import { ChevronUp, Mail, Calendar, MessageCircle, Instagram, Youtube, Heart, Li
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
 import { toast } from "sonner";
-import omniQrCode from "@/assets/omni-qr-code.png";
+
+const OMNI_QR_CODE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/omniwellnessmedia.png";
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -220,7 +221,7 @@ const Footer = () => {
             {/* QR Code */}
             <div className="bg-white rounded-xl p-4 mb-4 inline-block">
               <img 
-                src={omniQrCode} 
+                src={OMNI_QR_CODE_URL} 
                 alt="Omni Wellness Media QR Code" 
                 className="w-32 h-32 object-contain"
               />
