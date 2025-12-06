@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { IMAGES } from '@/lib/images';
+import { Sparkles } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -165,20 +165,11 @@ const UnifiedNavigation = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3">
-              <img 
-                src={IMAGES.logos.omniPrimary}
-                alt="Omni Wellness Media" 
-                className="h-12 w-12 object-contain transition-all duration-300 hover:scale-105"
-              />
-              <div className="hidden sm:block">
-                <span className="font-bold text-lg bg-gradient-primary bg-clip-text text-transparent">
-                  Omni
-                </span>
-                <span className="text-xs text-muted-foreground ml-1 hidden lg:inline">
-                  Wellness
-                </span>
-              </div>
+            <Link to="/" className="flex items-center space-x-2">
+              <Sparkles className="h-8 w-8 text-primary" />
+              <span className="text-xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+                Omni Wellness
+              </span>
             </Link>
           </div>
 
@@ -273,7 +264,7 @@ const UnifiedNavigation = () => {
               <SheetContent side="right" className="w-80">
                 <SheetHeader>
                   <SheetTitle className="text-left flex items-center">
-                    <img src={IMAGES.logos.omniPrimary} alt="Omni" className="h-8 w-8 mr-3" />
+                    <Sparkles className="h-6 w-6 text-primary mr-2" />
                     Omni Wellness
                   </SheetTitle>
                 </SheetHeader>
