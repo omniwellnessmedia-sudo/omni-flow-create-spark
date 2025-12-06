@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import omniLogo from '@/assets/omni-logo-new.png';
+import { IMAGES } from '@/lib/images';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +39,7 @@ import {
 import { useAuth } from '@/components/AuthProvider';
 import { handleKeyboardNavigation, announceToScreenReader } from '@/lib/accessibility';
 import { CartIcon } from '@/components/cart/CartIcon';
-import { getOmniLogo } from '@/lib/images';
+
 import { SearchAutocomplete } from '@/components/product/SearchAutocomplete';
 import { MegaNavigation } from './MegaNavigation';
 
@@ -167,7 +167,7 @@ const UnifiedNavigation = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3">
               <img 
-                src={omniLogo}
+                src={IMAGES.logos.omniPrimary}
                 alt="Omni Wellness Media" 
                 className="h-12 w-12 object-contain transition-all duration-300 hover:scale-105"
               />
@@ -273,7 +273,7 @@ const UnifiedNavigation = () => {
               <SheetContent side="right" className="w-80">
                 <SheetHeader>
                   <SheetTitle className="text-left flex items-center">
-                    <img {...getOmniLogo()} alt="Omni" className="h-8 w-8 mr-3" />
+                    <img src={IMAGES.logos.omniPrimary} alt="Omni" className="h-8 w-8 mr-3" />
                     Omni Wellness
                   </SheetTitle>
                 </SheetHeader>

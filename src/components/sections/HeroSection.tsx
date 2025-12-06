@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { IMAGES, getOmniLogo, getImageWithFallback } from "@/lib/images";
 import { CommunityCard } from "@/components/community/CommunityCard";
-import omniLogo from '@/assets/omni-logo-new.png';
+
 import { 
   Sparkles, 
   Briefcase, 
@@ -242,7 +242,7 @@ const HeroSection = () => {
           {/* Logo */}
           <div className="flex justify-center mb-6 sm:mb-8 animate-fade-in">
             <img 
-              src={omniLogo}
+              src={IMAGES.logos.omniPrimary}
               alt="Omni Wellness Media" 
               className="h-24 w-24 sm:h-32 sm:w-32 lg:h-40 lg:w-40 object-contain drop-shadow-2xl"
             />
