@@ -74,7 +74,7 @@ const HeroSection = () => {
     {
       title: "Indigenous Wisdom Tours",
       description: "Ancient healing practices & cultural experiences",
-      href: "/tours-retreats",
+      href: "/tours/great-mother-cave-tour",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg",
       badge: "Cultural"
     },
@@ -91,7 +91,7 @@ const HeroSection = () => {
     {
       title: "Chief Kingsley's Wisdom",
       description: "Indigenous knowledge & cultural heritage tours",
-      href: "/tours-retreats",
+      href: "/tours/great-mother-cave-tour",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/chief%20kingsley%201.jpg",
       category: "tours",
       author: "Cultural Experience",
@@ -102,7 +102,7 @@ const HeroSection = () => {
     {
       title: "Wellness Group Tours",
       description: "Transformative group experiences in nature",
-      href: "/tours-retreats",
+      href: "/tours/great-mother-cave-tour",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/tour%20picture%20couple%20with%20chief%20kingsley.jpg",
       category: "tours",
       author: "Adventures",
@@ -113,7 +113,7 @@ const HeroSection = () => {
     {
       title: "Sacred Cave Explorations",
       description: "Ancient sites for deep spiritual practice",
-      href: "/tours-retreats",
+      href: "/tours/great-mother-cave-tour",
       image: getStorageUrl("group tour amazing cave view.jpg"),
       category: "wellness",
       author: "Experiences",
@@ -124,7 +124,7 @@ const HeroSection = () => {
     {
       title: "Indigenous Teachings",
       description: "Learn from Chief Kingsley's ancestral wisdom",
-      href: "/tours-retreats",
+      href: "/tours/great-mother-cave-tour",
       image: getStorageUrl("chief kingsley talking to group.jpg"),
       category: "community",
       author: "Cultural Learning",
@@ -157,7 +157,7 @@ const HeroSection = () => {
     {
       title: "Ancient Rock Art Tours",
       description: "Discover South Africa's indigenous heritage",
-      href: "/tours-retreats",
+      href: "/tours/great-mother-cave-tour",
       image: getStorageUrl("Rock art portrait.jpg"),
       category: "tours",
       author: "Heritage",
@@ -168,7 +168,7 @@ const HeroSection = () => {
     {
       title: "Muizenberg Cave Views",
       description: "Breathtaking natural formations & meditation spots",
-      href: "/tours-retreats",
+      href: "/tours/muizenberg-cave-tours",
       image: getStorageUrl("muizenberg cave view.jpg"),
       category: "tours",
       author: "Nature",
