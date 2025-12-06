@@ -260,19 +260,62 @@ serve(async (req) => {
         return await handleCreateOrder(data, supabase)
       
       case 'trackOrder':
-        return await handleTrackOrder(data.orderId)
-      
       case 'getOrderedEsims':
-        return await handleGetOrderedEsims(data)
-      
       case 'getEsimDetails':
-        return await handleGetEsimDetails(data.iccid)
-      
       case 'activateEsim':
-        return await handleActivateEsim(data)
-      
-      case 'validateEsim':
-        return await handleValidateEsim(data.iccid)
+      case 'validateEsim': {
+        // Require authentication for all eSIM-related sensitive actions
+        const esimAuthHeader = req.headers.get('Authorization');
+        if (!esimAuthHeader) {
+          return new Response(
+            JSON.stringify({ 
+              success: false, 
+              error: 'Authentication required',
+              message: 'Please sign in to access eSIM data'
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+          );
+        }
+
+        const supabaseEsimAuth = createClient(
+          Deno.env.get('SUPABASE_URL') ?? '',
+          Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+          {
+            global: {
+              headers: { Authorization: esimAuthHeader },
+            },
+          }
+        );
+
+        const { data: { user: esimUser }, error: esimAuthError } = await supabaseEsimAuth.auth.getUser();
+        
+        if (esimAuthError || !esimUser) {
+          return new Response(
+            JSON.stringify({ 
+              success: false, 
+              error: 'Invalid authentication',
+              message: 'Please sign in again to access eSIM data'
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
+          );
+        }
+
+        console.log('✅ User authenticated for eSIM action:', action, 'user:', esimUser.id);
+
+        // Route to appropriate handler
+        switch (action) {
+          case 'trackOrder':
+            return await handleTrackOrder(data.orderId)
+          case 'getOrderedEsims':
+            return await handleGetOrderedEsims(data)
+          case 'getEsimDetails':
+            return await handleGetEsimDetails(data.iccid)
+          case 'activateEsim':
+            return await handleActivateEsim(data)
+          case 'validateEsim':
+            return await handleValidateEsim(data.iccid)
+        }
+      }
       
       case 'getWalletTransactions':
         return await handleGetWalletTransactions(data)

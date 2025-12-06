@@ -62,22 +62,85 @@ const ProviderWebsite = () => {
   const [notFound, setNotFound] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Sanitize custom CSS to prevent XSS attacks
+  // CSS property whitelist for secure sanitization
+  const ALLOWED_CSS_PROPERTIES = new Set([
+    'color', 'background', 'background-color', 'background-image', 'background-position', 'background-size', 'background-repeat',
+    'font', 'font-family', 'font-size', 'font-weight', 'font-style', 'line-height', 'letter-spacing', 'text-align', 'text-decoration', 'text-transform',
+    'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+    'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+    'border', 'border-radius', 'border-color', 'border-width', 'border-style',
+    'width', 'max-width', 'min-width', 'height', 'max-height', 'min-height',
+    'display', 'flex', 'flex-direction', 'justify-content', 'align-items', 'gap',
+    'grid', 'grid-template-columns', 'grid-template-rows', 'grid-gap',
+    'position', 'top', 'right', 'bottom', 'left', 'z-index',
+    'opacity', 'visibility', 'overflow', 'box-shadow', 'transition', 'transform',
+  ]);
+
+  // Sanitize custom CSS using whitelist approach to prevent XSS attacks
   const sanitizedCSS = useMemo(() => {
     if (!website?.custom_css) return "";
     
-    // Basic CSS sanitization - remove script tags, javascript:, and dangerous properties
-    const cleanCSS = website.custom_css
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove script tags
-      .replace(/javascript:/gi, '') // Remove javascript: URLs
-      .replace(/expression\s*\(/gi, '') // Remove CSS expressions
-      .replace(/@import/gi, '') // Remove @import to prevent external resource loading
-      .replace(/behavior\s*:/gi, '') // Remove IE behavior property
-      .replace(/binding\s*:/gi, '') // Remove binding property
-      .replace(/url\s*\(\s*["']?\s*javascript:/gi, '') // Remove javascript URLs in url()
-      .replace(/url\s*\(\s*["']?\s*data:/gi, ''); // Remove data URLs to prevent data injection
-
-    return cleanCSS;
+    try {
+      // Parse CSS and only allow whitelisted properties
+      const cssLines = website.custom_css.split(/[;{}]/);
+      const sanitizedParts: string[] = [];
+      let currentSelector = '';
+      
+      for (const line of cssLines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        
+        // Check if it's a selector (contains no colon or starts with . # or tag)
+        if (trimmed.includes('{') || (!trimmed.includes(':') && (trimmed.startsWith('.') || trimmed.startsWith('#') || /^[a-zA-Z]/.test(trimmed)))) {
+          currentSelector = trimmed.replace('{', '').trim();
+          if (currentSelector && !currentSelector.includes('expression') && !currentSelector.includes('javascript')) {
+            sanitizedParts.push(`${currentSelector} {`);
+          }
+          continue;
+        }
+        
+        // Check if it's a property:value pair
+        const colonIndex = trimmed.indexOf(':');
+        if (colonIndex > 0) {
+          const property = trimmed.substring(0, colonIndex).trim().toLowerCase();
+          let value = trimmed.substring(colonIndex + 1).trim();
+          
+          // Only allow whitelisted properties
+          if (ALLOWED_CSS_PROPERTIES.has(property)) {
+            // Sanitize value - block dangerous patterns
+            if (!value.includes('javascript:') && 
+                !value.includes('expression(') && 
+                !value.includes('behavior:') &&
+                !value.includes('binding:') &&
+                !value.includes('@import') &&
+                !/url\s*\(\s*["']?\s*data:/i.test(value)) {
+              // For url() values, only allow https URLs
+              if (value.includes('url(')) {
+                value = value.replace(/url\s*\(\s*["']?([^"')]+)["']?\s*\)/gi, (match, url) => {
+                  if (url.startsWith('https://') || url.startsWith('/')) {
+                    return `url("${url}")`;
+                  }
+                  return '';
+                });
+              }
+              if (value) {
+                sanitizedParts.push(`  ${property}: ${value};`);
+              }
+            }
+          }
+        }
+        
+        // Close selector blocks
+        if (trimmed === '}' && sanitizedParts.length > 0 && sanitizedParts[sanitizedParts.length - 1].includes('{')) {
+          sanitizedParts.push('}');
+        }
+      }
+      
+      return sanitizedParts.join('\n');
+    } catch (error) {
+      console.error('CSS sanitization error:', error);
+      return ''; // Return empty string on any parsing error
+    }
   }, [website?.custom_css]);
 
   useEffect(() => {
