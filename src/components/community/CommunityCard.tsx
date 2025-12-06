@@ -17,8 +17,8 @@ export const CommunityCard = ({ item, orientation }: CommunityCardProps) => {
   const aspectRatio = orientation === 'portrait' ? 'aspect-[3/4]' : 'aspect-[16/9]';
   
   return (
-    <Link to={item.href} className="group block h-full">
-      <Card className="overflow-hidden h-full hover:shadow-xl transition-all duration-300 border-border/50">
+    <Link to={item.href} className="group block">
+      <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 border-border/50">
         <div className={`relative ${aspectRatio} w-full`}>
           <img 
             src={item.image} 
