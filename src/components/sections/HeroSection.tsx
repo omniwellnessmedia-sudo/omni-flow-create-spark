@@ -92,7 +92,7 @@ const HeroSection = () => {
       title: "Chief Kingsley's Wisdom",
       description: "Indigenous knowledge & cultural heritage tours",
       href: "/tours-retreats",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/chief%20kingsley%201.jpg",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Indigenous-Tours**(tntafrica)/Kalk%20Bay%201.jpg",
       category: "tours",
       author: "Cultural Experience",
       badge: "Travel",
