@@ -20,29 +20,30 @@ import {
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
 const images = {
-  // Core programme images
+  // Core programme images - all unique from Tufcat and Carthorse folder
   hero: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`,
   volunteer: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230717-WA0065.jpg`,
   fieldwork1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
-  fieldwork2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
-  // Cart Horse images
+  fieldwork2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230929_170146.jpg`,
+  // Cart Horse images - all unique
   cartHorse1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/587383422_1285925536894677_4345595592711419953_n.jpg`,
   cartHorse2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/574087632_1263656015788296_8646920016236566402_n.jpg`,
   cartHorse3: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
-  // TUFCAT images
+  cartHorse4: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/560022017_1402463328553412_5538853250832369992_n.jpg`,
+  // TUFCAT images - all unique
   tufcat1: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556100985_1378021790997566_6773851859108767885_n.jpg`,
   accommodation: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547230382_1363593685773710_4169595945775668111_n.jpg`,
   kitchen: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
   living: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`,
   workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
-// Community & Dr. Phil-afel / Valley of Plenty images - using Tufcat fallbacks for reliability
-  valleyOfPlenty: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`,
-  community: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`,
-  empowerment: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547230382_1363593685773710_4169595945775668111_n.jpg`,
-  empowerment2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
-  khoe: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/574087632_1263656015788296_8646920016236566402_n.jpg`,
-  khoe2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
-  roze: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
+  // Community images - unique from Tufcat folder
+  valleyOfPlenty: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230819_102326.jpg`,
+  community: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20231001_095356.jpg`,
+  empowerment: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20231005_160240.jpg`,
+  empowerment2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20231008_111532.jpg`,
+  khoe: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20231014_140004.jpg`,
+  khoe2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240325_122443.jpg`,
+  roze: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240328_122946.jpg`,
   // Omni Media images
   omniTeam: `${STORAGE_BASE}/Omni%20wellness%20team.jpg`,
   humanAnimal1: `${STORAGE_BASE}/HUMAN%20ANIMAL_CHAD-3.jpg`,
@@ -52,12 +53,19 @@ const images = {
   retreat2: `${STORAGE_BASE}/OMNI_OLIVETREE_RETREAT_2024-5.jpg`,
   landmark: `${STORAGE_BASE}/OMNI_LANDMARK%20FOUNDATION_IMAGES_JUNE%202024-2.jpg`,
   graduation: `${STORAGE_BASE}/OMNI_KALK%20BAY_%20GRADUATION-8.jpg`,
-  // Cape Town destination images
-  tableMountain: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=800&q=80",
-  winelands: "https://images.unsplash.com/photo-1516594798947-e65505dbb29d?w=800&q=80",
-  coastline: "https://images.unsplash.com/photo-1576485375217-d6a95e34d043?w=800&q=80",
-  sunset: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?w=800&q=80",
-  uwcCampus: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&q=80"
+  // Additional unique images
+  research: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240328_151157.jpg`,
+  publication: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240405_103531.jpg`,
+  indigenous: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240524_162256.jpg`,
+  immersion: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240623_113740.jpg`,
+  wellness: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240712_125316.jpg`,
+  therapy: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240901_122548.jpg`,
+  // Cape Town destination images - using actual storage images
+  tableMountain: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20240912_150945.jpg`,
+  winelands: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20241002_162340.jpg`,
+  coastline: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20250729_124830.jpg`,
+  sunset: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20220529-WA0007.jpg`,
+  uwcCampus: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/Sans%20titre-163.jpg`
 };
 
 // Programme constants
@@ -79,10 +87,10 @@ const partnerLogos = {
   omni: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`
 };
 
-// Fallback placeholder for broken images
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1551884170-09fb70a3a2ed?w=800&q=80";
+// Fallback placeholder for broken images - using storage image
+const FALLBACK_IMAGE = `${STORAGE_BASE}/Tufcat%20and%20Carthorse/Sans%20titre-24.jpg`;
 
-// Additional TUFCAT sanctuary images
+// Additional TUFCAT sanctuary images - all unique
 const tufcatGallery = [
   `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230807_093722.jpg`,
   `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1713679843832.jpg`,
@@ -91,30 +99,30 @@ const tufcatGallery = [
   `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230907-WA0016.jpg`
 ];
 
-// Cart Horse gallery images from Supabase storage
+// Cart Horse gallery images from Supabase storage - all unique
 const cartHorseGallery = [
   `${STORAGE_BASE}/Tufcat%20and%20Carthorse/589898659_1285925556894675_521226922354987204_n.jpg`,
-  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`,
+  `${STORAGE_BASE}/Tufcat%20and%20Carthorse/588551952_1285925380028026_397508256720982049_n.jpg`,
   `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565111747_1249493680537863_2087503467128195421_n.jpg`,
   `${STORAGE_BASE}/Tufcat%20and%20Carthorse/558852709_1243815057772392_7668626230595706187_n.jpg`
 ];
 
-// Feature images for "What Makes This Unique" section - using reliable Tufcat images
+// Feature images for "What Makes This Unique" section - all unique
 const featureImages = {
-  research: images.humanAnimal1,
-  indigenous: images.cartHorse2,
-  immersion: images.accommodation,
-  publication: images.graduation
+  research: images.research,
+  indigenous: images.indigenous,
+  immersion: images.immersion,
+  publication: images.publication
 };
 
-// Candidate persona images - using actual programme photos
+// Candidate persona images - all unique
 const candidateImages = {
-  students: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0017.jpg`,
-  students2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0018.jpg`,
-  practitioners: images.cartHorse2,
-  researchers: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230717-WA0065.jpg`,
+  students: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20221016-WA0018.jpg`,
+  students2: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230819-WA0054.jpg`,
+  practitioners: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230819-WA0120.jpg`,
+  researchers: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20240224-WA0045.jpg`,
   volunteers: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/560581362_1396149479184797_833395091101970838_n.jpg`,
-  community: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230929_170146.jpg`
+  community: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20240224-WA0067.jpg`
 };
 
 // Image with fallback component - shows initials when image fails
