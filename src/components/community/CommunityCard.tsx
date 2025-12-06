@@ -14,8 +14,8 @@ interface CommunityCardProps {
 }
 
 export const CommunityCard = ({ item, orientation }: CommunityCardProps) => {
-  // Use taller aspect ratio for more visual impact
-  const aspectRatio = 'aspect-[3/2.5]';
+  // Taller aspect ratio for more visual impact
+  const aspectRatio = 'aspect-[3/4]';
   
   return (
     <Link to={item.href} className="group block">
