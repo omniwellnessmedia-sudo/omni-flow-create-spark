@@ -35,14 +35,14 @@ const images = {
   kitchen: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`,
   living: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`,
   workshop: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`,
-  // Community & Dr. Phil-afel / Valley of Plenty images - fixed URL encoding
-  valleyOfPlenty: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
-  community: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
-  empowerment: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
-  empowerment2: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
-  khoe: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
-  khoe2: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
-  roze: `${STORAGE_BASE}/community-images%20(Workshop%20Photos)/ROZE.jpg`,
+// Community & Dr. Phil-afel / Valley of Plenty images - using consistent path encoding
+  valleyOfPlenty: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
+  community: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/_MG_9481-2.jpg`,
+  empowerment: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_.jpg`,
+  empowerment2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/OMNI_Women%20Empowerment%20course%20-%20the%20lookout_-4.jpg`,
+  khoe: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-2.jpg`,
+  khoe2: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/RR_OMNI_Khoe%20Meisie_WRM-5.jpg`,
+  roze: `${STORAGE_BASE}/%20community-images%20(Workshop%20Photos)/ROZE.jpg`,
   // Omni Media images
   omniTeam: `${STORAGE_BASE}/Omni%20wellness%20team.jpg`,
   humanAnimal1: `${STORAGE_BASE}/HUMAN%20ANIMAL_CHAD-3.jpg`,
@@ -69,13 +69,13 @@ const DEMO_ACCESS_CODE = 'DEMO2026';
 
 const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.humanAnimal1, images.tufcat1];
 
-// Partner logos - using Supabase storage URLs with external fallbacks
+// Partner logos - using Supabase storage URLs with fallbacks
 const partnerLogos = {
   carthorse: 'https://carthorse.org.za/wp/wp-content/uploads/2021/02/Cart-Horse-Logo-Blue-Square.png',
   tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
   drphilafel: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
   valleyOfPlenty: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
-  uwc: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/UWC-Crest.png`,
+  uwc: 'https://images.unsplash.com/photo-1562774053-701939374585?w=100&q=80', // UWC crest fallback
   omni: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`
 };
 
@@ -393,7 +393,6 @@ const PulseMeter = () => {
 };
 
 const UWCHumanAnimalProgram = () => {
-  console.log('[UWC Page] Component mounting, partners count:', partners.length);
   const [activeSection, setActiveSection] = useState('overview');
   const [isSticky, setIsSticky] = useState(false);
   const [heroIndex, setHeroIndex] = useState(0);
