@@ -445,9 +445,9 @@ const UWCHumanAnimalProgram = () => {
     { id: 'overview', label: 'Overview' },
     { id: 'partners', label: 'Our Partners' },
     { id: 'journey', label: 'Your Journey' },
+    { id: 'destination', label: 'Cape Town' },
     { id: 'qualification', label: 'Requirements' },
     { id: 'getting-ready', label: 'Preparation' },
-    { id: 'destination', label: 'Cape Town' },
     { id: 'guides', label: 'Your Guides' },
     { id: 'pricing', label: 'Investment' },
     { id: 'apply', label: 'Apply Now' }
@@ -1042,22 +1042,22 @@ const UWCHumanAnimalProgram = () => {
           {/* Partner Tabs Content */}
           <div id="partner-tabs" className="scroll-mt-24">
             <Tabs value={activePartner} onValueChange={setActivePartner} className="w-full">
-              <TabsList className="w-full flex-wrap h-auto p-3 bg-muted/30 border border-border rounded-3xl mb-10 gap-2">
+              <TabsList className="w-full flex-wrap h-auto p-4 bg-gradient-to-r from-muted/40 to-muted/60 backdrop-blur-sm border border-border/50 rounded-3xl mb-12 gap-3 shadow-lg">
                 {partners.map((partner) => (
                   <TabsTrigger 
                     key={partner.id} 
                     value={partner.id}
-                    className={`flex-1 min-w-[130px] py-4 px-5 rounded-2xl flex items-center gap-3 transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:${partner.color} data-[state=active]:text-white data-[state=active]:shadow-lg`}
+                    className={`flex-1 min-w-[150px] py-5 px-6 rounded-2xl flex items-center gap-4 transition-all duration-300 hover:scale-[1.03] hover:shadow-md data-[state=active]:bg-gradient-to-r data-[state=active]:${partner.color} data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:scale-[1.02] group`}
                   >
-                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center overflow-hidden">
+                    <div className="w-10 h-10 rounded-xl bg-white/30 flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
                       <PartnerLogo 
                         logo={partner.logo} 
                         name={partner.name}
                         shortName={partner.shortName}
-                        className="w-6 h-6 object-contain"
+                        className="w-7 h-7 object-contain"
                       />
                     </div>
-                    <span className="font-semibold hidden sm:inline">{partner.shortName}</span>
+                    <span className="font-bold text-base hidden sm:inline">{partner.shortName}</span>
                   </TabsTrigger>
                 ))}
               </TabsList>
