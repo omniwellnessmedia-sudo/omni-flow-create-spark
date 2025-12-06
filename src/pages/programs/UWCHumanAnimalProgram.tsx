@@ -295,7 +295,7 @@ const partners = [
     logo: partnerLogos.uwc,
     color: 'from-blue-500 to-indigo-600',
     bgColor: 'bg-blue-50 dark:bg-blue-950/30',
-    heroImage: images.graduation,
+    heroImage: `${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`,
     gallery: [images.graduation, images.retreat1],
     story: `Founded during apartheid to serve "non-white" students, UWC has evolved into a beacon of academic excellence with a deep commitment to social justice. The Psychology Department brings world-class research methodology and community psychology expertise, while the broader university provides the academic framework for this groundbreaking programme.`,
     roleInProgramme: `UWC is the **academic backbone** of the programme, providing official accreditation (NQF Level 7-8, 10 SAQA credits), research supervision, and the scholarly rigour that ensures your work meets publication standards. Opening and closing weeks take place on campus, connecting you to the broader academic community.`,
@@ -923,7 +923,7 @@ const UWCHumanAnimalProgram = () => {
                         </div>
                         
                         {/* Partner Logo - Large */}
-                        <div className={`w-24 h-24 mx-auto mb-5 rounded-2xl bg-white shadow-xl p-3 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:scale-110 ${
+                        <div className={`w-32 h-32 mx-auto mb-5 rounded-2xl bg-white shadow-xl p-4 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:scale-110 ${
                           isActive ? 'ring-4 ring-primary/30' : ''
                         }`}>
                           <PartnerLogo 
@@ -935,7 +935,7 @@ const UWCHumanAnimalProgram = () => {
                         </div>
                         
                         {/* Partner Image Preview */}
-                        <div className="relative w-full h-32 mb-4 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300">
+                        <div className="relative w-full h-44 mb-4 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300">
                           <ImageWithFallback 
                             src={item.partner.heroImage} 
                             alt={item.partner.name}
