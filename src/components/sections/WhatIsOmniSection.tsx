@@ -1,155 +1,166 @@
 import { useState } from "react";
-import { Play, Pause, MessageCircle, Sparkles, Heart, Globe, Users } from "lucide-react";
+import { MessageCircle, Sparkles, Heart, Globe, Users, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const thoughtBubbles = [
-  { text: "What is Omni?", icon: MessageCircle, delay: "0s" },
-  { text: "Conscious Media", icon: Sparkles, delay: "0.5s" },
-  { text: "Wellness First", icon: Heart, delay: "1s" },
-  { text: "South Africa", icon: Globe, delay: "1.5s" },
-  { text: "Community", icon: Users, delay: "2s" },
+const pillars = [
+  { text: "Inspiration", icon: Sparkles, color: "from-amber-500 to-orange-500" },
+  { text: "Education", icon: MessageCircle, color: "from-emerald-500 to-teal-500" },
+  { text: "Empowerment", icon: Heart, color: "from-rose-500 to-pink-500" },
+  { text: "Wellness", icon: Globe, color: "from-blue-500 to-cyan-500" },
+];
+
+const stats = [
+  { label: "Content Pillars", value: "4", icon: Sparkles },
+  { label: "Community Focus", value: "SA", icon: Users },
+  { label: "Mission", value: "Conscious", icon: Heart },
 ];
 
 export const WhatIsOmniSection = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hoveredBubble, setHoveredBubble] = useState<number | null>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [activePillar, setActivePillar] = useState<number | null>(null);
 
   return (
-    <section className="relative py-16 md:py-20 overflow-hidden bg-gradient-to-b from-muted/50 via-background to-muted/30">
-      {/* Enhanced background pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.08),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--accent)/0.08),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,hsl(var(--primary)/0.02),transparent)]" />
+    <section className="relative py-20 md:py-28 overflow-hidden">
+      {/* Elegant background with subtle gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.05),transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,hsl(var(--accent)/0.05),transparent_70%)]" />
       
-      <div className="container mx-auto px-4">
+      {/* Decorative geometric shapes */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
-          {/* Header with interactive thought bubbles */}
-          <div className="text-center mb-10 relative">
-            {/* Floating interactive thought bubbles */}
-            <div className="absolute inset-0 pointer-events-auto">
-              {thoughtBubbles.map((bubble, index) => (
-                <div
-                  key={index}
-                  onMouseEnter={() => setHoveredBubble(index)}
-                  onMouseLeave={() => setHoveredBubble(null)}
-                  className={cn(
-                    "absolute hidden md:flex items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer",
-                    "bg-background/90 backdrop-blur-md border-2 shadow-xl",
-                    "animate-float opacity-0 transition-all duration-300",
-                    hoveredBubble === index 
-                      ? "border-primary scale-110 shadow-primary/30 bg-primary/5" 
-                      : "border-border/60 hover:border-primary/50 hover:scale-105",
-                    index % 2 === 0 ? "left-0 lg:left-[3%]" : "right-0 lg:right-[3%]"
-                  )}
-                  style={{
-                    top: `${10 + index * 18}%`,
-                    animationDelay: bubble.delay,
-                    animationFillMode: "forwards",
-                  }}
-                >
-                  <bubble.icon className={cn(
-                    "h-4 w-4 transition-colors duration-300",
-                    hoveredBubble === index ? "text-primary" : "text-primary/70"
-                  )} />
-                  <span className={cn(
-                    "text-sm font-semibold transition-colors duration-300",
-                    hoveredBubble === index ? "text-primary" : "text-foreground/80"
-                  )}>{bubble.text}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/15 border-2 border-primary/30 mb-6 shadow-lg shadow-primary/10 hover:scale-105 transition-transform duration-300 cursor-default">
-              <MessageCircle className="h-4 w-4 text-primary" />
-              <span className="text-sm font-bold text-primary">Meet the Founder</span>
+          
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-fade-in">
+              <Play className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-primary tracking-wide">Meet the Founder</span>
             </div>
             
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               <span className="text-foreground">What is </span>
-              <span className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent drop-shadow-sm">
-                Omni Wellness Media
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-primary via-emerald-500 to-teal-500 bg-clip-text text-transparent">
+                  Omni Wellness Media
+                </span>
+                <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-emerald-500/50 to-teal-500/50 rounded-full blur-sm" />
               </span>
               <span className="text-foreground">?</span>
             </h2>
             
-            <p className="text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Hear from Chad Cupido as he introduces our mission to bridge wellness, 
               outreach & media — empowering South Africa's journey to health & consciousness.
             </p>
           </div>
 
-          {/* Video container */}
-          <div className="relative max-w-4xl mx-auto">
-            {/* Decorative elements */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-3xl blur-2xl opacity-50" />
+          {/* Content Pillars - Interactive Pills */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {pillars.map((pillar, index) => (
+              <button
+                key={index}
+                onMouseEnter={() => setActivePillar(index)}
+                onMouseLeave={() => setActivePillar(null)}
+                className={cn(
+                  "flex items-center gap-2 px-5 py-3 rounded-full border-2 transition-all duration-300",
+                  "bg-background/80 backdrop-blur-sm shadow-lg",
+                  activePillar === index 
+                    ? "border-primary scale-105 shadow-xl shadow-primary/20" 
+                    : "border-border/50 hover:border-primary/50 hover:scale-102"
+                )}
+              >
+                <div className={cn(
+                  "p-1.5 rounded-full bg-gradient-to-r",
+                  pillar.color
+                )}>
+                  <pillar.icon className="h-4 w-4 text-white" />
+                </div>
+                <span className={cn(
+                  "font-semibold transition-colors duration-300",
+                  activePillar === index ? "text-primary" : "text-foreground"
+                )}>
+                  {pillar.text}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Video Container with Premium Styling */}
+          <div 
+            className="relative max-w-4xl mx-auto"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            {/* Outer glow effect */}
+            <div className={cn(
+              "absolute -inset-4 rounded-3xl transition-all duration-500",
+              "bg-gradient-to-r from-primary/20 via-emerald-500/20 to-teal-500/20",
+              isHovering ? "blur-2xl opacity-80 scale-105" : "blur-xl opacity-50"
+            )} />
             
-            {/* Video wrapper */}
-            <div 
-              className={cn(
-                "relative rounded-2xl overflow-hidden shadow-2xl",
-                "border border-border/50 bg-background",
-                "transition-all duration-500",
-                isPlaying ? "ring-4 ring-primary/30" : "hover:ring-2 hover:ring-primary/20"
-              )}
-            >
-              {/* Aspect ratio container */}
-              <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/ZOoaiV-IiiU?rel=0&modestbranding=1"
-                  title="The conscious content creators - Omni Wellness Media"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                  onLoad={() => setIsPlaying(false)}
-                />
+            {/* Video wrapper with elegant border */}
+            <div className={cn(
+              "relative rounded-2xl overflow-hidden",
+              "bg-gradient-to-r from-primary/10 via-emerald-500/10 to-teal-500/10 p-[2px]",
+              "shadow-2xl transition-all duration-500",
+              isHovering && "shadow-primary/20"
+            )}>
+              <div className="bg-background rounded-2xl overflow-hidden">
+                {/* Aspect ratio container */}
+                <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/ZOoaiV-IiiU?rel=0&modestbranding=1"
+                    title="The conscious content creators - Omni Wellness Media"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Bottom accent */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent rounded-full" />
+            {/* Bottom accent line */}
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-primary/60 to-transparent rounded-full" />
           </div>
 
-          {/* Bottom tagline */}
-          <div className="text-center mt-12">
-            <p className="text-sm text-muted-foreground italic">
-              "Creating content that uplifts, educates, and inspires real change"
-            </p>
+          {/* Bottom Section - Quote & Stats */}
+          <div className="text-center mt-16">
+            {/* Quote */}
+            <blockquote className="relative max-w-2xl mx-auto mb-12">
+              <div className="absolute -left-4 -top-4 text-6xl text-primary/20 font-serif">"</div>
+              <p className="text-lg md:text-xl text-muted-foreground italic leading-relaxed">
+                Creating content that uplifts, educates, and inspires real change
+              </p>
+              <div className="absolute -right-4 -bottom-4 text-6xl text-primary/20 font-serif rotate-180">"</div>
+            </blockquote>
             
-            {/* Stats row */}
-            <div className="flex flex-wrap justify-center gap-8 mt-8">
-              {[
-                { label: "Content Pillars", value: "4" },
-                { label: "Community Focus", value: "SA" },
-                { label: "Mission", value: "Conscious" },
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-2xl font-bold text-primary">{stat.value}</div>
-                  <div className="text-xs text-muted-foreground uppercase tracking-wide">{stat.label}</div>
+            {/* Stats Grid */}
+            <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+              {stats.map((stat, index) => (
+                <div 
+                  key={index} 
+                  className="group flex flex-col items-center p-4 rounded-xl transition-all duration-300 hover:bg-muted/50"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <stat.icon className="h-5 w-5 text-primary/70 group-hover:text-primary transition-colors" />
+                    <span className="text-3xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent">
+                      {stat.value}
+                    </span>
+                  </div>
+                  <span className="text-xs text-muted-foreground uppercase tracking-widest font-medium">
+                    {stat.label}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-
-      {/* CSS for floating animation */}
-      <style>{`
-        @keyframes float {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-float {
-          animation: float 0.6s ease-out forwards;
-        }
-      `}</style>
     </section>
   );
 };
