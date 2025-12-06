@@ -1074,43 +1074,47 @@ const UWCHumanAnimalProgram = () => {
               {/* Enhanced Partner Tab Navigation */}
               <div className="relative mb-16">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-primary/5 rounded-3xl blur-xl" />
-                <TabsList className="relative w-full flex-wrap h-auto p-6 bg-gradient-to-br from-background/95 via-muted/50 to-background/95 backdrop-blur-md border-2 border-border/60 rounded-3xl gap-4 shadow-2xl">
-                  {partners.map((partner) => (
-                    <TabsTrigger 
-                      key={partner.id} 
-                      value={partner.id}
-                      className={`relative flex-1 min-w-[180px] py-6 px-8 rounded-2xl flex flex-col items-center gap-3 transition-all duration-500 
-                        hover:scale-[1.05] hover:shadow-xl hover:bg-background/80
-                        data-[state=active]:bg-gradient-to-br data-[state=active]:${partner.color} data-[state=active]:text-white 
-                        data-[state=active]:shadow-2xl data-[state=active]:scale-[1.05] data-[state=active]:border-2 data-[state=active]:border-white/20
-                        group overflow-hidden`}
-                    >
-                      {/* Active indicator glow */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-white/0 opacity-0 data-[state=active]:opacity-100 transition-opacity" />
-                      
-                      {/* Logo Container - Much Bigger */}
-                      <div className="relative w-20 h-20 rounded-2xl bg-white shadow-lg p-3 flex items-center justify-center overflow-hidden 
-                        group-hover:shadow-xl group-hover:scale-105 transition-all duration-300
-                        group-data-[state=active]:ring-4 group-data-[state=active]:ring-white/30">
-                        <PartnerLogo 
-                          logo={partner.logo} 
-                          name={partner.name}
-                          shortName={partner.shortName}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                      
-                      {/* Partner Name */}
-                      <span className="font-bold text-lg text-center leading-tight group-data-[state=active]:text-white">
-                        {partner.shortName}
-                      </span>
-                      
-                      {/* Subtle tagline on hover/active */}
-                      <span className="text-xs opacity-0 group-hover:opacity-70 group-data-[state=active]:opacity-90 transition-opacity text-center max-w-[150px] truncate">
-                        {partner.tagline}
-                      </span>
-                    </TabsTrigger>
-                  ))}
+                <TabsList className="relative w-full flex-wrap h-auto p-8 bg-background backdrop-blur-md border-4 border-border rounded-3xl gap-6 shadow-2xl">
+                  {partners.map((partner) => {
+                    const isActive = activePartner === partner.id;
+                    return (
+                      <TabsTrigger 
+                        key={partner.id} 
+                        value={partner.id}
+                        className={`relative flex-1 min-w-[200px] py-8 px-6 rounded-2xl flex flex-col items-center gap-4 transition-all duration-300 
+                          border-3 
+                          ${isActive 
+                            ? 'bg-primary shadow-2xl scale-[1.03] border-primary' 
+                            : 'bg-card hover:bg-muted border-border hover:border-primary/50 hover:shadow-lg'
+                          }
+                          group overflow-hidden`}
+                      >
+                        {/* Logo Container - Much Bigger */}
+                        <div className={`relative w-28 h-28 rounded-2xl bg-white shadow-xl p-4 flex items-center justify-center overflow-hidden 
+                          transition-all duration-300
+                          ${isActive ? 'ring-4 ring-primary-foreground/30 scale-105' : 'group-hover:shadow-2xl group-hover:scale-105'}`}>
+                          <PartnerLogo 
+                            logo={partner.logo} 
+                            name={partner.name}
+                            shortName={partner.shortName}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        
+                        {/* Partner Name - Always Visible */}
+                        <span className={`font-bold text-xl text-center leading-tight transition-colors duration-300
+                          ${isActive ? 'text-primary-foreground' : 'text-foreground'}`}>
+                          {partner.shortName}
+                        </span>
+                        
+                        {/* Tagline - Always Visible */}
+                        <span className={`text-sm text-center max-w-[180px] leading-snug transition-colors duration-300
+                          ${isActive ? 'text-primary-foreground/90' : 'text-muted-foreground'}`}>
+                          {partner.tagline}
+                        </span>
+                      </TabsTrigger>
+                    );
+                  })}
                 </TabsList>
               </div>
 
