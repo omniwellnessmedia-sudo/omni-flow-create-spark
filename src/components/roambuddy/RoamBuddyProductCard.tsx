@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PeaceOfMindScore } from "./PeaceOfMindScore";
 import { useCurrencyConverter } from "@/hooks/useCurrencyConverter";
-import { Globe, Award, Shield, Wifi, Signal } from "lucide-react";
+import { Globe, Award, Shield, Wifi, Signal, DollarSign, RefreshCw } from "lucide-react";
 
 interface RoamBuddyProductCardProps {
   planName: string;
@@ -20,6 +21,9 @@ interface RoamBuddyProductCardProps {
   isFeatured?: boolean;
   isPopular?: boolean;
   curatorNote?: string;
+  selectedCurrency?: 'USD' | 'ZAR';
+  onCurrencyChange?: (currency: 'USD' | 'ZAR') => void;
+  showCurrencyToggle?: boolean;
   onSelect?: () => void;
 }
 
@@ -38,9 +42,21 @@ export const RoamBuddyProductCard = ({
   isFeatured = false,
   isPopular = false,
   curatorNote,
+  selectedCurrency = 'USD',
+  onCurrencyChange,
+  showCurrencyToggle = true,
   onSelect
 }: RoamBuddyProductCardProps) => {
   const { formatZAR, formatUSD, convertZARToUSD, exchangeRates } = useCurrencyConverter();
+  
+  // Local currency state for this card
+  const [localCurrency, setLocalCurrency] = useState<'USD' | 'ZAR'>(selectedCurrency);
+  
+  const handleCurrencyToggle = () => {
+    const newCurrency = localCurrency === 'USD' ? 'ZAR' : 'USD';
+    setLocalCurrency(newCurrency);
+    onCurrencyChange?.(newCurrency);
+  };
 
   // Calculate display prices based on whether price is already in USD
   const displayPriceUSD = priceIsUSD ? price : convertZARToUSD(price);
@@ -207,16 +223,29 @@ export const RoamBuddyProductCard = ({
           )}
 
           <div className="pt-4 space-y-4">
-            <div className="flex items-baseline justify-between bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">From</p>
-                <p className="text-3xl font-bold text-primary">
-                  {formatUSD(displayPriceUSD)}
-                </p>
+            <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm text-muted-foreground">Price</p>
+                {showCurrencyToggle && (
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCurrencyToggle();
+                    }}
+                    className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors bg-background/80 px-2 py-1 rounded-full border border-primary/20 hover:border-primary/40"
+                  >
+                    <RefreshCw className="h-3 w-3" />
+                    {localCurrency === 'USD' ? 'Show ZAR' : 'Show USD'}
+                  </button>
+                )}
               </div>
-              <div className="text-right">
-                <p className="text-xs text-muted-foreground">or</p>
-                <p className="text-lg font-semibold text-foreground/70">{formatZAR(displayPriceZAR)}</p>
+              <div className="flex items-baseline justify-between">
+                <p className="text-3xl font-bold text-primary">
+                  {localCurrency === 'USD' ? formatUSD(displayPriceUSD) : formatZAR(displayPriceZAR)}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  ≈ {localCurrency === 'USD' ? formatZAR(displayPriceZAR) : formatUSD(displayPriceUSD)}
+                </p>
               </div>
             </div>
 

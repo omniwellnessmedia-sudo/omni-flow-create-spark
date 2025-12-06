@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Smartphone, Loader2, Globe, Map } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Search, Smartphone, Loader2, Globe, Map, ChevronRight, Wifi, Calendar, Database } from "lucide-react";
 import { useRoamBuddyAPI } from "@/hooks/useRoamBuddyAPI";
 import { CurrencyToggle } from "./CurrencyToggle";
+import { Badge } from "@/components/ui/badge";
 
 interface CountrySearchProps {
   onCountrySelect: (country: string) => void;
@@ -13,122 +15,164 @@ interface CountrySearchProps {
   onCurrencyChange?: (currency: 'USD' | 'ZAR') => void;
 }
 
+interface RegionCategory {
+  id: string;
+  name: string;
+  plans: RegionalPlan[];
+}
+
 interface RegionalPlan {
   id: string;
   name: string;
-  description: string;
-  countries: string[];
+  countries: number;
   price: number;
   data: string;
   validity: string;
+  speed?: string;
 }
 
 interface GlobalPlan {
   id: string;
   name: string;
-  description: string;
-  coverage: string;
+  countries: number;
   price: number;
   data: string;
   validity: string;
+  speed?: string;
 }
 
-// Regional eSIM plans
-const regionalPlans: RegionalPlan[] = [
+// Regional eSIM categories with expandable accordion
+const regionalCategories: RegionCategory[] = [
   {
-    id: "europe",
-    name: "Europe eSIM",
-    description: "Coverage across 40+ European countries",
-    countries: ["France", "Germany", "Italy", "Spain", "UK", "Netherlands", "Belgium", "Switzerland", "Austria", "Portugal", "Greece", "Ireland", "Sweden", "Norway", "Denmark", "Finland", "Poland", "Czech Republic", "Hungary", "Croatia"],
-    price: 19.99,
-    data: "5GB",
-    validity: "30 days"
+    id: "africa",
+    name: "Africa",
+    plans: [
+      { id: "africa-1gb", name: "Africa 1GB", countries: 35, price: 9, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "africa-2gb", name: "Africa 2GB", countries: 35, price: 16.50, data: "2 GB", validity: "15 Days", speed: "4G/LTE" },
+      { id: "africa-3gb", name: "Africa 3GB", countries: 35, price: 24, data: "3 GB", validity: "30 Days", speed: "4G/LTE" },
+      { id: "africa-5gb", name: "Africa 5GB", countries: 35, price: 35, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+      { id: "africa-10gb", name: "Africa 10GB", countries: 35, price: 55, data: "10 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
   },
   {
     id: "asia",
-    name: "Asia Pacific eSIM",
-    description: "Coverage across 20+ Asian countries",
-    countries: ["Japan", "South Korea", "Thailand", "Vietnam", "Singapore", "Malaysia", "Indonesia", "Philippines", "Hong Kong", "Taiwan", "India", "Sri Lanka", "Cambodia", "Laos", "Myanmar"],
-    price: 24.99,
-    data: "5GB",
-    validity: "30 days"
+    name: "Asia",
+    plans: [
+      { id: "asia-1gb", name: "CloudFlex 1GB", countries: 14, price: 9, data: "1 GB", validity: "7 Days", speed: "4G/5G" },
+      { id: "asia-3gb", name: "CloudFlex 3GB", countries: 14, price: 24, data: "3 GB", validity: "30 Days", speed: "4G/5G" },
+      { id: "asia-5gb", name: "CloudFlex 5GB", countries: 14, price: 32, data: "5 GB", validity: "30 Days", speed: "4G/5G" },
+      { id: "asia-20gb", name: "CloudFlex 20GB", countries: 14, price: 85, data: "20 GB", validity: "365 Days", speed: "4G/5G" },
+    ]
   },
   {
-    id: "africa",
-    name: "Africa eSIM",
-    description: "Coverage across 15+ African countries",
-    countries: ["South Africa", "Kenya", "Tanzania", "Morocco", "Egypt", "Nigeria", "Ghana", "Ethiopia", "Rwanda", "Uganda", "Senegal", "Ivory Coast", "Cameroon", "Botswana", "Namibia"],
-    price: 29.99,
-    data: "3GB",
-    validity: "30 days"
+    id: "europe",
+    name: "Europe",
+    plans: [
+      { id: "eu-1gb", name: "Globe Plan 1GB", countries: 35, price: 5, data: "1 GB", validity: "7 Days", speed: "4G/5G" },
+      { id: "eu-2gb", name: "Globe 2GB", countries: 35, price: 12, data: "2 GB", validity: "15 Days", speed: "4G/5G" },
+      { id: "eu-5gb", name: "Globe Plan 5GB", countries: 35, price: 20, data: "5 GB", validity: "30 Days", speed: "4G/5G" },
+      { id: "eu-10gb", name: "Globe Plan 10GB", countries: 35, price: 33, data: "10 GB", validity: "30 Days", speed: "4G/5G" },
+      { id: "eu-50gb", name: "Globe 50GB", countries: 35, price: 120, data: "50 GB", validity: "365 Days", speed: "4G/5G" },
+      { id: "eu-100gb", name: "Cloud 100GB 365D", countries: 35, price: 200, data: "100 GB", validity: "365 Days", speed: "4G/5G" },
+    ]
   },
   {
-    id: "americas",
-    name: "Americas eSIM",
-    description: "Coverage across North & South America",
-    countries: ["USA", "Canada", "Mexico", "Brazil", "Argentina", "Chile", "Colombia", "Peru", "Costa Rica", "Panama", "Puerto Rico", "Dominican Republic"],
-    price: 24.99,
-    data: "5GB",
-    validity: "30 days"
+    id: "latam",
+    name: "LATAM",
+    plans: [
+      { id: "latam-1gb", name: "LATAM 1GB", countries: 20, price: 12, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "latam-3gb", name: "LATAM 3GB", countries: 20, price: 28, data: "3 GB", validity: "30 Days", speed: "4G/LTE" },
+      { id: "latam-5gb", name: "LATAM 5GB", countries: 20, price: 40, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
   },
   {
-    id: "middle-east",
-    name: "Middle East eSIM",
-    description: "Coverage across Middle Eastern countries",
-    countries: ["UAE", "Saudi Arabia", "Qatar", "Bahrain", "Kuwait", "Oman", "Jordan", "Israel", "Turkey", "Lebanon"],
-    price: 22.99,
-    data: "3GB",
-    validity: "30 days"
+    id: "north-america",
+    name: "North America",
+    plans: [
+      { id: "na-1gb", name: "North America 1GB", countries: 3, price: 8, data: "1 GB", validity: "7 Days", speed: "4G/5G" },
+      { id: "na-5gb", name: "North America 5GB", countries: 3, price: 25, data: "5 GB", validity: "30 Days", speed: "4G/5G" },
+      { id: "na-10gb", name: "North America 10GB", countries: 3, price: 45, data: "10 GB", validity: "30 Days", speed: "4G/5G" },
+    ]
   },
   {
     id: "oceania",
-    name: "Oceania eSIM",
-    description: "Coverage across Australia & Pacific Islands",
-    countries: ["Australia", "New Zealand", "Fiji", "Papua New Guinea", "Guam"],
-    price: 19.99,
-    data: "5GB",
-    validity: "30 days"
-  }
+    name: "Oceania",
+    plans: [
+      { id: "oceania-1gb", name: "Oceania 1GB", countries: 5, price: 10, data: "1 GB", validity: "7 Days", speed: "4G/5G" },
+      { id: "oceania-5gb", name: "Oceania 5GB", countries: 5, price: 35, data: "5 GB", validity: "30 Days", speed: "4G/5G" },
+    ]
+  },
+  {
+    id: "middle-east",
+    name: "Middle East",
+    plans: [
+      { id: "me-1gb", name: "Middle East 1GB", countries: 12, price: 11, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "me-5gb", name: "Middle East 5GB", countries: 12, price: 38, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
+  },
+  {
+    id: "caribbean",
+    name: "Caribbean",
+    plans: [
+      { id: "carib-1gb", name: "Caribbean 1GB", countries: 15, price: 12, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "carib-5gb", name: "Caribbean 5GB", countries: 15, price: 42, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
+  },
+  {
+    id: "cis",
+    name: "CIS",
+    plans: [
+      { id: "cis-1gb", name: "CIS 1GB", countries: 8, price: 10, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "cis-5gb", name: "CIS 5GB", countries: 8, price: 35, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
+  },
+  {
+    id: "central-asia",
+    name: "Central Asia",
+    plans: [
+      { id: "ca-1gb", name: "Central Asia 1GB", countries: 6, price: 12, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "ca-5gb", name: "Central Asia 5GB", countries: 6, price: 40, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
+  },
+  {
+    id: "east-africa",
+    name: "East Africa",
+    plans: [
+      { id: "ea-1gb", name: "East Africa 1GB", countries: 10, price: 11, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "ea-5gb", name: "East Africa 5GB", countries: 10, price: 38, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
+  },
+  {
+    id: "mena",
+    name: "Middle East and North Africa",
+    plans: [
+      { id: "mena-1gb", name: "MENA 1GB", countries: 18, price: 13, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "mena-5gb", name: "MENA 5GB", countries: 18, price: 45, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
+  },
+  {
+    id: "cenam",
+    name: "CENAM",
+    plans: [
+      { id: "cenam-1gb", name: "CENAM 1GB", countries: 12, price: 14, data: "1 GB", validity: "7 Days", speed: "4G/LTE" },
+      { id: "cenam-5gb", name: "CENAM 5GB", countries: 12, price: 48, data: "5 GB", validity: "30 Days", speed: "4G/LTE" },
+    ]
+  },
 ];
 
 // Global eSIM plans
 const globalPlans: GlobalPlan[] = [
-  {
-    id: "global-lite",
-    name: "Global Lite",
-    description: "Perfect for light travelers",
-    coverage: "100+ countries worldwide",
-    price: 29.99,
-    data: "1GB",
-    validity: "30 days"
-  },
-  {
-    id: "global-standard",
-    name: "Global Standard",
-    description: "Most popular for international travelers",
-    coverage: "120+ countries worldwide",
-    price: 49.99,
-    data: "3GB",
-    validity: "30 days"
-  },
-  {
-    id: "global-pro",
-    name: "Global Pro",
-    description: "For heavy data users & digital nomads",
-    coverage: "140+ countries worldwide",
-    price: 79.99,
-    data: "5GB",
-    validity: "30 days"
-  },
-  {
-    id: "global-unlimited",
-    name: "Global Unlimited",
-    description: "Unlimited data worldwide",
-    coverage: "150+ countries worldwide",
-    price: 129.99,
-    data: "Unlimited",
-    validity: "30 days"
-  }
+  { id: "global-1gb", name: "Global Plan 1GB", countries: 135, price: 5, data: "1 GB", validity: "7 Days", speed: "4G/5G" },
+  { id: "global-2gb", name: "Global 2GB", countries: 135, price: 10, data: "2 GB", validity: "15 Days", speed: "4G/5G" },
+  { id: "global-3gb", name: "Global 3GB", countries: 135, price: 22, data: "3 GB", validity: "30 Days", speed: "4G/5G" },
+  { id: "global-5gb", name: "Global 5GB", countries: 135, price: 35, data: "5 GB", validity: "60 Days", speed: "4G/5G" },
+  { id: "global-10gb", name: "Global Pay 10GB", countries: 135, price: 60, data: "10 GB", validity: "180 Days", speed: "4G/5G" },
+  { id: "global-20gb", name: "StradaFlex 20GB", countries: 135, price: 100, data: "20 GB", validity: "30 Days", speed: "4G/5G" },
+  { id: "global-unl-1d", name: "Global UNL 1D", countries: 30, price: 15, data: "Unlimited GB", validity: "1 Days", speed: "4G/5G" },
+  { id: "global-unl-3d", name: "Globe UNL S2", countries: 135, price: 40, data: "Unlimited GB", validity: "3 Days", speed: "4G/5G" },
+  { id: "global-unl-5d", name: "CloudFlex UNL 5D", countries: 100, price: 60, data: "Unlimited GB", validity: "5 Days", speed: "4G/5G" },
+  { id: "global-unl-7d", name: "United UNL 7D", countries: 70, price: 75, data: "Unlimited GB", validity: "7 Days", speed: "4G/5G" },
+  { id: "global-unl-10d", name: "Gotta UNL 100", countries: 35, price: 100, data: "Unlimited GB", validity: "10 Days", speed: "4G/5G" },
 ];
 
 export const CountrySearch = ({ 
@@ -295,109 +339,121 @@ export const CountrySearch = ({
               )}
             </TabsContent>
 
-            <TabsContent value="regional" className="space-y-6">
-              <p className="text-center text-muted-foreground mb-6">
-                Save more with regional plans covering multiple countries
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {regionalPlans.map((plan) => (
-                  <div 
-                    key={plan.id}
-                    className="bg-background rounded-xl border border-border p-6 hover:border-primary hover:shadow-lg transition-all duration-200"
+            <TabsContent value="regional" className="space-y-4">
+              <Accordion type="single" collapsible className="w-full space-y-2">
+                {regionalCategories.map((category) => (
+                  <AccordionItem 
+                    key={category.id} 
+                    value={category.id}
+                    className="bg-background rounded-xl border border-border overflow-hidden"
                   >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Map className="h-6 w-6 text-primary" />
+                    <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-muted/50 transition-colors">
+                      <div className="flex items-center justify-between w-full pr-4">
+                        <span className="font-semibold text-foreground text-left">{category.name}</span>
+                        <Badge variant="secondary" className="ml-auto mr-4">
+                          {category.plans.length} plans
+                        </Badge>
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-foreground">{plan.name}</h3>
-                        <p className="text-xs text-muted-foreground">{plan.description}</p>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-0 pb-0">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-muted/30">
+                        {category.plans.map((plan) => (
+                          <div 
+                            key={plan.id}
+                            className="bg-background rounded-lg border border-border p-4 hover:border-primary hover:shadow-md transition-all duration-200"
+                          >
+                            <div className="flex items-start justify-between mb-3">
+                              <div>
+                                <h4 className="font-semibold text-sm text-foreground">{plan.name}</h4>
+                                <p className="text-xs text-muted-foreground">{plan.countries} Countries</p>
+                              </div>
+                              <Badge variant="outline" className="text-xs bg-green-500/10 text-green-700 border-green-200">
+                                {formatPrice(plan.price)}
+                              </Badge>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-2 text-xs mb-4">
+                              <div className="flex items-center gap-1.5 text-muted-foreground">
+                                <Database className="h-3 w-3" />
+                                <span>{plan.data}</span>
+                              </div>
+                              <div className="flex items-center gap-1.5 text-muted-foreground">
+                                <Wifi className="h-3 w-3" />
+                                <span>{plan.speed || '4G/LTE'}</span>
+                              </div>
+                              <div className="flex items-center gap-1.5 text-muted-foreground col-span-2">
+                                <Calendar className="h-3 w-3" />
+                                <span>{plan.validity}</span>
+                              </div>
+                            </div>
+                            
+                            <Button 
+                              size="sm" 
+                              className="w-full bg-green-500 hover:bg-green-600 text-white text-xs"
+                              onClick={() => onCountrySelect(plan.name)}
+                            >
+                              View Offer
+                            </Button>
+                            <p className="text-center text-xs text-muted-foreground mt-2">
+                              Get for {formatPrice(plan.price)} 🛒
+                            </p>
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                    
-                    <div className="space-y-2 mb-4">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Data:</span>
-                        <span className="font-medium text-foreground">{plan.data}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Validity:</span>
-                        <span className="font-medium text-foreground">{plan.validity}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Countries:</span>
-                        <span className="font-medium text-foreground">{plan.countries.length}+</span>
-                      </div>
-                    </div>
-                    
-                    <div className="text-xs text-muted-foreground mb-4 line-clamp-2">
-                      Includes: {plan.countries.slice(0, 5).join(", ")}...
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-primary">{formatPrice(plan.price)}</span>
-                      <Button size="sm" onClick={() => onCountrySelect(plan.name)}>
-                        Select Plan
-                      </Button>
-                    </div>
-                  </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 ))}
-              </div>
+              </Accordion>
             </TabsContent>
 
-            <TabsContent value="global" className="space-y-6">
+            <TabsContent value="global" className="space-y-4">
               <p className="text-center text-muted-foreground mb-6">
                 One plan, worldwide coverage - perfect for multi-destination trips
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {globalPlans.map((plan, index) => (
                   <div 
                     key={plan.id}
-                    className={`bg-background rounded-xl border p-6 hover:shadow-lg transition-all duration-200 ${
-                      index === 1 ? 'border-primary ring-2 ring-primary/20' : 'border-border hover:border-primary'
+                    className={`bg-background rounded-lg border p-4 hover:shadow-lg transition-all duration-200 ${
+                      index === 2 ? 'border-primary ring-2 ring-primary/20' : 'border-border hover:border-primary'
                     }`}
                   >
-                    {index === 1 && (
-                      <div className="text-xs font-semibold text-primary mb-2">
-                        ★ MOST POPULAR
-                      </div>
-                    )}
-                    
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Globe className="h-6 w-6 text-primary" />
-                      </div>
+                    <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-semibold text-foreground">{plan.name}</h3>
-                        <p className="text-xs text-muted-foreground">{plan.description}</p>
+                        <h4 className="font-semibold text-sm text-foreground">{plan.name}</h4>
+                        <p className="text-xs text-muted-foreground">{plan.countries} Countries</p>
+                      </div>
+                      <Badge variant="outline" className="text-xs bg-green-500/10 text-green-700 border-green-200">
+                        {formatPrice(plan.price)}
+                      </Badge>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-xs mb-4">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Database className="h-3 w-3" />
+                        <span>{plan.data}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Wifi className="h-3 w-3" />
+                        <span>{plan.speed || '4G/5G'}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-muted-foreground col-span-2">
+                        <Calendar className="h-3 w-3" />
+                        <span>{plan.validity}</span>
                       </div>
                     </div>
                     
-                    <div className="space-y-2 mb-4">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Data:</span>
-                        <span className="font-medium text-foreground">{plan.data}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Validity:</span>
-                        <span className="font-medium text-foreground">{plan.validity}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Coverage:</span>
-                        <span className="font-medium text-foreground">{plan.coverage}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-primary">{formatPrice(plan.price)}</span>
-                      <Button 
-                        size="sm" 
-                        variant={index === 1 ? "default" : "outline"}
-                        onClick={() => onCountrySelect(plan.name)}
-                      >
-                        Select Plan
-                      </Button>
-                    </div>
+                    <Button 
+                      size="sm" 
+                      className={`w-full text-xs ${index === 2 ? 'bg-green-500 hover:bg-green-600 text-white' : ''}`}
+                      variant={index === 2 ? 'default' : 'outline'}
+                      onClick={() => onCountrySelect(plan.name)}
+                    >
+                      View Offer
+                    </Button>
+                    <p className="text-center text-xs text-muted-foreground mt-2">
+                      Get for {formatPrice(plan.price)} 🛒
+                    </p>
                   </div>
                 ))}
               </div>

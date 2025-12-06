@@ -189,32 +189,35 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-3xl max-h-[95vh] overflow-y-auto">
-        <StepIndicator />
+      <DialogContent className="max-w-4xl max-h-[95vh] overflow-y-auto p-0">
+        <div className="p-6 pb-4">
+          <StepIndicator />
+        </div>
 
-        {showCompatibilityCheck ? (
-          <>
-            <DialogHeader>
-              <DialogTitle className="text-xl font-bold flex items-center gap-2">
-                <Smartphone className="h-5 w-5 text-primary" />
-                Check if your device is eSIM compatible
-              </DialogTitle>
-            </DialogHeader>
-            <CompatibilityCheckContent />
-          </>
-        ) : currentStep === 'details' ? (
-          <>
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-bold">Billing Address</DialogTitle>
-              <DialogDescription>
-                Enter your details to complete your eSIM purchase
-              </DialogDescription>
-            </DialogHeader>
+        <div className="px-6 pb-6">
+          {showCompatibilityCheck ? (
+            <>
+              <DialogHeader className="mb-6">
+                <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                  <Smartphone className="h-5 w-5 text-primary" />
+                  Check if your device is eSIM compatible
+                </DialogTitle>
+              </DialogHeader>
+              <CompatibilityCheckContent />
+            </>
+          ) : currentStep === 'details' ? (
+            <>
+              <DialogHeader className="mb-6">
+                <DialogTitle className="text-2xl font-bold">Billing Address</DialogTitle>
+                <DialogDescription className="mt-2">
+                  Enter your details to complete your eSIM purchase
+                </DialogDescription>
+              </DialogHeader>
 
-            <div className="grid lg:grid-cols-3 gap-6">
-              {/* Form Section */}
-              <div className="lg:col-span-2 space-y-6">
-                <div className="grid grid-cols-2 gap-4">
+              <div className="grid lg:grid-cols-5 gap-8">
+                {/* Form Section - Takes more space */}
+                <div className="lg:col-span-3 space-y-5">
+                  <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="firstName" className="flex items-center gap-1">
                       First Name<span className="text-red-500">*</span>
@@ -341,9 +344,9 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                 </div>
               </div>
 
-              {/* Order Summary Sidebar */}
-              <div className="lg:col-span-1">
-                <div className="bg-muted/50 rounded-xl p-5 sticky top-4">
+              {/* Order Summary Sidebar - Takes less space */}
+              <div className="lg:col-span-2">
+                <div className="bg-muted/50 rounded-xl p-6 sticky top-4">
                   <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
                     Order Review
                   </h3>
@@ -351,7 +354,7 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                   <p className="text-sm text-muted-foreground mb-4">1 item in cart</p>
                   
                   <div className="space-y-3 pb-4 border-b border-border">
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start gap-4">
                       <div>
                         <p className="font-medium text-sm">{product.name}</p>
                         <p className="text-xs text-muted-foreground">{product.dataAmount} • {product.validity}</p>
@@ -366,17 +369,31 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                   </div>
 
                   <div className="py-4 border-b border-border">
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-muted-foreground">Coupon Code:</span>
+                    <Label htmlFor="coupon" className="text-sm text-muted-foreground mb-2 block">Coupon Code</Label>
+                    <div className="flex gap-2">
                       <Input 
-                        placeholder="Enter coupon code" 
-                        className="w-32 h-8 text-xs"
+                        id="coupon"
+                        placeholder="Enter code" 
+                        className="h-9 text-sm"
                       />
+                      <Button variant="outline" size="sm" className="h-9">
+                        Apply
+                      </Button>
                     </div>
                   </div>
 
-                  <div className="pt-4">
-                    <div className="flex justify-between items-center font-semibold">
+                  <div className="pt-4 space-y-2">
+                    <div className="flex justify-between items-center text-sm text-muted-foreground">
+                      <span>Subtotal</span>
+                      <PriceDisplay 
+                        price={product.price} 
+                        size="sm" 
+                        showBothCurrencies={false}
+                        priceIsUSD={product.priceIsUSD}
+                        primaryCurrency={product.priceIsUSD ? 'USD' : 'ZAR'}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center font-semibold text-lg pt-2 border-t border-border">
                       <span>Grand Total</span>
                       <PriceDisplay 
                         price={product.price} 
@@ -392,9 +409,9 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
           </>
         ) : currentStep === 'payment' ? (
           <>
-            <DialogHeader>
+            <DialogHeader className="mb-6">
               <DialogTitle className="text-2xl font-bold">Complete Payment</DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="mt-2">
                 Secure payment powered by PayPal
               </DialogDescription>
             </DialogHeader>
@@ -601,6 +618,7 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
             </div>
           </>
         )}
+        </div>
       </DialogContent>
     </Dialog>
   );
