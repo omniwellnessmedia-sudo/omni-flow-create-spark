@@ -54,7 +54,7 @@ const HeroSection = () => {
       title: "Business Strategy",
       description: "Strategic consulting for conscious growth",
       href: "/business-consulting",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Business%20Consulting/Business%20consulting.jpg",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg",
       badge: "Consulting"
     },
     {
@@ -72,14 +72,14 @@ const HeroSection = () => {
       badge: "Shop"
     },
     {
-      title: "Conscious Connections: Indigenous Wisdom + Healing",
+      title: "Indigenous Wisdom Tours",
       description: "Ancient healing practices & cultural experiences",
       href: "/tours-retreats",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg",
       badge: "Cultural"
     },
     {
-      title: "FACT Wellness Hybrid Classes",
+      title: "Wellness Classes",
       description: "Fitness, wellness & community classes",
       href: "/wellness-community",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg",

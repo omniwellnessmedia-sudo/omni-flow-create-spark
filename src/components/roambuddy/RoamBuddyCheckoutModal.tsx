@@ -5,11 +5,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { PriceDisplay } from '@/components/ui/price-display';
+import { CurrencyToggle } from './CurrencyToggle';
 import { useRoamBuddyAPI, RoamBuddyProduct } from '@/hooks/useRoamBuddyAPI';
+import { useCurrencyConverter } from '@/hooks/useCurrencyConverter';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { PAYPAL_OPTIONS } from '@/config/paypal';
 import { toast } from 'sonner';
-import { Loader2, CheckCircle, Copy, Smartphone, Calendar, Globe, Check, AlertCircle, Shield, FileText, Info } from 'lucide-react';
+import { Loader2, CheckCircle, Copy, Smartphone, Calendar, Globe, Check, AlertCircle, Shield, FileText, Info, DollarSign } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface RoamBuddyCheckoutModalProps {
@@ -30,6 +32,7 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [confirmDevice, setConfirmDevice] = useState(false);
   const [showCompatibilityCheck, setShowCompatibilityCheck] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState<'USD' | 'ZAR'>('USD');
   const [esimDetails, setEsimDetails] = useState<{
     iccid?: string;
     qrCode?: string;
@@ -38,11 +41,18 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
   } | null>(null);
 
   const { createOrder } = useRoamBuddyAPI();
+  const { formatZAR, formatUSD, exchangeRates } = useCurrencyConverter();
 
   if (!product) return null;
 
   const customerName = `${firstName} ${lastName}`.trim();
   const canProceedToPayment = firstName && lastName && customerEmail && acceptPrivacy && acceptTerms && confirmDevice;
+
+  // Calculate prices based on selected currency
+  const displayPriceUSD = product.priceIsUSD ? product.price : product.price / (exchangeRates?.USD || 18.50);
+  const displayPriceZAR = product.priceIsUSD ? product.price * (exchangeRates?.USD || 18.50) : product.price;
+  const displayPrice = selectedCurrency === 'USD' ? displayPriceUSD : displayPriceZAR;
+  const formattedPrice = selectedCurrency === 'USD' ? formatUSD(displayPriceUSD) : formatZAR(displayPriceZAR);
 
   const handlePayPalApprove = async (data: any) => {
     setIsProcessing(true);
@@ -94,6 +104,7 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
     setCurrentStep('details');
     setEsimDetails(null);
     setShowCompatibilityCheck(false);
+    setSelectedCurrency('USD');
     onClose();
   };
 
@@ -347,9 +358,13 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
               {/* Order Summary Sidebar - Takes less space */}
               <div className="lg:col-span-2">
                 <div className="bg-muted/50 rounded-xl p-6 sticky top-4">
-                  <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                    Order Review
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold text-lg">Order Review</h3>
+                    <CurrencyToggle 
+                      currency={selectedCurrency}
+                      onCurrencyChange={setSelectedCurrency}
+                    />
+                  </div>
                   
                   <p className="text-sm text-muted-foreground mb-4">1 item in cart</p>
                   
@@ -359,12 +374,7 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                         <p className="font-medium text-sm">{product.name}</p>
                         <p className="text-xs text-muted-foreground">{product.dataAmount} • {product.validity}</p>
                       </div>
-                      <PriceDisplay 
-                        price={product.price} 
-                        size="sm" 
-                        priceIsUSD={product.priceIsUSD}
-                        primaryCurrency={product.priceIsUSD ? 'USD' : 'ZAR'}
-                      />
+                      <span className="font-semibold text-primary">{formattedPrice}</span>
                     </div>
                   </div>
 
@@ -385,23 +395,17 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                   <div className="pt-4 space-y-2">
                     <div className="flex justify-between items-center text-sm text-muted-foreground">
                       <span>Subtotal</span>
-                      <PriceDisplay 
-                        price={product.price} 
-                        size="sm" 
-                        showBothCurrencies={false}
-                        priceIsUSD={product.priceIsUSD}
-                        primaryCurrency={product.priceIsUSD ? 'USD' : 'ZAR'}
-                      />
+                      <span>{formattedPrice}</span>
                     </div>
                     <div className="flex justify-between items-center font-semibold text-lg pt-2 border-t border-border">
                       <span>Grand Total</span>
-                      <PriceDisplay 
-                        price={product.price} 
-                        size="lg" 
-                        priceIsUSD={product.priceIsUSD}
-                        primaryCurrency={product.priceIsUSD ? 'USD' : 'ZAR'}
-                      />
+                      <span className="text-primary text-xl">{formattedPrice}</span>
                     </div>
+                    <p className="text-xs text-muted-foreground text-center mt-2">
+                      {selectedCurrency === 'USD' 
+                        ? `≈ ${formatZAR(displayPriceZAR)}` 
+                        : `≈ ${formatUSD(displayPriceUSD)}`}
+                    </p>
                   </div>
                 </div>
               </div>
