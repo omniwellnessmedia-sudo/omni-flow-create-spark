@@ -103,7 +103,7 @@ const HeroSection = () => {
       title: "Wellness Group Tours",
       description: "Transformative group experiences in nature",
       href: "/tours-retreats",
-      image: getStorageUrl("wellness group tour.jpg"),
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/tour%20picture%20couple%20with%20chief%20kingsley.jpg",
       category: "tours",
       author: "Adventures",
       badge: "Travel",
