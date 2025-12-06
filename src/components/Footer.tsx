@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
-import { ChevronUp, Mail, Calendar, MessageCircle, Facebook, Instagram, Linkedin, Youtube, Heart, Lightbulb, BookOpen, Users } from "lucide-react";
+import { ChevronUp, Mail, Calendar, MessageCircle, Instagram, Youtube, Heart, Lightbulb, BookOpen, Users, Share2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
+import { toast } from "sonner";
+import omniQrCode from "@/assets/omni-qr-code.png";
+
 const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({
@@ -9,7 +12,33 @@ const Footer = () => {
       behavior: 'smooth'
     });
   };
-  return <footer className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white mt-16 overflow-hidden">
+
+  const handleShareQR = async () => {
+    const shareData = {
+      title: 'Omni Wellness Media',
+      text: 'Connect with Omni Wellness Media - Bridging Wellness, Outreach & Media',
+      url: 'https://linktr.ee/omniwellnessmedia'
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // User cancelled or error
+        copyLinktreeLink();
+      }
+    } else {
+      copyLinktreeLink();
+    }
+  };
+
+  const copyLinktreeLink = () => {
+    navigator.clipboard.writeText('https://linktr.ee/omniwellnessmedia');
+    toast.success('Linktree link copied to clipboard!');
+  };
+
+  return (
+    <footer className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white mt-16 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 opacity-30"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1),transparent_70%)]"></div>
@@ -50,30 +79,29 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           
           {/* Brand Section */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-1">
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative">
-                <img src={IMAGES.logos.omniPrimary} alt="Omni Wellness Media" className="h-20 w-20 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
+                <img src={IMAGES.logos.omniPrimary} alt="Omni Wellness Media" className="h-16 w-16 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-accent opacity-20 animate-pulse"></div>
               </div>
               <div>
-                <h3 className="font-heading font-bold text-2xl text-white mb-1">
+                <h3 className="font-heading font-bold text-xl text-white mb-1">
                   Omni Wellness Media
                 </h3>
-                <p className="text-primary font-medium">Conscious Content Creation</p>
+                <p className="text-primary font-medium text-sm">Conscious Content Creation</p>
               </div>
             </div>
             
-            <p className="text-gray-300 mb-8 max-w-md leading-relaxed text-lg">
-              Bridging wellness, outreach & media to empower South Africa's journey to health & consciousness. 
-              Creating positive change through conscious content and sustainable solutions.
+            <p className="text-gray-300 mb-6 leading-relaxed text-sm">
+              Bridging wellness, outreach & media to empower South Africa's journey to health & consciousness.
             </p>
 
             {/* Wellness Mission Highlights */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-primary/20 rounded-lg">
-                  <Lightbulb className="w-4 h-4 text-primary bg-white" />
+                  <Lightbulb className="w-4 h-4 text-primary" />
                 </div>
                 <span className="text-sm text-gray-300">Conscious Content</span>
               </div>
@@ -85,47 +113,45 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Social Media with proper icons */}
-            <div className="flex justify-center space-x-4">
+            {/* Social Media Links */}
+            <div className="flex flex-wrap gap-3">
               <a
-                href="https://facebook.com/omniwellnessmedia"
+                href="https://www.instagram.com/omniwellnessmedia/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
-                aria-label="Follow us on Facebook"
-              >
-                <Facebook className="w-5 h-5 text-white group-hover:text-blue-300 transition-colors" />
-                <span className="sr-only">Facebook</span>
-              </a>
-              <a
-                href="https://instagram.com/omniwellnessmedia"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+                className="group p-3 bg-white/10 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
                 aria-label="Follow us on Instagram"
               >
-                <Instagram className="w-5 h-5 text-white group-hover:text-pink-300 transition-colors" />
-                <span className="sr-only">Instagram</span>
+                <Instagram className="w-5 h-5 text-white" />
               </a>
               <a
-                href="https://linkedin.com/company/omni-wellness-media"
+                href="https://www.youtube.com/watch?v=ZOoaiV-IiiU"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
-                aria-label="Connect with us on LinkedIn"
+                className="group p-3 bg-white/10 hover:bg-red-600 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+                aria-label="Subscribe to our YouTube"
               >
-                <Linkedin className="w-5 h-5 text-white group-hover:text-blue-300 transition-colors" />
-                <span className="sr-only">LinkedIn</span>
+                <Youtube className="w-5 h-5 text-white" />
               </a>
               <a
-                href="https://youtube.com/@omniwellnessmedia"
+                href="https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group p-3 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
-                aria-label="Subscribe to our YouTube channel"
+                className="group p-3 bg-white/10 hover:bg-green-600 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+                aria-label="Join our WhatsApp Channel"
               >
-                <Youtube className="w-5 h-5 text-white group-hover:text-red-300 transition-colors" />
-                <span className="sr-only">YouTube</span>
+                <MessageCircle className="w-5 h-5 text-white" />
+              </a>
+              <a
+                href="https://x.com/Omniwellmedia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group p-3 bg-white/10 hover:bg-black rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+                aria-label="Follow us on X"
+              >
+                <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
               </a>
             </div>
           </div>
@@ -163,25 +189,67 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                <BookOpen className="w-4 h-4 text-white/70" />
                 Wellness Blog
               </Link></li>
               <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                <MessageCircle className="w-4 h-4 text-white/70" />
                 Wellness Podcast
               </Link></li>
               <li><Link to="/wellness-community" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
-                <Users className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                <Users className="w-4 h-4 text-white/70" />
                 Community
               </Link></li>
               <li><Link to="/tours-retreats" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
-                <Heart className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                <Heart className="w-4 h-4 text-white/70" />
                 Tours & Retreats
               </Link></li>
               <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Our Story
               </Link></li>
             </ul>
+          </div>
+
+          {/* Connect With Us - QR Code & Linktree */}
+          <div>
+            <h3 className="font-heading font-bold text-lg mb-6 text-white flex items-center gap-2">
+              <div className="w-2 h-2 bg-gradient-to-r from-accent to-primary rounded-full"></div>
+              Connect With Us
+            </h3>
+            
+            {/* QR Code */}
+            <div className="bg-white rounded-xl p-4 mb-4 inline-block">
+              <img 
+                src={omniQrCode} 
+                alt="Omni Wellness Media QR Code" 
+                className="w-32 h-32 object-contain"
+              />
+            </div>
+            
+            <p className="text-gray-400 text-xs mb-4">Scan to connect with us</p>
+            
+            {/* Share & Linktree Buttons */}
+            <div className="space-y-3">
+              <a
+                href="https://linktr.ee/omniwellnessmedia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 px-4 py-2 rounded-lg transition-all duration-300 text-sm font-medium w-full justify-center"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Visit Our Linktree
+              </a>
+              
+              <Button 
+                onClick={handleShareQR}
+                variant="outline" 
+                size="sm"
+                className="w-full border-white/30 text-white hover:bg-white/10"
+              >
+                <Share2 className="w-4 h-4 mr-2" />
+                Share Our Links
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -200,13 +268,15 @@ const Footer = () => {
 
           {/* Back to Top - Mobile Only */}
           <div className="flex justify-center mt-8 md:hidden">
-            <Button onClick={scrollToTop} variant="outline" size="sm" className="bg-transparent border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white card-button-standard">
+            <Button onClick={scrollToTop} variant="outline" size="sm" className="bg-transparent border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white">
               <ChevronUp className="w-4 h-4 mr-2" />
               Back to Top
             </Button>
           </div>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;
