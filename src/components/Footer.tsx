@@ -189,10 +189,6 @@ const Footer = () => {
               Wellness Resources
             </h3>
             <ul className="space-y-3">
-              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-white/70" />
-                Wellness Blog
-              </Link></li>
               <li><Link to="/podcast" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
                 <MessageCircle className="w-4 h-4 text-white/70" />
                 Wellness Podcast
@@ -204,6 +200,10 @@ const Footer = () => {
               <li><Link to="/tours-retreats" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
                 <Heart className="w-4 h-4 text-white/70" />
                 Tours & Retreats
+              </Link></li>
+              <li><Link to="/twobewellshop" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-white/70" />
+                2BeWell Shop
               </Link></li>
               <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Our Story
@@ -267,15 +267,17 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Back to Top - Mobile Only */}
-          <div className="flex justify-center mt-8 md:hidden">
-            <Button onClick={scrollToTop} variant="outline" size="sm" className="bg-transparent border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white">
-              <ChevronUp className="w-4 h-4 mr-2" />
-              Back to Top
-            </Button>
-          </div>
         </div>
       </div>
+
+      {/* Floating Back to Top Button */}
+      <button
+        onClick={scrollToTop}
+        className="fixed bottom-6 right-6 p-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-50"
+        aria-label="Back to top"
+      >
+        <ChevronUp className="w-5 h-5" />
+      </button>
     </footer>
   );
 };
