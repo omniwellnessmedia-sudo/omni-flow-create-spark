@@ -122,26 +122,16 @@ const AppTour = ({
             Interactive tour to help you navigate and discover the features of this application
           </DialogDescription>
           <DialogHeader className="pb-4">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                {getStepIcon(currentStepData.id)}
-                <div>
-                  <DialogTitle className="text-xl font-semibold text-gray-900 mb-1">
-                    {currentStepData.title}
-                  </DialogTitle>
-                  <Badge variant="secondary" className="text-xs">
-                    Step {currentStep + 1} of {steps.length}
-                  </Badge>
-                </div>
+            <div className="flex items-center gap-3">
+              {getStepIcon(currentStepData.id)}
+              <div>
+                <DialogTitle className="text-xl font-semibold text-gray-900 mb-1">
+                  {currentStepData.title}
+                </DialogTitle>
+                <Badge variant="secondary" className="text-xs">
+                  Step {currentStep + 1} of {steps.length}
+                </Badge>
               </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleSkip}
-                className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full w-8 h-8 p-0"
-              >
-                <X className="w-4 h-4" />
-              </Button>
             </div>
           </DialogHeader>
 

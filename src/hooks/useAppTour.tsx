@@ -22,68 +22,57 @@ const tourSteps: TourConfig = {
     {
       id: 'welcome',
       title: 'Welcome to Omni Wellness Media!',
-      content: 'Your gateway to conscious wellness experiences across South Africa. Let\'s explore how our platform can transform your wellness journey and connect you with our thriving community.',
+      content: 'Your gateway to conscious wellness experiences across South Africa. We bridge wellness, outreach, and media to empower your journey to health and consciousness.',
       position: 'center'
     },
     {
-      id: 'mission',
-      title: 'Our Mission & Vision',
-      content: 'We\'re bridging wellness, outreach, and media to empower South Africa\'s journey to health and consciousness. Discover our four content pillars: Inspiration, Education, Empowerment, and Wellness.',
-      target: '[data-tour="mission"]',
-      position: 'bottom'
-    },
-    {
       id: 'services',
-      title: 'Wellness Services & Exchange',
-      content: 'Discover our revolutionary wellness marketplace where you can find authentic practitioners, book services, and earn WellCoins. Connect with verified wellness professionals across South Africa.',
-      target: '[data-tour="services"]',
-      position: 'top',
+      title: 'Our Professional Services',
+      content: 'From media production and content creation to business consulting and web development - we help conscious brands tell their stories and grow sustainably.',
+      position: 'center',
       action: {
-        label: 'Browse Services',
-        link: '/wellness-exchange'
+        label: 'View Services',
+        link: '/services'
       }
     },
     {
-      id: 'tours',
-      title: 'Immersive Wellness Journeys',
-      content: 'Join curated wellness retreats and adventures across Cape Town, wine country, and beyond. Each experience includes seamless eSIM connectivity for worry-free travel.',
-      target: '[data-tour="tours"]',
-      position: 'top',
+      id: 'retreat',
+      title: 'Annual Omni Wellness Retreat',
+      content: 'Join our flagship wellness retreat featuring wine country exploration, nature immersion, and transformative wellness experiences in South Africa\'s most beautiful locations.',
+      position: 'center',
       action: {
-        label: 'Explore Tours',
-        link: '/tours-retreats'
+        label: 'Explore Retreat',
+        link: '/tour-detail/winter-wine-country-wellness'
       }
     },
     {
-      id: 'ai-tools',
-      title: 'AI-Powered Wellness Tools',
-      content: 'Access cutting-edge AI tools designed for wellness practitioners and conscious businesses. Create content, analyze impact, and optimize your wellness offerings.',
-      target: '[data-tour="ai-tools"]',
-      position: 'top',
+      id: 'programs',
+      title: 'UWC Human-Animal Program',
+      content: 'A pioneering academic programme combining animal-assisted therapy research, indigenous knowledge, and community wellness. Launching June 2026.',
+      position: 'center',
       action: {
-        label: 'Try AI Tools',
-        link: '/ai-tools'
+        label: 'Learn More',
+        link: '/programs/uwc-human-animal'
       }
     },
     {
-      id: 'community',
-      title: 'Join Our Conscious Community',
-      content: 'Connect with like-minded individuals, share insights, and contribute to our growing wellness community. Explore our blog, participate in discussions, and build meaningful connections.',
-      target: '[data-tour="community"]',
-      position: 'top',
+      id: 'shop',
+      title: 'Travel Well Connected',
+      content: 'Stay connected on your wellness journeys with curated eSIM plans and explore our wellness-centered product recommendations from trusted partners.',
+      position: 'center',
       action: {
-        label: 'Join Community',
-        link: '/wellness-community'
+        label: 'Browse Store',
+        link: '/travel-well-connected-store'
       }
     },
     {
       id: 'complete',
-      title: 'Ready to Begin Your Journey?',
-      content: 'You\'re all set to explore the Omni Wellness ecosystem! Start by browsing our wellness exchange, booking a transformative tour, or trying our AI tools. Your conscious wellness journey awaits.',
+      title: 'Ready to Begin?',
+      content: 'Explore our services, book a retreat, or connect with us to start your conscious wellness journey. We\'re here to help you transform and thrive.',
       position: 'center',
       action: {
-        label: 'Get Started',
-        link: '/wellness-exchange'
+        label: 'Get in Touch',
+        link: '/contact'
       }
     }
   ],
@@ -91,37 +80,16 @@ const tourSteps: TourConfig = {
     {
       id: 'services-overview',
       title: 'Our Services',
-      content: 'Here you can explore all our professional services from content creation to business consulting.',
+      content: 'Explore our comprehensive suite of services from content creation and media production to business consulting and web development.',
       position: 'center'
-    },
-    {
-      id: 'service-cards',
-      title: 'Service Categories',
-      content: 'Each card represents a different service category. Click on any card to learn more details.',
-      target: '.grid .group:first-child',
-      position: 'right'
     }
   ],
-  '/wellness-exchange': [
+  '/travel-well-connected-store': [
     {
-      id: 'wellness-exchange-intro',
-      title: 'Wellness Exchange',
-      content: 'Welcome to our revolutionary wellness marketplace where you can trade services using WellCoins!',
+      id: 'store-intro',
+      title: 'Travel Well Connected',
+      content: 'Browse curated wellness experiences and stay connected with eSIM plans designed for conscious travelers.',
       position: 'center'
-    },
-    {
-      id: 'marketplace',
-      title: 'Browse Services',
-      content: 'Browse wellness services offered by verified practitioners in our community.',
-      target: '[data-tour="marketplace-link"]',
-      position: 'bottom'
-    },
-    {
-      id: 'post-want',
-      title: 'Post Your Needs',
-      content: 'Need something specific? Post a "want" and let practitioners come to you with proposals.',
-      target: '[data-tour="post-want"]',
-      position: 'bottom'
     }
   ]
 };
