@@ -68,7 +68,7 @@ const HeroSection = () => {
       title: "2BeWell Natural Products",
       description: "Handmade wellness essentials",
       href: "/twobewellshop",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images%20(2BeWell)/12.png",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images%2A%2A%20(2BeWell)/10.png",
       badge: "Shop"
     },
     {
@@ -239,11 +239,13 @@ const HeroSection = () => {
 
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Brand Icon */}
+          {/* Brand Logo */}
           <div className="flex justify-center mb-6 sm:mb-8 animate-fade-in">
-            <div className="h-24 w-24 sm:h-32 sm:w-32 lg:h-40 lg:w-40 rounded-full bg-gradient-to-br from-primary via-accent to-secondary flex items-center justify-center shadow-2xl">
-              <Sparkles className="h-12 w-12 sm:h-16 sm:w-16 lg:h-20 lg:w-20 text-white" />
-            </div>
+            <img 
+              src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
+              alt="Omni Wellness Media"
+              className="h-28 w-28 sm:h-36 sm:w-36 lg:h-44 lg:w-44 object-contain drop-shadow-2xl"
+            />
           </div>
           
           {/* Main Headline */}
