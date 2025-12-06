@@ -393,6 +393,7 @@ const PulseMeter = () => {
 };
 
 const UWCHumanAnimalProgram = () => {
+  console.log('[UWC Page] Component mounting, partners count:', partners.length);
   const [activeSection, setActiveSection] = useState('overview');
   const [isSticky, setIsSticky] = useState(false);
   const [heroIndex, setHeroIndex] = useState(0);
