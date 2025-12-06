@@ -84,6 +84,8 @@ const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
 const RoamBuddyStore = React.lazy(() => import('@/pages/RoamBuddyStore'));
+const RoamBuddyTerms = React.lazy(() => import('@/pages/roambuddy/RoamBuddyTerms'));
+const RoamBuddyPrivacy = React.lazy(() => import('@/pages/roambuddy/RoamBuddyPrivacy'));
 const AffiliateMarketplace = React.lazy(() => import('@/pages/AffiliateMarketplace'));
 const AffiliatePerformance = React.lazy(() => import('@/pages/admin/AffiliatePerformance'));
 const AffiliatePayouts = React.lazy(() => import('@/pages/admin/AffiliatePayouts'));
@@ -264,6 +266,8 @@ function App() {
                     </ProtectedRoute>
                   } />
                   <Route path="/roambuddy-store" element={<RoamBuddyStore />} />
+                  <Route path="/roambuddy/terms" element={<RoamBuddyTerms />} />
+                  <Route path="/roambuddy/privacy" element={<RoamBuddyPrivacy />} />
                   <Route path="/admin/affiliate-performance" element={
                     <ProtectedRoute requireAdmin={true}>
                       <AffiliatePerformance />
