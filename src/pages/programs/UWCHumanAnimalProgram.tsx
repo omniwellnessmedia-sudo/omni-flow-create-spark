@@ -1122,7 +1122,7 @@ const UWCHumanAnimalProgram = () => {
                 <TabsContent key={partner.id} value={partner.id} className="mt-0">
                   <div className={`${partner.bgColor} rounded-3xl overflow-hidden border border-border`}>
                     {/* Partner Hero */}
-                    <div className="relative h-64 md:h-96">
+                    <div className="relative h-80 md:h-[500px] lg:h-[600px]">
                       <ImageWithFallback 
                         src={partner.heroImage} 
                         alt={partner.name}
