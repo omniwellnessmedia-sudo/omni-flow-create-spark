@@ -360,30 +360,18 @@ const HeroSection = () => {
             </div>
 
             {/* Masonry grid layout - alternating portrait and landscape */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {communityItems
                 .filter(item => item.tags?.includes(activeFilter))
                 .slice(0, showMoreCommunity ? 99 : 6)
-                .map((item, index) => {
-                  // Define layout pattern: portrait, landscape(2 cols), landscape(2 cols), portrait, etc
-                  const layoutClasses = [
-                    'md:col-span-1', // Portrait
-                    'md:col-span-2', // Landscape
-                    'md:col-span-2', // Landscape  
-                    'md:col-span-1', // Portrait
-                    'md:col-span-1.5', // Landscape
-                    'md:col-span-1.5', // Landscape
-                  ];
-                  
-                  return (
-                    <div key={index} className={layoutClasses[index % layoutClasses.length] || 'md:col-span-1'}>
-                      <CommunityCard 
-                        item={item}
-                        orientation={(item.orientation as 'portrait' | 'landscape') || (index % 4 === 0 || index % 4 === 3 ? 'portrait' : 'landscape')}
-                      />
-                    </div>
-                  );
-                })}
+                .map((item, index) => (
+                  <div key={index}>
+                    <CommunityCard 
+                      item={item}
+                      orientation="landscape"
+                    />
+                  </div>
+                ))}
             </div>
           </div>
 
