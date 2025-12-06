@@ -273,7 +273,7 @@ const Footer = () => {
       {/* Floating Back to Top Button */}
       <button
         onClick={scrollToTop}
-        className="fixed bottom-6 right-6 p-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-50"
+        className="fixed bottom-6 left-6 p-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 z-40"
         aria-label="Back to top"
       >
         <ChevronUp className="w-5 h-5" />
