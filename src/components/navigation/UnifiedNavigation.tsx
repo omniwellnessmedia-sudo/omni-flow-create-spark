@@ -165,11 +165,12 @@ const UnifiedNavigation = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <Sparkles className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-                Omni Wellness
-              </span>
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/omni-logo-horizontal.png" 
+                alt="Omni Wellness Media" 
+                className="h-10 w-auto object-contain"
+              />
             </Link>
           </div>
 
@@ -264,8 +265,7 @@ const UnifiedNavigation = () => {
               <SheetContent side="right" className="w-80">
                 <SheetHeader>
                   <SheetTitle className="text-left flex items-center">
-                    <Sparkles className="h-6 w-6 text-primary mr-2" />
-                    Omni Wellness
+                    <img src="/omni-logo-horizontal.png" alt="Omni" className="h-8 w-auto" />
                   </SheetTitle>
                 </SheetHeader>
                 
