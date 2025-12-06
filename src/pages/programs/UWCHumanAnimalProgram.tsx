@@ -84,7 +84,7 @@ const partnerLogos = {
   drphilafel: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
   valleyOfPlenty: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
   uwc: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/UWC-Crest.png`,
-  omni: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png`
+  omni: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png`
 };
 
 // Fallback placeholder for broken images - using storage image
@@ -828,7 +828,7 @@ const UWCHumanAnimalProgram = () => {
                     : 'bg-muted/30 hover:bg-muted/50 hover:shadow-lg hover:scale-102'
                 }`}
               >
-                <div className="w-20 h-20 rounded-2xl bg-white shadow-md flex items-center justify-center p-2 overflow-hidden">
+                <div className="w-28 h-28 rounded-2xl bg-white shadow-md flex items-center justify-center p-3 overflow-hidden">
                   <PartnerLogo 
                     logo={partner.logo} 
                     name={partner.name}
