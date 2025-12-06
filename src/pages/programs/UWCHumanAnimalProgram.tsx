@@ -15,7 +15,7 @@ import {
   Mail, Phone, Shield, TrendingUp, Lightbulb, TreePine, HandHeart, Mountain,
   Waves, Sun, Play, Video, Plane, Building, DollarSign, CreditCard, Gift,
   PawPrint, Cat, Sprout, GraduationCap as GradCap, Film, ExternalLink, Handshake,
-  Activity, Lock, Timer, ImageIcon
+  Activity, Lock, Timer, ImageIcon, Plus
 } from 'lucide-react';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
@@ -1249,52 +1249,98 @@ const UWCHumanAnimalProgram = () => {
           </div>
 
           {/* Combined Impact Stats - Enhanced with Partner Logos */}
-          <div className="mt-16 bg-gradient-to-br from-primary/10 via-background to-secondary/10 rounded-3xl p-8 md:p-12 border border-border overflow-hidden">
-            <h3 className="text-2xl font-bold text-center mb-6 text-foreground">The Power of Partnership</h3>
+          <div className="mt-20 relative">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 rounded-[3rem] blur-3xl" />
             
-            {/* Partner Logos Row */}
-            <div className="flex flex-wrap justify-center items-center gap-6 mb-10 py-6 border-y border-border/50">
-              {partners.map((partner, idx) => (
-                <div key={partner.id} className="flex items-center gap-2">
-                  <div className="w-12 h-12 rounded-xl bg-white shadow-sm p-2 flex items-center justify-center">
-                    <PartnerLogo 
-                      logo={partner.logo} 
-                      name={partner.name}
-                      shortName={partner.shortName}
-                    />
-                  </div>
-                  {idx < partners.length - 1 && (
-                    <span className="text-primary/30 text-2xl font-light ml-4">+</span>
-                  )}
+            <div className="relative bg-gradient-to-br from-card via-background to-card rounded-[2.5rem] p-10 md:p-16 border-2 border-border shadow-2xl overflow-hidden">
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+              <div className="absolute bottom-0 left-0 w-72 h-72 bg-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+              
+              <div className="relative">
+                <Badge className="mx-auto flex w-fit mb-6 bg-primary/10 text-primary border-primary/20 px-4 py-2">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Collaborative Excellence
+                </Badge>
+                <h3 className="text-3xl md:text-4xl font-bold text-center mb-4 text-foreground">The Power of Partnership</h3>
+                <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
+                  Five world-class organizations united by a shared commitment to healing, education, and community transformation.
+                </p>
+                
+                {/* Partner Logos Row - Enhanced */}
+                <div className="flex flex-wrap justify-center items-center gap-8 mb-16 py-10 px-6 bg-background/50 rounded-3xl border border-border/50 shadow-inner">
+                  {partners.map((partner, idx) => (
+                    <div key={partner.id} className="flex items-center gap-4 group">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-white shadow-lg p-3 flex items-center justify-center 
+                          transform group-hover:scale-110 group-hover:shadow-2xl transition-all duration-300 border-2 border-transparent group-hover:border-primary/20">
+                          <PartnerLogo 
+                            logo={partner.logo} 
+                            name={partner.name}
+                            shortName={partner.shortName}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                          {partner.shortName}
+                        </span>
+                      </div>
+                      {idx < partners.length - 1 && (
+                        <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 ml-2">
+                          <Plus className="w-5 h-5 text-primary" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { value: '50+', label: 'Years Combined Experience', icon: Clock },
-                { value: '8,000+', label: 'Animals Helped Annually', icon: Heart },
-                { value: '2,500+', label: 'Community Members Served', icon: Users },
-                { value: '5', label: 'World-Class Organizations', icon: Building2 }
-              ].map((stat, idx) => (
-                <div key={idx} className="text-center group">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                    <stat.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="text-3xl md:text-4xl font-bold text-primary mb-2">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                
+                {/* Stats Grid - Enhanced */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 mb-16">
+                  {[
+                    { value: '50+', label: 'Years Combined Experience', icon: Clock, color: 'from-blue-500 to-blue-600' },
+                    { value: '8,000+', label: 'Animals Helped Annually', icon: Heart, color: 'from-rose-500 to-rose-600' },
+                    { value: '2,500+', label: 'Community Members Served', icon: Users, color: 'from-emerald-500 to-emerald-600' },
+                    { value: '5', label: 'World-Class Organizations', icon: Building2, color: 'from-violet-500 to-violet-600' }
+                  ].map((stat, idx) => (
+                    <div key={idx} className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="relative bg-card rounded-2xl p-6 md:p-8 border border-border group-hover:border-primary/30 group-hover:shadow-xl transition-all duration-300 text-center">
+                        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                          <stat.icon className="w-8 h-8 text-white" />
+                        </div>
+                        <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
+                          {stat.value}
+                        </div>
+                        <div className="text-sm md:text-base text-muted-foreground font-medium">{stat.label}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            {/* Partnership Quote */}
-            <div className="mt-12 text-center max-w-3xl mx-auto">
-              <blockquote className="text-lg md:text-xl italic text-muted-foreground leading-relaxed">
-                "When organizations unite around a shared vision of healing—for animals, communities, and 
-                the humans who connect them—something magical happens. This programme is proof that 
-                collaboration creates transformation."
-              </blockquote>
-              <p className="mt-4 font-semibold text-foreground">— Dr. Sharyn Spicer, Academic Director</p>
+                {/* Partnership Quote - Enhanced */}
+                <div className="relative max-w-4xl mx-auto">
+                  <div className="absolute -top-6 left-8 text-8xl text-primary/10 font-serif">"</div>
+                  <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-3xl p-8 md:p-12 border border-border/50">
+                    <blockquote className="text-xl md:text-2xl italic text-foreground leading-relaxed text-center relative z-10">
+                      When organizations unite around a shared vision of healing—for animals, communities, and 
+                      the humans who connect them—something magical happens. This programme is proof that 
+                      collaboration creates transformation.
+                    </blockquote>
+                    <div className="mt-8 flex items-center justify-center gap-4">
+                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                        <GraduationCap className="w-7 h-7 text-primary" />
+                      </div>
+                      <div className="text-left">
+                        <p className="font-bold text-foreground text-lg">Dr. Sharyn Spicer</p>
+                        <p className="text-muted-foreground">Academic Director</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute -bottom-6 right-8 text-8xl text-primary/10 font-serif rotate-180">"</div>
+                </div>
+              </div>
             </div>
           </div>
 
