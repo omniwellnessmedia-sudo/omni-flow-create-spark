@@ -7,6 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Input } from '@/components/ui/input';
 import Footer from '@/components/Footer';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
+import InteractiveGallery from '@/components/gallery/InteractiveGallery';
 import { 
   GraduationCap, Heart, Globe, Users, Calendar, MapPin, Award, BookOpen, Leaf, Brain,
   Building2, Clock, Check, Target, Star, Coffee, Utensils, Home, Camera, Sparkles,
@@ -14,10 +15,38 @@ import {
   Mail, Phone, Shield, TrendingUp, Lightbulb, TreePine, HandHeart, Mountain,
   Waves, Sun, Play, Video, Plane, Building, DollarSign, CreditCard, Gift,
   PawPrint, Cat, Sprout, GraduationCap as GradCap, Film, ExternalLink, Handshake,
-  Activity, Lock, Timer
+  Activity, Lock, Timer, ImageIcon
 } from 'lucide-react';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
+
+// Full gallery images from Tufcat and Carthorse storage
+const fullGalleryImages = [
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/536268543_1347914427341636_1998352865646746143_n.jpg`, alt: 'Cart Horse work', caption: 'Working with cart horses' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/542040370_1353140630152349_287216765193985309_n.jpg`, alt: 'Workshop session', caption: 'Interactive workshop session' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547794566_1363929295910716_2829124990570404841_n.jpg`, alt: 'Field experience', caption: 'Field experience with animals' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/547230382_1363593685773710_4169595945775668111_n.jpg`, alt: 'TUFCAT accommodation', caption: 'Student accommodation at TUFCAT' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/555728551_1378021847664227_1071983310888780042_n.jpg`, alt: 'Living spaces', caption: 'Comfortable living spaces' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556098599_1378021897664222_4748312450378726214_n.jpg`, alt: 'Kitchen facilities', caption: 'Shared kitchen facilities' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/556100985_1378021790997566_6773851859108767885_n.jpg`, alt: 'Cat sanctuary', caption: 'TUFCAT cat sanctuary' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/558852709_1043815057772392_7668626230595706187_n.jpg`, alt: 'Animal interaction', caption: 'Animal interaction therapy' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/560022017_1402463328553412_5538853250832369992_n.jpg`, alt: 'Horse care', caption: 'Equine welfare activities' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/565941732_1251461607007737_6890680042161126307_n.jpg`, alt: 'Team work', caption: 'Team collaboration' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/573873211_1410644467735298_1144516536869352175_n.jpg`, alt: 'Indigenous knowledge', caption: 'Indigenous knowledge sharing' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/573883488_1410644557735289_7908845877500205254_n.jpg`, alt: 'Research activities', caption: 'Field research activities' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/574087632_1263656015788296_8646920016236566402_n.jpg`, alt: 'Community outreach', caption: 'Community outreach programme' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/585868855_1429203929212685_6885647248657070604_n.jpg`, alt: 'Volunteer work', caption: 'Volunteer engagement' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/587383422_1285925536894677_4345595592711419953_n.jpg`, alt: 'Cart Horse Partnership', caption: 'Cart Horse Protection work' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/588551952_1285925380028026_397508256720982049_n.jpg`, alt: 'Animal welfare', caption: 'Animal welfare initiatives' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1700020499120.jpg`, alt: 'Cat care', caption: 'Feline welfare at TUFCAT' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1713679813612.jpg`, alt: 'Field work', caption: 'Fieldwork experience' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1713679840761.jpg`, alt: 'Student activities', caption: 'Student learning activities' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/FB_IMG_1713679843832.jpg`, alt: 'Sanctuary life', caption: 'Daily life at the sanctuary' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230804_120620.jpg`, alt: 'Programme session', caption: 'Programme session' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230807_104308.jpg`, alt: 'Group activities', caption: 'Group learning activities' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230810_165946.jpg`, alt: 'Nature immersion', caption: 'Nature immersion experience' },
+  { src: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230929_170146.jpg`, alt: 'Community work', caption: 'Community engagement' },
+];
 
 const images = {
   // Core programme images - all unique from Tufcat and Carthorse folder
@@ -1042,25 +1071,48 @@ const UWCHumanAnimalProgram = () => {
           {/* Partner Tabs Content */}
           <div id="partner-tabs" className="scroll-mt-24">
             <Tabs value={activePartner} onValueChange={setActivePartner} className="w-full">
-              <TabsList className="w-full flex-wrap h-auto p-4 bg-gradient-to-r from-muted/40 to-muted/60 backdrop-blur-sm border border-border/50 rounded-3xl mb-12 gap-3 shadow-lg">
-                {partners.map((partner) => (
-                  <TabsTrigger 
-                    key={partner.id} 
-                    value={partner.id}
-                    className={`flex-1 min-w-[150px] py-5 px-6 rounded-2xl flex items-center gap-4 transition-all duration-300 hover:scale-[1.03] hover:shadow-md data-[state=active]:bg-gradient-to-r data-[state=active]:${partner.color} data-[state=active]:text-white data-[state=active]:shadow-xl data-[state=active]:scale-[1.02] group`}
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-white/30 flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
-                      <PartnerLogo 
-                        logo={partner.logo} 
-                        name={partner.name}
-                        shortName={partner.shortName}
-                        className="w-7 h-7 object-contain"
-                      />
-                    </div>
-                    <span className="font-bold text-base hidden sm:inline">{partner.shortName}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+              {/* Enhanced Partner Tab Navigation */}
+              <div className="relative mb-16">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-primary/5 rounded-3xl blur-xl" />
+                <TabsList className="relative w-full flex-wrap h-auto p-6 bg-gradient-to-br from-background/95 via-muted/50 to-background/95 backdrop-blur-md border-2 border-border/60 rounded-3xl gap-4 shadow-2xl">
+                  {partners.map((partner) => (
+                    <TabsTrigger 
+                      key={partner.id} 
+                      value={partner.id}
+                      className={`relative flex-1 min-w-[180px] py-6 px-8 rounded-2xl flex flex-col items-center gap-3 transition-all duration-500 
+                        hover:scale-[1.05] hover:shadow-xl hover:bg-background/80
+                        data-[state=active]:bg-gradient-to-br data-[state=active]:${partner.color} data-[state=active]:text-white 
+                        data-[state=active]:shadow-2xl data-[state=active]:scale-[1.05] data-[state=active]:border-2 data-[state=active]:border-white/20
+                        group overflow-hidden`}
+                    >
+                      {/* Active indicator glow */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-white/0 opacity-0 data-[state=active]:opacity-100 transition-opacity" />
+                      
+                      {/* Logo Container - Much Bigger */}
+                      <div className="relative w-20 h-20 rounded-2xl bg-white shadow-lg p-3 flex items-center justify-center overflow-hidden 
+                        group-hover:shadow-xl group-hover:scale-105 transition-all duration-300
+                        group-data-[state=active]:ring-4 group-data-[state=active]:ring-white/30">
+                        <PartnerLogo 
+                          logo={partner.logo} 
+                          name={partner.name}
+                          shortName={partner.shortName}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      
+                      {/* Partner Name */}
+                      <span className="font-bold text-lg text-center leading-tight group-data-[state=active]:text-white">
+                        {partner.shortName}
+                      </span>
+                      
+                      {/* Subtle tagline on hover/active */}
+                      <span className="text-xs opacity-0 group-hover:opacity-70 group-data-[state=active]:opacity-90 transition-opacity text-center max-w-[150px] truncate">
+                        {partner.tagline}
+                      </span>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
 
               {partners.map((partner) => (
                 <TabsContent key={partner.id} value={partner.id} className="mt-0">
@@ -1298,42 +1350,64 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
-      {/* Entry Requirements & Qualification Guidelines */}
-      <section id="qualification" className="py-24 scroll-mt-20 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/20">
-        <div className="container mx-auto px-4">
+      {/* Entry Requirements & Qualification Guidelines - Enhanced */}
+      <section id="qualification" className="py-24 scroll-mt-20 relative overflow-hidden">
+        {/* Background with image */}
+        <div className="absolute inset-0">
+          <img 
+            src={images.fieldwork1}
+            alt="Background"
+            className="w-full h-full object-cover opacity-10"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/95 via-background/98 to-indigo-50/95 dark:from-blue-950/95 dark:via-background/98 dark:to-indigo-950/95" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
-              <Shield className="w-3.5 h-3.5 mr-2" />
+            <Badge className="mb-4 bg-primary text-primary-foreground border-0 px-6 py-2 text-sm shadow-lg">
+              <Shield className="w-4 h-4 mr-2" />
               Entry Requirements
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Who Should Apply?
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+              Who Should <span className="text-primary">Apply?</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Clear qualification guidelines to ensure the best experience for all participants
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-12">
-            {/* Academic Requirements */}
-            <Card className="border-border hover:shadow-xl transition-all">
-              <CardContent className="p-8">
-                <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6">
-                  <GraduationCap className="w-7 h-7 text-blue-600" />
+          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16">
+            {/* Academic Requirements - Enhanced with visual */}
+            <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden group">
+              <div className="h-48 relative overflow-hidden">
+                <img 
+                  src={images.graduation}
+                  alt="Academic qualifications"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                <div className="absolute bottom-4 left-6">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-xl">
+                    <GraduationCap className="w-8 h-8 text-white" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">Academic Qualifications</h3>
-                <ul className="space-y-3">
+              </div>
+              <CardContent className="p-8">
+                <h3 className="text-2xl font-bold text-foreground mb-6">Academic Qualifications</h3>
+                <ul className="space-y-4">
                   {[
-                    { req: "Bachelor's degree (completed or final year)", level: "Required" },
-                    { req: "Honours or Master's in Psychology, Social Work, or related field", level: "Preferred" },
-                    { req: "Minimum 60% academic average", level: "Required" },
-                    { req: "English proficiency (IELTS 6.0+ or equivalent)", level: "International students" }
+                    { req: "Bachelor's degree (completed or final year)", level: "Required", color: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" },
+                    { req: "Honours or Master's in Psychology, Social Work, or related field", level: "Preferred", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
+                    { req: "Minimum 60% academic average", level: "Required", color: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" },
+                    { req: "English proficiency (IELTS 6.0+ or equivalent)", level: "International", color: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" }
                   ].map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <span className="text-foreground">{item.req}</span>
-                        <Badge variant="outline" className="ml-2 text-xs">{item.level}</Badge>
+                    <li key={idx} className="flex items-start gap-4 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-md">
+                        <Check className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-foreground font-medium">{item.req}</span>
+                        <Badge className={`ml-2 text-xs border-0 ${item.color}`}>{item.level}</Badge>
                       </div>
                     </li>
                   ))}
@@ -1341,25 +1415,37 @@ const UWCHumanAnimalProgram = () => {
               </CardContent>
             </Card>
 
-            {/* Professional Experience */}
-            <Card className="border-border hover:shadow-xl transition-all">
-              <CardContent className="p-8">
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-6">
-                  <Briefcase className="w-7 h-7 text-amber-600" />
+            {/* Professional Experience - Enhanced with visual */}
+            <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden group">
+              <div className="h-48 relative overflow-hidden">
+                <img 
+                  src={images.humanAnimal1}
+                  alt="Professional experience"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                <div className="absolute bottom-4 left-6">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-xl">
+                    <Briefcase className="w-8 h-8 text-white" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">Professional Background</h3>
-                <ul className="space-y-3">
+              </div>
+              <CardContent className="p-8">
+                <h3 className="text-2xl font-bold text-foreground mb-6">Professional Background</h3>
+                <ul className="space-y-4">
                   {[
-                    { req: "Working professionals in mental health, social services, or animal welfare", level: "Welcome" },
-                    { req: "No prior animal-assisted therapy experience needed", level: "Training provided" },
-                    { req: "Interest in research methodology and data collection", level: "Essential" },
-                    { req: "Willingness to engage in immersive field experiences", level: "Essential" }
+                    { req: "Working professionals in mental health, social services, or animal welfare", level: "Welcome", color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
+                    { req: "No prior animal-assisted therapy experience needed", level: "Training provided", color: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
+                    { req: "Interest in research methodology and data collection", level: "Essential", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
+                    { req: "Willingness to engage in immersive field experiences", level: "Essential", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" }
                   ].map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <span className="text-foreground">{item.req}</span>
-                        <Badge variant="outline" className="ml-2 text-xs">{item.level}</Badge>
+                    <li key={idx} className="flex items-start gap-4 p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-md">
+                        <Check className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-foreground font-medium">{item.req}</span>
+                        <Badge className={`ml-2 text-xs border-0 ${item.color}`}>{item.level}</Badge>
                       </div>
                     </li>
                   ))}
@@ -1639,121 +1725,154 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-24 scroll-mt-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
-              <DollarSign className="w-3.5 h-3.5 mr-2" />
+      {/* Pricing Section - Premium Redesign */}
+      <section id="pricing" className="py-24 scroll-mt-20 relative overflow-hidden">
+        {/* Decorative background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-20">
+            <Badge className="mb-4 bg-gradient-to-r from-primary to-secondary text-white border-0 px-6 py-2 text-sm shadow-lg">
+              <DollarSign className="w-4 h-4 mr-2" />
               Your Investment
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Pricing That Works For You
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+              Pricing That <span className="text-primary">Works For You</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               All-inclusive packages designed for different needs and budgets
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
-            {/* Early Bird */}
-            <Card className="border-border hover:shadow-xl transition-all relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Badge className="bg-green-500 text-white border-0 px-4">Save R7,000</Badge>
+          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto mb-20">
+            {/* Early Bird - Enhanced */}
+            <Card className="border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-green-400 to-emerald-500" />
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0 px-6 py-2 shadow-lg text-sm font-bold">
+                  Save R7,000
+                </Badge>
               </div>
-              <CardContent className="p-8 pt-10">
-                <h3 className="text-xl font-bold text-foreground mb-1">Early Bird</h3>
-                <p className="text-sm text-muted-foreground mb-6">Apply by Dec 2025</p>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-foreground">R63,000</span>
-                  <span className="text-muted-foreground ml-2">≈ $3,400 USD</span>
+              <CardContent className="p-8 pt-12">
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-2">Early Bird</h3>
+                  <p className="text-muted-foreground">Apply by Dec 2025</p>
                 </div>
-                <ul className="space-y-3 mb-8">
+                <div className="text-center mb-8 py-6 bg-muted/50 rounded-2xl">
+                  <span className="text-5xl font-bold text-foreground">R63,000</span>
+                  <p className="text-muted-foreground mt-2">≈ $3,400 USD</p>
+                </div>
+                <ul className="space-y-4 mb-8">
                   {["Everything in Full Programme", "Priority cohort placement", "Pre-programme mentorship call", "Welcome gift pack"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm">
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    <li key={i} className="flex items-center gap-3">
+                      <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4 text-green-600" />
+                      </div>
                       <span className="text-foreground">{item}</span>
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant="outline">Apply Early</Button>
-                <p className="text-xs text-center text-muted-foreground mt-3">Deadline: 31 December 2025</p>
+                <Button className="w-full h-14 text-lg rounded-xl" variant="outline">
+                  Apply Early
+                </Button>
+                <p className="text-xs text-center text-muted-foreground mt-4">Deadline: 31 December 2025</p>
               </CardContent>
             </Card>
 
-            {/* Full Programme - Featured */}
-            <Card className="border-primary shadow-xl relative scale-105 z-10">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Badge className="bg-primary text-primary-foreground border-0 px-4">Most Popular</Badge>
+            {/* Full Programme - Featured & Enhanced */}
+            <Card className="border-0 shadow-2xl relative z-10 lg:scale-110 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-primary/90" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                <Badge className="bg-white text-primary border-0 px-6 py-2 shadow-lg text-sm font-bold">
+                  <Star className="w-4 h-4 mr-1 fill-current" /> Most Popular
+                </Badge>
               </div>
-              <CardContent className="p-8 pt-10">
-                <h3 className="text-xl font-bold text-foreground mb-1">Full Programme</h3>
-                <p className="text-sm text-muted-foreground mb-6">Individual Students</p>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-primary">R70,000</span>
-                  <span className="text-muted-foreground ml-2">≈ $3,800 USD</span>
+              <CardContent className="p-8 pt-12 relative z-10">
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-white mb-2">Full Programme</h3>
+                  <p className="text-white/80">Individual Students</p>
                 </div>
-                <ul className="space-y-3 mb-8">
+                <div className="text-center mb-8 py-6 bg-white/10 backdrop-blur rounded-2xl">
+                  <span className="text-5xl font-bold text-white">R70,000</span>
+                  <p className="text-white/80 mt-2">≈ $3,800 USD</p>
+                </div>
+                <ul className="space-y-4 mb-8">
                   {["10 weeks accommodation at TUFCAT", "All meals (organic, farm-fresh)", "Field transport to all sites", "Biometric research equipment", "UWC certificate (10 SAQA credits)", "Publication support"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm">
-                      <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                      <span className="text-foreground">{item}</span>
+                    <li key={i} className="flex items-center gap-3">
+                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-white">{item}</span>
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full bg-primary hover:bg-primary/90">Reserve Your Spot</Button>
+                <Button className="w-full h-14 text-lg rounded-xl bg-white text-primary hover:bg-white/90 font-bold">
+                  Reserve Your Spot
+                </Button>
               </CardContent>
             </Card>
 
-            {/* University Partners */}
-            <Card className="border-border hover:shadow-xl transition-all">
-              <CardContent className="p-8">
-                <h3 className="text-xl font-bold text-foreground mb-1">University Partners</h3>
-                <p className="text-sm text-muted-foreground mb-6">Institutional Pricing</p>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-foreground">Custom</span>
-                  <span className="text-muted-foreground block text-sm mt-1">Contact for group rates</span>
+            {/* University Partners - Enhanced */}
+            <Card className="border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-400 to-indigo-500" />
+              <CardContent className="p-8 pt-8">
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-2">University Partners</h3>
+                  <p className="text-muted-foreground">Institutional Pricing</p>
                 </div>
-                <ul className="space-y-3 mb-8">
+                <div className="text-center mb-8 py-6 bg-muted/50 rounded-2xl">
+                  <span className="text-5xl font-bold text-foreground">Custom</span>
+                  <p className="text-muted-foreground mt-2">Contact for group rates</p>
+                </div>
+                <ul className="space-y-4 mb-8">
                   {["Custom cohort arrangements", "Credit transfer support", "Faculty exchange options", "Research collaboration", "Branded certificates"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm">
-                      <Check className="w-5 h-5 text-primary flex-shrink-0" />
+                    <li key={i} className="flex items-center gap-3">
+                      <div className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4 text-blue-600" />
+                      </div>
                       <span className="text-foreground">{item}</span>
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant="outline">
-                  <Building className="mr-2 h-4 w-4" />
+                <Button className="w-full h-14 text-lg rounded-xl" variant="outline">
+                  <Building className="mr-2 h-5 w-5" />
                   Partner With Us
                 </Button>
               </CardContent>
             </Card>
           </div>
 
-          {/* Payment Options */}
-          <div className="bg-muted/50 rounded-3xl p-8 max-w-4xl mx-auto border border-border">
-            <h3 className="text-xl font-bold text-center mb-6 text-foreground">Flexible Payment Options</h3>
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div className="p-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <CreditCard className="w-6 h-6 text-primary" />
+          {/* Payment Options - Enhanced */}
+          <div className="relative max-w-5xl mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 rounded-3xl blur-xl" />
+            <div className="relative bg-background/80 backdrop-blur-sm rounded-3xl p-10 border border-border shadow-xl">
+              <h3 className="text-2xl font-bold text-center mb-10 text-foreground">Flexible Payment Options</h3>
+              <div className="grid md:grid-cols-3 gap-8">
+                <div className="text-center p-6 rounded-2xl bg-muted/50 hover:bg-muted transition-colors group">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                    <CreditCard className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-bold text-primary mb-2">{showCurrency === 'ZAR' ? 'R20,000' : '$1,100'}</div>
+                  <div className="text-muted-foreground">Deposit to secure place</div>
                 </div>
-              <div className="text-2xl font-bold text-primary">{showCurrency === 'ZAR' ? 'R20,000' : '$1,100'}</div>
-                <div className="text-sm text-muted-foreground">Deposit to secure place</div>
-              </div>
-              <div className="p-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <Calendar className="w-6 h-6 text-primary" />
+                <div className="text-center p-6 rounded-2xl bg-muted/50 hover:bg-muted transition-colors group">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                    <Calendar className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-bold text-primary mb-2">3 Installments</div>
+                  <div className="text-muted-foreground">Spread over 3 months</div>
                 </div>
-                <div className="text-2xl font-bold text-primary">3 Installments</div>
-                <div className="text-sm text-muted-foreground">Spread over 3 months</div>
-              </div>
-              <div className="p-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <Gift className="w-6 h-6 text-primary" />
+                <div className="text-center p-6 rounded-2xl bg-muted/50 hover:bg-muted transition-colors group">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                    <Gift className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="text-3xl font-bold text-primary mb-2">Bursaries</div>
+                  <div className="text-muted-foreground">Limited partial funding</div>
                 </div>
-                <div className="text-2xl font-bold text-primary">Bursaries</div>
-                <div className="text-sm text-muted-foreground">Limited partial funding</div>
               </div>
             </div>
           </div>
@@ -1787,45 +1906,85 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
-      {/* Getting Ready Guide Section */}
-      <section id="getting-ready" className="py-24 scroll-mt-20">
+      {/* Interactive Photo Gallery Section */}
+      <section className="py-24 bg-gradient-to-br from-muted/30 via-background to-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20 px-4 py-1.5">
-              <Briefcase className="w-3.5 h-3.5 mr-2" />
+            <Badge className="mb-4 bg-gradient-to-r from-primary to-secondary text-white border-0 px-6 py-2 text-sm shadow-lg">
+              <ImageIcon className="w-4 h-4 mr-2" />
+              Life at the Programme
+            </Badge>
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+              Experience <span className="text-primary">Gallery</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Explore moments from our partner organizations - Cart Horse Protection Association and TUFCAT Sanctuary
+            </p>
+          </div>
+          
+          <InteractiveGallery 
+            images={fullGalleryImages}
+            columns={4}
+            className="max-w-7xl mx-auto"
+          />
+        </div>
+      </section>
+
+      {/* Getting Ready Guide Section - Enhanced */}
+      <section id="getting-ready" className="py-24 scroll-mt-20 relative overflow-hidden">
+        {/* Background with image */}
+        <div className="absolute inset-0">
+          <img 
+            src={images.coastline}
+            alt="Cape Town coastline"
+            className="w-full h-full object-cover opacity-5"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-20">
+            <Badge className="mb-4 bg-primary text-primary-foreground border-0 px-6 py-2 text-sm shadow-lg">
+              <Briefcase className="w-4 h-4 mr-2" />
               Preparation Guide
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Getting Ready for Your Journey
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+              Getting Ready for <span className="text-primary">Your Journey</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Everything you need to prepare for 10 transformative weeks in Cape Town
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto mb-16">
-            {/* Pre-Arrival Checklist */}
-            <Card className="border-border hover:shadow-xl transition-all">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Check className="w-6 h-6 text-primary" />
+          <div className="grid lg:grid-cols-2 gap-10 max-w-6xl mx-auto mb-20">
+            {/* Pre-Arrival Checklist - Enhanced */}
+            <Card className="border-0 shadow-2xl overflow-hidden group">
+              <div className="h-32 relative overflow-hidden bg-gradient-to-br from-green-500 to-emerald-600">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur flex items-center justify-center">
+                    <Check className="w-10 h-10 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">Pre-Arrival Checklist</h3>
                 </div>
+                <div className="absolute bottom-4 left-6">
+                  <h3 className="text-2xl font-bold text-white">Pre-Arrival Checklist</h3>
+                </div>
+              </div>
+              <CardContent className="p-8">
                 <div className="space-y-4">
                   {[
-                    { title: 'Valid Passport', desc: '6+ months validity beyond programme end' },
-                    { title: 'South African Visa', desc: 'Study visa recommended for 10+ weeks' },
-                    { title: 'Travel Insurance', desc: 'Medical coverage including animal interaction' },
-                    { title: 'Vaccinations', desc: 'Standard travel vaccines, tetanus booster' },
-                    { title: 'Academic Portfolio', desc: 'CV, transcripts, research interests document' },
-                    { title: 'Personal Journal', desc: 'For fieldwork reflections & research notes' }
+                    { title: 'Valid Passport', desc: '6+ months validity beyond programme end', icon: FileText },
+                    { title: 'South African Visa', desc: 'Study visa recommended for 10+ weeks', icon: Shield },
+                    { title: 'Travel Insurance', desc: 'Medical coverage including animal interaction', icon: Heart },
+                    { title: 'Vaccinations', desc: 'Standard travel vaccines, tetanus booster', icon: Activity },
+                    { title: 'Academic Portfolio', desc: 'CV, transcripts, research interests document', icon: BookOpen },
+                    { title: 'Personal Journal', desc: 'For fieldwork reflections & research notes', icon: FileText }
                   ].map((item, idx) => (
-                    <div key={idx} className="flex gap-3 p-3 bg-muted/50 rounded-xl">
-                      <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div key={idx} className="flex gap-4 p-4 bg-muted/50 rounded-2xl hover:bg-muted transition-colors group/item">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center flex-shrink-0 shadow-md group-hover/item:scale-110 transition-transform">
+                        <item.icon className="w-6 h-6 text-white" />
+                      </div>
                       <div>
-                        <p className="font-medium text-foreground">{item.title}</p>
+                        <p className="font-bold text-foreground">{item.title}</p>
                         <p className="text-sm text-muted-foreground">{item.desc}</p>
                       </div>
                     </div>
@@ -1834,25 +1993,34 @@ const UWCHumanAnimalProgram = () => {
               </CardContent>
             </Card>
 
-            {/* What to Pack */}
-            <Card className="border-border hover:shadow-xl transition-all">
-              <CardContent className="p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Briefcase className="w-6 h-6 text-primary" />
+            {/* What to Pack - Enhanced */}
+            <Card className="border-0 shadow-2xl overflow-hidden group">
+              <div className="h-32 relative overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur flex items-center justify-center">
+                    <Briefcase className="w-10 h-10 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">What to Pack</h3>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="absolute bottom-4 left-6">
+                  <h3 className="text-2xl font-bold text-white">What to Pack</h3>
+                </div>
+              </div>
+              <CardContent className="p-8">
+                <div className="grid grid-cols-1 gap-4">
                   {[
-                    { category: 'Clothing', items: 'Layered clothing, rain jacket, closed-toe shoes for farm work, sun hat' },
-                    { category: 'Tech', items: 'Laptop, smartphone, portable charger, universal adapter (Type M)' },
-                    { category: 'Field Work', items: 'Sunscreen SPF50, insect repellent, reusable water bottle' },
-                    { category: 'Personal', items: 'Medications, toiletries (eco-friendly preferred), comfortable sleepwear' }
+                    { category: 'Clothing', items: 'Layered clothing, rain jacket, closed-toe shoes for farm work, sun hat', icon: '👕', color: 'from-pink-400 to-rose-500' },
+                    { category: 'Tech & Camera', items: 'Laptop, smartphone, portable charger, universal adapter (Type M), camera gear', icon: '📱', color: 'from-blue-400 to-cyan-500' },
+                    { category: 'Field Work', items: 'Sunscreen SPF50, insect repellent, reusable water bottle, sturdy boots', icon: '🥾', color: 'from-amber-400 to-orange-500' },
+                    { category: 'Personal', items: 'Medications, toiletries (eco-friendly preferred), comfortable sleepwear', icon: '🧴', color: 'from-purple-400 to-violet-500' }
                   ].map((item, idx) => (
-                    <div key={idx} className="p-4 bg-muted/30 rounded-xl">
-                      <p className="font-semibold text-primary text-sm mb-1">{item.category}</p>
-                      <p className="text-sm text-muted-foreground">{item.items}</p>
+                    <div key={idx} className="p-5 bg-muted/50 rounded-2xl hover:bg-muted transition-colors">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-xl shadow-md`}>
+                          {item.icon}
+                        </div>
+                        <p className="font-bold text-foreground">{item.category}</p>
+                      </div>
+                      <p className="text-sm text-muted-foreground pl-13">{item.items}</p>
                     </div>
                   ))}
                 </div>
