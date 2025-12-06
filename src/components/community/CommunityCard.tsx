@@ -14,7 +14,8 @@ interface CommunityCardProps {
 }
 
 export const CommunityCard = ({ item, orientation }: CommunityCardProps) => {
-  const aspectRatio = orientation === 'portrait' ? 'aspect-[3/4]' : 'aspect-[16/9]';
+  // Use consistent aspect ratio (4/3) to minimize height differences
+  const aspectRatio = 'aspect-[4/3]';
   
   return (
     <Link to={item.href} className="group block">
