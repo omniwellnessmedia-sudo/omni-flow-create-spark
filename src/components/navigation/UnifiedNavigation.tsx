@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import omniLogo from '@/assets/omni-logo-new.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -166,17 +167,10 @@ const UnifiedNavigation = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3">
               <img 
-                src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1).png"
+                src={omniLogo}
                 alt="Omni Wellness Media" 
-                className="h-10 w-10 object-contain rounded-lg border border-primary/20 p-1 transition-all duration-300 hover:border-primary/40 hover:scale-105"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                }}
+                className="h-12 w-12 object-contain transition-all duration-300 hover:scale-105"
               />
-              <div className="h-10 w-10 rounded-lg border border-primary/20 p-1 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center hidden">
-                <span className="text-lg font-bold bg-gradient-primary bg-clip-text text-transparent">O</span>
-              </div>
               <div className="hidden sm:block">
                 <span className="font-bold text-lg bg-gradient-primary bg-clip-text text-transparent">
                   Omni
