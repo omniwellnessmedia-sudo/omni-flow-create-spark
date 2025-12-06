@@ -1429,16 +1429,22 @@ const UWCHumanAnimalProgram = () => {
           <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16">
             {/* Academic Requirements - Enhanced with visual */}
             <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden group">
-              <div className="h-48 relative overflow-hidden">
+              <div className="h-64 md:h-80 relative overflow-hidden">
                 <img 
                   src={images.graduation}
                   alt="Academic qualifications"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  onError={(e) => {
+                    e.currentTarget.src = images.humanAnimal1;
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                <div className="absolute bottom-4 left-6">
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+                <div className="absolute bottom-4 left-6 flex items-center gap-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-xl">
                     <GraduationCap className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <Badge className="bg-blue-500/90 text-white border-0 text-sm">Academic Track</Badge>
                   </div>
                 </div>
               </div>
@@ -1467,16 +1473,22 @@ const UWCHumanAnimalProgram = () => {
 
             {/* Professional Experience - Enhanced with visual */}
             <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden group">
-              <div className="h-48 relative overflow-hidden">
+              <div className="h-64 md:h-80 relative overflow-hidden">
                 <img 
                   src={images.humanAnimal1}
                   alt="Professional experience"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  onError={(e) => {
+                    e.currentTarget.src = images.cartHorse1;
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                <div className="absolute bottom-4 left-6">
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+                <div className="absolute bottom-4 left-6 flex items-center gap-4">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-xl">
                     <Briefcase className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <Badge className="bg-amber-500/90 text-white border-0 text-sm">Professional Track</Badge>
                   </div>
                 </div>
               </div>
