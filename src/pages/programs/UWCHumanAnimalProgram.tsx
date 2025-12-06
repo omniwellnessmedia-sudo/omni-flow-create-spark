@@ -117,27 +117,80 @@ const candidateImages = {
   community: `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG_20230929_170146.jpg`
 };
 
-// Image with fallback component
-const ImageWithFallback = ({ src, alt, className, fallback = FALLBACK_IMAGE }: { 
+// Image with fallback component - shows initials when image fails
+const ImageWithFallback = ({ 
+  src, 
+  alt, 
+  className, 
+  fallback = FALLBACK_IMAGE,
+  showInitials = false,
+  initials = '',
+  bgColor = 'bg-primary/20'
+}: { 
   src: string; 
   alt: string; 
   className?: string;
   fallback?: string;
+  showInitials?: boolean;
+  initials?: string;
+  bgColor?: string;
 }) => {
-  const [imgSrc, setImgSrc] = React.useState(src);
   const [hasError, setHasError] = React.useState(false);
+  
+  // Generate initials from alt text if not provided
+  const displayInitials = initials || alt.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  
+  if (hasError && showInitials) {
+    return (
+      <div className={`${className} ${bgColor} flex items-center justify-center`}>
+        <span className="text-lg font-bold text-primary">{displayInitials}</span>
+      </div>
+    );
+  }
   
   return (
     <img
-      src={hasError ? fallback : imgSrc}
+      src={hasError ? fallback : src}
       alt={alt}
       className={className}
       onError={() => {
         if (!hasError) {
           setHasError(true);
-          setImgSrc(fallback);
         }
       }}
+    />
+  );
+};
+
+// Partner logo component with text fallback
+const PartnerLogo = ({ 
+  logo, 
+  name, 
+  shortName,
+  className = "w-full h-full object-contain"
+}: { 
+  logo: string; 
+  name: string; 
+  shortName: string;
+  className?: string;
+}) => {
+  const [hasError, setHasError] = React.useState(false);
+  const initials = shortName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  
+  if (hasError) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg">
+        <span className="text-sm font-bold text-primary">{initials}</span>
+      </div>
+    );
+  }
+  
+  return (
+    <img 
+      src={logo} 
+      alt={name}
+      className={className}
+      onError={() => setHasError(true)}
     />
   );
 };
@@ -768,22 +821,11 @@ const UWCHumanAnimalProgram = () => {
                 }`}
               >
                 <div className="w-20 h-20 rounded-2xl bg-white shadow-md flex items-center justify-center p-2 overflow-hidden">
-                  <img 
-                    src={partner.logo} 
-                    alt={partner.name}
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
+                  <PartnerLogo 
+                    logo={partner.logo} 
+                    name={partner.name}
+                    shortName={partner.shortName}
                   />
-                  <div 
-                    className={`hidden w-full h-full rounded-xl bg-gradient-to-br ${partner.color} items-center justify-center`}
-                  >
-                    <partner.icon className="w-8 h-8 text-white" />
-                  </div>
                 </div>
                 <span className={`text-sm font-semibold whitespace-nowrap transition-colors ${
                   activePartner === partner.id ? 'text-primary' : 'text-foreground'
@@ -837,14 +879,10 @@ const UWCHumanAnimalProgram = () => {
                     
                     {/* Partner Logo Mini */}
                     <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-white shadow-md p-1.5 flex items-center justify-center">
-                      <img 
-                        src={item.partner.logo} 
-                        alt={item.partner.shortName}
-                        className="w-full h-full object-contain"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
+                      <PartnerLogo 
+                        logo={item.partner.logo} 
+                        name={item.partner.name}
+                        shortName={item.partner.shortName}
                       />
                     </div>
                     
@@ -870,14 +908,11 @@ const UWCHumanAnimalProgram = () => {
                     className={`flex-1 min-w-[130px] py-4 px-5 rounded-2xl flex items-center gap-3 transition-all data-[state=active]:bg-gradient-to-r data-[state=active]:${partner.color} data-[state=active]:text-white data-[state=active]:shadow-lg`}
                   >
                     <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center overflow-hidden">
-                      <img 
-                        src={partner.logo} 
-                        alt={partner.shortName}
+                      <PartnerLogo 
+                        logo={partner.logo} 
+                        name={partner.name}
+                        shortName={partner.shortName}
                         className="w-6 h-6 object-contain"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
                       />
                     </div>
                     <span className="font-semibold hidden sm:inline">{partner.shortName}</span>
@@ -1024,14 +1059,10 @@ const UWCHumanAnimalProgram = () => {
               {partners.map((partner, idx) => (
                 <div key={partner.id} className="flex items-center gap-2">
                   <div className="w-12 h-12 rounded-xl bg-white shadow-sm p-2 flex items-center justify-center">
-                    <img 
-                      src={partner.logo} 
-                      alt={partner.shortName}
-                      className="w-full h-full object-contain"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                      }}
+                    <PartnerLogo 
+                      logo={partner.logo} 
+                      name={partner.name}
+                      shortName={partner.shortName}
                     />
                   </div>
                   {idx < partners.length - 1 && (
