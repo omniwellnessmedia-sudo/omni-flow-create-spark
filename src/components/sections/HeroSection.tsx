@@ -239,13 +239,11 @@ const HeroSection = () => {
 
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Logo */}
+          {/* Brand Icon */}
           <div className="flex justify-center mb-6 sm:mb-8 animate-fade-in">
-            <img 
-              src={IMAGES.logos.omniPrimary}
-              alt="Omni Wellness Media" 
-              className="h-24 w-24 sm:h-32 sm:w-32 lg:h-40 lg:w-40 object-contain drop-shadow-2xl"
-            />
+            <div className="h-24 w-24 sm:h-32 sm:w-32 lg:h-40 lg:w-40 rounded-full bg-gradient-to-br from-primary via-accent to-secondary flex items-center justify-center shadow-2xl">
+              <Sparkles className="h-12 w-12 sm:h-16 sm:w-16 lg:h-20 lg:w-20 text-white" />
+            </div>
           </div>
           
           {/* Main Headline */}
