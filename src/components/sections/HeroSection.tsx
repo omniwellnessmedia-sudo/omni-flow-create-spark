@@ -241,11 +241,14 @@ const HeroSection = () => {
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Brand Logo */}
           <div className="flex justify-center mb-6 sm:mb-8 animate-fade-in">
-            <img 
-              src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
-              alt="Omni Wellness Media"
-              className="h-28 w-28 sm:h-36 sm:w-36 lg:h-44 lg:w-44 object-contain drop-shadow-2xl"
-            />
+            <div className="relative">
+              <img 
+                src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
+                alt="Omni Wellness Media"
+                className="h-28 w-28 sm:h-36 sm:w-36 lg:h-44 lg:w-44 object-contain drop-shadow-2xl rounded-full bg-white/90 p-3 animate-[pulse_3s_ease-in-out_infinite]"
+              />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 animate-[pulse_3s_ease-in-out_infinite] blur-md -z-10"></div>
+            </div>
           </div>
           
           {/* Main Headline */}
