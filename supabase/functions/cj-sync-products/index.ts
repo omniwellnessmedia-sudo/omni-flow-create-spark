@@ -8,16 +8,30 @@ const corsHeaders = {
 
 const CJ_PRODUCT_FEED_ENDPOINT = 'https://ads.api.cj.com/query';
 
-const isValidImageUrl = (url: string): boolean => {
-  if (!url) return false;
-  if (url.endsWith('/')) return false;
+// Fallback wellness product images from Supabase storage
+const FALLBACK_IMAGES = [
+  'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg',
+  'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg',
+  'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg',
+];
+
+// Enhanced image validation
+const isValidImageUrl = (url: string | undefined | null): boolean => {
+  if (!url || typeof url !== 'string') return false;
   if (url.length < 10) return false;
+  if (url.endsWith('/')) return false;
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return false;
   // Filter out placeholder images
-  if (/no[_-]?image|noimaged|placeholder|default/i.test(url)) return false;
-  const hasValidDomain = url.startsWith('http://') || url.startsWith('https://');
-  const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(url);
-  const looksLikeImage = url.includes('image') || url.includes('img') || url.includes('product') || url.includes('photo');
-  return hasValidDomain && (hasImageExtension || looksLikeImage);
+  if (/no[_-]?image|noimaged|placeholder|default|missing|blank|empty/i.test(url)) return false;
+  // Check for valid image indicators
+  const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg|bmp)(\?.*)?$/i.test(url);
+  const looksLikeImage = /image|img|product|photo|media|cdn|assets|pictures/i.test(url);
+  return hasImageExtension || looksLikeImage;
+};
+
+// Get fallback image with variety
+const getFallbackImage = (index: number): string => {
+  return FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
 };
 
 const extractProductTitle = (title: string, description?: string): string => {
@@ -75,10 +89,44 @@ const fetchBrandLogo = async (advertiserName: string): Promise<string | null> =>
       return clearbitUrl;
     }
   } catch (error) {
-    console.log(`Logo fetch failed for ${domain}`);
+    console.log(`[CJ] Logo fetch failed for ${domain}`);
   }
   
   return null;
+};
+
+// Find best available image from product data
+const extractBestImage = (product: any, index: number): { url: string; isFallback: boolean } => {
+  // Try main image first
+  if (isValidImageUrl(product.imageLink)) {
+    return { url: product.imageLink, isFallback: false };
+  }
+
+  // Try additional images
+  if (Array.isArray(product.additionalImageLinks)) {
+    for (const img of product.additionalImageLinks) {
+      if (isValidImageUrl(img)) {
+        console.log(`[CJ] Using additionalImageLink for product ${product.id}`);
+        return { url: img, isFallback: false };
+      }
+    }
+  }
+
+  if (product.additionalImageLink) {
+    if (Array.isArray(product.additionalImageLink)) {
+      for (const img of product.additionalImageLink) {
+        if (isValidImageUrl(img)) {
+          return { url: img, isFallback: false };
+        }
+      }
+    } else if (isValidImageUrl(product.additionalImageLink)) {
+      return { url: product.additionalImageLink, isFallback: false };
+    }
+  }
+
+  // Return fallback
+  console.log(`[CJ] No valid image for product ${product.id}, using fallback`);
+  return { url: getFallbackImage(index), isFallback: true };
 };
 
 serve(async (req) => {
@@ -93,12 +141,39 @@ serve(async (req) => {
     if (!CJ_PAT) throw new Error('CJ Personal Access Token not configured');
     if (!CJ_COMPANY_ID) throw new Error('CJ Company ID not configured');
 
+    // Create supabase client with service role for admin operations
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    // Optional: Verify admin if Authorization header provided
+    const authHeader = req.headers.get('Authorization');
+    if (authHeader) {
+      const userClient = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+        { global: { headers: { Authorization: authHeader } } }
+      );
+      
+      const { data: { user }, error: userError } = await userClient.auth.getUser();
+      if (user) {
+        const { data: isAdmin } = await userClient.rpc('is_admin', { user_id: user.id });
+        if (!isAdmin) {
+          return new Response(
+            JSON.stringify({ success: false, error: 'Admin access required' }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 403 }
+          );
+        }
+        console.log('[CJ] Admin user verified:', user.id);
+      }
+    }
+
     const { category, keywords, limit = 100 } = await req.json();
     const searchKeywords = keywords || category || 'wellness';
 
-    console.log('Fetching CJ products:', { category, keywords, limit, companyId: CJ_COMPANY_ID });
+    console.log('[CJ] Fetching products:', { category, keywords, limit, companyId: CJ_COMPANY_ID });
 
-    // Fixed GraphQL query - removed longDescription as it doesn't exist in CJ API
     const graphqlQuery = {
       query: `
         query ProductSearch($companyId: ID!, $keywords: [String!], $limit: Int) {
@@ -158,22 +233,35 @@ serve(async (req) => {
     const productsData = data.data?.products;
     const resultList = productsData?.resultList || [];
 
-    console.log(`Fetched ${resultList.length} products from CJ API`);
+    console.log(`[CJ] Fetched ${resultList.length} products from API`);
 
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    // Track image statistics
+    let validImages = 0;
+    let fallbackImages = 0;
+    let skippedProducts = 0;
 
     const productsWithBrands = await Promise.all(
       resultList
-        .filter((product: any) => {
-          if (!isValidImageUrl(product.imageLink)) return false;
-          if (!product.title || product.title.length < 5) return false;
-          if (parseFloat(product.price?.amount || '0') <= 0) return false;
-          return true;
-        })
-        .map(async (product: any) => {
+        .map(async (product: any, index: number) => {
+          // Extract best image
+          const { url: imageUrl, isFallback } = extractBestImage(product, index);
+          
+          if (isFallback) {
+            fallbackImages++;
+          } else {
+            validImages++;
+          }
+
+          // Skip products without title or valid price
+          if (!product.title || product.title.length < 5) {
+            skippedProducts++;
+            return null;
+          }
+          if (parseFloat(product.price?.amount || '0') <= 0) {
+            skippedProducts++;
+            return null;
+          }
+
           const priceAmount = parseFloat(product.price?.amount || '0');
           const priceCurrency = product.price?.currency || 'USD';
           const salePriceAmount = parseFloat(product.salePrice?.amount || '0');
@@ -205,29 +293,19 @@ serve(async (req) => {
             });
           }
 
-          // Process additional images from both fields
+          // Process additional images
           const additionalImages: string[] = [];
-          
-          // Add images from additionalImageLinks array (Shopping type)
           if (Array.isArray(product.additionalImageLinks)) {
             additionalImages.push(...product.additionalImageLinks.filter((img: string) => isValidImageUrl(img)));
           }
-          
-          // Add single additionalImageLink if present
           if (product.additionalImageLink) {
             if (Array.isArray(product.additionalImageLink)) {
               additionalImages.push(...product.additionalImageLink.filter((img: string) => isValidImageUrl(img)));
-            } else if (typeof product.additionalImageLink === 'string' && isValidImageUrl(product.additionalImageLink)) {
+            } else if (isValidImageUrl(product.additionalImageLink)) {
               additionalImages.push(product.additionalImageLink);
             }
           }
 
-          // If no additional images, at least include main image for gallery
-          if (additionalImages.length === 0 && isValidImageUrl(product.imageLink)) {
-            additionalImages.push(product.imageLink);
-          }
-
-          // Map description to both fields (short and long)
           const description = product.description || '';
           const shortDesc = description.length > 200 ? description.substring(0, 200) + '...' : description;
           const longDesc = description || (product.brand && cleanTitle ? `${product.brand} - ${cleanTitle}` : '');
@@ -239,7 +317,7 @@ serve(async (req) => {
             description: shortDesc || cleanTitle,
             long_description: longDesc || shortDesc || cleanTitle,
             category: inferredCategory,
-            image_url: product.imageLink,
+            image_url: imageUrl,
             affiliate_url: product.link || '',
             price_usd: Math.round(prices.usd * 100) / 100,
             price_zar: Math.round(prices.zar * 100) / 100,
@@ -253,7 +331,7 @@ serve(async (req) => {
             advertiser_name: product.advertiserName,
             brand_logo_url: brandLogoUrl,
             brand: product.brand || null,
-            manufacturer: null, // Field doesn't exist in CJ API
+            manufacturer: null,
             condition: product.condition || null,
             availability: product.availability || null,
             color: product.color || null,
@@ -263,31 +341,33 @@ serve(async (req) => {
             mpn: product.mpn || null,
             product_highlights: Array.isArray(product.productHighlight) ? product.productHighlight.filter((h: any) => h) : [],
             product_details: productDetails,
-            additional_images: additionalImages,
+            additional_images: additionalImages.length > 0 ? additionalImages : [imageUrl],
             google_category: product.googleProductCategory ? { id: product.googleProductCategory.id, name: product.googleProductCategory.name } : {},
             last_synced_at: new Date().toISOString(),
           };
         })
     );
 
-    console.log(`Processed ${productsWithBrands.length} valid products`);
+    // Filter out null entries
+    const validProducts = productsWithBrands.filter(p => p !== null);
+    console.log(`[CJ] Processed ${validProducts.length} valid products (${skippedProducts} skipped)`);
+    console.log(`[CJ] Image stats: ${validImages} valid, ${fallbackImages} fallbacks`);
 
-    // De-duplicate products before upsert to prevent ON CONFLICT errors
+    // De-duplicate products
     const productMap = new Map();
-    productsWithBrands.forEach(product => {
+    validProducts.forEach(product => {
       const key = `${product.external_product_id}|${product.affiliate_program_id}`;
       if (!productMap.has(key)) {
         productMap.set(key, product);
       }
     });
     const uniqueProducts = Array.from(productMap.values());
-    console.log(`De-duplicated to ${uniqueProducts.length} unique products`);
+    console.log(`[CJ] De-duplicated to ${uniqueProducts.length} unique products`);
 
     let inserted = 0;
     let updated = 0;
 
     if (uniqueProducts.length > 0) {
-      // Get existing product IDs to calculate inserted vs updated
       const externalIds = uniqueProducts.map(p => p.external_product_id);
       const { data: existingProducts } = await supabaseClient
         .from('affiliate_products')
@@ -299,7 +379,6 @@ serve(async (req) => {
       inserted = uniqueProducts.filter(p => !existingIds.has(p.external_product_id)).length;
       updated = existingProducts?.length || 0;
 
-      // Upsert products with proper conflict resolution
       const { error: productsError } = await supabaseClient
         .from('affiliate_products')
         .upsert(uniqueProducts, { 
@@ -308,10 +387,10 @@ serve(async (req) => {
         });
 
       if (productsError) {
-        console.error('Error upserting products:', productsError);
+        console.error('[CJ] Error upserting products:', productsError);
         throw productsError;
       } else {
-        console.log(`Upserted products: ${inserted} new, ${updated} updated`);
+        console.log(`[CJ] Upserted products: ${inserted} new, ${updated} updated`);
       }
 
       // Upsert brands
@@ -337,9 +416,9 @@ serve(async (req) => {
           });
 
         if (brandsError) {
-          console.error('Error upserting brands:', brandsError);
+          console.error('[CJ] Error upserting brands:', brandsError);
         } else {
-          console.log(`Upserted ${uniqueBrands.length} brands`);
+          console.log(`[CJ] Upserted ${uniqueBrands.length} brands`);
         }
       }
     }
@@ -350,11 +429,16 @@ serve(async (req) => {
         results: {
           inserted,
           updated,
-          totalFetched: resultList.length
+          totalFetched: resultList.length,
+          skipped: skippedProducts,
+        },
+        image_stats: {
+          valid_images: validImages,
+          fallback_images: fallbackImages,
         },
         processedCount: uniqueProducts.length,
         totalRecords: productsData?.totalCount || 0,
-        products: uniqueProducts.slice(0, 10), // Return first 10 for debugging
+        products: uniqueProducts.slice(0, 5), // Return first 5 for debugging
         metadata: {
           category,
           keywords: searchKeywords,
@@ -365,7 +449,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('[CJ] Error:', error);
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
