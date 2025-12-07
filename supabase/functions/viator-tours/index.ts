@@ -6,6 +6,13 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Fallback images for tours without valid images
+const FALLBACK_IMAGES = [
+  'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg',
+  'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg',
+  'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg',
+];
+
 interface ViatorImageVariant {
   url: string;
   width: number;
@@ -53,27 +60,59 @@ interface ViatorProduct {
   }>;
 }
 
+// Validate if URL is a proper image URL
+const isValidImageUrl = (url: string | undefined | null): boolean => {
+  if (!url || typeof url !== 'string') return false;
+  if (url.length < 10) return false;
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return false;
+  if (url === 'SUPPLIER_PROVIDED') return false;
+  return true;
+};
+
+// Get fallback image with variety
+const getFallbackImage = (index: number): string => {
+  return FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
+};
+
 // Helper function to extract best image URL from Viator image variants
-const extractImageUrl = (images?: ViatorImage[]): string => {
-  if (!images || images.length === 0) return '';
+const extractImageUrl = (images: ViatorImage[] | undefined, productCode: string, index: number): { url: string; isFallback: boolean } => {
+  if (!images || images.length === 0) {
+    console.log(`[VIATOR] No images array for product ${productCode}`);
+    return { url: getFallbackImage(index), isFallback: true };
+  }
   
   // Try to find cover image first, then use first image
   const coverImage = images.find(img => img.isCover) || images[0];
   
-  // If no variants, return empty (imageSource alone doesn't provide a usable URL)
-  if (!coverImage.variants || coverImage.variants.length === 0) return '';
+  // If no variants, check if imageSource itself is a URL
+  if (!coverImage.variants || coverImage.variants.length === 0) {
+    if (coverImage.imageSource && isValidImageUrl(coverImage.imageSource)) {
+      return { url: coverImage.imageSource, isFallback: false };
+    }
+    console.log(`[VIATOR] No variants for product ${productCode}`);
+    return { url: getFallbackImage(index), isFallback: true };
+  }
   
   // Prefer larger sizes for better quality
   const preferredWidths = [720, 540, 480, 400, 360, 240];
   
   for (const width of preferredWidths) {
     const variant = coverImage.variants.find(v => v.width === width);
-    if (variant?.url) return variant.url;
+    if (variant?.url && isValidImageUrl(variant.url)) {
+      return { url: variant.url, isFallback: false };
+    }
   }
   
   // Fall back to largest available variant
   const sortedVariants = [...coverImage.variants].sort((a, b) => b.width - a.width);
-  return sortedVariants[0]?.url || '';
+  const largestUrl = sortedVariants[0]?.url;
+  
+  if (isValidImageUrl(largestUrl)) {
+    return { url: largestUrl, isFallback: false };
+  }
+  
+  console.log(`[VIATOR] No valid variant URLs for product ${productCode}`);
+  return { url: getFallbackImage(index), isFallback: true };
 };
 
 serve(async (req) => {
@@ -147,16 +186,15 @@ serve(async (req) => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Viator API error:', response.status, errorText);
+        console.error('[VIATOR] API error:', response.status, errorText);
         throw new Error(`Viator API returned ${response.status}: ${errorText}`);
       }
 
       const product: ViatorProduct = await response.json();
 
-      // Cache in database
-      // Extract proper image URL from variants array
-      const imageUrl = extractImageUrl(product.images);
-      console.log(`Product ${product.productCode} image URL:`, imageUrl || 'no image found');
+      // Extract proper image URL from variants array with fallback
+      const { url: imageUrl, isFallback } = extractImageUrl(product.images, product.productCode, 0);
+      console.log(`[VIATOR] Product ${product.productCode} image: ${imageUrl} (fallback: ${isFallback})`);
       
       const tourData = {
         viator_product_code: product.productCode,
@@ -184,11 +222,11 @@ serve(async (req) => {
         .upsert(tourData, { onConflict: 'viator_product_code' });
 
       if (upsertError) {
-        console.error('Error caching tour:', upsertError);
+        console.error('[VIATOR] Error caching tour:', upsertError);
       }
 
       return new Response(
-        JSON.stringify({ success: true, product: tourData }),
+        JSON.stringify({ success: true, product: tourData, image_is_fallback: isFallback }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -315,12 +353,22 @@ serve(async (req) => {
         console.log(`Found ${natureResults.products?.length || 0} nature tours`);
       }
 
-      console.log(`Total unique tours found: ${products.length}`);
+      console.log(`[VIATOR] Total unique tours found: ${products.length}`);
+
+      // Track image statistics
+      let validImages = 0;
+      let fallbackImages = 0;
 
       // Cache all products in database
-      const toursToCache = products.map((product: ViatorProduct) => {
-        // Extract proper image URL from variants array
-        const imageUrl = extractImageUrl(product.images);
+      const toursToCache = products.map((product: ViatorProduct, index: number) => {
+        // Extract proper image URL from variants array with fallback
+        const { url: imageUrl, isFallback } = extractImageUrl(product.images, product.productCode, index);
+        
+        if (isFallback) {
+          fallbackImages++;
+        } else {
+          validImages++;
+        }
         
         return {
           viator_product_code: product.productCode,
@@ -344,7 +392,8 @@ serve(async (req) => {
         };
       });
       
-      console.log('Sample tour images:', toursToCache.slice(0, 3).map(t => ({ code: t.viator_product_code, image: t.image_url })));
+      console.log(`[VIATOR] Image stats: ${validImages} valid, ${fallbackImages} fallbacks`);
+      console.log('[VIATOR] Sample tour images:', toursToCache.slice(0, 3).map(t => ({ code: t.viator_product_code, image: t.image_url.substring(0, 50) })));
 
       if (toursToCache.length > 0) {
         const { error: bulkUpsertError } = await supabase
@@ -352,7 +401,7 @@ serve(async (req) => {
           .upsert(toursToCache, { onConflict: 'viator_product_code' });
 
         if (bulkUpsertError) {
-          console.error('Error bulk caching tours:', bulkUpsertError);
+          console.error('[VIATOR] Error bulk caching tours:', bulkUpsertError);
         }
       }
 
@@ -360,7 +409,11 @@ serve(async (req) => {
         JSON.stringify({ 
           success: true, 
           count: products.length,
-          tours: toursToCache 
+          tours: toursToCache,
+          image_stats: {
+            valid_images: validImages,
+            fallback_images: fallbackImages,
+          }
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
