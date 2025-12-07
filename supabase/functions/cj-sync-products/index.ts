@@ -15,6 +15,46 @@ const FALLBACK_IMAGES = [
   'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg',
 ];
 
+// Low quality image patterns - these should use fallbacks
+const LOW_QUALITY_PATTERNS = [
+  'knetbooks.com', 'ecampus.com', 'biggerbooks.com', // Small book thumbnails
+  'supraphonline.cz/cover/200', // Small album covers (200px)
+  '/thumb/', '/thumbnail/', '/small/', '/tiny/', '/mini/',
+  'width=200', 'width=100', 'width=150', 'maxheight=200', 'maxheight=150',
+  '_50x50', '_100x100', '_150x150', '_200x200',
+  '/50/', '/100/', '/150/', '/200/', // Size in path
+  'simages.ecampus.com', 'images.biggerbooks.com'
+];
+
+// Check if URL points to a low quality image
+const isLowQualityImage = (url: string): boolean => {
+  return LOW_QUALITY_PATTERNS.some(pattern => url.toLowerCase().includes(pattern));
+};
+
+// Upgrade image quality for known CDN patterns
+const upgradeImageUrl = (url: string): string => {
+  let enhanced = url;
+  
+  // Upgrade to HTTPS
+  enhanced = enhanced.replace(/^http:\/\//, 'https://');
+  
+  // Shopify: Request larger image
+  if (enhanced.includes('cdn.shopify.com')) {
+    enhanced = enhanced.replace(/_\d+x\d*\./, '_1024x1024.');
+    enhanced = enhanced.replace(/_\d*x\d+\./, '_1024x1024.');
+  }
+  
+  // Indigo/Chapters books: Request larger
+  if (enhanced.includes('indigoimages.ca') || enhanced.includes('indigo.ca')) {
+    enhanced = enhanced.replace(/width=\d+/, 'width=800').replace(/maxheight=\d+/, 'maxheight=800');
+  }
+  
+  // Factcool: Already decent quality, no changes needed
+  // Cloudfront: Usually good quality, no changes needed
+  
+  return enhanced;
+};
+
 // Enhanced image validation
 const isValidImageUrl = (url: string | undefined | null): boolean => {
   if (!url || typeof url !== 'string') return false;
@@ -27,6 +67,13 @@ const isValidImageUrl = (url: string | undefined | null): boolean => {
   const hasImageExtension = /\.(jpg|jpeg|png|gif|webp|svg|bmp)(\?.*)?$/i.test(url);
   const looksLikeImage = /image|img|product|photo|media|cdn|assets|pictures/i.test(url);
   return hasImageExtension || looksLikeImage;
+};
+
+// Check if image is high quality enough to use
+const isHighQualityImage = (url: string): boolean => {
+  if (!isValidImageUrl(url)) return false;
+  if (isLowQualityImage(url)) return false;
+  return true;
 };
 
 // Get fallback image with variety
@@ -95,38 +142,45 @@ const fetchBrandLogo = async (advertiserName: string): Promise<string | null> =>
   return null;
 };
 
-// Find best available image from product data
-const extractBestImage = (product: any, index: number): { url: string; isFallback: boolean } => {
-  // Try main image first
-  if (isValidImageUrl(product.imageLink)) {
-    return { url: product.imageLink, isFallback: false };
-  }
-
-  // Try additional images
+// Find best available HIGH QUALITY image from product data
+const extractBestImage = (product: any, index: number): { url: string; isFallback: boolean; reason?: string } => {
+  const allCandidates: string[] = [];
+  
+  // Collect all candidate images
+  if (product.imageLink) allCandidates.push(product.imageLink);
   if (Array.isArray(product.additionalImageLinks)) {
-    for (const img of product.additionalImageLinks) {
-      if (isValidImageUrl(img)) {
-        console.log(`[CJ] Using additionalImageLink for product ${product.id}`);
-        return { url: img, isFallback: false };
-      }
-    }
+    allCandidates.push(...product.additionalImageLinks);
   }
-
   if (product.additionalImageLink) {
     if (Array.isArray(product.additionalImageLink)) {
-      for (const img of product.additionalImageLink) {
-        if (isValidImageUrl(img)) {
-          return { url: img, isFallback: false };
-        }
-      }
-    } else if (isValidImageUrl(product.additionalImageLink)) {
-      return { url: product.additionalImageLink, isFallback: false };
+      allCandidates.push(...product.additionalImageLink);
+    } else {
+      allCandidates.push(product.additionalImageLink);
     }
   }
-
-  // Return fallback
-  console.log(`[CJ] No valid image for product ${product.id}, using fallback`);
-  return { url: getFallbackImage(index), isFallback: true };
+  
+  // First pass: Look for high-quality images
+  for (const img of allCandidates) {
+    if (isHighQualityImage(img)) {
+      const enhancedUrl = upgradeImageUrl(img);
+      console.log(`[CJ] Using high-quality image for ${product.id}: ${enhancedUrl}`);
+      return { url: enhancedUrl, isFallback: false };
+    }
+  }
+  
+  // Second pass: Accept valid images even if low quality (better than nothing)
+  for (const img of allCandidates) {
+    if (isValidImageUrl(img)) {
+      // But still upgrade it if possible
+      const enhancedUrl = upgradeImageUrl(img);
+      console.log(`[CJ] Using lower-quality image for ${product.id} (no HQ available): ${enhancedUrl}`);
+      return { url: enhancedUrl, isFallback: false, reason: 'low-quality-source' };
+    }
+  }
+  
+  // Use fallback wellness image for products with no valid images
+  console.log(`[CJ] No valid image for product ${product.id}, using wellness fallback`);
+  return { url: getFallbackImage(index), isFallback: true, reason: 'no-source-image' };
 };
 
 serve(async (req) => {
