@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import LiveDemoPresence from "@/components/collaboration/LiveDemoPresence";
 import ProductManagement from "@/pages/admin/ProductManagement";
 import AdminTools from "@/pages/admin/AdminTools";
+import AdminLeads from "@/pages/admin/AdminLeads";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -268,8 +269,9 @@ const AdminDashboard = () => {
 
         {/* Enhanced Main Content Tabs for Helen's Admin Interface */}
         <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-10">
+          <TabsList className="grid w-full grid-cols-11">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="leads">Leads</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
             <TabsTrigger value="tools">Tools</TabsTrigger>
             <TabsTrigger value="providers">Top Providers</TabsTrigger>
@@ -376,6 +378,10 @@ const AdminDashboard = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="leads" className="space-y-4">
+            <AdminLeads />
           </TabsContent>
 
           <TabsContent value="products" className="space-y-4">
