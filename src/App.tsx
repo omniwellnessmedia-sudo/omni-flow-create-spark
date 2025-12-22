@@ -96,6 +96,7 @@ const StoreCollections = React.lazy(() => import('@/pages/StoreCollections'));
 const AdminTools = React.lazy(() => import('@/pages/admin/AdminTools'));
 const Wishlist = React.lazy(() => import('@/pages/Wishlist'));
 const StoreProductDetail = React.lazy(() => import('@/pages/StoreProductDetail'));
+const UpdatePassword = React.lazy(() => import('@/pages/UpdatePassword'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -126,6 +127,7 @@ function App() {
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms-of-service" element={<TermsOfService />} />
                   <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/update-password" element={<UpdatePassword />} />
 
                   {/* Wellness Exchange Routes */}
                   <Route path="/wellness-exchange" element={<WellnessExchange />} />
