@@ -462,94 +462,33 @@ const AdminDashboard = () => {
             <AdminTools />
           </TabsContent>
 
-          <TabsContent value="providers" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Top Performing Providers</CardTitle>
-                <CardDescription>Leading wellness providers on the platform</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {dashboardData.providers.map((provider, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-omni-blue to-omni-purple rounded-full flex items-center justify-center text-white font-bold text-lg">
-                          {index + 1}
-                        </div>
-                        <div>
-                          <p className="font-medium text-lg">{provider.name}</p>
-                          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                            <span>⭐ {provider.rating}</span>
-                            <span>📅 {provider.bookings} bookings</span>
-                            <span className="text-green-600">📈 +{provider.growth}% growth</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xl font-bold text-omni-green">R{provider.revenue.toLocaleString()}</p>
-                        <p className="text-sm text-muted-foreground">Monthly revenue</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="activity" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Platform Activity</CardTitle>
-                <CardDescription>Latest actions and events across the platform</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {dashboardData.recentActivity.map((activity, index) => (
-                    <div key={index} className="flex items-start space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                      <div className="w-2 h-2 rounded-full bg-omni-blue mt-2 flex-shrink-0"></div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium">{activity.description}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(activity.timestamp).toLocaleString()}
-                        </p>
-                      </div>
-                      <Badge variant="secondary" className="text-xs">
-                        {activity.type.replace('_', ' ')}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           <TabsContent value="orders" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>All Orders</CardTitle>
-                <CardDescription>Manage customer orders and payments</CardDescription>
+                <CardTitle>Recent Orders</CardTitle>
+                <CardDescription>Latest customer orders</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {dashboardData.orders.map((order) => (
-                    <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex-1">
-                        <p className="font-medium">{order.customer_name}</p>
-                        <p className="text-sm text-muted-foreground">{order.customer_email}</p>
-                        <p className="text-sm">{order.product_name}</p>
-                        <p className="text-xs text-muted-foreground">Order #{order.order_number}</p>
+                  {dashboardData.orders.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8">No orders yet</p>
+                  ) : (
+                    dashboardData.orders.map((order: any) => (
+                      <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex-1">
+                          <p className="font-medium">{order.customer_name || 'Customer'}</p>
+                          <p className="text-sm text-muted-foreground">{order.customer_email}</p>
+                          <p className="text-sm">{order.product_name}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold">R{order.amount?.toLocaleString() || 0}</p>
+                          <Badge variant={order.status === 'completed' ? 'default' : 'secondary'}>
+                            {order.status}
+                          </Badge>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-bold">R{order.amount}</p>
-                        <Badge variant={order.status === 'completed' ? 'default' : 'secondary'}>
-                          {order.status}
-                        </Badge>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(order.created_at).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -563,24 +502,28 @@ const AdminDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {dashboardData.bookings.map((booking) => (
-                    <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex-1">
-                        <p className="font-medium">{booking.contact_name}</p>
-                        <p className="text-sm text-muted-foreground">{booking.contact_email}</p>
-                        <p className="text-sm">{booking.tours?.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {booking.participants} participant(s) • {new Date(booking.booking_date).toLocaleDateString()}
-                        </p>
+                  {dashboardData.bookings.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8">No bookings yet</p>
+                  ) : (
+                    dashboardData.bookings.map((booking: any) => (
+                      <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex-1">
+                          <p className="font-medium">{booking.contact_name || 'Guest'}</p>
+                          <p className="text-sm text-muted-foreground">{booking.contact_email}</p>
+                          <p className="text-sm">{booking.tours?.title || 'Tour'}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {booking.participants} participant(s) • {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString() : 'TBD'}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold">R{booking.total_price?.toLocaleString() || 0}</p>
+                          <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'}>
+                            {booking.status}
+                          </Badge>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-bold">R{booking.total_price}</p>
-                        <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'}>
-                          {booking.status}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -593,49 +536,27 @@ const AdminDashboard = () => {
                 <CardDescription>Manage wellness exchange services</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {dashboardData.services.map((service) => (
-                    <div key={service.id} className="p-4 border rounded-lg">
-                      <h3 className="font-medium">{service.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">{service.category}</p>
-                      <div className="flex justify-between items-center mt-2">
-                        <div>
-                          {service.price_zar && <p className="text-sm">R{service.price_zar}</p>}
-                          {service.price_wellcoins && <p className="text-sm text-green-600">{service.price_wellcoins} WC</p>}
+                {dashboardData.services.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">No services yet</p>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {dashboardData.services.map((service: any) => (
+                      <div key={service.id} className="p-4 border rounded-lg">
+                        <h3 className="font-medium">{service.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">{service.category}</p>
+                        <div className="flex justify-between items-center mt-2">
+                          <div>
+                            {service.price_zar && <p className="text-sm">R{service.price_zar}</p>}
+                            {service.price_wellcoins && <p className="text-sm text-green-600">{service.price_wellcoins} WC</p>}
+                          </div>
+                          <Badge variant={service.active ? 'default' : 'secondary'}>
+                            {service.active ? 'Active' : 'Inactive'}
+                          </Badge>
                         </div>
-                        <Badge variant={service.active ? 'default' : 'secondary'}>
-                          {service.active ? 'Active' : 'Inactive'}
-                        </Badge>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="tours" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Tours & Retreats</CardTitle>
-                <CardDescription>Manage tour packages and experiences</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {dashboardData.tours.map((tour) => (
-                    <div key={tour.id} className="p-4 border rounded-lg">
-                      <h3 className="font-medium">{tour.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">{tour.destination}</p>
-                      <p className="text-sm mt-1">{tour.duration}</p>
-                      <div className="flex justify-between items-center mt-2">
-                        <p className="text-sm font-medium">From R{tour.price_from}</p>
-                        <Badge variant={tour.featured ? 'default' : 'secondary'}>
-                          {tour.featured ? 'Featured' : 'Standard'}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
