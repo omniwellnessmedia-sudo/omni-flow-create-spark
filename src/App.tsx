@@ -64,6 +64,7 @@ const ConsciousMediaInfrastructurePage = React.lazy(() => import('@/pages/Consci
 const TourCategory = React.lazy(() => import('@/pages/TourCategory'));
 const TourDetail = React.lazy(() => import('@/pages/TourDetail'));
 const ToursRetreats = React.lazy(() => import('@/pages/ToursRetreats'));
+const Tours = React.lazy(() => import('@/pages/Tours'));
 const MuizenbergCaveTours = React.lazy(() => import('@/pages/tours/MuizenbergCaveTours'));
 const OmniWellnessRetreat = React.lazy(() => import('@/pages/tours/OmniWellnessRetreat'));
 const GreatMotherCaveTour = React.lazy(() => import('@/pages/tours/GreatMotherCaveTour'));
@@ -203,6 +204,7 @@ function App() {
                   <Route path="/resources" element={<Resources />} />
 
                   {/* Travel & Tours */}
+            <Route path="/tours" element={<Tours />} />
             <Route path="/tours-retreats" element={<ToursRetreats />} />
             <Route path="/tour-category/:category" element={<TourCategory />} />
             <Route path="/tour-detail/winter-wine-country-wellness" element={<OmniWellnessRetreat />} />
