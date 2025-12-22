@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -1161,7 +1162,12 @@ const UWCHumanAnimalProgram = () => {
                               Role in Your Journey
                             </h4>
                             <p className="text-muted-foreground leading-relaxed" 
-                               dangerouslySetInnerHTML={{ __html: partner.roleInProgramme.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary">$1</strong>') }} 
+                               dangerouslySetInnerHTML={{ 
+                                 __html: DOMPurify.sanitize(
+                                   partner.roleInProgramme.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary">$1</strong>'),
+                                   { ALLOWED_TAGS: ['strong', 'em', 'p', 'br'], ALLOWED_ATTR: ['class'] }
+                                 ) 
+                               }} 
                             />
                           </div>
 
