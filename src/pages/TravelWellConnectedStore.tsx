@@ -462,8 +462,12 @@ const TravelWellConnectedStore = () => {
             alt={curator.name}
             className="w-full h-full object-cover"
             onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
-              (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-2xl font-bold text-primary">${curator.name.charAt(0)}</span>`;
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+              const span = document.createElement('span');
+              span.className = 'text-2xl font-bold text-primary';
+              span.textContent = curator.name.charAt(0); // textContent prevents XSS
+              target.parentElement?.appendChild(span);
             }}
           />
         </div>
