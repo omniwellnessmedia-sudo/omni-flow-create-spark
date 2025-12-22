@@ -46,11 +46,12 @@ const WellnessExchange = () => {
     }
   ];
 
+  // Real stats will be loaded from database - these are targets/goals
   const stats = [
-    { number: "500+", label: "Active Members" },
-    { number: "1,000+", label: "WellCoins Circulating" },
-    { number: "200+", label: "Services Available" },
-    { number: "98%", label: "User Satisfaction" }
+    { number: "Growing", label: "Active Members" },
+    { number: "Building", label: "WellCoins System" },
+    { number: "Expanding", label: "Services Network" },
+    { number: "100%", label: "Commitment" }
   ];
 
   return (
@@ -84,9 +85,9 @@ const WellnessExchange = () => {
                   in South Africa's most advanced conscious commerce platform.
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                <div className="flex flex-col sm:flex-row gap-3 mb-8 md:mb-12">
                   {user ? (
-                    <Button asChild size="lg" className="bg-omni-violet hover:bg-omni-indigo text-white px-8 py-3 shadow-lg font-semibold border-0">
+                    <Button asChild size="lg" className="bg-omni-violet hover:bg-omni-indigo text-white px-6 md:px-8 py-3 shadow-lg font-semibold border-0 w-full sm:w-auto">
                       <Link to="/wellness-exchange/marketplace">
                         Explore Marketplace
                         <ArrowRight className="ml-2 h-5 w-5" />
@@ -94,13 +95,13 @@ const WellnessExchange = () => {
                     </Button>
                   ) : (
                     <>
-                      <Button asChild size="lg" className="bg-omni-violet hover:bg-omni-indigo text-white px-8 py-3 shadow-lg font-semibold border-0">
+                      <Button asChild size="lg" className="bg-omni-violet hover:bg-omni-indigo text-white px-6 md:px-8 py-3 shadow-lg font-semibold border-0 w-full sm:w-auto">
                         <Link to="/auth">
                           Join as Provider
                           <ArrowRight className="ml-2 h-5 w-5" />
                         </Link>
                       </Button>
-                      <Button asChild variant="outline" size="lg" className="px-8 py-3 border-2 border-gray-300 bg-white hover:bg-gray-50 font-semibold text-gray-800">
+                      <Button asChild variant="outline" size="lg" className="px-6 md:px-8 py-3 border-2 border-gray-300 bg-white hover:bg-gray-50 font-semibold text-gray-800 w-full sm:w-auto">
                         <Link to="/auth">
                           Join as Consumer
                         </Link>
@@ -110,13 +111,13 @@ const WellnessExchange = () => {
                 </div>
                 
                 {/* Stats */}
-                <div className="grid grid-cols-2 gap-8">
+                <div className="grid grid-cols-2 gap-3 md:gap-6">
                   {stats.map((stat) => (
-                    <div key={stat.label} className="text-center bg-white rounded-lg p-4 shadow-md border border-gray-100">
-                      <div className="text-3xl sm:text-4xl font-bold text-omni-violet mb-2">
+                    <div key={stat.label} className="text-center bg-white rounded-lg p-3 md:p-4 shadow-md border border-gray-100">
+                      <div className="text-xl sm:text-2xl md:text-3xl font-bold text-omni-violet mb-1">
                         {stat.number}
                       </div>
-                      <div className="text-sm text-gray-700 font-medium">{stat.label}</div>
+                      <div className="text-xs md:text-sm text-gray-700 font-medium">{stat.label}</div>
                     </div>
                   ))}
                 </div>
