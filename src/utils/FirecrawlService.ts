@@ -20,15 +20,34 @@ type CrawlResponse = CrawlStatusResponse | ErrorResponse;
 export class FirecrawlService {
   private static API_KEY_STORAGE_KEY = 'firecrawl_api_key';
   private static firecrawlApp: FirecrawlApp | null = null;
+  // Store API key in memory only for current session (more secure than localStorage)
+  private static currentApiKey: string | null = null;
 
   static saveApiKey(apiKey: string): void {
-    localStorage.setItem(this.API_KEY_STORAGE_KEY, apiKey);
+    // Use sessionStorage instead of localStorage - clears when browser closes
+    sessionStorage.setItem(this.API_KEY_STORAGE_KEY, apiKey);
+    this.currentApiKey = apiKey;
     this.firecrawlApp = new FirecrawlApp({ apiKey });
-    console.log('API key saved successfully');
+    console.log('API key saved for this session');
   }
 
   static getApiKey(): string | null {
-    return localStorage.getItem(this.API_KEY_STORAGE_KEY);
+    // Prefer in-memory key, fallback to sessionStorage
+    if (this.currentApiKey) {
+      return this.currentApiKey;
+    }
+    const storedKey = sessionStorage.getItem(this.API_KEY_STORAGE_KEY);
+    if (storedKey) {
+      this.currentApiKey = storedKey;
+    }
+    return storedKey;
+  }
+
+  static clearApiKey(): void {
+    sessionStorage.removeItem(this.API_KEY_STORAGE_KEY);
+    this.currentApiKey = null;
+    this.firecrawlApp = null;
+    console.log('API key cleared');
   }
 
   static async testApiKey(apiKey: string): Promise<boolean> {
