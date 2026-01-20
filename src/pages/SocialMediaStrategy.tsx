@@ -7,13 +7,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
-import { Hash, TrendingUp, Users, MessageCircle, Calendar, Download, Calculator, CheckCircle, Instagram, Facebook, Twitter } from "lucide-react";
+import { Hash, TrendingUp, Users, MessageCircle, Calendar, Download, Calculator, CheckCircle, Instagram, Facebook, Twitter, Loader2 } from "lucide-react";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const SocialMediaStrategy = () => {
   const [auditData, setAuditData] = useState({ followers: '', engagement: '', posts: '' });
   const [auditResult, setAuditResult] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', business: '', goals: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleAuditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.goals) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke('submit-service-quote', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          service_type: 'Social Media Strategy',
+          project_details: `Goal: ${formData.goals}\nBusiness: ${formData.business || 'Not specified'}`,
+          company: formData.business,
+        }
+      });
+      if (error) throw error;
+      toast.success("Audit request submitted!", { description: "We'll get back to you within 24 hours." });
+      setFormData({ name: '', email: '', business: '', goals: '' });
+    } catch (error) {
+      console.error("Audit submission error:", error);
+      toast.error("Failed to submit audit request", { description: "Please try again or contact us directly." });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const calculateEngagement = () => {
     const followers = parseFloat(auditData.followers) || 0;
@@ -142,8 +173,12 @@ const SocialMediaStrategy = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
-                    Get My Free Audit
+                  <Button 
+                    onClick={handleAuditSubmit}
+                    disabled={isSubmitting}
+                    className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full"
+                  >
+                    {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Free Audit'}
                   </Button>
                 </div>
               </div>

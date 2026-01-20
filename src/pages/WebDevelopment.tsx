@@ -8,12 +8,43 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
-import { Code, Smartphone, Zap, Shield, Calendar, Download, Calculator, CheckCircle, Globe, ShoppingCart } from "lucide-react";
+import { Code, Smartphone, Zap, Shield, Calendar, Download, Calculator, CheckCircle, Globe, ShoppingCart, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const WebDevelopment = () => {
   const [projectData, setProjectData] = useState({ type: '', pages: '', features: [], timeline: '' });
   const [estimate, setEstimate] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', website: '', needs: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleQuoteSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.needs) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke('submit-service-quote', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          service_type: 'Web Development',
+          project_details: `Website Need: ${formData.needs}\nCurrent Website: ${formData.website || 'None'}`,
+          company: formData.website,
+        }
+      });
+      if (error) throw error;
+      toast.success("Quote request submitted!", { description: "We'll get back to you within 24 hours." });
+      setFormData({ name: '', email: '', website: '', needs: '' });
+    } catch (error) {
+      console.error("Quote submission error:", error);
+      toast.error("Failed to submit quote request", { description: "Please try again or contact us directly." });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const calculateEstimate = () => {
     const baseCosts = {
@@ -148,8 +179,12 @@ const WebDevelopment = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
-                    Get My Custom Quote
+                  <Button 
+                    onClick={handleQuoteSubmit}
+                    disabled={isSubmitting}
+                    className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full"
+                  >
+                    {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Custom Quote'}
                   </Button>
                 </div>
               </div>

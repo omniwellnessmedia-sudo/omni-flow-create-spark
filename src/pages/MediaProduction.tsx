@@ -8,12 +8,43 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { Play, Camera, Mic, Film, Calendar, Download, Calculator, CheckCircle } from "lucide-react";
+import { Play, Camera, Mic, Film, Calendar, Download, Calculator, CheckCircle, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const MediaProduction = () => {
   const [projectData, setProjectData] = useState({ type: '', duration: '', complexity: '' });
   const [estimate, setEstimate] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', project: '', budget: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleQuoteSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.project) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke('submit-service-quote', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          service_type: 'Media Production',
+          project_details: `Project Type: ${formData.project}\nBudget Range: ${formData.budget || 'Not specified'}`,
+          budget_range: formData.budget,
+        }
+      });
+      if (error) throw error;
+      toast.success("Quote request submitted!", { description: "We'll get back to you within 24 hours." });
+      setFormData({ name: '', email: '', project: '', budget: '' });
+    } catch (error) {
+      console.error("Quote submission error:", error);
+      toast.error("Failed to submit quote request", { description: "Please try again or contact us directly." });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const calculateEstimate = () => {
     const baseCosts = {
@@ -127,8 +158,12 @@ const MediaProduction = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
-                    Get My Custom Quote
+                  <Button 
+                    onClick={handleQuoteSubmit}
+                    disabled={isSubmitting}
+                    className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full"
+                  >
+                    {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Custom Quote'}
                   </Button>
                 </div>
               </div>

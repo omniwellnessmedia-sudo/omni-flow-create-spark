@@ -197,7 +197,7 @@ serve(async (req) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'Omni Wellness Media <noreply@omniwellnessmedia.com>',
+            from: 'Omni Wellness Media <onboarding@resend.dev>',
             to: [ADMIN_EMAIL],
             subject: `🌟 New Quote Request: ${sanitizedServiceType} - ${sanitizedName}`,
             html: emailHtml,

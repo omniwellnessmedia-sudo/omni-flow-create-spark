@@ -1,34 +1,79 @@
 
+import { useState } from "react";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Play, Users, Heart, Lightbulb, Zap, Quote } from "lucide-react";
+import { Play, Users, Heart, Lightbulb, Zap, Quote, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Podcast = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [quoteText, setQuoteText] = useState("");
   const [quoteAuthor, setQuoteAuthor] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmittingQuote, setIsSubmittingQuote] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    // Here you would integrate with your email service
-    console.log("Subscription:", { email, name });
+    if (!email) {
+      toast.error("Please enter your email address");
+      return;
+    }
+    setIsSubscribing(true);
+    try {
+      const { error } = await supabase.functions.invoke('subscribe-newsletter', {
+        body: {
+          email,
+          full_name: name,
+          source: 'podcast-page',
+          interests: ['podcast', 'conversations', 'wellness']
+        }
+      });
+      if (error) throw error;
+      setSubmitted(true);
+      toast.success("Welcome to the community!", { description: "Check your email for your first episode recommendation." });
+    } catch (error) {
+      console.error("Subscription error:", error);
+      toast.error("Failed to subscribe", { description: "Please try again." });
+    } finally {
+      setIsSubscribing(false);
+    }
   };
 
-  const handleQuoteSubmit = (e: React.FormEvent) => {
+  const handleQuoteSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would save the quote
-    console.log("Quote submitted:", { quoteText, quoteAuthor });
-    setQuoteText("");
-    setQuoteAuthor("");
+    if (!quoteText || !quoteAuthor) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    setIsSubmittingQuote(true);
+    try {
+      const { error } = await supabase.functions.invoke('submit-contact', {
+        body: {
+          name: quoteAuthor,
+          email: 'quote-submission@omniwellnessmedia.co.za',
+          organization: 'Quote Submission',
+          service: 'Podcast Quote',
+          message: quoteText,
+        }
+      });
+      if (error) throw error;
+      toast.success("Thank you for sharing your wisdom!", { description: "We may feature it in our newsletter." });
+      setQuoteText("");
+      setQuoteAuthor("");
+    } catch (error) {
+      console.error("Quote submission error:", error);
+      toast.error("Failed to submit quote", { description: "Please try again." });
+    } finally {
+      setIsSubmittingQuote(false);
+    }
   };
 
   const featuredVideos = [
@@ -115,7 +160,7 @@ const Podcast = () => {
                     placeholder="Your Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    required
+                    disabled={isSubscribing}
                   />
                   <Input
                     type="email"
@@ -123,9 +168,10 @@ const Podcast = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    disabled={isSubscribing}
                   />
-                  <Button type="submit" className="w-full bg-omni-violet hover:bg-omni-indigo text-white py-3">
-                    🎧 Start Listening Free
+                  <Button type="submit" className="w-full bg-omni-violet hover:bg-omni-indigo text-white py-3" disabled={isSubscribing}>
+                    {isSubscribing ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Subscribing...</> : '🎧 Start Listening Free'}
                   </Button>
                 </form>
               ) : (
@@ -225,6 +271,7 @@ const Podcast = () => {
                       onChange={(e) => setQuoteText(e.target.value)}
                       rows={4}
                       required
+                      disabled={isSubmittingQuote}
                     />
                   </div>
                   <div>
@@ -234,11 +281,11 @@ const Podcast = () => {
                       value={quoteAuthor}
                       onChange={(e) => setQuoteAuthor(e.target.value)}
                       required
+                      disabled={isSubmittingQuote}
                     />
                   </div>
-                  <Button type="submit" className="w-full bg-omni-orange hover:bg-omni-red text-white">
-                    <Zap className="w-4 h-4 mr-2" />
-                    Share Your Wisdom
+                  <Button type="submit" className="w-full bg-omni-orange hover:bg-omni-red text-white" disabled={isSubmittingQuote}>
+                    {isSubmittingQuote ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Submitting...</> : <><Zap className="w-4 h-4 mr-2" />Share Your Wisdom</>}
                   </Button>
                 </form>
               </CardContent>

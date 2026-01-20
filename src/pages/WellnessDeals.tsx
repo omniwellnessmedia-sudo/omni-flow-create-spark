@@ -13,7 +13,7 @@ import {
   Search, Filter, MapPin, Clock, Coins, Star, Globe, Calendar, 
   ShoppingBag, Sparkles, Gift, Users, ArrowRight, Heart, Share2, 
   Eye, Timer, Zap, Package, TrendingUp, AlertCircle, CheckCircle,
-  Percent, Tag, Flame, Crown
+  Percent, Tag, Flame, Crown, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 import { IMAGES, getImageWithFallback } from "@/lib/images";
@@ -265,6 +265,51 @@ const sampleDeals: WellnessDeal[] = [
     related_content_ids: ['beach-yoga-session', 'sunrise-meditation']
   }
 ];
+
+// Newsletter signup component
+const NewsletterSignup = () => {
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
+  const handleSubscribe = async () => {
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+    setIsSubscribing(true);
+    try {
+      const { error } = await supabase.functions.invoke('subscribe-newsletter', {
+        body: { email, source: 'wellness-deals', interests: ['deals', 'flash-sales'] }
+      });
+      if (error) throw error;
+      toast.success("Subscribed!", { description: "You'll get exclusive deals." });
+      setEmail("");
+    } catch (error) {
+      toast.error("Failed to subscribe");
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
+  return (
+    <div className="mt-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-center text-white">
+      <h3 className="text-2xl font-bold mb-4">Never Miss a Deal!</h3>
+      <p className="mb-6">Subscribe to get exclusive deals and early access to flash sales.</p>
+      <div className="flex max-w-md mx-auto gap-3">
+        <Input 
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="bg-white/20 border-white/30 text-white placeholder-white/70"
+          disabled={isSubscribing}
+        />
+        <Button onClick={handleSubscribe} className="bg-white text-purple-600 hover:bg-gray-100 font-bold" disabled={isSubscribing}>
+          {isSubscribing ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Subscribe'}
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 const WellnessDeals = () => {
   const navigate = useNavigate();
@@ -792,19 +837,7 @@ const WellnessDeals = () => {
           )}
 
           {/* Newsletter Signup */}
-          <div className="mt-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-center text-white">
-            <h3 className="text-2xl font-bold mb-4">Never Miss a Deal!</h3>
-            <p className="mb-6">Subscribe to get exclusive deals and early access to flash sales.</p>
-            <div className="flex max-w-md mx-auto gap-3">
-              <Input 
-                placeholder="Enter your email"
-                className="bg-white/20 border-white/30 text-white placeholder-white/70"
-              />
-              <Button className="bg-white text-purple-600 hover:bg-gray-100 font-bold">
-                Subscribe
-              </Button>
-            </div>
-          </div>
+          <NewsletterSignup />
 
           {/* 2BeWell CTA Section */}
           {!loading && filteredDeals.length > 0 && (
