@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar, Users, Plus, Minus, Send, CreditCard } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Calendar, Users, Plus, Minus, Send, CreditCard, Search, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -42,6 +42,8 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [servicesLoading, setServicesLoading] = useState(false);
+  const [esimSearch, setEsimSearch] = useState('');
+  const [showAllEsims, setShowAllEsims] = useState(false);
   const { toast } = useToast();
   const { formatUSD, formatZAR, convertZARToUSD } = useCurrencyConverter();
 
@@ -275,6 +277,18 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
         <div className="border-t pt-4">
           <h4 className="font-semibold mb-3">Stay Connected - RoamBuddy eSIM</h4>
           <p className="text-xs text-muted-foreground mb-3">Add eSIM data plans to stay connected during your journey</p>
+          
+          {/* eSIM Search Input */}
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search eSIM plans..."
+              value={esimSearch}
+              onChange={(e) => setEsimSearch(e.target.value)}
+              className="pl-10 text-sm"
+            />
+          </div>
+          
           {servicesLoading ? (
             <div className="space-y-2">
               <div className="h-4 bg-muted rounded animate-pulse"></div>
@@ -282,27 +296,76 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
               <div className="h-4 bg-muted rounded animate-pulse w-1/2"></div>
             </div>
           ) : (
-            <div className="space-y-3">
-              {roamBuddyServices.map(service => (
-                <div key={service.id} className="flex items-start space-x-3">
-                  <Checkbox
-                    id={`service-${service.id}`}
-                    checked={selectedServices.includes(service.id)}
-                    onCheckedChange={() => handleServiceToggle(service.id)}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <label 
-                      htmlFor={`service-${service.id}`}
-                      className="text-sm font-medium cursor-pointer"
-                    >
-                      {service.name}
-                    </label>
-                    <p className="text-xs text-muted-foreground">{service.description}</p>
-                    <p className="text-sm font-semibold text-primary">{formatUSD(service.price)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <>
+              {/* Filtered Services */}
+              {(() => {
+                const filteredServices = roamBuddyServices.filter(service => {
+                  const matchesSearch = service.name.toLowerCase().includes(esimSearch.toLowerCase()) ||
+                                       service.description.toLowerCase().includes(esimSearch.toLowerCase());
+                  const isRelevant = service.name.toLowerCase().includes('south africa') || 
+                                    service.name.toLowerCase().includes('africa') ||
+                                    service.description.toLowerCase().includes('south africa') ||
+                                    service.description.toLowerCase().includes('africa');
+                  
+                  if (esimSearch) return matchesSearch;
+                  return showAllEsims || isRelevant;
+                });
+
+                return (
+                  <>
+                    <div className="space-y-3 max-h-[200px] overflow-y-auto">
+                      {filteredServices.length > 0 ? (
+                        filteredServices.map(service => (
+                          <div key={service.id} className="flex items-start space-x-3">
+                            <Checkbox
+                              id={`service-${service.id}`}
+                              checked={selectedServices.includes(service.id)}
+                              onCheckedChange={() => handleServiceToggle(service.id)}
+                            />
+                            <div className="flex-1 min-w-0">
+                              <label 
+                                htmlFor={`service-${service.id}`}
+                                className="text-sm font-medium cursor-pointer"
+                              >
+                                {service.name}
+                              </label>
+                              <p className="text-xs text-muted-foreground">{service.description}</p>
+                              <p className="text-sm font-semibold text-primary">{formatUSD(service.price)}</p>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-sm text-muted-foreground text-center py-2">
+                          No eSIM plans found matching "{esimSearch}"
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Show More / Show Less Toggle */}
+                    {!esimSearch && roamBuddyServices.length > 4 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowAllEsims(!showAllEsims)}
+                        className="w-full mt-2 text-xs"
+                      >
+                        {showAllEsims ? (
+                          <>
+                            <ChevronUp className="w-3 h-3 mr-1" />
+                            Show Relevant Only
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-3 h-3 mr-1" />
+                            Show All Countries ({roamBuddyServices.length})
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </>
+                );
+              })()}
+            </>
           )}
         </div>
 
