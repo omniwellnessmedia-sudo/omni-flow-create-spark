@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { X, Phone, ArrowRight, Sparkles } from 'lucide-react';
 
 interface StickyConversionBarProps {
@@ -14,7 +13,7 @@ interface StickyConversionBarProps {
     action: () => void;
   };
   message?: string;
-  showAfterScroll?: number; // pixels to scroll before showing
+  showAfterScroll?: number;
   hideOnMobile?: boolean;
 }
 
@@ -53,13 +52,11 @@ const StickyConversionBar: React.FC<StickyConversionBarProps> = ({
       <div className="bg-gradient-to-r from-primary via-primary to-primary/90 text-primary-foreground shadow-2xl border-t border-primary-foreground/10">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-4">
-            {/* Message */}
             <div className="hidden sm:flex items-center gap-3">
               <Sparkles className="w-5 h-5 text-primary-foreground/80" />
               <span className="font-medium text-sm md:text-base">{message}</span>
             </div>
 
-            {/* CTAs */}
             <div className="flex items-center gap-2 sm:gap-3 flex-1 sm:flex-none justify-center sm:justify-end">
               {secondaryCTA && (
                 <Button
@@ -82,7 +79,6 @@ const StickyConversionBar: React.FC<StickyConversionBarProps> = ({
               </Button>
             </div>
 
-            {/* Dismiss */}
             <Button
               size="sm"
               variant="ghost"

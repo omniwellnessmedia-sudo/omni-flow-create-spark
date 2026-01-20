@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Download, Mail, X, Gift, Sparkles } from 'lucide-react';
+import { Download, Mail, Gift, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -15,7 +15,7 @@ interface ExitIntentPopupProps {
   ctaLabel?: string;
   downloadUrl?: string;
   collectEmail?: boolean;
-  delay?: number; // ms before enabling exit detection
+  delay?: number;
 }
 
 const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
@@ -24,7 +24,7 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
   offerTitle = "Free Programme Prospectus",
   offerDescription = "40+ pages of programme details, outcomes, and alumni stories",
   ctaLabel = "Download Free Guide",
-  downloadUrl = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf",
+  downloadUrl = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos/UWC-Programme-Prospectus.pdf",
   collectEmail = true,
   delay = 5000
 }) => {
@@ -35,7 +35,6 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if already shown this session
     if (sessionStorage.getItem('exitIntentShown')) {
       setHasShown(true);
       return;
@@ -45,8 +44,6 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
     
     const handleMouseLeave = (e: MouseEvent) => {
       if (hasShown) return;
-      
-      // Only trigger when mouse moves to top of viewport (likely leaving tab)
       if (e.clientY < 10 && e.movementY < 0) {
         setIsOpen(true);
         setHasShown(true);
@@ -54,7 +51,6 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
       }
     };
 
-    // Enable after delay
     timeoutId = setTimeout(() => {
       document.addEventListener('mouseleave', handleMouseLeave);
     }, delay);
@@ -70,41 +66,23 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
     
     if (collectEmail && email) {
       setIsSubmitting(true);
-      
       try {
-        const { error } = await supabase
+        await supabase
           .from('newsletter_subscribers')
-          .upsert({
-            email,
-            source: 'exit_intent_popup',
-            interests: ['uwc_programme'],
-          }, { onConflict: 'email' });
-
-        if (error) throw error;
-
-        toast({
-          title: 'Success!',
-          description: 'Check your inbox for the download link.',
-        });
+          .upsert({ email, source: 'exit_intent_popup', interests: ['uwc_programme'] }, { onConflict: 'email' });
+        toast({ title: 'Success!', description: 'Check your inbox for the download link.' });
       } catch (error) {
         console.error('Error subscribing:', error);
       }
-      
       setIsSubmitting(false);
     }
 
-    // Download the file
-    if (downloadUrl) {
-      window.open(downloadUrl, '_blank');
-    }
-    
+    if (downloadUrl) window.open(downloadUrl, '_blank');
     setIsOpen(false);
   };
 
   const handleDownloadOnly = () => {
-    if (downloadUrl) {
-      window.open(downloadUrl, '_blank');
-    }
+    if (downloadUrl) window.open(downloadUrl, '_blank');
     setIsOpen(false);
   };
 
@@ -118,20 +96,15 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
               Free Resource
             </Badge>
           </div>
-          <DialogTitle className="text-2xl font-bold text-foreground">
-            {title}
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground">
-            {description}
-          </DialogDescription>
+          <DialogTitle className="text-2xl font-bold text-foreground">{title}</DialogTitle>
+          <DialogDescription className="text-muted-foreground">{description}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {/* Offer Card */}
           <div className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20">
             <div className="flex items-start gap-3">
               <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
-                <Download className="w-6 h-6 text-primary" />
+                <Sparkles className="w-6 h-6 text-primary" />
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">{offerTitle}</h4>
@@ -142,34 +115,30 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
 
           {collectEmail ? (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <div className="flex gap-2">
                 <Input
                   type="email"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 min-h-[44px]"
                   required
+                  className="flex-1"
                 />
               </div>
-              <Button 
-                type="submit" 
-                className="w-full min-h-[44px]"
-                disabled={isSubmitting}
-              >
-                <Sparkles className="w-4 h-4 mr-2" />
+              <Button type="submit" className="w-full min-h-[44px]" disabled={isSubmitting}>
+                <Mail className="w-4 h-4 mr-2" />
                 {isSubmitting ? 'Sending...' : ctaLabel}
               </Button>
-              <p className="text-xs text-center text-muted-foreground">
-                We'll also send you wellness tips. Unsubscribe anytime.
-              </p>
+              <button
+                type="button"
+                onClick={handleDownloadOnly}
+                className="w-full text-center text-sm text-muted-foreground hover:text-foreground underline"
+              >
+                Skip email, just download
+              </button>
             </form>
           ) : (
-            <Button 
-              className="w-full min-h-[44px]"
-              onClick={handleDownloadOnly}
-            >
+            <Button onClick={handleDownloadOnly} className="w-full min-h-[44px]">
               <Download className="w-4 h-4 mr-2" />
               {ctaLabel}
             </Button>
