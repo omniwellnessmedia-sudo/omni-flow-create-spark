@@ -8,6 +8,7 @@ import AdminLeads from "@/pages/admin/AdminLeads";
 import AdminInvites from "@/pages/admin/AdminInvites";
 import AdminTasks from "@/pages/admin/AdminTasks";
 import AdminContent from "@/pages/admin/AdminContent";
+import AdminUWCRecruitment from "@/pages/admin/AdminUWCRecruitment";
 import AdminViatorTours from "@/pages/admin/AdminViatorTours";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -320,6 +321,7 @@ const AdminDashboard = () => {
               <TabsTrigger value="orders" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Orders</TabsTrigger>
               <TabsTrigger value="bookings" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Bookings</TabsTrigger>
               <TabsTrigger value="tours" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Viator Tours</TabsTrigger>
+              <TabsTrigger value="uwc" className="text-[10px] md:text-xs px-2 md:px-3 h-7">UWC Pipeline</TabsTrigger>
               <TabsTrigger value="tools" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Tools</TabsTrigger>
             </TabsList>
             <ScrollBar orientation="horizontal" />

@@ -2717,6 +2717,78 @@ export type Database = {
           },
         ]
       }
+      uwc_programme_leads: {
+        Row: {
+          assigned_to: string | null
+          channel: string
+          cohort: string | null
+          country: string | null
+          created_at: string
+          email: string
+          follow_up_count: number | null
+          id: string
+          institution: string | null
+          is_international: boolean | null
+          last_contact_date: string | null
+          name: string
+          next_follow_up_date: string | null
+          notes: string | null
+          phone: string | null
+          source: string | null
+          stage: string
+          updated_at: string
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          channel: string
+          cohort?: string | null
+          country?: string | null
+          created_at?: string
+          email: string
+          follow_up_count?: number | null
+          id?: string
+          institution?: string | null
+          is_international?: boolean | null
+          last_contact_date?: string | null
+          name: string
+          next_follow_up_date?: string | null
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          stage?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          channel?: string
+          cohort?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string
+          follow_up_count?: number | null
+          id?: string
+          institution?: string | null
+          is_international?: boolean | null
+          last_contact_date?: string | null
+          name?: string
+          next_follow_up_date?: string | null
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          stage?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       viator_tours: {
         Row: {
           availability: string | null

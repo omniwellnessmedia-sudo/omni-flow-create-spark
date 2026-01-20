@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import Footer from '@/components/Footer';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import InteractiveGallery from '@/components/gallery/InteractiveGallery';
+import RecruitmentJourney from '@/components/programs/RecruitmentJourney';
+import RecruitmentOps from '@/components/programs/RecruitmentOps';
 import { 
   GraduationCap, Heart, Globe, Users, Calendar, MapPin, Award, BookOpen, Leaf, Brain,
   Building2, Clock, Check, Target, Star, Coffee, Utensils, Home, Camera, Sparkles,
