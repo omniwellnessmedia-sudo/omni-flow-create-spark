@@ -1,13 +1,45 @@
+import { useState } from "react";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, BookOpen, Video, Headphones, Globe, Users } from "lucide-react";
+import { Download, BookOpen, Video, Headphones, Globe, Users, Loader2 } from "lucide-react";
 import { IMAGES } from "@/lib/images";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Resources = () => {
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast.error("Please enter your email address");
+      return;
+    }
+    setIsSubscribing(true);
+    try {
+      const { error } = await supabase.functions.invoke('subscribe-newsletter', {
+        body: {
+          email,
+          source: 'resources-page',
+          interests: ['resources', 'guides', 'educational-content']
+        }
+      });
+      if (error) throw error;
+      toast.success("Successfully subscribed!", { description: "You'll be notified about new resources." });
+      setEmail("");
+    } catch (error) {
+      console.error("Subscription error:", error);
+      toast.error("Failed to subscribe", { description: "Please try again." });
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
   const resources = [
     {
       category: "Wellness Guides",
@@ -139,16 +171,19 @@ const Resources = () => {
               <p className="text-lg text-gray-600 mb-8">
                 Get notified when we release new resources, guides, and educational content.
               </p>
-              <div className="flex gap-4 max-w-md mx-auto">
+              <form onSubmit={handleSubscribe} className="flex gap-4 max-w-md mx-auto">
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rainbow-gradient focus:border-transparent"
+                  disabled={isSubscribing}
                 />
-                <Button variant="wellness" className="px-6">
-                  Subscribe
+                <Button type="submit" variant="wellness" className="px-6" disabled={isSubscribing}>
+                  {isSubscribing ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Subscribe'}
                 </Button>
-              </div>
+              </form>
             </div>
           </div>
         </section>

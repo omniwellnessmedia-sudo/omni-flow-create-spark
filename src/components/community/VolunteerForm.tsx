@@ -7,9 +7,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Heart, Send } from "lucide-react";
+import { Heart, Send, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const VolunteerForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -53,24 +55,55 @@ export const VolunteerForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    // Here you would send to Supabase or email service
-    console.log("Volunteer application:", formData);
-    
-    toast.success("Thank you! We'll be in touch soon.", {
-      description: "Your volunteer application has been submitted successfully.",
-    });
-    
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      role: "",
-      skills: [],
-      availability: "",
-      motivation: "",
-    });
+    try {
+      // Format the message with all volunteer details
+      const volunteerMessage = `
+VOLUNTEER APPLICATION
+
+Role: ${formData.role}
+Skills: ${formData.skills.join(', ') || 'Not specified'}
+Availability: ${formData.availability || 'Not specified'}
+
+Motivation:
+${formData.motivation}
+      `.trim();
+
+      const { error } = await supabase.functions.invoke('submit-contact', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          organization: `Volunteer - ${formData.role}`,
+          service: 'Volunteer Application',
+          message: volunteerMessage,
+        }
+      });
+
+      if (error) throw error;
+      
+      toast.success("Thank you! We'll be in touch soon.", {
+        description: "Your volunteer application has been submitted successfully.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        role: "",
+        skills: [],
+        availability: "",
+        motivation: "",
+      });
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error("Failed to submit application", {
+        description: "Please try again or contact us directly.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -95,6 +128,7 @@ export const VolunteerForm = () => {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="John Doe"
+                disabled={isSubmitting}
               />
             </div>
             
@@ -107,6 +141,7 @@ export const VolunteerForm = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="john@example.com"
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -120,6 +155,7 @@ export const VolunteerForm = () => {
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="+27 123 456 789"
+                disabled={isSubmitting}
               />
             </div>
 
@@ -129,6 +165,7 @@ export const VolunteerForm = () => {
                 value={formData.role} 
                 onValueChange={(value) => setFormData({ ...formData, role: value })}
                 required
+                disabled={isSubmitting}
               >
                 <SelectTrigger id="role">
                   <SelectValue placeholder="Select a role" />
@@ -153,6 +190,7 @@ export const VolunteerForm = () => {
                     id={skill}
                     checked={formData.skills.includes(skill)}
                     onCheckedChange={() => handleSkillToggle(skill)}
+                    disabled={isSubmitting}
                   />
                   <Label
                     htmlFor={skill}
@@ -172,6 +210,7 @@ export const VolunteerForm = () => {
               value={formData.availability}
               onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
               placeholder="e.g., Weekends, 2 hours per week"
+              disabled={isSubmitting}
             />
           </div>
 
@@ -184,12 +223,22 @@ export const VolunteerForm = () => {
               onChange={(e) => setFormData({ ...formData, motivation: e.target.value })}
               placeholder="Tell us about your motivation and what you hope to contribute..."
               rows={4}
+              disabled={isSubmitting}
             />
           </div>
 
-          <Button type="submit" className="w-full" size="lg">
-            <Send className="w-4 h-4 mr-2" />
-            Submit Application
+          <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4 mr-2" />
+                Submit Application
+              </>
+            )}
           </Button>
         </form>
       </CardContent>
