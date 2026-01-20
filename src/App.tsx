@@ -178,7 +178,7 @@ function App() {
                   <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
                   <Route path="/data-products" element={<DataProducts />} />
                   <Route path="/product-detail/:id" element={<ProductDetail />} />
-                  <Route path="/deal-detail/:id" element={<DealDetail />} />
+                  <Route path="/deal/:id" element={<DealDetail />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
                   <Route path="/guest-order-lookup" element={<GuestOrderLookup />} />

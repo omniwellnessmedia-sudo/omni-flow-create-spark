@@ -212,23 +212,18 @@ export const products: EnhancedProduct[] = [
   },
   {
     id: 8,
-    name: "Godox LMS-60G Lavalier Microphone",
-    description: "Professional omnidirectional lavalier microphone. Clear vocal capture, minimal handling noise, lightweight clip-on design. Essential for documentary-style wellness interviews.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-1-337.webp?v=1752080234&width=640",
+    name: "Neewer CM28 Wireless Lavalier Microphone",
+    description: "Wireless lavalier microphone with charging case and built-in 4GB storage. Crystal-clear omnidirectional audio, noise reduction, up to 8-hour battery life. Perfect for wireless documentary interviews and on-the-go content capture.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-cm28-wireless-lavalier-lapel-microphone-charging-case-built-4gb-storage-camerastuff-1.webp",
     imageGallery: [
-      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-1-337.webp?v=1752080234&width=640",
-      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-2-414.webp?v=1752080237&width=640",
-      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-3-477.webp?v=1752080240&width=640",
-      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-4-405.webp?v=1752080243&width=640",
-      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-5-970.webp?v=1752080246&width=640",
-      "https://camerastuff.co.za/cdn/shop/files/godox-lms-60g-lavalier-microphone-camerastuff-online-shop-south-africa-10-135.webp?v=1752080260&width=640"
+      "https://camerastuff.co.za/cdn/shop/files/neewer-cm28-wireless-lavalier-lapel-microphone-charging-case-built-4gb-storage-camerastuff-1.webp"
     ],
-    productUrl: "https://camerastuff.co.za/products/godox-lms-60g-lavalier-microphone",
+    productUrl: "https://camerastuff.co.za/products/neewer-cm28-wireless-lavalier-lapel-microphone-with-charging-case-and-built-in-4gb-storage",
     category: 'travel',
     skillLevel: 'intermediate',
     curator: 'chad',
-    curatorQuote: "Unobtrusive audio. Documentary interviews. Clear vocal capture. Disappears on clothing. Professional sound without intimidating equipment.",
-    whyYouNeedThis: "Unobtrusive, professional audio capture that maintains intimacy in documentary settings.",
+    curatorQuote: "Wireless freedom. Built-in recording. Documentary interviews. No cables. Professional sound without intimidating equipment.",
+    whyYouNeedThis: "Wireless, professional audio capture with built-in storage for ultimate documentary flexibility.",
     perfectFor: [
       "Documentary interviews",
       "Retreat testimonials",
@@ -268,7 +263,7 @@ export const products: EnhancedProduct[] = [
       "https://camerastuff.co.za/cdn/shop/files/camerastuff-icb-04-clapper-board-30x25cm-acrylic-black-online-shop-south-africa-1-386.jpg?v=1758820955&width=1280",
       "https://camerastuff.co.za/cdn/shop/files/camerastuff-icb-04-clapper-board-30x25cm-acrylic-black-online-shop-south-africa-2-222.jpg?v=1758820958&width=1280"
     ],
-    productUrl: "https://camerastuff.co.za/products/camerastuff-icb-04-clapper-board-30x25cm-acrylic-black",
+    productUrl: "https://camerastuff.co.za/products/camerastuff-icb-02-clapper-board-30x25cm-acrylic-black",
     category: 'film-production',
     skillLevel: 'professional',
     curator: 'zenith',
@@ -408,15 +403,15 @@ export const products: EnhancedProduct[] = [
   },
   {
     id: 17,
-    name: "Neewer NW-XJB02S Camera Sling Backpack",
-    description: "Professional camera sling backpack with ergonomic single-shoulder design. Multiple compartments, weatherproof material, compatible with DSLR/mirrorless and accessories. Enables hands-free mobility.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-nw-xjb02s-sling-camera-backpack-bag-purple-camerastuff-online-shop-south-africa-2-576.webp",
-    productUrl: "https://camerastuff.co.za/products/neewer-nw-xjb02s-camera-sling-backpack-purple",
+    name: "Neewer Travel Camera Backpack (Grey)",
+    description: "Compact travel camera backpack (30x14x37cm) in grey. Lightweight design with padded compartments, weatherproof exterior, laptop sleeve, and tripod holder. Perfect for mobile wellness documentarians.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-travel-camera-backpack-bag-30x14x37cm-grey-camerastuff-1.webp",
+    productUrl: "https://camerastuff.co.za/products/neewer-travel-camera-backpack-bag-30x14x37cm-grey",
     category: 'travel',
     skillLevel: 'beginner',
     curator: 'ferozza',
-    curatorQuote: "Participant-documenter balance. Quick access. Non-intrusive. Retreat filming. Maintains presence while capturing moments.",
-    whyYouNeedThis: "Respectful, mobile camera storage that maintains your presence in wellness spaces.",
+    curatorQuote: "Travel-ready. Compact design. Quick access. Non-intrusive. Retreat filming. Maintains presence while capturing moments.",
+    whyYouNeedThis: "Compact, travel-optimized camera storage that maintains your presence in wellness spaces.",
     perfectFor: [
       "Retreat participant-documenters",
       "Community wellness events",
@@ -518,30 +513,71 @@ export const products: EnhancedProduct[] = [
   },
   {
     id: 21,
-    name: "Neewer SL90 12W RGBWW Mini LED Panel",
-    description: "Ultra-compact 12W RGBWW LED panel. Pocket-sized, magnetic mounting, rechargeable battery, full color control. Perfect for travel creators and on-the-go lighting needs.",
-    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-729.webp?v=1752089431&width=1540",
+    name: "Neewer BH30S 15W RGBWW LED Light Stick",
+    description: "Versatile 15W RGBWW LED light stick with built-in battery and touchscreen control. Full color spectrum, adjustable brightness, magnetic mounting, portable design. Perfect for creative lighting on location.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-bh30s-15w-rgb-ww-led-constant-light-stick-built-in-battery-touchscreen-control-1.webp",
     imageGallery: [
-      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-729.webp?v=1752089431&width=1540",
-      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-970.webp?v=1752089439&width=1540",
-      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-623.webp?v=1752089464&width=1540",
-      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-337.webp?v=1752089457&width=1540",
-      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-988.webp?v=1752089450&width=1540",
-      "https://camerastuff.co.za/cdn/shop/files/neewer-sl90-12w-rgb-ww-mini-led-constant-light-panel-camerastuff-online-shop-south-africa-286.webp?v=1752089442&width=1540"
+      "https://camerastuff.co.za/cdn/shop/files/neewer-bh30s-15w-rgb-ww-led-constant-light-stick-built-in-battery-touchscreen-control-1.webp"
     ],
-    productUrl: "https://camerastuff.co.za/products/neewer-sl90-12w-rgbww-mini-led-constant-light-panel",
+    productUrl: "https://camerastuff.co.za/products/neewer-bh30s-15w-rgb-ww-led-constant-light-stick-with-built-in-battery-and-touchscreen-control",
     category: 'travel',
     skillLevel: 'beginner',
     curator: 'ferozza',
-    curatorQuote: "Pocket-sized. Emergency fill light. Travel essential. Magnetic mount. Always-ready lighting. Never miss a moment for lack of light.",
-    whyYouNeedThis: "Emergency lighting solution that fits in your pocket and saves unexpected moments.",
+    curatorQuote: "Versatile light stick. Built-in battery. Touchscreen control. Creative accents. Location lighting. Never miss a moment for lack of light.",
+    whyYouNeedThis: "Creative lighting solution with touchscreen control for dynamic on-location wellness content.",
     perfectFor: [
       "Travel wellness creators",
-      "Emergency fill lighting",
+      "Creative accent lighting",
       "Compact travel kits",
       "Spontaneous content capture"
     ],
     channel: "travel-essentials",
+    imagePosition: 'left'
+  },
+  {
+    id: 22,
+    name: "Neewer TL253A Upgraded Tabletop Camera Mount Stand",
+    description: "Upgraded tabletop tripod with flexible positioning, quick-release plate, and compact footprint. Perfect for overhead shots, product demos, and desktop content creation.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/neewer-tl253amh022-upgraded-tabletop-camera-mount-stand-1.webp",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/neewer-tl253amh022-upgraded-tabletop-camera-mount-stand-1.webp"
+    ],
+    productUrl: "https://camerastuff.co.za/products/neewer-tl253amh022-upgraded-tabletop-camera-mount-stand",
+    category: 'studio',
+    skillLevel: 'beginner',
+    curator: 'zenith',
+    curatorQuote: "Tabletop stability. Overhead shots. Compact setup. Product demos. Perfect for desktop wellness content and tutorials.",
+    whyYouNeedThis: "Compact tabletop solution for overhead shots and desktop content without bulky equipment.",
+    perfectFor: [
+      "Product demo videos",
+      "Overhead cooking content",
+      "Desk-based tutorials",
+      "Compact studio setups"
+    ],
+    channel: "desktop-content",
+    imagePosition: 'right'
+  },
+  {
+    id: 23,
+    name: "Aputure Amaran Ace 25C Mini LED Panel (White)",
+    description: "Compact professional RGB+WW mini LED panel from Aputure's Amaran line. High CRI, app control, built-in battery, magnetic mounting. Studio-quality lighting in a pocket-sized form factor.",
+    imageUrl: "https://camerastuff.co.za/cdn/shop/files/aputure-amaran-ace-25c-rgb-ww-mini-led-constant-light-panel-white-1.webp",
+    imageGallery: [
+      "https://camerastuff.co.za/cdn/shop/files/aputure-amaran-ace-25c-rgb-ww-mini-led-constant-light-panel-white-1.webp"
+    ],
+    productUrl: "https://camerastuff.co.za/products/aputure-amaran-ace-25c-rgb-ww-mini-led-constant-light-panel-white",
+    category: 'travel',
+    skillLevel: 'intermediate',
+    curator: 'chad',
+    curatorQuote: "Aputure quality. Pocket-sized power. RGB versatility. Professional color accuracy. Premium mini lighting for serious creators.",
+    whyYouNeedThis: "Studio-quality mini LED panel from a trusted brand for creators who demand professional results.",
+    perfectFor: [
+      "Travel content creators",
+      "On-location interviews",
+      "Professional color work",
+      "Compact lighting setups"
+    ],
+    channel: "professional-portable",
     imagePosition: 'left'
   }
 ];
