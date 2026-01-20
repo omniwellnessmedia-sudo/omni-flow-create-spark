@@ -854,6 +854,105 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_campaigns: {
+        Row: {
+          click_count: number | null
+          created_at: string
+          created_by: string | null
+          from_email: string | null
+          from_name: string | null
+          html_content: string
+          id: string
+          name: string
+          open_count: number | null
+          preview_text: string | null
+          scheduled_send_time: string | null
+          sent_count: number | null
+          status: Database["public"]["Enums"]["newsletter_status"]
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          click_count?: number | null
+          created_at?: string
+          created_by?: string | null
+          from_email?: string | null
+          from_name?: string | null
+          html_content: string
+          id?: string
+          name: string
+          open_count?: number | null
+          preview_text?: string | null
+          scheduled_send_time?: string | null
+          sent_count?: number | null
+          status?: Database["public"]["Enums"]["newsletter_status"]
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          click_count?: number | null
+          created_at?: string
+          created_by?: string | null
+          from_email?: string | null
+          from_name?: string | null
+          html_content?: string
+          id?: string
+          name?: string
+          open_count?: number | null
+          preview_text?: string | null
+          scheduled_send_time?: string | null
+          sent_count?: number | null
+          status?: Database["public"]["Enums"]["newsletter_status"]
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          confirmed: boolean | null
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          interests: string[] | null
+          source: string | null
+          subscribed_at: string
+          unsubscribed: boolean | null
+          unsubscribed_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          confirmed?: boolean | null
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id?: string
+          interests?: string[] | null
+          source?: string | null
+          subscribed_at?: string
+          unsubscribed?: boolean | null
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          confirmed?: boolean | null
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          interests?: string[] | null
+          source?: string | null
+          subscribed_at?: string
+          unsubscribed?: boolean | null
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       onboarding_sessions: {
         Row: {
           completed: boolean | null
@@ -1985,6 +2084,66 @@ export type Database = {
         }
         Relationships: []
       }
+      scheduled_social_posts: {
+        Row: {
+          campaign_name: string | null
+          content_pillar: Database["public"]["Enums"]["content_pillar"] | null
+          content_text: string
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          hashtags: string[] | null
+          id: string
+          image_url: string | null
+          link_url: string | null
+          platforms: Database["public"]["Enums"]["social_platform"][]
+          posted_at: string | null
+          scheduled_date: string
+          scheduled_time: string
+          status: Database["public"]["Enums"]["post_status"]
+          updated_at: string
+          zapier_webhook_url: string | null
+        }
+        Insert: {
+          campaign_name?: string | null
+          content_pillar?: Database["public"]["Enums"]["content_pillar"] | null
+          content_text: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          hashtags?: string[] | null
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          platforms?: Database["public"]["Enums"]["social_platform"][]
+          posted_at?: string | null
+          scheduled_date: string
+          scheduled_time?: string
+          status?: Database["public"]["Enums"]["post_status"]
+          updated_at?: string
+          zapier_webhook_url?: string | null
+        }
+        Update: {
+          campaign_name?: string | null
+          content_pillar?: Database["public"]["Enums"]["content_pillar"] | null
+          content_text?: string
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          hashtags?: string[] | null
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          platforms?: Database["public"]["Enums"]["social_platform"][]
+          posted_at?: string | null
+          scheduled_date?: string
+          scheduled_time?: string
+          status?: Database["public"]["Enums"]["post_status"]
+          updated_at?: string
+          zapier_webhook_url?: string | null
+        }
+        Relationships: []
+      }
       security_events: {
         Row: {
           details: Json | null
@@ -2121,6 +2280,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      social_automation_settings: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          setting_key: string
+          setting_value: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          setting_key: string
+          setting_value: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       tour_bookings: {
         Row: {
@@ -2829,6 +3015,15 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "super_admin" | "user"
+      content_pillar: "inspiration" | "education" | "empowerment" | "wellness"
+      newsletter_status: "draft" | "scheduled" | "sending" | "sent" | "failed"
+      post_status: "draft" | "scheduled" | "posted" | "failed"
+      social_platform:
+        | "facebook"
+        | "instagram"
+        | "tiktok"
+        | "linkedin"
+        | "twitter"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2957,6 +3152,16 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "super_admin", "user"],
+      content_pillar: ["inspiration", "education", "empowerment", "wellness"],
+      newsletter_status: ["draft", "scheduled", "sending", "sent", "failed"],
+      post_status: ["draft", "scheduled", "posted", "failed"],
+      social_platform: [
+        "facebook",
+        "instagram",
+        "tiktok",
+        "linkedin",
+        "twitter",
+      ],
     },
   },
 } as const

@@ -45,7 +45,7 @@ import {
 } from 'lucide-react';
 import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 import SiteHeader from '@/components/SiteHeader';
-import SiteFooter from '@/components/SiteFooter';
+import Footer from '@/components/Footer';
 
 interface ScheduledPost {
   id: string;
@@ -106,14 +106,14 @@ const SocialScheduler = () => {
 
   const fetchPosts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('scheduled_social_posts')
+      const { data, error } = await (supabase
+        .from('scheduled_social_posts' as any)
         .select('*')
         .order('scheduled_date', { ascending: true })
-        .order('scheduled_time', { ascending: true });
+        .order('scheduled_time', { ascending: true }) as any);
       
       if (error) throw error;
-      setPosts(data || []);
+      setPosts((data || []) as ScheduledPost[]);
     } catch (error) {
       console.error('Error fetching posts:', error);
       toast({
@@ -128,11 +128,11 @@ const SocialScheduler = () => {
 
   const fetchSettings = async () => {
     try {
-      const { data } = await supabase
-        .from('social_automation_settings')
+      const { data } = await (supabase
+        .from('social_automation_settings' as any)
         .select('setting_value')
         .eq('setting_key', 'zapier_webhook_url')
-        .single();
+        .single() as any);
       
       if (data) {
         setZapierWebhookUrl(data.setting_value || '');
@@ -144,12 +144,12 @@ const SocialScheduler = () => {
 
   const handleSaveWebhook = async () => {
     try {
-      const { error } = await supabase
-        .from('social_automation_settings')
+      const { error } = await (supabase
+        .from('social_automation_settings' as any)
         .upsert({
           setting_key: 'zapier_webhook_url',
           setting_value: zapierWebhookUrl,
-        }, { onConflict: 'setting_key' });
+        }, { onConflict: 'setting_key' }) as any);
       
       if (error) throw error;
       toast({
@@ -186,17 +186,17 @@ const SocialScheduler = () => {
       };
 
       if (editingPost) {
-        const { error } = await supabase
-          .from('scheduled_social_posts')
+        const { error } = await (supabase
+          .from('scheduled_social_posts' as any)
           .update(postData)
-          .eq('id', editingPost.id);
+          .eq('id', editingPost.id) as any);
         
         if (error) throw error;
         toast({ title: 'Updated', description: 'Post updated successfully' });
       } else {
-        const { error } = await supabase
-          .from('scheduled_social_posts')
-          .insert(postData);
+        const { error } = await (supabase
+          .from('scheduled_social_posts' as any)
+          .insert(postData) as any);
         
         if (error) throw error;
         toast({ title: 'Created', description: 'Post scheduled successfully' });
@@ -220,10 +220,10 @@ const SocialScheduler = () => {
     if (!confirm('Delete this scheduled post?')) return;
     
     try {
-      const { error } = await supabase
-        .from('scheduled_social_posts')
+      const { error } = await (supabase
+        .from('scheduled_social_posts' as any)
         .delete()
-        .eq('id', id);
+        .eq('id', id) as any);
       
       if (error) throw error;
       toast({ title: 'Deleted', description: 'Post removed' });
@@ -284,9 +284,9 @@ const SocialScheduler = () => {
       }
 
       if (postsToCreate.length > 0) {
-        const { error } = await supabase
-          .from('scheduled_social_posts')
-          .insert(postsToCreate);
+        const { error } = await (supabase
+          .from('scheduled_social_posts' as any)
+          .insert(postsToCreate) as any);
         
         if (error) throw error;
         
@@ -770,7 +770,7 @@ const SocialScheduler = () => {
         </Tabs>
       </main>
 
-      <SiteFooter />
+      <Footer />
     </div>
   );
 };

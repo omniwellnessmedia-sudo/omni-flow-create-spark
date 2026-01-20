@@ -35,7 +35,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import SiteHeader from '@/components/SiteHeader';
-import SiteFooter from '@/components/SiteFooter';
+import Footer from '@/components/Footer';
 
 interface NewsletterCampaign {
   id: string;
@@ -153,22 +153,22 @@ const NewsletterEditor = () => {
   const fetchData = async () => {
     try {
       const [campaignsResult, subscribersResult] = await Promise.all([
-        supabase
-          .from('newsletter_campaigns')
+        (supabase
+          .from('newsletter_campaigns' as any)
           .select('*')
-          .order('created_at', { ascending: false }),
-        supabase
-          .from('newsletter_subscribers')
+          .order('created_at', { ascending: false }) as any),
+        (supabase
+          .from('newsletter_subscribers' as any)
           .select('*')
           .eq('unsubscribed', false)
-          .order('subscribed_at', { ascending: false }),
+          .order('subscribed_at', { ascending: false }) as any),
       ]);
 
       if (campaignsResult.error) throw campaignsResult.error;
       if (subscribersResult.error) throw subscribersResult.error;
 
-      setCampaigns(campaignsResult.data || []);
-      setSubscribers(subscribersResult.data || []);
+      setCampaigns((campaignsResult.data || []) as NewsletterCampaign[]);
+      setSubscribers((subscribersResult.data || []) as Subscriber[]);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
@@ -215,17 +215,17 @@ const NewsletterEditor = () => {
       };
 
       if (editingCampaign) {
-        const { error } = await supabase
-          .from('newsletter_campaigns')
+        const { error } = await (supabase
+          .from('newsletter_campaigns' as any)
           .update(campaignData)
-          .eq('id', editingCampaign.id);
+          .eq('id', editingCampaign.id) as any);
         
         if (error) throw error;
         toast({ title: 'Updated', description: 'Campaign updated successfully' });
       } else {
-        const { error } = await supabase
-          .from('newsletter_campaigns')
-          .insert(campaignData);
+        const { error } = await (supabase
+          .from('newsletter_campaigns' as any)
+          .insert(campaignData) as any);
         
         if (error) throw error;
         toast({ title: 'Created', description: `Campaign ${status === 'scheduled' ? 'scheduled' : 'saved as draft'}` });
@@ -249,10 +249,10 @@ const NewsletterEditor = () => {
     if (!confirm('Delete this campaign?')) return;
     
     try {
-      const { error } = await supabase
-        .from('newsletter_campaigns')
+      const { error } = await (supabase
+        .from('newsletter_campaigns' as any)
         .delete()
-        .eq('id', id);
+        .eq('id', id) as any);
       
       if (error) throw error;
       toast({ title: 'Deleted', description: 'Campaign removed' });
@@ -708,7 +708,7 @@ const NewsletterEditor = () => {
         </DialogContent>
       </Dialog>
 
-      <SiteFooter />
+      <Footer />
     </div>
   );
 };
