@@ -1,17 +1,50 @@
 import { Link } from "react-router-dom";
-import { ChevronUp, Mail, Calendar, MessageCircle, Instagram, Youtube, Heart, Lightbulb, BookOpen, Users, Share2, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { ChevronUp, Mail, Calendar, MessageCircle, Instagram, Youtube, Heart, Lightbulb, BookOpen, Users, Share2, ExternalLink, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { IMAGES } from "@/lib/images";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const OMNI_QR_CODE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/omniwellnessmedia.png";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    setIsSubscribing(true);
+    try {
+      const { error } = await supabase.functions.invoke('subscribe-newsletter', {
+        body: {
+          email,
+          source: 'footer',
+          interests: ['wellness', 'conscious-content', 'community']
+        }
+      });
+      if (error) throw error;
+      toast.success("Subscribed!", { description: "Welcome to our wellness community!" });
+      setEmail("");
+    } catch (error) {
+      console.error('Newsletter error:', error);
+      toast.error("Couldn't subscribe", { description: "Please try again later." });
+    } finally {
+      setIsSubscribing(false);
+    }
   };
 
   const handleShareQR = async () => {
@@ -59,13 +92,30 @@ const Footer = () => {
             <p className="text-gray-300 mb-6">
               Get weekly wellness tips, conscious content insights, and be the first to know about our transformative projects.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button size="lg" className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-medium" asChild>
-                <a href="mailto:omnimediawellness@gmail.com?subject=Newsletter Subscription">
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+              <Input 
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 flex-1"
+                disabled={isSubscribing}
+              />
+              <Button 
+                type="submit"
+                size="lg" 
+                className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-medium"
+                disabled={isSubscribing}
+              >
+                {isSubscribing ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
                   <Mail className="w-4 h-4 mr-2" />
-                  Subscribe to Newsletter
-                </a>
+                )}
+                {isSubscribing ? "Subscribing..." : "Subscribe"}
               </Button>
+            </form>
+            <div className="mt-4">
               <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
                 <Link to="/contact">
                   <Calendar className="w-4 h-4 mr-2" />
