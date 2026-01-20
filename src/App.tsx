@@ -95,6 +95,7 @@ const AwinAffiliateProducts = React.lazy(() => import('@/pages/AwinAffiliateProd
 const CJProductDetail = React.lazy(() => import('@/pages/CJProductDetail'));
 const StoreCollections = React.lazy(() => import('@/pages/StoreCollections'));
 const AdminTools = React.lazy(() => import('@/pages/admin/AdminTools'));
+const MonetizableURLsReference = React.lazy(() => import('@/pages/admin/MonetizableURLsReference'));
 const Wishlist = React.lazy(() => import('@/pages/Wishlist'));
 const StoreProductDetail = React.lazy(() => import('@/pages/StoreProductDetail'));
 const UpdatePassword = React.lazy(() => import('@/pages/UpdatePassword'));
@@ -285,6 +286,11 @@ function App() {
                   <Route path="/admin/tools" element={
                     <ProtectedRoute requireAdmin={true}>
                       <AdminTools />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/monetizable-urls" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <MonetizableURLsReference />
                     </ProtectedRoute>
                   } />
 
