@@ -133,21 +133,21 @@ const curatorProfiles = {
     title: "Travel Coordinator & Wellness Guide",
     expertise: "Wellness Retreats • Mindful Travel • Group Coordination",
     bio: "Travel should nourish your soul, not just tick boxes. I curate experiences that create lasting transformation.",
-    avatar: `${STORAGE_BASE}/team-photos/zenith.jpg`
+    avatar: `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`
   },
   chad: {
     name: "Chad",
     title: "Head of Media & Strategy",
     expertise: "Adventure Travel • Documentary Journeys • Cultural Immersion",
     bio: "The best adventures are those that change your perspective and connect you to something greater.",
-    avatar: `${STORAGE_BASE}/team-photos/chad.jpg`
+    avatar: `${STORAGE_BASE}/General%20Images/chad%20cupido%20portrait.jpg`
   },
-  abbi: {
-    name: "Abbi",
-    title: "Content Developer",
-    expertise: "Eco-Tourism • Local Experiences • Sustainable Travel",
-    bio: "Every destination has a story to tell. I help travelers find the experiences that resonate with their journey.",
-    avatar: `${STORAGE_BASE}/team-photos/abbi.jpg`
+  ferozza: {
+    name: "Ferozza",
+    title: "Communications & Media Curator",
+    expertise: "Wellness Travel • Cultural Experiences • Travel Planning",
+    bio: "I believe every journey should nurture the soul. I help travelers discover experiences that create lasting transformation.",
+    avatar: `${STORAGE_BASE}/General%20Images/feroza%20begg%20-%20portrait.jpg`
   }
 };
 
@@ -436,7 +436,11 @@ const TravelWellConnectedStore = () => {
             className="w-full"
             onClick={() => handleViatorClick(tour)}
           >
-            <a href={tour.booking_url} target="_blank" rel="noopener noreferrer">
+            <a 
+              href={`https://www.viator.com/partner-shop/omniwellnessmedia/?search=${encodeURIComponent(tour.title || '')}&medium=link&medium_version=shop&campaign=omni-wellness`} 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
               <Globe className="w-4 h-4 mr-2" />
               Book on Viator
               <ExternalLink className="w-3 h-3 ml-2" />
