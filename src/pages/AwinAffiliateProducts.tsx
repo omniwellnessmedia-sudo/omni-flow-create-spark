@@ -236,7 +236,7 @@ export default function AwinAffiliateProducts() {
               </Badge>
             </div>
             
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-6xl font-bold text-foreground">
               Wellness Marketplace
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
