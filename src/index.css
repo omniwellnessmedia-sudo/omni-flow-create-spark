@@ -542,8 +542,111 @@ img {
   box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-/* ===== ACCESSIBILITY ===== */
+/* ===== WCAG 2.2 ACCESSIBILITY SYSTEM ===== */
+/* ISO 9241-171 Software Accessibility Requirements */
+
+/* Skip Navigation - WCAG 2.4.1 Bypass Blocks */
+.skip-nav-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.skip-link {
+  @apply absolute bg-primary text-primary-foreground px-4 py-3 font-semibold text-sm rounded-md shadow-lg;
+  transform: translateY(-100%);
+  transition: transform 0.2s ease-in-out;
+  left: 1rem;
+  top: 1rem;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Focus States - WCAG 2.4.7 Focus Visible */
+:focus-visible {
+  outline: 3px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+/* Ensure high contrast focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Touch Targets - WCAG 2.5.5 Target Size (Enhanced) */
+/* Minimum 44x44px for all interactive elements */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.touch-target-sm {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Touch target spacing */
+.touch-safe {
+  margin: 4px;
+}
+
+/* Screen Reader Only - ISO 9241-171 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus Not Obscured - WCAG 2.4.11 */
+[tabindex]:focus {
+  scroll-margin-top: 100px;
+  scroll-margin-bottom: 100px;
+}
+
+/* Reduced Motion - WCAG 2.3.3 */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
   .animate-fade-in-up,
   .animate-float,
   .animate-scale-in,
@@ -555,4 +658,123 @@ img {
     animation: none !important;
     transform: none !important;
   }
+}
+
+/* High Contrast Mode Support - WCAG 1.4.11 */
+@media (prefers-contrast: high) {
+  :root {
+    --border: 0 0% 30%;
+    --ring: 200 100% 40%;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    border-width: 2px;
+  }
+}
+
+/* Color Contrast Utilities - WCAG 1.4.3 */
+.text-contrast-high {
+  color: hsl(0 0% 0%) !important;
+}
+
+.dark .text-contrast-high {
+  color: hsl(0 0% 100%) !important;
+}
+
+.bg-contrast-overlay {
+  background: linear-gradient(
+    to bottom,
+    hsla(0, 0%, 0%, 0.6) 0%,
+    hsla(0, 0%, 0%, 0.5) 50%,
+    hsla(0, 0%, 0%, 0.7) 100%
+  );
+}
+
+/* Hero Text Contrast Enhancement */
+.hero-text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Image Aspect Ratios - Per goodbarber.com standards */
+.aspect-hero-mobile {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-hero-tablet {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-hero-desktop {
+  aspect-ratio: 21 / 9;
+}
+
+@media (min-width: 640px) {
+  .sm\:aspect-hero-tablet {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:aspect-hero-desktop {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+/* Safe animation defaults (max 3 flashes/sec - WCAG 2.3.1) */
+.animation-safe {
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+}
+
+/* Semantic landmarks styling */
+[role="main"] {
+  min-height: 100vh;
+}
+
+[role="banner"] {
+  position: relative;
+}
+
+[role="navigation"] {
+  position: relative;
+}
+
+[role="contentinfo"] {
+  margin-top: auto;
+}
+
+/* Form accessibility enhancements - ISO 9241-143 */
+.form-group {
+  @apply space-y-2;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-foreground;
+}
+
+.form-label-required::after {
+  content: " *";
+  color: hsl(var(--destructive));
+}
+
+.form-error {
+  @apply text-sm text-destructive mt-1;
+}
+
+.form-hint {
+  @apply text-sm text-muted-foreground mt-1;
+}
+
+/* Live region for screen reader announcements */
+.live-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

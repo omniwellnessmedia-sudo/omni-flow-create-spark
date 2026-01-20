@@ -154,7 +154,7 @@ const UnifiedNavigation = () => {
   return (
     <header 
       role="banner"
-      aria-label="Main navigation"
+      aria-label="Site header"
       className={`sticky top-0 z-50 w-full border-b transition-all duration-200 ${
         scrolled 
           ? 'bg-background/95 backdrop-blur-lg supports-[backdrop-filter]:bg-background/85 shadow-sm' 

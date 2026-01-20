@@ -224,17 +224,24 @@ const HeroSection = () => {
 
   return (
     <>
-      {/* Stunning Hero Section with Cave View */}
-      <div className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
+      {/* Stunning Hero Section with Cave View - WCAG 2.2 Compliant */}
+      <section 
+        aria-labelledby="hero-heading"
+        className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden"
+      >
+        {/* Background Image with Enhanced Contrast Overlay */}
         <div className="absolute inset-0">
           <img 
             src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/muizenberg%20cave%20view%202.jpg"
-            alt="Muizenberg Cave View - Spiritual Wellness Journey"
+            alt=""
+            aria-hidden="true"
             className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
             onError={(e) => { e.currentTarget.src = IMAGES.locations.view1; }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
+          {/* WCAG 1.4.3 Contrast - Enhanced overlay for 4.5:1 ratio */}
+          <div className="absolute inset-0 bg-contrast-overlay" aria-hidden="true"></div>
         </div>
 
         {/* Hero Content */}
@@ -244,44 +251,55 @@ const HeroSection = () => {
             <div className="relative">
               <img 
                 src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
-                alt="Omni Wellness Media"
+                alt="Omni Wellness Media logo"
                 className="h-28 w-28 sm:h-36 sm:w-36 lg:h-44 lg:w-44 object-contain drop-shadow-2xl rounded-full bg-white/90 p-3 animate-[pulse_3s_ease-in-out_infinite]"
+                loading="eager"
               />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 animate-[pulse_3s_ease-in-out_infinite] blur-md -z-10"></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 animate-[pulse_3s_ease-in-out_infinite] blur-md -z-10" aria-hidden="true"></div>
             </div>
           </div>
           
-          {/* Main Headline */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-white drop-shadow-lg animate-fade-in-up leading-tight">
+          {/* Main Headline - WCAG 1.4.3 Enhanced Contrast */}
+          <h1 
+            id="hero-heading"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-white hero-text-shadow animate-fade-in-up leading-tight"
+          >
             Bridging Wellness, Outreach & Media
           </h1>
           
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 mb-8 sm:mb-12 max-w-4xl mx-auto drop-shadow-md animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.2s' }}>
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 mb-8 sm:mb-12 max-w-4xl mx-auto hero-text-shadow animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.2s' }}>
             Empowering South Africa's Journey to Health & Consciousness
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold bg-wellness-primary hover:bg-wellness-primary/90 text-white shadow-2xl">
+          {/* CTA Buttons - WCAG 2.5.5 Touch Targets (44px min) + 8px spacing */}
+          <nav 
+            aria-label="Primary actions"
+            className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center animate-fade-in-up" 
+            style={{ animationDelay: '0.4s' }}
+          >
+            <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold bg-wellness-primary hover:bg-wellness-primary/90 text-white shadow-2xl min-w-[200px]">
               <Link to="/services">Explore Services</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-wellness-primary border-2 border-white shadow-2xl">
+            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-wellness-primary border-2 border-white shadow-2xl min-w-[200px]">
               <Link to="/tours-retreats">Wellness Tours</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-wellness-primary border-2 border-white shadow-2xl">
+            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-wellness-primary border-2 border-white shadow-2xl min-w-[200px]">
               <Link to="/twobewellshop">2BeWell Shop</Link>
             </Button>
-          </div>
+          </nav>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        {/* Scroll Indicator - Hidden from screen readers */}
+        <div 
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
+          aria-hidden="true"
+        >
           <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2">
             <div className="w-1 h-3 bg-white/70 rounded-full"></div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Main Content */}
       <div className="bg-gradient-to-br from-gray-50 to-purple-50">
