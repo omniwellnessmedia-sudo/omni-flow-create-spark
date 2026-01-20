@@ -657,11 +657,20 @@ const UWCHumanAnimalProgram = () => {
             </div>
             
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-xl">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-xl"
+                onClick={() => document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 <Heart className="mr-2 h-5 w-5" />
                 Start Your Journey
               </Button>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg rounded-xl backdrop-blur">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg rounded-xl backdrop-blur"
+                onClick={() => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank')}
+              >
                 <Phone className="mr-2 h-5 w-5" />
                 Book a Discovery Call
               </Button>
@@ -702,7 +711,11 @@ const UWCHumanAnimalProgram = () => {
                 </button>
               ))}
             </div>
-            <Button size="sm" className="hidden md:flex bg-primary hover:bg-primary/90">
+            <Button 
+              size="sm" 
+              className="hidden md:flex bg-primary hover:bg-primary/90"
+              onClick={() => document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Apply Now <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </div>
@@ -2223,11 +2236,18 @@ const UWCHumanAnimalProgram = () => {
                 documentation, and custom cohort arrangements.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button className="bg-white text-blue-900 hover:bg-white/90">
+                <Button 
+                  className="bg-white text-blue-900 hover:bg-white/90"
+                  onClick={() => window.open('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/UWC-Partnership-Prospectus.pdf', '_blank')}
+                >
                   <Download className="mr-2 h-4 w-4" />
                   Download Partnership Prospectus
                 </Button>
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                <Button 
+                  variant="outline" 
+                  className="border-white/30 text-white hover:bg-white/10"
+                  onClick={() => window.open('https://calendly.com/omniwellnessmedia/faculty-call', '_blank')}
+                >
                   <Phone className="mr-2 h-4 w-4" />
                   Schedule Faculty Call
                 </Button>
@@ -2323,15 +2343,29 @@ const UWCHumanAnimalProgram = () => {
           </div>
 
           <div className="flex flex-wrap justify-center gap-4">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 px-8">
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 px-8"
+              onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Student Sponsorship Inquiry&body=Hi,%0A%0AI am interested in sponsoring a student for the UWC Human-Animal Programme.%0A%0APlease send me more information.%0A%0AThank you!', '_blank')}
+            >
               <Heart className="mr-2 h-5 w-5" />
               Sponsor a Student
             </Button>
-            <Button size="lg" variant="outline" className="px-8">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="px-8"
+              onClick={() => window.open('/conscious-media-partnership', '_self')}
+            >
               <Building2 className="mr-2 h-5 w-5" />
               Corporate Partnership
             </Button>
-            <Button size="lg" variant="outline" className="px-8">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="px-8"
+              onClick={() => window.open('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/UWC-Funding-Proposal.pdf', '_blank')}
+            >
               <Download className="mr-2 h-5 w-5" />
               Download Funding Proposal
             </Button>
@@ -2358,10 +2392,10 @@ const UWCHumanAnimalProgram = () => {
           {/* Application Steps */}
           <div className="grid md:grid-cols-4 gap-4 max-w-5xl mx-auto mb-16">
             {[
-              { num: "1", title: "Express Interest", desc: "Fill out our quick form", active: true, cta: "Get Started" },
-              { num: "2", title: "Book a Call", desc: "Speak with our team", active: false, cta: "Schedule" },
-              { num: "3", title: "Apply", desc: "Submit your documents", active: false, cta: "Apply Now" },
-              { num: "4", title: "Secure Your Spot", desc: "Pay deposit to confirm", active: false, cta: null }
+              { num: "1", title: "Express Interest", desc: "Fill out our quick form", active: true, cta: "Get Started", action: () => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Interest&body=Hi,%0A%0AI am interested in learning more about the UWC Human-Animal Programme.%0A%0APlease send me more information.%0A%0AThank you!', '_blank') },
+              { num: "2", title: "Book a Call", desc: "Speak with our team", active: false, cta: "Schedule", action: () => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank') },
+              { num: "3", title: "Apply", desc: "Submit your documents", active: false, cta: "Apply Now", action: () => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Application&body=Hi,%0A%0AI would like to apply for the UWC Human-Animal Programme starting June 2026.%0A%0APlease send me the application requirements.%0A%0AThank you!', '_blank') },
+              { num: "4", title: "Secure Your Spot", desc: "Pay deposit to confirm", active: false, cta: null, action: null }
             ].map((step, idx) => (
               <div key={idx} className={`p-6 rounded-2xl text-center transition-all ${step.active ? 'bg-primary text-primary-foreground shadow-lg scale-105' : 'bg-background border border-border hover:shadow-md'}`}>
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold ${step.active ? 'bg-white/20' : 'bg-primary/10 text-primary'}`}>
@@ -2369,8 +2403,13 @@ const UWCHumanAnimalProgram = () => {
                 </div>
                 <h3 className={`font-bold mb-2 ${step.active ? 'text-white' : 'text-foreground'}`}>{step.title}</h3>
                 <p className={`text-sm mb-4 ${step.active ? 'text-white/80' : 'text-muted-foreground'}`}>{step.desc}</p>
-                {step.cta && (
-                  <Button size="sm" variant={step.active ? "secondary" : "outline"} className={step.active ? 'bg-white text-primary hover:bg-white/90' : ''}>
+                {step.cta && step.action && (
+                  <Button 
+                    size="sm" 
+                    variant={step.active ? "secondary" : "outline"} 
+                    className={step.active ? 'bg-white text-primary hover:bg-white/90' : ''}
+                    onClick={step.action}
+                  >
                     {step.cta} <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>
                 )}
@@ -2387,11 +2426,20 @@ const UWCHumanAnimalProgram = () => {
                   Book a free 20-minute discovery call with our team. No pressure, just conversation.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 px-8">
+                  <Button 
+                    size="lg" 
+                    className="bg-primary hover:bg-primary/90 px-8"
+                    onClick={() => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank')}
+                  >
                     <Phone className="mr-2 h-5 w-5" />
                     Book a Discovery Call
                   </Button>
-                  <Button size="lg" variant="outline" className="px-8">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="px-8"
+                    onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Question About UWC Programme', '_blank')}
+                  >
                     <Mail className="mr-2 h-5 w-5" />
                     Email Us a Question
                   </Button>
@@ -2468,11 +2516,20 @@ const UWCHumanAnimalProgram = () => {
             how you see animals, communities, and yourself.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button size="lg" className="bg-white text-primary hover:bg-white/90 px-8 py-6 text-lg">
+            <Button 
+              size="lg" 
+              className="bg-white text-primary hover:bg-white/90 px-8 py-6 text-lg"
+              onClick={() => document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               <Heart className="mr-2 h-5 w-5" />
               Start Your Journey
             </Button>
-            <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg"
+              onClick={() => window.open('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf', '_blank')}
+            >
               <Download className="mr-2 h-5 w-5" />
               Download Prospectus
             </Button>

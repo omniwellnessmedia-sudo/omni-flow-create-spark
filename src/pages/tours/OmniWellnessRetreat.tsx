@@ -81,7 +81,11 @@ const OmniWellnessRetreat = () => {
             </div>
             
             <div className="flex gap-4 pt-6">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
+                onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 Reserve Your Spot
               </Button>
               <Button 
@@ -630,7 +634,7 @@ const OmniWellnessRetreat = () => {
 
             {/* Right Column - Booking Sidebar */}
             <div className="lg:col-span-1">
-              <div className="sticky top-8 space-y-6">
+              <div id="booking-section" className="sticky top-8 space-y-6 scroll-mt-20">
                 {/* Package Options */}
                 <Card>
                   <CardContent className="p-6">
@@ -663,7 +667,11 @@ const OmniWellnessRetreat = () => {
                     </div>
 
                     <div className="mt-6 space-y-3">
-                      <Button className="w-full" size="lg">
+                      <Button 
+                        className="w-full" 
+                        size="lg"
+                        onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Omni Wellness Retreat Booking&body=Hi,%0A%0AI would like to book a spot for the 4th Annual Omni Wellness Retreat.%0A%0APackage preference:%0ANumber of guests:%0A%0APlease send me more information.%0A%0AThank you!', '_blank')}
+                      >
                         Book Now
                       </Button>
                       <p className="text-xs text-center text-muted-foreground">
