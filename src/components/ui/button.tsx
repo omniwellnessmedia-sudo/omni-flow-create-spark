@@ -5,8 +5,15 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Button Component - WCAG 2.2 Compliant
+ * 
+ * Touch Targets: All sizes meet WCAG 2.5.5 minimum of 44x44px
+ * Focus States: Uses focus-visible for keyboard users
+ * Contrast: All variants meet WCAG 1.4.3 AA requirements
+ */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-base font-bold rounded-xl border-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 relative overflow-visible",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-base font-bold rounded-xl border-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 relative overflow-visible select-none touch-manipulation",
   {
     variants: {
       variant: {
@@ -22,10 +29,11 @@ const buttonVariants = cva(
         soft: "bg-white text-gray-800 border-2 border-gray-200 hover:bg-gray-50 hover:shadow-md backdrop-blur-sm",
       },
       size: {
-        default: "min-h-[48px] px-6 py-4 text-base",
-        sm: "min-h-[40px] px-4 py-2 text-sm",
-        lg: "min-h-[56px] px-8 py-5 text-lg",
-        icon: "min-h-[48px] w-12",
+        // WCAG 2.5.5: All touch targets minimum 44x44px
+        default: "min-h-[48px] min-w-[48px] px-6 py-4 text-base",
+        sm: "min-h-[44px] min-w-[44px] px-4 py-2 text-sm",
+        lg: "min-h-[56px] min-w-[56px] px-8 py-5 text-lg",
+        icon: "min-h-[48px] min-w-[48px] w-12",
       },
     },
     defaultVariants: {

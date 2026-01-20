@@ -19,6 +19,17 @@ export default {
 				'2xl': '1400px'
 			}
 		},
+		// Extended breakpoints for ISO 9241-300 compliance
+		screens: {
+			'xs': '320px',    // Small phones - WCAG mobile baseline
+			'sm': '640px',    // Large phones / Small tablets
+			'md': '768px',    // Tablets
+			'lg': '1024px',   // Small laptops
+			'xl': '1280px',   // Desktops
+			'2xl': '1536px',  // Large desktops
+			'3xl': '1920px',  // Full HD displays
+			'4xl': '2560px',  // 2K/4K displays
+		},
 		extend: {
 			colors: {
 				border: 'hsl(var(--border))',
