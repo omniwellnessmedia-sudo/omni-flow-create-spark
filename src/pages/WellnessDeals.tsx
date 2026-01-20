@@ -708,21 +708,25 @@ const WellnessDeals = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="flex items-center gap-3">
-                            <span className="text-2xl font-bold text-purple-600">R{deal.deal_price_zar}</span>
-                            <span className="text-lg text-gray-500 line-through">R{deal.original_price_zar}</span>
+                            <span className="text-2xl font-bold text-purple-600">R {deal.deal_price_zar.toFixed(2)}</span>
+                            {deal.original_price_zar > deal.deal_price_zar && (
+                              <span className="text-lg text-gray-500 line-through">R {deal.original_price_zar.toFixed(2)}</span>
+                            )}
                           </div>
                           <div className="text-sm text-gray-600 mt-1">
-                            or {deal.deal_price_wellcoins} WellCoins
+                            or {Math.round(deal.deal_price_wellcoins)} WellCoins
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-green-600">
-                            SAVE R{deal.original_price_zar - deal.deal_price_zar}
+                        {deal.original_price_zar > deal.deal_price_zar && (
+                          <div className="text-right">
+                            <div className="text-xl font-bold text-green-600">
+                              SAVE R {(deal.original_price_zar - deal.deal_price_zar).toFixed(2)}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              ({deal.discount_percentage}% off)
+                            </div>
                           </div>
-                          <div className="text-sm text-gray-600">
-                            ({deal.discount_percentage}% off)
-                          </div>
-                        </div>
+                        )}
                       </div>
                     </div>
 
