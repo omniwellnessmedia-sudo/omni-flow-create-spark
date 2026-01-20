@@ -11,6 +11,8 @@ import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import InteractiveGallery from '@/components/gallery/InteractiveGallery';
 import RecruitmentJourney from '@/components/programs/RecruitmentJourney';
 import RecruitmentOps from '@/components/programs/RecruitmentOps';
+import StickyConversionBar from '@/components/conversion/StickyConversionBar';
+import ExitIntentPopup from '@/components/conversion/ExitIntentPopup';
 import { 
   GraduationCap, Heart, Globe, Users, Calendar, MapPin, Award, BookOpen, Leaf, Brain,
   Building2, Clock, Check, Target, Star, Coffee, Utensils, Home, Camera, Sparkles,
@@ -1376,6 +1378,13 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
+      {/* Your Journey Section - Recruitment Flowchart */}
+      <section id="journey" className="py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5 scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <RecruitmentJourney onPhaseClick={(phase) => console.log('Phase clicked:', phase)} />
+        </div>
+      </section>
+
       {/* Travel Experiences Section - Best of Western Cape */}
       <section id="destination" className="py-24 bg-muted/30 scroll-mt-20 overflow-hidden">
         <div className="container mx-auto px-4">
@@ -2375,6 +2384,25 @@ const UWCHumanAnimalProgram = () => {
         </div>
       </section>
 
+      {/* Recruitment Operations Hub - Team Access */}
+      <section id="recruitment-ops" className="py-16 bg-muted/30 scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <Badge className="mb-4 bg-muted text-muted-foreground border-border px-4 py-1.5">
+              <Lock className="w-3.5 h-3.5 mr-2" />
+              Team Access
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+              Recruitment Operations Hub
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              For recruitment team members and partners. Access marketing materials, UTM tracking links, and the recruitment timeline.
+            </p>
+          </div>
+          <RecruitmentOps onLeadAdded={() => console.log('Lead added from RecruitmentOps')} />
+        </div>
+      </section>
+
       {/* Pre-Enrollment Section */}
       <section id="apply" className="py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5 scroll-mt-20">
         <div className="container mx-auto px-4">
@@ -2540,6 +2568,28 @@ const UWCHumanAnimalProgram = () => {
       </section>
 
       <Footer />
+
+      {/* Conversion Components */}
+      <StickyConversionBar 
+        message="Ready to transform your career in animal-assisted therapy?"
+        primaryCTA={{
+          label: 'Book Discovery Call',
+          action: () => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank'),
+        }}
+        secondaryCTA={{
+          label: 'Download Prospectus',
+          action: () => window.open('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf', '_blank'),
+        }}
+        showAfterScroll={600}
+      />
+      <ExitIntentPopup 
+        title="Wait! Get the Full Programme Details"
+        description="Download our free prospectus and discover how this 10-week immersive experience can transform your career."
+        offerTitle="Free UWC Programme Prospectus"
+        offerDescription="40+ pages of programme details, outcomes, partner information, and alumni testimonials"
+        ctaLabel="Get Free Prospectus"
+        collectEmail={true}
+      />
     </div>
   );
 };

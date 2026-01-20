@@ -166,7 +166,7 @@ const RecruitmentJourney: React.FC<RecruitmentJourneyProps> = ({ onPhaseClick })
                             key={ctaIdx}
                             size="sm"
                             variant={cta.primary ? "default" : "outline"}
-                            className="w-full text-xs h-8"
+                            className="w-full text-xs min-h-[44px]"
                             onClick={() => handleAction(cta.action)}
                           >
                             <cta.icon className="w-3 h-3 mr-1" />
