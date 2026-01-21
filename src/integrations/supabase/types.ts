@@ -568,6 +568,145 @@ export type Database = {
         }
         Relationships: []
       }
+      booking_leases: {
+        Row: {
+          consumer_id: string | null
+          consumer_session_id: string
+          converted_to_booking_id: string | null
+          created_at: string | null
+          expires_at: string
+          id: string
+          participants: number
+          selected_date: string
+          selected_time: string | null
+          status: string | null
+          tour_id: string
+        }
+        Insert: {
+          consumer_id?: string | null
+          consumer_session_id: string
+          converted_to_booking_id?: string | null
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          participants: number
+          selected_date: string
+          selected_time?: string | null
+          status?: string | null
+          tour_id: string
+        }
+        Update: {
+          consumer_id?: string | null
+          consumer_session_id?: string
+          converted_to_booking_id?: string | null
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          participants?: number
+          selected_date?: string
+          selected_time?: string | null
+          status?: string | null
+          tour_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_leases_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_requests: {
+        Row: {
+          alternative_dates_offered: Json | null
+          alternative_message: string | null
+          confirmed_date: string | null
+          confirmed_time: string | null
+          consumer_id: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string | null
+          deposit_amount_zar: number | null
+          deposit_captured: boolean | null
+          expires_at: string | null
+          flexibility: string | null
+          id: string
+          operator_id: string | null
+          operator_response_at: string | null
+          operator_response_deadline: string | null
+          participants: number
+          preferred_dates: Json
+          special_requirements: string | null
+          status: string | null
+          stripe_payment_intent_id: string | null
+          tour_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          alternative_dates_offered?: Json | null
+          alternative_message?: string | null
+          confirmed_date?: string | null
+          confirmed_time?: string | null
+          consumer_id?: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string | null
+          deposit_amount_zar?: number | null
+          deposit_captured?: boolean | null
+          expires_at?: string | null
+          flexibility?: string | null
+          id?: string
+          operator_id?: string | null
+          operator_response_at?: string | null
+          operator_response_deadline?: string | null
+          participants: number
+          preferred_dates?: Json
+          special_requirements?: string | null
+          status?: string | null
+          stripe_payment_intent_id?: string | null
+          tour_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          alternative_dates_offered?: Json | null
+          alternative_message?: string | null
+          confirmed_date?: string | null
+          confirmed_time?: string | null
+          consumer_id?: string | null
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string | null
+          deposit_amount_zar?: number | null
+          deposit_captured?: boolean | null
+          expires_at?: string | null
+          flexibility?: string | null
+          id?: string
+          operator_id?: string | null
+          operator_response_at?: string | null
+          operator_response_deadline?: string | null
+          participants?: number
+          preferred_dates?: Json
+          special_requirements?: string | null
+          status?: string | null
+          stripe_payment_intent_id?: string | null
+          tour_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_requests_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           amount_wellcoins: number | null
@@ -2456,6 +2595,65 @@ export type Database = {
           },
         ]
       }
+      tour_operator_availability: {
+        Row: {
+          available_date: string
+          booked_capacity: number | null
+          created_at: string | null
+          end_time: string | null
+          external_calendar_sync: string | null
+          external_event_id: string | null
+          id: string
+          max_capacity: number | null
+          notes: string | null
+          operator_id: string
+          start_time: string | null
+          status: string | null
+          tour_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          available_date: string
+          booked_capacity?: number | null
+          created_at?: string | null
+          end_time?: string | null
+          external_calendar_sync?: string | null
+          external_event_id?: string | null
+          id?: string
+          max_capacity?: number | null
+          notes?: string | null
+          operator_id: string
+          start_time?: string | null
+          status?: string | null
+          tour_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          available_date?: string
+          booked_capacity?: number | null
+          created_at?: string | null
+          end_time?: string | null
+          external_calendar_sync?: string | null
+          external_event_id?: string | null
+          id?: string
+          max_capacity?: number | null
+          notes?: string | null
+          operator_id?: string
+          start_time?: string | null
+          status?: string | null
+          tour_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tour_operator_availability_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tour_testimonials: {
         Row: {
           approved: boolean | null
@@ -2509,8 +2707,12 @@ export type Database = {
       tours: {
         Row: {
           active: boolean | null
+          booking_mode: string | null
+          cancellation_policy: string | null
           category_id: string
           created_at: string
+          deposit_amount_zar: number | null
+          deposit_percentage: number | null
           destination: string
           difficulty_level: string | null
           duration: string
@@ -2522,8 +2724,11 @@ export type Database = {
           image_gallery: string[] | null
           inclusions: string[] | null
           max_participants: number
+          min_notice_hours: number | null
+          operator_id: string | null
           overview: string | null
           price_from: number
+          requires_deposit: boolean | null
           slug: string
           subtitle: string | null
           title: string
@@ -2531,8 +2736,12 @@ export type Database = {
         }
         Insert: {
           active?: boolean | null
+          booking_mode?: string | null
+          cancellation_policy?: string | null
           category_id: string
           created_at?: string
+          deposit_amount_zar?: number | null
+          deposit_percentage?: number | null
           destination: string
           difficulty_level?: string | null
           duration: string
@@ -2544,8 +2753,11 @@ export type Database = {
           image_gallery?: string[] | null
           inclusions?: string[] | null
           max_participants?: number
+          min_notice_hours?: number | null
+          operator_id?: string | null
           overview?: string | null
           price_from: number
+          requires_deposit?: boolean | null
           slug: string
           subtitle?: string | null
           title: string
@@ -2553,8 +2765,12 @@ export type Database = {
         }
         Update: {
           active?: boolean | null
+          booking_mode?: string | null
+          cancellation_policy?: string | null
           category_id?: string
           created_at?: string
+          deposit_amount_zar?: number | null
+          deposit_percentage?: number | null
           destination?: string
           difficulty_level?: string | null
           duration?: string
@@ -2566,8 +2782,11 @@ export type Database = {
           image_gallery?: string[] | null
           inclusions?: string[] | null
           max_participants?: number
+          min_notice_hours?: number | null
+          operator_id?: string | null
           overview?: string | null
           price_from?: number
+          requires_deposit?: boolean | null
           slug?: string
           subtitle?: string | null
           title?: string
@@ -3073,8 +3292,20 @@ export type Database = {
         Args: { submitter_email: string }
         Returns: boolean
       }
+      cleanup_expired_leases: { Args: never; Returns: undefined }
       ensure_provider_profile: { Args: { user_id: string }; Returns: undefined }
+      generate_confirmation_code: { Args: never; Returns: string }
       generate_order_number: { Args: never; Returns: string }
+      get_tour_availability: {
+        Args: { p_date: string; p_tour_id: string }
+        Returns: {
+          available_capacity: number
+          end_time: string
+          start_time: string
+          status: string
+          total_capacity: number
+        }[]
+      }
       has_role: {
         Args: { role: Database["public"]["Enums"]["app_role"]; user_id: string }
         Returns: boolean
