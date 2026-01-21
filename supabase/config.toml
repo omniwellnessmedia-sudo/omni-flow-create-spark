@@ -38,3 +38,9 @@ verify_jwt = true
 
 [functions.track-affiliate-click]
 verify_jwt = false
+
+[functions.tour-availability]
+verify_jwt = false
+
+[functions.improved-booking]
+verify_jwt = true
