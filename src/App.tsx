@@ -72,6 +72,9 @@ const ViatorWellnessExperiences = React.lazy(() => import('@/pages/ViatorWellnes
 const ESIMStore = React.lazy(() => import('@/pages/ESIMStore'));
 const TravelWellConnectedESIM = React.lazy(() => import('@/pages/TravelWellConnectedESIM'));
 const UWCHumanAnimalProgram = React.lazy(() => import('@/pages/programs/UWCHumanAnimalProgram'));
+const UWCUniversityPartners = React.lazy(() => import('@/pages/programs/UWCUniversityPartners'));
+const UWCSponsors = React.lazy(() => import('@/pages/programs/UWCSponsors'));
+const UWCRecruitment = React.lazy(() => import('@/pages/programs/UWCRecruitment'));
 const CSRImpact = React.lazy(() => import('@/pages/CSRImpact'));
 const PartnersDirectory = React.lazy(() => import('@/pages/PartnersDirectory'));
 const PartnerProfile = React.lazy(() => import('@/pages/PartnerProfile'));
@@ -215,6 +218,9 @@ function App() {
             <Route path="/tours/great-mother-cave-tour" element={<GreatMotherCaveTour />} />
             <Route path="/experience/:id" element={<TourDetail />} />
             <Route path="/programs/uwc-human-animal" element={<UWCHumanAnimalProgram />} />
+            <Route path="/programs/uwc-human-animal/university-partners" element={<UWCUniversityPartners />} />
+            <Route path="/programs/uwc-human-animal/sponsors" element={<UWCSponsors />} />
+            <Route path="/programs/uwc-human-animal/recruitment" element={<UWCRecruitment />} />
             <Route path="/csr-impact" element={<CSRImpact />} />
             <Route path="/viator-wellness-experiences" element={<ViatorWellnessExperiences />} />
             <Route path="/esim-store" element={<ESIMStore />} />
