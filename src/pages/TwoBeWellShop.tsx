@@ -182,13 +182,10 @@ const TwoBeWellShop = () => {
                     <h3 className="text-2xl font-bold mb-2">{member.name}</h3>
                     <p className="text-primary font-semibold mb-4">{member.role}</p>
                     <p className="italic mb-6 text-muted-foreground">"{member.bio}"</p>
-                    <div className="text-sm text-muted-foreground space-y-2">
-                      <div className="flex items-center justify-center gap-2">
-                        <Mail className="w-4 h-4" />{member.email}
-                      </div>
-                      <div className="flex items-center justify-center gap-2">
-                        <Instagram className="w-4 h-4" />{member.instagram}
-                      </div>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {member.specialties.slice(0, 3).map((specialty, i) => (
+                        <span key={i} className="text-xs bg-purple-100 text-purple-800 px-3 py-1 rounded-full">{specialty}</span>
+                      ))}
                     </div>
                   </div>
                 </Card>
