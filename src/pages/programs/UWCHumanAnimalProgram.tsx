@@ -116,10 +116,10 @@ const heroGallery = [images.hero, images.cartHorse1, images.volunteer, images.hu
 const partnerLogos = {
   carthorse: 'https://carthorse.org.za/wp/wp-content/uploads/2021/02/Cart-Horse-Logo-Blue-Square.png',
   tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
-  drphilafel: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
-  valleyOfPlenty: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
-  uwc: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/UWC-Crest.png`,
-  omni: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png`
+  drphilafel: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
+  valleyOfPlenty: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
+  uwc: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/UWC-Crest.png`,
+  omni: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png`
 };
 
 // Fallback placeholder for broken images - using storage image
@@ -678,7 +678,12 @@ const UWCHumanAnimalProgram = () => {
                 <Phone className="mr-2 h-5 w-5" />
                 Book a Discovery Call
               </Button>
-              <Button size="lg" variant="ghost" className="text-white hover:bg-white/10 px-8 py-6 text-lg rounded-xl">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white/40 bg-white/10 text-white hover:bg-white/20 px-8 py-6 text-lg rounded-xl min-h-[44px]"
+                onClick={() => document.getElementById('programme-video')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 <Play className="mr-2 h-5 w-5" />
                 Watch Video
               </Button>
@@ -691,8 +696,11 @@ const UWCHumanAnimalProgram = () => {
               <button
                 key={idx}
                 onClick={() => setHeroIndex(idx)}
-                className={`w-2.5 h-2.5 rounded-full transition-all ${idx === heroIndex ? 'bg-white w-8' : 'bg-white/40 hover:bg-white/60'}`}
-              />
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`min-w-[44px] min-h-[44px] flex items-center justify-center transition-all ${idx === heroIndex ? 'scale-110' : 'hover:scale-105'}`}
+              >
+                <span className={`block rounded-full transition-all ${idx === heroIndex ? 'bg-white w-8 h-2.5' : 'bg-white/40 hover:bg-white/60 w-2.5 h-2.5'}`} />
+              </button>
             ))}
           </div>
         </div>
@@ -707,8 +715,10 @@ const UWCHumanAnimalProgram = () => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className={`px-4 py-2 text-sm font-medium whitespace-nowrap rounded-full transition-colors ${
-                    activeSection === item.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  className={`px-4 py-2 min-h-[44px] text-sm font-medium whitespace-nowrap rounded-full transition-colors ${
+                    activeSection === item.id 
+                      ? 'bg-primary text-primary-foreground shadow-md' 
+                      : 'text-muted-foreground hover:text-foreground bg-muted/50 hover:bg-muted'
                   }`}
                 >
                   {item.label}
