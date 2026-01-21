@@ -408,39 +408,7 @@ const useCountdown = (targetDate: Date) => {
   return timeLeft;
 };
 
-// Pulse animation component
-const PulseMeter = () => {
-  const [pulse, setPulse] = useState(72);
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPulse(prev => Math.max(60, Math.min(90, prev + (Math.random() - 0.5) * 8)));
-    }, 1500);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="flex items-center gap-3 bg-primary/10 rounded-xl px-4 py-2 border border-primary/20">
-      <Activity className="w-5 h-5 text-primary animate-pulse" />
-      <div className="flex items-baseline gap-1">
-        <span className="text-2xl font-bold text-primary">{Math.round(pulse)}</span>
-        <span className="text-xs text-muted-foreground">BPM</span>
-      </div>
-      <div className="flex gap-0.5">
-        {[...Array(5)].map((_, i) => (
-          <div 
-            key={i} 
-            className="w-1 bg-primary rounded-full animate-pulse"
-            style={{ 
-              height: `${12 + Math.random() * 12}px`,
-              animationDelay: `${i * 0.1}s`
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
+// PulseMeter removed for cleaner UX - was too distracting
 
 const UWCHumanAnimalProgram = () => {
   const [activeSection, setActiveSection] = useState('overview');
@@ -461,10 +429,11 @@ const UWCHumanAnimalProgram = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Slowed down hero rotation from 5s to 8s for calmer experience
   useEffect(() => {
     const interval = setInterval(() => {
       setHeroIndex((prev) => (prev + 1) % heroGallery.length);
-    }, 5000);
+    }, 8000);
     return () => clearInterval(interval);
   }, []);
 
@@ -622,48 +591,30 @@ const UWCHumanAnimalProgram = () => {
               and African Wellness in beautiful Cape Town, South Africa.
             </p>
 
-            {/* Countdown Timer */}
-            <div className="flex flex-wrap items-center gap-4 mb-6">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
-                <Timer className="w-5 h-5 text-primary" />
-                <span className="text-white/70 text-sm mr-2">Programme starts in:</span>
-                <div className="flex gap-3">
-                  {[
-                    { value: countdown.days, label: 'D' },
-                    { value: countdown.hours, label: 'H' },
-                    { value: countdown.minutes, label: 'M' },
-                    { value: countdown.seconds, label: 'S' }
-                  ].map((item, i) => (
-                    <div key={i} className="text-center">
-                      <div className="text-xl font-bold text-white tabular-nums">{String(item.value).padStart(2, '0')}</div>
-                      <div className="text-[10px] text-white/60 uppercase">{item.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <PulseMeter />
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-              {[
-                { icon: MapPin, label: "Cape Town, SA" },
-                { icon: Calendar, label: "June 2026" },
-                { icon: Clock, label: "10 Weeks" },
-                { icon: Award, label: "UWC Certified" }
-              ].map((item, idx) => (
-                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
-                    <item.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="text-white font-medium text-sm">{item.label}</span>
-                </div>
-              ))}
+            {/* Consolidated Metadata - Clean single line instead of busy cards */}
+            <div className="flex flex-wrap items-center gap-3 text-white/80 text-sm mb-8">
+              <span className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" /> Cape Town, SA
+              </span>
+              <span className="text-white/40">•</span>
+              <span className="flex items-center gap-2">
+                <Calendar className="w-4 h-4" /> June 2026
+              </span>
+              <span className="text-white/40">•</span>
+              <span className="flex items-center gap-2">
+                <Clock className="w-4 h-4" /> 10 Weeks
+              </span>
+              <span className="text-white/40">•</span>
+              <span className="flex items-center gap-2">
+                <Award className="w-4 h-4" /> UWC Certified
+              </span>
             </div>
             
+            {/* Simplified to 2 CTAs - moved Watch Video below the fold */}
             <div className="flex flex-wrap gap-4">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-xl"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-xl min-h-[48px]"
                 onClick={() => document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <Heart className="mr-2 h-5 w-5" />
@@ -672,20 +623,11 @@ const UWCHumanAnimalProgram = () => {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg rounded-xl backdrop-blur"
+                className="border-white/40 bg-white/10 text-white hover:bg-white/20 px-8 py-6 text-lg rounded-xl min-h-[48px]"
                 onClick={() => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank')}
               >
                 <Phone className="mr-2 h-5 w-5" />
-                Book a Discovery Call
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white/40 bg-white/10 text-white hover:bg-white/20 px-8 py-6 text-lg rounded-xl min-h-[44px]"
-                onClick={() => document.getElementById('programme-video')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                <Play className="mr-2 h-5 w-5" />
-                Watch Video
+                Book Discovery Call
               </Button>
             </div>
           </div>
