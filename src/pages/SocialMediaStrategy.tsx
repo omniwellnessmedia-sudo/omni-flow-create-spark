@@ -17,6 +17,7 @@ const SocialMediaStrategy = () => {
   const [auditResult, setAuditResult] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', business: '', goals: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleAuditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +37,7 @@ const SocialMediaStrategy = () => {
         }
       });
       if (error) throw error;
-      toast.success("Audit request submitted!", { description: "We'll get back to you within 24 hours." });
+      setSubmitSuccess(true);
       setFormData({ name: '', email: '', business: '', goals: '' });
     } catch (error) {
       console.error("Audit submission error:", error);
@@ -112,14 +113,22 @@ const SocialMediaStrategy = () => {
                 drive meaningful engagement, and convert followers into loyal advocates for your mission.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  onClick={() => document.getElementById('audit-form')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   <TrendingUp className="mr-2 w-5 h-5" />
                   Get Strategy Audit
                 </Button>
-                <Button variant="outline" size="lg" className="px-8 py-4 text-lg rounded-full border-2">
+                <a 
+                  href="/downloads/content-calendar-template.pdf" 
+                  download
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg rounded-full border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                >
                   <Download className="mr-2 w-5 h-5" />
                   Content Calendar Template
-                </Button>
+                </a>
               </div>
               <div className="flex items-center space-x-8 text-sm text-gray-600">
                 <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Multi-Platform Strategy</div>
@@ -127,7 +136,7 @@ const SocialMediaStrategy = () => {
                 <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Analytics & Reporting</div>
               </div>
             </div>
-            <div className="relative">
+            <div className="relative" id="audit-form">
               <div className="bg-white rounded-2xl shadow-2xl p-8 border">
                 <h3 className="font-heading font-bold text-2xl mb-6 text-center">Free Social Media Audit</h3>
                 <div className="space-y-4">
@@ -173,13 +182,29 @@ const SocialMediaStrategy = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button 
-                    onClick={handleAuditSubmit}
-                    disabled={isSubmitting}
-                    className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full"
-                  >
-                    {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Free Audit'}
-                  </Button>
+                  
+                  {submitSuccess ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                      <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-3" />
+                      <h4 className="font-bold text-lg text-green-800 mb-2">Audit Request Submitted!</h4>
+                      <p className="text-green-700">We'll get back to you within 24 hours with your personalized social media audit.</p>
+                      <Button 
+                        variant="outline" 
+                        className="mt-4"
+                        onClick={() => setSubmitSuccess(false)}
+                      >
+                        Submit Another Request
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button 
+                      onClick={handleAuditSubmit}
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full"
+                    >
+                      {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Free Audit'}
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

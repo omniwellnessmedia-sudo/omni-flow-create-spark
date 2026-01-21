@@ -60,8 +60,8 @@ const ConsciousMediaPartnershipPage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1920&h=1080&fit=crop')] bg-cover bg-center opacity-5" />
+      <section className="relative py-32 bg-gradient-to-br from-primary/10 via-background to-secondary/10 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Omni_Wellness_Media_Banner.jpg')] bg-cover bg-center opacity-20" />
         
         <div className="container max-w-7xl mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8">
@@ -81,7 +81,11 @@ const ConsciousMediaPartnershipPage = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
               <ConsciousnessFrameworkModal />
-              <Button size="lg" className="gap-2">
+              <Button 
+                size="lg" 
+                className="gap-2"
+                onClick={() => document.getElementById('partnership-cta')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 Explore Partnership
                 <ArrowRight className="w-4 h-4" />
               </Button>
@@ -118,7 +122,7 @@ const ConsciousMediaPartnershipPage = () => {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 bg-gradient-to-b from-muted/20 to-background">
+      <section id="partnership-cta" className="py-20 bg-gradient-to-b from-muted/20 to-background">
         <div className="container max-w-4xl mx-auto px-4 text-center space-y-8">
           <h2 className="text-3xl md:text-4xl font-heading font-bold tracking-tight">
             Ready to Build Your Conscious Media Infrastructure?
