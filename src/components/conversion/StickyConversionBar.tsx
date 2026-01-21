@@ -61,8 +61,8 @@ const StickyConversionBar: React.FC<StickyConversionBarProps> = ({
               {secondaryCTA && (
                 <Button
                   size="sm"
-                  variant="ghost"
-                  className="text-primary-foreground/90 hover:text-primary-foreground hover:bg-primary-foreground/10 hidden sm:flex"
+                  variant="outline"
+                  className="border-white/40 bg-white/10 text-primary-foreground hover:text-primary-foreground hover:bg-white/20 min-h-[44px] flex"
                   onClick={secondaryCTA.action}
                 >
                   {secondaryCTA.label}

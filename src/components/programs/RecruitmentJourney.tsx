@@ -96,7 +96,7 @@ const phases = [
 
 const handleAction = (action: string) => {
   const actions: Record<string, () => void> = {
-    prospectus: () => window.open('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf', '_blank'),
+    prospectus: () => window.open('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf', '_blank'),
     video: () => document.getElementById('programme-video')?.scrollIntoView({ behavior: 'smooth' }),
     calendly: () => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank'),
     email: () => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Inquiry', '_blank'),
@@ -155,25 +155,38 @@ const RecruitmentJourney: React.FC<RecruitmentJourneyProps> = ({ onPhaseClick })
                   <CardContent className="p-4 text-center">
                     <phase.icon className={`w-8 h-8 mx-auto mb-2 bg-gradient-to-br ${phase.color} text-transparent bg-clip-text`} style={{ color: 'transparent', backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }} />
                     <h3 className="font-bold text-foreground mb-1">{phase.title}</h3>
-                    <p className="text-xs text-muted-foreground mb-3">{phase.subtitle}</p>
+                    <p className="text-xs text-muted-foreground mb-2">{phase.subtitle}</p>
                     
-                    {/* Expanded Content on Hover */}
-                    <div className={`overflow-hidden transition-all duration-300 ${activePhase === phase.id ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
-                      <p className="text-xs text-muted-foreground mb-3">{phase.description}</p>
-                      <div className="space-y-2">
-                        {phase.ctas.map((cta, ctaIdx) => (
-                          <Button
-                            key={ctaIdx}
-                            size="sm"
-                            variant={cta.primary ? "default" : "outline"}
-                            className="w-full text-xs min-h-[44px]"
-                            onClick={() => handleAction(cta.action)}
-                          >
-                            <cta.icon className="w-3 h-3 mr-1" />
-                            {cta.label}
-                          </Button>
-                        ))}
-                      </div>
+                    {/* Primary CTA Always Visible */}
+                    {(() => {
+                      const PrimaryIcon = phase.ctas[0].icon;
+                      return (
+                        <Button
+                          size="sm"
+                          variant="default"
+                          className="w-full text-xs min-h-[44px] mb-2"
+                          onClick={() => handleAction(phase.ctas[0].action)}
+                        >
+                          <PrimaryIcon className="w-3 h-3 mr-1" />
+                          {phase.ctas[0].label}
+                        </Button>
+                      );
+                    })()}
+                    
+                    {/* Secondary CTA on Hover */}
+                    <div className={`overflow-hidden transition-all duration-300 ${activePhase === phase.id ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0'}`}>
+                      {phase.ctas.slice(1).map((cta, ctaIdx) => (
+                        <Button
+                          key={ctaIdx}
+                          size="sm"
+                          variant="outline"
+                          className="w-full text-xs min-h-[44px]"
+                          onClick={() => handleAction(cta.action)}
+                        >
+                          <cta.icon className="w-3 h-3 mr-1" />
+                          {cta.label}
+                        </Button>
+                      ))}
                     </div>
 
                     {/* Metric Badge */}
