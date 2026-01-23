@@ -117,13 +117,22 @@ const WebDevelopment = () => {
                 to robust e-commerce platforms, we create digital experiences that inspire and convert.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   <Globe className="mr-2 w-5 h-5" />
-                  View Portfolio
+                  View Our Work
                 </Button>
-                <Button variant="outline" size="lg" className="px-8 py-4 text-lg rounded-full border-2">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="px-8 py-4 text-lg rounded-full border-2"
+                  onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Web Strategy Guide Request', '_blank')}
+                >
                   <Download className="mr-2 w-5 h-5" />
-                  Web Strategy Guide
+                  Request Strategy Guide
                 </Button>
               </div>
               <div className="flex items-center space-x-8 text-sm text-gray-600">
@@ -367,7 +376,11 @@ const WebDevelopment = () => {
             <div className="bg-gray-100 p-6 rounded-lg mb-6">
               <p className="text-gray-700">Calendly booking widget will be integrated here</p>
             </div>
-            <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+            <Button 
+              size="lg" 
+              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+              onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Web Development Consultation Request', '_blank')}
+            >
               <Calendar className="mr-2 w-5 h-5" />
               Book My Consultation
             </Button>

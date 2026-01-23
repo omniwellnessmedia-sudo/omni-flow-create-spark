@@ -96,6 +96,10 @@ const TwoBeWellShop = () => {
                   src={productsHero} 
                   alt="2BeWell Natural Products Collection" 
                   className="relative w-full rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]" 
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20products%20display.jpg";
+                  }}
                 />
               </div>
             </div>

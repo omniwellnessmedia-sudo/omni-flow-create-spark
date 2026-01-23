@@ -59,22 +59,29 @@ const ConsciousMediaPartnershipPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-to-br from-primary/10 via-background to-secondary/10 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Omni_Wellness_Media_Banner.jpg')] bg-cover bg-center opacity-20" />
+      {/* Hero Section - Enhanced with Omni brand colors */}
+      <section className="relative py-32 overflow-hidden">
+        {/* Background image with higher opacity */}
+        <div className="absolute inset-0 bg-[url('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Omni_Wellness_Media_Banner.jpg')] bg-cover bg-center" />
+        
+        {/* Omni brand gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#339999]/80 via-[#B366CC]/60 to-[#F5923A]/70" />
+        
+        {/* Dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-black/30" />
         
         <div className="container max-w-7xl mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            <Badge variant="secondary" className="text-sm px-4 py-2">
+            <Badge className="text-sm px-4 py-2 bg-white/20 backdrop-blur-sm text-white border-white/30">
               <Camera className="w-4 h-4 mr-2 inline" />
               Conscious Media Infrastructure
             </Badge>
             
-            <h1 className="text-5xl md:text-7xl font-heading font-bold tracking-tight text-foreground">
+            <h1 className="text-5xl md:text-7xl font-heading font-bold tracking-tight text-white drop-shadow-lg">
               Conscious Media Infrastructure
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto drop-shadow-md">
               Document your wellness journey authentically. Empower conscious practitioners.
               Support South African capacity.
             </p>
@@ -83,7 +90,7 @@ const ConsciousMediaPartnershipPage = () => {
               <ConsciousnessFrameworkModal />
               <Button 
                 size="lg" 
-                className="gap-2"
+                className="gap-2 bg-white text-primary hover:bg-white/90"
                 onClick={() => document.getElementById('partnership-cta')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Explore Partnership
