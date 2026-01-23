@@ -68,25 +68,31 @@ export const AdminSchedule = () => {
   });
 
   const fetchServices = useCallback(async () => {
-    const result = await supabase
+    const { data, error } = await supabase
       .from("services")
       .select("id, title")
-      .eq("is_active", true)
+      .eq("active", true)
       .order("title");
 
-    if (result.data) {
-      setServices(result.data as Service[]);
+    if (data && !error) {
+      setServices(data.map(s => ({ id: s.id, title: s.title })));
     }
   }, []);
 
   const fetchTimeSlots = useCallback(async () => {
     setLoading(true);
     
-    const baseQuery = selectedService === "all"
-      ? supabase.from("service_time_slots").select("*").order("day_of_week").order("start_time")
-      : supabase.from("service_time_slots").select("*").eq("service_id", selectedService).order("day_of_week").order("start_time");
-
-    const { data, error } = await baseQuery;
+    let data, error;
+    
+    if (selectedService === "all") {
+      const result = await supabase.from("service_time_slots").select("*").order("day_of_week").order("start_time");
+      data = result.data;
+      error = result.error;
+    } else {
+      const result = await supabase.from("service_time_slots").select("*").eq("service_id", selectedService).order("day_of_week").order("start_time");
+      data = result.data;
+      error = result.error;
+    }
 
     if (!error && data) {
       setTimeSlots(data as TimeSlot[]);
