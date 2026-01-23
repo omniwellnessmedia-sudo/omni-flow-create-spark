@@ -135,10 +135,10 @@ const WebDevelopment = () => {
                   Request Strategy Guide
                 </Button>
               </div>
-              <div className="flex items-center space-x-8 text-sm text-gray-600">
-                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Mobile-First Design</div>
-                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />SEO Optimized</div>
-                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Lightning Fast</div>
+              <div className="flex flex-wrap items-center gap-4 md:gap-8 text-sm text-gray-600">
+                <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Mobile-First Design</div>
+                <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />SEO Optimized</div>
+                <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Lightning Fast</div>
               </div>
             </div>
             <div className="relative">
@@ -373,12 +373,12 @@ const WebDevelopment = () => {
               <p className="mb-2">📊 Project roadmap and timeline</p>
               <p>💰 Detailed pricing breakdown</p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg mb-6">
-              <p className="text-gray-700">Calendly booking widget will be integrated here</p>
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg mb-6 border border-indigo-200">
+              <p className="text-indigo-800 font-medium">✓ Click below to schedule your free technical consultation</p>
             </div>
             <Button 
               size="lg" 
-              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
               onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Web Development Consultation Request', '_blank')}
             >
               <Calendar className="mr-2 w-5 h-5" />
