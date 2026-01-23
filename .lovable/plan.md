@@ -1,217 +1,402 @@
 
-# Implementation Audit Report
+# Cal.com Integration & Enhanced Admin Dashboard
 
-## Executive Summary
-After thorough code review and visual verification of the recent implementation plans, I've identified **what has been successfully implemented** and **critical gaps that still need attention**.
-
----
-
-## Successfully Implemented (Verified)
-
-### 1. 2BeWell Wellness Shop
-- Hero image has `onError` fallback handler (lines 99-102)
-- General brand contact info correctly updated
-- Visual design looks polished with gradient backgrounds
-
-### 2. Social Media Strategy Page
-- "Get Strategy Audit" button scrolls to audit form (line 119)
-- Form has success message feedback (lines 186-198)
-- "Book My Strategy Session" button now has mailto action (lines 518-521)
-- Rainbow gradients displaying correctly on CTAs
-
-### 3. Conscious Media Partnership Page
-- Hero section enhanced with Omni brand gradient overlay (teal/purple/orange)
-- Text has proper drop shadows for contrast (line 80-84)
-- "Explore Partnership" button scrolls to CTA section (line 94)
-- Background image opacity increased for stronger visual presence
-
-### 4. UWC Human-Animal Programme
-- Page significantly simplified from ~2,500 lines to ~689 lines
-- Navigation reduced from 9 items to 5 items
-- "Watch Programme Video" button opens YouTube (line 376)
-- "Apply Early/Now" buttons use mailto links (lines 422, 447)
-- "Book Discovery Call" buttons link to Calendly (lines 184, 579, 675)
-- Partner logos have fallback handling (lines 315-319)
-- Pricing cards are clean and readable
-
-### 5. Web Development Page
-- "View Our Work" scrolls to portfolio section (line 123)
-- "Request Strategy Guide" sends email via mailto (line 132)
-- "Book My Consultation" uses mailto link (line 382)
-- Calculator and forms functional
-
-### 6. Media Production Page
-- "View Our Reel" scrolls to portfolio section (line 98)
-- "Request Production Guide" sends email (line 107)
-- "Book My Creative Session" uses mailto (line 454)
-- YouTube video embeds working in portfolio section
-
-### 7. Business Consulting Page
-- "Book Free Strategy Call" scrolls to booking section (line 103)
-- "Request Free Guide" sends email (line 112)
-- BookingCalendar component integrated (lines 339-350)
-- "Book My Free Session Now" uses mailto (line 354)
+## Overview
+This plan implements a comprehensive Cal.com booking integration, editable time slots for services, enhanced admin dashboard with team management, and feature flags that team members can toggle on/off.
 
 ---
 
-## Critical Gaps Remaining
+## Phase 1: Database Schema Updates
 
-### 1. 2BeWell Wellness Shop - Hero Image Not Loading
-**Issue**: Screenshot shows the hero image still failing to load
-**Root Cause**: The fallback URL may also be incorrect or the primary image path has issues
-**Code Location**: Line 96-102 in `TwoBeWellShop.tsx`
-**Fix Required**: 
-- Verify the Supabase storage path for the hero image
-- Update fallback to a guaranteed working image
-- Consider using a local placeholder as ultimate fallback
+### 1.1 Create Feature Flags Table
+```sql
+CREATE TABLE public.feature_flags (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  feature_key TEXT UNIQUE NOT NULL,
+  display_name TEXT NOT NULL,
+  description TEXT,
+  is_enabled BOOLEAN DEFAULT true,
+  category TEXT DEFAULT 'general',
+  updated_by UUID REFERENCES auth.users(id),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
 
-### 2. Partner Logos Still Using External URLs (UWC Page)
-**Issue**: TUFCAT logo still using external URL (line 23) which may be CORS blocked
-**Code Location**: Line 23 in `UWCHumanAnimalProgram.tsx`
+-- Pre-populate feature flags
+INSERT INTO public.feature_flags (feature_key, display_name, description, category) VALUES
+  ('booking_system', 'Booking System', 'Enable/disable the booking functionality', 'booking'),
+  ('wellcoin_payments', 'WellCoin Payments', 'Allow WellCoin as payment method', 'payments'),
+  ('tour_bookings', 'Tour Bookings', 'Enable tour booking functionality', 'booking'),
+  ('affiliate_products', 'Affiliate Products', 'Show affiliate products in marketplace', 'marketplace'),
+  ('provider_portal', 'Provider Portal', 'Enable provider dashboard access', 'access'),
+  ('social_scheduler', 'Social Scheduler', 'Enable social media scheduling', 'marketing'),
+  ('newsletter', 'Newsletter System', 'Enable newsletter functionality', 'marketing'),
+  ('calcom_integration', 'Cal.com Integration', 'Use Cal.com for bookings', 'booking');
+```
+
+### 1.2 Create Service Time Slots Table
+```sql
+CREATE TABLE public.service_time_slots (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  service_id UUID REFERENCES services(id) ON DELETE CASCADE,
+  day_of_week INTEGER CHECK (day_of_week >= 0 AND day_of_week <= 6),
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  slot_duration_minutes INTEGER DEFAULT 60,
+  is_available BOOLEAN DEFAULT true,
+  max_bookings_per_slot INTEGER DEFAULT 1,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(service_id, day_of_week, start_time)
+);
+
+-- Create index for faster lookups
+CREATE INDEX idx_service_time_slots_service ON public.service_time_slots(service_id);
+CREATE INDEX idx_service_time_slots_day ON public.service_time_slots(day_of_week);
+```
+
+### 1.3 Create Cal.com Settings Table
+```sql
+CREATE TABLE public.calcom_settings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
+  calcom_username TEXT,
+  calcom_api_key TEXT, -- Encrypted
+  event_type_slug TEXT,
+  embed_enabled BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(provider_id)
+);
+
+-- Global Cal.com settings for Omni services
+CREATE TABLE public.calcom_global_settings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  setting_key TEXT UNIQUE NOT NULL,
+  setting_value TEXT NOT NULL,
+  description TEXT,
+  updated_by UUID REFERENCES auth.users(id),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+```
+
+### 1.4 Extend Team Member Table
+```sql
+CREATE TABLE public.team_members (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  role TEXT CHECK (role IN ('admin', 'editor', 'viewer')) DEFAULT 'viewer',
+  department TEXT,
+  permissions TEXT[] DEFAULT '{}',
+  is_active BOOLEAN DEFAULT true,
+  last_login TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(user_id)
+);
+```
+
+---
+
+## Phase 2: Admin Dashboard Enhancements
+
+### 2.1 New Admin Tabs Structure
+Add to `AdminDashboard.tsx`:
+- **Schedule Tab**: Manage time slots for all services
+- **Settings Tab**: Feature flags, Cal.com configuration, system settings
+- **Team Tab (Enhanced)**: Full team management with permissions
+
+### 2.2 Create Admin Settings Component
+**File**: `src/pages/admin/AdminSettings.tsx`
+
+Features:
+- Feature Flags Toggle Section
+- Cal.com Configuration Panel
+- Global Booking Settings
+- Email/Notification Settings
+- System Maintenance Options
+
+```text
++------------------------------------------+
+|  Feature Management                       |
++------------------------------------------+
+| [ ] Booking System        ON/OFF Toggle  |
+| [ ] WellCoin Payments     ON/OFF Toggle  |
+| [ ] Tour Bookings         ON/OFF Toggle  |
+| [ ] Cal.com Integration   ON/OFF Toggle  |
++------------------------------------------+
+|  Cal.com Settings                         |
++------------------------------------------+
+| Username: [omniwellnessmedia]            |
+| Default Event: [30-min-consultation]      |
+| Embed Style: [Popup / Inline / Modal]    |
++------------------------------------------+
+```
+
+### 2.3 Create Admin Schedule Component
+**File**: `src/pages/admin/AdminSchedule.tsx`
+
+Features:
+- Visual week view of all time slots
+- Add/Edit/Delete time slots
+- Copy schedule to other days
+- Bulk time slot creation
+- Service-specific overrides
+- Holiday/blocked date management
+
+```text
++------------------------------------------+
+| Service: [Dropdown - All Services]       |
++------------------------------------------+
+|        MON   TUE   WED   THU   FRI   SAT |
+| 09:00  [x]   [x]   [x]   [x]   [x]   [ ] |
+| 10:00  [x]   [x]   [x]   [x]   [x]   [ ] |
+| 11:00  [x]   [x]   [x]   [x]   [x]   [ ] |
+| 14:00  [x]   [x]   [x]   [x]   [x]   [ ] |
+| 15:00  [x]   [x]   [x]   [x]   [x]   [ ] |
++------------------------------------------+
+| [+ Add Time Slot] [Copy to All Days]     |
++------------------------------------------+
+```
+
+### 2.4 Enhanced Team Management Component
+**File**: `src/pages/admin/AdminTeamManagement.tsx`
+
+Features:
+- View all team members
+- Add new team members (with invite)
+- Edit roles and permissions
+- Deactivate/reactivate accounts
+- Activity log per member
+- Permission matrix editor
+
+```text
++------------------------------------------+
+| Team Members                    [+ Add]   |
++------------------------------------------+
+| Chad Cupido    | Admin    | Active | ... |
+| Zenith         | Editor   | Active | ... |
+| Feroza         | Editor   | Active | ... |
+| Tumelo         | Admin    | Active | ... |
++------------------------------------------+
+| Permission Groups                         |
++------------------------------------------+
+| [ ] Content Management                    |
+| [ ] Product Management                    |
+| [ ] Booking Management                    |
+| [ ] Feature Flag Access                   |
+| [ ] Team Management                       |
++------------------------------------------+
+```
+
+---
+
+## Phase 3: Cal.com Integration
+
+### 3.1 Cal.com Booking Component
+**File**: `src/components/booking/CalComBooking.tsx`
+
+Features:
+- Embed Cal.com scheduling widget
+- Support for inline, popup, and modal modes
+- Pass customer data to Cal.com
+- Listen for booking confirmation events
+- Fallback to native booking if Cal.com unavailable
+
 ```typescript
-tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
-```
-**Fix Required**: Upload TUFCAT logo to Supabase storage and update URL
-
-### 3. Partner Logo Folder Path Issue
-**Issue**: Using `partner-logos%2A%2A` which is URL-encoding for `**` - unusual folder name
-**Code Location**: Lines 22-27 in `UWCHumanAnimalProgram.tsx`
-**Fix Required**: Verify actual folder name in Supabase storage bucket
-
-### 4. Calendly Placeholder Text Still Visible
-**Issue**: On all service pages, there's placeholder text saying "Calendly booking widget will be integrated here"
-**Affected Pages**:
-- Social Media Strategy (line 516)
-- Web Development (line 377)
-- Media Production (line 449)
-**Fix Required**: Either integrate actual Calendly embed or remove placeholder text
-
-### 5. Media Production Portfolio Videos Not Loading
-**Issue**: In screenshot, YouTube embed thumbnails appear blank/gray
-**Possible Cause**: YouTube embeds may need loading time or there's a CSP issue
-**Fix Required**: Add loading states or fallback thumbnails for video embeds
-
-### 6. Mobile Responsiveness Gaps
-Based on code review, I found these responsive issues:
-
-**a) Service Pages Hero Stats**
-- Lines like `flex items-center space-x-8` could overflow on mobile
-- Missing responsive breakpoints (e.g., `hidden md:flex`)
-
-**b) UWC Journey Grid**
-- `grid md:grid-cols-5` on line 348 will stack to single column on mobile, but cards may be too small
-
-**c) Touch Target Compliance**
-- Several buttons missing `min-h-[44px]` class for WCAG 2.5.5
-- Navigation items need minimum 44x44px touch targets on mobile
-
-### 7. Gradient Text Contrast Issues
-**Issue**: `text-gradient-rainbow` and `text-gradient-hero` use gradient clipping which can fail on some browsers
-**Affected Elements**:
-- Hero headlines on all service pages
-- Section titles using gradient text
-**Fix Required**: Add solid color fallback in CSS for browsers that don't support gradient text
-
-### 8. Missing Academic Qualifications Image
-**Issue**: Feroza noted "Academic Qualifications image still missing" on UWC page
-**Status**: Not addressed in current implementation
-**Fix Required**: Add visual element for academic credentials in Overview section
-
----
-
-## Recommended Fix Priority
-
-### Phase 1: Critical Fixes (Immediate)
-1. Fix 2BeWell hero image with verified Supabase URL
-2. Upload TUFCAT logo to Supabase and update path
-3. Remove "Calendly booking widget will be integrated here" placeholders
-4. Add Academic Qualifications visual to UWC page
-
-### Phase 2: Accessibility & Mobile (High Priority)
-5. Add 44x44px minimum touch targets to all interactive elements
-6. Fix responsive overflow on hero stats sections
-7. Add loading states for YouTube embeds
-8. Add solid color fallbacks for gradient text
-
-### Phase 3: Polish (Normal Priority)
-9. Verify all Supabase storage paths are correct
-10. Test all mailto links on iOS devices
-11. Add reduced-motion alternatives where missing
-12. Test contrast ratios meet 4.5:1 WCAG standard
-
----
-
-## Technical Specifications for Fixes
-
-### Fix 1: 2BeWell Hero Image
-```tsx
-// Verified working image paths
-const FALLBACK_HERO = "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1200&h=800&fit=crop";
-
-<img 
-  src={productsHero} 
-  alt="2BeWell Natural Products"
-  className="..."
-  onError={(e) => {
-    const target = e.target as HTMLImageElement;
-    if (!target.src.includes('unsplash')) {
-      target.src = FALLBACK_HERO;
-    }
-  }}
-/>
-```
-
-### Fix 2: Mobile Touch Targets
-```tsx
-// Add to all buttons
-className="... min-h-[44px] min-w-[44px]"
-
-// Add to navigation items
-className="... touch-target-sm"
-```
-
-### Fix 3: Gradient Text Fallback
-Add to `src/index.css`:
-```css
-/* Add fallback for gradient text */
-.text-gradient-rainbow,
-.text-gradient-hero,
-.text-gradient-primary {
-  color: hsl(var(--omni-violet)); /* Fallback */
-}
-
-@supports (background-clip: text) {
-  .text-gradient-rainbow,
-  .text-gradient-hero,
-  .text-gradient-primary {
-    color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
-  }
+interface CalComBookingProps {
+  eventTypeSlug: string;
+  calUsername: string;
+  prefillData?: {
+    name?: string;
+    email?: string;
+    notes?: string;
+  };
+  embedMode: 'inline' | 'popup' | 'modal';
+  onBookingSuccess?: (data: BookingData) => void;
 }
 ```
 
+### 3.2 Update Service Pages
+Replace current booking buttons with Cal.com integration:
+
+**Pattern for Service Pages**:
+```tsx
+// Check feature flag
+const { isEnabled } = useFeatureFlag('calcom_integration');
+
+{isEnabled ? (
+  <CalComBooking 
+    eventTypeSlug="30-min-consultation"
+    calUsername="omniwellnessmedia"
+    embedMode="popup"
+  />
+) : (
+  <Button onClick={handleMailtoBooking}>
+    Book Session
+  </Button>
+)}
+```
+
+### 3.3 Cal.com Event Types to Create
+The team should create these event types in Cal.com:
+- `discovery-call` (30 min) - Free initial consultation
+- `social-media-strategy` (60 min) - Social media consultation
+- `web-consultation` (45 min) - Web development discussion
+- `media-production` (60 min) - Media production planning
+- `business-strategy` (60 min) - Business consulting session
+- `wellness-session` (60 min) - General wellness booking
+
 ---
 
-## Summary Table
+## Phase 4: Feature Flag System
 
-| Page | Gradients | Contrast | Functions | Mobile |
-|------|-----------|----------|-----------|--------|
-| 2BeWell Shop | OK | OK | OK | OK (hero needs fix) |
-| Social Media | OK | OK | Complete | Minor fixes |
-| Conscious Media | OK | Good | Complete | OK |
-| UWC Programme | OK | Good | Complete | OK |
-| Web Development | OK | OK | Complete | Minor fixes |
-| Media Production | OK | OK | Complete | Minor fixes |
-| Business Consulting | OK | OK | Complete | OK |
-| Great Mother Cave | OK | Good | OK | OK |
-| Wine Country Retreat | OK | Good | OK | OK |
+### 4.1 Feature Flag Hook
+**File**: `src/hooks/useFeatureFlags.ts`
 
-**Overall Implementation Status: 85% Complete**
+```typescript
+interface FeatureFlag {
+  key: string;
+  displayName: string;
+  isEnabled: boolean;
+  category: string;
+}
 
-The main outstanding items are:
-1. Hero image loading on 2BeWell (asset verification)
-2. Calendly placeholder text removal
-3. TUFCAT logo migration to Supabase
-4. Mobile touch target compliance
-5. Academic qualifications visual for UWC
+export const useFeatureFlags = () => {
+  const [flags, setFlags] = useState<FeatureFlag[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch all feature flags
+  // Real-time subscription for updates
+  // Helper functions: isEnabled(key), toggleFlag(key)
+};
+
+export const useFeatureFlag = (key: string) => {
+  const { flags } = useFeatureFlags();
+  return flags.find(f => f.key === key);
+};
+```
+
+### 4.2 Feature Flag Gate Component
+**File**: `src/components/FeatureGate.tsx`
+
+```typescript
+interface FeatureGateProps {
+  feature: string;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}
+
+// Usage:
+<FeatureGate feature="booking_system">
+  <BookingCalendar {...props} />
+</FeatureGate>
+```
+
+---
+
+## Phase 5: Files to Create/Modify
+
+### New Files
+1. `src/pages/admin/AdminSettings.tsx` - Feature flags & Cal.com config
+2. `src/pages/admin/AdminSchedule.tsx` - Time slot management
+3. `src/pages/admin/AdminTeamManagement.tsx` - Enhanced team management
+4. `src/components/booking/CalComBooking.tsx` - Cal.com embed component
+5. `src/hooks/useFeatureFlags.ts` - Feature flag hook
+6. `src/components/FeatureGate.tsx` - Feature gating component
+7. `supabase/migrations/XXXX_feature_flags_and_calcom.sql` - Database migration
+
+### Files to Modify
+1. `src/pages/AdminDashboard.tsx` - Add new tabs (Schedule, Settings)
+2. `src/pages/SocialMediaStrategy.tsx` - Integrate Cal.com
+3. `src/pages/WebDevelopment.tsx` - Integrate Cal.com
+4. `src/pages/MediaProduction.tsx` - Integrate Cal.com
+5. `src/pages/BusinessConsulting.tsx` - Integrate Cal.com
+6. `src/pages/programs/UWCHumanAnimalProgram.tsx` - Integrate Cal.com
+7. `src/components/booking/BookingCalendar.tsx` - Add time slot fetching
+
+---
+
+## Phase 6: Implementation Priority
+
+### Sprint 1: Foundation (Week 1)
+1. Create database migrations
+2. Build feature flag system
+3. Create AdminSettings component
+
+### Sprint 2: Schedule Management (Week 1-2)
+4. Build AdminSchedule component
+5. Update BookingCalendar to use database slots
+6. Create time slot CRUD operations
+
+### Sprint 3: Cal.com Integration (Week 2)
+7. Build CalComBooking component
+8. Update all service pages
+9. Test Cal.com embed functionality
+
+### Sprint 4: Team Management (Week 2-3)
+10. Build AdminTeamManagement
+11. Implement permission system
+12. Add activity logging
+
+---
+
+## Technical Notes
+
+### Cal.com Embed Script
+Add to `index.html` or load dynamically:
+```html
+<script type="text/javascript">
+  (function (C, A, L) { 
+    let p = function (a, ar) { a.q.push(ar); }; 
+    let d = C.document; 
+    C.Cal = C.Cal || function () { 
+      let cal = C.Cal; 
+      let ar = arguments; 
+      if (!cal.loaded) { 
+        cal.ns = {}; 
+        cal.q = cal.q || []; 
+        d.head.appendChild(d.createElement("script")).src = A; 
+        cal.loaded = true; 
+      } 
+      if (ar[0] === L) { 
+        const api = function () { p(api, arguments); }; 
+        const namespace = ar[1]; 
+        api.q = api.q || []; 
+        typeof namespace === "string" ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar); 
+        return; 
+      } 
+      p(cal, ar); 
+    }; 
+  })(window, "https://app.cal.com/embed/embed.js", "init");
+</script>
+```
+
+### Security Considerations
+- Cal.com API keys stored encrypted in database
+- Feature flags only editable by admin role
+- Team permissions validated server-side via RLS
+- All booking data synced back to Supabase
+
+### Mobile Responsiveness
+- Cal.com embed is fully responsive
+- Admin dashboard tabs use horizontal scroll on mobile
+- Time slot grid adapts to mobile with single-column view
+- Touch-friendly toggle switches (min 44px)
+
+---
+
+## Summary
+
+| Component | Description | Priority |
+|-----------|-------------|----------|
+| Feature Flags | Enable/disable platform features | High |
+| Admin Settings | Centralized configuration panel | High |
+| Cal.com Integration | Professional booking experience | High |
+| Time Slot Management | Admin-editable availability | Medium |
+| Team Management | Enhanced permissions system | Medium |
+| Activity Logging | Track team member actions | Low |
+
+This implementation will give the Omni team full control over platform features, professional Cal.com-powered booking, and a scalable team management system.
