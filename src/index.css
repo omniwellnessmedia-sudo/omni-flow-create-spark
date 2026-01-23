@@ -133,37 +133,42 @@
 
 /* ===== GRADIENT SYSTEM - FIXED FOR TEXT READABILITY ===== */
 
-/* Text Gradients - These create gradient text effects */
-.text-gradient-primary {
-  background: linear-gradient(135deg, hsl(var(--omni-violet)) 0%, hsl(var(--omni-orange)) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: hsl(var(--omni-violet)); /* Fallback */
-}
-
-.text-gradient-hero {
-  background: linear-gradient(135deg, hsl(20 14.3% 4.1%) 0%, hsl(var(--omni-violet)) 50%, hsl(var(--omni-orange)) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: hsl(20 14.3% 4.1%); /* Fallback */
-}
-
+/* Text Gradients - With proper browser fallbacks */
+.text-gradient-primary,
+.text-gradient-hero,
 .text-gradient-rainbow {
-  background: linear-gradient(135deg, 
-    hsl(var(--omni-red)) 0%, 
-    hsl(var(--omni-orange)) 16.66%, 
-    hsl(var(--omni-yellow)) 33.33%, 
-    hsl(var(--omni-green)) 50%, 
-    hsl(var(--omni-blue)) 66.66%, 
-    hsl(var(--omni-indigo)) 83.33%, 
-    hsl(var(--omni-violet)) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: hsl(var(--omni-violet)); /* Fallback */
+  color: hsl(var(--omni-violet)); /* Solid fallback for all browsers */
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .text-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--omni-violet)) 0%, hsl(var(--omni-orange)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-hero {
+    background: linear-gradient(135deg, hsl(20 14.3% 4.1%) 0%, hsl(var(--omni-violet)) 50%, hsl(var(--omni-orange)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-rainbow {
+    background: linear-gradient(135deg, 
+      hsl(var(--omni-red)) 0%, 
+      hsl(var(--omni-orange)) 16.66%, 
+      hsl(var(--omni-yellow)) 33.33%, 
+      hsl(var(--omni-green)) 50%, 
+      hsl(var(--omni-blue)) 66.66%, 
+      hsl(var(--omni-indigo)) 83.33%, 
+      hsl(var(--omni-violet)) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
 /* Background Gradients - These create solid background colors with readable text */

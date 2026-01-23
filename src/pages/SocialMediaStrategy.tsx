@@ -130,10 +130,10 @@ const SocialMediaStrategy = () => {
                   Content Calendar Template
                 </a>
               </div>
-              <div className="flex items-center space-x-8 text-sm text-gray-600">
-                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Multi-Platform Strategy</div>
-                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Content Creation</div>
-                <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Analytics & Reporting</div>
+              <div className="flex flex-wrap items-center gap-4 md:gap-8 text-sm text-gray-600">
+                <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Multi-Platform Strategy</div>
+                <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Content Creation</div>
+                <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Analytics & Reporting</div>
               </div>
             </div>
             <div className="relative" id="audit-form">
@@ -512,12 +512,12 @@ const SocialMediaStrategy = () => {
               <p className="mb-2">📅 Content calendar template</p>
               <p>🎯 Platform-specific action plan</p>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg mb-6">
-              <p className="text-gray-700">Calendly booking widget will be integrated here</p>
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg mb-6 border border-green-200">
+              <p className="text-green-800 font-medium">✓ Click below to schedule your free strategy session</p>
             </div>
             <Button 
               size="lg" 
-              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
               onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Social Media Strategy Session Booking', '_blank')}
             >
               <Calendar className="mr-2 w-5 h-5" />
