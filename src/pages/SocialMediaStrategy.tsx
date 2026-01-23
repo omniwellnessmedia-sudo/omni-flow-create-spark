@@ -515,7 +515,11 @@ const SocialMediaStrategy = () => {
             <div className="bg-gray-100 p-6 rounded-lg mb-6">
               <p className="text-gray-700">Calendly booking widget will be integrated here</p>
             </div>
-            <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+            <Button 
+              size="lg" 
+              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+              onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Social Media Strategy Session Booking', '_blank')}
+            >
               <Calendar className="mr-2 w-5 h-5" />
               Book My Strategy Session
             </Button>

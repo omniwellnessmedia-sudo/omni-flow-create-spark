@@ -369,7 +369,12 @@ const UWCHumanAnimalProgram: React.FC = () => {
 
             {/* Watch Video CTA */}
             <div className="text-center">
-              <Button variant="outline" size="lg" className="rounded-xl">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="rounded-xl"
+                onClick={() => window.open('https://www.youtube.com/watch?v=ycYl7KSGkUU', '_blank')}
+              >
                 <Play className="mr-2 h-5 w-5" />
                 Watch Programme Video
               </Button>
@@ -414,7 +419,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant="outline">Apply Early</Button>
+                <Button className="w-full" variant="outline" onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Early Bird Application', '_blank')}>Apply Early</Button>
               </CardContent>
             </Card>
 
@@ -439,7 +444,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full">Apply Now</Button>
+                <Button className="w-full" onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Full Programme Application', '_blank')}>Apply Now</Button>
               </CardContent>
             </Card>
 

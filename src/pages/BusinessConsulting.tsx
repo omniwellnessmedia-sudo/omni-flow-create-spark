@@ -97,13 +97,22 @@ const BusinessConsulting = () => {
                 Our proven methodology has helped 200+ businesses achieve sustainable growth while making positive impact.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   <Calendar className="mr-2 w-5 h-5" />
                   Book Free Strategy Call
                 </Button>
-                <Button variant="outline" size="lg" className="px-8 py-4 text-lg rounded-full border-2">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="px-8 py-4 text-lg rounded-full border-2"
+                  onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Business Consulting Free Guide Request', '_blank')}
+                >
                   <Download className="mr-2 w-5 h-5" />
-                  Download Free Guide
+                  Request Free Guide
                 </Button>
               </div>
               <div className="flex items-center space-x-8 text-sm text-gray-600">
@@ -311,7 +320,7 @@ const BusinessConsulting = () => {
       </section>
 
       {/* Booking Section */}
-      <section className="py-20 bg-gray-900 text-white">
+      <section id="booking-section" className="py-20 bg-gray-900 text-white scroll-mt-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
             Ready to Transform Your Business?
@@ -339,7 +348,11 @@ const BusinessConsulting = () => {
                 });
               }}
             />
-            <Button size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg">
+            <Button 
+              size="lg" 
+              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg mt-4"
+              onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Business Strategy Session Request', '_blank')}
+            >
               <Calendar className="mr-2 w-5 h-5" />
               Book My Free Session Now
             </Button>
