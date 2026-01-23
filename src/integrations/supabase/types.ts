@@ -774,6 +774,74 @@ export type Database = {
           },
         ]
       }
+      calcom_global_settings: {
+        Row: {
+          description: string | null
+          id: string
+          setting_key: string
+          setting_value: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          setting_key: string
+          setting_value: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          setting_key?: string
+          setting_value?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      calcom_settings: {
+        Row: {
+          calcom_api_key: string | null
+          calcom_username: string | null
+          created_at: string | null
+          embed_enabled: boolean | null
+          event_type_slug: string | null
+          id: string
+          provider_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          calcom_api_key?: string | null
+          calcom_username?: string | null
+          created_at?: string | null
+          embed_enabled?: boolean | null
+          event_type_slug?: string | null
+          id?: string
+          provider_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          calcom_api_key?: string | null
+          calcom_username?: string | null
+          created_at?: string | null
+          embed_enabled?: boolean | null
+          event_type_slug?: string | null
+          id?: string
+          provider_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calcom_settings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: true
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       community_posts: {
         Row: {
           comments_count: number | null
@@ -990,6 +1058,42 @@ export type Database = {
           organization?: string | null
           service?: string | null
           status?: string | null
+        }
+        Relationships: []
+      }
+      feature_flags: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          display_name: string
+          feature_key: string
+          id: string
+          is_enabled: boolean | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_name: string
+          feature_key: string
+          id?: string
+          is_enabled?: boolean | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_name?: string
+          feature_key?: string
+          id?: string
+          is_enabled?: boolean | null
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -2361,6 +2465,53 @@ export type Database = {
         }
         Relationships: []
       }
+      service_time_slots: {
+        Row: {
+          created_at: string | null
+          day_of_week: number | null
+          end_time: string
+          id: string
+          is_available: boolean | null
+          max_bookings_per_slot: number | null
+          service_id: string | null
+          slot_duration_minutes: number | null
+          start_time: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          day_of_week?: number | null
+          end_time: string
+          id?: string
+          is_available?: boolean | null
+          max_bookings_per_slot?: number | null
+          service_id?: string | null
+          slot_duration_minutes?: number | null
+          start_time: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          day_of_week?: number | null
+          end_time?: string
+          id?: string
+          is_available?: boolean | null
+          max_bookings_per_slot?: number | null
+          service_id?: string | null
+          slot_duration_minutes?: number | null
+          start_time?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_time_slots_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       services: {
         Row: {
           active: boolean | null
@@ -2444,6 +2595,51 @@ export type Database = {
           setting_key?: string
           setting_value?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          created_at: string | null
+          department: string | null
+          email: string
+          id: string
+          invited_by: string | null
+          is_active: boolean | null
+          last_login: string | null
+          name: string
+          permissions: string[] | null
+          role: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          department?: string | null
+          email: string
+          id?: string
+          invited_by?: string | null
+          is_active?: boolean | null
+          last_login?: string | null
+          name: string
+          permissions?: string[] | null
+          role?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          department?: string | null
+          email?: string
+          id?: string
+          invited_by?: string | null
+          is_active?: boolean | null
+          last_login?: string | null
+          name?: string
+          permissions?: string[] | null
+          role?: string | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
