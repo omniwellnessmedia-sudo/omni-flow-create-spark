@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Leaf, Heart, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import { getLifestyleImage, getTeamImage, getProductImage } from "@/lib/imageHelpers";
+import { getLifestyleImage, getTeamImage, getProductImage, handleImageError } from "@/lib/imageHelpers";
 
 interface TwoBeWellCTAProps {
   variant?: "default" | "compact" | "sidebar";
@@ -193,6 +193,7 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
                 src={getLifestyleImage('hero-collage')}
                 alt="2BeWell Natural Products Collection"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={handleImageError}
               />
             </div>
             <div className="aspect-square bg-white rounded-2xl overflow-hidden shadow-md">
@@ -200,6 +201,7 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
                 src={getTeamImage('zenith')}
                 alt="Zenith - Co-Founder & Skincare Specialist"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={handleImageError}
               />
             </div>
             <div className="aspect-square bg-white rounded-2xl overflow-hidden shadow-md">
@@ -207,6 +209,7 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
                 src={getProductImage('2beglow-face-serum')}
                 alt="2BeGlow Face Serum"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={handleImageError}
               />
             </div>
           </div>

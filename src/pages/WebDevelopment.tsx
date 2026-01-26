@@ -321,6 +321,46 @@ const WebDevelopment = () => {
         </div>
       </section>
 
+      {/* Portfolio Section */}
+      <section id="portfolio" className="py-20 bg-gray-50 scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
+              Our <span className="text-gradient-rainbow">Recent Work</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Explore some of our latest web development projects
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { title: "E-commerce Store", type: "Online Shop", desc: "Full-featured online store with secure payments and inventory management" },
+              { title: "Business Website", type: "Corporate", desc: "Professional website with lead generation and CRM integration" },
+              { title: "Community Platform", type: "Web App", desc: "Interactive platform connecting wellness providers with clients" },
+              { title: "Booking System", type: "SaaS", desc: "Custom booking and scheduling solution for service businesses" },
+              { title: "Non-Profit Portal", type: "Non-Profit", desc: "Donation management and volunteer coordination system" },
+              { title: "Health Dashboard", type: "Healthcare", desc: "Patient portal with secure data management and reporting" }
+            ].map((project, index) => (
+              <Card key={project.title} className="hover:shadow-lg transition-all duration-300 border-0 shadow-md overflow-hidden">
+                <div className="h-40 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <Globe className="w-16 h-16 text-white/80" />
+                </div>
+                <CardHeader>
+                  <div className="flex justify-between items-start mb-2">
+                    <CardTitle className="text-lg">{project.title}</CardTitle>
+                    <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs font-medium">{project.type}</span>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-gray-600">{project.desc}</CardDescription>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Technology Stack */}
       <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -379,10 +419,12 @@ const WebDevelopment = () => {
             <Button 
               size="lg" 
               className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
-              onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Web Development Consultation Request', '_blank')}
+              asChild
             >
-              <Calendar className="mr-2 w-5 h-5" />
-              Book My Consultation
+              <a href="mailto:omniwellnessmedia@gmail.com?subject=Web Development Consultation Request">
+                <Calendar className="mr-2 w-5 h-5" />
+                Book My Consultation
+              </a>
             </Button>
           </div>
         </div>

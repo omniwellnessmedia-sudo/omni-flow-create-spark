@@ -451,10 +451,12 @@ const MediaProduction = () => {
             <Button 
               size="lg" 
               className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
-              onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Media Production Creative Session Request', '_blank')}
+              asChild
             >
-              <Calendar className="mr-2 w-5 h-5" />
-              Book My Creative Session
+              <a href="mailto:omniwellnessmedia@gmail.com?subject=Media Production Creative Session Request">
+                <Calendar className="mr-2 w-5 h-5" />
+                Book My Creative Session
+              </a>
             </Button>
           </div>
         </div>
