@@ -116,7 +116,13 @@ const SocialMediaStrategy = () => {
                 <Button 
                   size="lg" 
                   className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
-                  onClick={() => document.getElementById('audit-form')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => {
+                    const nameInput = document.getElementById('name');
+                    if (nameInput) {
+                      nameInput.focus();
+                      nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                  }}
                 >
                   <TrendingUp className="mr-2 w-5 h-5" />
                   Get Strategy Audit

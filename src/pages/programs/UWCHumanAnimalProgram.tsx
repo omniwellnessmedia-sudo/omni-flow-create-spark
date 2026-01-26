@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import drSharynSpicer from '@/assets/team/dr-sharyn-spicer.jpg';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -108,10 +109,10 @@ const UWCHumanAnimalProgram: React.FC = () => {
 
   // Team members
   const team = [
-    { name: 'Dr. Sharyn Spicer', role: 'Academic Director', expertise: 'Research Methodology, Community Psychology' },
-    { name: 'Chad Cupido', role: 'Research Partner', expertise: 'Human-Animal Bond, Media Documentation' },
-    { name: 'Dr. Megan White', role: 'Field Guide', expertise: 'Equine Welfare, Working Animals' },
-    { name: 'Wendy Walton', role: 'Community Bridge', expertise: 'Indigenous Knowledge, Urban Agriculture' }
+    { name: 'Dr. Sharyn Spicer', role: 'Academic Director', expertise: 'Research Methodology, Community Psychology', image: drSharynSpicer },
+    { name: 'Chad Cupido', role: 'Research Partner', expertise: 'Human-Animal Bond, Media Documentation', image: null },
+    { name: 'Dr. Megan White', role: 'Field Guide', expertise: 'Equine Welfare, Working Animals', image: null },
+    { name: 'Wendy Walton', role: 'Community Bridge', expertise: 'Indigenous Knowledge, Urban Agriculture', image: null }
   ];
 
   // FAQs - condensed
@@ -419,7 +420,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant="outline" onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Early Bird Application', '_blank')}>Apply Early</Button>
+                <Button className="w-full" variant="outline" onClick={() => { window.location.href = 'mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Early Bird Application'; }}>Apply Early</Button>
               </CardContent>
             </Card>
 
@@ -444,7 +445,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Full Programme Application', '_blank')}>Apply Now</Button>
+                <Button className="w-full" onClick={() => { window.location.href = 'mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Full Programme Application'; }}>Apply Now</Button>
               </CardContent>
             </Card>
 
@@ -521,11 +522,21 @@ const UWCHumanAnimalProgram: React.FC = () => {
             {team.map((person, idx) => (
               <Card key={idx} className="border-border hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                    <span className="text-primary font-bold text-lg">
-                      {person.name.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
+                  {person.image ? (
+                    <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-2 border-primary/20">
+                      <img 
+                        src={person.image} 
+                        alt={person.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <span className="text-primary font-bold text-xl">
+                        {person.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                  )}
                   <h4 className="font-bold text-foreground mb-1">{person.name}</h4>
                   <p className="text-primary text-sm mb-3">{person.role}</p>
                   <p className="text-muted-foreground text-xs">{person.expertise}</p>
@@ -585,7 +596,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
                 size="lg" 
                 variant="outline" 
                 className="px-8"
-                onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Interest', '_blank')}
+                onClick={() => { window.location.href = 'mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Interest'; }}
               >
                 <Mail className="mr-2 h-5 w-5" />
                 Email Us

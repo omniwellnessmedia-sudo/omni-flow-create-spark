@@ -5,7 +5,7 @@
 
 const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co';
 const STORAGE_BUCKET = 'provider-images';
-const PRODUCT_FOLDER = 'product-images** (2BeWell)';
+const PRODUCT_FOLDER = 'product-images%20(2BeWell%20Products)';
 
 /**
  * Get image URL from Supabase storage with fallback
