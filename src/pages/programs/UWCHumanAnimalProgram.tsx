@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import drSharynSpicer from '@/assets/team/dr-sharyn-spicer.jpg';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +13,9 @@ import {
 } from 'lucide-react';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
+
+// Dr. Sharyn Spicer photo from Supabase storage
+const drSharynSpicerImage = `${STORAGE_BASE}/team-photos/dr-sharyn-spicer.jpg`;
 
 // Hero image - static, high-quality
 const heroImage = `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`;
@@ -109,7 +111,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
 
   // Team members
   const team = [
-    { name: 'Dr. Sharyn Spicer', role: 'Academic Director', expertise: 'Research Methodology, Community Psychology', image: drSharynSpicer },
+    { name: 'Dr. Sharyn Spicer', role: 'Academic Director', expertise: 'Research Methodology, Community Psychology', image: drSharynSpicerImage },
     { name: 'Chad Cupido', role: 'Research Partner', expertise: 'Human-Animal Bond, Media Documentation', image: null },
     { name: 'Dr. Megan White', role: 'Field Guide', expertise: 'Equine Welfare, Working Animals', image: null },
     { name: 'Wendy Walton', role: 'Community Bridge', expertise: 'Indigenous Knowledge, Urban Agriculture', image: null }
