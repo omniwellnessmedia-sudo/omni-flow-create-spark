@@ -1,224 +1,117 @@
 
-# Comprehensive Bug Fix Plan: Feroza's Feedback Items
+# Cal.com Setup Guide & Email Response for Feroza
 
 ## Overview
-This plan addresses all 9 outstanding issues reported by Feroza, plus uploads Dr. Sharyn Spicer's profile photo for the UWC page.
+This plan creates two documentation files:
+1. A comprehensive Cal.com setup guide for Zenith to configure all booking event types
+2. A professional email response to Feroza summarizing the fixes implemented
 
 ---
 
-## Issue Summary Table
+## Deliverable 1: Cal.com Setup Guide (docs/CALCOM_SETUP_GUIDE.md)
 
-| # | Issue | Root Cause | Fix Required |
-|---|-------|------------|--------------|
-| 1 | 2BeWell section image banner not displaying | Incorrect Supabase folder path with `**` characters | Correct URL encoding in `imageHelpers.ts` |
-| 2 | Social Media Strategy scroll issue | Button scrolls to adjacent section (no separation) | Remove scroll behavior OR add section spacing |
-| 3 | Book My Strategy redirects to blank page | No issue found - button should open mailto | Verify and test the mailto link |
-| 4 | Placeholder text not visible on live | Text updated but may need republish | Confirm text exists in code |
-| 5 | ✅ Conscious Media Partnership | Working correctly | No changes needed |
-| 6 | UWC Apply buttons don't open email | `window.open('mailto:...')` blocked on some browsers | Change to `window.location.href` for mailto |
-| 7 | Web Dev "View our work" doesn't scroll | Target `#portfolio` section doesn't exist | Add `id="portfolio"` to projects section |
-| 8 | Web Dev "Book consultation" doesn't open | Using `window.open` for mailto | Change to `window.location.href` |
-| 9 | Media Production "Book my creative session" | Using `window.open` for mailto | Change to `window.location.href` |
-| 10 | Dr. Sharyn Spicer photo | New photo uploaded | Copy to project and add to UWC team section |
+### Purpose
+Provides Zenith with step-by-step instructions to create Cal.com event types with:
+- Exact slugs matching the website integration
+- Suggested durations and descriptions
+- Links to corresponding sales pages on the live site
+- Copy-paste ready event descriptions
+
+### Event Types to Create
+
+| Event Type | Slug | Duration | Sales Page URL |
+|------------|------|----------|----------------|
+| Discovery Call | `discovery-call` | 30 min | https://www.omniwellnessmedia.co.za/ |
+| Social Media Strategy | `social-media-strategy` | 60 min | https://www.omniwellnessmedia.co.za/social-media-strategy |
+| Web Consultation | `web-consultation` | 45 min | https://www.omniwellnessmedia.co.za/web-development |
+| Media Production | `media-production` | 60 min | https://www.omniwellnessmedia.co.za/media-production |
+| Business Strategy | `business-strategy` | 60 min | https://www.omniwellnessmedia.co.za/business-consulting |
+| Wellness Session | `wellness-session` | 60 min | https://www.omniwellnessmedia.co.za/wellness-exchange |
+| UWC Programme Call | `uwc-programme` | 30 min | https://www.omniwellnessmedia.co.za/programs/uwc-human-animal |
 
 ---
 
-## Phase 1: Fix 2BeWell Image Banner (Issue #1)
+## Deliverable 2: Email Response to Feroza (docs/EMAIL_RESPONSE_FEROZA.md)
 
-### Problem
-The `imageHelpers.ts` uses folder path `product-images** (2BeWell)` with literal `**` characters, which creates invalid URLs. The actual Supabase storage folder is `product-images (2BeWell Products)` (URL encoded as `product-images%20(2BeWell%20Products)`).
+### Content Summary
+Professional email acknowledging feedback and confirming:
+- Issues that have been resolved
+- Changes requiring a publish to go live
+- Next steps (testing, Cal.com setup)
+- Thank you for detailed feedback
 
-### Solution
-**File**: `src/lib/imageHelpers.ts`
+---
 
-Change line 8:
-```typescript
-// FROM:
-const PRODUCT_FOLDER = 'product-images** (2BeWell)';
+## File Structure
 
-// TO:
-const PRODUCT_FOLDER = 'product-images%20(2BeWell%20Products)';
 ```
-
-Also update `TwoBeWellCTA.tsx` to add `onError` handlers with fallbacks to prevent blank images.
-
----
-
-## Phase 2: Fix Social Media Strategy Scroll (Issue #2)
-
-### Problem
-The "Get Strategy Audit" button scrolls to `#audit-form`, but this form is immediately adjacent in the same grid column, making the scroll feel unnecessary/jumpy.
-
-### Solution
-**File**: `src/pages/SocialMediaStrategy.tsx`
-
-Option A: Remove the scroll entirely since the form is already visible in the hero
-Option B: Keep scroll but ensure smooth scroll to a section with proper offset
-
-We'll implement Option A - remove the onClick scroll handler since the form is already prominently displayed in the hero section. The button will instead submit the form directly or provide visual emphasis.
-
----
-
-## Phase 3: Fix All mailto Links (Issues #3, #6, #7, #8, #9)
-
-### Problem
-Using `window.open('mailto:...')` is blocked by popup blockers on many browsers (especially iOS Safari). This affects:
-- Social Media Strategy "Book My Strategy" button
-- UWC "Apply Early" and "Apply Now" buttons
-- Web Development "Book consultation" button
-- Media Production "Book my creative session" button
-
-### Solution
-Replace all `window.open('mailto:...')` with `window.location.href = 'mailto:...'` OR use `<a href="mailto:...">` wrapped in buttons.
-
-**Files to modify**:
-1. `src/pages/SocialMediaStrategy.tsx` - Check for booking section
-2. `src/pages/programs/UWCHumanAnimalProgram.tsx` - Lines 422, 447, 588
-3. `src/pages/WebDevelopment.tsx` - Line 382
-4. `src/pages/MediaProduction.tsx` - Line 454
-
-Pattern change:
-```typescript
-// FROM:
-onClick={() => window.open('mailto:...', '_blank')}
-
-// TO:
-onClick={() => { window.location.href = 'mailto:...'; }}
+docs/
+├── CALCOM_SETUP_GUIDE.md      (NEW - For Zenith)
+├── EMAIL_RESPONSE_FEROZA.md   (NEW - Email draft)
+├── EMAIL_TO_MR_BIRDIE.md      (existing)
+└── ROAMBUDDY_MARKETING_PLAN.md (existing)
 ```
 
 ---
 
-## Phase 4: Fix Web Development Portfolio Scroll (Issue #7)
+## Technical Note: Build Error Fix
 
-### Problem
-The "View Our Work" button tries to scroll to `#portfolio`, but the page doesn't have a section with that ID.
+The current build error is caused by a missing image file. In addition to creating the documentation, we need to:
 
-### Solution
-**File**: `src/pages/WebDevelopment.tsx`
+1. **Option A**: Update `UWCHumanAnimalProgram.tsx` to use the Supabase URL directly instead of importing a local asset
+2. **Option B**: Ensure the image is properly copied to the assets folder
 
-Add a portfolio/projects section with `id="portfolio"` OR change the scroll target to an existing section. Since the page doesn't have a dedicated portfolio section, we should either:
-- Add one showcasing completed web projects
-- Or scroll to the "Services Grid" section that lists capabilities
-
-We'll add a simple portfolio section between services and technology sections.
+We'll implement Option A as it's more reliable for images uploaded through the UI.
 
 ---
 
-## Phase 5: Add Dr. Sharyn Spicer's Photo (Issue #10)
+## Implementation Steps
 
-### Process
-1. Copy the uploaded image to project assets
-2. Add her to the UWC team section
-3. Update the team data array
-
-**File**: `src/pages/programs/UWCHumanAnimalProgram.tsx`
-
-The photo will be copied to `src/assets/team/dr-sharyn-spicer.jpg` and imported into the component.
+1. **Create** `docs/CALCOM_SETUP_GUIDE.md` with complete setup instructions
+2. **Create** `docs/EMAIL_RESPONSE_FEROZA.md` with email draft
+3. **Fix** the build error by updating the UWC page to use a Supabase URL for Dr. Spicer's image
 
 ---
 
-## Phase 6: Verify Placeholder Text (Issue #4)
+## Cal.com Setup Guide Content Preview
 
-### Current State
-The placeholder text "✓ Click below to schedule your free strategy session" exists in:
-- `WebDevelopment.tsx` line 377
-- `MediaProduction.tsx` line 449
+The guide will include:
 
-### Action
-Confirm this text is in the code and visible. If the live site doesn't show it, it may require a publish/update.
+### Account Setup Section
+- Create account at cal.com with username: `omniwellnessmedia`
+- Set timezone to Africa/Johannesburg (SAST)
+- Configure brand color: #339999
 
----
+### For Each Event Type:
+- **Title** (display name)
+- **Slug** (URL-friendly identifier - MUST match exactly)
+- **Duration** 
+- **Description** (copy-paste ready)
+- **Questions to ask** (optional intake form)
+- **Confirmation message**
+- **Redirect URL** after booking
 
-## Technical Implementation Details
-
-### Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/lib/imageHelpers.ts` | Fix Supabase folder path encoding |
-| `src/components/sections/TwoBeWellCTA.tsx` | Add onError fallbacks to images |
-| `src/pages/SocialMediaStrategy.tsx` | Remove unnecessary scroll, fix any mailto |
-| `src/pages/programs/UWCHumanAnimalProgram.tsx` | Fix 3 mailto buttons, add Dr. Spicer photo |
-| `src/pages/WebDevelopment.tsx` | Fix mailto, add portfolio section with id |
-| `src/pages/MediaProduction.tsx` | Fix mailto button |
-
-### Image Path Corrections
-
-**Current (Broken)**:
-```
-product-images** (2BeWell)/13.jpg
-```
-
-**Fixed (Working)**:
-```
-product-images%20(2BeWell%20Products)/13.jpg
-```
-
-### mailto Pattern Fix
-
-**Before** (blocked on iOS/Safari):
-```tsx
-<Button onClick={() => window.open('mailto:...', '_blank')}>
-```
-
-**After** (universal compatibility):
-```tsx
-<Button 
-  asChild 
-  className="..."
->
-  <a href="mailto:omniwellnessmedia@gmail.com?subject=...">
-    Book Now
-  </a>
-</Button>
-```
-
-Or:
-```tsx
-<Button onClick={() => { window.location.href = 'mailto:...'; }}>
-```
+### Availability Settings
+- Suggested hours: Monday-Friday 9:00-17:00 SAST
+- Buffer between meetings: 15 minutes
+- Minimum notice: 24 hours
 
 ---
 
-## Verification Checklist
+## Email Response Content Preview
 
-After implementation:
+Subject: Re: Website Updates - Status Report
 
-- [ ] 2BeWell section images load correctly on homepage
-- [ ] Social Media Strategy page scroll behavior is intuitive
-- [ ] All mailto buttons open email client on desktop & mobile
-- [ ] UWC Apply buttons work on all devices including iOS Safari
-- [ ] Web Development "View Our Work" scrolls to portfolio
-- [ ] Web Development "Book Consultation" opens email
-- [ ] Media Production "Book Creative Session" opens email
-- [ ] Dr. Sharyn Spicer photo appears in UWC team section
-- [ ] Placeholder confirmation text is visible
+Key points:
+1. ✅ 2BeWell image banner - Fixed (URL encoding corrected)
+2. ✅ Social Media Strategy scroll - Fixed (improved UX)
+3. ✅ Book My Strategy - Fixed (mailto compatibility)
+4. ✅ Placeholder text - Confirmed in code
+5. ✅ Conscious Media Partnership - Already working
+6. ✅ UWC Apply buttons - Fixed for iOS Safari
+7. ✅ Web Development "View our work" - Added portfolio section
+8. ✅ Web Development "Book consultation" - Fixed
+9. ✅ Media Production "Book my creative session" - Fixed
+10. ✅ Dr. Sharyn Spicer photo - Added to team section
 
----
-
-## Cross-Device Testing Required
-
-Per the critical mandate in project memory:
-> All pages must be fully accessible and functional on all devices, including iPhone/iOS Safari.
-
-After implementation, all mailto links and button functionality must be tested on:
-- Desktop Chrome
-- Desktop Safari
-- iOS Safari (iPhone)
-- Android Chrome
-
----
-
-## Summary
-
-This comprehensive fix addresses all 9 issues reported by Feroza:
-1. **2BeWell images**: Fix Supabase URL encoding
-2. **Social Media scroll**: Remove unnecessary scroll or improve UX
-3. **Book My Strategy**: Fix mailto approach
-4. **Placeholder text**: Verify presence in code
-5. **Conscious Media Partnership**: ✅ Already working
-6. **UWC Apply buttons**: Change window.open to window.location.href
-7. **Web Dev View Work**: Add portfolio section with proper ID
-8. **Web Dev Book Consultation**: Fix mailto
-9. **Media Production Book Session**: Fix mailto
-10. **Dr. Spicer photo**: Upload and add to team section
+Note: Changes require clicking "Update" in publish dialog to go live.
