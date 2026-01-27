@@ -5,6 +5,7 @@
 
 const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co';
 const STORAGE_BUCKET = 'provider-images';
+// Correct folder path - 2BeWell Products folder
 const PRODUCT_FOLDER = 'product-images%20(2BeWell%20Products)';
 
 /**

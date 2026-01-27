@@ -104,10 +104,12 @@ const MediaProduction = () => {
                   variant="outline" 
                   size="lg" 
                   className="px-8 py-4 text-lg rounded-full border-2"
-                  onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Media Production Guide Request', '_blank')}
+                  asChild
                 >
-                  <Download className="mr-2 w-5 h-5" />
-                  Request Production Guide
+                  <a href="mailto:omniwellnessmedia@gmail.com?subject=Media Production Guide Request">
+                    <Download className="mr-2 w-5 h-5" />
+                    Request Production Guide
+                  </a>
                 </Button>
               </div>
               <div className="flex flex-wrap items-center gap-4 md:gap-8 text-sm text-gray-600">
