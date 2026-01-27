@@ -167,7 +167,7 @@ const WellnessCommunity = () => {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div>
                 <h1 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-                  Wellness <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Community</span>
+                  Wellness <span className="text-primary font-bold">Community</span>
                 </h1>
                 <p className="text-lg text-gray-600 max-w-2xl">
                   Connect, share wisdom, and grow together with fellow wellness enthusiasts

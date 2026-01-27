@@ -68,13 +68,13 @@ const HeroSection = () => {
       title: "2BeWell Natural Products",
       description: "Handmade wellness essentials",
       href: "/twobewellshop",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images%2A%2A%20(2BeWell)/10.png",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images%20(2BeWell%20Products)/10.png",
       badge: "Shop"
     },
     {
       title: "Indigenous Wisdom Tours",
       description: "Ancient healing practices & cultural experiences",
-      href: "/tours/great-mother-cave-tour",
+      href: "/tours/indigenous-wisdom",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg",
       badge: "Cultural"
     },
@@ -91,7 +91,7 @@ const HeroSection = () => {
     {
       title: "Chief Kingsley's Wisdom",
       description: "Indigenous knowledge & cultural heritage tours",
-      href: "/tours/great-mother-cave-tour",
+      href: "/tours/indigenous-wisdom",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/chief%20kingsley%201.jpg",
       category: "tours",
       author: "Cultural Experience",

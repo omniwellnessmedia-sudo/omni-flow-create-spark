@@ -14,20 +14,20 @@ import {
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
-// Dr. Sharyn Spicer photo from Supabase storage
-const drSharynSpicerImage = `${STORAGE_BASE}/team-photos/dr-sharyn-spicer.jpg`;
+// Dr. Sharyn Spicer photo - imported directly for reliability
+import drSharynSpicerImage from '@/assets/team/dr-sharyn-spicer.jpg';
 
 // Hero image - static, high-quality
 const heroImage = `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`;
 
-// Partner logos - all from Supabase storage (corrected folder path: partner-logos** not partner-logos)
+// Partner logos - all from Supabase storage with correct folder path encoding
 const partnerLogos = {
-  carthorse: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/cart-horse-favicon-black.png`,
-  tufcat: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/tufcat-logo.png`,
-  drphilafel: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
-  valleyOfPlenty: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
-  uwc: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/UWC-Crest.png`,
-  omni: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png`
+  carthorse: `${STORAGE_BASE}/partner-logos**%20(Brand%20Assets)/cart-horse-favicon-black.png`,
+  tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
+  drphilafel: `${STORAGE_BASE}/partner-logos**%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
+  valleyOfPlenty: `${STORAGE_BASE}/partner-logos**%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
+  uwc: `${STORAGE_BASE}/partner-logos**%20(Brand%20Assets)/UWC-Crest.png`,
+  omni: `${STORAGE_BASE}/partner-logos**%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png`
 };
 
 // Journey images
@@ -422,7 +422,9 @@ const UWCHumanAnimalProgram: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant="outline" onClick={() => { window.location.href = 'mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Early Bird Application'; }}>Apply Early</Button>
+                <Button className="w-full" variant="outline" asChild>
+                  <a href="mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Early Bird Application">Apply Early</a>
+                </Button>
               </CardContent>
             </Card>
 
@@ -447,7 +449,9 @@ const UWCHumanAnimalProgram: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" onClick={() => { window.location.href = 'mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Full Programme Application'; }}>Apply Now</Button>
+                <Button className="w-full" asChild>
+                  <a href="mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Full Programme Application">Apply Now</a>
+                </Button>
               </CardContent>
             </Card>
 
