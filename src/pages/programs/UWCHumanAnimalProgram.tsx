@@ -14,8 +14,8 @@ import {
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
-// Dr. Sharyn Spicer photo - using placeholder until image is uploaded to Supabase
-const drSharynSpicerImage = "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&auto=format";
+// Dr. Sharyn Spicer photo - permanent Supabase storage URL
+const drSharynSpicerImage = `${STORAGE_BASE}/Tufcat%20and%20Carthorse/Dr.%20Sharron%20Spicer.jpg`;
 
 // Hero image - static, high-quality
 const heroImage = `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`;

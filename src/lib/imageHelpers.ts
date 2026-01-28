@@ -9,6 +9,7 @@ const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co';
 const STORAGE_BUCKET = 'provider-images';
 
 // Correct folder paths with ** encoded as %2A%2A
+// IMPORTANT: The folder name is "product-images** (2BeWell)" where ** must be encoded as %2A%2A
 const FOLDERS = {
   products: 'product-images%2A%2A%20(2BeWell)',
   partnerLogos: 'partner-logos%2A%2A%20(Brand%20Assets)',
