@@ -11,6 +11,7 @@ import { Hash, TrendingUp, Users, MessageCircle, Calendar, Download, Calculator,
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { CalComBooking } from "@/components/booking/CalComBooking";
 
 const SocialMediaStrategy = () => {
   const [auditData, setAuditData] = useState({ followers: '', engagement: '', posts: '' });
@@ -524,11 +525,21 @@ const SocialMediaStrategy = () => {
             <Button 
               size="lg" 
               className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
-              onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Social Media Strategy Session Booking', '_blank')}
+              asChild
             >
-              <Calendar className="mr-2 w-5 h-5" />
-              Book My Strategy Session
+              <a href="mailto:omniwellnessmedia@gmail.com?subject=Social Media Strategy Session Booking">
+                <Calendar className="mr-2 w-5 h-5" />
+                Email to Book Session
+              </a>
             </Button>
+            <div className="mt-6">
+              <CalComBooking 
+                eventTypeSlug="social-media-strategy"
+                calUsername="omni-wellness-media-gqj9mj"
+                buttonText="Book Strategy Session with Cal.com"
+                buttonClassName="w-full"
+              />
+            </div>
           </div>
         </div>
       </section>

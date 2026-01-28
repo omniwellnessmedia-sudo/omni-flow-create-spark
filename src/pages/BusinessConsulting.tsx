@@ -12,6 +12,7 @@ import { CheckCircle, TrendingUp, Users, Target, Calendar, Download, Calculator 
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { BookingCalendar } from "@/components/booking/BookingCalendar";
+import { CalComBooking } from "@/components/booking/CalComBooking";
 import { format } from "date-fns";
 
 const BusinessConsulting = () => {
@@ -351,11 +352,21 @@ const BusinessConsulting = () => {
             <Button 
               size="lg" 
               className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg mt-4"
-              onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Business Strategy Session Request', '_blank')}
+              asChild
             >
-              <Calendar className="mr-2 w-5 h-5" />
-              Book My Free Session Now
+              <a href="mailto:omniwellnessmedia@gmail.com?subject=Business Strategy Session Request">
+                <Calendar className="mr-2 w-5 h-5" />
+                Email to Book Session
+              </a>
             </Button>
+            <div className="mt-6">
+              <CalComBooking 
+                eventTypeSlug="business-strategy"
+                calUsername="omni-wellness-media-gqj9mj"
+                buttonText="Book Strategy Session"
+                buttonClassName="w-full"
+              />
+            </div>
           </div>
         </div>
       </section>

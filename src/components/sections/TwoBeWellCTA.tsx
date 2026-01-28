@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Leaf, Heart, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import { IMAGES } from "@/lib/images";
 
 interface TwoBeWellCTAProps {
   variant?: "default" | "compact" | "sidebar";
   className?: string;
 }
+
+// Direct URL to verified 2BeWell product image
+const TWOBWELL_PRODUCT_IMAGE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/10.png";
 
 export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellCTAProps) => {
   if (variant === "compact") {
@@ -48,7 +50,7 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
               asChild 
               className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-0 shadow-lg rounded-full"
             >
-              <Link to="/2bewell/shop" className="flex items-center justify-center gap-2">
+              <Link to="/twobewellshop" className="flex items-center justify-center gap-2">
                 Shop Now <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -57,7 +59,7 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
               variant="outline"
               className="flex-1 border-emerald-200 text-emerald-700 hover:bg-emerald-50 rounded-full"
             >
-              <Link to="/2bewell/shop#story">Our Story</Link>
+              <Link to="/twobewellshop#story">Our Story</Link>
             </Button>
           </div>
 
@@ -93,7 +95,7 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
             size="sm"
             className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-0 rounded-full"
           >
-            <Link to="/2bewell/shop" className="flex items-center justify-center gap-2">
+            <Link to="/twobewellshop" className="flex items-center justify-center gap-2">
               Explore <ArrowRight className="h-3 w-3" />
             </Link>
           </Button>
@@ -102,15 +104,15 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
     );
   }
 
-  // Default "full" variant with bento grid
+  // Default "full" variant with single portrait image column
   return (
     <Card className={`relative overflow-hidden border-0 bg-gradient-to-br from-emerald-50 via-white to-purple-50 shadow-elegant ${className}`}>
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0djItMnptMC0ydjJoLTJ2LTJoMnptLTItMmgydjJoLTJ2LTJ6bTItMmgydjJoLTJ2LTJ6bTAtMmgydjJoLTJ2LTJ6bTItMmgydjJoLTJ2LTJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-40"></div>
       
-      <div className="relative p-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="relative p-8 md:p-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left: Content */}
-          <div>
+          <div className="order-2 lg:order-1">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-3 bg-white rounded-2xl shadow-md">
                 <Leaf className="h-8 w-8 text-emerald-600" />
@@ -120,11 +122,11 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
               </Badge>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
               Meet 2BeWell
             </h2>
             
-            <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+            <p className="text-lg text-gray-700 mb-4 leading-relaxed">
               Nature Bottled with Love
             </p>
 
@@ -167,7 +169,7 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
                 size="lg"
                 className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-0 shadow-lg rounded-full px-8"
               >
-                <Link to="/2bewell/shop" className="flex items-center gap-2">
+                <Link to="/twobewellshop" className="flex items-center gap-2">
                   Explore 2BeWell <ArrowRight className="h-5 w-5" />
                 </Link>
               </Button>
@@ -177,7 +179,7 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
                 variant="outline"
                 className="border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 rounded-full px-8"
               >
-                <Link to="/2bewell/shop#story">Meet the Makers</Link>
+                <Link to="/twobewellshop#story">Meet the Makers</Link>
               </Button>
             </div>
 
@@ -186,31 +188,32 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
             </p>
           </div>
 
-          {/* Right: Product showcase (bento grid) */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2 aspect-[16/9] bg-white rounded-3xl overflow-hidden shadow-lg">
-              <img 
-                src={IMAGES.twoBeWell.hero}
-                alt="2BeWell Natural Products Collection"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
-              />
-            </div>
-            <div className="aspect-square bg-white rounded-2xl overflow-hidden shadow-md">
-              <img 
-                src={IMAGES.twoBeWell.bodyButter}
-                alt="2BeWell Handcrafted Products"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
-              />
-            </div>
-            <div className="aspect-square bg-white rounded-2xl overflow-hidden shadow-md">
-              <img 
-                src={IMAGES.twoBeWell.faceSerum}
-                alt="2BeGlow Face Serum"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
-              />
+          {/* Right: Single beautiful portrait product image */}
+          <div className="order-1 lg:order-2 flex justify-center">
+            <div className="relative w-full max-w-sm">
+              <div className="aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-2xl ring-1 ring-emerald-100">
+                <img 
+                  src={TWOBWELL_PRODUCT_IMAGE}
+                  alt="2BeWell Natural Wellness Products"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    target.style.display = 'none';
+                    target.parentElement!.innerHTML = `
+                      <div class="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-50 flex items-center justify-center">
+                        <div class="text-center p-8">
+                          <div class="text-6xl mb-4">🌿</div>
+                          <h3 class="text-xl font-bold text-emerald-800 mb-2">2BeWell Natural</h3>
+                          <p class="text-emerald-600">Pure Wellness, Naturally</p>
+                        </div>
+                      </div>
+                    `;
+                  }}
+                />
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -z-10 -bottom-4 -right-4 w-full h-full bg-gradient-to-br from-emerald-200 to-teal-200 rounded-3xl opacity-50"></div>
+              <div className="absolute -z-20 -bottom-8 -right-8 w-full h-full bg-gradient-to-br from-emerald-100 to-teal-100 rounded-3xl opacity-30"></div>
             </div>
           </div>
         </div>

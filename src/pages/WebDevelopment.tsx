@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Code, Smartphone, Zap, Shield, Calendar, Download, Calculator, CheckCircle, Globe, ShoppingCart, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { CalComBooking } from "@/components/booking/CalComBooking";
 
 const WebDevelopment = () => {
   const [projectData, setProjectData] = useState({ type: '', pages: '', features: [], timeline: '' });
@@ -425,9 +426,17 @@ const WebDevelopment = () => {
             >
               <a href="mailto:omniwellnessmedia@gmail.com?subject=Web Development Consultation Request">
                 <Calendar className="mr-2 w-5 h-5" />
-                Book My Consultation
+                Email to Book Consultation
               </a>
             </Button>
+            <div className="mt-6">
+              <CalComBooking 
+                eventTypeSlug="web-consultation"
+                calUsername="omni-wellness-media-gqj9mj"
+                buttonText="Book Web Consultation with Cal.com"
+                buttonClassName="w-full"
+              />
+            </div>
           </div>
         </div>
       </section>
