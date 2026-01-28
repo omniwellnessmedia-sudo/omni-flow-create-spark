@@ -96,7 +96,7 @@ const phases = [
 
 const handleAction = (action: string) => {
   const actions: Record<string, () => void> = {
-    prospectus: () => window.open('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf', '_blank'),
+    prospectus: () => window.open('https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf', '_blank'),
     video: () => document.getElementById('programme-video')?.scrollIntoView({ behavior: 'smooth' }),
     calendly: () => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank'),
     email: () => window.open('mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Inquiry', '_blank'),

@@ -20,14 +20,14 @@ const drSharynSpicerImage = "https://images.unsplash.com/photo-1559839734-2b71ea
 // Hero image - static, high-quality
 const heroImage = `${STORAGE_BASE}/Tufcat%20and%20Carthorse/IMG-20230905-WA0065.jpg`;
 
-// Partner logos - all from Supabase storage with correct folder path encoding
+// Partner logos - all from Supabase storage with correct folder path encoding (%2A%2A for **)
 const partnerLogos = {
-  carthorse: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/cart-horse-favicon-black.png`,
+  carthorse: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/cart-horse-favicon-black.png`,
   tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
-  drphilafel: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
-  valleyOfPlenty: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
-  uwc: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/UWC-Crest.png`,
-  omni: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png`
+  drphilafel: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/DR%20PHIL%20LOGO%20NPO_OMNI-02.png`,
+  valleyOfPlenty: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/The%20Valley%20of%20Plenty%20Logo%20No%20Background%20(2).png`,
+  uwc: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/UWC-Crest.png`,
+  omni: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png`
 };
 
 // Journey images

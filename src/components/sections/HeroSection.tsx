@@ -250,7 +250,7 @@ const HeroSection = () => {
           <div className="flex justify-center mb-6 sm:mb-8 animate-fade-in">
             <div className="relative">
               <img 
-                src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
+                src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
                 alt="Omni Wellness Media logo"
                 className="h-28 w-28 sm:h-36 sm:w-36 lg:h-44 lg:w-44 object-contain drop-shadow-2xl rounded-full bg-white/90 p-3 animate-[pulse_3s_ease-in-out_infinite]"
                 loading="eager"
