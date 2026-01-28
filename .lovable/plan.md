@@ -1,95 +1,157 @@
 
-# Create Comprehensive Email Response for Feroza's QA Feedback
+# Comprehensive Site Audit & Implementation Plan
 
-## Analysis Summary
+## Issues to Address
 
-Based on my thorough review of the codebase against Feroza's original 13 QA test cases, here is the status of each issue:
+### 1. 2BeWell Section Still Showing Omni Logos
+**Root Cause:** Despite correct folder path encoding (`product-images%2A%2A%20(2BeWell)`), the image files being referenced may not exist in the storage with those exact names, or there's a component-specific issue.
 
-### FIXED Issues (Verified in Code):
+**Solution:**
+- Update `TwoBeWellCTA.tsx` to use the specific product image URL you provided:
+  `https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/10.png`
+- Simplify to a **single beautiful portrait column** layout as requested
+- Remove the multi-image bento grid in favor of one impactful product image
 
-| # | Issue | Status | Technical Fix |
-|---|-------|--------|---------------|
-| 1 | 2BeWell Product Images | ✅ FIXED | Path encoding corrected to `product-images%2A%2A%20(2BeWell)` |
-| 2 | Chief Kingsley's Wisdom Card | ✅ FIXED | Links to `/tours/great-mother-cave-tour` |
-| 3 | Indigenous Teachings | ✅ FIXED | Links to `/tours/great-mother-cave-tour` |
-| 4 | Wellness Community Links | ✅ FIXED | Links to `/wellness-community` page (exists) |
-| 5 | Welcome Page Logos | ✅ FIXED | Path encoding corrected to `partner-logos%2A%2A%20(Brand%20Assets)` |
-| 6 | Projects & Services Navigation | ✅ FIXED | CommunityCard uses Link component with correct hrefs |
-| 9 | UWC Apply Buttons | ✅ FIXED | Email buttons use native `<a>` tags |
-| 10 | UWC Email Links | ✅ FIXED | Using `<a href="mailto:...">` for iOS compatibility |
-| 11 | Dr. Sharyn Spicer Image | ✅ FIXED | Permanent Supabase URL |
-| 12 | Web Dev Book Consultation | ✅ FIXED | Native `<a>` tag with mailto |
-| 13 | Media Production Booking | ✅ FIXED | Native `<a>` tag with mailto |
-
-### Issues Requiring Further Investigation:
-
-| # | Issue | Status | Notes |
-|---|-------|--------|-------|
-| 7 | RoamBuddy Team Picks | ⚠️ NEEDS REVIEW | No "team's picks" text found in codebase |
-| 8 | Travel Well Connected Welcome Buttons | ⚠️ NEEDS REVIEW | Buttons may need scroll/redirect logic review |
+**Files to modify:**
+- `src/components/sections/TwoBeWellCTA.tsx`
 
 ---
 
-## Implementation Plan
+### 2. Team Section Not Visible on Homepage
+**Current State:** The About page (`/about`) has the team section, but it's NOT on the homepage (`Index.tsx`).
 
-### File to Create: `docs/EMAIL_RESPONSE_QA_JAN28.md`
+**Solution:** Either:
+- Add a "Meet the Team" section to the homepage
+- OR ensure navigation clearly directs users to the About page
 
-This will contain:
+**Recommended:** Add a compact team preview section to the homepage that links to full About page.
 
-1. **Email for Feroza** - Non-technical summary confirming fixes
-2. **Email for Chad** - Technical summary with implementation details
-3. **QA Status Table** - Complete checklist matching Feroza's original test cases
-4. **Known Limitations** - Any issues still requiring attention
-
----
-
-## Email Content Structure
-
-### Email for Feroza
-- Confirmation that 11 of 13 QA issues have been addressed
-- Clear table matching her original test case format
-- Notes on remaining items that need verification
-- Instructions to re-test on iPhone, Android, and MacBook
-- Link to preview URL for testing
-
-### Email for Chad  
-- Technical summary of path encoding fixes
-- Team section update confirmation
-- Files modified list
-- Publishing instructions
+**Files to modify:**
+- `src/pages/Index.tsx` - Add team section
+- Create new component: `src/components/sections/TeamPreviewSection.tsx`
 
 ---
 
-## Technical Details
+### 3. Cal.com Integration Mapping
 
-### Root Cause of Original Issues
+Based on your screenshot, here are the event types that need to be mapped:
 
-The majority of issues stemmed from **Supabase storage folder path encoding**. Folder names containing `**` characters (e.g., `partner-logos** (Brand Assets)`) required proper URL encoding as `%2A%2A`.
+| Cal.com Event | Slug | Duration | Target Page(s) |
+|---------------|------|----------|----------------|
+| UWC Human-Animal Programme Call | `uwc-human-animal-programme` | 30m | `/programs/uwc-human-animal` |
+| Wellness Exchange Session | `wellness-exchange-session` | 60m | `/wellness-exchange` |
+| Business Strategy Session | `business-strategy` | 60m | `/business-consulting` |
+| Media Production Consultation | `media-production` | 60m | `/media-production` |
+| Web Development Consultation | `web-consultation` | 45m | `/web-development` |
+| Social Media Strategy Session | `social-media-strategy` | 60m | `/social-media-strategy` |
+| Discovery Call | `discovery-call` | 30m | Homepage, Contact, Footer CTAs |
 
-### Files Previously Modified
+**Implementation:**
+- Add `CalComBooking` component to each service page with correct `eventTypeSlug`
+- Enable feature flag `calcom_integration` in database
+- Update Cal.com username in settings to match screenshot: `omni-wellness-media-gqj9mj`
 
-| File | Change |
-|------|--------|
-| `src/lib/images.ts` | Correct folder path encoding |
-| `src/lib/imageHelpers.ts` | Correct product folder path |
-| `src/pages/programs/UWCHumanAnimalProgram.tsx` | Dr. Spicer image + mailto links |
-| `src/pages/WebDevelopment.tsx` | mailto links |
-| `src/pages/MediaProduction.tsx` | mailto links |
-| `src/pages/About.tsx` | Updated team structure |
-| `src/components/sections/HeroSection.tsx` | Omni logo path |
-| `src/components/sections/TwoBeWellCTA.tsx` | Product image references |
-
-### iOS Safari Compatibility
-
-All email/consultation buttons now use native `<a>` tags instead of `window.open()`:
-```typescript
-<a href="mailto:omniwellnessmedia@gmail.com?subject=...">
-```
-
-This ensures compatibility across MacBook, iPhone, and Android.
+**Files to modify:**
+- `src/pages/BusinessConsulting.tsx`
+- `src/pages/MediaProduction.tsx`
+- `src/pages/WebDevelopment.tsx`
+- `src/pages/SocialMediaStrategy.tsx`
+- `src/pages/programs/UWCHumanAnimalProgram.tsx`
+- `src/pages/WellnessExchange.tsx`
+- `src/pages/Contact.tsx`
 
 ---
 
-## Re-Testing Checklist for Feroza
+## 4. Comprehensive Site Audit - Critical Items
 
-The email will include a formatted checklist that Feroza can use to re-test each original issue, with expected behavior documented.
+### Navigation Gaps
+| Missing Item | Recommendation |
+|--------------|----------------|
+| About Us | Add to main nav (currently only in footer) |
+| Contact | Add prominent link in header |
+| Blog/Insights | Add to nav (exists at `/blog`) |
+| Great Mother Cave Tour | Add to Travel menu (popular experience) |
+| Tours page | Add `/tours` to Travel menu |
+
+### Homepage Sales Funnel Concerns
+| Issue | Impact | Fix |
+|-------|--------|-----|
+| No sticky CTA | Users scroll away from conversion | Add sticky "Book Discovery Call" bar |
+| No exit intent | Lost leads | Add exit-intent popup with free resource |
+| 2BeWell images broken | Low trust, high bounce | Fix image paths (Priority 1) |
+| No team visibility | Less personal connection | Add team preview section |
+| Missing clear value prop | Unclear offering | Strengthen hero messaging |
+
+### Bounce Rate Concerns
+1. **Broken images** - Creates unprofessional impression
+2. **Missing navigation items** - Users can't find content
+3. **No visible booking CTAs** - No clear next step
+4. **Long page with no engagement points** - Users scroll and leave
+
+### Pages Needing Attention
+| Page | Status | Issue |
+|------|--------|-------|
+| `/about` | ⚠️ | Team images all showing Omni logo (no real photos) |
+| `/contact` | ⚠️ | No Cal.com booking integration |
+| `/tours` | ✅ | Exists but not in main nav |
+| `/blog` | ✅ | Exists but not prominent in nav |
+| `/social-media-strategy` | ⚠️ | Needs Cal.com integration |
+
+---
+
+## Implementation Priority
+
+### Phase 1: Critical Fixes (Immediate)
+1. Fix 2BeWell section - single portrait image as requested
+2. Map Cal.com events to service pages
+3. Add About/Contact to main navigation
+
+### Phase 2: Conversion Optimization
+4. Add team preview section to homepage
+5. Add sticky CTA bar for Discovery Call
+6. Add exit-intent popup component
+
+### Phase 3: Navigation & UX
+7. Add Tours and Blog to main navigation
+8. Add Great Mother Cave Tour to Travel menu
+9. Review and fix all page navigation paths
+
+---
+
+## Files to Create/Modify
+
+### New Files:
+- `src/components/sections/TeamPreviewSection.tsx`
+- `src/components/conversion/StickyBookingBar.tsx`
+
+### Modified Files:
+- `src/components/sections/TwoBeWellCTA.tsx` - Single portrait image
+- `src/pages/Index.tsx` - Add team preview, sticky CTA
+- `src/components/navigation/MegaNavigation.tsx` - Add missing nav items
+- `src/components/navigation/UnifiedNavigation.tsx` - Add About/Contact
+- `src/pages/BusinessConsulting.tsx` - Cal.com integration
+- `src/pages/MediaProduction.tsx` - Cal.com integration
+- `src/pages/WebDevelopment.tsx` - Cal.com integration
+- `src/pages/SocialMediaStrategy.tsx` - Cal.com integration
+- `src/pages/programs/UWCHumanAnimalProgram.tsx` - Cal.com integration
+- `src/pages/Contact.tsx` - Cal.com integration
+
+---
+
+## Cal.com Configuration Note
+
+Your Cal.com username from the screenshot is `omni-wellness-media-gqj9mj`. This needs to be updated in:
+- `calcom_global_settings` database table
+- Or passed directly to `CalComBooking` component via `calUsername` prop
+
+---
+
+## Summary of Immediate Actions
+
+1. **Fix 2BeWell image** - Use single verified URL in portrait layout
+2. **Add Cal.com booking buttons** to all service pages with correct slugs
+3. **Add navigation items** for About, Contact, Blog, Tours
+4. **Add team section** to homepage
+5. **Enable `calcom_integration`** feature flag in database
+
+This comprehensive update will reduce bounce rate, improve conversion, and create a complete user journey through the site.
