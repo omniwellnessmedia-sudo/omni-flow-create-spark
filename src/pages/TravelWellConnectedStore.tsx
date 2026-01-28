@@ -533,11 +533,20 @@ const TravelWellConnectedStore = () => {
               curated to deepen your connection to self, community, and the natural world.
             </p>
             <div className="flex flex-wrap gap-4 items-center">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-lg"
+                onClick={() => document.getElementById('local-tours')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 <Mountain className="w-5 h-5 mr-2" />
                 Explore Sacred Local Tours
               </Button>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-6 text-lg">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-6 text-lg"
+                onClick={() => document.getElementById('viator-tours')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 <Globe className="w-5 h-5 mr-2" />
                 Browse Global Adventures
               </Button>
@@ -626,7 +635,7 @@ const TravelWellConnectedStore = () => {
       <Separator />
 
       {/* Main Content Tabs */}
-      <section className="py-20">
+      <section id="local-tours" className="py-20 scroll-mt-20">
         <div className="container mx-auto px-4">
           <Tabs defaultValue="local" className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12 h-14">
@@ -634,7 +643,7 @@ const TravelWellConnectedStore = () => {
                 <Mountain className="w-5 h-5 mr-2" />
                 Omni Local Tours
               </TabsTrigger>
-              <TabsTrigger value="viator" className="text-base">
+              <TabsTrigger value="viator" className="text-base" onClick={() => setTimeout(() => document.getElementById('viator-tours')?.scrollIntoView({ behavior: 'smooth' }), 100)}>
                 <Globe className="w-5 h-5 mr-2" />
                 Viator Experiences
               </TabsTrigger>
@@ -701,7 +710,7 @@ const TravelWellConnectedStore = () => {
             </TabsContent>
 
             {/* Viator Tours Tab */}
-            <TabsContent value="viator">
+            <TabsContent value="viator" id="viator-tours">
               <div className="mb-12 text-center">
                 <Badge className="mb-4">Global Wellness</Badge>
                 <h2 className="text-4xl md:text-5xl font-bold mb-6">Viator Wellness Experiences</h2>

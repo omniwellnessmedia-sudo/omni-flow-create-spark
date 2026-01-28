@@ -175,7 +175,7 @@ const RoamBuddyStore = () => {
       </section>
 
       {/* Editor's Picks Section - Enhanced */}
-      <section className="relative py-24 overflow-hidden bg-gradient-to-br from-muted/50 to-background">
+      <section id="editor-picks" className="relative py-24 overflow-hidden bg-gradient-to-br from-muted/50 to-background">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--primary),0.08),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(var(--accent),0.08),transparent_50%)]" />
         

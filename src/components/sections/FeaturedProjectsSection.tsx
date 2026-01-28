@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
@@ -9,19 +10,22 @@ const FeaturedProjectsSection = () => {
       title: "Community Outreach & Support",
       description: "Providing essential resources and support to families and children in our community.",
       image: IMAGES.wellness.communityProject1,
-      category: "Community Development"
+      category: "Community Development",
+      href: "/wellness-community"
     },
     {
       title: "Indigenous Wisdom & Healing",
       description: "Learning from traditional healers and documenting ancient wisdom for future generations.",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg",
-      category: "Cultural Heritage"
+      category: "Cultural Heritage",
+      href: "/tours/great-mother-cave-tour"
     },
     {
       title: "Wellness Education & Growth",
       description: "Sharing knowledge and fostering growth through educational programs and community workshops.",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/_MG_0148.jpg",
-      category: "Education & Development"
+      category: "Education & Development",
+      href: "/services"
     }
   ];
 
@@ -62,8 +66,9 @@ const FeaturedProjectsSection = () => {
                 <Button 
                   variant="soft"
                   className="w-full card-button-standard"
+                  asChild
                 >
-                  View Project
+                  <Link to={project.href}>View Project</Link>
                 </Button>
               </CardContent>
             </Card>
