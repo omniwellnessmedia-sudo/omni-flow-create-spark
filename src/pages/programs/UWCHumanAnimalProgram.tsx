@@ -11,6 +11,7 @@ import {
   Clock, Check, ChevronDown, ArrowRight, Phone, Mail, HelpCircle, Download,
   Sparkles, Play, Building2, DollarSign, ExternalLink
 } from 'lucide-react';
+import { CalComBooking } from '@/components/booking/CalComBooking';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -180,15 +181,12 @@ const UWCHumanAnimalProgram: React.FC = () => {
                 <Heart className="mr-2 h-5 w-5" />
                 Begin Your Journey
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white/40 bg-white/10 text-white hover:bg-white/20 px-8 py-6 text-lg rounded-xl"
-                onClick={() => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank')}
-              >
-                <Phone className="mr-2 h-5 w-5" />
-                Book a Call
-              </Button>
+              <CalComBooking 
+                eventTypeSlug="uwc-human-animal-programme"
+                calUsername="omni-wellness-media-gqj9mj"
+                buttonText="Book a Call"
+                buttonClassName="border-white/40 bg-white/10 text-white hover:bg-white/20 px-8 py-6 text-lg rounded-xl"
+              />
             </div>
           </div>
         </div>

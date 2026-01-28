@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Play, Camera, Mic, Film, Calendar, Download, Calculator, CheckCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { CalComBooking } from "@/components/booking/CalComBooking";
 
 const MediaProduction = () => {
   const [projectData, setProjectData] = useState({ type: '', duration: '', complexity: '' });
@@ -457,9 +458,17 @@ const MediaProduction = () => {
             >
               <a href="mailto:omniwellnessmedia@gmail.com?subject=Media Production Creative Session Request">
                 <Calendar className="mr-2 w-5 h-5" />
-                Book My Creative Session
+                Email to Book Session
               </a>
             </Button>
+            <div className="mt-6">
+              <CalComBooking 
+                eventTypeSlug="media-production"
+                calUsername="omni-wellness-media-gqj9mj"
+                buttonText="Book Creative Session with Cal.com"
+                buttonClassName="w-full"
+              />
+            </div>
           </div>
         </div>
       </section>

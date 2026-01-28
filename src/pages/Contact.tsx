@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { CalComBooking } from "@/components/booking/CalComBooking";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -177,6 +178,23 @@ const Contact = () => {
                   </CardContent>
                 </Card>
 
+                <Card className="border-0 shadow-lg bg-gradient-to-br from-primary/5 to-primary/10">
+                  <CardContent className="p-6">
+                    <h3 className="font-heading font-semibold text-xl mb-4 flex items-center gap-2">
+                      <span className="text-2xl">📅</span>
+                      Book a Discovery Call
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Schedule a free 30-minute call to discuss your project and explore how we can help.
+                    </p>
+                    <CalComBooking 
+                      eventTypeSlug="discovery-call"
+                      calUsername="omni-wellness-media-gqj9mj"
+                      buttonText="Book Discovery Call"
+                      buttonClassName="w-full"
+                    />
+                  </CardContent>
+                </Card>
                 <Card className="bg-rainbow-subtle border-0">
                   <CardContent className="p-6 text-center">
                     <h3 className="font-heading font-semibold text-xl mb-2">

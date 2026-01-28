@@ -13,6 +13,7 @@ import FacebookFeedSection from "@/components/sections/FacebookFeedSection";
 import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
 import WhatIsOmniSection from "@/components/sections/WhatIsOmniSection";
 import SkipNavigation from "@/components/accessibility/SkipNavigation";
+import TeamPreviewSection from "@/components/sections/TeamPreviewSection";
 
 /**
  * Index Page - WCAG 2.2 / ISO 9241 Compliant
@@ -52,6 +53,7 @@ const Index = () => {
         <ToursRetreatsPreview />
         {/* <AIToolsPreview /> Temporarily hidden */}
         <FeaturedProjectsSection />
+        <TeamPreviewSection />
         <TestimonialsSection />
         <VideoShowcaseSection />
         <WellnessHumansSection />
