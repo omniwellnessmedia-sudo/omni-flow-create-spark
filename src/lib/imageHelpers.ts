@@ -15,27 +15,27 @@ export const get2BeWellImage = (
   fileName: string,
   folder: 'products' | 'bundles' | 'team' | 'lifestyle' = 'products'
 ): string => {
-  // Map to actual storage file names based on your upload
+  // Map to actual storage file names based on your upload - CORRECTED MAPPINGS
   const storageMap: Record<string, string> = {
-    // Products (numbered files in storage)
-    'lip-balm': '6.png',
-    'face-serum': '9.png',
-    'body-butter': '10.png',
-    'home-cleaner': '11.png',
+    // Products - using correct numbered files from Supabase storage
+    'lip-balm': '3.png',
+    'face-serum': '12.png',
+    'body-butter': 'OMNI_2BeWell-7.jpg',
+    'home-cleaner': 'all%20purpose%20cleaner%20stock.png',
     'chia-seeds': '5.png',
     'pea-protein': '6.png',
     // Team
     'zenith': '10.png',
-    'feroza': '10.png', // Use same for now, update when you upload Feroza's photo
+    'feroza': '10.png',
     // Bundles/lifestyle
-    'hero-collage': '13.jpg',
-    'bundle-skincare': '1.jpg',
-    'bundle-complete': '2.jpg',
+    'hero-collage': 'OMNI_2BeWell-8.jpg',
+    'bundle-skincare': 'OMNI_2BeWell-7.jpg',
+    'bundle-complete': 'ChatGPT%20Image%20Jun%2024%2C%202025%2C%2009_26_31%20AM.png',
     'bundle-wellness': '5.png',
-    'bundle-starter': '2.jpg',
+    'bundle-starter': 'ChatGPT%20Image%20Jun%2024%2C%202025%2C%2009_26_31%20AM.png',
   };
 
-  const storageFileName = storageMap[fileName] || 'coming soon.jpg';
+  const storageFileName = storageMap[fileName] || 'OMNI_2BeWell-7.jpg';
   const storagePath = `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${PRODUCT_FOLDER}/${storageFileName}`;
 
   return storagePath;
@@ -54,7 +54,7 @@ export const getProductImage = (productId: string): string => {
     'pea-protein-500g': 'pea-protein',
   };
 
-  const imageKey = imageMap[productId] || 'coming soon';
+  const imageKey = imageMap[productId] || 'body-butter';
   return get2BeWellImage(imageKey);
 };
 
