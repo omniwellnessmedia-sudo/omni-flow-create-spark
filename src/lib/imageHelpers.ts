@@ -88,7 +88,7 @@ export const getLifestyleImage = (key: string = 'hero-collage'): string => {
 };
 
 /**
- * Image error handler with fallback
+ * Image error handler with fallback - uses Omni logo
  */
 export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
   const img = e.currentTarget;
@@ -100,6 +100,6 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
   
   img.dataset.fallbackAttempted = 'true';
   
-  // Use a gradient placeholder
-  img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect width="400" height="400" fill="%23f0fdf4"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%2310b981" font-size="20" font-family="sans-serif"%3E2BeWell%3C/text%3E%3C/svg%3E';
+  // Use Omni logo as fallback
+  img.src = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png';
 };

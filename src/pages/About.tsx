@@ -61,33 +61,45 @@ const About = () => {
   const team = [
     {
       name: "Chad Cupido",
-      role: "Founder & Head of Media and Strategy",
-      image: IMAGES.providers.chad,
-      description: "Chad oversees content creation and overall design direction, leveraging his strong background in media to produce high-quality, impactful content that bridges communities and inspires positive change."
+      role: "Founding Director",
+      image: IMAGES.omni.logo,
+      description: "Chad is the Founding Director responsible for overall vision, strategy, brand direction, and platform purpose. He leads Omni as a conscious media and commerce ecosystem, with extensive experience across media, wellness, education, tourism, and community development.",
+      location: "Muizenberg, Cape Town"
     },
     {
-      name: "Abbi Berkovitz",
-      role: "Content Developer",
-      image: IMAGES.sandy.portrait2,
-      description: "Abbi works closely with Chad on content development, creating engaging copy and organizing visuals for the website and other platforms. She specializes in distributing content across Facebook and TikTok."
+      name: "Tumelo Thabo Ncube",
+      role: "Technical Founder | Platform & Systems Architecture",
+      image: IMAGES.omni.logo,
+      description: "Tumelo is the Technical Founder responsible for designing and building the platform's technical architecture, digital systems, and infrastructure. He ensures Omni is technically robust, secure, and scalable.",
+      location: "Cape Town, South Africa"
     },
     {
-      name: "Tumelo",
-      role: "Web Development Lead",
-      image: IMAGES.wellness.muiz,
-      description: "Tumelo leads our web development and e-commerce services, ensuring a strong online presence for our clients with cutting-edge technical solutions."
+      name: "Zenith Yasin",
+      role: "Operations & Platform Coordination Lead",
+      image: IMAGES.omni.logo,
+      description: "Zenith supports operations, coordination, and execution across Omni Wellness Media. She ensures content workflows, partnerships, and administrative processes remain organised and aligned with brand values.",
+      location: "Cape Town, South Africa"
     },
     {
-      name: "Zenith",
-      role: "Administration and Coordination",
-      image: IMAGES.wellness.graduation2,
-      description: "Zenith handles the administrative and coordination aspects, ensuring deadlines are met and managing client relationships with precision and care."
+      name: "Feroza Begg",
+      role: "Operations & Administration Support",
+      image: IMAGES.omni.logo,
+      description: "Feroza supports through administration, coordination, content support, and operational follow-through. She assists with platform tasks, communications, documentation, and campaign execution.",
+      location: "Western Cape, South Africa"
     },
     {
-      name: "Feroza",
-      role: "Project Lead Support",
-      image: IMAGES.sandy.portrait1,
-      description: "Feroza brings strategic insights and innovative thinking to help clients achieve their conscious business goals and sustainable growth."
+      name: "Warren Cramer",
+      role: "Senior Financial Advisor & Governance Oversight",
+      image: IMAGES.omni.logo,
+      description: "Warren provides senior financial oversight and governance guidance, supporting leadership in ensuring financial sustainability, compliance, and sound decision-making.",
+      location: "Cape Town, South Africa"
+    },
+    {
+      name: "Stephen Bosch",
+      role: "Financial Operations & Systems Lead",
+      image: IMAGES.omni.logo,
+      description: "Stephen is the operational financial lead, embedded in day-to-day financial systems, reporting, and execution. He ensures accurate bookkeeping and financial visibility.",
+      location: "Cape Town, South Africa"
     }
   ];
 

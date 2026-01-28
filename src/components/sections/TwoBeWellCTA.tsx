@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Leaf, Heart, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import { getLifestyleImage, getTeamImage, getProductImage, handleImageError } from "@/lib/imageHelpers";
+import { IMAGES } from "@/lib/images";
 
 interface TwoBeWellCTAProps {
   variant?: "default" | "compact" | "sidebar";
@@ -190,26 +190,26 @@ export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellC
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 aspect-[16/9] bg-white rounded-3xl overflow-hidden shadow-lg">
               <img 
-                src={getLifestyleImage('hero-collage')}
+                src={IMAGES.twoBeWell.hero}
                 alt="2BeWell Natural Products Collection"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={handleImageError}
+                onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
               />
             </div>
             <div className="aspect-square bg-white rounded-2xl overflow-hidden shadow-md">
               <img 
-                src={getTeamImage('zenith')}
-                alt="Zenith - Co-Founder & Skincare Specialist"
+                src={IMAGES.twoBeWell.bodyButter}
+                alt="2BeWell Handcrafted Products"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={handleImageError}
+                onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
               />
             </div>
             <div className="aspect-square bg-white rounded-2xl overflow-hidden shadow-md">
               <img 
-                src={getProductImage('2beglow-face-serum')}
+                src={IMAGES.twoBeWell.faceSerum}
                 alt="2BeGlow Face Serum"
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={handleImageError}
+                onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
               />
             </div>
           </div>
