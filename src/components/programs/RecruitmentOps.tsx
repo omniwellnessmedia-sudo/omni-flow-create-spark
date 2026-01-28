@@ -57,7 +57,7 @@ const marketingMaterials = [
     format: 'PDF',
     size: '5.4 MB',
     icon: GraduationCap,
-    url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf'
+    url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/UWC-Programme-Prospectus.pdf'
   }
 ];
 

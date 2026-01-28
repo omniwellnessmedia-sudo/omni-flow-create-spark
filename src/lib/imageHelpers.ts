@@ -1,12 +1,18 @@
 /**
  * Image Helper for 2BeWell Products
  * Loads images from Supabase storage with fallback system
+ * 
+ * IMPORTANT: Folder names in Supabase contain ** which must be URL encoded as %2A%2A
  */
 
 const SUPABASE_URL = 'https://dtjmhieeywdvhjxqyxad.supabase.co';
 const STORAGE_BUCKET = 'provider-images';
-// Correct folder path - 2BeWell Products folder
-const PRODUCT_FOLDER = 'product-images%20(2BeWell%20Products)';
+
+// Correct folder paths with ** encoded as %2A%2A
+const FOLDERS = {
+  products: 'product-images%2A%2A%20(2BeWell)',
+  partnerLogos: 'partner-logos%2A%2A%20(Brand%20Assets)',
+};
 
 /**
  * Get image URL from Supabase storage with fallback
@@ -24,9 +30,9 @@ export const get2BeWellImage = (
     'home-cleaner': 'all%20purpose%20cleaner%20stock.png',
     'chia-seeds': '5.png',
     'pea-protein': '6.png',
-    // Team
-    'zenith': '10.png',
-    'feroza': '10.png',
+    // Team - use partner logos folder for Omni logo placeholder
+    'zenith': `../${FOLDERS.partnerLogos}/OMNI%20LOGO%20FA-06(1)%20(1).png`,
+    'feroza': `../${FOLDERS.partnerLogos}/OMNI%20LOGO%20FA-06(1)%20(1).png`,
     // Bundles/lifestyle
     'hero-collage': 'OMNI_2BeWell-8.jpg',
     'bundle-skincare': 'OMNI_2BeWell-7.jpg',
@@ -36,7 +42,13 @@ export const get2BeWellImage = (
   };
 
   const storageFileName = storageMap[fileName] || 'OMNI_2BeWell-7.jpg';
-  const storagePath = `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${PRODUCT_FOLDER}/${storageFileName}`;
+  
+  // Team images use partner-logos folder, others use products folder
+  if (folder === 'team' || storageFileName.startsWith('../')) {
+    return `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${FOLDERS.partnerLogos}/OMNI%20LOGO%20FA-06(1)%20(1).png`;
+  }
+  
+  const storagePath = `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${FOLDERS.products}/${storageFileName}`;
 
   return storagePath;
 };
@@ -89,6 +101,7 @@ export const getLifestyleImage = (key: string = 'hero-collage'): string => {
 
 /**
  * Image error handler with fallback - uses Omni logo
+ * Uses correct URL encoding with ** as %2A%2A
  */
 export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
   const img = e.currentTarget;
@@ -100,6 +113,6 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
   
   img.dataset.fallbackAttempted = 'true';
   
-  // Use Omni logo as fallback
-  img.src = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png';
+  // Use Omni logo as fallback - correct encoding with %2A%2A for **
+  img.src = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png';
 };

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
 const partnerLogos = {
-  uwc: `${STORAGE_BASE}/partner-logos%20(Brand%20Assets)/UWC-Crest.png`,
+  uwc: `${STORAGE_BASE}/partner-logos%2A%2A%20(Brand%20Assets)/UWC-Crest.png`,
 };
 
 const UWCUniversityPartners: React.FC = () => {
