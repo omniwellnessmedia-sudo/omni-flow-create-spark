@@ -8,9 +8,9 @@ import ImageCarousel3D from "@/components/ui/image-carousel-3d";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
 
-// Import local team images
-import warrenPhoto from '@/assets/team/warren.png';
-import stephenPhoto from '@/assets/team/stephen.png';
+// Local team images live in public/ (no bundler import needed)
+const warrenPhoto = "/lovable-uploads/warren.png";
+const stephenPhoto = "/lovable-uploads/stephen.png";
 
 const About = () => {
   const storyImages = [

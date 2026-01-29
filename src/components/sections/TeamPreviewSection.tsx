@@ -4,10 +4,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Users } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 
-// Import local team images
-import warrenPhoto from '@/assets/team/warren.png';
-import stephenPhoto from '@/assets/team/stephen.png';
-
 const team = [
   {
     name: "Chad Cupido",
