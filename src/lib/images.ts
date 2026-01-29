@@ -136,6 +136,11 @@ const CORE = {
     uwc: `${SUPABASE_URL}/${FOLDERS.partnerLogos}/UWC-Crest.png`,
     tufcat: 'https://www.tufcat.co.za/wp-content/uploads/2021/01/tufcat-logo-spaced.png',
   },
+  team: {
+    chad: `${SUPABASE_URL}/${FOLDERS.generalImages}/Chad%20Amazing%20portrait.jpg`,
+    feroza: `${SUPABASE_URL}/${FOLDERS.generalImages}/feroza%20begg%20-%20portrait.jpg`,
+    zenith: `${SUPABASE_URL}/${FOLDERS.generalImages}/Zenith_TNT_OMNI-9.jpg`,
+  },
 };
 
 export const IMAGES = {
@@ -232,6 +237,7 @@ export const IMAGES = {
     communityProject2: CORE.services.community2, 
     communityProject3: CORE.services.community3
   },
+  team: CORE.team,
   partners: { 
     twoBeWell: CORE.logos.twoBeWell, 
     apex: CORE.logos.apex, 
