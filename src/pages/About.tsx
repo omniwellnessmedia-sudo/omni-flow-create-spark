@@ -218,29 +218,29 @@ const About = () => {
                 >
                   {/* Image or Gradient Initials Avatar */}
                   <div className="relative aspect-[3/4] overflow-hidden">
-                    {member.image ? (
-                      <img 
-                        src={member.image}
-                        alt={member.name}
-                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                        loading="lazy"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const fallback = e.currentTarget.nextElementSibling;
-                          if (fallback) fallback.classList.remove('hidden');
-                        }}
-                      />
-                    ) : null}
-                    
-                    {/* Gradient Initials Fallback */}
-                    <div className={`absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center ${member.image ? 'hidden' : ''}`}>
+                    {/* Always show gradient initials as base layer */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center z-0">
                       <span className="text-white text-6xl font-bold tracking-wider">
                         {member.initials}
                       </span>
                     </div>
                     
+                    {/* Image overlay - if exists and loads */}
+                    {member.image && (
+                      <img 
+                        src={member.image}
+                        alt={member.name}
+                        className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 z-10"
+                        loading="lazy"
+                        onError={(e) => {
+                          // Hide image to show initials underneath
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    )}
+                    
                     {/* Gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
                   </div>
                   
                   {/* Content */}
