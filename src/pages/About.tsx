@@ -8,9 +8,9 @@ import ImageCarousel3D from "@/components/ui/image-carousel-3d";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
 
-// Local team images live in public/ (no bundler import needed)
-const warrenPhoto = "/lovable-uploads/warren.png";
-const stephenPhoto = "/lovable-uploads/stephen.png";
+// Supabase storage URLs for team photos
+const warrenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/warren.png";
+const stephenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/stephen.png";
 
 const About = () => {
   const storyImages = [
