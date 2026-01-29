@@ -4,6 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Users } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 
+// Import local team images
+import warrenPhoto from '@/assets/team/warren.png';
+import stephenPhoto from '@/assets/team/stephen.png';
+
 const team = [
   {
     name: "Chad Cupido",
@@ -49,33 +53,33 @@ export const TeamPreviewSection = () => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">
-          {team.map((member, index) => (
+          {team.map((member) => (
             <Card 
               key={member.name} 
               className="group border-0 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               <CardContent className="p-0">
-                <div className="aspect-square overflow-hidden bg-gray-100 relative">
-                  {member.image ? (
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        const fallback = e.currentTarget.nextElementSibling;
-                        if (fallback) fallback.classList.remove('hidden');
-                      }}
-                    />
-                  ) : null}
-                  
-                  {/* Gradient Initials Fallback */}
-                  <div className={`absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center ${member.image ? 'hidden' : ''}`}>
+                <div className="aspect-square overflow-hidden relative">
+                  {/* Always show gradient initials as base layer */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center">
                     <span className="text-white text-4xl md:text-5xl font-bold tracking-wider">
                       {member.initials}
                     </span>
                   </div>
+                  
+                  {/* Image overlay - if exists and loads */}
+                  {member.image && (
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      onError={(e) => {
+                        // Hide image to show initials underneath
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  )}
                 </div>
                 <div className="p-4 text-center">
                   <h3 className="font-semibold text-gray-900 text-sm md:text-base line-clamp-1">
