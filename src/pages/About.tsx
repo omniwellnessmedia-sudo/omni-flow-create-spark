@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Mail, Calendar, ArrowLeft } from "lucide-react";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
@@ -8,6 +7,10 @@ import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import ImageCarousel3D from "@/components/ui/image-carousel-3d";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
+
+// Import local team images
+import warrenPhoto from '@/assets/team/warren.png';
+import stephenPhoto from '@/assets/team/stephen.png';
 
 const About = () => {
   const storyImages = [
@@ -62,42 +65,48 @@ const About = () => {
     {
       name: "Chad Cupido",
       role: "Founding Director",
-      image: IMAGES.omni.logo,
+      image: IMAGES.team.chad,
+      initials: "CC",
       description: "Chad is the Founding Director responsible for overall vision, strategy, brand direction, and platform purpose. He leads Omni as a conscious media and commerce ecosystem, with extensive experience across media, wellness, education, tourism, and community development.",
       location: "Muizenberg, Cape Town"
     },
     {
       name: "Tumelo Thabo Ncube",
       role: "Technical Founder | Platform & Systems Architecture",
-      image: IMAGES.omni.logo,
+      image: null,
+      initials: "TN",
       description: "Tumelo is the Technical Founder responsible for designing and building the platform's technical architecture, digital systems, and infrastructure. He ensures Omni is technically robust, secure, and scalable.",
       location: "Cape Town, South Africa"
     },
     {
       name: "Zenith Yasin",
       role: "Operations & Platform Coordination Lead",
-      image: IMAGES.omni.logo,
+      image: IMAGES.team.zenith,
+      initials: "ZY",
       description: "Zenith supports operations, coordination, and execution across Omni Wellness Media. She ensures content workflows, partnerships, and administrative processes remain organised and aligned with brand values.",
       location: "Cape Town, South Africa"
     },
     {
       name: "Feroza Begg",
       role: "Operations & Administration Support",
-      image: IMAGES.omni.logo,
+      image: IMAGES.team.feroza,
+      initials: "FB",
       description: "Feroza supports through administration, coordination, content support, and operational follow-through. She assists with platform tasks, communications, documentation, and campaign execution.",
       location: "Western Cape, South Africa"
     },
     {
       name: "Warren Cramer",
       role: "Senior Financial Advisor & Governance Oversight",
-      image: IMAGES.omni.logo,
+      image: warrenPhoto,
+      initials: "WC",
       description: "Warren provides senior financial oversight and governance guidance, supporting leadership in ensuring financial sustainability, compliance, and sound decision-making.",
       location: "Cape Town, South Africa"
     },
     {
       name: "Stephen Bosch",
       role: "Financial Operations & Systems Lead",
-      image: IMAGES.omni.logo,
+      image: stephenPhoto,
+      initials: "SB",
       description: "Stephen is the operational financial lead, embedded in day-to-day financial systems, reporting, and execution. He ensures accurate bookkeeping and financial visibility.",
       location: "Cape Town, South Africa"
     }
@@ -199,27 +208,50 @@ const About = () => {
               </p>
             </div>
 
-            {/* Grid Layout with Square Images */}
+            {/* Premium Grid Layout with Portrait Images */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
               {team.map((member, index) => (
                 <div 
                   key={member.name}
-                  className="card-team group bg-white rounded-3xl shadow-lg overflow-hidden animate-fade-in-up hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 max-w-sm w-full"
+                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 max-w-sm w-full border border-gray-100"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="relative overflow-hidden flex justify-center">
-                    <img 
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  {/* Image or Gradient Initials Avatar */}
+                  <div className="relative aspect-[3/4] overflow-hidden">
+                    {member.image ? (
+                      <img 
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.nextElementSibling;
+                          if (fallback) fallback.classList.remove('hidden');
+                        }}
+                      />
+                    ) : null}
+                    
+                    {/* Gradient Initials Fallback */}
+                    <div className={`absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center ${member.image ? 'hidden' : ''}`}>
+                      <span className="text-white text-6xl font-bold tracking-wider">
+                        {member.initials}
+                      </span>
+                    </div>
+                    
+                    {/* Gradient overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
-                  <div className="p-8 text-center">
-                    <h3 className="card-title-clamp text-gray-800">{member.name}</h3>
-                    <p className="text-omni-indigo font-semibold mb-4 text-lg">{member.role}</p>
-                    <p className="card-description-clamp text-left">{member.description}</p>
+                  
+                  {/* Content */}
+                  <div className="p-6 text-center bg-gradient-to-b from-white to-gray-50">
+                    <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
+                    <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-pink-600 mb-3">
+                      {member.role}
+                    </p>
+                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
+                      {member.description}
+                    </p>
                   </div>
                 </div>
               ))}

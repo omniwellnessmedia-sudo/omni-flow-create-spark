@@ -8,22 +8,26 @@ const team = [
   {
     name: "Chad Cupido",
     role: "Founding Director",
-    image: IMAGES.omni.logo,
+    image: IMAGES.team.chad,
+    initials: "CC",
   },
   {
     name: "Tumelo Thabo Ncube",
     role: "Technical Founder",
-    image: IMAGES.omni.logo,
+    image: null,
+    initials: "TN",
   },
   {
     name: "Zenith Yasin",
     role: "Operations Lead",
-    image: IMAGES.omni.logo,
+    image: IMAGES.team.zenith,
+    initials: "ZY",
   },
   {
     name: "Feroza Begg",
     role: "Admin Support",
-    image: IMAGES.omni.logo,
+    image: IMAGES.team.feroza,
+    initials: "FB",
   },
 ];
 
@@ -51,13 +55,27 @@ export const TeamPreviewSection = () => {
               className="group border-0 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               <CardContent className="p-0">
-                <div className="aspect-square overflow-hidden bg-gray-100">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
+                <div className="aspect-square overflow-hidden bg-gray-100 relative">
+                  {member.image ? (
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.nextElementSibling;
+                        if (fallback) fallback.classList.remove('hidden');
+                      }}
+                    />
+                  ) : null}
+                  
+                  {/* Gradient Initials Fallback */}
+                  <div className={`absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center ${member.image ? 'hidden' : ''}`}>
+                    <span className="text-white text-4xl md:text-5xl font-bold tracking-wider">
+                      {member.initials}
+                    </span>
+                  </div>
                 </div>
                 <div className="p-4 text-center">
                   <h3 className="font-semibold text-gray-900 text-sm md:text-base line-clamp-1">
