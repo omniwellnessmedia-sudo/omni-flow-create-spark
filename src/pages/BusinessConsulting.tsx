@@ -110,10 +110,12 @@ const BusinessConsulting = () => {
                   variant="outline" 
                   size="lg" 
                   className="px-8 py-4 text-lg rounded-full border-2"
-                  onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Business Consulting Free Guide Request', '_blank')}
+                  asChild
                 >
-                  <Download className="mr-2 w-5 h-5" />
-                  Request Free Guide
+                  <a href="mailto:omniwellnessmedia@gmail.com?subject=Business Consulting Free Guide Request">
+                    <Download className="mr-2 w-5 h-5" />
+                    Request Free Guide
+                  </a>
                 </Button>
               </div>
               <div className="flex items-center space-x-8 text-sm text-gray-600">

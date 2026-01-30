@@ -215,9 +215,11 @@ const UWCRecruitment: React.FC = () => {
             <Button onClick={() => window.open('https://calendly.com/omniwellnessmedia/discovery-call', '_blank')}>
               Schedule Discovery Call
             </Button>
-            <Button variant="outline" onClick={() => window.open('mailto:omniwellnessmedia@gmail.com', '_blank')}>
-              <Mail className="mr-2 h-4 w-4" />
-              Email Template
+            <Button variant="outline" asChild>
+              <a href="mailto:omniwellnessmedia@gmail.com">
+                <Mail className="mr-2 h-4 w-4" />
+                Email Template
+              </a>
             </Button>
             <Button variant="outline">
               <Share2 className="mr-2 h-4 w-4" />

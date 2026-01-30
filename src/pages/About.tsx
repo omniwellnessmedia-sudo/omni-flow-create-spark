@@ -73,7 +73,7 @@ const About = () => {
     {
       name: "Tumelo Thabo Ncube",
       role: "Technical Founder | Platform & Systems Architecture",
-      image: null,
+      image: "/lovable-uploads/tumelo.png",
       initials: "TN",
       description: "Tumelo is the Technical Founder responsible for designing and building the platform's technical architecture, digital systems, and infrastructure. He ensures Omni is technically robust, secure, and scalable.",
       location: "Cape Town, South Africa"

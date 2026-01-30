@@ -9,8 +9,8 @@ interface TwoBeWellCTAProps {
   className?: string;
 }
 
-// Direct URL to verified 2BeWell product image
-const TWOBWELL_PRODUCT_IMAGE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images**%20(2BeWell)/10.png";
+// Direct URL to verified 2BeWell product image - properly URL-encoded folder name
+const TWOBWELL_PRODUCT_IMAGE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images%2A%2A%20(2BeWell)/10.png";
 
 export const TwoBeWellCTA = ({ variant = "default", className = "" }: TwoBeWellCTAProps) => {
   if (variant === "compact") {

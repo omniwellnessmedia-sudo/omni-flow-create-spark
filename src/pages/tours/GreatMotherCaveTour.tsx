@@ -81,7 +81,7 @@ export default function GreatMotherCaveTour() {
       </section>
 
       {/* Meet Chief Kingsley */}
-      <section className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50">
+      <section id="chief-kingsley" className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50 scroll-mt-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8 items-center">

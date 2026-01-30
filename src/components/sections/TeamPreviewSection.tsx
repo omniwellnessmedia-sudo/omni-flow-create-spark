@@ -14,7 +14,7 @@ const team = [
   {
     name: "Tumelo Thabo Ncube",
     role: "Technical Founder",
-    image: null,
+    image: "/lovable-uploads/tumelo.png",
     initials: "TN",
   },
   {

@@ -461,13 +461,21 @@ const MediaProduction = () => {
                 Email to Book Session
               </a>
             </Button>
-            <div className="mt-6">
-              <CalComBooking 
-                eventTypeSlug="media-production"
-                calUsername="omni-wellness-media-gqj9mj"
-                buttonText="Book Creative Session with Cal.com"
-                buttonClassName="w-full"
-              />
+            <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                size="lg"
+                asChild
+                className="bg-primary hover:bg-primary/90 text-primary-foreground min-h-[44px]"
+              >
+                <a 
+                  href="https://cal.com/omni-wellness-media-gqj9mj/media-production" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <Calendar className="mr-2 w-5 h-5" />
+                  Book Creative Session
+                </a>
+              </Button>
             </div>
           </div>
         </div>
