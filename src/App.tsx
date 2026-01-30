@@ -114,12 +114,16 @@ const LoadingSpinner = () => (
   </div>
 );
 
+// Import ScrollToHash component
+import ScrollToHash from '@/components/navigation/ScrollToHash';
+
 function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
         <CartProvider>
           <Router>
+            <ScrollToHash />
             <div className="min-h-screen">
               <Suspense fallback={<LoadingSpinner />}>
                 <Routes>

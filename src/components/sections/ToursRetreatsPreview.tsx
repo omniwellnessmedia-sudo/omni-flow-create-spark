@@ -124,11 +124,19 @@ const ToursRetreatsPreview = () => {
         name: 'Winter Wellness',
         slug: 'winter-wellness',
         icon: '❄️'
-      }].map(category => <Link key={category.slug} to={`/tours-retreats/${category.slug}`}>
-            <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
+      }].map(category => <Link 
+            key={category.slug} 
+            to={`/tours-retreats/${category.slug}`}
+            aria-label={`Explore ${category.name}`}
+          >
+            <Card className="hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer h-full group border-2 border-transparent hover:border-primary/20">
               <CardContent className="p-4 text-center">
                 <div className="text-2xl mb-2">{category.icon}</div>
-                <h4 className="font-semibold text-sm text-foreground">{category.name}</h4>
+                <h4 className="font-semibold text-sm text-foreground mb-2">{category.name}</h4>
+                <div className="flex items-center justify-center text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span>Explore</span>
+                  <ArrowRight className="ml-1 h-3 w-3" />
+                </div>
               </CardContent>
             </Card>
           </Link>)}

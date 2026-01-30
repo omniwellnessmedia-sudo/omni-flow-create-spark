@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -155,6 +155,7 @@ const TravelWellConnectedStore = () => {
   const [viatorTours, setViatorTours] = useState<ViatorTour[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncingViator, setSyncingViator] = useState(false);
+  const [activeTab, setActiveTab] = useState<'local' | 'viator'>('local');
   const { toast } = useToast();
   const { trackAffiliateClick, trackProductView } = useConsciousAffiliate();
 
@@ -545,7 +546,12 @@ const TravelWellConnectedStore = () => {
                 size="lg" 
                 variant="outline" 
                 className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-6 text-lg"
-                onClick={() => document.getElementById('viator-tours')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  setActiveTab('viator');
+                  setTimeout(() => {
+                    document.getElementById('viator-tours')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 150);
+                }}
               >
                 <Globe className="w-5 h-5 mr-2" />
                 Browse Global Adventures
@@ -637,13 +643,13 @@ const TravelWellConnectedStore = () => {
       {/* Main Content Tabs */}
       <section id="local-tours" className="py-20 scroll-mt-20">
         <div className="container mx-auto px-4">
-          <Tabs defaultValue="local" className="w-full">
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'local' | 'viator')} className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12 h-14">
               <TabsTrigger value="local" className="text-base">
                 <Mountain className="w-5 h-5 mr-2" />
                 Omni Local Tours
               </TabsTrigger>
-              <TabsTrigger value="viator" className="text-base" onClick={() => setTimeout(() => document.getElementById('viator-tours')?.scrollIntoView({ behavior: 'smooth' }), 100)}>
+              <TabsTrigger value="viator" className="text-base">
                 <Globe className="w-5 h-5 mr-2" />
                 Viator Experiences
               </TabsTrigger>

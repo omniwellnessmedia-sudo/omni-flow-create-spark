@@ -78,10 +78,12 @@ const UWCUniversityPartners: React.FC = () => {
             <div className="flex flex-wrap gap-4">
               <Button 
                 size="lg"
-                onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=University Partnership Inquiry', '_blank')}
+                asChild
               >
-                <Handshake className="mr-2 h-5 w-5" />
-                Request Partnership Info
+                <a href="mailto:omniwellnessmedia@gmail.com?subject=University Partnership Inquiry">
+                  <Handshake className="mr-2 h-5 w-5" />
+                  Request Partnership Info
+                </a>
               </Button>
               <Button 
                 size="lg" 
@@ -188,10 +190,12 @@ const UWCUniversityPartners: React.FC = () => {
           <Button 
             size="lg" 
             className="bg-white text-primary hover:bg-white/90"
-            onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=University Partnership Inquiry', '_blank')}
+            asChild
           >
-            <Mail className="mr-2 h-5 w-5" />
-            Contact Partnership Team
+            <a href="mailto:omniwellnessmedia@gmail.com?subject=University Partnership Inquiry">
+              <Mail className="mr-2 h-5 w-5" />
+              Contact Partnership Team
+            </a>
           </Button>
         </div>
       </section>

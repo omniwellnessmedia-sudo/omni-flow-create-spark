@@ -670,9 +670,11 @@ const OmniWellnessRetreat = () => {
                       <Button 
                         className="w-full" 
                         size="lg"
-                        onClick={() => window.open('mailto:omniwellnessmedia@gmail.com?subject=Omni Wellness Retreat Booking&body=Hi,%0A%0AI would like to book a spot for the 4th Annual Omni Wellness Retreat.%0A%0APackage preference:%0ANumber of guests:%0A%0APlease send me more information.%0A%0AThank you!', '_blank')}
+                        asChild
                       >
-                        Book Now
+                        <a href="mailto:omniwellnessmedia@gmail.com?subject=Omni Wellness Retreat Booking&body=Hi,%0A%0AI would like to book a spot for the 4th Annual Omni Wellness Retreat.%0A%0APackage preference:%0ANumber of guests:%0A%0APlease send me more information.%0A%0AThank you!">
+                          Book Now
+                        </a>
                       </Button>
                       <p className="text-xs text-center text-muted-foreground">
                         50% deposit required (non-refundable)
