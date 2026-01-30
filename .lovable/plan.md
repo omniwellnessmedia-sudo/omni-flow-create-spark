@@ -1,410 +1,187 @@
 
-# Team Images Fix & Premium About Page UI - Implementation Plan
-
-## Overview
-This plan addresses the broken team images, upgrades the About page UI to premium standards, and creates consolidated email response documents for Feroza, Zenith, and Chad.
-
----
-
-## Phase 1: Copy Uploaded Team Images
-
-**Action:** Copy user-uploaded photos to project assets
-
-| File | Source | Destination |
-|------|--------|-------------|
-| Stephen Bosch | `user-uploads://stephen.png` | `src/assets/team/stephen.png` |
-| Warren Cramer | `user-uploads://warren.png` | `src/assets/team/warren.png` |
-
----
-
-## Phase 2: Update Image System with Team Photos
-
-**File: `src/lib/images.ts`**
-
-Add new `team` section to CORE and IMAGES objects with all available photos:
-
-```typescript
-// Add to CORE object after line 139
-team: {
-  chad: `${SUPABASE_URL}/${FOLDERS.generalImages}/Chad%20Amazing%20portrait.jpg`,
-  feroza: `${SUPABASE_URL}/${FOLDERS.generalImages}/feroza%20begg%20-%20portrait.jpg`,
-  zenith: `${SUPABASE_URL}/${FOLDERS.generalImages}/Zenith_TNT_OMNI-9.jpg`,
-  // Tumelo - no photo available, will use gradient initials
-  tumelo: null,
-}
-
-// Warren and Stephen imported from local assets
-import warrenPhoto from '@/assets/team/warren.png';
-import stephenPhoto from '@/assets/team/stephen.png';
-```
-
-**Team Photo Sources:**
-
-| Team Member | Source | URL/Path |
-|-------------|--------|----------|
-| Chad Cupido | Supabase | `General%20Images/Chad%20Amazing%20portrait.jpg` |
-| Feroza Begg | Supabase | `General%20Images/feroza%20begg%20-%20portrait.jpg` |
-| Zenith Yasin | Supabase | `General%20Images/Zenith_TNT_OMNI-9.jpg` |
-| Warren Cramer | Local Asset | `src/assets/team/warren.png` (from upload) |
-| Stephen Bosch | Local Asset | `src/assets/team/stephen.png` (from upload) |
-| Tumelo Thabo Ncube | None | Gradient initials avatar "TN" |
-
----
-
-## Phase 3: Redesign About Page Team Section
-
-**File: `src/pages/About.tsx`**
-
-### Team Data Update (Lines 61-104)
-Replace `IMAGES.omni.logo` with actual team photos:
-
-```typescript
-// Import local team images at top
-import warrenPhoto from '@/assets/team/warren.png';
-import stephenPhoto from '@/assets/team/stephen.png';
-
-const team = [
-  {
-    name: "Chad Cupido",
-    role: "Founding Director",
-    image: IMAGES.team.chad, // Supabase URL
-    initials: "CC",
-    description: "...",
-  },
-  {
-    name: "Tumelo Thabo Ncube",
-    role: "Technical Founder | Platform & Systems Architecture",
-    image: null, // Will render gradient initials
-    initials: "TN",
-    description: "...",
-  },
-  {
-    name: "Zenith Yasin",
-    role: "Operations & Platform Coordination Lead",
-    image: IMAGES.team.zenith,
-    initials: "ZY",
-    description: "...",
-  },
-  {
-    name: "Feroza Begg",
-    role: "Operations & Administration Support",
-    image: IMAGES.team.feroza,
-    initials: "FB",
-    description: "...",
-  },
-  {
-    name: "Warren Cramer",
-    role: "Senior Financial Advisor & Governance Oversight",
-    image: warrenPhoto, // Local import
-    initials: "WC",
-    description: "...",
-  },
-  {
-    name: "Stephen Bosch",
-    role: "Financial Operations & Systems Lead",
-    image: stephenPhoto, // Local import
-    initials: "SB",
-    description: "...",
-  }
-];
-```
-
-### Premium Team Card Component
-Update the team card rendering (Lines 203-226) with premium styling:
-
-```typescript
-{team.map((member, index) => (
-  <div 
-    key={member.name}
-    className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 max-w-sm w-full border border-gray-100"
-    style={{ animationDelay: `${index * 0.1}s` }}
-  >
-    {/* Image or Gradient Initials Avatar */}
-    <div className="relative aspect-[3/4] overflow-hidden">
-      {member.image ? (
-        <img 
-          src={member.image}
-          alt={member.name}
-          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
-          loading="lazy"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-            e.currentTarget.nextElementSibling?.classList.remove('hidden');
-          }}
-        />
-      ) : null}
-      
-      {/* Gradient Initials Fallback */}
-      <div className={`absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center ${member.image ? 'hidden' : ''}`}>
-        <span className="text-white text-6xl font-bold tracking-wider">
-          {member.initials}
-        </span>
-      </div>
-      
-      {/* Gradient overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-    </div>
-    
-    {/* Content */}
-    <div className="p-6 text-center bg-gradient-to-b from-white to-gray-50">
-      <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-      <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-pink-600 mb-3">
-        {member.role}
-      </p>
-      <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
-        {member.description}
-      </p>
-    </div>
-  </div>
-))}
-```
-
----
-
-## Phase 4: Update Team Preview Section on Homepage
-
-**File: `src/components/sections/TeamPreviewSection.tsx`**
-
-Update to use actual photos with same pattern:
-
-```typescript
-import { IMAGES } from "@/lib/images";
-import warrenPhoto from '@/assets/team/warren.png';
-import stephenPhoto from '@/assets/team/stephen.png';
-
-const team = [
-  {
-    name: "Chad Cupido",
-    role: "Founding Director",
-    image: IMAGES.team.chad,
-    initials: "CC",
-  },
-  {
-    name: "Tumelo Thabo Ncube",
-    role: "Technical Founder",
-    image: null,
-    initials: "TN",
-  },
-  {
-    name: "Zenith Yasin",
-    role: "Operations Lead",
-    image: IMAGES.team.zenith,
-    initials: "ZY",
-  },
-  {
-    name: "Feroza Begg",
-    role: "Admin Support",
-    image: IMAGES.team.feroza,
-    initials: "FB",
-  },
-];
-```
-
-Add initials avatar fallback rendering for members without photos.
-
----
-
-## Phase 5: Create Consolidated Email Response Document
-
-**File: `docs/EMAIL_RESPONSE_FINAL_JAN28.md`**
-
-### Email for Feroza - QA Confirmation
-
-```markdown
-Subject: QA Feedback - All 13 Items Resolved ✅
-
-Hi Feroza,
-
-Thank you for your thorough QA testing across MacBook, iPhone, and Android devices. 
-I'm pleased to confirm that all 13 issues have been addressed:
-
-## Status Summary
-
-| # | Issue | Status |
-|---|-------|--------|
-| 1 | 2BeWell Product Images | ✅ Fixed - Correct product images now display |
-| 2 | Chief Kingsley's Wisdom Card | ✅ Fixed - Links to Great Mother Cave Tour |
-| 3 | Indigenous Teachings | ✅ Fixed - Navigates to tour page correctly |
-| 4 | Wellness Community Links | ✅ Fixed - Routes to /wellness-community |
-| 5 | Welcome Page Logos | ✅ Fixed - Logo paths corrected |
-| 6 | Projects & Services Navigation | ✅ Fixed - All cards navigate correctly |
-| 7 | RoamBuddy Team Picks | ✅ Verified - Links functional |
-| 8 | Travel Well Connected Buttons | ✅ Fixed - Scroll/redirect working |
-| 9 | UWC Apply Buttons | ✅ Fixed - Native mailto links |
-| 10 | UWC Email Links | ✅ Fixed - Works on all devices |
-| 11 | Dr. Sharyn Spicer Image | ✅ Fixed - Permanent Supabase URL |
-| 12 | Web Dev Book Consultation | ✅ Fixed - mailto compatibility |
-| 13 | Media Production Booking | ✅ Fixed - Cross-device compatible |
-
-## Re-Testing Links
-
-- **Preview URL**: https://id-preview--61859699-a11d-4fa8-a215-f664fadaaf98.lovable.app
-- **Live URL**: https://omni-flow-create-spark.lovable.app (requires publish)
-
-## Re-Testing Checklist
-
-Please verify on each device (MacBook, iPhone, Android):
-- [ ] Homepage → 2BeWell section shows product bottle image
-- [ ] Click "Chief Kingsley's Wisdom" → Opens Great Mother Cave Tour page
-- [ ] All navigation buttons are responsive
-- [ ] Email buttons open mail client correctly
-- [ ] Dr. Spicer's photo displays on UWC Programme page
-- [ ] Team photos display on About page
-
-Let me know if anything needs further attention!
-
-Best regards,
-Omni Wellness Media
-```
-
-### Email for Zenith - Cal.com Integration Confirmation
-
-```markdown
-Subject: Cal.com Integration Complete - 7 Events Mapped ✅
-
-Hi Zenith,
-
-The Cal.com integration is now complete! All 7 event types have been mapped 
-to their corresponding website pages:
-
-## Event Mapping
-
-| Cal.com Event | Duration | Website Page |
-|---------------|----------|--------------|
-| UWC Human-Animal Programme Call | 30 min | /programs/uwc-human-animal |
-| Wellness Exchange Session | 60 min | /wellness-exchange |
-| Business Strategy Session | 60 min | /business-consulting |
-| Media Production Consultation | 60 min | /media-production |
-| Web Development Consultation | 45 min | /web-development |
-| Social Media Strategy Session | 60 min | /social-media-strategy |
-| Discovery Call | 30 min | /contact |
-
-## Cal.com Username
-`omni-wellness-media-gqj9mj`
-
-## Testing Instructions
-
-1. Visit each service page listed above
-2. Look for the "Book a Consultation" or "Schedule a Call" button
-3. Click to verify Cal.com popup opens with correct event type
-4. Test on both desktop and mobile
-
-## Pages to Test
-
-- https://id-preview--61859699-a11d-4fa8-a215-f664fadaaf98.lovable.app/business-consulting
-- https://id-preview--61859699-a11d-4fa8-a215-f664fadaaf98.lovable.app/media-production
-- https://id-preview--61859699-a11d-4fa8-a215-f664fadaaf98.lovable.app/web-development
-- https://id-preview--61859699-a11d-4fa8-a215-f664fadaaf98.lovable.app/programs/uwc-human-animal
-
-Let me know if any bookings need adjustment!
-
-Best,
-Omni Wellness Media
-```
-
-### Email for Chad - Technical Summary
-
-```markdown
-Subject: Technical Update - Team Images, Cal.com & QA Fixes Complete
-
-Hi Chad,
-
-Here's a comprehensive summary of all technical updates completed:
-
-## 1. Team Structure (Confirmed)
-
-| Name | Role |
-|------|------|
-| Chad Cupido | Founding Director |
-| Tumelo Thabo Ncube | Technical Founder - Platform & Systems Architecture |
-| Zenith Yasin | Operations & Platform Coordination Lead |
-| Feroza Begg | Operations & Administration Support |
-| Warren Cramer | Senior Financial Advisor & Governance Oversight |
-| Stephen Bosch | Financial Operations & Systems Lead |
-
-## 2. Team Photos Status
-
-| Member | Photo Status |
-|--------|--------------|
-| Chad Cupido | ✅ Supabase - Chad Amazing portrait.jpg |
-| Feroza Begg | ✅ Supabase - feroza begg - portrait.jpg |
-| Zenith Yasin | ✅ Supabase - Zenith_TNT_OMNI-9.jpg |
-| Warren Cramer | ✅ Uploaded - warren.png |
-| Stephen Bosch | ✅ Uploaded - stephen.png |
-| Tumelo Thabo Ncube | ⚠️ Using gradient initials avatar (TN) |
-
-## 3. Cal.com Integration
-
-- **Username**: omni-wellness-media-gqj9mj
-- **Status**: All 7 events mapped to service pages
-- **Feature Flag**: `calcom_integration` enabled in database
-
-## 4. QA Fixes (Feroza's 13 Items)
-
-All items resolved:
-- Path encoding fixed for Supabase folders with ** characters
-- Native mailto links for iOS Safari compatibility
-- Navigation routes corrected throughout site
-
-## 5. Files Modified
-
-- `src/lib/images.ts` - Added team photo URLs
-- `src/pages/About.tsx` - Premium team card redesign
-- `src/components/sections/TeamPreviewSection.tsx` - Team photos
-- `src/components/MegaNavigation.tsx` - Added About, Contact, Blog, Tours
-- Service pages - Cal.com integration added
-
-## 6. URLs
-
-- **Preview**: https://id-preview--61859699-a11d-4fa8-a215-f664fadaaf98.lovable.app
-- **Production**: https://omni-flow-create-spark.lovable.app
-
-## Next Steps
-
-1. Review team photos on About page
-2. Test Cal.com booking flow
-3. Upload Tumelo's photo when available
-4. Publish to production when ready
-
-Best regards,
-Tumelo
-```
-
----
-
-## Files to Create/Modify Summary
-
-| File | Action | Purpose |
-|------|--------|---------|
-| `src/assets/team/stephen.png` | Create | Stephen's photo from upload |
-| `src/assets/team/warren.png` | Create | Warren's photo from upload |
-| `src/lib/images.ts` | Modify | Add team section with Supabase URLs |
-| `src/pages/About.tsx` | Modify | Premium team cards with actual photos |
-| `src/components/sections/TeamPreviewSection.tsx` | Modify | Add team photos with fallbacks |
-| `docs/EMAIL_RESPONSE_FINAL_JAN28.md` | Create | Consolidated emails for Feroza, Zenith, Chad |
-
----
-
-## Expected Visual Outcome
-
-After implementation:
-- **Chad, Feroza, Zenith, Warren, Stephen**: Display actual portrait photos
-- **Tumelo**: Beautiful gradient initials avatar (violet to pink gradient with "TN")
-- **Team cards**: 3:4 portrait aspect ratio, subtle shadows, gradient text for roles
-- **Hover effects**: Scale up image, gradient overlay, lift animation
-- **Consistent display**: Homepage preview and About page match exactly
-
----
-
-## Technical Notes
-
-### Image Loading Strategy
-- Primary: Supabase CDN for Chad, Feroza, Zenith
-- Local: ES6 imports for Warren, Stephen (bundled with app)
-- Fallback: Gradient initials for any failed loads
-
-### Gradient Initials Colors
-```css
-bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500
-```
-This matches the Omni brand rainbow aesthetic while providing a professional appearance for missing photos.
+Context recap (what’s broken per team feedback)
+- Welcome page category cards (Indigenous Wisdom & Healing / Wellness Retreats / Study Abroad / Winter Wellness) look clickable but the action is unclear.
+- 2BeWell product image(s) still not showing across devices.
+- Great Mother Cave Tour opens, but doesn’t auto-scroll/anchor to Chief Kingsley’s section.
+- Some “Email” CTAs don’t open the email client on MacBook (common when using window.open for mailto).
+- Cal.com CTAs do not open/redirect on desktop or phones.
+- Travel Well Connected “Browse Global Adventures” button does nothing.
+- Team photos: Warren/Stephen not visible where expected; Tumelo photo not visible.
+
+Root causes found in code (high confidence)
+1) Welcome page UX ambiguity
+- The screenshot matches the “Quick Links to Categories” grid in `src/components/sections/ToursRetreatsPreview.tsx`.
+- Those cards are wrapped in `<Link>` so they are clickable, but there is no explicit “this is a link” affordance (no arrow, no “Explore” label/button, no secondary cue).
+
+2) 2BeWell product image not displaying
+- `src/components/sections/TwoBeWellCTA.tsx` uses:
+  `product-images**%20(2BeWell)/10.png`
+  This is not URL-encoded correctly for folders containing `**`.
+- Your own image system (`src/lib/images.ts`) explicitly says `**` must be encoded as `%2A%2A`.
+- Result: the image URL likely 404s on all devices, so users see “no changes”.
+
+3) Chief Kingsley anchor not working
+- `src/pages/tours/GreatMotherCaveTour.tsx` has a “Meet Chief Kingsley” section, but it does not have an `id` like `chief-kingsley`.
+- Links currently point to `/tours/great-mother-cave-tour` without a hash.
+- Also, React Router won’t automatically scroll to a hash on route change unless we implement it.
+
+4) Email buttons not opening (MacBook)
+- There are still multiple `window.open('mailto:...')` usages (confirmed across several pages/components).
+- Modern browsers often block `window.open()` for mailto (pop-up blocker / gesture detection quirks).
+- The most reliable cross-device pattern is:
+  - Use a real `<a href="mailto:...">` (preferred)
+  - Or set `window.location.href = 'mailto:...'` (acceptable fallback)
+  - Avoid `window.open('mailto:...')`
+
+5) Cal.com buttons not opening
+- Current `CalComBooking` relies on injecting the Cal embed script and calling `window.Cal("popup"/"modal")`.
+- This is fragile on mobile Safari and in environments with script loading timing issues.
+- The fastest reliable fix is to provide a “direct-link” mode:
+  - Use a normal `<a href="https://cal.com/{username}/{eventSlug}" target="_blank" rel="noopener noreferrer">`
+  - That avoids any popup/embed JS issues and works on all devices.
+
+6) Travel Well Connected “Browse Global Adventures” button not working
+- In `src/pages/TravelWellConnectedStore.tsx`, the button calls:
+  `document.getElementById('viator-tours')?.scrollIntoView()`
+- But `#viator-tours` is inside `<TabsContent value="viator" id="viator-tours">`.
+- The Tabs default is `local`, so the `viator` content may not be mounted in the DOM when inactive; the element doesn’t exist, so scroll does nothing.
+- Fix requires switching the tab to `viator` first, then scrolling after render.
+
+7) Team photos not visible
+- Homepage “TeamPreviewSection” only includes 4 members (Chad, Tumelo, Zenith, Feroza). Warren & Stephen won’t appear on the homepage unless we add them there.
+- Tumelo is currently `image: null` everywhere, so he will always show initials until we wire in his uploaded photo.
+- About page currently uses Warren/Stephen Supabase URLs (good), but if users are checking the homepage they won’t see them.
+
+Implementation plan (ASAP, minimal-risk, cross-device first)
+
+Phase 1 — Fix 2BeWell images everywhere (highest visibility)
+1) Update `src/components/sections/TwoBeWellCTA.tsx`
+   - Replace `product-images**%20(2BeWell)` with the properly encoded folder name:
+     `product-images%2A%2A%20(2BeWell)`
+   - Keep the existing onError UI fallback, but avoid `innerHTML` injection if possible (safer to do state-based fallback rendering). If we keep it, ensure it doesn’t break hydration.
+2) Quick audit for other `product-images**` occurrences
+   - Replace any unencoded `**` folder usage with `%2A%2A`.
+
+Expected outcome:
+- The 2BeWell CTA product image should load consistently on Mac/iPhone/Android.
+
+Phase 2 — Fix Chief Kingsley anchor (route + hash scroll)
+1) Add an anchor target in `src/pages/tours/GreatMotherCaveTour.tsx`
+   - Add `id="chief-kingsley"` to the “Meet Chief Kingsley” section wrapper.
+   - Add `scroll-mt-24` (or similar) so the section isn’t hidden under the fixed header.
+2) Update all CTAs that should jump to the profile section
+   - Where relevant (Hero cards / community cards), change href to:
+     `/tours/great-mother-cave-tour#chief-kingsley`
+3) Implement global “scroll-to-hash on route change”
+   - Add a small component (e.g., `ScrollToHash`) that uses React Router’s `useLocation()`:
+     - On location change, if `location.hash` exists:
+       - `setTimeout(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }))`
+     - Else scroll to top on normal page changes (optional).
+   - Mount it once inside the Router (likely in `src/App.tsx`).
+
+Expected outcome:
+- Clicking “Chief Kingsley’s Wisdom” lands directly at his profile section on all devices.
+
+Phase 3 — Make Welcome page category cards’ action obvious
+Target file:
+- `src/components/sections/ToursRetreatsPreview.tsx`
+
+Changes:
+1) Keep navigation (since they already route to category pages), but add explicit affordance:
+   - Add a small “Explore” label + Arrow icon inside each card.
+   - Add `aria-label` like `Explore Indigenous Wisdom & Healing`.
+   - Ensure cursor/hover states match: if clickable, keep `cursor-pointer` but also add visible cue.
+2) Optional improvement:
+   - Make the entire card clickable AND add a small button-like chip (“Explore”) so users immediately understand the action.
+
+Expected outcome:
+- No more “looks clickable but not sure what it does” feedback.
+
+Phase 4 — Fix email CTAs (stop using window.open mailto)
+Targets (based on matches found):
+- `src/components/programs/RecruitmentJourney.tsx` (uses window.open mailto)
+- `src/pages/programs/UWCRecruitment.tsx` (mailto template button)
+- `src/pages/programs/UWCUniversityPartners.tsx` (mailto)
+- `src/pages/programs/UWCSponsors.tsx` (mailto)
+- `src/pages/BusinessConsulting.tsx` (mailto)
+- Potentially other pages identified by the same pattern
+
+Changes:
+1) Replace `window.open('mailto:...', '_blank')` with either:
+   - `<Button asChild><a href="mailto:...">...</a></Button>` (preferred)
+   - OR `onClick={() => { window.location.href = 'mailto:...'; }}` (fallback)
+2) Ensure all mailto buttons meet iOS Safari + accessibility standard:
+   - Minimum 44px touch target (already mostly handled by your Button component)
+
+Expected outcome:
+- Mail client opens reliably on MacBook/iPhone/Android.
+
+Phase 5 — Make Cal.com booking work reliably (remove fragile popup dependency)
+Targets:
+- `src/components/booking/CalComBooking.tsx`
+- Pages using it: `src/pages/WebDevelopment.tsx`, `src/pages/MediaProduction.tsx`, others
+
+Approach (fastest reliable):
+1) Add “direct link” booking mode:
+   - Build the URL: `https://cal.com/{calUsername}/{eventTypeSlug}`
+   - Render as `<a target="_blank" rel="noopener noreferrer">Book with Cal.com</a>`
+2) Update service pages:
+   - Keep “Email to Book” as mailto anchor
+   - Make “Book with Cal.com” a direct link button (not embed popup)
+   - Fix mobile layout so buttons are balanced (stacked full-width on small screens, equal spacing)
+3) Optional: keep embed popup as enhancement
+   - If you still want the popup experience, keep it behind a feature toggle or only after confirming it works on iOS Safari.
+   - But the direct link should always exist as the reliable path.
+
+Expected outcome:
+- Cal.com booking works on all devices immediately.
+
+Phase 6 — Fix Travel Well Connected “Browse Global Adventures”
+Target:
+- `src/pages/TravelWellConnectedStore.tsx`
+
+Changes:
+1) Convert Tabs to controlled state:
+   - `const [tab, setTab] = useState<'local' | 'viator'>('local')`
+   - `<Tabs value={tab} onValueChange={(v) => setTab(v as any)} ...>`
+2) Update “Browse Global Adventures” button:
+   - `setTab('viator')`
+   - After render: `setTimeout(() => document.getElementById('viator-tours')?.scrollIntoView(...), 100)`
+3) Add a secondary fallback link:
+   - A plain `<a>` that goes to the Viator partner shop URL (external) in case the Viator tab has no data yet.
+
+Expected outcome:
+- Button always does something: switches to Viator tab and scrolls, plus external fallback.
+
+Phase 7 — Team photos: show Warren/Stephen where expected + add Tumelo photo
+Targets:
+- `src/pages/About.tsx`
+- `src/components/sections/TeamPreviewSection.tsx`
+
+Changes:
+1) About page (already using Warren/Stephen Supabase URLs)
+   - Keep as-is but add `loading="lazy"` and ensure `object-position` is appropriate.
+2) Homepage team preview:
+   - Decide expectation: if the team expects to see Warren & Stephen on the homepage, add them to `TeamPreviewSection` (currently only 4 people).
+3) Tumelo photo integration:
+   - Use the uploaded Tumelo photo (`user-uploads://image-21.png`) by copying it into the project and referencing it safely:
+     - Preferred: `src/assets/team/tumelo.png` and import it
+     - Or: `public/lovable-uploads/tumelo.png` and reference `"/lovable-uploads/tumelo.png"`
+   - Then set Tumelo’s `image` to that URL/import in both About and TeamPreview.
+
+Expected outcome:
+- Warren/Stephen visible in the sections where the team expects them.
+- Tumelo shows a real photo instead of initials.
+
+QA checklist (must be done before calling it “fixed”)
+- Welcome page: category cards clearly indicate action (“Explore”) and still navigate correctly.
+- 2BeWell: the hero/CTA product image loads on Mac + iPhone Safari + Android Chrome.
+- Great Mother Cave Tour: clicking Chief Kingsley CTAs lands directly at the profile section without manual scroll.
+- UWC Apply/Email CTAs: mail client opens on MacBook.
+- Web Dev / Media Production:
+  - “Email to Book” opens mail client
+  - “Book with Cal.com” opens Cal.com in a new tab reliably (desktop + mobile)
+  - Buttons look balanced on mobile (full-width stack)
+- Travel Well Connected: “Browse Global Adventures” switches to Viator tab and scrolls; external fallback link works.
+
+If you want, I can proceed immediately with implementation in a new request (this message is read-only by instruction).
