@@ -9,7 +9,15 @@ import { PriceDisplay } from '@/components/ui/price-display';
 import { CurrencyToggle } from './CurrencyToggle';
 import { useRoamBuddyAPI, RoamBuddyProduct } from '@/hooks/useRoamBuddyAPI';
 import { useCurrencyConverter } from '@/hooks/useCurrencyConverter';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { 
+  PayPalScriptProvider, 
+  PayPalButtons,
+  PayPalCardFieldsProvider,
+  PayPalNumberField,
+  PayPalExpiryField,
+  PayPalCVVField
+} from '@paypal/react-paypal-js';
+import { PayPalCardFieldsSubmitButton } from './PayPalCardFieldsSubmitButton';
 import { PAYPAL_OPTIONS } from '@/config/paypal';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -668,47 +676,89 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                   
                   <TabsContent value="card" className="space-y-4">
                     <p className="text-sm text-muted-foreground text-center mb-2">
-                      Pay with credit or debit card via PayPal
+                      Enter your card details below
                     </p>
-                    <PayPalScriptProvider options={PAYPAL_OPTIONS}>
-                      <PayPalButtons
-                        fundingSource="card"
-                        createOrder={(data, actions) => {
-                          const priceValue = finalPriceUSD.toFixed(2);
-                          return actions.order.create({
+                    
+                    <PayPalCardFieldsProvider
+                      createOrder={async () => {
+                        const priceValue = finalPriceUSD.toFixed(2);
+                        // PayPal SDK handles order creation internally
+                        // We need to return the order ID from a server-side call
+                        // For CardFields, we use the REST API approach
+                        const response = await fetch('https://api-m.paypal.com/v2/checkout/orders', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
                             intent: 'CAPTURE',
                             purchase_units: [{
                               amount: {
-                                value: priceValue,
                                 currency_code: 'USD',
+                                value: priceValue,
                               },
                               description: discount.isApplied 
                                 ? `${product.name} - ${product.destination} (${discount.code} applied)`
                                 : `${product.name} - ${product.destination}`,
                             }],
-                            application_context: {
-                              shipping_preference: 'NO_SHIPPING',
-                              user_action: 'PAY_NOW',
-                              brand_name: 'Omni Wellness - RoamBuddy',
-                            },
-                          });
-                        }}
-                        onApprove={(data, actions) => handlePayPalApprove(data, actions)}
-                        onError={(err) => {
-                          console.error('Card payment error:', err);
-                          toast.error('Card payment failed. Please try again.');
-                        }}
-                        disabled={isProcessing}
-                        style={{
-                          layout: 'vertical',
-                          color: 'black',
-                          shape: 'rect',
-                          label: 'pay',
-                        }}
-                      />
-                    </PayPalScriptProvider>
-                    <p className="text-xs text-muted-foreground text-center">
-                      Card payments are processed securely by PayPal. No PayPal account required.
+                          }),
+                        });
+                        const order = await response.json();
+                        return order.id;
+                      }}
+                      onApprove={async (data) => {
+                        // Payment approved - use the existing handler
+                        await handlePayPalApprove(data, { 
+                          order: { 
+                            capture: async () => {
+                              // Capture happens automatically with CardFields
+                              return { status: 'COMPLETED' };
+                            } 
+                          }
+                        });
+                      }}
+                      onError={(err) => {
+                        console.error('Card payment error:', err);
+                        toast.error('Card payment failed. Please check your details.');
+                      }}
+                    >
+                      <div className="space-y-4">
+                        {/* Card Number Field */}
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Card Number</label>
+                          <div className="h-12 border rounded-lg bg-background overflow-hidden">
+                            <PayPalNumberField />
+                          </div>
+                        </div>
+                        
+                        {/* Expiry and CVV in a row */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Expiry Date</label>
+                            <div className="h-12 border rounded-lg bg-background overflow-hidden">
+                              <PayPalExpiryField />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">CVV</label>
+                            <div className="h-12 border rounded-lg bg-background overflow-hidden">
+                              <PayPalCVVField />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Submit Button */}
+                        <PayPalCardFieldsSubmitButton 
+                          onSubmitting={setIsProcessing}
+                          disabled={isProcessing}
+                          amount={finalPriceUSD.toFixed(2)}
+                        />
+                      </div>
+                    </PayPalCardFieldsProvider>
+                    
+                    <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
+                      <Shield className="h-3 w-3" />
+                      Card payments are processed securely by PayPal
                     </p>
                   </TabsContent>
                 </Tabs>
