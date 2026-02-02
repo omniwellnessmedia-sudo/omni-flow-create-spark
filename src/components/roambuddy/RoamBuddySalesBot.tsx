@@ -131,34 +131,64 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
     if (!email.trim()) return;
 
     try {
-      // Add to newsletter subscribers with lead source
-      const { error } = await supabase
+      const emailValue = email.trim().toLowerCase();
+      
+      // First try to insert (most common case for new subscribers)
+      const { error: insertError } = await supabase
         .from('newsletter_subscribers')
-        .upsert({
-          email: email.trim(),
+        .insert({
+          email: emailValue,
           source: 'roambuddy-sales-bot',
           interests: ['travel', 'esim', 'connectivity'],
           subscribed_at: new Date().toISOString()
-        }, { onConflict: 'email' });
+        });
 
-      if (error) throw error;
+      // If email already exists, update it instead
+      if (insertError && insertError.code === '23505') {
+        const { error: updateError } = await supabase
+          .from('newsletter_subscribers')
+          .update({
+            source: 'roambuddy-sales-bot',
+            interests: ['travel', 'esim', 'connectivity'],
+            updated_at: new Date().toISOString()
+          })
+          .eq('email', emailValue);
+          
+        if (updateError) {
+          console.error('Newsletter update error:', updateError);
+        }
+      } else if (insertError) {
+        throw insertError;
+      }
 
-      // Update chatbot conversation
-      await supabase
-        .from('chatbot_conversations' as any)
-        .upsert({
-          session_id: sessionId,
-          user_email: email.trim(),
-          messages: messages.map(m => ({ role: m.role, content: m.content })),
-          lead_captured: true,
-          lead_source: 'roambuddy-sales-bot'
-        }, { onConflict: 'session_id' });
+      // Update or insert chatbot conversation
+      const conversationData = {
+        session_id: sessionId,
+        user_email: emailValue,
+        messages: messages.map(m => ({ role: m.role, content: m.content })),
+        lead_captured: true,
+        lead_source: 'roambuddy-sales-bot',
+        updated_at: new Date().toISOString()
+      };
+
+      // Try insert first
+      const { error: convInsertError } = await supabase
+        .from('chatbot_conversations')
+        .insert({ ...conversationData, started_at: new Date().toISOString() });
+
+      // If session exists, update instead
+      if (convInsertError && convInsertError.code === '23505') {
+        await supabase
+          .from('chatbot_conversations')
+          .update(conversationData)
+          .eq('session_id', sessionId);
+      }
 
       // Send notification email to Chad
       try {
         await supabase.functions.invoke('roambuddy-lead-notification', {
           body: {
-            email: email.trim(),
+            email: emailValue,
             messages: messages.map(m => ({ role: m.role, content: m.content })),
             sessionId,
             capturedAt: new Date().toISOString()
@@ -167,7 +197,6 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
         console.log('Lead notification sent to Chad');
       } catch (notifyError) {
         console.error('Failed to send lead notification:', notifyError);
-        // Don't block the user flow if notification fails
       }
 
       setEmailSubmitted(true);

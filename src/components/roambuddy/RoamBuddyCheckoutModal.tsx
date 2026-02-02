@@ -10,8 +10,9 @@ import { useRoamBuddyAPI, RoamBuddyProduct } from '@/hooks/useRoamBuddyAPI';
 import { useCurrencyConverter } from '@/hooks/useCurrencyConverter';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { PAYPAL_OPTIONS } from '@/config/paypal';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Loader2, CheckCircle, Copy, Smartphone, Calendar, Globe, Check, AlertCircle, Shield, FileText, Info, DollarSign } from 'lucide-react';
+import { Loader2, CheckCircle, Copy, Smartphone, Calendar, Globe, Check, AlertCircle, Shield, FileText, Info, DollarSign, Coins, Tag, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface RoamBuddyCheckoutModalProps {
@@ -21,6 +22,16 @@ interface RoamBuddyCheckoutModalProps {
 }
 
 type CheckoutStep = 'details' | 'verification' | 'payment' | 'complete';
+
+interface DiscountState {
+  code: string;
+  isValidating: boolean;
+  isApplied: boolean;
+  discountAmount: number;
+  wellcoinsBonus: number;
+  message: string;
+  error: string;
+}
 
 export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCheckoutModalProps) => {
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('details');
@@ -33,6 +44,17 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
   const [confirmDevice, setConfirmDevice] = useState(false);
   const [showCompatibilityCheck, setShowCompatibilityCheck] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<'USD' | 'ZAR'>('USD');
+  const [couponInput, setCouponInput] = useState('');
+  const [discount, setDiscount] = useState<DiscountState>({
+    code: '',
+    isValidating: false,
+    isApplied: false,
+    discountAmount: 0,
+    wellcoinsBonus: 0,
+    message: '',
+    error: ''
+  });
+  const [wellcoinsEarned, setWellcoinsEarned] = useState(0);
   const [esimDetails, setEsimDetails] = useState<{
     iccid?: string;
     qrCode?: string;
@@ -52,24 +74,43 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
   const displayPriceUSD = product.priceIsUSD ? product.price : product.price / (exchangeRates?.USD || 18.50);
   const displayPriceZAR = product.priceIsUSD ? product.price * (exchangeRates?.USD || 18.50) : product.price;
   const displayPrice = selectedCurrency === 'USD' ? displayPriceUSD : displayPriceZAR;
+  
+  // Apply discount to get final price
+  const finalPriceUSD = discount.isApplied ? (displayPriceUSD - discount.discountAmount) : displayPriceUSD;
+  const finalPriceZAR = discount.isApplied ? (displayPriceZAR - (discount.discountAmount * (exchangeRates?.USD || 18.50))) : displayPriceZAR;
+  const finalPrice = selectedCurrency === 'USD' ? finalPriceUSD : finalPriceZAR;
+  
   const formattedPrice = selectedCurrency === 'USD' ? formatUSD(displayPriceUSD) : formatZAR(displayPriceZAR);
+  const formattedFinalPrice = selectedCurrency === 'USD' ? formatUSD(finalPriceUSD) : formatZAR(finalPriceZAR);
+  const formattedDiscount = selectedCurrency === 'USD' 
+    ? formatUSD(discount.discountAmount) 
+    : formatZAR(discount.discountAmount * (exchangeRates?.USD || 18.50));
 
   const handlePayPalApprove = async (data: any) => {
     setIsProcessing(true);
     try {
+      // Calculate WellCoins earned (1 per $1 spent + discount bonus)
+      const baseWellcoins = Math.floor(finalPriceUSD);
+      const totalWellcoins = baseWellcoins + discount.wellcoinsBonus;
+      
       const orderData = {
         product_id: product.id,
         customer_name: customerName,
         customer_email: customerEmail,
         product_name: product.name,
-        amount: product.price,
-        currency: product.priceIsUSD ? 'USD' : 'ZAR',
+        amount: finalPriceUSD, // Use discounted price
+        original_amount: displayPriceUSD,
+        currency: 'USD',
         destination: product.destination,
+        discount_code: discount.isApplied ? discount.code : null,
+        discount_amount: discount.discountAmount,
+        wellcoins_earned: totalWellcoins,
       };
 
       const result = await createOrder(orderData);
       
       if (result?.success) {
+        setWellcoinsEarned(totalWellcoins);
         setEsimDetails({
           iccid: result.iccid,
           qrCode: result.qrCode,
@@ -89,6 +130,65 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
     }
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) return;
+
+    setDiscount(prev => ({ ...prev, isValidating: true, error: '' }));
+
+    try {
+      const { data, error } = await supabase.functions.invoke('validate-discount-code', {
+        body: {
+          code: couponInput.trim(),
+          orderAmount: displayPriceUSD,
+          productId: product.id
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setDiscount({
+          code: data.data.code,
+          isValidating: false,
+          isApplied: true,
+          discountAmount: data.data.discountAmount,
+          wellcoinsBonus: data.data.wellcoinsBonus,
+          message: data.data.message,
+          error: ''
+        });
+        toast.success(data.data.message);
+      } else {
+        setDiscount(prev => ({
+          ...prev,
+          isValidating: false,
+          error: data?.error || 'Invalid code'
+        }));
+        toast.error(data?.message || 'Invalid discount code');
+      }
+    } catch (error: any) {
+      console.error('Coupon validation error:', error);
+      setDiscount(prev => ({
+        ...prev,
+        isValidating: false,
+        error: 'Failed to validate code'
+      }));
+      toast.error('Failed to validate discount code');
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setDiscount({
+      code: '',
+      isValidating: false,
+      isApplied: false,
+      discountAmount: 0,
+      wellcoinsBonus: 0,
+      message: '',
+      error: ''
+    });
+    setCouponInput('');
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success('Copied to clipboard!');
@@ -105,6 +205,17 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
     setEsimDetails(null);
     setShowCompatibilityCheck(false);
     setSelectedCurrency('USD');
+    setCouponInput('');
+    setDiscount({
+      code: '',
+      isValidating: false,
+      isApplied: false,
+      discountAmount: 0,
+      wellcoinsBonus: 0,
+      message: '',
+      error: ''
+    });
+    setWellcoinsEarned(0);
     onClose();
   };
 
@@ -380,16 +491,47 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
 
                   <div className="py-4 border-b border-border">
                     <Label htmlFor="coupon" className="text-sm text-muted-foreground mb-2 block">Coupon Code</Label>
-                    <div className="flex gap-2">
-                      <Input 
-                        id="coupon"
-                        placeholder="Enter code" 
-                        className="h-9 text-sm"
-                      />
-                      <Button variant="outline" size="sm" className="h-9">
-                        Apply
-                      </Button>
-                    </div>
+                    {discount.isApplied ? (
+                      <div className="flex items-center justify-between bg-green-50 dark:bg-green-950/20 rounded-lg p-2">
+                        <div className="flex items-center gap-2">
+                          <Tag className="h-4 w-4 text-green-600" />
+                          <span className="text-sm font-medium text-green-700 dark:text-green-300">{discount.code}</span>
+                          <span className="text-xs text-green-600">(-{formattedDiscount})</span>
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={handleRemoveCoupon}
+                          className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <div className="flex gap-2">
+                          <Input 
+                            id="coupon"
+                            placeholder="Enter code" 
+                            className="h-9 text-sm uppercase"
+                            value={couponInput}
+                            onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                          />
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="h-9"
+                            onClick={handleApplyCoupon}
+                            disabled={discount.isValidating || !couponInput.trim()}
+                          >
+                            {discount.isValidating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Apply'}
+                          </Button>
+                        </div>
+                        {discount.error && (
+                          <p className="text-xs text-destructive">{discount.error}</p>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="pt-4 space-y-2">
@@ -397,14 +539,29 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                       <span>Subtotal</span>
                       <span>{formattedPrice}</span>
                     </div>
+                    {discount.isApplied && (
+                      <div className="flex justify-between items-center text-sm text-green-600">
+                        <span>Discount ({discount.code})</span>
+                        <span>-{formattedDiscount}</span>
+                      </div>
+                    )}
+                    {discount.wellcoinsBonus > 0 && (
+                      <div className="flex justify-between items-center text-sm text-amber-600">
+                        <span className="flex items-center gap-1">
+                          <Coins className="h-3 w-3" />
+                          Bonus WellCoins
+                        </span>
+                        <span>+{discount.wellcoinsBonus}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between items-center font-semibold text-lg pt-2 border-t border-border">
                       <span>Grand Total</span>
-                      <span className="text-primary text-xl">{formattedPrice}</span>
+                      <span className="text-primary text-xl">{formattedFinalPrice}</span>
                     </div>
                     <p className="text-xs text-muted-foreground text-center mt-2">
                       {selectedCurrency === 'USD' 
-                        ? `≈ ${formatZAR(displayPriceZAR)}` 
-                        : `≈ ${formatUSD(displayPriceUSD)}`}
+                        ? `≈ ${formatZAR(finalPriceZAR)}` 
+                        : `≈ ${formatUSD(finalPriceUSD)}`}
                     </p>
                   </div>
                 </div>
@@ -455,19 +612,19 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                   <PayPalScriptProvider options={PAYPAL_OPTIONS}>
                     <PayPalButtons
                       createOrder={(data, actions) => {
-                        const priceValue = product.priceIsUSD 
-                          ? product.price.toFixed(2) 
-                          : (product.price / 100).toFixed(2);
-                        const currencyCode = product.priceIsUSD ? 'USD' : 'ZAR';
+                        // Use discounted price if applicable
+                        const priceValue = finalPriceUSD.toFixed(2);
                         
                         return actions.order.create({
                           intent: 'CAPTURE',
                           purchase_units: [{
                             amount: {
                               value: priceValue,
-                              currency_code: currencyCode,
+                              currency_code: 'USD',
                             },
-                            description: `${product.name} - ${product.destination}`,
+                            description: discount.isApplied 
+                              ? `${product.name} - ${product.destination} (${discount.code} applied)`
+                              : `${product.name} - ${product.destination}`,
                           }],
                         });
                       }}
@@ -503,25 +660,33 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                         <p className="font-medium text-sm">{product.name}</p>
                         <p className="text-xs text-muted-foreground">{product.dataAmount} • {product.validity}</p>
                       </div>
-                      <PriceDisplay 
-                        price={product.price} 
-                        size="sm" 
-                        priceIsUSD={product.priceIsUSD}
-                        primaryCurrency={product.priceIsUSD ? 'USD' : 'ZAR'}
-                      />
+                      <span className="font-medium">{formatUSD(displayPriceUSD)}</span>
                     </div>
+                    {discount.isApplied && (
+                      <div className="flex justify-between items-center text-sm text-green-600">
+                        <span className="flex items-center gap-1">
+                          <Tag className="h-3 w-3" />
+                          {discount.code}
+                        </span>
+                        <span>-{formatUSD(discount.discountAmount)}</span>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="pt-4">
+                  <div className="pt-4 space-y-2">
                     <div className="flex justify-between items-center font-semibold">
                       <span>Grand Total</span>
-                      <PriceDisplay 
-                        price={product.price} 
-                        size="lg" 
-                        priceIsUSD={product.priceIsUSD}
-                        primaryCurrency={product.priceIsUSD ? 'USD' : 'ZAR'}
-                      />
+                      <span className="text-primary text-xl">{formatUSD(finalPriceUSD)}</span>
                     </div>
+                    {(discount.wellcoinsBonus > 0 || Math.floor(finalPriceUSD) > 0) && (
+                      <div className="flex justify-between items-center text-sm text-amber-600">
+                        <span className="flex items-center gap-1">
+                          <Coins className="h-3 w-3" />
+                          WellCoins you'll earn
+                        </span>
+                        <span>+{Math.floor(finalPriceUSD) + discount.wellcoinsBonus}</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-6 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
@@ -609,6 +774,17 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                   </div>
                 )}
               </div>
+
+              {wellcoinsEarned > 0 && (
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                  <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+                    <Coins className="h-5 w-5" />
+                    <p className="text-sm font-medium">
+                      You earned <strong>{wellcoinsEarned} WellCoins</strong> with this purchase!
+                    </p>
+                  </div>
+                </div>
+              )}
 
               <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                 <p className="text-sm text-blue-800 dark:text-blue-200">
