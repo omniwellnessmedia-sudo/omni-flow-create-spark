@@ -10,6 +10,7 @@ import { SIMActivation } from '@/components/roambuddy/SIMActivation';
 import { DeviceCompatibility } from '@/components/roambuddy/DeviceCompatibility';
 import { RoamBuddyPartnershipSection } from '@/components/roambuddy/RoamBuddyPartnershipSection';
 import { RoamBuddyCheckoutModal } from '@/components/roambuddy/RoamBuddyCheckoutModal';
+import { RoamBuddySalesBot } from '@/components/roambuddy/RoamBuddySalesBot';
 import { curatedESIMPicks, curatorProfiles } from '@/data/roamBuddyProducts';
 import { useRoamBuddyAPI, RoamBuddyProduct } from '@/hooks/useRoamBuddyAPI';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
@@ -384,6 +385,13 @@ const RoamBuddyStore = () => {
         onClose={() => {
           setShowCheckoutModal(false);
           setSelectedProduct(null);
+        }}
+      />
+
+      {/* AI Sales Bot */}
+      <RoamBuddySalesBot 
+        onProductRecommended={(productId) => {
+          console.log('Product recommended:', productId);
         }}
       />
 
