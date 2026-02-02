@@ -48,5 +48,8 @@ verify_jwt = true
 [functions.roambuddy-sales-chat]
 verify_jwt = false
 
+[functions.roambuddy-lead-notification]
+verify_jwt = false
+
 [functions.generate-campaign-content]
 verify_jwt = true
