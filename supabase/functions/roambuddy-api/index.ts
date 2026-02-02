@@ -764,7 +764,24 @@ async function handleCreateOrder(orderData: OrderData, supabase: ReturnType<type
     }
 
     const authData = await authResponse.json();
-    const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || authData.access_token || authData.token || authData.data?.token;
+    
+    // Fix: Prioritize access_token over auth_token (matches working pattern in getAllProducts)
+    const token = authData.data?.access_token || 
+                  authData.access_token || 
+                  authData.data?.auth_token || 
+                  authData.auth_token || 
+                  authData.token || 
+                  authData.data?.token ||
+                  Deno.env.get('ROAMBUDDY_ACCESS_TOKEN'); // Fallback to env token
+    
+    // Enhanced logging for debugging token issues
+    console.log('Order auth token type:', 
+      authData.data?.access_token ? 'access_token (data)' : 
+      authData.access_token ? 'access_token (root)' :
+      authData.data?.auth_token ? 'auth_token (data)' : 
+      authData.auth_token ? 'auth_token (root)' : 
+      Deno.env.get('ROAMBUDDY_ACCESS_TOKEN') ? 'env_fallback' : 'unknown');
+    console.log('Order auth token (first 30 chars):', token?.substring(0, 30) + '...');
     
     if (!token) {
       throw new Error('No token received from authentication');
