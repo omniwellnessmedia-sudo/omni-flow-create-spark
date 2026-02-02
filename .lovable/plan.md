@@ -1,82 +1,55 @@
 
 
-# Fix RoamBuddy Order Creation Authentication Failure
+# Add Customer eSIM Confirmation Email
 
 ## Problem Analysis
 
-The checkout crashes after entering address and clicking "Pay" with the error:
-```
-Order request failed: {"statusCode":500,"message":"Authorization token is Invalid!"}
-```
+Currently, when a customer purchases an eSIM:
+1. **Admin gets notified** - Email to omniwellnessmedia@gmail.com with sale details
+2. **Customer gets nothing** - No email with their eSIM activation details
 
-### Root Cause Identified
+The UI promises to send details to the customer's email (line 416 and 929 in the checkout modal), but this hasn't been implemented.
 
-Looking at the `roambuddy-api` edge function, there's a **token prioritization inconsistency** between different operations:
+## What Needs to Happen
 
-**For fetching products (line 472)** - works correctly:
+### 1. Pass eSIM Activation Data to Notification Function
+
+Currently, the `roambuddy-api` sends basic order info to `roambuddy-sale-notification` but **omits** the critical activation data:
+
+**Current payload (lines 874-883):**
 ```typescript
-const token = authData.data?.access_token || authData.access_token || ...
+body: JSON.stringify({
+  orderId: `RB-${Date.now()}`,
+  customerEmail: orderData.customer_email,
+  customerName: orderData.customer_name,
+  productName: orderData.product_name,
+  amount: orderData.amount,
+  currency: orderData.currency,
+  destination: orderData.destination,
+  completedAt: new Date().toISOString()
+  // MISSING: iccid, qr_code, qrcode_url
+})
 ```
 
-**For creating orders (line 767)** - FAILS:
+**Required:** Add the eSIM details from `completeData`:
 ```typescript
-const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || ...
+iccid: completeData.iccid,
+qrCode: completeData.qr_code,        // LPA activation code
+qrCodeUrl: completeData.qrcode_url,  // QR image URL
+apn: completeData.apn,
+dataRoaming: completeData.data_roaming
 ```
 
-The RoamBuddy API authentication returns both `access_token` and `auth_token`. According to the logs, `access_token` is the correct one to use. The order creation code mistakenly prioritizes `auth_token` first, which may be a different/invalid token type.
+### 2. Update Notification Function to Send Customer Email
 
-### Additional Issues
-
-1. **Exchange Rate API Failing**: The `api.exchangerate-api.io` is returning `ERR_NAME_NOT_RESOLVED` - a DNS issue that causes fallback to hardcoded rates. This is a warning but doesn't block the payment.
-
-2. **FeatureGateClients Warning**: This is a PayPal SDK internal warning about multiple versions - can be safely ignored as it comes from the PayPal JavaScript.
-
----
-
-## Solution
-
-### Fix 1: Standardize Token Priority in Order Creation
-
-Update the order creation in `roambuddy-api` to use the same token priority as product fetching:
-
-**File: `supabase/functions/roambuddy-api/index.ts`**
-
-Change line 767 from:
-```typescript
-const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || authData.access_token || authData.token || authData.data?.token;
-```
-
-To:
-```typescript
-const token = authData.data?.access_token || authData.access_token || authData.data?.auth_token || authData.auth_token || authData.token || authData.data?.token;
-```
-
-This matches the working token priority used in `handleGetAllProducts()`.
-
-### Fix 2: Add Fallback to Environment Token
-
-If the fresh token still fails, try using the stored `ROAMBUDDY_ACCESS_TOKEN` from environment as a fallback:
-
-```typescript
-const token = authData.data?.access_token || 
-              authData.access_token || 
-              authData.data?.auth_token || 
-              authData.auth_token || 
-              authData.token || 
-              authData.data?.token ||
-              Deno.env.get('ROAMBUDDY_ACCESS_TOKEN'); // Fallback to env token
-```
-
-### Fix 3: Add Better Error Logging
-
-Add more detailed logging to help debug future token issues:
-
-```typescript
-console.log('Order auth token type:', 
-  authData.data?.access_token ? 'access_token' : 
-  authData.data?.auth_token ? 'auth_token' : 'other');
-console.log('Order auth token (first 30 chars):', token?.substring(0, 30) + '...');
-```
+The `roambuddy-sale-notification` function needs to:
+1. Accept the new eSIM fields
+2. Send a **second email** to the customer with:
+   - QR code image embedded
+   - LPA activation code as text backup
+   - Step-by-step installation instructions
+   - APN settings and data roaming reminder
+   - ICCID for reference
 
 ---
 
@@ -84,62 +57,130 @@ console.log('Order auth token (first 30 chars):', token?.substring(0, 30) + '...
 
 | File | Changes |
 |------|---------|
-| `supabase/functions/roambuddy-api/index.ts` | Fix token priority in order creation to match product fetching |
+| `supabase/functions/roambuddy-api/index.ts` | Include eSIM details (iccid, qr_code, qrcode_url, apn) in notification payload |
+| `supabase/functions/roambuddy-sale-notification/index.ts` | Add customer email with eSIM activation details |
 
 ---
 
-## Technical Details
+## Technical Implementation
 
-### Token Priority Comparison
+### Update 1: roambuddy-api - Pass eSIM Details
 
-| Operation | Current Priority | Required Priority |
-|-----------|------------------|-------------------|
-| `handleGetAllProducts` (line 472) | `access_token` first | correct |
-| `handleCreateOrder` (line 767) | `auth_token` first | **needs fix** |
+Add the activation data to the notification payload (around line 874):
 
-### RoamBuddy Auth Response Structure
+```typescript
+body: JSON.stringify({
+  orderId: `RB-${Date.now()}`,
+  customerEmail: orderData.customer_email,
+  customerName: orderData.customer_name,
+  productName: orderData.product_name,
+  amount: orderData.amount,
+  currency: orderData.currency,
+  destination: orderData.destination,
+  completedAt: new Date().toISOString(),
+  // NEW: eSIM activation details
+  iccid: completeData?.iccid,
+  qrCode: completeData?.qr_code,          // LPA string
+  qrCodeUrl: completeData?.qrcode_url,    // QR image URL
+  apn: completeData?.apn || 'plus',
+  dataRoaming: completeData?.data_roaming || 'ON'
+})
+```
 
-Based on the logs, the authentication response looks like:
-```json
-{
-  "code": 200,
-  "message": "User authenticate successfully",
-  "data": {
-    "username": "T&TCapeTownSA",
-    "wallet_balance": "20.00",
-    "access_token": "eyJhbGc...",  // This one works!
-    "auth_token": "eyJhbGc..."     // This one may not work for orders
-  }
+### Update 2: roambuddy-sale-notification - Customer Email
+
+Add new fields to the interface and send a branded customer email:
+
+```typescript
+interface SaleNotificationRequest {
+  // ... existing fields ...
+  // NEW
+  iccid?: string;
+  qrCode?: string;
+  qrCodeUrl?: string;
+  apn?: string;
+  dataRoaming?: string;
 }
 ```
 
-Both tokens are present, but `access_token` is the correct one for API calls.
+Create a customer-specific HTML template with:
+- Branded header with RoamBuddy/Omni Wellness branding
+- QR code image prominently displayed
+- Manual activation code as backup
+- Step-by-step installation instructions for iPhone and Android
+- APN settings and data roaming reminder
+- Order summary
+
+Send to customer:
+```typescript
+// Send customer confirmation email
+await resend.emails.send({
+  from: 'RoamBuddy eSIM <onboarding@resend.dev>',
+  to: [saleData.customerEmail],
+  subject: `🌍 Your eSIM is Ready! - ${saleData.productName}`,
+  html: customerEmailHtml,
+});
+```
+
+---
+
+## Customer Email Content Design
+
+The customer email should include:
+
+**Header:**
+- "Your eSIM is Ready for ${destination}!"
+- Warm, travel-focused messaging
+
+**QR Code Section:**
+```text
+📱 SCAN TO ACTIVATE
+[QR Code Image]
+Or enter manually: LPA:1$smdp.io$K2-2UIKO8-12MM42P
+```
+
+**Installation Instructions:**
+```text
+📲 HOW TO INSTALL YOUR eSIM
+
+iPhone (iOS 12.1+):
+1. Go to Settings → Cellular → Add eSIM
+2. Tap "Use QR Code" and scan the code above
+3. Follow the prompts to activate
+
+Android:
+1. Go to Settings → Network & Internet → SIMs
+2. Tap "Add eSIM" or "Download eSIM"
+3. Scan the QR code above
+
+⚠️ IMPORTANT:
+• Install BEFORE you travel (while on WiFi)
+• Enable Data Roaming when you arrive
+• APN: plus (usually auto-configured)
+```
+
+**Order Summary:**
+- Product name, data amount, validity
+- ICCID for reference
+- Support contact
 
 ---
 
 ## Testing Checklist
 
-After the fix:
+After implementation:
 
-1. **Payment Flow**
-   - [ ] Select an eSIM product
-   - [ ] Fill in customer details
-   - [ ] Complete PayPal/Card payment
-   - [ ] Verify order processes without 500 error
-   - [ ] Confirm eSIM details display on success
-
-2. **Verify Edge Function Logs**
-   - [ ] Check that correct token type is being used
-   - [ ] Confirm order request succeeds
-   - [ ] Verify order completion succeeds
-
-3. **Database Verification**
-   - [ ] Check that order is saved to `orders` table
-   - [ ] Verify RoamBuddy order ID is stored
+- [ ] Complete a test purchase
+- [ ] Verify admin email still arrives at omniwellnessmedia@gmail.com
+- [ ] Verify customer email arrives at the provided email address
+- [ ] Confirm QR code image displays correctly in email
+- [ ] Confirm LPA activation code is correct
+- [ ] Test QR code can be scanned (or validate activation code format)
+- [ ] Verify instructions are clear and accurate
 
 ---
 
 ## Summary
 
-The fix is straightforward - change the token priority in `handleCreateOrder()` from prioritizing `auth_token` to prioritizing `access_token`, matching the working pattern used in `handleGetAllProducts()`. This single-line change should resolve the "Authorization token is Invalid!" error.
+This enhancement adds a customer confirmation email with all the information needed to activate their eSIM - fulfilling the promise made in the checkout UI. The admin notification continues to work as before, but now the customer also receives their activation details directly to their inbox.
 
