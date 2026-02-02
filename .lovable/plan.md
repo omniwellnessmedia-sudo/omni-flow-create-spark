@@ -1,256 +1,93 @@
 
-# Implement PayPal CardFields for Full Control Over Card Payments
 
-## Why This Is Better
+# Fix Chatbot Text Formatting and PayPal Card Payment Regional Issues
 
-The current approach uses `PayPalButtons` with `fundingSource="card"` which:
-- Opens PayPal's hosted popup form
-- Has regional validation rules we can't control
-- May still request billing address despite `NO_SHIPPING`
+## Issues Identified
 
-**PayPal CardFields** renders card inputs **directly on your page**:
-- No popup or redirect
-- No billing address required
-- No phone number required
-- Full styling control to match your brand
-- Works for all countries without regional restrictions
-- Users never leave your checkout flow
+### Issue 1: Chatbot Not Formatting Text Properly
+The RoamBuddy sales bot displays raw markdown/asterisks instead of properly formatted text. This is because the AI responses contain markdown formatting (like `**bold**`, `*italic*`) but the chat UI renders `{message.content}` as plain text without parsing markdown.
 
-## Technical Approach
-
-### Components to Use
-
-The `@paypal/react-paypal-js` package already includes CardFields components:
-
-```typescript
-import {
-  PayPalCardFieldsProvider,
-  PayPalCardFieldsForm,
-  PayPalNumberField,
-  PayPalExpiryField,
-  PayPalCVVField,
-  usePayPalCardFields
-} from "@paypal/react-paypal-js";
+**Current code (line 303):**
+```tsx
+{message.content}
 ```
 
-### Architecture
+This just outputs the raw string with asterisks visible.
 
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│                    RoamBuddyCheckoutModal                       │
-├─────────────────────────────────────────────────────────────────┤
-│  Tabs: [PayPal] [Credit/Debit Card]                             │
-│                                                                  │
-│  [Credit/Debit Card] Tab:                                       │
-│  ┌─────────────────────────────────────────────────────────────┐│
-│  │  PayPalCardFieldsProvider                                   ││
-│  │    ├── PayPalNumberField (renders card number input)        ││
-│  │    ├── PayPalExpiryField (renders expiry input)             ││
-│  │    ├── PayPalCVVField (renders CVV input)                   ││
-│  │    └── PayCardFieldsButton (submit button using hook)       ││
-│  └─────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────┘
+### Issue 2: PayPal CardFields Still Requires UK/US Phone Number
+The PayPal CardFields implementation attempts to call the PayPal REST API directly from the browser (line 688-707), which:
+1. Won't work without authentication headers
+2. Doesn't have proper configuration for digital goods
+3. May still trigger PayPal's hosted vault form which requires billing details
+
+**Current problematic code:**
+```tsx
+createOrder={async () => {
+  const response = await fetch('https://api-m.paypal.com/v2/checkout/orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ... })
+  });
+  const order = await response.json();
+  return order.id;
+}}
 ```
+
+This approach is incorrect - you can't call PayPal's REST API directly from the browser without OAuth credentials.
 
 ---
 
-## Implementation Details
+## Solution
 
-### 1. Create Reusable Submit Button Component
+### Fix 1: Add Markdown Rendering to Chatbot
 
-Create a new component that uses the `usePayPalCardFields` hook to submit the card form:
+Install a lightweight markdown parser and render bot messages with proper formatting:
 
-**New File: `src/components/roambuddy/PayPalCardFieldsSubmitButton.tsx`**
+**Option A: Simple regex-based formatter (recommended for chat)**
+- Convert `**text**` to bold
+- Convert `*text*` to italic  
+- Convert emoji codes naturally
+- No additional dependencies needed
 
+**Option B: Use a markdown library like `react-markdown`**
+- Full markdown support
+- Requires adding dependency
+
+I recommend **Option A** for simplicity since we only need basic formatting in a chat context.
+
+**Changes to `RoamBuddySalesBot.tsx`:**
+
+Add a formatting function:
 ```tsx
-import { usePayPalCardFields } from "@paypal/react-paypal-js";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { useState } from "react";
-
-interface SubmitButtonProps {
-  onSubmitting?: (isSubmitting: boolean) => void;
-  disabled?: boolean;
-}
-
-export const PayPalCardFieldsSubmitButton = ({ onSubmitting, disabled }: SubmitButtonProps) => {
-  const { cardFieldsForm, fields } = usePayPalCardFields();
-  const [isPaying, setIsPaying] = useState(false);
-
-  const handleClick = async () => {
-    if (!cardFieldsForm) {
-      console.error("CardFields not initialized");
-      return;
-    }
-
-    // Check if all fields are filled
-    const allFieldsRendered = Object.keys(fields).length === 3; // Number, Expiry, CVV
-    if (!allFieldsRendered) {
-      console.error("Not all card fields are rendered");
-      return;
-    }
-
-    setIsPaying(true);
-    onSubmitting?.(true);
-
-    try {
-      // This submits the card form and triggers createOrder/onApprove
-      await cardFieldsForm.submit();
-    } catch (error) {
-      console.error("Card submission error:", error);
-    } finally {
-      setIsPaying(false);
-      onSubmitting?.(false);
-    }
-  };
-
-  return (
-    <Button
-      onClick={handleClick}
-      disabled={disabled || isPaying || !cardFieldsForm}
-      className="w-full bg-blue-600 hover:bg-blue-700"
-      size="lg"
-    >
-      {isPaying ? (
-        <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Processing Payment...
-        </>
-      ) : (
-        "Pay Now"
-      )}
-    </Button>
-  );
+const formatMessage = (content: string) => {
+  // Convert **bold** to <strong>
+  // Convert *italic* to <em>
+  // Convert line breaks
+  return content
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br />');
 };
 ```
 
-### 2. Update Checkout Modal - Replace Card Tab Content
+Update message rendering to use `dangerouslySetInnerHTML` with sanitization or create React elements.
 
-**File: `src/components/roambuddy/RoamBuddyCheckoutModal.tsx`**
+### Fix 2: Fix PayPal CardFields Order Creation
 
-Update imports:
-```tsx
-import { 
-  PayPalScriptProvider, 
-  PayPalButtons,
-  PayPalCardFieldsProvider,
-  PayPalNumberField,
-  PayPalExpiryField,
-  PayPalCVVField
-} from '@paypal/react-paypal-js';
-import { PayPalCardFieldsSubmitButton } from './PayPalCardFieldsSubmitButton';
-```
+The CardFields component needs to use the **PayPal SDK's internal order creation**, not a direct API call. The correct approach is to return an order ID from a server-side edge function or use the SDK's built-in mechanism.
 
-Replace the Card tab content (current lines 669-713):
-```tsx
-<TabsContent value="card" className="space-y-4">
-  <p className="text-sm text-muted-foreground text-center mb-2">
-    Enter your card details below
-  </p>
-  
-  <PayPalCardFieldsProvider
-    createOrder={async () => {
-      // Create order and return order ID
-      const response = await fetch("https://api.paypal.com/v2/checkout/orders", {
-        // ... or use actions.order.create pattern
-      });
-      // The CardFieldsProvider handles this internally via PayPal SDK
-      const priceValue = finalPriceUSD.toFixed(2);
-      return actions.order.create({
-        intent: 'CAPTURE',
-        purchase_units: [{
-          amount: { value: priceValue, currency_code: 'USD' },
-          description: `${product.name} - ${product.destination}`,
-        }],
-      });
-    }}
-    onApprove={async (data) => {
-      // Payment approved - capture and fulfill
-      await handlePayPalApprove(data, { order: { capture: () => Promise.resolve({ status: 'COMPLETED' }) }});
-    }}
-    onError={(err) => {
-      console.error('Card payment error:', err);
-      toast.error('Card payment failed. Please check your details.');
-    }}
-    style={{
-      input: {
-        fontSize: '16px',
-        fontFamily: 'system-ui, sans-serif',
-        color: '#333',
-        padding: '12px',
-      },
-      '.invalid': {
-        color: '#dc2626',
-      },
-    }}
-  >
-    <div className="space-y-4">
-      {/* Card Number Field */}
-      <div>
-        <label className="text-sm font-medium mb-2 block">Card Number</label>
-        <PayPalNumberField 
-          className="w-full h-12 border rounded-lg px-3 bg-background"
-        />
-      </div>
-      
-      {/* Expiry and CVV in a row */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="text-sm font-medium mb-2 block">Expiry Date</label>
-          <PayPalExpiryField 
-            className="w-full h-12 border rounded-lg px-3 bg-background"
-          />
-        </div>
-        <div>
-          <label className="text-sm font-medium mb-2 block">CVV</label>
-          <PayPalCVVField 
-            className="w-full h-12 border rounded-lg px-3 bg-background"
-          />
-        </div>
-      </div>
-      
-      {/* Submit Button */}
-      <PayPalCardFieldsSubmitButton 
-        onSubmitting={setIsProcessing}
-        disabled={isProcessing}
-      />
-    </div>
-  </PayPalCardFieldsProvider>
-  
-  <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1">
-    <Shield className="h-3 w-3" />
-    Card payments are processed securely by PayPal
-  </p>
-</TabsContent>
-```
+**Solution: Create order via Edge Function**
 
-### 3. Handle Order Creation for CardFields
+Create a new edge function `roambuddy-paypal-order` that:
+1. Creates the PayPal order server-side using proper OAuth
+2. Returns the order ID to the client
+3. Handles capture after approval
 
-The `PayPalCardFieldsProvider` needs order creation callbacks. Update the `handlePayPalApprove` function or create a dedicated handler:
-
-```tsx
-// Create order callback for CardFields
-const createCardFieldsOrder = async (): Promise<string> => {
-  const priceValue = finalPriceUSD.toFixed(2);
-  
-  // Use the PayPal SDK to create order
-  // This is handled by the SDK internally when using CardFieldsProvider
-  // The provider will call this and expect an order ID back
-  
-  // For now, we return a placeholder - the SDK handles actual creation
-  // In practice, you may need to call your backend to create the order
-  // and return the order ID
-  
-  return new Promise((resolve) => {
-    // The SDK creates the order internally
-    resolve(''); // SDK handles this
-  });
-};
-```
-
-### 4. Update PayPal Options (Already Done)
-
-The config already has `components: "buttons,card-fields"` which is correct.
+This ensures:
+- No billing address required (digital goods)
+- No phone number required
+- Works for all countries
+- Proper OAuth authentication
 
 ---
 
@@ -258,24 +95,208 @@ The config already has `components: "buttons,card-fields"` which is correct.
 
 | File | Purpose |
 |------|---------|
-| `src/components/roambuddy/PayPalCardFieldsSubmitButton.tsx` | Submit button component using usePayPalCardFields hook |
+| `supabase/functions/roambuddy-paypal-order/index.ts` | Server-side PayPal order creation and capture |
 
 ## Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/components/roambuddy/RoamBuddyCheckoutModal.tsx` | Replace Card tab with CardFields components |
+| `src/components/roambuddy/RoamBuddySalesBot.tsx` | Add markdown formatting for bot messages |
+| `src/components/roambuddy/RoamBuddyCheckoutModal.tsx` | Update CardFields to use edge function for order creation |
+| `supabase/functions/roambuddy-sales-chat/index.ts` | Update system prompt to avoid markdown formatting |
 
 ---
 
-## Benefits
+## Technical Implementation Details
 
-1. **No Billing Address**: CardFields only collects card number, expiry, and CVV
-2. **No Phone Validation**: No phone number field at all
-3. **Works Worldwide**: No locale restrictions - same experience for SA, US, EU users
-4. **On-Page Experience**: Users stay on your checkout page
-5. **Full Styling Control**: Style inputs to match your brand perfectly
-6. **Policy Compliant**: This is PayPal's recommended approach for card payments
+### 1. Chatbot Markdown Formatting
+
+**Update `RoamBuddySalesBot.tsx` message rendering:**
+
+Add a helper function to convert basic markdown to React elements:
+
+```tsx
+import DOMPurify from 'dompurify';
+
+const formatBotMessage = (content: string): string => {
+  let formatted = content
+    // Bold text: **text** -> <strong>text</strong>
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    // Italic text: *text* -> <em>text</em>
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    // Line breaks
+    .replace(/\n/g, '<br />');
+  
+  // Sanitize to prevent XSS
+  return DOMPurify.sanitize(formatted);
+};
+```
+
+Update the message display:
+```tsx
+{message.role === 'assistant' ? (
+  <div 
+    dangerouslySetInnerHTML={{ __html: formatBotMessage(message.content) }}
+  />
+) : (
+  message.content
+)}
+```
+
+Note: `dompurify` is already in dependencies.
+
+### 2. PayPal Edge Function for Order Creation
+
+**New file: `supabase/functions/roambuddy-paypal-order/index.ts`**
+
+```typescript
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, ...",
+};
+
+// Get PayPal access token
+async function getPayPalAccessToken(): Promise<string> {
+  const clientId = Deno.env.get("PAYPAL_CLIENT_ID");
+  const clientSecret = Deno.env.get("PAYPAL_CLIENT_SECRET");
+  
+  const response = await fetch("https://api-m.paypal.com/v1/oauth2/token", {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+  });
+  
+  const data = await response.json();
+  return data.access_token;
+}
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  const { action, amount, description, orderId } = await req.json();
+
+  if (action === "create") {
+    const accessToken = await getPayPalAccessToken();
+    
+    const response = await fetch("https://api-m.paypal.com/v2/checkout/orders", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        intent: "CAPTURE",
+        purchase_units: [{
+          amount: { currency_code: "USD", value: amount },
+          description: description,
+        }],
+        payment_source: {
+          card: {
+            // No billing address required for digital goods
+          }
+        }
+      }),
+    });
+    
+    const order = await response.json();
+    return new Response(JSON.stringify({ orderId: order.id }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  if (action === "capture") {
+    const accessToken = await getPayPalAccessToken();
+    
+    const response = await fetch(`https://api-m.paypal.com/v2/checkout/orders/${orderId}/capture`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    
+    const result = await response.json();
+    return new Response(JSON.stringify(result), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});
+```
+
+### 3. Update Checkout Modal CardFields
+
+Replace the broken direct API call with edge function:
+
+```tsx
+<PayPalCardFieldsProvider
+  createOrder={async () => {
+    const { data, error } = await supabase.functions.invoke('roambuddy-paypal-order', {
+      body: {
+        action: 'create',
+        amount: finalPriceUSD.toFixed(2),
+        description: `${product.name} - ${product.destination}`,
+      }
+    });
+    if (error) throw error;
+    return data.orderId;
+  }}
+  onApprove={async (data) => {
+    // Capture via edge function
+    const { data: captureResult, error } = await supabase.functions.invoke('roambuddy-paypal-order', {
+      body: {
+        action: 'capture',
+        orderId: data.orderID,
+      }
+    });
+    if (error) throw error;
+    
+    // Continue with existing order flow
+    await handlePayPalApprove(data, { 
+      order: { capture: async () => captureResult }
+    });
+  }}
+  // ... rest of props
+>
+```
+
+### 4. Alternative: Update AI Prompt to Avoid Markdown
+
+A simpler approach for the chatbot is to instruct the AI not to use markdown:
+
+**Update SYSTEM_PROMPT in `roambuddy-sales-chat/index.ts`:**
+
+Add to the RESPONSE FORMAT section:
+```
+RESPONSE FORMAT:
+Keep responses concise (2-3 sentences max). Be conversational, not robotic.
+DO NOT use markdown formatting like asterisks (*) for emphasis. Just write naturally.
+Emojis are fine and encouraged for warmth.
+```
+
+---
+
+## Recommended Approach
+
+For maximum reliability and speed:
+
+1. **Chatbot**: Update the AI prompt to not use markdown (simplest fix)
+2. **Chatbot (backup)**: Also add basic markdown parsing in case some formatting slips through
+3. **PayPal**: Create the edge function for proper server-side order creation
+
+---
+
+## Required Secrets
+
+For the PayPal edge function, you'll need to add:
+- `PAYPAL_CLIENT_ID` - Your PayPal client ID (you may already have this)
+- `PAYPAL_CLIENT_SECRET` - Your PayPal client secret for OAuth
 
 ---
 
@@ -283,26 +304,16 @@ The config already has `components: "buttons,card-fields"` which is correct.
 
 After implementation:
 
-1. **Card Field Rendering**
-   - [ ] Card number field appears
-   - [ ] Expiry field appears
-   - [ ] CVV field appears
-   - [ ] No billing address or phone fields
+**Chatbot:**
+- [ ] Bot messages display without raw asterisks
+- [ ] Bold/italic text renders properly (if used)
+- [ ] Emojis display correctly
+- [ ] Line breaks work as expected
 
-2. **Card Entry**
-   - [ ] Can type card number with auto-formatting
-   - [ ] Can enter expiry date
-   - [ ] Can enter CVV
-   - [ ] Invalid inputs show error styling
-
-3. **Payment Flow**
-   - [ ] Click Pay Now submits the form
-   - [ ] Payment processes successfully
-   - [ ] Order is created in database
-   - [ ] eSIM activation completes
-
-4. **South African Test**
-   - [ ] Checkout works with SA card
-   - [ ] No regional validation errors
-   - [ ] Payment completes successfully
+**PayPal CardFields:**
+- [ ] Card form shows only number/expiry/CVV fields
+- [ ] No phone number field appears
+- [ ] No billing address required
+- [ ] Payment completes successfully with SA card
+- [ ] Order is created in database after payment
 
