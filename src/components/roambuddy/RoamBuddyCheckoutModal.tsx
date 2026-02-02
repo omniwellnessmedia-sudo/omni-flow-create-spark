@@ -129,11 +129,17 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
       
       if (result?.success) {
         setWellcoinsEarned(totalWellcoins);
+        
+        // Extract eSIM details from RoamBuddy API response
+        // The API returns: qr_code (LPA string), qrcode_url (image URL), iccid
+        const roambuddyData = result.data?.roambuddy_data?.data || result.data?.roambuddy_data || {};
+        console.log('RoamBuddy eSIM data:', roambuddyData);
+        
         setEsimDetails({
-          iccid: result.data?.roambuddy_data?.iccid || result.iccid,
-          qrCode: result.data?.roambuddy_data?.qr_code || result.qrCode,
-          activationCode: result.data?.roambuddy_data?.activation_code || result.activationCode,
-          instructions: result.data?.roambuddy_data?.instructions || result.instructions,
+          iccid: roambuddyData.iccid || result.iccid,
+          qrCode: roambuddyData.qrcode_url || roambuddyData.qr_code_url || result.qrCode, // Use image URL
+          activationCode: roambuddyData.qr_code || roambuddyData.activation_code || result.activationCode, // LPA string is the activation code
+          instructions: `APN: ${roambuddyData.apn || 'plus'} | Data Roaming: ${roambuddyData.data_roaming || 'ON'}`,
         });
         setCurrentStep('complete');
         toast.success('eSIM order successful! Check your email for details.');
