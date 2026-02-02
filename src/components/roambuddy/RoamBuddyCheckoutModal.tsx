@@ -649,6 +649,11 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                                 ? `${product.name} - ${product.destination} (${discount.code} applied)`
                                 : `${product.name} - ${product.destination}`,
                             }],
+                            application_context: {
+                              shipping_preference: 'NO_SHIPPING',
+                              user_action: 'PAY_NOW',
+                              brand_name: 'Omni Wellness - RoamBuddy',
+                            },
                           });
                         }}
                         onApprove={(data, actions) => handlePayPalApprove(data, actions)}
@@ -681,6 +686,11 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                                 ? `${product.name} - ${product.destination} (${discount.code} applied)`
                                 : `${product.name} - ${product.destination}`,
                             }],
+                            application_context: {
+                              shipping_preference: 'NO_SHIPPING',
+                              user_action: 'PAY_NOW',
+                              brand_name: 'Omni Wellness - RoamBuddy',
+                            },
                           });
                         }}
                         onApprove={(data, actions) => handlePayPalApprove(data, actions)}

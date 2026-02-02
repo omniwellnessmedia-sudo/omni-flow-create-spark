@@ -11,8 +11,8 @@ export const PAYPAL_OPTIONS = {
   clientId: PAYPAL_CONFIG.clientId,
   currency: PAYPAL_CONFIG.currency,
   intent: PAYPAL_CONFIG.intent,
-  locale: "en_US",
-  components: "buttons,card-fields", // Enable card payments
+  // Locale removed to allow PayPal auto-detection for international users
+  components: "buttons,card-fields",
 };
 
 // Separate options for ZAR transactions (main store)
