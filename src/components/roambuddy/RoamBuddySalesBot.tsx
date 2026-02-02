@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import DOMPurify from 'dompurify';
 import { 
   MessageCircle, 
   X, 
@@ -16,6 +17,20 @@ import {
   Check
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+// Format bot messages - convert markdown to HTML
+const formatBotMessage = (content: string): string => {
+  let formatted = content
+    // Bold text: **text** -> <strong>text</strong>
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    // Italic text: *text* -> <em>text</em>
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    // Line breaks
+    .replace(/\n/g, '<br />');
+  
+  // Sanitize to prevent XSS
+  return DOMPurify.sanitize(formatted);
+};
 
 interface Message {
   role: 'user' | 'assistant';
@@ -300,7 +315,11 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
                       : "bg-muted text-foreground rounded-bl-md"
                   )}
                 >
-                  {message.content}
+                  {message.role === 'assistant' ? (
+                    <span dangerouslySetInnerHTML={{ __html: formatBotMessage(message.content) }} />
+                  ) : (
+                    message.content
+                  )}
                 </div>
               </div>
             ))}

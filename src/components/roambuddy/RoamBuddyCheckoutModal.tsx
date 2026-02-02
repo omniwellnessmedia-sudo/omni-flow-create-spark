@@ -682,38 +682,44 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                     <PayPalCardFieldsProvider
                       createOrder={async () => {
                         const priceValue = finalPriceUSD.toFixed(2);
-                        // PayPal SDK handles order creation internally
-                        // We need to return the order ID from a server-side call
-                        // For CardFields, we use the REST API approach
-                        const response = await fetch('https://api-m.paypal.com/v2/checkout/orders', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify({
-                            intent: 'CAPTURE',
-                            purchase_units: [{
-                              amount: {
-                                currency_code: 'USD',
-                                value: priceValue,
-                              },
-                              description: discount.isApplied 
-                                ? `${product.name} - ${product.destination} (${discount.code} applied)`
-                                : `${product.name} - ${product.destination}`,
-                            }],
-                          }),
+                        const description = discount.isApplied 
+                          ? `${product.name} - ${product.destination} (${discount.code} applied)`
+                          : `${product.name} - ${product.destination}`;
+                        
+                        // Create order via server-side edge function with proper OAuth
+                        const { data, error } = await supabase.functions.invoke('roambuddy-paypal-order', {
+                          body: {
+                            action: 'create',
+                            amount: priceValue,
+                            description: description,
+                          }
                         });
-                        const order = await response.json();
-                        return order.id;
+                        
+                        if (error || !data?.success) {
+                          console.error('Failed to create PayPal order:', error || data?.error);
+                          throw new Error(data?.error || 'Failed to create order');
+                        }
+                        
+                        return data.orderId;
                       }}
                       onApprove={async (data) => {
-                        // Payment approved - use the existing handler
+                        // Capture payment via edge function
+                        const { data: captureResult, error } = await supabase.functions.invoke('roambuddy-paypal-order', {
+                          body: {
+                            action: 'capture',
+                            orderId: data.orderID,
+                          }
+                        });
+                        
+                        if (error || !captureResult?.success) {
+                          console.error('Failed to capture PayPal order:', error || captureResult?.error);
+                          throw new Error(captureResult?.error || 'Failed to capture payment');
+                        }
+                        
+                        // Continue with existing order flow
                         await handlePayPalApprove(data, { 
                           order: { 
-                            capture: async () => {
-                              // Capture happens automatically with CardFields
-                              return { status: 'COMPLETED' };
-                            } 
+                            capture: async () => captureResult
                           }
                         });
                       }}
