@@ -1,200 +1,191 @@
 
-# Add Sale Confirmation Notifications (Email + WhatsApp)
+# Fix RoamBuddy Sales Bot Email Submission + Add Discount & WellCoins Integration
 
-## Overview
-When a RoamBuddy eSIM sale is completed (payment confirmed), automatically send:
-1. **Email notification** to `omniwellnessmedia@gmail.com` with full purchase details
-2. **WhatsApp notification** to Chad with a quick summary
+## Issues Identified
 
-## Current Sale Flow
-```
-User selects eSIM → Checkout → PayPal payment → createOrder API → Order saved to DB → Success screen
-```
+### Issue 1: Email Submission 401 Error
+The email capture in the RoamBuddy chat fails with a 401 error when trying to save to `newsletter_subscribers`. 
 
-## New Sale Flow
-```
-User selects eSIM → Checkout → PayPal payment → createOrder API → Order saved to DB 
-                                                       ↓
-                                          Send sale notification
-                                                       ↓
-                                          ┌─────────────────────┐
-                                          │ Email to Omni       │
-                                          │ WhatsApp to Chad    │
-                                          └─────────────────────┘
-                                                       ↓
-                                               Success screen
-```
+**Root Cause**: The frontend uses `upsert` which requires both INSERT and UPDATE permissions. While INSERT policy allows anonymous access, the table requires authentication for UPDATE operations. The anonymous Supabase client cannot perform upsert without proper RLS policies.
 
-## Implementation Approach
+**Solution**: Add an UPDATE policy for the `newsletter_subscribers` table that allows unauthenticated updates on conflict, or change the frontend to use a simple INSERT with conflict handling.
 
-### Phase 1: Create Sale Notification Edge Function
+### Issue 2: Coupon Codes Not Functional
+The checkout modal shows a coupon code input field, but clicking "Apply" does nothing - it's purely UI with no backend logic.
 
-**New File:** `supabase/functions/roambuddy-sale-notification/index.ts`
+**Solution**: Create a `discount_codes` table and implement coupon validation logic.
 
-This function will be called after successful order completion and will:
-1. Send a detailed email via Resend to `omniwellnessmedia@gmail.com`
-2. Send a WhatsApp message to Chad
+### Issue 3: WellCoins Not Integrated
+The WellCoins loyalty system exists but isn't connected to RoamBuddy purchases.
 
-**Email Content:**
-```
-Subject: 💰 New RoamBuddy Sale: $25.00 USD
+**Solution**: Award WellCoins on completed purchases and allow WellCoins redemption at checkout.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
-🎉 ESIM SALE CONFIRMED
-━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-📦 Product: South Africa eSIM - 5GB
-🌍 Destination: South Africa
-💰 Amount: $25.00 USD
-📧 Customer: john@example.com
-👤 Name: John Doe
+## Implementation Plan
 
-━━━ ORDER DETAILS ━━━
+### Phase 1: Fix Email Submission (Critical)
 
-Order ID: RB-1738489123456
-Status: Completed
-Payment: PayPal
-Date: 2 Feb 2026, 10:30 AM
+**Database Changes:**
+Create an UPDATE policy on `newsletter_subscribers` that allows updates when email matches:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Commission Earned: ~$2.50 (estimated)
-View in Dashboard: /admin/roambuddy-sales
+```sql
+CREATE POLICY "Allow upsert on newsletter_subscribers" 
+ON public.newsletter_subscribers 
+FOR UPDATE 
+USING (true) 
+WITH CHECK (true);
 ```
 
-### Phase 2: WhatsApp Integration Options
+Alternatively, also add similar policy for `chatbot_conversations`:
 
-For WhatsApp, we have three options based on complexity and cost:
-
-**Option A: WhatsApp Business API (Complex)**
-- Requires Facebook Business verification
-- Needs a dedicated phone number
-- Template messages must be approved
-- Best for high-volume, production use
-
-**Option B: WhatsApp Click-to-Chat via Email (Recommended)**
-- Include a pre-formatted WhatsApp link in the email
-- Chad clicks the link → Opens WhatsApp with pre-filled message
-- Zero setup, works immediately
-- Format: `https://wa.me/27XXXXXXXXX?text=New%20Sale%3A%20...`
-
-**Option C: Twilio WhatsApp Sandbox (Quick Setup)**
-- Twilio provides WhatsApp messaging via their API
-- Sandbox mode for testing (free)
-- Production mode costs ~$0.005/message
-- Requires Twilio account and API keys
-
-**Recommended: Option B (Click-to-Chat in Email)**
-
-This approach:
-- Works immediately with no additional setup
-- Costs nothing
-- Chad receives email → taps WhatsApp link → sees notification in WhatsApp
-- Can upgrade to proper API later if volume justifies it
-
-### Phase 3: Integrate into Order Flow
-
-**Modify:** `supabase/functions/roambuddy-api/index.ts`
-
-After successful order completion (around line 815), call the notification function:
-
-```typescript
-// After order is saved to database
-// Send sale notification (async, don't block order completion)
-fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/roambuddy-sale-notification`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`
-  },
-  body: JSON.stringify({
-    orderId: roambuddyOrderId,
-    customerEmail: orderData.customer_email,
-    customerName: orderData.customer_name,
-    productName: orderData.product_name,
-    amount: orderData.amount,
-    currency: orderData.currency,
-    destination: orderData.destination,
-    completedAt: new Date().toISOString()
-  })
-});
+```sql
+CREATE POLICY "Allow public update for chatbot by session" 
+ON public.chatbot_conversations 
+FOR UPDATE 
+USING (true);
 ```
+
+**Files Modified:**
+- Database migration to add UPDATE policies
+
+---
+
+### Phase 2: Implement Discount Code System
+
+**New Database Table: `discount_codes`**
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | uuid | Primary key |
+| code | text | Unique discount code (e.g., "ROAM10") |
+| discount_type | text | 'percentage' or 'fixed' |
+| discount_value | numeric | Amount (10 for 10%, or 5 for $5 off) |
+| min_order_amount | numeric | Minimum order to apply |
+| max_uses | integer | Total allowed uses (null = unlimited) |
+| current_uses | integer | How many times used |
+| valid_from | timestamp | Start date |
+| valid_until | timestamp | Expiry date |
+| applicable_products | text[] | Product IDs or null for all |
+| wellcoins_bonus | integer | Extra WellCoins when code used |
+| created_at | timestamp | Creation date |
+
+**New Edge Function: `validate-discount-code`**
+- Validates code exists and is active
+- Checks usage limits
+- Returns discount amount and WellCoins bonus
+
+**Frontend Changes:**
+Update `RoamBuddyCheckoutModal.tsx`:
+- Add state for discount code validation
+- Call edge function on "Apply" button click
+- Show discount applied in order summary
+- Adjust PayPal order amount with discount
+
+---
+
+### Phase 3: WellCoins Integration
+
+**WellCoins Earning on Purchase:**
+After successful RoamBuddy order, award WellCoins based on purchase amount:
+- Base rate: 1 WellCoin per $1 spent
+- Bonus: 10 WellCoins for first purchase
+- Code bonus: Additional WellCoins if discount code includes bonus
+
+**Files Modified:**
+- `supabase/functions/roambuddy-api/index.ts` - After order completion, create transaction in `transactions` table
+- `src/components/roambuddy/RoamBuddyCheckoutModal.tsx` - Show WellCoins earned in success screen
+
+**New Feature: WellCoins Redemption (Future)**
+- Allow partial payment with WellCoins
+- Display user's WellCoins balance at checkout
+- Requires user authentication
+
+---
 
 ## Files to Create
 
-1. **`supabase/functions/roambuddy-sale-notification/index.ts`**
-   - Receives order details
-   - Formats and sends email via Resend
-   - Includes WhatsApp click-to-chat link
-   - Logs sale to console for debugging
+1. **`supabase/functions/validate-discount-code/index.ts`**
+   - Validates discount codes
+   - Returns discount details and WellCoins bonus
+
+2. **Database migration**
+   - Add UPDATE policies for `newsletter_subscribers`
+   - Add UPDATE policies for `chatbot_conversations`
+   - Create `discount_codes` table
+   - Insert default discount codes (ROAM10, WELCOME5, etc.)
 
 ## Files to Modify
 
-1. **`supabase/functions/roambuddy-api/index.ts`**
-   - Add call to sale notification after order completion
-   - Non-blocking (fire and forget) to not slow down checkout
+1. **`src/components/roambuddy/RoamBuddySalesBot.tsx`**
+   - Change upsert to INSERT with ON CONFLICT handling via edge function
+   - Better error handling
 
-2. **`supabase/config.toml`**
-   - Add new `roambuddy-sale-notification` function
+2. **`src/components/roambuddy/RoamBuddyCheckoutModal.tsx`**
+   - Add discount code validation state
+   - Connect "Apply" button to edge function
+   - Show discount in order summary
+   - Update PayPal order creation with discounted price
+   - Show WellCoins earned after purchase
 
-## Email Notification Structure
+3. **`supabase/functions/roambuddy-api/index.ts`**
+   - After successful order, insert WellCoins transaction
+   - Include discount tracking in order notes
 
-The email will include:
+4. **`supabase/config.toml`**
+   - Add new `validate-discount-code` function
 
-| Section | Content |
-|---------|---------|
-| Header | Sale confirmation banner with amount |
-| Product Info | Name, destination, data amount, validity |
-| Customer Info | Name, email |
-| Order Info | Order ID, status, payment method, timestamp |
-| Quick Actions | View in Dashboard, WhatsApp link to open chat |
-| Commission | Estimated commission earned |
+---
 
-## WhatsApp Click-to-Chat Link
+## Discount Tracking Benefits
 
-Chad's whatsapp number is +27748315961
+1. **Marketing Attribution**: Track which codes drive sales
+2. **Influencer Programs**: Give unique codes to partners
+3. **Campaign Effectiveness**: Measure promotion ROI
+4. **Customer Retention**: Reward repeat customers
+5. **WellCoins Bonus**: Incentivize code usage with extra loyalty points
 
-The email will include a button/link like:
-```
-📱 Open in WhatsApp
-https://wa.me/27XXXXXXXXX?text=🎉%20New%20Sale!%0A%0A📦%20South%20Africa%20eSIM%20-%205GB%0A💰%20$25.00%20USD%0A📧%20john@example.com
-```
+---
 
-When Chad clicks this, WhatsApp opens with a pre-filled message he can send to himself or a team group.
+## Default Discount Codes to Create
 
-## Required Information
+| Code | Type | Value | WellCoins Bonus | Description |
+|------|------|-------|-----------------|-------------|
+| ROAM10 | percentage | 10% | 5 | General 10% off |
+| WELCOME | fixed | $5 | 10 | New customer discount |
+| WELLNESS | percentage | 15% | 15 | Wellness community special |
+| OMNI25 | percentage | 25% | 25 | VIP/launch discount |
+| FIRSTTRIP | percentage | 20% | 20 | First-time travelers |
 
-Before implementation, I need:
-
-1. **Chad's WhatsApp number** (with country code, e.g., +27XXXXXXXXX)
-   - This will be used in the click-to-chat link
-
-## Configuration Update
-
-Add to `supabase/config.toml`:
-```toml
-[functions.roambuddy-sale-notification]
-verify_jwt = false
-```
+---
 
 ## Testing Plan
 
-1. Complete a test purchase on the RoamBuddy store
-2. Verify email arrives at `omniwellnessmedia@gmail.com`
-3. Click WhatsApp link in email
-4. Confirm it opens WhatsApp with the sale details
-5. Check edge function logs for any errors
+1. **Email Submission**
+   - Open chat on `/roambuddy-store`
+   - Complete conversation until email capture appears
+   - Submit email
+   - Verify no 401 error
+   - Check `newsletter_subscribers` for new entry
+   - Verify notification email sent
 
-## Future Enhancements
+2. **Discount Codes**
+   - Start checkout process
+   - Enter valid code (ROAM10)
+   - Verify discount applied to total
+   - Complete purchase with PayPal
+   - Verify discounted amount charged
 
-- **Upgrade to WhatsApp Business API** when sales volume increases
-- **Add Slack integration** for team notifications
-- **SMS fallback** for urgent notifications
-- **Real-time dashboard alerts** with sound
+3. **WellCoins**
+   - Complete a purchase (with or without discount)
+   - Check `transactions` table for new WellCoin entry
+   - Verify balance updated in user profile
+
+---
 
 ## Technical Notes
 
-- Uses existing Resend API integration (already configured)
-- Non-blocking notification to ensure fast checkout experience
-- Falls back gracefully if notification fails (order still completes)
-- All notifications logged for debugging
+- Discount validation happens server-side for security
+- WellCoins awarded only for authenticated users (guest purchases don't earn)
+- All discount usage is logged for analytics
+- Expired/invalid codes show clear error messages
