@@ -1,187 +1,203 @@
 
-Context recap (what’s broken per team feedback)
-- Welcome page category cards (Indigenous Wisdom & Healing / Wellness Retreats / Study Abroad / Winter Wellness) look clickable but the action is unclear.
-- 2BeWell product image(s) still not showing across devices.
-- Great Mother Cave Tour opens, but doesn’t auto-scroll/anchor to Chief Kingsley’s section.
-- Some “Email” CTAs don’t open the email client on MacBook (common when using window.open for mailto).
-- Cal.com CTAs do not open/redirect on desktop or phones.
-- Travel Well Connected “Browse Global Adventures” button does nothing.
-- Team photos: Warren/Stephen not visible where expected; Tumelo photo not visible.
+# RoamBuddy Automated Sales Funnel Campaign
 
-Root causes found in code (high confidence)
-1) Welcome page UX ambiguity
-- The screenshot matches the “Quick Links to Categories” grid in `src/components/sections/ToursRetreatsPreview.tsx`.
-- Those cards are wrapped in `<Link>` so they are clickable, but there is no explicit “this is a link” affordance (no arrow, no “Explore” label/button, no secondary cue).
+## Overview
 
-2) 2BeWell product image not displaying
-- `src/components/sections/TwoBeWellCTA.tsx` uses:
-  `product-images**%20(2BeWell)/10.png`
-  This is not URL-encoded correctly for folders containing `**`.
-- Your own image system (`src/lib/images.ts`) explicitly says `**` must be encoded as `%2A%2A`.
-- Result: the image URL likely 404s on all devices, so users see “no changes”.
+Building an AI-powered automated sales funnel for RoamBuddy eSIM products using your existing infrastructure plus a new AI Sales Bot. This creates a complete "set and forget" marketing automation system.
 
-3) Chief Kingsley anchor not working
-- `src/pages/tours/GreatMotherCaveTour.tsx` has a “Meet Chief Kingsley” section, but it does not have an `id` like `chief-kingsley`.
-- Links currently point to `/tours/great-mother-cave-tour` without a hash.
-- Also, React Router won’t automatically scroll to a hash on route change unless we implement it.
+## Architecture
 
-4) Email buttons not opening (MacBook)
-- There are still multiple `window.open('mailto:...')` usages (confirmed across several pages/components).
-- Modern browsers often block `window.open()` for mailto (pop-up blocker / gesture detection quirks).
-- The most reliable cross-device pattern is:
-  - Use a real `<a href="mailto:...">` (preferred)
-  - Or set `window.location.href = 'mailto:...'` (acceptable fallback)
-  - Avoid `window.open('mailto:...')`
+```text
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        ROAMBUDDY SALES FUNNEL                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   [AI Sales Bot]  ←→  [Visitor on /roambuddy-store]                     │
+│        │                                                                 │
+│        ▼                                                                 │
+│   Qualify Lead → Capture Email → Add to Newsletter                       │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                        CONTENT ENGINE                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   [AI Content Generator]                                                 │
+│        │                                                                 │
+│        ├── Social Posts (31-Day Campaign)                               │
+│        │      └── Bulk import to Social Scheduler                       │
+│        │                                                                 │
+│        └── Newsletter Sequences                                          │
+│               └── Welcome + 4-email nurture series                       │
+│                                                                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                        AUTOMATION LAYER                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   [Zapier Free]                                                          │
+│        │                                                                 │
+│        ├── Zap 1: Social Scheduler → Facebook Page                      │
+│        ├── Zap 2: Social Scheduler → Instagram Business                 │
+│        └── Zap 3: Social Scheduler → TikTok (via Zapier)                │
+│                                                                          │
+│   [Cron Job] ─── trigger-social-post (every 5 mins)                     │
+│   [Cron Job] ─── send-scheduled-newsletter (daily)                      │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
 
-5) Cal.com buttons not opening
-- Current `CalComBooking` relies on injecting the Cal embed script and calling `window.Cal("popup"/"modal")`.
-- This is fragile on mobile Safari and in environments with script loading timing issues.
-- The fastest reliable fix is to provide a “direct-link” mode:
-  - Use a normal `<a href="https://cal.com/{username}/{eventSlug}" target="_blank" rel="noopener noreferrer">`
-  - That avoids any popup/embed JS issues and works on all devices.
+## Phase 1: AI Sales Bot for RoamBuddy Store
 
-6) Travel Well Connected “Browse Global Adventures” button not working
-- In `src/pages/TravelWellConnectedStore.tsx`, the button calls:
-  `document.getElementById('viator-tours')?.scrollIntoView()`
-- But `#viator-tours` is inside `<TabsContent value="viator" id="viator-tours">`.
-- The Tabs default is `local`, so the `viator` content may not be mounted in the DOM when inactive; the element doesn’t exist, so scroll does nothing.
-- Fix requires switching the tab to `viator` first, then scrolling after render.
+Create an AI-powered sales assistant that appears on the RoamBuddy store page:
 
-7) Team photos not visible
-- Homepage “TeamPreviewSection” only includes 4 members (Chad, Tumelo, Zenith, Feroza). Warren & Stephen won’t appear on the homepage unless we add them there.
-- Tumelo is currently `image: null` everywhere, so he will always show initials until we wire in his uploaded photo.
-- About page currently uses Warren/Stephen Supabase URLs (good), but if users are checking the homepage they won’t see them.
+**New Files:**
+- `src/components/roambuddy/RoamBuddySalesBot.tsx` - Chat widget component
+- `supabase/functions/roambuddy-sales-chat/index.ts` - AI backend using Lovable AI
 
-Implementation plan (ASAP, minimal-risk, cross-device first)
+**Features:**
+- Floating chat bubble on RoamBuddy store page
+- Understands RoamBuddy products, pricing, destinations
+- Qualifies leads with questions: "Where are you traveling?" "How long?"
+- Recommends specific eSIM packages
+- Captures email for newsletter signup
+- Tracks conversations for sales follow-up
 
-Phase 1 — Fix 2BeWell images everywhere (highest visibility)
-1) Update `src/components/sections/TwoBeWellCTA.tsx`
-   - Replace `product-images**%20(2BeWell)` with the properly encoded folder name:
-     `product-images%2A%2A%20(2BeWell)`
-   - Keep the existing onError UI fallback, but avoid `innerHTML` injection if possible (safer to do state-based fallback rendering). If we keep it, ensure it doesn’t break hydration.
-2) Quick audit for other `product-images**` occurrences
-   - Replace any unencoded `**` folder usage with `%2A%2A`.
+**AI Persona:**
+- Name: "Roam" - Your Travel Connectivity Expert
+- Tone: Helpful, friendly, travel-savvy
+- Knowledge: All RoamBuddy products, pricing, destinations, device compatibility
 
-Expected outcome:
-- The 2BeWell CTA product image should load consistently on Mac/iPhone/Android.
+## Phase 2: AI Content Campaign Generator
 
-Phase 2 — Fix Chief Kingsley anchor (route + hash scroll)
-1) Add an anchor target in `src/pages/tours/GreatMotherCaveTour.tsx`
-   - Add `id="chief-kingsley"` to the “Meet Chief Kingsley” section wrapper.
-   - Add `scroll-mt-24` (or similar) so the section isn’t hidden under the fixed header.
-2) Update all CTAs that should jump to the profile section
-   - Where relevant (Hero cards / community cards), change href to:
-     `/tours/great-mother-cave-tour#chief-kingsley`
-3) Implement global “scroll-to-hash on route change”
-   - Add a small component (e.g., `ScrollToHash`) that uses React Router’s `useLocation()`:
-     - On location change, if `location.hash` exists:
-       - `setTimeout(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }))`
-     - Else scroll to top on normal page changes (optional).
-   - Mount it once inside the Router (likely in `src/App.tsx`).
+Create an edge function that generates a complete 31-day social media campaign:
 
-Expected outcome:
-- Clicking “Chief Kingsley’s Wisdom” lands directly at his profile section on all devices.
+**New File:**
+- `supabase/functions/generate-campaign-content/index.ts`
 
-Phase 3 — Make Welcome page category cards’ action obvious
-Target file:
-- `src/components/sections/ToursRetreatsPreview.tsx`
+**Output:**
+- 31 days × 3 posts/day = 93 social media posts
+- Platform-optimized (Facebook, Instagram, TikTok)
+- Content pillar rotation (Wellness, Education, Empowerment, Inspiration)
+- Hashtag strategies per platform
+- RoamBuddy-specific messaging and CTAs
 
-Changes:
-1) Keep navigation (since they already route to category pages), but add explicit affordance:
-   - Add a small “Explore” label + Arrow icon inside each card.
-   - Add `aria-label` like `Explore Indigenous Wisdom & Healing`.
-   - Ensure cursor/hover states match: if clickable, keep `cursor-pointer` but also add visible cue.
-2) Optional improvement:
-   - Make the entire card clickable AND add a small button-like chip (“Explore”) so users immediately understand the action.
+**Sample Generated Content:**
+```text
+Day 1 - Inspiration
+[Instagram] ✈️ Your next adventure awaits! Stay connected to what matters most while exploring the world. No more hunting for WiFi or shocking roaming bills. 🌍 #RoamBuddy #TravelWellness #DigitalNomad
 
-Expected outcome:
-- No more “looks clickable but not sure what it does” feedback.
+Day 3 - Education  
+[Facebook] Did you know? Most travelers spend R500-R2000 on international roaming PER TRIP? 😱 RoamBuddy eSIMs start from just R90 for the same coverage. Save money, stay connected. Link in bio!
 
-Phase 4 — Fix email CTAs (stop using window.open mailto)
-Targets (based on matches found):
-- `src/components/programs/RecruitmentJourney.tsx` (uses window.open mailto)
-- `src/pages/programs/UWCRecruitment.tsx` (mailto template button)
-- `src/pages/programs/UWCUniversityPartners.tsx` (mailto)
-- `src/pages/programs/UWCSponsors.tsx` (mailto)
-- `src/pages/BusinessConsulting.tsx` (mailto)
-- Potentially other pages identified by the same pattern
+Day 5 - Empowerment
+[TikTok] POV: You land in Thailand and you're already connected 📱✨ No SIM cards, no hassle. This is the RoamBuddy effect. #TravelHack #eSIM
+```
 
-Changes:
-1) Replace `window.open('mailto:...', '_blank')` with either:
-   - `<Button asChild><a href="mailto:...">...</a></Button>` (preferred)
-   - OR `onClick={() => { window.location.href = 'mailto:...'; }}` (fallback)
-2) Ensure all mailto buttons meet iOS Safari + accessibility standard:
-   - Minimum 44px touch target (already mostly handled by your Button component)
+## Phase 3: Automated Newsletter Nurture Sequence
 
-Expected outcome:
-- Mail client opens reliably on MacBook/iPhone/Android.
+Create a 5-email welcome and nurture sequence for RoamBuddy leads:
 
-Phase 5 — Make Cal.com booking work reliably (remove fragile popup dependency)
-Targets:
-- `src/components/booking/CalComBooking.tsx`
-- Pages using it: `src/pages/WebDevelopment.tsx`, `src/pages/MediaProduction.tsx`, others
+**Email 1 (Immediate):** Welcome + 10% discount code
+**Email 2 (Day 2):** "How eSIMs Work" educational content
+**Email 3 (Day 4):** Customer testimonial + social proof
+**Email 4 (Day 7):** "Planning Your Trip?" destination guides
+**Email 5 (Day 10):** Limited time offer + urgency
 
-Approach (fastest reliable):
-1) Add “direct link” booking mode:
-   - Build the URL: `https://cal.com/{calUsername}/{eventTypeSlug}`
-   - Render as `<a target="_blank" rel="noopener noreferrer">Book with Cal.com</a>`
-2) Update service pages:
-   - Keep “Email to Book” as mailto anchor
-   - Make “Book with Cal.com” a direct link button (not embed popup)
-   - Fix mobile layout so buttons are balanced (stacked full-width on small screens, equal spacing)
-3) Optional: keep embed popup as enhancement
-   - If you still want the popup experience, keep it behind a feature toggle or only after confirming it works on iOS Safari.
-   - But the direct link should always exist as the reliable path.
+**Database Changes:**
+- Add `lead_source` column to newsletter_subscribers
+- Add `nurture_sequence_step` column for automation tracking
 
-Expected outcome:
-- Cal.com booking works on all devices immediately.
+## Phase 4: Zapier Integration Setup
 
-Phase 6 — Fix Travel Well Connected “Browse Global Adventures”
-Target:
-- `src/pages/TravelWellConnectedStore.tsx`
+**Your Setup Steps (15 minutes):**
 
-Changes:
-1) Convert Tabs to controlled state:
-   - `const [tab, setTab] = useState<'local' | 'viator'>('local')`
-   - `<Tabs value={tab} onValueChange={(v) => setTab(v as any)} ...>`
-2) Update “Browse Global Adventures” button:
-   - `setTab('viator')`
-   - After render: `setTimeout(() => document.getElementById('viator-tours')?.scrollIntoView(...), 100)`
-3) Add a secondary fallback link:
-   - A plain `<a>` that goes to the Viator partner shop URL (external) in case the Viator tab has no data yet.
+1. Create free Zapier account at zapier.com
+2. Create Zap: "Webhooks by Zapier" trigger → "Facebook Pages" action
+3. Copy the webhook URL to `/admin/social-scheduler` settings
+4. Test with a single scheduled post
 
-Expected outcome:
-- Button always does something: switches to Viator tab and scrolls, plus external fallback.
+**Technical Setup:**
+- The `trigger-social-post` edge function already sends the correct payload
+- Need to set up a cron job to call it (using pg_cron)
 
-Phase 7 — Team photos: show Warren/Stephen where expected + add Tumelo photo
-Targets:
-- `src/pages/About.tsx`
-- `src/components/sections/TeamPreviewSection.tsx`
+## Phase 5: Canva Pro Asset Integration
 
-Changes:
-1) About page (already using Warren/Stephen Supabase URLs)
-   - Keep as-is but add `loading="lazy"` and ensure `object-position` is appropriate.
-2) Homepage team preview:
-   - Decide expectation: if the team expects to see Warren & Stephen on the homepage, add them to `TeamPreviewSection` (currently only 4 people).
-3) Tumelo photo integration:
-   - Use the uploaded Tumelo photo (`user-uploads://image-21.png`) by copying it into the project and referencing it safely:
-     - Preferred: `src/assets/team/tumelo.png` and import it
-     - Or: `public/lovable-uploads/tumelo.png` and reference `"/lovable-uploads/tumelo.png"`
-   - Then set Tumelo’s `image` to that URL/import in both About and TeamPreview.
+Since you have Canva Pro, we can create branded social assets:
 
-Expected outcome:
-- Warren/Stephen visible in the sections where the team expects them.
-- Tumelo shows a real photo instead of initials.
+**Workflow:**
+1. AI generates post copy
+2. You create matching visual in Canva (or use Canva's Magic Design)
+3. Upload image URL to scheduled post
+4. Zapier sends both text + image to social platforms
 
-QA checklist (must be done before calling it “fixed”)
-- Welcome page: category cards clearly indicate action (“Explore”) and still navigate correctly.
-- 2BeWell: the hero/CTA product image loads on Mac + iPhone Safari + Android Chrome.
-- Great Mother Cave Tour: clicking Chief Kingsley CTAs lands directly at the profile section without manual scroll.
-- UWC Apply/Email CTAs: mail client opens on MacBook.
-- Web Dev / Media Production:
-  - “Email to Book” opens mail client
-  - “Book with Cal.com” opens Cal.com in a new tab reliably (desktop + mobile)
-  - Buttons look balanced on mobile (full-width stack)
-- Travel Well Connected: “Browse Global Adventures” switches to Viator tab and scrolls; external fallback link works.
+**Optional Enhancement:**
+- Add CANVA_API_KEY secret to enable automated design generation
+- Currently shows demo mode without API key
 
-If you want, I can proceed immediately with implementation in a new request (this message is read-only by instruction).
+## Phase 6: Sales Dashboard
+
+Add a RoamBuddy-specific sales tracking tab to Admin Dashboard:
+
+**New File:**
+- `src/pages/admin/RoamBuddySalesDashboard.tsx`
+
+**Metrics:**
+- Chatbot conversations started
+- Leads captured (email signups)
+- Product recommendations made
+- Click-through to checkout
+- Newsletter open/click rates
+- Social post engagement (manual input or Zapier webhook back)
+
+## Implementation Summary
+
+**New Files to Create:**
+1. `src/components/roambuddy/RoamBuddySalesBot.tsx` - AI chat widget
+2. `supabase/functions/roambuddy-sales-chat/index.ts` - Chat backend
+3. `supabase/functions/generate-campaign-content/index.ts` - Content generator
+4. `src/pages/admin/RoamBuddySalesDashboard.tsx` - Sales metrics
+
+**Files to Modify:**
+1. `src/pages/RoamBuddyStore.tsx` - Add sales bot widget
+2. `src/pages/admin/SocialScheduler.tsx` - Add campaign generator button
+3. `supabase/config.toml` - Add new functions
+4. Database migration for newsletter tracking columns
+
+## Required Setup (Your Actions)
+
+1. **Zapier Free Account** - Create and get webhook URL
+2. **Facebook Business Page** - Connect to Zapier
+3. **Instagram Business Account** - Connect to Zapier (requires FB Page)
+4. **TikTok Business Account** - Connect to Zapier
+5. **Optional: Canva API Key** - For automated design (Canva Pro includes this)
+
+## Cost Breakdown
+
+- Zapier Free: R0/month (100 tasks, 5 Zaps)
+- Canva Pro: Already have it
+- Lovable AI: Uses your existing credits
+- Resend (newsletters): Free tier (100 emails/day)
+
+**Total Additional Cost: R0/month**
+
+## Timeline
+
+- Phase 1 (AI Sales Bot): Day 1
+- Phase 2 (Content Generator): Day 1
+- Phase 3 (Newsletter Sequence): Day 1
+- Phase 4 (Zapier Setup): Day 2 (your setup + testing)
+- Phase 5 (Canva Integration): Optional enhancement
+- Phase 6 (Dashboard): Day 2
+
+## Success Metrics
+
+- Week 1: 10+ chatbot conversations, 5+ email signups
+- Week 2: First automated social posts live
+- Month 1: 50+ newsletter subscribers, consistent posting
+- Month 3: Measurable eSIM sales from funnel
+
+## Technical Notes
+
+- AI Sales Bot uses Lovable AI (google/gemini-3-flash-preview) for fast responses
+- Content generator uses structured output (tool calling) for consistent formatting
+- Newsletter automation uses existing Resend integration
+- All data tracked in Supabase for analytics
