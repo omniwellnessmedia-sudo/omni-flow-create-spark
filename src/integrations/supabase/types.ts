@@ -1103,6 +1103,60 @@ export type Database = {
         }
         Relationships: []
       }
+      discount_codes: {
+        Row: {
+          applicable_products: string[] | null
+          code: string
+          created_at: string
+          current_uses: number | null
+          description: string | null
+          discount_type: string
+          discount_value: number
+          id: string
+          is_active: boolean | null
+          max_uses: number | null
+          min_order_amount: number | null
+          updated_at: string
+          valid_from: string | null
+          valid_until: string | null
+          wellcoins_bonus: number | null
+        }
+        Insert: {
+          applicable_products?: string[] | null
+          code: string
+          created_at?: string
+          current_uses?: number | null
+          description?: string | null
+          discount_type?: string
+          discount_value?: number
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          min_order_amount?: number | null
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+          wellcoins_bonus?: number | null
+        }
+        Update: {
+          applicable_products?: string[] | null
+          code?: string
+          created_at?: string
+          current_uses?: number | null
+          description?: string | null
+          discount_type?: string
+          discount_value?: number
+          id?: string
+          is_active?: boolean | null
+          max_uses?: number | null
+          min_order_amount?: number | null
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+          wellcoins_bonus?: number | null
+        }
+        Relationships: []
+      }
       feature_flags: {
         Row: {
           category: string | null

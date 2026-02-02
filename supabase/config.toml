@@ -54,5 +54,8 @@ verify_jwt = false
 [functions.roambuddy-sale-notification]
 verify_jwt = false
 
+[functions.validate-discount-code]
+verify_jwt = false
+
 [functions.generate-campaign-content]
 verify_jwt = true
