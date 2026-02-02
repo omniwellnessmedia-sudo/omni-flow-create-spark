@@ -1,191 +1,339 @@
 
-# Fix RoamBuddy Sales Bot Email Submission + Add Discount & WellCoins Integration
+# Fix RoamBuddy Store Issues: Email, PayPal & Bot Behavior
 
 ## Issues Identified
 
-### Issue 1: Email Submission 401 Error
-The email capture in the RoamBuddy chat fails with a 401 error when trying to save to `newsletter_subscribers`. 
+### 1. Email Submission 401 Error (High Priority)
 
-**Root Cause**: The frontend uses `upsert` which requires both INSERT and UPDATE permissions. While INSERT policy allows anonymous access, the table requires authentication for UPDATE operations. The anonymous Supabase client cannot perform upsert without proper RLS policies.
+**Root Cause**: The `ExitIntentPopup.tsx` component still uses `.upsert()` which fails for anonymous users. The 401 error in console logs (`on_conflict=email`) confirms upsert is being attempted. While RLS policies were added for UPDATE, the upsert operation still fails because anonymous users cannot perform the combined insert-on-conflict-update pattern with Supabase's client.
 
-**Solution**: Add an UPDATE policy for the `newsletter_subscribers` table that allows unauthenticated updates on conflict, or change the frontend to use a simple INSERT with conflict handling.
+**Evidence**: 
+- Console log: `dtjmhieeywdvhjxqyxad…on_conflict=email:1 Failed to load resource: the server responded with a status of 401`
+- `ExitIntentPopup.tsx` line 72 uses `.upsert({ email, source: 'exit_intent_popup', interests: ['uwc_programme'] }, { onConflict: 'email' })`
+- Edge function logs show `roambuddy-lead-notification` DID successfully send (shows "Lead notification sent successfully") - so the RoamBuddySalesBot fix is working, but other upsert uses remain
 
-### Issue 2: Coupon Codes Not Functional
-The checkout modal shows a coupon code input field, but clicking "Apply" does nothing - it's purely UI with no backend logic.
+**Fix**: Update `ExitIntentPopup.tsx` to use the same insert-then-update pattern as `RoamBuddySalesBot.tsx`
 
-**Solution**: Create a `discount_codes` table and implement coupon validation logic.
+### 2. PayPal/Card Payment Not Working (High Priority)
 
-### Issue 3: WellCoins Not Integrated
-The WellCoins loyalty system exists but isn't connected to RoamBuddy purchases.
+**Root Cause Analysis**:
 
-**Solution**: Award WellCoins on completed purchases and allow WellCoins redemption at checkout.
+A. **Authentication Required for Order Creation**: The `roambuddy-api` edge function requires JWT authentication for the `createOrder` action (lines 221-260). When an unauthenticated user tries to purchase, they get a 401 error: "Authentication required for order creation".
+
+B. **No Card Payment Option**: The checkout only shows PayPal buttons. User wants card payments via PayPal Hosted Fields.
+
+C. **Currency Configuration**: PAYPAL_OPTIONS in `src/config/paypal.ts` uses `currency: "ZAR"` but the checkout sends USD prices. PayPal may reject due to currency mismatch.
+
+**Fixes Needed**:
+- Enable guest checkout by creating a separate unauthenticated order flow
+- Add PayPal card payment option using Hosted Fields
+- Fix currency configuration to match the order amount currency (USD)
+
+### 3. Bot Suggesting External RoamBuddy Instead of Omni Store (Medium Priority)
+
+**Root Cause**: The AI system prompt in `roambuddy-sales-chat` edge function doesn't instruct the bot to link to the Omni store. The prompt mentions RoamBuddy products generically without directing users to `/roambuddy-store` checkout.
+
+**Fix**: Update the system prompt to:
+- Direct users to search/browse products on the Omni store page
+- Provide specific product links that open the checkout modal
+- Never suggest visiting roambuddy.world directly
+
+### 4. Notification Logging & WhatsApp Automation (User Request)
+
+**Requirements**:
+- Log all notification attempts to database for audit
+- Add automatic WhatsApp message via API (requires setup)
 
 ---
 
 ## Implementation Plan
 
-### Phase 1: Fix Email Submission (Critical)
+### Phase 1: Fix Email Submission (All Upsert Uses)
 
-**Database Changes:**
-Create an UPDATE policy on `newsletter_subscribers` that allows updates when email matches:
+**File: `src/components/conversion/ExitIntentPopup.tsx`**
 
-```sql
-CREATE POLICY "Allow upsert on newsletter_subscribers" 
-ON public.newsletter_subscribers 
-FOR UPDATE 
-USING (true) 
-WITH CHECK (true);
+Replace upsert with insert-then-update pattern:
+```typescript
+// Replace lines 70-72
+const { error: insertError } = await supabase
+  .from('newsletter_subscribers')
+  .insert({ 
+    email, 
+    source: 'exit_intent_popup', 
+    interests: ['uwc_programme'],
+    subscribed_at: new Date().toISOString()
+  });
+
+if (insertError && insertError.code === '23505') {
+  // Email already exists, update instead
+  await supabase
+    .from('newsletter_subscribers')
+    .update({ 
+      source: 'exit_intent_popup',
+      interests: ['uwc_programme'],
+      updated_at: new Date().toISOString()
+    })
+    .eq('email', email);
+}
 ```
-
-Alternatively, also add similar policy for `chatbot_conversations`:
-
-```sql
-CREATE POLICY "Allow public update for chatbot by session" 
-ON public.chatbot_conversations 
-FOR UPDATE 
-USING (true);
-```
-
-**Files Modified:**
-- Database migration to add UPDATE policies
 
 ---
 
-### Phase 2: Implement Discount Code System
+### Phase 2: Enable Guest Checkout for RoamBuddy
 
-**New Database Table: `discount_codes`**
+**Problem**: `createOrder` requires authentication but user wants guest checkout.
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | uuid | Primary key |
-| code | text | Unique discount code (e.g., "ROAM10") |
-| discount_type | text | 'percentage' or 'fixed' |
-| discount_value | numeric | Amount (10 for 10%, or 5 for $5 off) |
-| min_order_amount | numeric | Minimum order to apply |
-| max_uses | integer | Total allowed uses (null = unlimited) |
-| current_uses | integer | How many times used |
-| valid_from | timestamp | Start date |
-| valid_until | timestamp | Expiry date |
-| applicable_products | text[] | Product IDs or null for all |
-| wellcoins_bonus | integer | Extra WellCoins when code used |
-| created_at | timestamp | Creation date |
+**Solution**: Create a separate public order handler that:
+1. Does NOT require JWT for guest orders
+2. Still validates input thoroughly
+3. Stores guest orders with `user_id = null`
+4. Awards WellCoins only if user signs up later
 
-**New Edge Function: `validate-discount-code`**
-- Validates code exists and is active
-- Checks usage limits
-- Returns discount amount and WellCoins bonus
+**File: `supabase/functions/roambuddy-api/index.ts`**
 
-**Frontend Changes:**
-Update `RoamBuddyCheckoutModal.tsx`:
-- Add state for discount code validation
-- Call edge function on "Apply" button click
-- Show discount applied in order summary
-- Adjust PayPal order amount with discount
+Add new action `createGuestOrder`:
+```typescript
+case 'createGuestOrder':
+  // No JWT required - guest checkout
+  // Validate inputs strictly
+  if (!data.customer_email || !data.customer_name || !data.product_id) {
+    return error response;
+  }
+  // Rate limit by IP or email to prevent abuse
+  return await handleCreateGuestOrder(data, supabase);
+```
+
+**File: `src/components/roambuddy/RoamBuddyCheckoutModal.tsx`**
+
+Update to call `createGuestOrder` instead of `createOrder`:
+```typescript
+const orderData = {
+  action: 'createGuestOrder', // Use guest endpoint
+  ...
+};
+```
 
 ---
 
-### Phase 3: WellCoins Integration
+### Phase 3: Add PayPal Card Payments (Hosted Fields)
 
-**WellCoins Earning on Purchase:**
-After successful RoamBuddy order, award WellCoins based on purchase amount:
-- Base rate: 1 WellCoin per $1 spent
-- Bonus: 10 WellCoins for first purchase
-- Code bonus: Additional WellCoins if discount code includes bonus
+**Concept**: PayPal Hosted Fields allows card payments directly on your site, processed by PayPal.
 
-**Files Modified:**
-- `supabase/functions/roambuddy-api/index.ts` - After order completion, create transaction in `transactions` table
-- `src/components/roambuddy/RoamBuddyCheckoutModal.tsx` - Show WellCoins earned in success screen
+**Required Changes**:
 
-**New Feature: WellCoins Redemption (Future)**
-- Allow partial payment with WellCoins
-- Display user's WellCoins balance at checkout
-- Requires user authentication
+1. **Update PayPal Script Options** (`src/config/paypal.ts`):
+```typescript
+export const PAYPAL_OPTIONS = {
+  clientId: "...",
+  currency: "USD", // Change from ZAR to match checkout
+  intent: "capture",
+  components: "buttons,hosted-fields",
+  enableFunding: "card",
+  dataClientToken: undefined, // Will be fetched from server
+};
+```
+
+2. **Create Edge Function for Client Token** (`supabase/functions/paypal-client-token/index.ts`):
+```typescript
+// Fetches a client token from PayPal for Hosted Fields
+const response = await fetch(`${PAYPAL_API_BASE}/v1/identity/generate-token`, {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${accessToken}`,
+    'Content-Type': 'application/json',
+  }
+});
+return clientToken;
+```
+
+3. **Add Hosted Fields Component** (`src/components/roambuddy/PayPalCardFields.tsx`):
+```tsx
+import { PayPalHostedFieldsProvider, PayPalHostedField, usePayPalHostedFields } from "@paypal/react-paypal-js";
+
+// Render card number, expiry, CVV fields
+// On submit, hostedFields.submit() handles capture
+```
+
+4. **Integrate into Checkout Modal**:
+- Add tabs: "PayPal" | "Credit/Debit Card"
+- Fetch client token on mount
+- Render PayPalHostedFields for card tab
+
+---
+
+### Phase 4: Fix Bot Behavior - Link to Omni Store
+
+**File: `supabase/functions/roambuddy-sales-chat/index.ts`**
+
+Update `SYSTEM_PROMPT` to include:
+```typescript
+const SYSTEM_PROMPT = `...
+
+IMPORTANT RULES:
+1. When users are ready to buy, direct them to browse plans on our store page at /roambuddy-store
+2. NEVER suggest visiting roambuddy.world or any external site
+3. Help users search for destinations and recommend specific plans
+4. When recommending a plan, mention they can click "Get Connected" on that plan card
+5. Example: "I'd recommend our Thailand 5GB plan ($12)! You can find it by searching 'Thailand' on our store page above."
+
+PRODUCT SEARCH:
+- Guide users to use the country search bar at the top of the store
+- Suggest popular destinations: Thailand, Europe, USA, South Africa
+- Explain regional plans cover multiple countries
+
+PURCHASE FLOW:
+- After recommendation, say "Just search for [country] above and click 'Get Connected' on the plan you like!"
+- Mention guest checkout is available - no account needed
+...`;
+```
+
+---
+
+### Phase 5: Add Notification Logging Table
+
+**Database Migration**:
+```sql
+CREATE TABLE public.notification_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  notification_type TEXT NOT NULL, -- 'lead_capture', 'sale_complete', 'email', 'whatsapp'
+  recipient TEXT NOT NULL,
+  payload JSONB,
+  status TEXT DEFAULT 'pending', -- 'pending', 'sent', 'failed'
+  error_message TEXT,
+  message_id TEXT, -- Resend/WhatsApp message ID
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- RLS: Admins only
+ALTER TABLE public.notification_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Admins can view notification logs" ON public.notification_logs
+  FOR SELECT USING (is_admin(auth.uid()));
+```
+
+**Update Edge Functions** to log all notifications:
+```typescript
+// After sending email/whatsapp
+await supabase.from('notification_logs').insert({
+  notification_type: 'lead_capture',
+  recipient: 'omniwellnessmedia@gmail.com',
+  payload: { email, sessionId, ... },
+  status: emailResult.error ? 'failed' : 'sent',
+  error_message: emailResult.error?.message,
+  message_id: emailResult.data?.id
+});
+```
+
+---
+
+### Phase 6: WhatsApp Automation via Twilio
+
+**Prerequisites**: User needs Twilio account with WhatsApp sandbox or approved number.
+
+**Add Secrets** (if not already configured):
+- `TWILIO_ACCOUNT_SID`
+- `TWILIO_AUTH_TOKEN`
+- `TWILIO_WHATSAPP_FROM` (e.g., `whatsapp:+14155238886`)
+- `CHAD_WHATSAPP_TO` (e.g., `whatsapp:+27748315961`)
+
+**Create Edge Function: `supabase/functions/send-whatsapp/index.ts`**:
+```typescript
+const client = require('twilio')(ACCOUNT_SID, AUTH_TOKEN);
+await client.messages.create({
+  from: TWILIO_WHATSAPP_FROM,
+  to: CHAD_WHATSAPP_TO,
+  body: `🎯 New RoamBuddy Lead!\n\n📧 ${email}\n🌍 ${destination}\n📅 ${duration}`
+});
+```
+
+**Integrate into Lead/Sale Notification Functions**:
+```typescript
+// After Resend email
+try {
+  await fetch(`${SUPABASE_URL}/functions/v1/send-whatsapp`, {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'lead',
+      email,
+      destination,
+      duration
+    })
+  });
+} catch (e) {
+  console.error('WhatsApp failed (non-blocking):', e);
+}
+```
 
 ---
 
 ## Files to Create
 
-1. **`supabase/functions/validate-discount-code/index.ts`**
-   - Validates discount codes
-   - Returns discount details and WellCoins bonus
-
-2. **Database migration**
-   - Add UPDATE policies for `newsletter_subscribers`
-   - Add UPDATE policies for `chatbot_conversations`
-   - Create `discount_codes` table
-   - Insert default discount codes (ROAM10, WELCOME5, etc.)
+| File | Purpose |
+|------|---------|
+| `supabase/functions/paypal-client-token/index.ts` | Generate PayPal client token for Hosted Fields |
+| `supabase/functions/send-whatsapp/index.ts` | Send WhatsApp messages via Twilio |
+| `src/components/roambuddy/PayPalCardFields.tsx` | Card payment form component |
 
 ## Files to Modify
 
-1. **`src/components/roambuddy/RoamBuddySalesBot.tsx`**
-   - Change upsert to INSERT with ON CONFLICT handling via edge function
-   - Better error handling
+| File | Changes |
+|------|---------|
+| `src/components/conversion/ExitIntentPopup.tsx` | Replace upsert with insert-then-update |
+| `supabase/functions/roambuddy-api/index.ts` | Add `createGuestOrder` action for guest checkout |
+| `supabase/functions/roambuddy-sales-chat/index.ts` | Update prompt to direct to Omni store |
+| `supabase/functions/roambuddy-lead-notification/index.ts` | Add notification logging + WhatsApp call |
+| `supabase/functions/roambuddy-sale-notification/index.ts` | Add notification logging + WhatsApp call |
+| `src/config/paypal.ts` | Update currency to USD, add hosted-fields component |
+| `src/components/roambuddy/RoamBuddyCheckoutModal.tsx` | Use guest order endpoint, add card payment tab |
+| `supabase/config.toml` | Add new functions |
 
-2. **`src/components/roambuddy/RoamBuddyCheckoutModal.tsx`**
-   - Add discount code validation state
-   - Connect "Apply" button to edge function
-   - Show discount in order summary
-   - Update PayPal order creation with discounted price
-   - Show WellCoins earned after purchase
+## Database Migration
 
-3. **`supabase/functions/roambuddy-api/index.ts`**
-   - After successful order, insert WellCoins transaction
-   - Include discount tracking in order notes
-
-4. **`supabase/config.toml`**
-   - Add new `validate-discount-code` function
-
----
-
-## Discount Tracking Benefits
-
-1. **Marketing Attribution**: Track which codes drive sales
-2. **Influencer Programs**: Give unique codes to partners
-3. **Campaign Effectiveness**: Measure promotion ROI
-4. **Customer Retention**: Reward repeat customers
-5. **WellCoins Bonus**: Incentivize code usage with extra loyalty points
-
----
-
-## Default Discount Codes to Create
-
-| Code | Type | Value | WellCoins Bonus | Description |
-|------|------|-------|-----------------|-------------|
-| ROAM10 | percentage | 10% | 5 | General 10% off |
-| WELCOME | fixed | $5 | 10 | New customer discount |
-| WELLNESS | percentage | 15% | 15 | Wellness community special |
-| OMNI25 | percentage | 25% | 25 | VIP/launch discount |
-| FIRSTTRIP | percentage | 20% | 20 | First-time travelers |
-
----
-
-## Testing Plan
-
-1. **Email Submission**
-   - Open chat on `/roambuddy-store`
-   - Complete conversation until email capture appears
-   - Submit email
-   - Verify no 401 error
-   - Check `newsletter_subscribers` for new entry
-   - Verify notification email sent
-
-2. **Discount Codes**
-   - Start checkout process
-   - Enter valid code (ROAM10)
-   - Verify discount applied to total
-   - Complete purchase with PayPal
-   - Verify discounted amount charged
-
-3. **WellCoins**
-   - Complete a purchase (with or without discount)
-   - Check `transactions` table for new WellCoin entry
-   - Verify balance updated in user profile
+Create `notification_logs` table for audit trail.
 
 ---
 
 ## Technical Notes
 
-- Discount validation happens server-side for security
-- WellCoins awarded only for authenticated users (guest purchases don't earn)
-- All discount usage is logged for analytics
-- Expired/invalid codes show clear error messages
+### Guest Checkout Security
+- Rate limit by email/IP to prevent abuse
+- Validate all inputs server-side
+- WellCoins only awarded if user creates account and links order later
+
+### PayPal Hosted Fields Requirements
+- Requires `data-client-token` from server
+- Must be fetched fresh per checkout session
+- Card payments go through PayPal's fraud detection
+
+### WhatsApp Automation
+- Twilio sandbox for testing (free)
+- Production requires approved WhatsApp Business number (~$0.005/message)
+- Messages are async/non-blocking to not slow checkout
+
+---
+
+## Testing Checklist
+
+1. **Email Submission**
+   - [ ] Exit intent popup subscribes without 401
+   - [ ] RoamBuddy chat captures email successfully
+   - [ ] Lead notification email received at `omniwellnessmedia@gmail.com`
+
+2. **Guest Checkout**
+   - [ ] Can purchase without login
+   - [ ] Order saved to database with `user_id = null`
+   - [ ] Sale notification sent
+
+3. **Card Payments**
+   - [ ] Card tab appears in checkout
+   - [ ] Can enter card details
+   - [ ] Payment processes successfully
+
+4. **Bot Behavior**
+   - [ ] Bot suggests searching on Omni store
+   - [ ] Bot never mentions roambuddy.world
+   - [ ] Bot provides actionable next steps
+
+5. **Notifications**
+   - [ ] All notifications logged to `notification_logs` table
+   - [ ] WhatsApp message received by Chad
+
