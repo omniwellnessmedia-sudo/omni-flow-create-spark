@@ -1,125 +1,200 @@
 
-# Add Email Notification on RoamBuddy Lead Capture
+# Add Sale Confirmation Notifications (Email + WhatsApp)
 
 ## Overview
-Send an automated email notification to Chad (omniwellnessmedia@gmail.com) whenever a lead is captured through the RoamBuddy AI Sales Bot. The email will include all conversation details to help with personalized follow-up.
+When a RoamBuddy eSIM sale is completed (payment confirmed), automatically send:
+1. **Email notification** to `omniwellnessmedia@gmail.com` with full purchase details
+2. **WhatsApp notification** to Chad with a quick summary
 
-## Current Flow
+## Current Sale Flow
 ```
-User chats with Roam → Email captured → Saved to database
-```
-
-## New Flow
-```
-User chats with Roam → Email captured → Saved to database → Email sent to Chad
+User selects eSIM → Checkout → PayPal payment → createOrder API → Order saved to DB → Success screen
 ```
 
-## Implementation
+## New Sale Flow
+```
+User selects eSIM → Checkout → PayPal payment → createOrder API → Order saved to DB 
+                                                       ↓
+                                          Send sale notification
+                                                       ↓
+                                          ┌─────────────────────┐
+                                          │ Email to Omni       │
+                                          │ WhatsApp to Chad    │
+                                          └─────────────────────┘
+                                                       ↓
+                                               Success screen
+```
 
-### Option A: Modify Frontend (Simpler)
-Update `src/components/roambuddy/RoamBuddySalesBot.tsx` to call a new edge function after successful email capture.
+## Implementation Approach
 
-### Option B: Modify Edge Function (Recommended)
-Create a dedicated notification function or add to the chat function for better reliability.
+### Phase 1: Create Sale Notification Edge Function
 
-## Changes Required
+**New File:** `supabase/functions/roambuddy-sale-notification/index.ts`
 
-### 1. Create New Edge Function: `roambuddy-lead-notification`
-
-**File:** `supabase/functions/roambuddy-lead-notification/index.ts`
-
-**Purpose:** Send formatted email to Chad with full lead details
+This function will be called after successful order completion and will:
+1. Send a detailed email via Resend to `omniwellnessmedia@gmail.com`
+2. Send a WhatsApp message to Chad
 
 **Email Content:**
-- Lead's email address
-- Date and time captured
-- Full conversation transcript
-- Travel destination mentioned
-- Data/usage needs identified
-- Products recommended (if any)
-- Device type (if mentioned)
-
-**Sample Email Format:**
 ```
-Subject: 🎯 New RoamBuddy Lead: john@example.com
+Subject: 💰 New RoamBuddy Sale: $25.00 USD
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━
-NEW ESIM LEAD CAPTURED
+🎉 ESIM SALE CONFIRMED
 ━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📧 Email: john@example.com
-📅 Captured: 2 Feb 2026, 09:45 AM
-🌍 Destination: Thailand (14 days)
-📱 Data Needs: Heavy usage, video calls
-💡 Recommended: 10GB Asia Plan ($25)
+📦 Product: South Africa eSIM - 5GB
+🌍 Destination: South Africa
+💰 Amount: $25.00 USD
+📧 Customer: john@example.com
+👤 Name: John Doe
 
-━━━ CONVERSATION TRANSCRIPT ━━━
+━━━ ORDER DETAILS ━━━
 
-Roam: Hey there! 👋 I'm Roam, your travel...
-User: I'm going to Thailand for 2 weeks
-Roam: Thailand is amazing! 🇹🇭 For a 2-week...
-User: I need data for work video calls
-Roam: Got it - you'll want reliable data...
-[Email captured]
+Order ID: RB-1738489123456
+Status: Completed
+Payment: PayPal
+Date: 2 Feb 2026, 10:30 AM
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Quick Actions:
-• View in Dashboard: /admin/roambuddy-sales
-• All Subscribers: /admin/newsletter
+Commission Earned: ~$2.50 (estimated)
+View in Dashboard: /admin/roambuddy-sales
 ```
 
-### 2. Update `RoamBuddySalesBot.tsx`
+### Phase 2: WhatsApp Integration Options
 
-After successful email capture in `handleEmailSubmit()`, call the notification function:
+For WhatsApp, we have three options based on complexity and cost:
+
+**Option A: WhatsApp Business API (Complex)**
+- Requires Facebook Business verification
+- Needs a dedicated phone number
+- Template messages must be approved
+- Best for high-volume, production use
+
+**Option B: WhatsApp Click-to-Chat via Email (Recommended)**
+- Include a pre-formatted WhatsApp link in the email
+- Chad clicks the link → Opens WhatsApp with pre-filled message
+- Zero setup, works immediately
+- Format: `https://wa.me/27XXXXXXXXX?text=New%20Sale%3A%20...`
+
+**Option C: Twilio WhatsApp Sandbox (Quick Setup)**
+- Twilio provides WhatsApp messaging via their API
+- Sandbox mode for testing (free)
+- Production mode costs ~$0.005/message
+- Requires Twilio account and API keys
+
+**Recommended: Option B (Click-to-Chat in Email)**
+
+This approach:
+- Works immediately with no additional setup
+- Costs nothing
+- Chad receives email → taps WhatsApp link → sees notification in WhatsApp
+- Can upgrade to proper API later if volume justifies it
+
+### Phase 3: Integrate into Order Flow
+
+**Modify:** `supabase/functions/roambuddy-api/index.ts`
+
+After successful order completion (around line 815), call the notification function:
 
 ```typescript
-// After database save succeeds
-await supabase.functions.invoke('roambuddy-lead-notification', {
-  body: {
-    email: email.trim(),
-    messages: messages.map(m => ({ role: m.role, content: m.content })),
-    sessionId,
-    capturedAt: new Date().toISOString()
-  }
+// After order is saved to database
+// Send sale notification (async, don't block order completion)
+fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/roambuddy-sale-notification`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`
+  },
+  body: JSON.stringify({
+    orderId: roambuddyOrderId,
+    customerEmail: orderData.customer_email,
+    customerName: orderData.customer_name,
+    productName: orderData.product_name,
+    amount: orderData.amount,
+    currency: orderData.currency,
+    destination: orderData.destination,
+    completedAt: new Date().toISOString()
+  })
 });
 ```
 
-### 3. Update `supabase/config.toml`
+## Files to Create
 
-Add the new function configuration.
+1. **`supabase/functions/roambuddy-sale-notification/index.ts`**
+   - Receives order details
+   - Formats and sends email via Resend
+   - Includes WhatsApp click-to-chat link
+   - Logs sale to console for debugging
 
-## Extracted Lead Intelligence
+## Files to Modify
 
-The notification email will parse the conversation to extract:
+1. **`supabase/functions/roambuddy-api/index.ts`**
+   - Add call to sale notification after order completion
+   - Non-blocking (fire and forget) to not slow down checkout
 
-| Field | How Detected |
-|-------|--------------|
-| Destination | Keywords: "going to", "traveling to", country names |
-| Trip Duration | Numbers + "days", "weeks", "month" |
-| Data Needs | "work", "video calls", "streaming", "light use" |
-| Device | "iPhone", "Android", "Samsung", phone models |
-| Budget Mentioned | Dollar/Rand amounts |
-| Urgency | "leaving tomorrow", "next week", dates |
+2. **`supabase/config.toml`**
+   - Add new `roambuddy-sale-notification` function
 
-## Benefits
+## Email Notification Structure
 
-1. **Instant Awareness** - Chad knows immediately when someone shows buying intent
-2. **Context for Follow-up** - Full conversation helps personalize outreach
-3. **No Manual Checking** - No need to constantly monitor the dashboard
-4. **Lead Scoring** - Future enhancement: prioritize hot leads
+The email will include:
 
-## Testing
+| Section | Content |
+|---------|---------|
+| Header | Sale confirmation banner with amount |
+| Product Info | Name, destination, data amount, validity |
+| Customer Info | Name, email |
+| Order Info | Order ID, status, payment method, timestamp |
+| Quick Actions | View in Dashboard, WhatsApp link to open chat |
+| Commission | Estimated commission earned |
 
-1. Visit `/roambuddy-store`
-2. Chat with Roam about travel plans
-3. Submit email in the capture form
-4. Check `omniwellnessmedia@gmail.com` for notification
-5. Verify all details are included
+## WhatsApp Click-to-Chat Link
 
-## Future Enhancements (Optional)
+Chad's whatsapp number is +27748315961
 
-- Add lead scoring (hot/warm/cold based on conversation)
-- Include direct "Reply to Lead" button in email
-- Slack/WhatsApp notification option
-- Auto-assign to CRM if integrated
+The email will include a button/link like:
+```
+📱 Open in WhatsApp
+https://wa.me/27XXXXXXXXX?text=🎉%20New%20Sale!%0A%0A📦%20South%20Africa%20eSIM%20-%205GB%0A💰%20$25.00%20USD%0A📧%20john@example.com
+```
+
+When Chad clicks this, WhatsApp opens with a pre-filled message he can send to himself or a team group.
+
+## Required Information
+
+Before implementation, I need:
+
+1. **Chad's WhatsApp number** (with country code, e.g., +27XXXXXXXXX)
+   - This will be used in the click-to-chat link
+
+## Configuration Update
+
+Add to `supabase/config.toml`:
+```toml
+[functions.roambuddy-sale-notification]
+verify_jwt = false
+```
+
+## Testing Plan
+
+1. Complete a test purchase on the RoamBuddy store
+2. Verify email arrives at `omniwellnessmedia@gmail.com`
+3. Click WhatsApp link in email
+4. Confirm it opens WhatsApp with the sale details
+5. Check edge function logs for any errors
+
+## Future Enhancements
+
+- **Upgrade to WhatsApp Business API** when sales volume increases
+- **Add Slack integration** for team notifications
+- **SMS fallback** for urgent notifications
+- **Real-time dashboard alerts** with sound
+
+## Technical Notes
+
+- Uses existing Resend API integration (already configured)
+- Non-blocking notification to ensure fast checkout experience
+- Falls back gracefully if notification fails (order still completes)
+- All notifications logged for debugging
