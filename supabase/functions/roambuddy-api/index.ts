@@ -879,7 +879,13 @@ async function handleCreateOrder(orderData: OrderData, supabase: ReturnType<type
           amount: orderData.amount || 0,
           currency: orderData.currency || 'USD',
           destination: orderData.destination,
-          completedAt: new Date().toISOString()
+          completedAt: new Date().toISOString(),
+          // eSIM activation details for customer email
+          iccid: completeData?.iccid,
+          qrCode: completeData?.qr_code,
+          qrCodeUrl: completeData?.qrcode_url,
+          apn: completeData?.apn || 'plus',
+          dataRoaming: completeData?.data_roaming || 'ON'
         })
       }).then(res => res.json())
         .then(data => console.log('✅ Sale notification sent:', data))
