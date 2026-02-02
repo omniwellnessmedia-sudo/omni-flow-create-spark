@@ -154,6 +154,22 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
           lead_source: 'roambuddy-sales-bot'
         }, { onConflict: 'session_id' });
 
+      // Send notification email to Chad
+      try {
+        await supabase.functions.invoke('roambuddy-lead-notification', {
+          body: {
+            email: email.trim(),
+            messages: messages.map(m => ({ role: m.role, content: m.content })),
+            sessionId,
+            capturedAt: new Date().toISOString()
+          }
+        });
+        console.log('Lead notification sent to Chad');
+      } catch (notifyError) {
+        console.error('Failed to send lead notification:', notifyError);
+        // Don't block the user flow if notification fails
+      }
+
       setEmailSubmitted(true);
       setShowEmailCapture(false);
       
