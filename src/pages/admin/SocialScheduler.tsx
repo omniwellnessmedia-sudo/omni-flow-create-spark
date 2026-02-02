@@ -81,6 +81,8 @@ const SocialScheduler = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
+  const [isCampaignGeneratorOpen, setIsCampaignGeneratorOpen] = useState(false);
+  const [generatingCampaign, setGeneratingCampaign] = useState(false);
   const [editingPost, setEditingPost] = useState<ScheduledPost | null>(null);
   const [zapierWebhookUrl, setZapierWebhookUrl] = useState('');
   
@@ -322,6 +324,42 @@ const SocialScheduler = () => {
     });
   };
 
+  const handleGenerateCampaign = async () => {
+    setGeneratingCampaign(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-campaign-content', {
+        body: { days: 31, postsPerDay: 3, campaign: 'RoamBuddy 31-Day Launch' }
+      });
+
+      if (error) throw error;
+
+      if (data?.posts && data.posts.length > 0) {
+        // Format posts for bulk import
+        const formattedContent = data.posts.map((post: any) => 
+          `[${post.platform.charAt(0).toUpperCase() + post.platform.slice(1)}] ${post.content} ${post.hashtags?.join(' ') || ''}`
+        ).join('\n');
+
+        setBulkContent(formattedContent);
+        setIsCampaignGeneratorOpen(false);
+        setIsBulkImportOpen(true);
+
+        toast({
+          title: 'Campaign Generated!',
+          description: `${data.posts.length} posts ready for review and import`,
+        });
+      }
+    } catch (error) {
+      console.error('Campaign generation error:', error);
+      toast({
+        title: 'Generation Error',
+        description: 'Failed to generate campaign content. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setGeneratingCampaign(false);
+    }
+  };
+
   const openEditDialog = (post: ScheduledPost) => {
     setEditingPost(post);
     setFormData({
@@ -389,7 +427,58 @@ const SocialScheduler = () => {
             <h1 className="text-2xl md:text-3xl font-bold">Social Media Scheduler</h1>
             <p className="text-muted-foreground">Schedule posts for Facebook, Instagram, and TikTok</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            {/* AI Campaign Generator Button */}
+            <Dialog open={isCampaignGeneratorOpen} onOpenChange={setIsCampaignGeneratorOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/30">
+                  <Sparkles className="h-4 w-4 mr-2 text-purple-500" />
+                  AI Campaign
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-purple-500" />
+                    Generate RoamBuddy Campaign
+                  </DialogTitle>
+                  <DialogDescription>
+                    AI will generate a complete 31-day social media campaign for RoamBuddy eSIMs
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div className="bg-muted rounded-lg p-4 space-y-2">
+                    <p className="font-medium">Campaign Details:</p>
+                    <ul className="text-sm text-muted-foreground space-y-1">
+                      <li>• 31 days × 3 posts/day = 93 posts</li>
+                      <li>• Platforms: Facebook, Instagram, TikTok</li>
+                      <li>• Content pillars: Inspiration, Education, Empowerment, Wellness</li>
+                      <li>• RoamBuddy eSIM focused messaging</li>
+                    </ul>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Posts will be generated and added to the bulk import queue for your review.
+                  </p>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsCampaignGeneratorOpen(false)}>Cancel</Button>
+                  <Button onClick={handleGenerateCampaign} disabled={generatingCampaign}>
+                    {generatingCampaign ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4 mr-2" />
+                        Generate Campaign
+                      </>
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             <Dialog open={isBulkImportOpen} onOpenChange={setIsBulkImportOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline">

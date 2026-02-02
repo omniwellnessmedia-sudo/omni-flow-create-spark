@@ -842,6 +842,48 @@ export type Database = {
           },
         ]
       }
+      chatbot_conversations: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          id: string
+          lead_captured: boolean | null
+          lead_source: string | null
+          messages: Json | null
+          products_recommended: Json | null
+          session_id: string
+          started_at: string
+          updated_at: string
+          user_email: string | null
+        }
+        Insert: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          lead_captured?: boolean | null
+          lead_source?: string | null
+          messages?: Json | null
+          products_recommended?: Json | null
+          session_id: string
+          started_at?: string
+          updated_at?: string
+          user_email?: string | null
+        }
+        Update: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          lead_captured?: boolean | null
+          lead_source?: string | null
+          messages?: Json | null
+          products_recommended?: Json | null
+          session_id?: string
+          started_at?: string
+          updated_at?: string
+          user_email?: string | null
+        }
+        Relationships: []
+      }
       community_posts: {
         Row: {
           comments_count: number | null
@@ -1160,6 +1202,10 @@ export type Database = {
           full_name: string | null
           id: string
           interests: string[] | null
+          last_email_sent_at: string | null
+          lead_source: string | null
+          nurture_sequence_step: number | null
+          nurture_started_at: string | null
           source: string | null
           subscribed_at: string
           unsubscribed: boolean | null
@@ -1174,6 +1220,10 @@ export type Database = {
           full_name?: string | null
           id?: string
           interests?: string[] | null
+          last_email_sent_at?: string | null
+          lead_source?: string | null
+          nurture_sequence_step?: number | null
+          nurture_started_at?: string | null
           source?: string | null
           subscribed_at?: string
           unsubscribed?: boolean | null
@@ -1188,6 +1238,10 @@ export type Database = {
           full_name?: string | null
           id?: string
           interests?: string[] | null
+          last_email_sent_at?: string | null
+          lead_source?: string | null
+          nurture_sequence_step?: number | null
+          nurture_started_at?: string | null
           source?: string | null
           subscribed_at?: string
           unsubscribed?: boolean | null
