@@ -813,6 +813,32 @@ async function handleCreateOrder(orderData: OrderData, supabase: ReturnType<type
       console.error('Database order error:', orderError);
     }
 
+    // Send sale notification (async, don't block order completion)
+    try {
+      console.log('📧 Triggering sale notification...');
+      fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/roambuddy-sale-notification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`
+        },
+        body: JSON.stringify({
+          orderId: `RB-${Date.now()}`,
+          customerEmail: orderData.customer_email || 'traveler@omniwellnessmedia.com',
+          customerName: orderData.customer_name || 'Wellness Traveler',
+          productName: orderData.product_name || 'RoamBuddy eSIM',
+          amount: orderData.amount || 0,
+          currency: orderData.currency || 'USD',
+          destination: orderData.destination,
+          completedAt: new Date().toISOString()
+        })
+      }).then(res => res.json())
+        .then(data => console.log('✅ Sale notification sent:', data))
+        .catch(err => console.error('❌ Sale notification failed:', err));
+    } catch (notifyError) {
+      console.error('Sale notification error (non-blocking):', notifyError);
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true,
