@@ -28,11 +28,11 @@ export const useRoamBuddyAPI = () => {
 
     try {
       const { data: result, error: apiError } = await supabase.functions.invoke('roambuddy-api', {
-        body: { action, ...data }
+        body: { action, data }
       });
 
       if (apiError) throw apiError;
-      if (result.error) throw new Error(result.error);
+      if (result.error && !result.success) throw new Error(result.error);
 
       return result;
     } catch (err: any) {
@@ -75,10 +75,31 @@ export const useRoamBuddyAPI = () => {
     customer_email: string;
     product_name: string;
     amount: number;
+    original_amount?: number;
     currency?: string;
     destination?: string;
+    discount_code?: string | null;
+    discount_amount?: number;
+    wellcoins_earned?: number;
   }) => {
     return callAPI('createOrder', orderData);
+  };
+
+  // Guest checkout - no authentication required
+  const createGuestOrder = async (orderData: {
+    product_id: string;
+    customer_name: string;
+    customer_email: string;
+    product_name: string;
+    amount: number;
+    original_amount?: number;
+    currency?: string;
+    destination?: string;
+    discount_code?: string | null;
+    discount_amount?: number;
+    wellcoins_earned?: number;
+  }) => {
+    return callAPI('createGuestOrder', orderData);
   };
 
   const getOrderedEsims = async () => {
@@ -102,6 +123,7 @@ export const useRoamBuddyAPI = () => {
     getCountries,
     getWellnessPackages,
     createOrder,
+    createGuestOrder,
     getOrderedEsims,
     activateEsim,
     trackOrder

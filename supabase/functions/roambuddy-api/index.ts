@@ -218,15 +218,47 @@ serve(async (req) => {
       case 'getProductsPagination':
         return await handleGetProductsPagination(data)
       
+      // Guest checkout - no authentication required
+      case 'createGuestOrder':
+        console.log('🛒 Processing guest checkout order');
+        
+        // Validate required fields for guest checkout
+        if (!data.customer_email || !data.customer_name || !data.product_id) {
+          return new Response(
+            JSON.stringify({ 
+              success: false, 
+              error: 'Missing required fields',
+              message: 'Please provide customer_email, customer_name, and product_id'
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+          );
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(data.customer_email)) {
+          return new Response(
+            JSON.stringify({ 
+              success: false, 
+              error: 'Invalid email address',
+              message: 'Please provide a valid email address'
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+          );
+        }
+
+        console.log('✅ Guest order validated, proceeding with order creation');
+        return await handleCreateOrder({ ...data, user_id: null }, supabase);
+      
       case 'createOrder':
-        // Require authentication for order creation to prevent abuse
+        // Require authentication for authenticated order creation
         const authHeader = req.headers.get('Authorization');
         if (!authHeader) {
           return new Response(
             JSON.stringify({ 
               success: false, 
               error: 'Authentication required for order creation',
-              message: 'Please sign in to create orders'
+              message: 'Please sign in to create orders, or use guest checkout'
             }),
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 401 }
           );
@@ -257,7 +289,7 @@ serve(async (req) => {
         }
 
         console.log('✅ User authenticated for order creation:', user.id);
-        return await handleCreateOrder(data, supabase)
+        return await handleCreateOrder({ ...data, user_id: user.id }, supabase)
       
       case 'trackOrder':
       case 'getOrderedEsims':

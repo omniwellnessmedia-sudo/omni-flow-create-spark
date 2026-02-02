@@ -1,10 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.54.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+// Chad's WhatsApp number
+const CHAD_WHATSAPP = "27748315961";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -230,9 +234,49 @@ serve(async (req) => {
 
     console.log("Lead notification sent successfully:", data);
 
+    // Initialize Supabase for logging
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Log notification to database
+    await supabase.from("notification_logs").insert({
+      notification_type: 'lead_capture',
+      recipient: 'omniwellnessmedia@gmail.com',
+      payload: { email, sessionId, intelligence },
+      status: 'sent',
+      message_id: data?.id
+    });
+
+    // Generate WhatsApp click-to-chat link
+    const whatsappMessage = `🎯 New RoamBuddy Lead!\n\n📧 ${email}${intelligence.destination ? `\n🌍 ${intelligence.destination}` : ''}${intelligence.duration ? ` (${intelligence.duration})` : ''}`;
+    const whatsappLink = `https://wa.me/${CHAD_WHATSAPP}?text=${encodeURIComponent(whatsappMessage)}`;
+    
+    console.log("📱 WhatsApp link:", whatsappLink);
+
+    // Try to send WhatsApp notification (non-blocking)
+    try {
+      await fetch(`${supabaseUrl}/functions/v1/send-whatsapp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`
+        },
+        body: JSON.stringify({
+          type: 'lead',
+          email,
+          destination: intelligence.destination,
+          duration: intelligence.duration
+        })
+      });
+    } catch (whatsappError) {
+      console.error("WhatsApp notification failed (non-blocking):", whatsappError);
+    }
+
     return new Response(JSON.stringify({ 
       success: true,
-      messageId: data?.id 
+      messageId: data?.id,
+      whatsappLink
     }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -240,6 +284,24 @@ serve(async (req) => {
 
   } catch (error) {
     console.error("Error in roambuddy-lead-notification:", error);
+
+    // Log failed notification
+    try {
+      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      
+      await supabase.from("notification_logs").insert({
+        notification_type: 'lead_capture',
+        recipient: 'omniwellnessmedia@gmail.com',
+        payload: {},
+        status: 'failed',
+        error_message: error instanceof Error ? error.message : "Unknown error"
+      });
+    } catch (logError) {
+      console.error("Failed to log notification error:", logError);
+    }
+
     return new Response(JSON.stringify({ 
       success: false,
       error: error instanceof Error ? error.message : "Unknown error"
