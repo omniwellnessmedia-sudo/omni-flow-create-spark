@@ -1,319 +1,145 @@
 
 
-# Fix Chatbot Text Formatting and PayPal Card Payment Regional Issues
+# Fix RoamBuddy Order Creation Authentication Failure
 
-## Issues Identified
+## Problem Analysis
 
-### Issue 1: Chatbot Not Formatting Text Properly
-The RoamBuddy sales bot displays raw markdown/asterisks instead of properly formatted text. This is because the AI responses contain markdown formatting (like `**bold**`, `*italic*`) but the chat UI renders `{message.content}` as plain text without parsing markdown.
-
-**Current code (line 303):**
-```tsx
-{message.content}
+The checkout crashes after entering address and clicking "Pay" with the error:
+```
+Order request failed: {"statusCode":500,"message":"Authorization token is Invalid!"}
 ```
 
-This just outputs the raw string with asterisks visible.
+### Root Cause Identified
 
-### Issue 2: PayPal CardFields Still Requires UK/US Phone Number
-The PayPal CardFields implementation attempts to call the PayPal REST API directly from the browser (line 688-707), which:
-1. Won't work without authentication headers
-2. Doesn't have proper configuration for digital goods
-3. May still trigger PayPal's hosted vault form which requires billing details
+Looking at the `roambuddy-api` edge function, there's a **token prioritization inconsistency** between different operations:
 
-**Current problematic code:**
-```tsx
-createOrder={async () => {
-  const response = await fetch('https://api-m.paypal.com/v2/checkout/orders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ... })
-  });
-  const order = await response.json();
-  return order.id;
-}}
+**For fetching products (line 472)** - works correctly:
+```typescript
+const token = authData.data?.access_token || authData.access_token || ...
 ```
 
-This approach is incorrect - you can't call PayPal's REST API directly from the browser without OAuth credentials.
+**For creating orders (line 767)** - FAILS:
+```typescript
+const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || ...
+```
+
+The RoamBuddy API authentication returns both `access_token` and `auth_token`. According to the logs, `access_token` is the correct one to use. The order creation code mistakenly prioritizes `auth_token` first, which may be a different/invalid token type.
+
+### Additional Issues
+
+1. **Exchange Rate API Failing**: The `api.exchangerate-api.io` is returning `ERR_NAME_NOT_RESOLVED` - a DNS issue that causes fallback to hardcoded rates. This is a warning but doesn't block the payment.
+
+2. **FeatureGateClients Warning**: This is a PayPal SDK internal warning about multiple versions - can be safely ignored as it comes from the PayPal JavaScript.
 
 ---
 
 ## Solution
 
-### Fix 1: Add Markdown Rendering to Chatbot
+### Fix 1: Standardize Token Priority in Order Creation
 
-Install a lightweight markdown parser and render bot messages with proper formatting:
+Update the order creation in `roambuddy-api` to use the same token priority as product fetching:
 
-**Option A: Simple regex-based formatter (recommended for chat)**
-- Convert `**text**` to bold
-- Convert `*text*` to italic  
-- Convert emoji codes naturally
-- No additional dependencies needed
+**File: `supabase/functions/roambuddy-api/index.ts`**
 
-**Option B: Use a markdown library like `react-markdown`**
-- Full markdown support
-- Requires adding dependency
-
-I recommend **Option A** for simplicity since we only need basic formatting in a chat context.
-
-**Changes to `RoamBuddySalesBot.tsx`:**
-
-Add a formatting function:
-```tsx
-const formatMessage = (content: string) => {
-  // Convert **bold** to <strong>
-  // Convert *italic* to <em>
-  // Convert line breaks
-  return content
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    .replace(/\n/g, '<br />');
-};
+Change line 767 from:
+```typescript
+const token = authData.data?.auth_token || authData.auth_token || authData.data?.access_token || authData.access_token || authData.token || authData.data?.token;
 ```
 
-Update message rendering to use `dangerouslySetInnerHTML` with sanitization or create React elements.
+To:
+```typescript
+const token = authData.data?.access_token || authData.access_token || authData.data?.auth_token || authData.auth_token || authData.token || authData.data?.token;
+```
 
-### Fix 2: Fix PayPal CardFields Order Creation
+This matches the working token priority used in `handleGetAllProducts()`.
 
-The CardFields component needs to use the **PayPal SDK's internal order creation**, not a direct API call. The correct approach is to return an order ID from a server-side edge function or use the SDK's built-in mechanism.
+### Fix 2: Add Fallback to Environment Token
 
-**Solution: Create order via Edge Function**
+If the fresh token still fails, try using the stored `ROAMBUDDY_ACCESS_TOKEN` from environment as a fallback:
 
-Create a new edge function `roambuddy-paypal-order` that:
-1. Creates the PayPal order server-side using proper OAuth
-2. Returns the order ID to the client
-3. Handles capture after approval
+```typescript
+const token = authData.data?.access_token || 
+              authData.access_token || 
+              authData.data?.auth_token || 
+              authData.auth_token || 
+              authData.token || 
+              authData.data?.token ||
+              Deno.env.get('ROAMBUDDY_ACCESS_TOKEN'); // Fallback to env token
+```
 
-This ensures:
-- No billing address required (digital goods)
-- No phone number required
-- Works for all countries
-- Proper OAuth authentication
+### Fix 3: Add Better Error Logging
+
+Add more detailed logging to help debug future token issues:
+
+```typescript
+console.log('Order auth token type:', 
+  authData.data?.access_token ? 'access_token' : 
+  authData.data?.auth_token ? 'auth_token' : 'other');
+console.log('Order auth token (first 30 chars):', token?.substring(0, 30) + '...');
+```
 
 ---
-
-## Files to Create
-
-| File | Purpose |
-|------|---------|
-| `supabase/functions/roambuddy-paypal-order/index.ts` | Server-side PayPal order creation and capture |
 
 ## Files to Modify
 
 | File | Changes |
 |------|---------|
-| `src/components/roambuddy/RoamBuddySalesBot.tsx` | Add markdown formatting for bot messages |
-| `src/components/roambuddy/RoamBuddyCheckoutModal.tsx` | Update CardFields to use edge function for order creation |
-| `supabase/functions/roambuddy-sales-chat/index.ts` | Update system prompt to avoid markdown formatting |
+| `supabase/functions/roambuddy-api/index.ts` | Fix token priority in order creation to match product fetching |
 
 ---
 
-## Technical Implementation Details
+## Technical Details
 
-### 1. Chatbot Markdown Formatting
+### Token Priority Comparison
 
-**Update `RoamBuddySalesBot.tsx` message rendering:**
+| Operation | Current Priority | Required Priority |
+|-----------|------------------|-------------------|
+| `handleGetAllProducts` (line 472) | `access_token` first | correct |
+| `handleCreateOrder` (line 767) | `auth_token` first | **needs fix** |
 
-Add a helper function to convert basic markdown to React elements:
+### RoamBuddy Auth Response Structure
 
-```tsx
-import DOMPurify from 'dompurify';
-
-const formatBotMessage = (content: string): string => {
-  let formatted = content
-    // Bold text: **text** -> <strong>text</strong>
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    // Italic text: *text* -> <em>text</em>
-    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    // Line breaks
-    .replace(/\n/g, '<br />');
-  
-  // Sanitize to prevent XSS
-  return DOMPurify.sanitize(formatted);
-};
-```
-
-Update the message display:
-```tsx
-{message.role === 'assistant' ? (
-  <div 
-    dangerouslySetInnerHTML={{ __html: formatBotMessage(message.content) }}
-  />
-) : (
-  message.content
-)}
-```
-
-Note: `dompurify` is already in dependencies.
-
-### 2. PayPal Edge Function for Order Creation
-
-**New file: `supabase/functions/roambuddy-paypal-order/index.ts`**
-
-```typescript
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, ...",
-};
-
-// Get PayPal access token
-async function getPayPalAccessToken(): Promise<string> {
-  const clientId = Deno.env.get("PAYPAL_CLIENT_ID");
-  const clientSecret = Deno.env.get("PAYPAL_CLIENT_SECRET");
-  
-  const response = await fetch("https://api-m.paypal.com/v1/oauth2/token", {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: "grant_type=client_credentials",
-  });
-  
-  const data = await response.json();
-  return data.access_token;
+Based on the logs, the authentication response looks like:
+```json
+{
+  "code": 200,
+  "message": "User authenticate successfully",
+  "data": {
+    "username": "T&TCapeTownSA",
+    "wallet_balance": "20.00",
+    "access_token": "eyJhbGc...",  // This one works!
+    "auth_token": "eyJhbGc..."     // This one may not work for orders
+  }
 }
-
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
-
-  const { action, amount, description, orderId } = await req.json();
-
-  if (action === "create") {
-    const accessToken = await getPayPalAccessToken();
-    
-    const response = await fetch("https://api-m.paypal.com/v2/checkout/orders", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        intent: "CAPTURE",
-        purchase_units: [{
-          amount: { currency_code: "USD", value: amount },
-          description: description,
-        }],
-        payment_source: {
-          card: {
-            // No billing address required for digital goods
-          }
-        }
-      }),
-    });
-    
-    const order = await response.json();
-    return new Response(JSON.stringify({ orderId: order.id }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
-
-  if (action === "capture") {
-    const accessToken = await getPayPalAccessToken();
-    
-    const response = await fetch(`https://api-m.paypal.com/v2/checkout/orders/${orderId}/capture`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-    
-    const result = await response.json();
-    return new Response(JSON.stringify(result), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
-});
 ```
 
-### 3. Update Checkout Modal CardFields
-
-Replace the broken direct API call with edge function:
-
-```tsx
-<PayPalCardFieldsProvider
-  createOrder={async () => {
-    const { data, error } = await supabase.functions.invoke('roambuddy-paypal-order', {
-      body: {
-        action: 'create',
-        amount: finalPriceUSD.toFixed(2),
-        description: `${product.name} - ${product.destination}`,
-      }
-    });
-    if (error) throw error;
-    return data.orderId;
-  }}
-  onApprove={async (data) => {
-    // Capture via edge function
-    const { data: captureResult, error } = await supabase.functions.invoke('roambuddy-paypal-order', {
-      body: {
-        action: 'capture',
-        orderId: data.orderID,
-      }
-    });
-    if (error) throw error;
-    
-    // Continue with existing order flow
-    await handlePayPalApprove(data, { 
-      order: { capture: async () => captureResult }
-    });
-  }}
-  // ... rest of props
->
-```
-
-### 4. Alternative: Update AI Prompt to Avoid Markdown
-
-A simpler approach for the chatbot is to instruct the AI not to use markdown:
-
-**Update SYSTEM_PROMPT in `roambuddy-sales-chat/index.ts`:**
-
-Add to the RESPONSE FORMAT section:
-```
-RESPONSE FORMAT:
-Keep responses concise (2-3 sentences max). Be conversational, not robotic.
-DO NOT use markdown formatting like asterisks (*) for emphasis. Just write naturally.
-Emojis are fine and encouraged for warmth.
-```
-
----
-
-## Recommended Approach
-
-For maximum reliability and speed:
-
-1. **Chatbot**: Update the AI prompt to not use markdown (simplest fix)
-2. **Chatbot (backup)**: Also add basic markdown parsing in case some formatting slips through
-3. **PayPal**: Create the edge function for proper server-side order creation
-
----
-
-## Required Secrets
-
-For the PayPal edge function, you'll need to add:
-- `PAYPAL_CLIENT_ID` - Your PayPal client ID (you may already have this)
-- `PAYPAL_CLIENT_SECRET` - Your PayPal client secret for OAuth
+Both tokens are present, but `access_token` is the correct one for API calls.
 
 ---
 
 ## Testing Checklist
 
-After implementation:
+After the fix:
 
-**Chatbot:**
-- [ ] Bot messages display without raw asterisks
-- [ ] Bold/italic text renders properly (if used)
-- [ ] Emojis display correctly
-- [ ] Line breaks work as expected
+1. **Payment Flow**
+   - [ ] Select an eSIM product
+   - [ ] Fill in customer details
+   - [ ] Complete PayPal/Card payment
+   - [ ] Verify order processes without 500 error
+   - [ ] Confirm eSIM details display on success
 
-**PayPal CardFields:**
-- [ ] Card form shows only number/expiry/CVV fields
-- [ ] No phone number field appears
-- [ ] No billing address required
-- [ ] Payment completes successfully with SA card
-- [ ] Order is created in database after payment
+2. **Verify Edge Function Logs**
+   - [ ] Check that correct token type is being used
+   - [ ] Confirm order request succeeds
+   - [ ] Verify order completion succeeds
+
+3. **Database Verification**
+   - [ ] Check that order is saved to `orders` table
+   - [ ] Verify RoamBuddy order ID is stored
+
+---
+
+## Summary
+
+The fix is straightforward - change the token priority in `handleCreateOrder()` from prioritizing `auth_token` to prioritizing `access_token`, matching the working pattern used in `handleGetAllProducts()`. This single-line change should resolve the "Authorization token is Invalid!" error.
 
