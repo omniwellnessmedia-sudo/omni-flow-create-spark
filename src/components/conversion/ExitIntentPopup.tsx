@@ -67,9 +67,30 @@ const ExitIntentPopup: React.FC<ExitIntentPopupProps> = ({
     if (collectEmail && email) {
       setIsSubmitting(true);
       try {
-        await supabase
+        // Use insert-then-update pattern to avoid upsert 401 errors for anonymous users
+        const { error: insertError } = await supabase
           .from('newsletter_subscribers')
-          .upsert({ email, source: 'exit_intent_popup', interests: ['uwc_programme'] }, { onConflict: 'email' });
+          .insert({ 
+            email, 
+            source: 'exit_intent_popup', 
+            interests: ['uwc_programme'],
+            subscribed_at: new Date().toISOString()
+          });
+
+        if (insertError && insertError.code === '23505') {
+          // Email already exists, update instead
+          await supabase
+            .from('newsletter_subscribers')
+            .update({ 
+              source: 'exit_intent_popup',
+              interests: ['uwc_programme'],
+              updated_at: new Date().toISOString()
+            })
+            .eq('email', email);
+        } else if (insertError) {
+          throw insertError;
+        }
+        
         toast({ title: 'Success!', description: 'Check your inbox for the download link.' });
       } catch (error) {
         console.error('Error subscribing:', error);

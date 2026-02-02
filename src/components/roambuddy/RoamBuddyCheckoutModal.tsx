@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PriceDisplay } from '@/components/ui/price-display';
 import { CurrencyToggle } from './CurrencyToggle';
 import { useRoamBuddyAPI, RoamBuddyProduct } from '@/hooks/useRoamBuddyAPI';
@@ -12,7 +13,7 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { PAYPAL_OPTIONS } from '@/config/paypal';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Loader2, CheckCircle, Copy, Smartphone, Calendar, Globe, Check, AlertCircle, Shield, FileText, Info, DollarSign, Coins, Tag, X } from 'lucide-react';
+import { Loader2, CheckCircle, Copy, Smartphone, Calendar, Globe, Check, AlertCircle, Shield, FileText, Info, DollarSign, Coins, Tag, X, CreditCard, Wallet } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface RoamBuddyCheckoutModalProps {
@@ -62,7 +63,7 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
     instructions?: string;
   } | null>(null);
 
-  const { createOrder } = useRoamBuddyAPI();
+  const { createGuestOrder } = useRoamBuddyAPI();
   const { formatZAR, formatUSD, exchangeRates } = useCurrencyConverter();
 
   if (!product) return null;
@@ -86,9 +87,17 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
     ? formatUSD(discount.discountAmount) 
     : formatZAR(discount.discountAmount * (exchangeRates?.USD || 18.50));
 
-  const handlePayPalApprove = async (data: any) => {
+  const handlePayPalApprove = async (data: any, actions: any) => {
     setIsProcessing(true);
     try {
+      // Capture the payment first
+      const captureResult = await actions.order.capture();
+      console.log('PayPal capture result:', captureResult);
+
+      if (captureResult.status !== 'COMPLETED') {
+        throw new Error('Payment was not completed');
+      }
+
       // Calculate WellCoins earned (1 per $1 spent + discount bonus)
       const baseWellcoins = Math.floor(finalPriceUSD);
       const totalWellcoins = baseWellcoins + discount.wellcoinsBonus;
@@ -107,20 +116,21 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
         wellcoins_earned: totalWellcoins,
       };
 
-      const result = await createOrder(orderData);
+      // Use guest checkout - no authentication required
+      const result = await createGuestOrder(orderData);
       
       if (result?.success) {
         setWellcoinsEarned(totalWellcoins);
         setEsimDetails({
-          iccid: result.iccid,
-          qrCode: result.qrCode,
-          activationCode: result.activationCode,
-          instructions: result.instructions,
+          iccid: result.data?.roambuddy_data?.iccid || result.iccid,
+          qrCode: result.data?.roambuddy_data?.qr_code || result.qrCode,
+          activationCode: result.data?.roambuddy_data?.activation_code || result.activationCode,
+          instructions: result.data?.roambuddy_data?.instructions || result.instructions,
         });
         setCurrentStep('complete');
         toast.success('eSIM order successful! Check your email for details.');
       } else {
-        throw new Error(result?.message || 'Order failed');
+        throw new Error(result?.message || result?.error || 'Order failed');
       }
     } catch (error: any) {
       console.error('Order error:', error);
@@ -607,42 +617,98 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
                   </div>
                 </div>
 
-                {/* PayPal Payment */}
-                <div className="space-y-4">
-                  <PayPalScriptProvider options={PAYPAL_OPTIONS}>
-                    <PayPalButtons
-                      createOrder={(data, actions) => {
-                        // Use discounted price if applicable
-                        const priceValue = finalPriceUSD.toFixed(2);
-                        
-                        return actions.order.create({
-                          intent: 'CAPTURE',
-                          purchase_units: [{
-                            amount: {
-                              value: priceValue,
-                              currency_code: 'USD',
-                            },
-                            description: discount.isApplied 
-                              ? `${product.name} - ${product.destination} (${discount.code} applied)`
-                              : `${product.name} - ${product.destination}`,
-                          }],
-                        });
-                      }}
-                      onApprove={handlePayPalApprove}
-                      onError={(err) => {
-                        console.error('PayPal error:', err);
-                        toast.error('Payment failed. Please try again.');
-                      }}
-                      disabled={isProcessing}
-                    />
-                  </PayPalScriptProvider>
-                  {isProcessing && (
-                    <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Processing your order...</span>
-                    </div>
-                  )}
-                </div>
+                {/* Payment Options */}
+                <Tabs defaultValue="paypal" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2 mb-4">
+                    <TabsTrigger value="paypal" className="flex items-center gap-2">
+                      <Wallet className="h-4 w-4" />
+                      PayPal
+                    </TabsTrigger>
+                    <TabsTrigger value="card" className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4" />
+                      Credit/Debit Card
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="paypal" className="space-y-4">
+                    <p className="text-sm text-muted-foreground text-center mb-2">
+                      Pay securely with your PayPal account
+                    </p>
+                    <PayPalScriptProvider options={PAYPAL_OPTIONS}>
+                      <PayPalButtons
+                        createOrder={(data, actions) => {
+                          const priceValue = finalPriceUSD.toFixed(2);
+                          return actions.order.create({
+                            intent: 'CAPTURE',
+                            purchase_units: [{
+                              amount: {
+                                value: priceValue,
+                                currency_code: 'USD',
+                              },
+                              description: discount.isApplied 
+                                ? `${product.name} - ${product.destination} (${discount.code} applied)`
+                                : `${product.name} - ${product.destination}`,
+                            }],
+                          });
+                        }}
+                        onApprove={(data, actions) => handlePayPalApprove(data, actions)}
+                        onError={(err) => {
+                          console.error('PayPal error:', err);
+                          toast.error('Payment failed. Please try again.');
+                        }}
+                        disabled={isProcessing}
+                      />
+                    </PayPalScriptProvider>
+                  </TabsContent>
+                  
+                  <TabsContent value="card" className="space-y-4">
+                    <p className="text-sm text-muted-foreground text-center mb-2">
+                      Pay with credit or debit card via PayPal
+                    </p>
+                    <PayPalScriptProvider options={PAYPAL_OPTIONS}>
+                      <PayPalButtons
+                        fundingSource="card"
+                        createOrder={(data, actions) => {
+                          const priceValue = finalPriceUSD.toFixed(2);
+                          return actions.order.create({
+                            intent: 'CAPTURE',
+                            purchase_units: [{
+                              amount: {
+                                value: priceValue,
+                                currency_code: 'USD',
+                              },
+                              description: discount.isApplied 
+                                ? `${product.name} - ${product.destination} (${discount.code} applied)`
+                                : `${product.name} - ${product.destination}`,
+                            }],
+                          });
+                        }}
+                        onApprove={(data, actions) => handlePayPalApprove(data, actions)}
+                        onError={(err) => {
+                          console.error('Card payment error:', err);
+                          toast.error('Card payment failed. Please try again.');
+                        }}
+                        disabled={isProcessing}
+                        style={{
+                          layout: 'vertical',
+                          color: 'black',
+                          shape: 'rect',
+                          label: 'pay',
+                        }}
+                      />
+                    </PayPalScriptProvider>
+                    <p className="text-xs text-muted-foreground text-center">
+                      Card payments are processed securely by PayPal. No PayPal account required.
+                    </p>
+                  </TabsContent>
+                </Tabs>
+                
+                {isProcessing && (
+                  <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Processing your order...</span>
+                  </div>
+                )}
 
                 <Button variant="outline" onClick={() => setCurrentStep('details')} className="w-full">
                   Back to Details

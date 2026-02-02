@@ -1304,6 +1304,39 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_logs: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          message_id: string | null
+          notification_type: string
+          payload: Json | null
+          recipient: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          message_id?: string | null
+          notification_type: string
+          payload?: Json | null
+          recipient: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          message_id?: string | null
+          notification_type?: string
+          payload?: Json | null
+          recipient?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
       onboarding_sessions: {
         Row: {
           completed: boolean | null

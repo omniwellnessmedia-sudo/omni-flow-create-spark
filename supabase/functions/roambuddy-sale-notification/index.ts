@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.54.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -230,6 +231,42 @@ serve(async (req) => {
     console.log("✅ Sale notification sent successfully:", data);
     console.log("📱 WhatsApp link included:", whatsappLink);
 
+    // Initialize Supabase for logging
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Log notification to database
+    await supabase.from("notification_logs").insert({
+      notification_type: 'sale_complete',
+      recipient: 'omniwellnessmedia@gmail.com',
+      payload: saleData,
+      status: 'sent',
+      message_id: data?.id
+    });
+
+    // Try to send WhatsApp notification (non-blocking)
+    try {
+      await fetch(`${supabaseUrl}/functions/v1/send-whatsapp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`
+        },
+        body: JSON.stringify({
+          type: 'sale',
+          email: saleData.customerEmail,
+          destination: saleData.destination,
+          productName: saleData.productName,
+          amount: saleData.amount,
+          currency: saleData.currency,
+          orderId: saleData.orderId
+        })
+      });
+    } catch (whatsappError) {
+      console.error("WhatsApp notification failed (non-blocking):", whatsappError);
+    }
+
     return new Response(JSON.stringify({ 
       success: true,
       messageId: data?.id,
@@ -241,6 +278,24 @@ serve(async (req) => {
 
   } catch (error) {
     console.error("Error in roambuddy-sale-notification:", error);
+
+    // Log failed notification
+    try {
+      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      
+      await supabase.from("notification_logs").insert({
+        notification_type: 'sale_complete',
+        recipient: 'omniwellnessmedia@gmail.com',
+        payload: {},
+        status: 'failed',
+        error_message: error instanceof Error ? error.message : "Unknown error"
+      });
+    } catch (logError) {
+      console.error("Failed to log notification error:", logError);
+    }
+
     return new Response(JSON.stringify({ 
       success: false,
       error: error instanceof Error ? error.message : "Unknown error"
