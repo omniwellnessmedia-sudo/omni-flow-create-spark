@@ -12,25 +12,35 @@ import {
   Send, 
   Loader2, 
   Sparkles,
-  Plane,
   Mail,
   Check
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Format bot messages - convert markdown to HTML
+// Format bot messages - convert markdown to clean HTML with proper spacing
 const formatBotMessage = (content: string): string => {
   let formatted = content
-    // Bold text: **text** -> <strong>text</strong>
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    // Italic text: *text* -> <em>text</em>
-    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    // Line breaks
+    // Remove all asterisk-based formatting (bold and italic)
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    // Convert bullet points to styled list items
+    .replace(/^[•\-]\s+(.+)$/gm, '<li class="ml-4 mb-1">$1</li>')
+    // Wrap consecutive list items in ul tags
+    .replace(/(<li[^>]*>.*<\/li>\n?)+/g, '<ul class="list-disc mb-3">$&</ul>')
+    // Double line breaks to paragraph breaks
+    .replace(/\n\n+/g, '</p><p class="mb-3">')
+    // Single line breaks to br
     .replace(/\n/g, '<br />');
+  
+  // Wrap in paragraph if not already wrapped
+  if (!formatted.startsWith('<')) {
+    formatted = `<p class="mb-3">${formatted}</p>`;
+  }
   
   // Sanitize to prevent XSS
   return DOMPurify.sanitize(formatted);
 };
+
 
 interface Message {
   role: 'user' | 'assistant';
@@ -62,7 +72,7 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
         // Add welcome message
         setMessages([{
           role: 'assistant',
-          content: "Hey there! 👋 I'm Roam, your travel connectivity expert. Planning a trip? I can help you find the perfect eSIM plan to stay connected anywhere in the world. Where are you headed?",
+          content: "Hey there! 🧭 I'm Roam, your wellness travel connectivity guide.\n\nBefore we dive in, a quick check - do you prefer:\n• Emojis and casual chat 🌍\n• Clean, professional text only\n\nEither way works great! Now, what wellness journey are you planning?",
           timestamp: new Date()
         }]);
       }
@@ -242,7 +252,7 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
     if (messages.length === 0) {
       setMessages([{
         role: 'assistant',
-        content: "Hey there! 👋 I'm Roam, your travel connectivity expert. Planning a trip? I can help you find the perfect eSIM plan to stay connected anywhere in the world. Where are you headed?",
+        content: "Hey there! 🧭 I'm Roam, your wellness travel connectivity guide.\n\nBefore we dive in, a quick check - do you prefer:\n• Emojis and casual chat 🌍\n• Clean, professional text only\n\nEither way works great! Now, what wellness journey are you planning?",
         timestamp: new Date()
       }]);
     }
@@ -274,15 +284,15 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
         style={{ maxHeight: 'calc(100vh - 120px)' }}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4">
+        <div className="bg-gradient-to-r from-blue-600 to-teal-600 text-white p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                <Plane className="h-5 w-5" />
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg">
+                🧭
               </div>
               <div>
                 <h3 className="font-semibold">Roam</h3>
-                <p className="text-xs text-white/80">Your Travel Connectivity Expert</p>
+                <p className="text-xs text-white/80">Wellness Travel Connectivity Guide</p>
               </div>
             </div>
             <Button 
@@ -362,21 +372,27 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
           </div>
         </ScrollArea>
 
-        {/* Quick Actions */}
+        {/* Wellness Quick Actions */}
         {messages.length === 1 && (
           <div className="px-4 pb-2">
+            <p className="text-xs text-muted-foreground mb-2">Popular wellness journeys:</p>
             <div className="flex flex-wrap gap-2">
-              {['Thailand', 'Europe', 'USA', 'Global'].map((dest) => (
+              {[
+                { label: '🧘 Yoga Retreat', query: "I'm going on a yoga retreat" },
+                { label: '🥾 Hiking Trip', query: "I'm planning a hiking adventure" },
+                { label: '🦁 Safari', query: "I'm going on safari" },
+                { label: '🧭 Multi-Country', query: "I'm traveling to multiple countries" },
+              ].map((item) => (
                 <Badge
-                  key={dest}
+                  key={item.label}
                   variant="secondary"
-                  className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                  className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-xs"
                   onClick={() => {
-                    setInputValue(`I'm traveling to ${dest}`);
+                    setInputValue(item.query);
                     setTimeout(() => sendMessage(), 100);
                   }}
                 >
-                  {dest}
+                  {item.label}
                 </Badge>
               ))}
             </div>
