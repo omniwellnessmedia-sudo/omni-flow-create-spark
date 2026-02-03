@@ -373,22 +373,25 @@ const WellnessRoamingPackages = () => {
   return (
     <div className="min-h-screen bg-background">
       <UnifiedNavigation />
-      {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
+      {/* Hero Section - WELLCONNECT Branding */}
+      <section className="py-16 bg-gradient-to-br from-green-500/10 via-emerald-500/5 to-teal-500/10">
         <div className="container mx-auto px-4 text-center">
+          <Badge className="mb-4 bg-green-500/10 text-green-700 border-green-500/20 px-4 py-2">
+            🌿 WellConnect by Omni
+          </Badge>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Travel Well Connected Services
+            🌿 Wellness Travel Essentials
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Comprehensive wellness travel services curated for your mindful journey. 
-            From peaceful transportation to transformative experiences - all with peace of mind.
+            Everything you need for a connected, conscious journey. 
+            Curated services for retreat centers, wellness practitioners, and mindful travelers.
           </p>
           <div className="flex justify-center gap-4">
-            <Badge variant="secondary" className="text-sm px-4 py-2">
-              Wellness-Optimized Services
+            <Badge variant="secondary" className="text-sm px-4 py-2 bg-green-500/10">
+              🌿 Retreat-Optimized Services
             </Badge>
-            <Badge variant="outline" className="text-sm px-4 py-2">
-              Peace of Mind Guaranteed
+            <Badge variant="outline" className="text-sm px-4 py-2 border-green-500/30">
+              💚 Peace of Mind Guaranteed
             </Badge>
           </div>
         </div>

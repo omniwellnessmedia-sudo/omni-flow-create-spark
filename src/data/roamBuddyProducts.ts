@@ -84,41 +84,52 @@ export const curatedESIMPicks: CuratedESIMPick[] = [
   }
 ];
 
-export const curatorProfiles: Record<string, CuratorProfile> = {
+export interface ExtendedCuratorProfile extends CuratorProfile {
+  wellnessSpecialty: string;
+  wellnessIcon: string;
+}
+
+export const curatorProfiles: Record<string, ExtendedCuratorProfile> = {
   ferozza: {
     name: 'Ferozza',
     role: 'Digital Nomad & Travel Content Creator',
     expertise: 'Global Connectivity Solutions',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Feroza%20Portrait.jpg',
-    quote: 'As someone always on the move, I know the stress of staying connected abroad. I recommend eSIM plans that give you reliable data without the roaming bill shock.',
-    curatorId: 'ferozza'
+    quote: 'Your wellness journey deserves reliable connectivity. I recommend eSIM plans that keep you present and connected without the roaming stress.',
+    curatorId: 'ferozza',
+    wellnessSpecialty: 'Multi-Country Explorer',
+    wellnessIcon: '🧭'
   },
   chad: {
     name: 'Chad',
     role: 'Head of Media & Strategy',
     expertise: 'Business Travel & Remote Production',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Chad%20and%20cow_OMNI_BWC.jpg',
-    quote: 'When you\'re filming on location or coordinating international projects, connectivity isn\'t optional. I choose plans that keep teams connected without compromise.',
-    curatorId: 'chad'
+    quote: 'Capture every transformative moment. When you\'re filming on location or coordinating projects, connectivity isn\'t optional - it\'s essential.',
+    curatorId: 'chad',
+    wellnessSpecialty: 'Production & Documentation',
+    wellnessIcon: '📸'
   },
   zenith: {
     name: 'Zenith',
     role: 'Travel Coordinator & Wellness Guide',
     expertise: 'Stress-Free Travel Setup',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Zenith_TNT_OMNI-9.jpg',
-    quote: 'First-time international travelers shouldn\'t worry about SIM cards. I recommend the simplest, most reliable eSIM options so you can focus on your wellness journey.',
-    curatorId: 'zenith'
+    quote: 'Focus on your inner journey, let me handle the connectivity. I recommend the simplest, most reliable eSIM options for peace of mind.',
+    curatorId: 'zenith',
+    wellnessSpecialty: 'Retreat Specialist',
+    wellnessIcon: '🧘'
   }
 };
 
 export const partnershipStory = {
-  headline: 'Why We Partner with RoamBuddy',
-  description: `We've chosen RoamBuddy as our connectivity partner because staying connected during transformative travel shouldn't mean compromising your wellness journey. RoamBuddy shares our commitment to seamless, stress-free travel connectivity.`,
+  headline: '🧭 Powered by RoamBuddy Technology',
+  description: `ROAM by Omni leverages RoamBuddy's global eSIM infrastructure to deliver wellness-optimized connectivity. We've curated their offerings through a wellness lens, so you get the right data for your journey type.`,
   benefits: [
     {
-      icon: '🇿🇦',
-      title: 'South African Excellence',
-      description: 'Supporting local tech infrastructure and innovation'
+      icon: '🧭',
+      title: 'Wellness-Curated Plans',
+      description: 'Every plan is selected with mindful travelers in mind'
     },
     {
       icon: '⚡',
@@ -127,23 +138,23 @@ export const partnershipStory = {
     },
     {
       icon: '🎧',
-      title: '24/7 Support',
+      title: '24/7 Wellness Support',
       description: 'Peace of mind during retreats with round-the-clock assistance'
     },
     {
-      icon: '🌍',
-      title: 'Wellness Destinations',
-      description: 'Coverage optimized for global wellness and retreat locations'
+      icon: '💚',
+      title: 'Community Impact',
+      description: 'Purchases support Valley of Plenty community projects'
     }
   ],
-  disclaimer: `Omni Wellness Media doesn't sell connectivity directly. We guide you toward solutions that align with conscious travel. When you purchase through our platform, we earn a small commission that supports our community development work.`
+  disclaimer: `ROAM by Omni is the wellness travel connectivity brand of Omni Wellness Media. We partner with RoamBuddy for eSIM infrastructure. When you purchase through our platform, we earn a small commission that supports our community development work.`
 };
 
 export const trustBadges = [
-  { icon: '🛡️', label: 'Peace of Mind Guarantee' },
-  { icon: '⚡', label: 'Instant Activation' },
-  { icon: '🌍', label: 'Global Coverage' },
-  { icon: '💚', label: 'Wellness App Optimized' },
+  { icon: '🧘', label: 'Retreat-Ready' },
+  { icon: '🌿', label: 'Wellness Optimized' },
+  { icon: '🧭', label: 'Curator Picks' },
+  { icon: '✨', label: 'Peace of Mind' },
   { icon: '🎧', label: '24/7 Support' }
 ];
 

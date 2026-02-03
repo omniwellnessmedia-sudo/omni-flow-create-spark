@@ -167,33 +167,34 @@ export default function ESIMStore() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50/20">
       <UnifiedNavigation />
       
-      {/* Hero Section */}
+      {/* Hero Section - ROAM Branding */}
       <Section size="large" className="pt-32 pb-16">
         <div className="text-center space-y-6 max-w-4xl mx-auto">
           <Badge className="bg-primary/10 text-primary hover:bg-primary/20">
-            Stay Connected, Stay Well
+            🧭 ROAM by Omni
           </Badge>
           <h1 className="text-5xl md:text-6xl font-bold text-foreground">
-            Wellness-Optimized eSIM Plans
+            🧭 Stay Connected to Your Wellness Journey
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Travel-ready connectivity designed for mindful explorers, retreat attendees, and wellness professionals
+            Connectivity curated for mindful explorers, retreat attendees, and wellness professionals
           </p>
         </div>
       </Section>
 
-      {/* Trust Badges */}
+
+      {/* Trust Badges - ROAM Wellness Focus */}
       <Section size="breathable" background="white">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { icon: Shield, label: "Peace of Mind Guarantee" },
-            { icon: Sparkles, label: "Wellness App Optimized" },
-            { icon: HeadphonesIcon, label: "24/7 Wellness Support" },
-            { icon: Globe, label: "Multi-Destination Coverage" }
+            { icon: '🧘', label: 'Retreat-Ready' },
+            { icon: '🌿', label: 'Wellness Optimized' },
+            { icon: '🧭', label: 'Curator Picks' },
+            { icon: '✨', label: 'Peace of Mind' }
           ].map((item, idx) => (
             <div key={idx} className="flex flex-col items-center text-center space-y-2">
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <item.icon className="w-8 h-8 text-primary" />
+                <span className="text-3xl">{item.icon}</span>
               </div>
               <p className="text-sm font-medium text-foreground">{item.label}</p>
             </div>
@@ -201,29 +202,37 @@ export default function ESIMStore() {
         </div>
       </Section>
 
-      {/* Meet Your Curators */}
+
+      {/* Meet Your Curators - ROAM Branding */}
       <Section size="large" background="gradient">
+        <div className="text-center mb-8">
+          <Badge className="mb-4 bg-primary/10 text-primary">🧭 Guided by Roam & Our Wellness Team</Badge>
+        </div>
         <h2 className="text-4xl font-bold text-center mb-12 text-foreground">
-          Meet Your Wellness Travel Curators
+          Your Wellness Connectivity Curators
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {curators.map((curator, idx) => (
-            <Card key={idx} className="hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-6 text-center space-y-4">
-                <Avatar className="w-24 h-24 mx-auto border-4 border-primary/20">
-                  <AvatarImage src={curator.avatar} alt={curator.name} />
-                  <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
-                    {curator.name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="text-xl font-bold text-foreground">{curator.name}</h3>
-                  <p className="text-sm text-primary font-medium">{curator.role}</p>
+            <Card key={idx} className="hover:shadow-xl transition-all duration-300 group">
+              <CardContent className="p-8 text-center space-y-6">
+                {/* Enlarged Avatar with Gradient Ring */}
+                <div className="relative mx-auto w-40 h-40">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary via-accent to-primary rounded-full opacity-75 group-hover:opacity-100 blur-sm transition-opacity duration-500" />
+                  <Avatar className="relative w-40 h-40 border-4 border-background shadow-xl group-hover:scale-105 transition-transform duration-500">
+                    <AvatarImage src={curator.avatar} alt={curator.name} />
+                    <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-4xl font-bold">
+                      {curator.name.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-foreground">{curator.name}</h3>
+                  <p className="text-sm font-medium text-primary">{curator.role}</p>
                   <p className="text-xs text-muted-foreground uppercase tracking-wider">
                     {curator.expertise}
                   </p>
                 </div>
-                <Badge className="bg-primary/10 text-primary">
+                <Badge className="bg-primary/10 text-primary border-primary/20">
                   {curator.recommendation}
                 </Badge>
                 <p className="text-sm text-muted-foreground italic">"{curator.quote}"</p>
