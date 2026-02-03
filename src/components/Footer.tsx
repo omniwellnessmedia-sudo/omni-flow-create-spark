@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { IMAGES } from "@/lib/images";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { omniVoice } from "@/data/omniVoiceGuide";
 
 const OMNI_QR_CODE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos**%20(Brand%20Assets)/omniwellnessmedia.png";
 
@@ -77,20 +78,26 @@ const Footer = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 opacity-30"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1),transparent_70%)]"></div>
       
-      <div className="relative container-width py-16">
-        {/* Newsletter Spotlight */}
-        <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl p-8 mb-16 border border-white/10 backdrop-blur-sm">
+      {/* Gaia Floating Orbs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-gradient-to-br from-primary/10 to-transparent blur-3xl motion-safe:animate-pulse-slow" />
+        <div className="absolute top-1/2 -right-10 w-32 h-32 rounded-full bg-gradient-to-br from-secondary/10 to-transparent blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '1s' }} />
+      </div>
+      
+      <div className="relative container-width py-16 z-10">
+        {/* Newsletter Spotlight - Updated with guided copy */}
+        <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-2xl p-8 mb-16 border border-white/10 backdrop-blur-sm motion-safe:animate-fade-in">
           <div className="text-center max-w-2xl mx-auto">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-gradient-to-r from-primary to-secondary rounded-full">
+              <div className="p-3 bg-gradient-to-r from-primary to-secondary rounded-full motion-safe:animate-breathing-slow">
                 <Heart className="w-6 h-6 text-white" />
               </div>
             </div>
             <h3 className="font-heading text-2xl font-bold mb-3">
-              Join Our <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-bold">Wellness Community</span>
+              {omniVoice.newsletter.headline}
             </h3>
             <p className="text-gray-300 mb-6">
-              Get weekly wellness tips, conscious content insights, and be the first to know about our transformative projects.
+              {omniVoice.newsletter.subheadline}
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
               <Input 
@@ -112,14 +119,14 @@ const Footer = () => {
                 ) : (
                   <Mail className="w-4 h-4 mr-2" />
                 )}
-                {isSubscribing ? "Subscribing..." : "Subscribe"}
+                {isSubscribing ? "Subscribing..." : omniVoice.newsletter.ctaText}
               </Button>
             </form>
             <div className="mt-4">
               <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
                 <Link to="/contact">
                   <Calendar className="w-4 h-4 mr-2" />
-                  Book Consultation
+                  {omniVoice.ctas.contact}
                 </Link>
               </Button>
             </div>
@@ -133,20 +140,45 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative">
-                <img src={IMAGES.logos.omniPrimary} alt="Omni Wellness Media" className="h-16 w-16 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-accent opacity-20 animate-pulse"></div>
+                <img src={IMAGES.logos.omniPrimary} alt="Omni Wellness Media" className="h-20 w-20 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105" />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-accent opacity-20 motion-safe:animate-pulse-slow"></div>
               </div>
               <div>
                 <h3 className="font-heading font-bold text-xl text-white mb-1">
                   Omni Wellness Media
                 </h3>
-                <p className="text-primary font-medium text-sm">Conscious Content Creation</p>
+                <p className="text-primary font-medium text-sm">{omniVoice.reassurance.gotYourBack}</p>
               </div>
             </div>
             
             <p className="text-gray-300 mb-6 leading-relaxed text-sm">
-              Bridging wellness, outreach & media to empower South Africa's journey to health & consciousness.
+              {omniVoice.pageIntros.home.subheadline}
             </p>
+
+            {/* Team Curator Avatars */}
+            <div className="flex items-center gap-2 mb-6">
+              <div className="flex -space-x-3">
+                <img 
+                  src={IMAGES.team.chad} 
+                  alt="Chad" 
+                  className="w-10 h-10 rounded-full border-2 border-slate-800 object-cover"
+                  onError={(e) => { e.currentTarget.src = IMAGES.logos.omniPrimary; }}
+                />
+                <img 
+                  src={IMAGES.team.zenith} 
+                  alt="Zenith" 
+                  className="w-10 h-10 rounded-full border-2 border-slate-800 object-cover"
+                  onError={(e) => { e.currentTarget.src = IMAGES.logos.omniPrimary; }}
+                />
+                <img 
+                  src={IMAGES.team.feroza} 
+                  alt="Feroza" 
+                  className="w-10 h-10 rounded-full border-2 border-slate-800 object-cover"
+                  onError={(e) => { e.currentTarget.src = IMAGES.logos.omniPrimary; }}
+                />
+              </div>
+              <span className="text-xs text-gray-400 ml-2">Your guides</span>
+            </div>
 
             {/* Wellness Mission Highlights */}
             <div className="space-y-3 mb-6">

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { TourTrigger } from "@/components/ui/app-tour";
@@ -8,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { IMAGES, getOmniLogo, getImageWithFallback } from "@/lib/images";
 import { CommunityCard } from "@/components/community/CommunityCard";
+import { FloatingDecorations } from "@/components/ui/gaia-elements";
+import { CuratorTip } from "@/components/curator/CuratorTip";
+import { omniVoice } from "@/data/omniVoiceGuide";
 
 import { 
   Sparkles, 
@@ -224,7 +226,7 @@ const HeroSection = () => {
 
   return (
     <>
-      {/* Stunning Hero Section with Cave View - WCAG 2.2 Compliant */}
+      {/* Stunning Hero Section with Cave View - WCAG 2.2 Compliant + Gaia Magic */}
       <section 
         aria-labelledby="hero-heading"
         className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden"
@@ -244,55 +246,71 @@ const HeroSection = () => {
           <div className="absolute inset-0 bg-contrast-overlay" aria-hidden="true"></div>
         </div>
 
+        {/* Gaia Magic - Floating Decorative Orbs */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute top-20 -left-20 w-64 h-64 rounded-full bg-gradient-to-br from-primary/20 to-transparent blur-3xl motion-safe:animate-pulse-slow" />
+          <div className="absolute top-40 right-10 w-48 h-48 rounded-full bg-gradient-to-br from-secondary/15 to-transparent blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-20 left-1/3 w-32 h-32 rounded-full bg-gradient-to-br from-accent/20 to-transparent blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '2s' }} />
+          <div className="absolute -bottom-10 -right-10 w-64 h-64 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '1.5s' }} />
+        </div>
+
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Brand Logo */}
+          {/* Brand Logo with Breathing Animation */}
           <div className="flex justify-center mb-6 sm:mb-8 animate-fade-in">
-            <div className="relative">
+            <div className="relative motion-safe:animate-breathing-slow">
               <img 
                 src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
                 alt="Omni Wellness Media logo"
-                className="h-28 w-28 sm:h-36 sm:w-36 lg:h-44 lg:w-44 object-contain drop-shadow-2xl rounded-full bg-white/90 p-3 animate-[pulse_3s_ease-in-out_infinite]"
+                className="h-28 w-28 sm:h-36 sm:w-36 lg:h-44 lg:w-44 object-contain drop-shadow-2xl rounded-full bg-white/90 p-3"
                 loading="eager"
               />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 animate-[pulse_3s_ease-in-out_infinite] blur-md -z-10" aria-hidden="true"></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 motion-safe:animate-glow-pulse blur-md -z-10" aria-hidden="true"></div>
             </div>
           </div>
           
-          {/* Main Headline - WCAG 1.4.3 Enhanced Contrast */}
+          {/* Main Headline - Guided, Welcoming Tone */}
           <h1 
             id="hero-heading"
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-white hero-text-shadow animate-fade-in-up leading-tight"
           >
-            Bridging Wellness, Outreach & Media
+            {omniVoice.pageIntros.home.headline}
           </h1>
           
-          {/* Subheadline */}
+          {/* Subheadline - Conversational, Guided */}
           <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 mb-8 sm:mb-12 max-w-4xl mx-auto hero-text-shadow animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.2s' }}>
-            Empowering South Africa's Journey to Health & Consciousness
+            {omniVoice.pageIntros.home.subheadline}
           </p>
 
-          {/* CTA Buttons - WCAG 2.5.5 Touch Targets (44px min) + 8px spacing */}
+          {/* CTA Buttons - Updated with guided copy */}
           <nav 
             aria-label="Primary actions"
             className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center animate-fade-in-up" 
             style={{ animationDelay: '0.4s' }}
           >
-            <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold bg-wellness-primary hover:bg-wellness-primary/90 text-white shadow-2xl min-w-[200px]">
-              <Link to="/services">Explore Services</Link>
+            <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
+              <Link to="/services">{omniVoice.ctas.seeMore}</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-wellness-primary border-2 border-white shadow-2xl min-w-[200px]">
-              <Link to="/tours-retreats">Wellness Tours</Link>
+            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-primary border-2 border-white shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
+              <Link to="/tours-retreats">{omniVoice.ctas.discover}</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-wellness-primary border-2 border-white shadow-2xl min-w-[200px]">
+            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-primary border-2 border-white shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
               <Link to="/twobewellshop">2BeWell Shop</Link>
             </Button>
           </nav>
+
+          {/* Reassurance Badge */}
+          <div className="mt-8 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white/90 text-sm">
+              <Heart className="w-4 h-4" />
+              {omniVoice.reassurance.gotYourBack}
+            </span>
+          </div>
         </div>
 
         {/* Scroll Indicator - Hidden from screen readers */}
         <div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 motion-safe:animate-bounce"
           aria-hidden="true"
         >
           <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2">
@@ -302,26 +320,40 @@ const HeroSection = () => {
       </section>
 
       {/* Main Content */}
-      <div className="bg-gradient-to-br from-gray-50 to-purple-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+      <div className="bg-gradient-to-br from-background to-muted/30 relative">
+        {/* Subtle Gaia floating elements */}
+        <FloatingDecorations variant="subtle" />
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 relative z-10">
+
+          {/* Curator Welcome Strip */}
+          <div className="mb-8">
+            <CuratorTip 
+              curator="chad" 
+              message={omniVoice.sectionIntros.services}
+              variant="banner"
+            />
+          </div>
 
           {/* Workspace Section */}
           <div className="mb-8 sm:mb-16">
-            <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+            <div className="bg-card rounded-xl shadow-sm border border-border/50 p-4 sm:p-6 motion-safe:animate-fade-in">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Omni's Conscious Workspace</h2>
-                <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-gray-500">
-                  <select className="border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm">
+                <h2 className="text-lg sm:text-xl font-semibold text-foreground">
+                  {omniVoice.transitions.curated}
+                </h2>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
+                  <select className="border border-border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm bg-background">
                     <option>Last edited</option>
                   </select>
-                  <select className="border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm">
+                  <select className="border border-border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm bg-background">
                     <option>Newest first</option>
                   </select>
-                  <select className="border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm">
+                  <select className="border border-border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm bg-background">
                     <option>All services</option>
                   </select>
                   <Link to="/services">
-                    <Button variant="ghost" size="sm" className="text-xs sm:text-sm">View All</Button>
+                    <Button variant="ghost" size="sm" className="text-xs sm:text-sm">{omniVoice.ctas.explore}</Button>
                   </Link>
                 </div>
               </div>
@@ -329,23 +361,23 @@ const HeroSection = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
                 {workspaceItems.map((item, index) => (
                   <Link key={index} to={item.href} className="group">
-                    <Card className="overflow-hidden hover:shadow-md transition-shadow">
-                      <div className="aspect-video bg-gradient-to-br from-wellness-light to-wellness-primary/20 relative">
+                    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 motion-safe:hover:scale-[1.02] border-border/50">
+                      <div className="aspect-video bg-gradient-to-br from-primary/10 to-secondary/10 relative">
                         <img 
                           src={item.image} 
                           alt={item.title}
-                          className="w-full h-full object-cover opacity-80"
+                          className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                           onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
                         />
                         <div className="absolute top-3 left-3">
-                          <span className="bg-wellness-primary text-white text-xs px-2 py-1 rounded-full">
+                          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full shadow-sm">
                             {item.badge}
                           </span>
                         </div>
                       </div>
                       <CardContent className="p-4">
-                        <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                        <p className="text-sm text-gray-600">{item.description}</p>
+                        <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                        <p className="text-sm text-muted-foreground">{item.description}</p>
                       </CardContent>
                     </Card>
                   </Link>
@@ -357,17 +389,17 @@ const HeroSection = () => {
           {/* Community Section */}
           <div className="mb-16">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-              <h2 className="text-xl font-semibold text-gray-900">From the Community</h2>
+              <h2 className="text-xl font-semibold text-foreground">{omniVoice.sectionIntros.community}</h2>
               <div className="flex items-center gap-4 w-full sm:w-auto">
                 <div className="flex gap-2 text-sm overflow-x-auto pb-2 sm:pb-0">
                   {['Popular', 'Discover', 'Wellness', 'Personal'].map((filter) => (
                     <button
                       key={filter}
                       onClick={() => setActiveFilter(filter)}
-                      className={`px-3 py-1 rounded-full transition-colors whitespace-nowrap ${
+                      className={`px-3 py-1 rounded-full transition-all duration-200 whitespace-nowrap ${
                         activeFilter === filter 
-                          ? 'bg-wellness-primary text-white' 
-                          : 'hover:bg-gray-100'
+                          ? 'bg-primary text-primary-foreground' 
+                          : 'hover:bg-muted text-foreground'
                       }`}
                     >
                       {filter}
@@ -375,7 +407,7 @@ const HeroSection = () => {
                   ))}
                 </div>
                 <Link to="/wellness-community" className="shrink-0">
-                  <Button variant="ghost" size="sm">View All</Button>
+                  <Button variant="ghost" size="sm">{omniVoice.ctas.explore}</Button>
                 </Link>
               </div>
             </div>
@@ -401,7 +433,7 @@ const HeroSection = () => {
                 <Button 
                   variant="outline" 
                   onClick={() => setShowMoreCommunity(!showMoreCommunity)}
-                  className="px-6"
+                  className="px-6 border-border"
                 >
                   {showMoreCommunity ? 'Show Less' : `Show More (${communityItems.filter(item => item.tags?.includes(activeFilter)).length - 6} more)`}
                 </Button>
