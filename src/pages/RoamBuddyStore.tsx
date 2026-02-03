@@ -149,7 +149,7 @@ const RoamBuddyStore = () => {
         />
       </div>
 
-      {/* Wellness Curators Section - Enhanced */}
+      {/* Wellness Curators Section - Enhanced with ROAM Branding */}
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--accent),0.1),transparent_70%)]" />
@@ -157,13 +157,15 @@ const RoamBuddyStore = () => {
         <div className="relative container mx-auto px-4">
           <div className="text-center mb-16 space-y-4">
             <div className="inline-block px-6 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full mb-4">
-              <p className="text-sm font-semibold text-primary uppercase tracking-widest">Meet Your Guides</p>
+              <p className="text-sm font-semibold text-primary uppercase tracking-widest">
+                🧭 Your Wellness Connectivity Curators
+              </p>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Curated by Wellness Travel Experts
+              Guided by Roam & Our Wellness Team
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our team has personally selected these connectivity solutions for conscious travelers
+              Our curators have personally selected connectivity solutions for conscious travelers like you
             </p>
           </div>
           
@@ -175,7 +177,7 @@ const RoamBuddyStore = () => {
         </div>
       </section>
 
-      {/* Editor's Picks Section - Enhanced */}
+      {/* Editor's Picks Section - ROAM Curated Wellness Plans */}
       <section id="editor-picks" className="relative py-24 overflow-hidden bg-gradient-to-br from-muted/50 to-background">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--primary),0.08),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(var(--accent),0.08),transparent_50%)]" />
@@ -185,14 +187,14 @@ const RoamBuddyStore = () => {
             <div className="inline-block px-6 py-2 bg-gradient-to-r from-yellow-500/10 to-amber-500/10 rounded-full mb-4">
               <p className="text-sm font-semibold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent uppercase tracking-widest">
                 <Award className="w-4 h-4 inline mr-2" />
-                Handpicked for You
+                🧭 Roam's Curated Wellness Plans
               </p>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Editor's Top Connectivity Picks
+              Connectivity Matched to Your Journey
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Specially curated eSIM plans for retreat attendees, digital nomads, and conscious travelers
+              Our wellness curators have handpicked these plans for retreat attendees, digital nomads, and conscious travelers
             </p>
           </div>
           
@@ -234,17 +236,17 @@ const RoamBuddyStore = () => {
         </div>
       </section>
 
-      {/* All Connectivity Options */}
+      {/* All Connectivity Options - ROAM Branded */}
       <section className="py-16 bg-background" data-products-section>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              {selectedCountry ? `eSIM Plans for ${selectedCountry}` : 'All Connectivity Options'}
+              {selectedCountry ? `🧭 Plans for ${selectedCountry}` : '🧭 All ROAM Connectivity Options'}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               {selectedCountry 
-                ? `Stay connected during your journey to ${selectedCountry}`
-                : 'Explore our complete range of global eSIM plans powered by RoamBuddy'}
+                ? `Stay connected during your wellness journey to ${selectedCountry}`
+                : 'Explore our complete range of wellness-curated eSIM plans'}
             </p>
             {selectedCountry && (
               <div className="mt-4 flex justify-center">
@@ -340,39 +342,39 @@ const RoamBuddyStore = () => {
         <DeviceCompatibility />
       </div>
 
-      {/* Footer CTA */}
-      <section className="py-16 bg-gradient-to-br from-blue-900 to-blue-700 text-white">
+      {/* Footer CTA - ROAM Branded */}
+      <section className="py-16 bg-gradient-to-br from-teal-900 via-cyan-800 to-blue-900 text-white">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <div className="mb-8">
               <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 rounded-full p-6 mb-6">
-                <Shield className="h-12 w-12 text-white" />
+                <span className="text-5xl">🧭</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Warranty & Satisfaction Guaranteed
+                Begin Your Connected Wellness Journey
               </h2>
               <p className="text-xl text-white/90">
-                Travel with confidence knowing you're backed by our commitment to quality and service
+                Travel with confidence knowing ROAM by Omni has curated the perfect connectivity for your journey
               </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <button 
                 onClick={scrollToSearch}
-                className="bg-white text-blue-900 hover:bg-white/90 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
+                className="bg-white text-teal-900 hover:bg-white/90 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                Get Connected Now
+                Find Your Perfect Plan
               </button>
               <button 
                 onClick={() => window.open('https://www.roambuddy.world/', '_blank')}
                 className="bg-white/10 border border-white/30 text-white hover:bg-white/20 backdrop-blur-sm px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                Visit RoamBuddy
+                About Our Partner: RoamBuddy
               </button>
             </div>
 
             <div className="text-sm text-white/70">
-              Questions? Contact our wellness travel support team
+              Questions? Chat with Roam 🧭 - your wellness travel connectivity guide
             </div>
           </div>
         </div>

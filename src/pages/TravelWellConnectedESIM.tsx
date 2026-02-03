@@ -60,19 +60,25 @@ const TravelWellConnectedESIM = () => {
 
   return (
     <div className="min-h-screen">
+      {/* Hero - WELLCONNECT Branding */}
       <Hero
-        title="Stay Connected, Stay Well"
-        subtitle="Wellness-optimized eSIM connectivity for mindful travelers"
+        title="🌿 Seamless Connectivity for Healing Journeys"
+        subtitle="WellConnect by Omni - connectivity curated for retreat centers and wellness organizations"
         variant="centered"
         height="medium"
-        className="bg-gradient-to-br from-primary/5 via-background to-secondary/5"
+        className="bg-gradient-to-br from-green-500/10 via-emerald-500/5 to-teal-500/10"
       >
         <div className="flex flex-col items-center gap-4 mt-6">
-          <Badge variant="secondary" className="text-sm px-4 py-2">
-            Your Wellness Travel Partner
+          <Badge variant="secondary" className="text-sm px-4 py-2 bg-green-500/10 text-green-700 border-green-500/20">
+            🌿 WellConnect by Omni
           </Badge>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
-            {trustBadges.map((badge, index) => (
+            {[
+              { icon: '🌿', label: 'Retreat-Optimized' },
+              { icon: '👥', label: 'Group Packages' },
+              { icon: '🧘', label: 'Mindful Connectivity' },
+              { icon: '💚', label: 'Healing Support' }
+            ].map((badge, index) => (
               <div key={index} className="flex items-center gap-2">
                 <span className="text-lg">{badge.icon}</span>
                 <span>{badge.label}</span>
@@ -82,13 +88,15 @@ const TravelWellConnectedESIM = () => {
         </div>
       </Hero>
 
+      {/* Curators Section - WELLCONNECT */}
       <Section size="large" background="white">
         <div className="text-center mb-12">
+          <Badge className="mb-4 bg-green-500/10 text-green-700">🌿 Guided by Our Wellness Team</Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Meet Your Wellness Curators
+            Your Retreat Connectivity Curators
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Our team has selected the best connectivity solutions for your wellness journey
+            Our team specializes in connectivity solutions for healing journeys and group wellness experiences
           </p>
         </div>
 
@@ -99,15 +107,17 @@ const TravelWellConnectedESIM = () => {
         </div>
       </Section>
 
+
+      {/* Editor's Picks - WELLCONNECT Curated */}
       <Section size="large" background="light">
         <div className="text-center mb-12">
+          <Badge className="mb-4 bg-green-500/10 text-green-700">🌿 WellConnect Curated Plans</Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Editor's Picks: Wellness-Optimized Connectivity
+            Retreat & Healing Journey Connectivity
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-6">
-            These recommendations are based on our understanding of wellness travel needs and RoamBuddy's offerings. 
-            We haven't personally tested every plan in every country—these are thoughtful curations to help you choose 
-            the right connectivity for your journey.
+            Curated by our wellness team for retreat centers, healing practitioners, and group organizers. 
+            These plans are optimized for mindful connectivity during transformative experiences.
           </p>
         </div>
 

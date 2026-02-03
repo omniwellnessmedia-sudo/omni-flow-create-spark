@@ -330,8 +330,8 @@ const DataProducts = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       <UnifiedNavigation />
 
-      {/* Hero Section - Saily-inspired with Omni branding */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-teal-500 to-cyan-400 min-h-[85vh] flex items-center">
+      {/* Hero Section - OMNI GLOBAL DATA Branding */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-400 min-h-[85vh] flex items-center">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0 bg-white/10 rounded-lg"></div>
@@ -340,30 +340,30 @@ const DataProducts = () => {
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 lg:px-6 grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-white space-y-8">
-            {/* Special Offer Badge */}
-            <div className="inline-flex items-center bg-orange-400 text-orange-900 px-4 py-2 rounded-full text-sm font-medium shadow-lg">
-              ⚡ Wellness Traveler Special: 25% OFF
+            {/* Brand Badge */}
+            <div className="inline-flex items-center bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg border border-white/20">
+              ✈️ Omni Global Data - Production-Ready Connectivity
             </div>
             
             <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-              Stay connected on your 
-              <span className="block text-yellow-300">wellness journey</span>
+              ✈️ Never Miss the Shot.
+              <span className="block text-white/90">Never Drop the Call.</span>
             </h1>
             
             <div className="space-y-4">
               <div className="flex items-center text-lg">
-                <Check className="w-6 h-6 mr-3 text-green-300 bg-green-600/20 rounded-full p-1" />
-                Get <strong className="text-yellow-300">25% off</strong> all wellness eSIM plans
+                <Check className="w-6 h-6 mr-3 text-white bg-white/20 rounded-full p-1" />
+                Get <strong className="text-white">25% off</strong> all production-ready data plans
               </div>
               <div className="flex items-center text-lg">
-                <Check className="w-6 h-6 mr-3 text-green-300 bg-green-600/20 rounded-full p-1" />
-                Plus earn <strong className="text-yellow-300">wellness credits</strong> for future bookings!
+                <Check className="w-6 h-6 mr-3 text-white bg-white/20 rounded-full p-1" />
+                High-data plans for <strong className="text-white">media teams & content creators</strong>
               </div>
             </div>
             
             {/* Destination Search */}
             <div className="space-y-4">
-              <h3 className="text-xl font-medium">Where are you traveling for wellness?</h3>
+              <h3 className="text-xl font-medium">Where's your next production?</h3>
               <div className="flex max-w-md">
                 <div className="relative flex-1">
                   <Input 
@@ -375,7 +375,7 @@ const DataProducts = () => {
                   />
                   <Button 
                     size="sm"
-                    className="absolute right-1 top-1 h-12 w-12 bg-orange-400 hover:bg-orange-500 text-orange-900 shadow-lg"
+                    className="absolute right-1 top-1 h-12 w-12 bg-orange-600 hover:bg-orange-700 text-white shadow-lg"
                     onClick={handleSearch}
                   >
                     <Search className="w-5 h-5" />
@@ -383,7 +383,7 @@ const DataProducts = () => {
                 </div>
               </div>
               <p className="text-sm opacity-90">
-                Instant activation • No roaming fees • 24/7 wellness support
+                ✈️ Global Coverage • 📸 Production-Ready • ⚡ High-Speed Data • 💼 Business Invoicing
               </p>
             </div>
           </div>
@@ -393,7 +393,7 @@ const DataProducts = () => {
             <div className="relative z-10 overflow-hidden rounded-3xl shadow-2xl">
               <img 
                 src={IMAGES.wellness.deals} 
-                alt="Wellness traveler staying connected with eSIM"
+                alt="Production team staying connected with Omni Global Data"
                 className="w-full h-auto object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
@@ -407,15 +407,15 @@ const DataProducts = () => {
                 <div className="text-xs text-gray-500 mt-1">5G • 45ms ping</div>
               </div>
               
-              <div className="absolute bottom-6 left-6 bg-orange-400 text-orange-900 rounded-xl p-4 shadow-lg">
+              <div className="absolute bottom-6 left-6 bg-orange-500 text-white rounded-xl p-4 shadow-lg">
                 <div className="text-sm font-medium">Save 75% vs roaming</div>
-                <div className="text-xs opacity-80">No bill shock • Instant setup</div>
+                <div className="text-xs opacity-80">Business invoicing available</div>
               </div>
             </div>
             
             {/* Floating elements */}
-            <div className="absolute -top-4 -right-4 w-20 h-20 bg-yellow-400/30 rounded-full animate-pulse"></div>
-            <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-orange-300/40 rounded-full animate-bounce"></div>
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/30 rounded-full animate-pulse"></div>
+            <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-amber-300/40 rounded-full animate-bounce"></div>
           </div>
         </div>
         
@@ -436,13 +436,21 @@ const DataProducts = () => {
              'Demo Mode'}
           </div>
         </div>
+        
+        {/* Powered by badge */}
+        <div className="absolute bottom-4 right-4 z-10">
+          <Badge variant="outline" className="bg-black/20 text-white/70 border-white/20 text-xs backdrop-blur-sm">
+            Powered by RoamBuddy Technology
+          </Badge>
+        </div>
       </section>
 
-      {/* Plans Section */}
+      {/* Plans Section - OMNI GLOBAL DATA */}
       <section className="py-20 px-4 bg-gray-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">Choose your perfect data plan</h2>
+            <Badge className="mb-4 bg-orange-500/10 text-orange-700">✈️ Omni Global Data Plans</Badge>
+            <h2 className="text-4xl font-bold mb-4 text-gray-900">Production-Ready Data Plans</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Transparent pricing, instant activation, and coverage that works wherever your wellness journey takes you.
             </p>
