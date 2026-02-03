@@ -1,55 +1,325 @@
 
 
-# Add Customer eSIM Confirmation Email
+# RoamBuddy Wellness Telecoms Marketing Plan
 
-## Problem Analysis
+## Executive Summary
 
-Currently, when a customer purchases an eSIM:
-1. **Admin gets notified** - Email to omniwellnessmedia@gmail.com with sale details
-2. **Customer gets nothing** - No email with their eSIM activation details
+This plan transforms RoamBuddy from a generic eSIM retailer into the world's first **Wellness Telecoms Brand** - virtual wellness employees powered by AI that understand the psychology of conscious travelers and guide them to connectivity solutions aligned with their wellness journey.
 
-The UI promises to send details to the customer's email (line 416 and 929 in the checkout modal), but this hasn't been implemented.
+---
 
-## What Needs to Happen
+## Core Brand Positioning
 
-### 1. Pass eSIM Activation Data to Notification Function
+**Tagline**: "Stay Connected to Your Wellness Journey"
 
-Currently, the `roambuddy-api` sends basic order info to `roambuddy-sale-notification` but **omits** the critical activation data:
+**Sales Agent Persona**: 🧭 **Roam** - The Mindful Travel Guide
 
-**Current payload (lines 874-883):**
-```typescript
-body: JSON.stringify({
-  orderId: `RB-${Date.now()}`,
-  customerEmail: orderData.customer_email,
-  customerName: orderData.customer_name,
-  productName: orderData.product_name,
-  amount: orderData.amount,
-  currency: orderData.currency,
-  destination: orderData.destination,
-  completedAt: new Date().toISOString()
-  // MISSING: iccid, qr_code, qrcode_url
-})
+The compass emoji (🧭) represents:
+- Navigation and guidance through decisions
+- Finding your true direction
+- Exploration with purpose
+- Pointing toward wellness destinations
+
+---
+
+## 30 Standardized Wellness Travel Activities
+
+Curated recommendations will be mapped to these wellness categories, each with associated connectivity needs:
+
+### Movement & Nature (10)
+1. **Hiking** - GPS-dependent, photo sharing, emergency contact
+2. **Trail Running** - Fitness tracking, route mapping
+3. **Forest Bathing (Shinrin-yoku)** - Light data for meditation apps
+4. **Beach Walking** - Photo sharing, tide apps
+5. **Mountain Climbing** - Emergency SOS, offline maps
+6. **Surfing & Water Sports** - Weather apps, surf reports
+7. **Cycling Tours** - Navigation, fitness tracking
+8. **Safari & Wildlife** - Photo uploads, guide communication
+9. **Kayaking & Paddleboarding** - Minimal but reliable emergency data
+10. **Cold Plunge & Wild Swimming** - Location sharing for safety
+
+### Mind & Meditation (6)
+11. **Guided Meditation Retreats** - Minimal distraction, emergency contact only
+12. **Silent Retreats (Vipassana)** - Ultra-minimal, peace of mind backup
+13. **Sound Bath & Sound Healing** - Streaming meditation content
+14. **Breathwork Workshops** - App-based guidance
+15. **Digital Detox Programs** - Emergency-only connectivity
+16. **Mindfulness Journaling** - Light cloud sync
+
+### Healing & Bodywork (6)
+17. **Yoga Retreats** - Moderate data for class videos
+18. **Spa & Thermal Wellness** - Light use, booking confirmations
+19. **Ayurvedic Treatments** - Practitioner communication
+20. **Traditional Healing Ceremonies** - Documentation, translation apps
+21. **Massage & Bodywork Journeys** - Booking and reviews
+22. **Detox & Fasting Retreats** - Health monitoring apps
+
+### Adventure & Exploration (4)
+23. **Cultural Immersion Tours** - Translation, navigation, documentation
+24. **Eco-Tourism** - Conservation apps, wildlife tracking
+25. **Stargazing & Astronomy** - Astronomy apps, remote locations
+26. **Pilgrimage & Sacred Site Visits** - Audio guides, spiritual apps
+
+### Community & Growth (4)
+27. **Wellness Conferences & Events** - High data for networking
+28. **Retreat Facilitation** - Video calls, group coordination
+29. **Conscious Community Gatherings** - Social sharing, live streaming
+30. **Plant Medicine Ceremonies** - Emergency contacts, integration support
+
+---
+
+## Wellness Intent Badges
+
+Each eSIM recommendation will carry a wellness context badge:
+
+| Badge | Wellness Intent | Data Need |
+|-------|-----------------|-----------|
+| 🧘 | Meditation & Mindfulness | Light (1-3GB) |
+| 🥾 | Active Adventure | Moderate (5-10GB) |
+| 🌊 | Ocean & Water Wellness | Moderate (5GB) |
+| 🌿 | Nature Immersion | Light (3-5GB) |
+| 🎪 | Community & Events | Heavy (10GB+) |
+| ✨ | Healing Journeys | Light (3GB) |
+| 📸 | Documentation & Creation | Heavy (10-20GB) |
+| 🧭 | Explorer & Multi-Country | Unlimited |
+
+---
+
+## The Roam Sales Agent - Enhanced System Prompt
+
+### Personality Profile
+
+```text
+Name: Roam 🧭
+Role: Your Mindful Travel Connectivity Guide
+
+Core Traits:
+- Calm and grounded (never pushy or salesy)
+- Psychologically aware (respects travel anxiety)
+- Wellness-literate (understands retreat culture)
+- Culturally sensitive (adapts language appropriately)
+- Accessibility conscious (offers emoji-free mode)
+
+Opening Ritual:
+"Hey there! 🧭 I'm Roam, your wellness travel connectivity guide. 
+
+Before we dive in, a quick check - do you prefer:
+• Emojis and casual chat 🌍
+• Clean, professional text only
+
+Either way works great! Now, what wellness journey are you planning?"
 ```
 
-**Required:** Add the eSIM details from `completeData`:
-```typescript
-iccid: completeData.iccid,
-qrCode: completeData.qr_code,        // LPA activation code
-qrCodeUrl: completeData.qrcode_url,  // QR image URL
-apn: completeData.apn,
-dataRoaming: completeData.data_roaming
+### Conversation Structure
+
+1. **Preference Check** (first message)
+   - Emoji preference
+   - Language/tone preference
+   
+2. **Wellness Discovery**
+   - "What type of wellness experience?" (present the 30 categories)
+   - "How connected do you want to be?"
+   
+3. **Curated Recommendation**
+   - Match activity to data need
+   - Present curator pick with wellness angle
+   
+4. **Guided Purchase**
+   - Clear formatting with spacing
+   - Step-by-step instructions
+
+### Response Formatting Standards
+
+```text
+STRUCTURE EVERY RESPONSE WITH:
+
+1. Acknowledgment (warm, personal)
+   [blank line]
+   
+2. Core recommendation with wellness angle
+   [blank line]
+   
+3. Action step (search instructions)
+   [blank line]
+   
+4. Follow-up question OR wellness tip
+
+NEVER:
+- Use asterisks for emphasis
+- Write walls of text
+- Sound robotic or templated
+- Assume one-size-fits-all
 ```
 
-### 2. Update Notification Function to Send Customer Email
+---
 
-The `roambuddy-sale-notification` function needs to:
-1. Accept the new eSIM fields
-2. Send a **second email** to the customer with:
-   - QR code image embedded
-   - LPA activation code as text backup
-   - Step-by-step installation instructions
-   - APN settings and data roaming reminder
-   - ICCID for reference
+## Technical Implementation Roadmap
+
+### Phase 1: Roam Agent Enhancement (Week 1)
+
+**Update**: `supabase/functions/roambuddy-sales-chat/index.ts`
+
+1. Add wellness activity knowledge base (30 categories)
+2. Implement preference check flow (emoji/language)
+3. Add structured response formatting rules
+4. Integrate wellness intent badges in recommendations
+5. Add curator context for personalized picks
+
+### Phase 2: Wellness Data Layer (Week 2)
+
+**Create**: `src/data/wellnessTravelActivities.ts`
+
+```typescript
+export const wellnessTravelActivities = [
+  {
+    id: 'hiking',
+    name: 'Hiking',
+    category: 'Movement & Nature',
+    icon: '🥾',
+    dataNeeds: 'moderate',
+    recommendedGB: '5-10',
+    keyApps: ['GPS', 'Maps', 'Weather', 'Camera'],
+    connectivityTips: 'Download offline maps before your hike',
+    curatedPlanIds: ['pick-sa-retreat', 'pick-europe-wellness']
+  },
+  // ... 29 more activities
+];
+```
+
+### Phase 3: Curated Suggestions Engine (Week 3)
+
+**Update**: `src/components/roambuddy/RoamBuddySalesBot.tsx`
+
+1. Add quick action buttons for wellness activities
+2. Implement activity-to-plan matching
+3. Display wellness badges on recommendations
+4. Show curator picks contextually
+
+### Phase 4: Virtual Wellness Employees (Week 4)
+
+**Create specialized agents** for different touchpoints:
+
+| Agent | Emoji | Role | Location |
+|-------|-------|------|----------|
+| Roam | 🧭 | Primary Sales | RoamBuddy Store |
+| Compass | 🌍 | Tour Bundler | Viator Integration |
+| Flow | 💧 | Retreat Specialist | Wellness Blog |
+| Signal | 📡 | Tech Support | Help Center |
+
+---
+
+## Chatbot UX Enhancements
+
+### Current Issues to Fix
+
+1. **Spacing**: Add line breaks between sections
+2. **Formatting**: Remove markdown artifacts
+3. **Preference**: Ask about emoji comfort upfront
+4. **Layout**: Use bullet points for options
+5. **Accessibility**: Offer text-only mode
+
+### Enhanced Message Component
+
+Update the `formatBotMessage` function to handle:
+
+```typescript
+// Clean, spaced paragraphs
+// Bullet points for lists
+// Clear section headers
+// Consistent emoji placement (or removal)
+// Wellness badge integration
+```
+
+---
+
+## Revenue Strategy: Virtual Wellness Employees
+
+### Sales Agent Deployment
+
+1. **RoamBuddy Store Page** - Roam 🧭 (primary)
+2. **Travel Well Connected** - Compass 🌍 
+3. **Blog Sidebar** - Flow 💧 (content-triggered)
+4. **Email Campaigns** - Embedded chat links
+5. **WhatsApp Business** - Same persona, different channel
+
+### Lead Qualification Flow
+
+```text
+AWARENESS -> ENGAGEMENT -> QUALIFICATION -> CONVERSION
+
+1. Roam greets warmly
+2. Asks wellness travel intent
+3. Presents curated option
+4. Captures email for 10% discount
+5. Guides to checkout
+6. Triggers sale notification
+7. Sends customer confirmation
+```
+
+### Commission Structure Visibility
+
+Include in marketing materials:
+- "8-15% of your purchase supports our community projects"
+- Link to Valley of Plenty initiative
+- Transparent conscious business model
+
+---
+
+## Content Calendar Integration
+
+### Weekly Themes (Roam's Tips)
+
+| Week | Theme | Content Focus |
+|------|-------|---------------|
+| 1 | Mountain Wellness | Hiking, altitude, cold plunge |
+| 2 | Ocean Healing | Surfing, beach walks, diving |
+| 3 | Urban Retreats | City wellness, day spas, events |
+| 4 | Remote Adventures | Safari, desert, rainforest |
+
+### Roam's Wellness Tips Bank
+
+Create 100+ wellness travel tips for Roam to share:
+- "Pro tip for hiking in the Alps: Download your maps on WiFi first..."
+- "Heading to a silent retreat? Our 1GB plan is perfect..."
+- "Safari tip: Keep your phone on airplane mode to save battery..."
+
+---
+
+## Metrics & Success Criteria
+
+### KPIs for Roam 🧭
+
+| Metric | Target | Current |
+|--------|--------|---------|
+| Conversation-to-Lead Rate | 25% | TBD |
+| Lead-to-Purchase Rate | 15% | TBD |
+| Email Capture Rate | 40% | TBD |
+| Customer Satisfaction | 4.5/5 | TBD |
+| Wellness Match Accuracy | 90% | TBD |
+
+### A/B Testing Queue
+
+1. Emoji preference impact on conversion
+2. Wellness activity prompts vs. destination prompts
+3. Curator picks visibility effect
+4. Chat bubble timing (5s vs. 10s vs. 15s)
+
+---
+
+## Summary: The Wellness Telecoms Niche
+
+### What Makes Us Different
+
+| Competitor | Their Approach | Our Approach |
+|------------|----------------|--------------|
+| Airalo | Generic eSIM listings | Wellness-curated picks |
+| Holafly | Price-focused | Experience-focused |
+| eSIM.net | Tech-first | Human-first (curator-led) |
+| RoamBuddy (us) | Conscious connectivity | Wellness telecoms pioneer |
+
+### The Roam Promise
+
+"We don't just sell data. We guide you to the right connectivity for your wellness journey - whether you're on a silent retreat in Bali or a hiking adventure in Patagonia. Stay connected to what matters."
 
 ---
 
@@ -57,130 +327,8 @@ The `roambuddy-sale-notification` function needs to:
 
 | File | Changes |
 |------|---------|
-| `supabase/functions/roambuddy-api/index.ts` | Include eSIM details (iccid, qr_code, qrcode_url, apn) in notification payload |
-| `supabase/functions/roambuddy-sale-notification/index.ts` | Add customer email with eSIM activation details |
-
----
-
-## Technical Implementation
-
-### Update 1: roambuddy-api - Pass eSIM Details
-
-Add the activation data to the notification payload (around line 874):
-
-```typescript
-body: JSON.stringify({
-  orderId: `RB-${Date.now()}`,
-  customerEmail: orderData.customer_email,
-  customerName: orderData.customer_name,
-  productName: orderData.product_name,
-  amount: orderData.amount,
-  currency: orderData.currency,
-  destination: orderData.destination,
-  completedAt: new Date().toISOString(),
-  // NEW: eSIM activation details
-  iccid: completeData?.iccid,
-  qrCode: completeData?.qr_code,          // LPA string
-  qrCodeUrl: completeData?.qrcode_url,    // QR image URL
-  apn: completeData?.apn || 'plus',
-  dataRoaming: completeData?.data_roaming || 'ON'
-})
-```
-
-### Update 2: roambuddy-sale-notification - Customer Email
-
-Add new fields to the interface and send a branded customer email:
-
-```typescript
-interface SaleNotificationRequest {
-  // ... existing fields ...
-  // NEW
-  iccid?: string;
-  qrCode?: string;
-  qrCodeUrl?: string;
-  apn?: string;
-  dataRoaming?: string;
-}
-```
-
-Create a customer-specific HTML template with:
-- Branded header with RoamBuddy/Omni Wellness branding
-- QR code image prominently displayed
-- Manual activation code as backup
-- Step-by-step installation instructions for iPhone and Android
-- APN settings and data roaming reminder
-- Order summary
-
-Send to customer:
-```typescript
-// Send customer confirmation email
-await resend.emails.send({
-  from: 'RoamBuddy eSIM <onboarding@resend.dev>',
-  to: [saleData.customerEmail],
-  subject: `🌍 Your eSIM is Ready! - ${saleData.productName}`,
-  html: customerEmailHtml,
-});
-```
-
----
-
-## Customer Email Content Design
-
-The customer email should include:
-
-**Header:**
-- "Your eSIM is Ready for ${destination}!"
-- Warm, travel-focused messaging
-
-**QR Code Section:**
-```text
-📱 SCAN TO ACTIVATE
-[QR Code Image]
-Or enter manually: LPA:1$smdp.io$K2-2UIKO8-12MM42P
-```
-
-**Installation Instructions:**
-```text
-📲 HOW TO INSTALL YOUR eSIM
-
-iPhone (iOS 12.1+):
-1. Go to Settings → Cellular → Add eSIM
-2. Tap "Use QR Code" and scan the code above
-3. Follow the prompts to activate
-
-Android:
-1. Go to Settings → Network & Internet → SIMs
-2. Tap "Add eSIM" or "Download eSIM"
-3. Scan the QR code above
-
-⚠️ IMPORTANT:
-• Install BEFORE you travel (while on WiFi)
-• Enable Data Roaming when you arrive
-• APN: plus (usually auto-configured)
-```
-
-**Order Summary:**
-- Product name, data amount, validity
-- ICCID for reference
-- Support contact
-
----
-
-## Testing Checklist
-
-After implementation:
-
-- [ ] Complete a test purchase
-- [ ] Verify admin email still arrives at omniwellnessmedia@gmail.com
-- [ ] Verify customer email arrives at the provided email address
-- [ ] Confirm QR code image displays correctly in email
-- [ ] Confirm LPA activation code is correct
-- [ ] Test QR code can be scanned (or validate activation code format)
-- [ ] Verify instructions are clear and accurate
-
----
-
-## Summary
-
-This enhancement adds a customer confirmation email with all the information needed to activate their eSIM - fulfilling the promise made in the checkout UI. The admin notification continues to work as before, but now the customer also receives their activation details directly to their inbox.
+| `supabase/functions/roambuddy-sales-chat/index.ts` | Enhanced system prompt with wellness training |
+| `src/components/roambuddy/RoamBuddySalesBot.tsx` | UX improvements, wellness quick actions |
+| `src/data/wellnessTravelActivities.ts` | NEW - 30 wellness activities data |
+| `src/data/roamBuddyProducts.ts` | Add wellness intent mappings |
 
