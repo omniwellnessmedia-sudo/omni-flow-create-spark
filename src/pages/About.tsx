@@ -7,6 +7,9 @@ import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import ImageCarousel3D from "@/components/ui/image-carousel-3d";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
+import { FloatingDecorations } from "@/components/ui/gaia-elements";
+import { CuratorTip } from "@/components/curator/CuratorTip";
+import { omniVoice } from "@/data/omniVoiceGuide";
 
 // Supabase storage URLs for team photos
 const warrenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/warren.png";
@@ -126,22 +129,22 @@ const About = () => {
       <Hero
         title={
           <>
-            About <span className="text-gradient-rainbow">Omni Wellness Media</span>
+            {omniVoice.pageIntros.about.headline}
           </>
         }
-        description="We are messengers to humanity, creating authentic content that bridges communities and inspires positive change from South Africa to the world."
+        description={omniVoice.pageIntros.about.subheadline}
         image={IMAGES.wellness.community}
         imageAlt="Community outreach with distribution boxes"
         variant="split"
         height="medium"
         actions={[
           {
-            label: "Our Services",
+            label: omniVoice.ctas.seeMore,
             href: "/services",
             variant: "wellness"
           },
           {
-            label: "Contact Us",
+            label: omniVoice.ctas.contact,
             href: "/contact",
             variant: "outline"
           }
@@ -151,8 +154,18 @@ const About = () => {
       <main>
 
         {/* Our Story - Redesigned for better image showcase */}
-        <section className="section-spacing bg-white">
-          <div className="container-width">
+        <section className="section-spacing bg-white relative overflow-hidden">
+          <FloatingDecorations variant="subtle" />
+          <div className="container-width relative z-10">
+            {/* Curator Welcome */}
+            <div className="mb-8">
+              <CuratorTip 
+                curator="chad" 
+                message="Let me share our story with you — it all started with a simple belief that everyone deserves content that uplifts."
+                variant="banner"
+              />
+            </div>
+
             <div className="text-center mb-12">
               <h2 className="heading-secondary text-gradient-hero no-faded-text">Our Story</h2>
               <p className="text-lg text-gray-600 max-w-4xl mx-auto mb-8 leading-relaxed">
@@ -197,14 +210,24 @@ const About = () => {
         </section>
 
         {/* Meet Our Team - New Large Image-Focused Layout */}
-        <section className="section-spacing bg-gray-50">
-          <div className="container-width">
+        <section className="section-spacing bg-gray-50 relative overflow-hidden">
+          <FloatingDecorations variant="section" />
+          <div className="container-width relative z-10">
+            {/* Team Curator Intro */}
+            <div className="mb-8">
+              <CuratorTip 
+                curator="zenith" 
+                message={omniVoice.sectionIntros.team}
+                variant="inline"
+              />
+            </div>
+
             <div className="text-center mb-16">
               <h2 className="heading-secondary text-gradient-hero no-faded-text">
                 Meet Our <span className="text-rainbow-enhanced">Team</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our diverse team brings together creativity, strategy, and passion for positive change.
+                {omniVoice.reassurance.goodHands}
               </p>
             </div>
 
@@ -260,12 +283,16 @@ const About = () => {
         </section>
 
         {/* Values */}
-        <section className="section-spacing bg-white">
-          <div className="container-width">
+        <section className="section-spacing bg-white relative overflow-hidden">
+          <FloatingDecorations variant="subtle" />
+          <div className="container-width relative z-10">
             <div className="text-center mb-16">
               <h2 className="heading-secondary text-gradient-hero no-faded-text">
                 Our <span className="text-rainbow-enhanced">Values</span>
               </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                These aren't just words on a page — they guide everything we do.
+              </p>
             </div>
             <div className="grid-responsive-4">
               {[
@@ -288,8 +315,9 @@ const About = () => {
         </section>
 
         {/* Community Impact */}
-        <section className="section-spacing bg-gray-50">
-          <div className="container-width">
+        <section className="section-spacing bg-gray-50 relative overflow-hidden">
+          <FloatingDecorations variant="section" />
+          <div className="container-width relative z-10">
             <div className="text-center mb-16">
               <h2 className="heading-secondary text-gradient-hero no-faded-text">
                 Our <span className="text-rainbow-enhanced">Impact</span>
@@ -369,108 +397,39 @@ const About = () => {
               </div>
               <div className="p-6">
                 <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl font-bold">🎬</span>
+                  <span className="text-white text-2xl font-bold">🌟</span>
                 </div>
-                <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">100+</h4>
-                <p className="text-gray-600 font-medium">Stories Told</p>
+                <h4 className="font-heading font-semibold text-2xl text-gray-800 mb-2">200+</h4>
+                <p className="text-gray-600 font-medium">Businesses Supported</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Call to Action Section */}
+        {/* CTA Section */}
         <section className="section-spacing bg-white relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white"></div>
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-omni-violet/20"></div>
-            <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-omni-blue/20"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-omni-teal/10"></div>
-          </div>
-          
+          <FloatingDecorations variant="hero" />
           <div className="container-width relative z-10">
-            <div className="max-w-4xl mx-auto text-center">
-              {/* Main Heading with Better Contrast */}
-              <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 mb-6 leading-tight">
-                Ready to Create 
-                <br />
-                <span className="text-gradient-rainbow">
-                  Positive Change
-                </span> 
-                <br />
-                Together?
+            <div className="max-w-3xl mx-auto text-center">
+              <CuratorTip 
+                curator="chad" 
+                message={omniVoice.curatorVoices.chad.intro}
+                variant="card"
+                className="mb-8"
+              />
+              <h2 className="heading-secondary text-gradient-hero no-faded-text mb-6">
+                Ready to <span className="text-rainbow-enhanced">Connect</span>?
               </h2>
-              
-              {/* Description */}
-              <p className="text-xl text-gray-700 mb-12 leading-relaxed max-w-3xl mx-auto">
-                Join us in bridging wellness, outreach, and media to empower communities and inspire 
-                conscious living. Let&apos;s tell your story and make a meaningful impact.
+              <p className="text-lg text-gray-600 mb-8">
+                {omniVoice.reassurance.everyStep}
               </p>
-              
-              {/* Main Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-                <Button 
-                  size="lg" 
-                  className="bg-omni-violet hover:bg-omni-violet/90 text-white font-semibold px-12 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                  asChild
-                >
-                  <Link to="/contact">Start Your Project</Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+                  <Link to="/contact">{omniVoice.ctas.contact}</Link>
                 </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 font-semibold px-12 py-4 text-lg rounded-full transition-all duration-300"
-                  asChild
-                >
-                  <Link to="/services">View Our Services</Link>
+                <Button asChild variant="outline" size="lg" className="font-semibold px-8 py-3 text-lg rounded-full">
+                  <Link to="/services">{omniVoice.ctas.seeMore}</Link>
                 </Button>
-              </div>
-
-              {/* Contact Information Card */}
-              <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-8 max-w-2xl mx-auto">
-                <div className="flex items-center justify-center mb-6">
-                  <div className="w-16 h-16 rounded-full bg-omni-violet/10 flex items-center justify-center mr-4">
-                    <img 
-                      src={IMAGES.omni.logo} 
-                      alt="Omni Wellness Media" 
-                      className="h-10 w-10 rounded-full"
-                    />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="font-heading font-bold text-xl text-gray-900">Get in Touch</h3>
-                    <p className="text-gray-600">We&apos;re here to help bring your vision to life</p>
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="text-center md:text-left">
-                    <div className="flex items-center justify-center md:justify-start mb-2">
-                      <Mail className="w-5 h-5 text-omni-violet mr-2" />
-                      <span className="font-semibold text-gray-900">Email Us</span>
-                    </div>
-                    <a 
-                      href="mailto:omnimediawellness@gmail.com" 
-                      className="text-omni-violet hover:text-omni-violet/80 font-medium transition-colors block"
-                    >
-                      omnimediawellness@gmail.com
-                    </a>
-                  </div>
-                  
-                  <div className="text-center md:text-left">
-                    <div className="flex items-center justify-center md:justify-start mb-2">
-                      <Calendar className="w-5 h-5 text-omni-violet mr-2" />
-                      <span className="font-semibold text-gray-900">Book Meeting</span>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="border-omni-violet/30 text-omni-violet hover:bg-omni-violet/5 rounded-full"
-                      asChild
-                    >
-                      <Link to="/contact">Schedule Consultation</Link>
-                    </Button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

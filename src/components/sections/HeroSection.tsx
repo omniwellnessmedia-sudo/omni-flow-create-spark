@@ -239,7 +239,6 @@ const HeroSection = () => {
             aria-hidden="true"
             className="w-full h-full object-cover"
             loading="eager"
-            fetchPriority="high"
             onError={(e) => { e.currentTarget.src = IMAGES.locations.view1; }}
           />
           {/* WCAG 1.4.3 Contrast - Enhanced overlay for 4.5:1 ratio */}

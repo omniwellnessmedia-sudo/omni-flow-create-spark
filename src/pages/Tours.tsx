@@ -15,6 +15,9 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
 import { toast } from 'sonner';
+import { FloatingDecorations } from '@/components/ui/gaia-elements';
+import { CuratorTip } from '@/components/curator/CuratorTip';
+import { omniVoice } from '@/data/omniVoiceGuide';
 
 interface ViatorTour {
   id: string;
@@ -149,7 +152,7 @@ export default function Tours() {
     const IconComponent = categoryIcons[tour.category] || Mountain;
     
     return (
-      <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"
+      <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer motion-safe:hover:-translate-y-1"
             onClick={() => handleTourClick(tour)}>
         <div className="relative aspect-[4/3] overflow-hidden">
           <img 
@@ -222,19 +225,28 @@ export default function Tours() {
       
       {/* Hero Section */}
       <section className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-br from-primary/10 via-background to-accent/10">
-        <div className="container mx-auto px-4">
+        <FloatingDecorations variant="hero" />
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-4 text-sm px-4 py-2" variant="outline">
               <Globe className="w-4 h-4 mr-2" />
               Powered by Viator
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Tours & Experiences
+              {omniVoice.pageIntros.tours.headline}
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8">
-              Discover incredible wellness tours, safaris, and cultural experiences across South Africa. 
-              Curated by our team for conscious travelers.
+              {omniVoice.pageIntros.tours.subheadline}
             </p>
+            
+            {/* Curator Welcome */}
+            <div className="max-w-xl mx-auto mb-8">
+              <CuratorTip 
+                curator="zenith" 
+                message={omniVoice.curatorVoices.zenith.intro}
+                variant="inline"
+              />
+            </div>
             
             {/* Search Bar */}
             <div className="max-w-2xl mx-auto">
@@ -253,8 +265,9 @@ export default function Tours() {
       </section>
 
       {/* Filters & Results */}
-      <section className="py-8 md:py-12 bg-background">
-        <div className="container mx-auto px-4">
+      <section className="py-8 md:py-12 bg-background relative overflow-hidden">
+        <FloatingDecorations variant="subtle" />
+        <div className="container mx-auto px-4 relative z-10">
           {/* Filters */}
           <div className="flex flex-wrap gap-3 mb-8 p-4 bg-muted/30 rounded-lg">
             <div className="flex items-center gap-2 text-sm font-medium">
@@ -362,16 +375,22 @@ export default function Tours() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary/5">
-        <div className="container mx-auto px-4 text-center">
+      <section className="py-16 bg-primary/5 relative overflow-hidden">
+        <FloatingDecorations variant="section" />
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <CuratorTip 
+            curator="zenith" 
+            message="Looking for something more personal? Let's create your perfect itinerary together."
+            variant="card"
+            className="max-w-xl mx-auto mb-8"
+          />
           <h2 className="text-3xl font-bold mb-4">Looking for Custom Experiences?</h2>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Our wellness curators can help you plan personalized tours and retreats 
-            tailored to your interests and wellness goals.
+            {omniVoice.reassurance.everyStep}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button size="lg" onClick={() => navigate('/contact')}>
-              Contact Our Team
+              {omniVoice.ctas.contact}
             </Button>
             <Button size="lg" variant="outline" onClick={() => navigate('/tours-retreats')}>
               View Omni Retreats

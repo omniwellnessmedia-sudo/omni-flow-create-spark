@@ -1,4 +1,3 @@
-
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import Hero from "@/components/ui/hero";
@@ -7,6 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowLeft } from "lucide-react";
+import { FloatingDecorations } from "@/components/ui/gaia-elements";
+import { CuratorTip } from "@/components/curator/CuratorTip";
+import { omniVoice } from "@/data/omniVoiceGuide";
 
 const Services = () => {
   const services = [
@@ -138,15 +140,15 @@ const Services = () => {
       <Hero
         title={
           <>
-            Our <span className="text-gradient-rainbow">Services</span>
+            {omniVoice.pageIntros.services.headline}
           </>
         }
-        description="Comprehensive solutions that align with your values and amplify your impact. From strategy to execution, we're your partners in conscious growth."
+        description={omniVoice.pageIntros.services.subheadline}
         variant="minimal"
         height="small"
         actions={[
           {
-            label: "Get a Quote",
+            label: omniVoice.ctas.contact,
             href: "/contact",
             variant: "wellness"
           },
@@ -161,14 +163,24 @@ const Services = () => {
       <main>
 
         {/* Core Services Grid */}
-        <section className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-20 bg-white relative overflow-hidden">
+          <FloatingDecorations variant="subtle" />
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Curator Welcome */}
+            <div className="mb-8">
+              <CuratorTip 
+                curator="chad" 
+                message={omniVoice.sectionIntros.services}
+                variant="banner"
+              />
+            </div>
+
             <div className="text-center mb-16">
               <h2 className="heading-secondary text-gradient-hero no-faded-text">
                 What We <span className="text-gradient-rainbow">Create</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Professional solutions that drive real results for conscious businesses.
+                {omniVoice.transitions.curated}
               </p>
             </div>
 
@@ -209,7 +221,7 @@ const Services = () => {
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group/btn"
                     >
                       <Link to={service.link} className="inline-flex items-center justify-center text-lg">
-                        Get Started
+                        {omniVoice.ctas.getStarted}
                         <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
@@ -222,7 +234,7 @@ const Services = () => {
             <div className="text-center">
               <details className="group">
                 <summary className="cursor-pointer inline-flex items-center gap-2 text-lg font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-                  <span>View All Services</span>
+                  <span>{omniVoice.transitions.explore}</span>
                   <svg className="w-5 h-5 group-open:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -250,7 +262,7 @@ const Services = () => {
                           className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300"
                         >
                           <Link to={service.link}>
-                            Learn More
+                            {omniVoice.ctas.learn}
                           </Link>
                         </Button>
                       </CardContent>
@@ -263,14 +275,15 @@ const Services = () => {
         </section>
 
         {/* Process Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-20 bg-gray-50 relative overflow-hidden">
+          <FloatingDecorations variant="section" />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
                 Our <span className="text-gradient-rainbow">Process</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                We follow a structured yet flexible approach to ensure every project delivers maximum impact.
+                {omniVoice.reassurance.everyStep}
               </p>
             </div>
             
@@ -286,7 +299,7 @@ const Services = () => {
                   className="text-center animate-fade-in-up"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4 motion-safe:animate-breathing-slow">
                     <span className="text-white font-bold text-lg">{phase.step}</span>
                   </div>
                   <h3 className="font-heading font-semibold text-xl mb-2">{phase.title}</h3>
@@ -298,16 +311,23 @@ const Services = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <section className="py-20 bg-white relative overflow-hidden">
+          <FloatingDecorations variant="hero" />
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <CuratorTip 
+              curator="chad" 
+              message={omniVoice.curatorVoices.chad.intro}
+              variant="card"
+              className="mb-8"
+            />
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
               Ready to Create <span className="text-gradient-rainbow">Positive Change</span>?
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Let's work together to amplify your impact and create content that inspires meaningful change in your community.
+              {omniVoice.reassurance.noPressure}
             </p>
             <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
-              <Link to="/contact">Start Your Project</Link>
+              <Link to="/contact">{omniVoice.ctas.start}</Link>
             </Button>
           </div>
         </section>
