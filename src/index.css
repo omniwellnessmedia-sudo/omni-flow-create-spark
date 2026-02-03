@@ -732,6 +732,141 @@ textarea:focus-visible,
   animation-timing-function: ease-out;
 }
 
+/* ===== GAIA MAGIC ANIMATIONS ===== */
+/* Calm, organic animations for the wellness aesthetic */
+
+/* Breathing Animation - Organic, alive feel */
+@keyframes breathing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes breathing-slow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+}
+
+@keyframes breathing-fast {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.animate-breathing {
+  animation: breathing 4s ease-in-out infinite;
+}
+
+.animate-breathing-slow {
+  animation: breathing-slow 6s ease-in-out infinite;
+}
+
+.animate-breathing-fast {
+  animation: breathing-fast 3s ease-in-out infinite;
+}
+
+/* Float Gentle - Subtle hover effect */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+/* Pulse Slow - For floating orbs */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* Gradient Shift - For text gradients */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 8s ease infinite;
+}
+
+/* Fade In Up - For content reveals */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+/* Glow Pulse - For highlighted elements */
+@keyframes glow-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px hsla(var(--primary), 0.2);
+  }
+  50% { 
+    box-shadow: 0 0 30px hsla(var(--primary), 0.4);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Radial gradient background utility */
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, var(--tw-gradient-from), var(--tw-gradient-to));
+}
+
+/* Curator ring glow effect */
+.ring-glow {
+  box-shadow: 0 0 0 4px hsla(var(--primary), 0.2),
+              0 0 20px hsla(var(--primary), 0.15);
+}
+
+/* Floating decorator positioning helpers */
+.float-top-left {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+}
+
+.float-top-right {
+  position: absolute;
+  top: 15%;
+  right: 10%;
+}
+
+.float-bottom-left {
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+}
+
+.float-bottom-right {
+  position: absolute;
+  bottom: 15%;
+  right: 5%;
+}
+
+/* Respect reduced motion for Gaia animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-breathing,
+  .animate-breathing-slow,
+  .animate-breathing-fast,
+  .animate-float-gentle,
+  .animate-pulse-slow,
+  .animate-gradient-shift,
+  .animate-glow-pulse {
+    animation: none !important;
+  }
+}
+
 /* Semantic landmarks styling */
 [role="main"] {
   min-height: 100vh;

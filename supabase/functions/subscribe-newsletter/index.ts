@@ -84,13 +84,13 @@ serve(async (req) => {
         }
 
         return new Response(
-          JSON.stringify({ success: true, message: "Welcome back! You've been resubscribed." }),
+          JSON.stringify({ success: true, message: "Welcome back! We're so glad you're here again. Check your inbox for a warm hello." }),
           { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
 
       return new Response(
-        JSON.stringify({ success: true, message: "You're already subscribed!" }),
+        JSON.stringify({ success: true, message: "You're already part of the Omni family! 🙏" }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -265,7 +265,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, message: "Successfully subscribed!", data }),
+      JSON.stringify({ success: true, message: "Welcome to the Omni family! We're so glad you're here. Check your inbox for a warm hello from our team. 🙏", data }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 

@@ -175,7 +175,11 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, data }),
+      JSON.stringify({ 
+        success: true, 
+        data,
+        message: "Got it! Your message is in Chad's inbox. He'll get back to you within 24 hours. In the meantime, explore our services or grab a cup of tea with our blog. 🙏" 
+      }),
       { 
         status: 200, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
