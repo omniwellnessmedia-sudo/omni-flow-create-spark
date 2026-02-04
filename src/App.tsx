@@ -100,6 +100,7 @@ const StoreCollections = React.lazy(() => import('@/pages/StoreCollections'));
 const AdminTools = React.lazy(() => import('@/pages/admin/AdminTools'));
 const MonetizableURLsReference = React.lazy(() => import('@/pages/admin/MonetizableURLsReference'));
 const RoamBuddySalesDashboard = React.lazy(() => import('@/pages/admin/RoamBuddySalesDashboard'));
+const RoamMarketingHub = React.lazy(() => import('@/pages/admin/RoamMarketingHub'));
 const Wishlist = React.lazy(() => import('@/pages/Wishlist'));
 const StoreProductDetail = React.lazy(() => import('@/pages/StoreProductDetail'));
 const UpdatePassword = React.lazy(() => import('@/pages/UpdatePassword'));
@@ -307,6 +308,11 @@ function App() {
                   <Route path="/admin/roambuddy-sales" element={
                     <ProtectedRoute requireAdmin={true}>
                       <RoamBuddySalesDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/roam-marketing" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <RoamMarketingHub />
                     </ProtectedRoute>
                   } />
                   {/* Error Handling */}
