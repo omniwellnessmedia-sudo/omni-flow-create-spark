@@ -81,6 +81,7 @@ const PartnerProfile = React.lazy(() => import('@/pages/PartnerProfile'));
 const PartnerPortal = React.lazy(() => import('@/pages/PartnerPortal'));
 const ExerciseLibrary = React.lazy(() => import('@/pages/ExerciseLibrary'));
 const DeviceCompatibility = React.lazy(() => import('@/pages/DeviceCompatibility'));
+const RoamBuddyOverview = React.lazy(() => import('@/pages/partner/RoamBuddyOverview'));
 const NotFound = React.lazy(() => import('@/pages/NotFound'));
 const AdminDashboard = React.lazy(() => import('@/pages/AdminDashboard'));
 const ProductManagement = React.lazy(() => import('@/pages/admin/ProductManagement'));
@@ -248,6 +249,7 @@ function App() {
                   <Route path="/partners-directory" element={<PartnersDirectory />} />
                   <Route path="/partner-profile/:id" element={<PartnerProfile />} />
                   <Route path="/partner-portal" element={<PartnerPortal />} />
+                  <Route path="/partner/roambuddy-overview" element={<RoamBuddyOverview />} />
 
                   {/* Health & Fitness */}
                   <Route path="/exercise-library" element={<ExerciseLibrary />} />
