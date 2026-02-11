@@ -106,7 +106,7 @@ const Auth = () => {
         }
       } else if (data.user) {
         toast.success("Welcome back!");
-        navigate("/wellness-exchange/marketplace");
+        navigate("/");
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Sign in failed";
@@ -122,7 +122,7 @@ const Auth = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/wellness-exchange/provider-signup`
+          redirectTo: `${window.location.origin}/`
         }
       });
       if (error) throw error;
@@ -156,8 +156,25 @@ const Auth = () => {
     }
   };
 
+  if (emailSent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center p-4">
+        <div className="w-full max-w-md mx-auto text-center">
+          <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold mb-2">Check Your Email</h1>
+          <p className="text-muted-foreground mb-6">
+            We've sent a verification link to <strong>{email}</strong>. Click the link to activate your account.
+          </p>
+          <MobileOptimizedButton variant="outline" onClick={() => setEmailSent(false)}>
+            Back to Sign In
+          </MobileOptimizedButton>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center p-4">
       <div className="w-full max-w-md mx-auto">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4">
