@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
-import { User, Settings, Heart, Star, Calendar, Coins, Gift } from "lucide-react";
+import { User, Settings, Heart, Star, Calendar, Coins } from "lucide-react";
 import { toast } from "sonner";
 
 const WellnessAccount = () => {
@@ -69,23 +69,19 @@ const WellnessAccount = () => {
     }
   };
 
-  const handleStartTrial = () => {
-    toast.success("7-day free trial activated! Welcome to Omni Wellness!");
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-omni-blue mx-auto mb-4"></div>
-          <p>Loading your account...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading your account...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <UnifiedNavigation />
       
       <main className="pt-8 pb-20">
@@ -95,29 +91,8 @@ const WellnessAccount = () => {
             <h1 className="font-heading font-bold text-2xl sm:text-3xl">
               My <span className="text-gradient-rainbow">Account</span>
             </h1>
-            <p className="text-gray-600 mt-1">Manage your wellness journey</p>
+            <p className="text-muted-foreground mt-1">Manage your wellness journey</p>
           </div>
-
-          {/* 7-Day Trial Promotion */}
-          <Card className="mb-6 bg-gradient-to-r from-omni-orange/10 to-omni-yellow/10 border-omni-orange/20">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Gift className="h-8 w-8 text-omni-orange mr-4" />
-                  <div>
-                    <h3 className="font-bold text-lg">🎯 Exclusive: 7-Day Free Trial</h3>
-                    <p className="text-gray-600">Access all Omni Wellness premium services</p>
-                  </div>
-                </div>
-                <Button 
-                  onClick={handleStartTrial}
-                  className="bg-gradient-rainbow hover:opacity-90 text-white"
-                >
-                  Activate Trial
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Profile Card */}
@@ -131,18 +106,15 @@ const WellnessAccount = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Email</label>
+                    <label className="text-sm font-medium text-muted-foreground">Email</label>
                     <p className="text-lg">{user?.email}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Member Since</label>
-                    <p className="text-lg">Welcome to the community!</p>
+                    <label className="text-sm font-medium text-muted-foreground">Name</label>
+                    <p className="text-lg">{userProfile?.full_name || user?.user_metadata?.full_name || 'Wellness Member'}</p>
                   </div>
                   <div className="flex gap-2">
-                    <Badge variant="secondary">
-                      {userProfile?.user_type === 'provider' ? 'Provider' : 'Consumer'}
-                    </Badge>
-                    <Badge className="bg-green-100 text-green-800">Active</Badge>
+                    <Badge className="bg-green-100 text-green-800">Active Member</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -159,16 +131,9 @@ const WellnessAccount = () => {
               <CardContent>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-omni-orange mb-2">{wellCoinBalance} WC</div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     {wellCoinBalance === 50 ? "Welcome bonus included!" : "Your current balance"}
                   </p>
-                  <Button 
-                    variant="outline" 
-                    className="mt-4 w-full"
-                    onClick={() => toast.info("Coming soon! WellCoin top-up feature.")}
-                  >
-                    Add WellCoins
-                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -186,26 +151,26 @@ const WellnessAccount = () => {
                   <Button 
                     variant="outline" 
                     className="w-full justify-start"
-                    onClick={() => navigate('/wellness-exchange/wants')}
+                    onClick={() => navigate('/services')}
                   >
                     <Heart className="h-4 w-4 mr-2" />
-                    My Wants
+                    Browse Services
                   </Button>
                   <Button 
                     variant="outline" 
                     className="w-full justify-start"
-                    onClick={() => navigate('/wellness-exchange/transactions')}
-                  >
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Transactions
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-start"
-                    onClick={() => toast.info("Reviews feature coming soon!")}
+                    onClick={() => navigate('/blog')}
                   >
                     <Star className="h-4 w-4 mr-2" />
-                    Reviews
+                    Read Blog
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start"
+                    onClick={() => navigate('/contact')}
+                  >
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Contact Us
                   </Button>
                 </div>
               </CardContent>
@@ -219,13 +184,6 @@ const WellnessAccount = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Settings className="h-4 w-4 mr-2" />
-                    Preferences
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    Privacy Settings
-                  </Button>
                   <Button 
                     variant="outline" 
                     className="w-full justify-start text-red-600 hover:text-red-700"
@@ -233,30 +191,6 @@ const WellnessAccount = () => {
                   >
                     Sign Out
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Wellness Journey */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Wellness Journey</CardTitle>
-                <CardDescription>Your progress and achievements</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center">
-                  <div className="text-2xl font-bold mb-2">🌱</div>
-                  <p className="text-sm text-gray-600 mb-4">Just getting started!</p>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Services Booked</span>
-                      <span className="font-medium">0</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span>Community Posts</span>
-                      <span className="font-medium">0</span>
-                    </div>
-                  </div>
                 </div>
               </CardContent>
             </Card>

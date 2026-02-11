@@ -78,18 +78,9 @@ const UnifiedNavigation = () => {
       icon: Home,
     },
     {
-      title: 'Wellness Exchange',
+      title: 'About',
+      href: '/about',
       icon: Users,
-      children: [
-        { title: 'Marketplace', href: '/wellness-exchange', description: 'Browse services', icon: '🛒' },
-        { title: 'Wants', href: '/wellness-exchange/wants', description: 'Community requests', icon: '❤️' },
-        { title: 'Community', href: '/wellness-exchange/community', description: 'Connect & share', icon: '👥' },
-        { title: 'Search', href: '/wellness-exchange/search', description: 'Find services', icon: '🔍' },
-        { title: 'Add Service', href: '/wellness-exchange/add-service', description: 'List your service', icon: '➕' },
-        { title: 'Add Want', href: '/wellness-exchange/add-want', description: 'Request something', icon: '💬' },
-        { title: 'Dashboard', href: '/wellness-exchange/provider-dashboard', description: 'Provider dashboard', icon: '📊' },
-        { title: 'Account', href: '/wellness-exchange/account', description: 'My account', icon: '👤' },
-      ]
     },
     {
       title: 'Travel',
@@ -97,7 +88,6 @@ const UnifiedNavigation = () => {
       children: [
         { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Transformative 4-day retreat', icon: '🧘‍♀️' },
         { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: 'Sacred indigenous journey with Chief Kingsley', icon: '⛰️' },
-        { title: '2BeWell Community', href: '/two-be-well', description: 'Join our wellness community', icon: '💝' },
       ]
     },
     {
@@ -105,7 +95,6 @@ const UnifiedNavigation = () => {
       icon: Store,
       children: [
         { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural wellness products', icon: '🌿' },
-        { title: 'RoamBuddy Store', href: '/roambuddy-store', description: 'Travel eSIM & connectivity', icon: '🌍' },
         { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'eSIM & travel data', icon: '📱' },
       ]
     },
@@ -115,19 +104,19 @@ const UnifiedNavigation = () => {
       children: [
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic business development', icon: '💼' },
         { title: 'Media Production', href: '/media-production', description: 'Content creation services', icon: '🎬' },
-        { title: 'Conscious Media Infrastructure', href: '/conscious-media-infrastructure', description: 'Handpicked media equipment', icon: '📷' },
         { title: 'Web Development', href: '/web-development', description: 'Digital solutions', icon: '💻' },
-        // UWC Human-Animal Program hidden from public navigation - accessible via direct URL for private sharing
-        { title: 'Provider Directory', href: '/provider-directory', description: 'Discover wellness providers', icon: '👥' },
       ]
     },
-    // AI Tools temporarily hidden - launching soon with 100% donations to Dr. Phil Foundation
-    // {
-    //   title: 'AI Tools',
-    //   href: '/ai-tools',
-    //   icon: Bot,
-    //   badge: 'NEW',
-    // },
+    {
+      title: 'Blog',
+      href: '/blog',
+      icon: Globe,
+    },
+    {
+      title: 'Contact',
+      href: '/contact',
+      icon: Heart,
+    },
   ];
 
   const handleSignOut = async () => {
