@@ -62,10 +62,13 @@ const Auth = () => {
       });
 
       if (error) {
+        console.error("Signup error details:", error.message, error.status);
         if (error.message.includes("already registered")) {
           toast.error("This email is already registered. Please sign in instead.");
+        } else if (error.message.includes("not allowed") || error.message.includes("disabled")) {
+          toast.error("Signups are currently disabled. Please contact support or check Supabase Auth settings.");
         } else {
-          throw error;
+          toast.error(`Signup failed: ${error.message}`);
         }
       } else {
         setEmailSent(true);
