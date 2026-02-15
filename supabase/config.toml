@@ -65,3 +65,9 @@ verify_jwt = false
 
 [functions.roambuddy-paypal-order]
 verify_jwt = false
+
+[functions.submit-partner-application]
+verify_jwt = false
+
+[functions.leaddyno-webhook]
+verify_jwt = false
