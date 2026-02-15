@@ -1,4 +1,3 @@
-
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -11,8 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { IMAGES } from "@/lib/images";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 import { 
   Users, 
   Store, 
@@ -31,12 +31,28 @@ import {
   MessageCircle,
   Share2,
   Shield,
-  Target
+  Target,
+  Loader2
 } from "lucide-react";
 
 const PartnerPortal = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedService, setSelectedService] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  // Form state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("");
+  const [bio, setBio] = useState("");
+  const [website, setWebsite] = useState("");
+  const [hasCertifications, setHasCertifications] = useState(false);
+  const [hasInsurance, setHasInsurance] = useState(false);
+  const [offersOnline, setOffersOnline] = useState(false);
+  const [canTravel, setCanTravel] = useState(false);
 
   const serviceCategories = [
     {
@@ -137,6 +153,46 @@ const PartnerPortal = () => {
     }
   ];
 
+  const handleSubmitApplication = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+    if (!fullName || !email.trim() || !selectedService || !bio.trim()) {
+      toast({ title: "Missing fields", description: "Please fill in all required fields.", variant: "destructive" });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('submit-partner-application', {
+        body: {
+          full_name: fullName,
+          email: email.trim(),
+          phone: phone.trim() || null,
+          service_category: selectedService,
+          experience_level: experienceLevel || null,
+          bio: bio.trim(),
+          website: website.trim() || null,
+          has_certifications: hasCertifications,
+          has_insurance: hasInsurance,
+          offers_online: offersOnline,
+          can_travel: canTravel,
+        }
+      });
+
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'Submission failed');
+
+      setSubmitted(true);
+      toast({ title: "Application submitted!", description: "We'll review your application within 24 hours." });
+    } catch (err: any) {
+      console.error('Application submission error:', err);
+      toast({ title: "Submission failed", description: err.message || "Please try again.", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <UnifiedNavigation />
@@ -158,12 +214,10 @@ const PartnerPortal = () => {
                   <Button 
                     size="lg" 
                     className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-xl"
-                    asChild
+                    onClick={() => setActiveTab("application")}
                   >
-                    <Link to="/wellness-exchange/provider-signup">
-                      Start Your Journey
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </Link>
+                    Start Your Journey
+                    <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                   <Button 
                     size="lg" 
@@ -573,134 +627,182 @@ const PartnerPortal = () => {
                     </p>
                   </div>
 
-                  <Card className="shadow-xl">
-                    <CardContent className="p-8">
-                      <form className="space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {submitted ? (
+                    <Card className="shadow-xl">
+                      <CardContent className="p-12 text-center">
+                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <CheckCircle className="w-10 h-10 text-green-600" />
+                        </div>
+                        <h3 className="font-heading font-bold text-2xl mb-4">Application Submitted!</h3>
+                        <p className="text-lg text-gray-600 mb-6 max-w-md mx-auto">
+                          Thank you for applying to join the Omni Partner Network. We'll review your application and get back to you within 24 hours.
+                        </p>
+                        <div className="bg-blue-50 p-6 rounded-lg max-w-md mx-auto">
+                          <h4 className="font-semibold mb-3">What happens next?</h4>
+                          <div className="space-y-2 text-sm text-gray-700 text-left">
+                            <div className="flex items-center gap-2">
+                              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                              <span>Application reviewed within 24 hours</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                              <span>You'll receive your unique referral link</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                              <span>15% commission on first referral purchases</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                              <span>R100 bonus for every 10 referrals</span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <Card className="shadow-xl">
+                      <CardContent className="p-8">
+                        <form onSubmit={handleSubmitApplication} className="space-y-8">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <Label htmlFor="firstName" className="text-base font-medium">First Name *</Label>
+                              <Input id="firstName" placeholder="Your first name" className="mt-2" value={firstName} onChange={e => setFirstName(e.target.value)} required />
+                            </div>
+                            <div>
+                              <Label htmlFor="lastName" className="text-base font-medium">Last Name *</Label>
+                              <Input id="lastName" placeholder="Your last name" className="mt-2" value={lastName} onChange={e => setLastName(e.target.value)} required />
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <Label htmlFor="email" className="text-base font-medium">Email Address *</Label>
+                              <Input id="email" type="email" placeholder="your@email.com" className="mt-2" value={email} onChange={e => setEmail(e.target.value)} required />
+                            </div>
+                            <div>
+                              <Label htmlFor="phone" className="text-base font-medium">Phone Number</Label>
+                              <Input id="phone" placeholder="+27 xxx xxx xxxx" className="mt-2" value={phone} onChange={e => setPhone(e.target.value)} />
+                            </div>
+                          </div>
+
                           <div>
-                            <Label htmlFor="firstName" className="text-base font-medium">First Name *</Label>
-                            <Input id="firstName" placeholder="Your first name" className="mt-2" />
+                            <Label htmlFor="serviceCategory" className="text-base font-medium">Primary Service Category *</Label>
+                            <Select value={selectedService} onValueChange={setSelectedService}>
+                              <SelectTrigger className="mt-2">
+                                <SelectValue placeholder="Choose your main service category" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {serviceCategories.map((category) => (
+                                  <SelectItem key={category.id} value={category.id}>
+                                    {category.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </div>
+
                           <div>
-                            <Label htmlFor="lastName" className="text-base font-medium">Last Name *</Label>
-                            <Input id="lastName" placeholder="Your last name" className="mt-2" />
+                            <Label htmlFor="experience" className="text-base font-medium">Years of Experience</Label>
+                            <Select value={experienceLevel} onValueChange={setExperienceLevel}>
+                              <SelectTrigger className="mt-2">
+                                <SelectValue placeholder="Select your experience level" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="0-1">0-1 years</SelectItem>
+                                <SelectItem value="2-3">2-3 years</SelectItem>
+                                <SelectItem value="4-5">4-5 years</SelectItem>
+                                <SelectItem value="6-10">6-10 years</SelectItem>
+                                <SelectItem value="10+">10+ years</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
-                        </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div>
-                            <Label htmlFor="email" className="text-base font-medium">Email Address *</Label>
-                            <Input id="email" type="email" placeholder="your@email.com" className="mt-2" />
+                            <Label htmlFor="bio" className="text-base font-medium">Professional Bio *</Label>
+                            <Textarea 
+                              id="bio" 
+                              placeholder="Tell us about your expertise, background, and what makes you unique..."
+                              className="mt-2 min-h-[120px]"
+                              value={bio}
+                              onChange={e => setBio(e.target.value)}
+                              required
+                            />
                           </div>
+
                           <div>
-                            <Label htmlFor="phone" className="text-base font-medium">Phone Number *</Label>
-                            <Input id="phone" placeholder="+27 xxx xxx xxxx" className="mt-2" />
+                            <Label htmlFor="website" className="text-base font-medium">Website or Portfolio (Optional)</Label>
+                            <Input id="website" placeholder="https://your-website.com" className="mt-2" value={website} onChange={e => setWebsite(e.target.value)} />
                           </div>
-                        </div>
 
-                        <div>
-                          <Label htmlFor="serviceCategory" className="text-base font-medium">Primary Service Category *</Label>
-                          <Select value={selectedService} onValueChange={setSelectedService}>
-                            <SelectTrigger className="mt-2">
-                              <SelectValue placeholder="Choose your main service category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {serviceCategories.map((category) => (
-                                <SelectItem key={category.id} value={category.id}>
-                                  {category.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div>
-                          <Label htmlFor="experience" className="text-base font-medium">Years of Experience *</Label>
-                          <Select>
-                            <SelectTrigger className="mt-2">
-                              <SelectValue placeholder="Select your experience level" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="0-1">0-1 years</SelectItem>
-                              <SelectItem value="2-3">2-3 years</SelectItem>
-                              <SelectItem value="4-5">4-5 years</SelectItem>
-                              <SelectItem value="6-10">6-10 years</SelectItem>
-                              <SelectItem value="10+">10+ years</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div>
-                          <Label htmlFor="bio" className="text-base font-medium">Professional Bio *</Label>
-                          <Textarea 
-                            id="bio" 
-                            placeholder="Tell us about your expertise, background, and what makes you unique..."
-                            className="mt-2 min-h-[120px]"
-                          />
-                        </div>
-
-                        <div>
-                          <Label htmlFor="website" className="text-base font-medium">Website or Portfolio (Optional)</Label>
-                          <Input id="website" placeholder="https://your-website.com" className="mt-2" />
-                        </div>
-
-                        <div className="space-y-4">
-                          <Label className="text-base font-medium">Additional Information</Label>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="flex items-center space-x-2">
-                              <input type="checkbox" id="certified" className="rounded" />
-                              <Label htmlFor="certified" className="text-sm">I have relevant certifications</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input type="checkbox" id="insurance" className="rounded" />
-                              <Label htmlFor="insurance" className="text-sm">I have professional insurance</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input type="checkbox" id="online" className="rounded" />
-                              <Label htmlFor="online" className="text-sm">I offer online services</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <input type="checkbox" id="travel" className="rounded" />
-                              <Label htmlFor="travel" className="text-sm">I can travel to clients</Label>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="border-t pt-8">
-                          <div className="bg-blue-50 p-6 rounded-lg mb-6">
-                            <h3 className="font-semibold text-lg mb-3">What happens next?</h3>
-                            <div className="space-y-2 text-sm text-gray-700">
-                              <div className="flex items-center gap-2">
-                                <CheckCircle className="w-4 h-4 text-green-500" />
-                                <span>We'll review your application within 24 hours</span>
+                          <div className="space-y-4">
+                            <Label className="text-base font-medium">Additional Information</Label>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="flex items-center space-x-2">
+                                <input type="checkbox" id="certified" className="rounded" checked={hasCertifications} onChange={e => setHasCertifications(e.target.checked)} />
+                                <Label htmlFor="certified" className="text-sm">I have relevant certifications</Label>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <CheckCircle className="w-4 h-4 text-green-500" />
-                                <span>Schedule a brief video call to discuss your goals</span>
+                              <div className="flex items-center space-x-2">
+                                <input type="checkbox" id="insurance" className="rounded" checked={hasInsurance} onChange={e => setHasInsurance(e.target.checked)} />
+                                <Label htmlFor="insurance" className="text-sm">I have professional insurance</Label>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <CheckCircle className="w-4 h-4 text-green-500" />
-                                <span>Set up your profile with our media team support</span>
+                              <div className="flex items-center space-x-2">
+                                <input type="checkbox" id="online" className="rounded" checked={offersOnline} onChange={e => setOffersOnline(e.target.checked)} />
+                                <Label htmlFor="online" className="text-sm">I offer online services</Label>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <CheckCircle className="w-4 h-4 text-green-500" />
-                                <span>Start receiving matched client opportunities</span>
+                              <div className="flex items-center space-x-2">
+                                <input type="checkbox" id="travel" className="rounded" checked={canTravel} onChange={e => setCanTravel(e.target.checked)} />
+                                <Label htmlFor="travel" className="text-sm">I can travel to clients</Label>
                               </div>
                             </div>
                           </div>
-                          
-                          <Button 
-                            type="submit" 
-                            size="lg" 
-                            className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-4 text-lg rounded-full shadow-lg"
-                          >
-                            Submit Application
-                            <ArrowRight className="ml-2 w-5 h-5" />
-                          </Button>
-                        </div>
-                      </form>
-                    </CardContent>
-                  </Card>
+
+                          <div className="border-t pt-8">
+                            <div className="bg-blue-50 p-6 rounded-lg mb-6">
+                              <h3 className="font-semibold text-lg mb-3">What happens next?</h3>
+                              <div className="space-y-2 text-sm text-gray-700">
+                                <div className="flex items-center gap-2">
+                                  <CheckCircle className="w-4 h-4 text-green-500" />
+                                  <span>We'll review your application within 24 hours</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <CheckCircle className="w-4 h-4 text-green-500" />
+                                  <span>You'll receive your unique referral link on approval</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <CheckCircle className="w-4 h-4 text-green-500" />
+                                  <span>Earn 15% commission on first referral purchases, 10% on repeats</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <CheckCircle className="w-4 h-4 text-green-500" />
+                                  <span>R100 bonus for every 10 referrals</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <Button 
+                              type="submit" 
+                              size="lg" 
+                              className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-4 text-lg rounded-full shadow-lg"
+                              disabled={isSubmitting}
+                            >
+                              {isSubmitting ? (
+                                <>
+                                  <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+                                  Submitting...
+                                </>
+                              ) : (
+                                <>
+                                  Submit Application
+                                  <ArrowRight className="ml-2 w-5 h-5" />
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        </form>
+                      </CardContent>
+                    </Card>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>

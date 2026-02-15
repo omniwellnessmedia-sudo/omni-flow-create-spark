@@ -1,4 +1,4 @@
-export type AffiliateNetwork = 'cj' | 'awin' | 'direct' | 'shareasale';
+export type AffiliateNetwork = 'cj' | 'awin' | 'direct' | 'shareasale' | 'leaddyno';
 export type AffiliateCurrency = 'USD' | 'ZAR' | 'EUR';
 export type AffiliateStatus = 'active' | 'testing' | 'paused';
 export type CommissionType = 'percentage' | 'fixed' | 'hybrid';
@@ -174,6 +174,23 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     categories: ['travel', 'safari', 'wellness-retreats', 'adventure'],
     status: 'paused',
     launch_date: '2025-11-17'
+  },
+
+  // LeadDyno - Own affiliate program management
+  leaddyno: {
+    id: 'leaddyno',
+    name: 'LeadDyno (Omni Partner Program)',
+    network: 'leaddyno',
+    tier: 1,
+    commission_type: 'hybrid',
+    commission_rate: 15.0, // 15% first purchase, 10% repeat
+    cookie_duration_days: 90,
+    currency: 'ZAR',
+    tracking_domain: 'leaddyno.com',
+    deep_linking_enabled: true,
+    categories: ['wellness', 'services', 'media', 'consulting', 'partner-referrals'],
+    status: 'testing',
+    launch_date: '2026-02-20'
   }
 };
 

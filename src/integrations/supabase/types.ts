@@ -1543,6 +1543,107 @@ export type Database = {
           },
         ]
       }
+      partner_applications: {
+        Row: {
+          bio: string | null
+          can_travel: boolean | null
+          created_at: string
+          email: string
+          experience_level: string | null
+          full_name: string
+          has_certifications: boolean | null
+          has_insurance: boolean | null
+          id: string
+          offers_online: boolean | null
+          phone: string | null
+          referral_code: string | null
+          service_category: string
+          status: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          bio?: string | null
+          can_travel?: boolean | null
+          created_at?: string
+          email: string
+          experience_level?: string | null
+          full_name: string
+          has_certifications?: boolean | null
+          has_insurance?: boolean | null
+          id?: string
+          offers_online?: boolean | null
+          phone?: string | null
+          referral_code?: string | null
+          service_category: string
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          bio?: string | null
+          can_travel?: boolean | null
+          created_at?: string
+          email?: string
+          experience_level?: string | null
+          full_name?: string
+          has_certifications?: boolean | null
+          has_insurance?: boolean | null
+          id?: string
+          offers_online?: boolean | null
+          phone?: string | null
+          referral_code?: string | null
+          service_category?: string
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      partner_referrals: {
+        Row: {
+          commission_amount: number | null
+          conversion_type: string | null
+          converted: boolean | null
+          created_at: string
+          id: string
+          page_visited: string | null
+          partner_application_id: string
+          referral_code: string
+          visitor_ip_hash: string | null
+        }
+        Insert: {
+          commission_amount?: number | null
+          conversion_type?: string | null
+          converted?: boolean | null
+          created_at?: string
+          id?: string
+          page_visited?: string | null
+          partner_application_id: string
+          referral_code: string
+          visitor_ip_hash?: string | null
+        }
+        Update: {
+          commission_amount?: number | null
+          conversion_type?: string | null
+          converted?: boolean | null
+          created_at?: string
+          id?: string
+          page_visited?: string | null
+          partner_application_id?: string
+          referral_code?: string
+          visitor_ip_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_referrals_partner_application_id_fkey"
+            columns: ["partner_application_id"]
+            isOneToOne: false
+            referencedRelation: "partner_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       partner_website_stats: {
         Row: {
           avg_session_duration: number | null
