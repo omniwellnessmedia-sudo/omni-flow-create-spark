@@ -1,62 +1,66 @@
 
 
-# Fix Account Signup (422 Error)
+# Build Omni Affiliate Program + LeadDyno Prep
 
-## Root Cause
+## Overview
 
-The 422 error from Supabase `/auth/v1/signup` is a server-side rejection. Your database already contains 6 registered users, so the issue is either:
+Transform the existing Partner Portal (`/partner-portal`) into a working affiliate program with referral link generation, application submission to the database, and prepare the infrastructure for LeadDyno integration when you sign up later this week.
 
-1. You are trying to sign up with an already-registered email
-2. Supabase Auth settings need configuration updates
+## What Gets Built
 
-The browser extension errors (utils.js, tabutils.js, etc.) are unrelated -- they come from a browser extension, not your app.
+### 1. Working Partner Application Form
+- The current form on `/partner-portal` is static (no submit handler). Wire it up to save applications to a new `partner_applications` table in Supabase.
+- Send email notification to `omniwellnessmedia@gmail.com` via the existing Resend integration when someone applies.
+- Show success confirmation after submission.
 
-## Fix Plan
+### 2. Affiliate Referral Link System
+- After approval, partners get a unique referral code (e.g., `?ref=sarah-j`)
+- Track referral visits, signups, and purchases via a `partner_referrals` table
+- Display a simple dashboard for approved partners showing their link, clicks, and earnings
+- Commission structure as previously defined: 15% first purchase, 10% repeat, R100 bonus per 10 referrals
 
-### Step 1: Verify Supabase Auth Provider Settings
+### 3. LeadDyno Integration Prep
+- Add LeadDyno to the affiliate config (`src/config/affiliates.ts`)
+- Create a placeholder edge function (`leaddyno-webhook`) ready to receive conversion webhooks once the account is created
+- When you sign up for LeadDyno, you'll just need to add the API key as a secret and configure the webhook URL
 
-You need to check your Supabase Dashboard manually:
-
-- Go to **Authentication > Providers** in your Supabase dashboard
-- Confirm **Email provider is enabled**
-- Confirm "Enable Sign Up" toggle is ON (if this is OFF, no new signups are allowed)
-- For Google OAuth: confirm Google provider is enabled with valid Client ID and Secret
-
-### Step 2: Check URL Configuration
-
-In Supabase Dashboard under **Authentication > URL Configuration**:
-
-- **Site URL** should be set to: `https://omni-flow-create-spark.lovable.app`
-- **Redirect URLs** should include:
-  - `https://omni-flow-create-spark.lovable.app/**`
-  - `https://omniwellnessmedia.co.za/**` (if using custom domain)
-  - `http://localhost:3000/**` (for local dev)
-
-### Step 3: Improve Error Handling in Code
-
-Update the signup error handler in `src/pages/Auth.tsx` to show the actual Supabase error message instead of generic text. This will reveal the exact 422 reason (e.g., "Signups not allowed for this instance" or "User already registered").
-
-**Change:** In the `handleSignUp` function, log and display the full `error.message` from Supabase so you can see exactly why signup is being rejected.
-
-### Step 4: Add Duplicate Email Detection
-
-Add a clearer check for "already registered" errors and guide users to the Sign In tab instead.
+### 4. Fix Broken Link
+- Update the "Start Your Journey" button on Partner Portal from `/wellness-exchange/provider-signup` to scroll to the application tab instead
 
 ## Technical Details
 
-**Files to modify:**
-- `src/pages/Auth.tsx` -- Improve error messages in `handleSignUp` to surface the exact 422 reason
+**New database tables:**
 
-**No database changes needed** -- the issue is in Supabase Auth configuration, not the database schema.
+```text
+partner_applications
+- id (uuid, PK)
+- full_name, email, phone, service_category
+- experience_level, bio, website
+- has_certifications, has_insurance, offers_online, can_travel
+- status (pending/approved/rejected)
+- referral_code (generated on approval)
+- created_at, updated_at
 
-## Priority Action (Before Code Changes)
+partner_referrals
+- id (uuid, PK)
+- partner_application_id (FK)
+- referral_code
+- visitor_ip_hash, page_visited
+- converted (boolean)
+- conversion_type (signup/purchase)
+- commission_amount
+- created_at
+```
 
-The most likely fix is a **Supabase Dashboard setting**. Before any code changes:
+**Files to create/modify:**
+- `src/pages/PartnerPortal.tsx` -- Wire up form submission, fix broken link
+- `src/config/affiliates.ts` -- Add LeadDyno program config
+- `supabase/functions/submit-partner-application/index.ts` -- Handle form + email notification
+- `supabase/functions/leaddyno-webhook/index.ts` -- Placeholder for future LeadDyno webhooks
 
-1. Open https://supabase.com/dashboard/project/dtjmhieeywdvhjxqyxad/auth/providers
-2. Verify Email provider has "Enable Sign Up" toggled ON
-3. Open https://supabase.com/dashboard/project/dtjmhieeywdvhjxqyxad/auth/url-configuration
-4. Verify Site URL and Redirect URLs are correct
+**RLS Policies:**
+- `partner_applications`: Insert allowed for anyone (public applications), select/update restricted to admins
+- `partner_referrals`: Insert for tracking (public), select for admins and the owning partner
 
-If signups were accidentally disabled, re-enabling them will fix the 422 instantly with no code changes needed.
+**No new secrets needed yet** -- LeadDyno API key will be added when you create the account later this week.
 
