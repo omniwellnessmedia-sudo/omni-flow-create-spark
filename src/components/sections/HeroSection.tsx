@@ -294,7 +294,7 @@ const HeroSection = () => {
               <Link to="/tours-retreats">{omniVoice.ctas.discover}</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-primary border-2 border-white shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
-              <Link to="/twobewellshop">2BeWell Shop</Link>
+              <Link to="/travel-well-connected-store">Travel Store</Link>
             </Button>
           </nav>
 

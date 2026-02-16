@@ -97,7 +97,7 @@ const Blog = () => {
 
             <div className="flex gap-4 justify-center">
               <Button 
-                onClick={() => window.location.href = '/blog/community'}
+                onClick={() => window.location.href = '/community-blog'}
                 className="bg-gradient-rainbow hover:opacity-90 text-white"
               >
                 Community Blog

@@ -13,7 +13,6 @@ import { omniVoice } from "@/data/omniVoiceGuide";
 
 // Supabase storage URLs for team photos
 const warrenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/warren.png";
-const stephenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/stephen.png";
 
 const About = () => {
   const storyImages = [
@@ -103,14 +102,6 @@ const About = () => {
       image: warrenPhoto,
       initials: "WC",
       description: "Warren provides senior financial oversight and governance guidance, supporting leadership in ensuring financial sustainability, compliance, and sound decision-making.",
-      location: "Cape Town, South Africa"
-    },
-    {
-      name: "Stephen Bosch",
-      role: "Financial Operations & Systems Lead",
-      image: stephenPhoto,
-      initials: "SB",
-      description: "Stephen is the operational financial lead, embedded in day-to-day financial systems, reporting, and execution. He ensures accurate bookkeeping and financial visibility.",
       location: "Cape Town, South Africa"
     }
   ];

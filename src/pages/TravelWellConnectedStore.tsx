@@ -210,6 +210,23 @@ const TravelWellConnectedStore = () => {
         'Community impact partnership'
       ],
       badge: 'Academic Program'
+    },
+    {
+      id: 'fish-hoek-walk',
+      title: 'Fish Hoek Coastal Walk',
+      description: 'A scenic coastal wellness walk through Fish Hoek, exploring natural beauty and local heritage.',
+      price: 500,
+      duration: 'Half day',
+      location: 'Fish Hoek, Cape Town',
+      image: `${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`,
+      link: '/tours/fish-hoek-walk',
+      highlights: [
+        'Scenic coastal trail',
+        'Local heritage sites',
+        'Nature immersion',
+        'Guided wellness experience'
+      ],
+      badge: 'New Experience'
     }
   ];
 

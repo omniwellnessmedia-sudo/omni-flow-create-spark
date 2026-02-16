@@ -13,7 +13,7 @@ const ServicesSection = () => {
       features: ["Brand Development", "Strategic Planning", "Market Analysis", "Sustainability Consulting"],
       icon: Briefcase,
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&auto=format&fit=crop",
-      link: "/services/business-consulting"
+      link: "/business-consulting"
     },
     {
       title: "Media & Content Creation",
@@ -21,7 +21,7 @@ const ServicesSection = () => {
       features: ["Video Production", "Photography", "Storytelling", "Documentary Work"],
       icon: Video,
       image: "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=800&auto=format&fit=crop",
-      link: "/services/media-production"
+      link: "/media-production"
     },
     {
       title: "Social Media Strategy",
@@ -29,7 +29,7 @@ const ServicesSection = () => {
       features: ["Content Planning", "Community Building", "Brand Voice", "Engagement Strategy"],
       icon: Share2,
       image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop",
-      link: "/services/social-media-strategy"
+      link: "/social-media-strategy"
     },
     {
       title: "Web Development",
@@ -37,7 +37,7 @@ const ServicesSection = () => {
       features: ["Responsive Design", "SEO Optimization", "User Experience", "Performance Optimization"],
       icon: Globe,
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop",
-      link: "/services/web-development"
+      link: "/web-development"
     }
   ];
 

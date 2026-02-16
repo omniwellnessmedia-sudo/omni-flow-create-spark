@@ -61,7 +61,7 @@ const OmniWellnessRetreat = () => {
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4">
                 <Calendar className="h-6 w-6 mb-2 text-white/80" />
                 <div className="text-sm text-white/60">Dates</div>
-                <div className="font-semibold">Feb 27 - May 2</div>
+                <div className="font-semibold">Dates TBA</div>
               </div>
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4">
                 <MapPin className="h-6 w-6 mb-2 text-white/80" />
@@ -729,9 +729,9 @@ const OmniWellnessRetreat = () => {
                         <Phone className="h-4 w-4 mr-2" />
                         Chad Cupido: 074 831 5961
                       </a>
-                      <a href="tel:0813884726" className="flex items-center text-sm hover:text-primary transition-colors">
-                        <Phone className="h-4 w-4 mr-2" />
-                        Joline Oliver: 081 388 4726
+                      <a href="mailto:admin@omniwellnessmedia.co.za" className="flex items-center text-sm hover:text-primary transition-colors">
+                        <Mail className="h-4 w-4 mr-2" />
+                        admin@omniwellnessmedia.co.za
                       </a>
                     </div>
                   </CardContent>

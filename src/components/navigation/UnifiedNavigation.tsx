@@ -88,14 +88,16 @@ const UnifiedNavigation = () => {
       children: [
         { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Transformative 4-day retreat', icon: '🧘‍♀️' },
         { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: 'Sacred indigenous journey with Chief Kingsley', icon: '⛰️' },
+        { title: 'Muizenberg Cave Tour', href: '/tours/muizenberg-cave-tours', description: 'Wellness cave journey', icon: '🏔️' },
+        { title: 'Kalk Bay Tour', href: '/tours/kalk-bay-tour', description: 'Coastal cultural experience', icon: '🌊' },
       ]
     },
     {
       title: 'Store',
       icon: Store,
       children: [
-        { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural wellness products', icon: '🌿' },
         { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'eSIM & travel data', icon: '📱' },
+        { title: 'RoamBuddy eSIM', href: '/roambuddy-store', description: 'Global eSIM solutions', icon: '🌐' },
       ]
     },
     {

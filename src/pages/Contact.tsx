@@ -191,7 +191,7 @@ const Contact = () => {
                       Get in Touch
                     </h3>
                     <div className="space-y-2 text-gray-600">
-                      <p>📧 hello@omniwellnessmedia.co.za</p>
+                      <p>📧 admin@omniwellnessmedia.co.za</p>
                       <p>📱 +27 74 831 5961</p>
                       <p>🕐 Mon - Fri, 9AM - 5PM SAST</p>
                     </div>
@@ -241,17 +241,17 @@ const Contact = () => {
                     </h3>
                     <p className="text-gray-600 mb-4">Stay connected with our latest projects and insights</p>
                     <div className="flex justify-center space-x-4">
-                      <Button variant="outline" size="sm" className="rounded-full">
-                        📘 Facebook
+                      <Button variant="outline" size="sm" className="rounded-full" asChild>
+                        <a href="https://www.facebook.com/omniwellnessmedia" target="_blank" rel="noopener noreferrer">📘 Facebook</a>
                       </Button>
-                      <Button variant="outline" size="sm" className="rounded-full">
-                        📷 Instagram
+                      <Button variant="outline" size="sm" className="rounded-full" asChild>
+                        <a href="https://www.instagram.com/omniwellnessmedia/" target="_blank" rel="noopener noreferrer">📷 Instagram</a>
                       </Button>
-                      <Button variant="outline" size="sm" className="rounded-full">
-                        💼 LinkedIn
+                      <Button variant="outline" size="sm" className="rounded-full" asChild>
+                        <a href="https://www.linkedin.com/company/omniwellnessmedia" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a>
                       </Button>
-                      <Button variant="outline" size="sm" className="rounded-full">
-                        📺 YouTube
+                      <Button variant="outline" size="sm" className="rounded-full" asChild>
+                        <a href="https://www.youtube.com/@omniwellnessmedia" target="_blank" rel="noopener noreferrer">📺 YouTube</a>
                       </Button>
                     </div>
                   </CardContent>

@@ -10,7 +10,6 @@ import Footer from "@/components/Footer";
 import WellnessHumansSection from "@/components/sections/WellnessHumansSection";
 import PartnersSection from "@/components/sections/PartnersSection";
 import FacebookFeedSection from "@/components/sections/FacebookFeedSection";
-import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
 import WhatIsOmniSection from "@/components/sections/WhatIsOmniSection";
 import SkipNavigation from "@/components/accessibility/SkipNavigation";
 import TeamPreviewSection from "@/components/sections/TeamPreviewSection";
@@ -38,16 +37,6 @@ const Index = () => {
         <HeroSection />
         <WhatIsOmniSection />
         <MissionSection />
-        
-        {/* 2BeWell Featured Section */}
-        <section 
-          aria-labelledby="twobwell-heading"
-          className="py-20 bg-gradient-to-br from-green-50 via-white to-blue-50"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <TwoBeWellCTA />
-          </div>
-        </section>
         
         <ServicesSection />
         <ToursRetreatsPreview />
