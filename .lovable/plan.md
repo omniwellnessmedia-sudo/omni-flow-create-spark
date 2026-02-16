@@ -1,66 +1,82 @@
 
 
-# Build Omni Affiliate Program + LeadDyno Prep
+# Feroza's Feedback Fixes + ROAM Visibility
 
-## Overview
+This is a large batch of fixes across 10+ areas. Given 5 credits, the plan consolidates all changes into the minimum number of file edits.
 
-Transform the existing Partner Portal (`/partner-portal`) into a working affiliate program with referral link generation, application submission to the database, and prepare the infrastructure for LeadDyno integration when you sign up later this week.
+## Summary of All Fixes
 
-## What Gets Built
+### 1. ROAM Section - Add to Navigation
+The ROAM store page exists at `/roambuddy-store` but is not in the navigation. Add it under the "Store" dropdown in both desktop MegaNavigation and mobile UnifiedNavigation.
 
-### 1. Working Partner Application Form
-- The current form on `/partner-portal` is static (no submit handler). Wire it up to save applications to a new `partner_applications` table in Supabase.
-- Send email notification to `omniwellnessmedia@gmail.com` via the existing Resend integration when someone applies.
-- Show success confirmation after submission.
+### 2. Archive 2BeWell
+- Remove `TwoBeWellCTA` section from homepage (`Index.tsx`)
+- Remove `2BeWell Shop` from navigation menus (MegaNavigation + UnifiedNavigation)
+- Remove `2BeWell Shop` link from Footer
+- Keep the actual shop page alive (accessible via direct URL) but hide from all navigation
 
-### 2. Affiliate Referral Link System
-- After approval, partners get a unique referral code (e.g., `?ref=sarah-j`)
-- Track referral visits, signups, and purchases via a `partner_referrals` table
-- Display a simple dashboard for approved partners showing their link, clicks, and earnings
-- Commission structure as previously defined: 15% first purchase, 10% repeat, R100 bonus per 10 referrals
+### 3. Homepage Fixes
+- **"Our Services" anchor**: The hero CTA button links to `/services` (a separate page). The "curated" section on the homepage needs an `id` so anchor scrolling works. Update the hero CTA to scroll to `#curated-services` on the homepage instead.
+- **Featured section buttons** (Indigenous Wisdom, Wellness Retreats, Study Abroad, Winter Wellness): These are in `FeaturedProjectsSection.tsx` and already link to real pages (`/tours/great-mother-cave-tour`, `/wellness-community`, `/services`). No placeholder `#` links found there. The issue may be in another section -- will verify and fix any `href="#"` links.
 
-### 3. LeadDyno Integration Prep
-- Add LeadDyno to the affiliate config (`src/config/affiliates.ts`)
-- Create a placeholder edge function (`leaddyno-webhook`) ready to receive conversion webhooks once the account is created
-- When you sign up for LeadDyno, you'll just need to add the API key as a secret and configure the webhook URL
+### 4. Name Corrections (Sitewide)
+- `Zenith Yasin` is correct on About page and TeamPreviewSection
+- `Zenith Yassin` (double-s) found in `ViatorWellnessExperiences.tsx` -- fix to `Zenith Yasin`
+- `Feroza Begg` is consistently spelled -- confirmed correct
 
-### 4. Fix Broken Link
-- Update the "Start Your Journey" button on Partner Portal from `/wellness-exchange/provider-signup` to scroll to the application tab instead
+### 5. About Page
+- **Remove Stephen Bosch** from the team array (and the `stephenPhoto` import)
+- Images use the centralized `IMAGES` system with `onError` fallbacks -- should be working. Will verify `IMAGES.team.*` paths are valid.
 
-## Technical Details
+### 6. Wellness Retreat Page (`OmniWellnessRetreat.tsx`)
+- **Label**: Already says "4th Annual Omni Wellness Retreat" -- correct
+- **Dates**: Change `Feb 27 - May 2` to `Dates TBA` (since current dates are inaccurate)
+- **Book Now button**: Already linked to `mailto:omniwellnessmedia@gmail.com` -- this is functional
+- **Remove Joline's number**: Remove the `081 388 4726` contact line
+- **Image review**: The page uses retreat-specific images from Supabase storage -- no shark education image found on this page. Will do a sweep for any irrelevant images.
 
-**New database tables:**
+### 7. Great Mother Cave Tour
+No code changes needed now -- structure is ready for Zenith's updated copy.
 
-```text
-partner_applications
-- id (uuid, PK)
-- full_name, email, phone, service_category
-- experience_level, bio, website
-- has_certifications, has_insurance, offers_online, can_travel
-- status (pending/approved/rejected)
-- referral_code (generated on approval)
-- created_at, updated_at
+### 8. Travel Well Connected Store
+- **Fish Hoek Walk**: Add as a new local experience option (placeholder copy, Zenith to provide details)
+- **Navigation**: Add "Muizenberg Tour" and "Kalk Bay Tour" under the Travel dropdown in MegaNavigation and UnifiedNavigation
 
-partner_referrals
-- id (uuid, PK)
-- partner_application_id (FK)
-- referral_code
-- visitor_ip_hash, page_visited
-- converted (boolean)
-- conversion_type (signup/purchase)
-- commission_amount
-- created_at
-```
+### 9. Blog Page
+- **Community Blog button**: Currently uses `window.location.href = '/blog/community'` -- this path doesn't exist as a route. Fix to link to `/community` (which maps to `CommunityBlog` page).
 
-**Files to create/modify:**
-- `src/pages/PartnerPortal.tsx` -- Wire up form submission, fix broken link
-- `src/config/affiliates.ts` -- Add LeadDyno program config
-- `supabase/functions/submit-partner-application/index.ts` -- Handle form + email notification
-- `supabase/functions/leaddyno-webhook/index.ts` -- Placeholder for future LeadDyno webhooks
+### 10. Contact Page
+- **Email**: Change `hello@omniwellnessmedia.co.za` to `admin@omniwellnessmedia.co.za`
+- **Social buttons**: Add actual URLs to the "Follow our journey" buttons:
+  - Facebook: `https://www.facebook.com/omniwellnessmedia`
+  - Instagram: `https://www.instagram.com/omniwellnessmedia/`
+  - LinkedIn: `https://www.linkedin.com/company/omniwellnessmedia`
+  - YouTube: `https://www.youtube.com/@omniwellnessmedia`
 
-**RLS Policies:**
-- `partner_applications`: Insert allowed for anyone (public applications), select/update restricted to admins
-- `partner_referrals`: Insert for tracking (public), select for admins and the owning partner
+### 11. Services Section Links
+The `ServicesSection.tsx` on the homepage uses `/services/business-consulting`, `/services/media-production`, etc. but actual routes are `/business-consulting`, `/media-production`. Fix these link paths.
 
-**No new secrets needed yet** -- LeadDyno API key will be added when you create the account later this week.
+### 12. Footer Updates
+- Remove 2BeWell Shop link
+- Fix service links from `/services/business-consulting` to `/business-consulting` format
+- Update copyright year from 2025 to 2026
+
+## Technical Details - Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/components/navigation/MegaNavigation.tsx` | Add ROAM store to Store menu, add Muizenberg + Kalk Bay tours to Travel menu, remove 2BeWell |
+| `src/components/navigation/UnifiedNavigation.tsx` | Same nav updates for mobile menu |
+| `src/pages/Index.tsx` | Remove TwoBeWellCTA import and section, add `id="curated-services"` to services section |
+| `src/components/sections/HeroSection.tsx` | Update "Our Services" CTA to scroll to `#curated-services` |
+| `src/components/sections/ServicesSection.tsx` | Fix 4 broken service link paths |
+| `src/pages/About.tsx` | Remove Stephen Bosch from team array |
+| `src/pages/tours/OmniWellnessRetreat.tsx` | Fix dates to "TBA", remove Joline's number |
+| `src/pages/Contact.tsx` | Update email, add social URLs to buttons |
+| `src/pages/Blog.tsx` | Fix Community Blog button link |
+| `src/pages/ViatorWellnessExperiences.tsx` | Fix "Zenith Yassin" to "Zenith Yasin" |
+| `src/components/Footer.tsx` | Remove 2BeWell link, fix service paths, update copyright year |
+| `src/pages/TravelWellConnectedStore.tsx` | Add Fish Hoek Walk placeholder |
+
+**RoamBuddy logos from Supabase storage** are already in the `Roambuddy` folder under `provider-images` bucket. The ROAM store page at `/roambuddy-store` should already reference these. No additional asset work needed.
 
