@@ -246,16 +246,16 @@ const Footer = () => {
               Services & Solutions
             </h3>
             <ul className="space-y-3">
-              <li><Link to="/services/business-consulting" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+              <li><Link to="/business-consulting" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Business Development
               </Link></li>
-              <li><Link to="/services/media-production" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+              <li><Link to="/media-production" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Media Production
               </Link></li>
-              <li><Link to="/services/social-media-strategy" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+              <li><Link to="/social-media-strategy" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Social Media Strategy
               </Link></li>
-              <li><Link to="/services/web-development" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
+              <li><Link to="/web-development" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Web Development
               </Link></li>
               <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
@@ -283,9 +283,9 @@ const Footer = () => {
                 <Heart className="w-4 h-4 text-white/70" />
                 Tours & Retreats
               </Link></li>
-              <li><Link to="/twobewellshop" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
+              <li><Link to="/travel-well-connected-store" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-white/70" />
-                2BeWell Shop
+                Travel Store
               </Link></li>
               <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Our Story
@@ -338,7 +338,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-300 text-sm">© 2025 Omni Wellness Media. All rights reserved.</p>
+            <p className="text-gray-300 text-sm">© 2026 Omni Wellness Media. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link to="/privacy-policy" className="text-gray-300 hover:text-white text-sm transition-colors">
                 Privacy Policy

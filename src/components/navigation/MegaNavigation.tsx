@@ -34,6 +34,8 @@ export const MegaNavigation = () => {
       items: [
         { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Transformative 4-day retreat', icon: '🧘‍♀️', featured: true },
         { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: 'Sacred indigenous journey', icon: '⛰️' },
+        { title: 'Muizenberg Cave Tour', href: '/tours/muizenberg-cave-tours', description: 'Wellness cave journey', icon: '🏔️' },
+        { title: 'Kalk Bay Tour', href: '/tours/kalk-bay-tour', description: 'Coastal cultural experience', icon: '🌊' },
       ]
     }
   ];
@@ -42,8 +44,8 @@ export const MegaNavigation = () => {
     {
       title: 'Shop',
       items: [
-        { title: '2BeWell Shop', href: '/twobewellshop', description: 'Natural wellness products', icon: '🌿', featured: true },
-        { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'eSIM & data packages', icon: '📱' },
+        { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'eSIM & data packages', icon: '📱', featured: true },
+        { title: 'RoamBuddy eSIM', href: '/roambuddy-store', description: 'Global eSIM solutions', icon: '🌐' },
       ]
     }
   ];

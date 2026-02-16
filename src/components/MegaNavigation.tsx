@@ -36,13 +36,13 @@ const MegaNavigation = () => {
         { name: 'All Tours', href: '/tours', icon: '🗺️' },
         { name: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', icon: '⛰️' },
         { name: 'Annual Wellness Retreat', href: '/tour-category/weekend-retreats', icon: '🧘‍♀️' },
-        { name: '2BeWell Community', href: '/two-be-well', icon: '💝' }
+        { name: 'Muizenberg Cave Tour', href: '/tours/muizenberg-cave-tours', icon: '🏔️' },
+        { name: 'Kalk Bay Tour', href: '/tours/kalk-bay-tour', icon: '🌊' },
       ]
     },
     {
       title: 'Omni Wellness Store',
       items: [
-        { name: '2BeWell Shop', href: '/twobewellshop', icon: '🌿' },
         { name: 'Travel Well Connected', href: '/travel-well-connected-store', icon: '🌐' },
         { name: 'RoamBuddy eSIM', href: '/roambuddy-store', icon: '📱' }
       ]

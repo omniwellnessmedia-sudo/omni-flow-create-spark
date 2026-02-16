@@ -39,7 +39,7 @@ export default function ViatorWellnessExperiences() {
 
   const curators = [
     {
-      name: 'Zenith Yassin',
+      name: 'Zenith Yasin',
       title: 'Administrative Director & Wellness Curator',
       avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg',
       bio: 'With a deep passion for holistic wellness and cultural immersion, Zenith curates transformative spa and meditation experiences.',
