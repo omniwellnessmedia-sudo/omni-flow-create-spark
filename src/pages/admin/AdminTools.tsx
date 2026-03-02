@@ -188,7 +188,7 @@ const AdminTools = () => {
   const teamMembers = [
     { name: 'Chad Cupido', email: 'chad@omniwellnessmedia.com', role: 'Founder & Head of Media' },
     { name: 'Zenith', email: 'zenith@omniwellnessmedia.com', role: 'Administration & Coordination' },
-    { name: 'Feroza', email: 'feroza@omniwellnessmedia.com', role: 'Team Member' },
+    { name: 'Ferozza', email: 'ferozza@omniwellnessmedia.com', role: 'Team Member' },
   ];
 
   return (
@@ -377,7 +377,7 @@ const AdminTools = () => {
 
           <div className="border-t pt-4">
             <p className="text-sm text-muted-foreground mb-3">
-              Quick action: Add predefined team admins (Chad, Zenith, Feroza)
+              Quick action: Add predefined team admins (Chad, Zenith, Ferozza)
             </p>
             <Button 
               variant="outline" 

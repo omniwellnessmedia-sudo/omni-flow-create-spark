@@ -6,6 +6,7 @@ const PartnersSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const partners = [
+    { name: "2beWell All Natural", logo: IMAGES.partners.twoBeWell, description: "Natural Wellness Products" },
     { name: "APEX Advocacy", logo: IMAGES.partners.apex, description: "Legal Advocacy Services" },
     { name: "MBS Mzansi Business Services", logo: IMAGES.partners.mbs, description: "Business Solutions" },
     { name: "Dr. Phil-Afei Foundation", logo: IMAGES.partners.drPhil, description: "Community Healthcare" },

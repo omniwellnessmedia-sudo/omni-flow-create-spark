@@ -111,26 +111,22 @@ const ToursRetreatsPreview = () => {
         {[{
         name: 'Indigenous Wisdom & Healing',
         slug: 'indigenous-wisdom',
-        icon: '🌿',
-        link: '/tours/great-mother-cave-tour'
+        icon: '🌿'
       }, {
         name: 'Wellness Retreats',
         slug: 'wellness-retreats',
-        icon: '🧘',
-        link: '/tour-detail/winter-wine-country-wellness'
+        icon: '🧘'
       }, {
         name: 'Study Abroad',
         slug: 'study-abroad',
-        icon: '📚',
-        link: '/tours/muizenberg-cave-tours'
+        icon: '📚'
       }, {
         name: 'Winter Wellness',
         slug: 'winter-wellness',
-        icon: '❄️',
-        link: '/tour-detail/winter-wine-country-wellness'
+        icon: '❄️'
       }].map(category => <Link 
             key={category.slug} 
-            to={category.link}
+            to={`/tours-retreats/${category.slug}`}
             aria-label={`Explore ${category.name}`}
           >
             <Card className="hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer h-full group border-2 border-transparent hover:border-primary/20">

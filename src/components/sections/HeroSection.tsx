@@ -67,6 +67,13 @@ const HeroSection = () => {
       badge: "Media"
     },
     {
+      title: "2BeWell Natural Products",
+      description: "Handmade wellness essentials",
+      href: "/twobewellshop",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/product-images%20(2BeWell%20Products)/10.png",
+      badge: "Shop"
+    },
+    {
       title: "Indigenous Wisdom Tours",
       description: "Ancient healing practices & cultural experiences",
       href: "/tours/great-mother-cave-tour",
@@ -86,7 +93,7 @@ const HeroSection = () => {
     {
       title: "Chief Kingsley's Wisdom",
       description: "Indigenous knowledge & cultural heritage tours",
-      href: "/tours/great-mother-cave-tour#chief-kingsley",
+      href: "/tours/great-mother-cave-tour",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/chief%20kingsley%201.jpg",
       category: "tours",
       author: "Cultural Experience",
@@ -281,7 +288,7 @@ const HeroSection = () => {
             style={{ animationDelay: '0.4s' }}
           >
             <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
-              <a href="/#curated-services" onClick={(e) => { e.preventDefault(); document.getElementById('curated-services')?.scrollIntoView({ behavior: 'smooth' }); }}>{omniVoice.ctas.seeMore}</a>
+              <Link to="/services">{omniVoice.ctas.seeMore}</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-primary border-2 border-white shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
               <Link to="/tours-retreats">{omniVoice.ctas.discover}</Link>
@@ -328,7 +335,7 @@ const HeroSection = () => {
           </div>
 
           {/* Workspace Section */}
-          <div id="curated-services" className="mb-8 sm:mb-16">
+          <div className="mb-8 sm:mb-16">
             <div className="bg-card rounded-xl shadow-sm border border-border/50 p-4 sm:p-6 motion-safe:animate-fade-in">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                 <h2 className="text-lg sm:text-xl font-semibold text-foreground">

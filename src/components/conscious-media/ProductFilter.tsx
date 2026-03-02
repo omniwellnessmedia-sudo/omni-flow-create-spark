@@ -129,7 +129,7 @@ export const ProductFilter = ({
               className="cursor-pointer hover:bg-primary/10 transition-colors px-4 py-2"
               onClick={() => handleCuratorClick('ferozza')}
             >
-              Feroza
+              Ferozza
             </Badge>
             <Badge
               variant={selectedCurator === 'chad' ? "default" : "outline"}

@@ -142,8 +142,8 @@ const curatorProfiles = {
     bio: "The best adventures are those that change your perspective and connect you to something greater.",
     avatar: `${STORAGE_BASE}/General%20Images/chad%20cupido%20portrait.jpg`
   },
-  feroza: {
-    name: "Feroza",
+  ferozza: {
+    name: "Ferozza",
     title: "Communications & Media Curator",
     expertise: "Wellness Travel • Cultural Experiences • Travel Planning",
     bio: "I believe every journey should nurture the soul. I help travelers discover experiences that create lasting transformation.",
@@ -511,8 +511,6 @@ const TravelWellConnectedStore = () => {
               'travel_well_connected_curator',
               'view_curator_picks'
             );
-            const section = document.getElementById('local-tours');
-            section?.scrollIntoView({ behavior: 'smooth' });
           }}
         >
           See {curator.name}'s Picks

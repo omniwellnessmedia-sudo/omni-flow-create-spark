@@ -13,6 +13,14 @@ const TestimonialsSection = () => {
       featured: true
     },
     {
+      quote: "The natural skincare products from 2BeWell have transformed my skin. Knowing they're handmade with love and completely natural gives me peace of mind. The face serum is absolutely incredible!",
+      author: "Anonymous",
+      role: "2BeWell Customer",
+      initials: "AC",
+      rating: 5,
+      featured: false
+    },
+    {
       quote: "My weekend wellness retreat in Cape Town was life-changing. The combination of nature, indigenous wisdom, and community connection created a profound healing experience I'll never forget.",
       author: "Anonymous",
       role: "Retreat Participant",

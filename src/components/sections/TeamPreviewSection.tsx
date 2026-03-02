@@ -18,7 +18,7 @@ const team = [
     initials: "TN",
   },
   {
-    name: "Zenith Yassin",
+    name: "Zenith Yasin",
     role: "Operations Lead",
     image: IMAGES.team.zenith,
     initials: "ZY",

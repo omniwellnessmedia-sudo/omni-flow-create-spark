@@ -1,6 +1,5 @@
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
-import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
@@ -135,44 +134,40 @@ const Blog = () => {
           <FloatingDecorations variant="section" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {blogPosts.map((post, index) => {
-                const slug = post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                return (
-                  <Link key={post.title} to={`/blog/${slug}`} className="block">
-                    <Card 
-                      className="overflow-hidden hover:shadow-lg transition-all duration-300 transform motion-safe:hover:-translate-y-1 animate-fade-in-up cursor-pointer border-0 shadow-md h-full"
-                      style={{ animationDelay: `${index * 0.1}s` }}
-                    >
-                      <div className="aspect-video overflow-hidden">
-                        <img 
-                          src={post.image}
-                          alt={post.title}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                      <CardHeader>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className={`text-xs font-medium px-2 py-1 rounded-full ${getCategoryColor(post.category)}`}>
-                            {post.category}
-                          </span>
-                          <span className="text-xs text-gray-500">{post.readTime}</span>
-                        </div>
-                        <CardTitle className="font-heading text-lg mb-2 line-clamp-2 hover:text-omni-indigo transition-colors">
-                          {post.title}
-                        </CardTitle>
-                        <CardDescription className="text-gray-600 line-clamp-2">
-                          {post.excerpt}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-xs text-gray-500">
-                          {post.date}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                );
-              })}
+              {blogPosts.map((post, index) => (
+                <Card 
+                  key={post.title}
+                  className="overflow-hidden hover:shadow-lg transition-all duration-300 transform motion-safe:hover:-translate-y-1 animate-fade-in-up cursor-pointer border-0 shadow-md"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="aspect-video overflow-hidden">
+                    <img 
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${getCategoryColor(post.category)}`}>
+                        {post.category}
+                      </span>
+                      <span className="text-xs text-gray-500">{post.readTime}</span>
+                    </div>
+                    <CardTitle className="font-heading text-lg mb-2 line-clamp-2 hover:text-omni-indigo transition-colors">
+                      {post.title}
+                    </CardTitle>
+                    <CardDescription className="text-gray-600 line-clamp-2">
+                      {post.excerpt}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-xs text-gray-500">
+                      {post.date}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </section>
