@@ -91,7 +91,7 @@ export interface ExtendedCuratorProfile extends CuratorProfile {
 
 export const curatorProfiles: Record<string, ExtendedCuratorProfile> = {
   ferozza: {
-    name: 'Ferozza',
+    name: 'Feroza',
     role: 'Digital Nomad & Travel Content Creator',
     expertise: 'Global Connectivity Solutions',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Feroza%20Portrait.jpg',
