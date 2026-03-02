@@ -1,82 +1,82 @@
 
 
-# Feroza's Feedback Fixes + ROAM Visibility
+# Feroza's Complete Fix List -- Implementation Plan
 
-This is a large batch of fixes across 10+ areas. Given 5 credits, the plan consolidates all changes into the minimum number of file edits.
+This is a large batch of fixes spanning the homepage, tours, travel store, blog, contact, and sitewide name corrections. The issues are organized by page and priority.
 
-## Summary of All Fixes
+## Fixes by File
 
-### 1. ROAM Section - Add to Navigation
-The ROAM store page exists at `/roambuddy-store` but is not in the navigation. Add it under the "Store" dropdown in both desktop MegaNavigation and mobile UnifiedNavigation.
+### 1. Homepage -- HeroSection.tsx
+- **Remove 2BeWell card** from `workspaceItems` array (line 69-75) -- it still appears in the "curated for you" section
+- **Chief Kingsley card** (line 93-103): Change `href` from `/tours/great-mother-cave-tour` to `/tours/great-mother-cave-tour#chief-kingsley` so it scrolls to Chief Kingsley's section
+- **"Our Services" CTA** (line 291): Currently links to `/services` via React Router `<Link>`. Change to native `<a href="/#curated-services">` to enable proper scroll behavior, and add `id="curated-services"` to the workspace section div
 
-### 2. Archive 2BeWell
-- Remove `TwoBeWellCTA` section from homepage (`Index.tsx`)
-- Remove `2BeWell Shop` from navigation menus (MegaNavigation + UnifiedNavigation)
-- Remove `2BeWell Shop` link from Footer
-- Keep the actual shop page alive (accessible via direct URL) but hide from all navigation
+### 2. Homepage -- ToursRetreatsPreview.tsx
+- **Category buttons** (lines 127-142): Currently link to `/tours-retreats/indigenous-wisdom`, `/tours-retreats/wellness-retreats`, etc. -- these routes do not exist. Fix to:
+  - Indigenous Wisdom & Healing -> `/tours/great-mother-cave-tour`
+  - Wellness Retreats -> `/tour-detail/winter-wine-country-wellness`
+  - Study Abroad -> `/tours/muizenberg-cave-tours`
+  - Winter Wellness -> `/tour-detail/winter-wine-country-wellness`
 
-### 3. Homepage Fixes
-- **"Our Services" anchor**: The hero CTA button links to `/services` (a separate page). The "curated" section on the homepage needs an `id` so anchor scrolling works. Update the hero CTA to scroll to `#curated-services` on the homepage instead.
-- **Featured section buttons** (Indigenous Wisdom, Wellness Retreats, Study Abroad, Winter Wellness): These are in `FeaturedProjectsSection.tsx` and already link to real pages (`/tours/great-mother-cave-tour`, `/wellness-community`, `/services`). No placeholder `#` links found there. The issue may be in another section -- will verify and fix any `href="#"` links.
+### 3. Homepage -- PartnersSection.tsx
+- **Remove 2BeWell** from partners array (line 9)
 
-### 4. Name Corrections (Sitewide)
-- `Zenith Yasin` is correct on About page and TeamPreviewSection
-- `Zenith Yassin` (double-s) found in `ViatorWellnessExperiences.tsx` -- fix to `Zenith Yasin`
-- `Feroza Begg` is consistently spelled -- confirmed correct
+### 4. Homepage -- TestimonialsSection.tsx
+- **Remove 2BeWell testimonial** (lines 16-20)
 
-### 5. About Page
-- **Remove Stephen Bosch** from the team array (and the `stephenPhoto` import)
-- Images use the centralized `IMAGES` system with `onError` fallbacks -- should be working. Will verify `IMAGES.team.*` paths are valid.
+### 5. Muizenberg Cave Tour -- MuizenbergCaveTours.tsx
+- **Joel's avatar** (line 93): Currently shows Chief Kingsley's image (`indigenous%20tour%20chief%20kingsley%20explaining.jpg`). Replace with Joel's actual portrait. Need to use a different image -- will use the Muizenberg tour guide portrait or a generic fallback since Joel's individual portrait is not in storage
 
-### 6. Wellness Retreat Page (`OmniWellnessRetreat.tsx`)
-- **Label**: Already says "4th Annual Omni Wellness Retreat" -- correct
-- **Dates**: Change `Feb 27 - May 2` to `Dates TBA` (since current dates are inaccurate)
-- **Book Now button**: Already linked to `mailto:omniwellnessmedia@gmail.com` -- this is functional
-- **Remove Joline's number**: Remove the `081 388 4726` contact line
-- **Image review**: The page uses retreat-specific images from Supabase storage -- no shark education image found on this page. Will do a sweep for any irrelevant images.
+### 6. Travel Well Connected -- TravelWellConnectedStore.tsx
+- **Name correction**: Change `"Ferozza"` to `"Feroza"` in curator profiles (line 146)
+- **Curator photos**: Replace Zenith's group photo avatar with her individual portrait; add Chad's portrait photo (currently showing initials fallback)
+- **"See Picks" buttons** (lines 505-517): Currently only fires a tracking event with no navigation. Add scroll behavior to scroll to the local/viator tours section when clicked
+- **Viator links** (line 458): Currently uses `search=` parameter which shows all results. This is the intended affiliate partner shop behavior per existing memory -- the Viator partner shop model doesn't support direct product deep links
 
-### 7. Great Mother Cave Tour
-No code changes needed now -- structure is ready for Zenith's updated copy.
+### 7. Wellness Retreat -- OmniWellnessRetreat.tsx
+- **Remove incorrect images**: The retreat page gallery (lines 14-21) contains generic images. Review and ensure no shark/ECD images are present. The current images appear to be from the retreat folder and general wellness -- will verify the actual URLs
+- **Add more gallery images**: Currently 6 images in the gallery array, which is reasonable
 
-### 8. Travel Well Connected Store
-- **Fish Hoek Walk**: Add as a new local experience option (placeholder copy, Zenith to provide details)
-- **Navigation**: Add "Muizenberg Tour" and "Kalk Bay Tour" under the Travel dropdown in MegaNavigation and UnifiedNavigation
+### 8. Blog -- Blog.tsx
+- **Blog cards not clickable**: The blog cards (line 138-169) are wrapped in `<Card>` with `cursor-pointer` but have no `onClick` or `<Link>` wrapper. Add click navigation to `/blog/{slug}` for each post
+- **Zenith name**: Search confirms Zenith is spelled "Zenith Yasin" throughout -- Feroza requests "Zenith Yassin" (double-s). Need to update sitewide to "Zenith Yassin"
 
-### 9. Blog Page
-- **Community Blog button**: Currently uses `window.location.href = '/blog/community'` -- this path doesn't exist as a route. Fix to link to `/community` (which maps to `CommunityBlog` page).
+### 9. Contact -- Contact.tsx
+- **Discovery Call button**: Uses `CalComBooking` component which loads Cal.com embed. If the `calcom_integration` feature flag is disabled, it falls back to `mailto:hello@omniwellnessmedia.co.za`. Update fallback email to `admin@omniwellnessmedia.co.za`
 
-### 10. Contact Page
-- **Email**: Change `hello@omniwellnessmedia.co.za` to `admin@omniwellnessmedia.co.za`
-- **Social buttons**: Add actual URLs to the "Follow our journey" buttons:
-  - Facebook: `https://www.facebook.com/omniwellnessmedia`
-  - Instagram: `https://www.instagram.com/omniwellnessmedia/`
-  - LinkedIn: `https://www.linkedin.com/company/omniwellnessmedia`
-  - YouTube: `https://www.youtube.com/@omniwellnessmedia`
+### 10. RoamBuddy Store
+- **Name correction**: No "Feroza/Ferozza" references found in RoamBuddy components -- this may be rendered via WellnessCuratorCard which uses `ferozza` key. Fix to `feroza`
+- **Pop-up**: Need to identify and soften the dominant pop-up -- likely the RoamBuddy sales bot chatbot widget
 
-### 11. Services Section Links
-The `ServicesSection.tsx` on the homepage uses `/services/business-consulting`, `/services/media-production`, etc. but actual routes are `/business-consulting`, `/media-production`. Fix these link paths.
+### 11. Sitewide Name Corrections
+Feroza specifically requests **"Zenith Yassin"** (double-s). Currently the codebase uses "Zenith Yasin" (single-s). Files to update:
+- `src/data/curatorTips.ts`
+- `src/components/sections/TeamPreviewSection.tsx`
+- `src/pages/About.tsx`
+- `src/pages/ViatorWellnessExperiences.tsx`
 
-### 12. Footer Updates
-- Remove 2BeWell Shop link
-- Fix service links from `/services/business-consulting` to `/business-consulting` format
-- Update copyright year from 2025 to 2026
+And "Ferozza" -> "Feroza" across:
+- `src/pages/TravelWellConnectedStore.tsx`
+- `src/pages/ConsciousMediaInfrastructurePage.tsx`
+- `src/components/conscious-media/ProductFilter.tsx`
+- `src/pages/admin/AdminTools.tsx`
+- `src/components/roambuddy/WellnessCuratorCard.tsx`
 
-## Technical Details - Files to Modify
+## Files to Modify (13 files)
 
 | File | Changes |
 |------|---------|
-| `src/components/navigation/MegaNavigation.tsx` | Add ROAM store to Store menu, add Muizenberg + Kalk Bay tours to Travel menu, remove 2BeWell |
-| `src/components/navigation/UnifiedNavigation.tsx` | Same nav updates for mobile menu |
-| `src/pages/Index.tsx` | Remove TwoBeWellCTA import and section, add `id="curated-services"` to services section |
-| `src/components/sections/HeroSection.tsx` | Update "Our Services" CTA to scroll to `#curated-services` |
-| `src/components/sections/ServicesSection.tsx` | Fix 4 broken service link paths |
-| `src/pages/About.tsx` | Remove Stephen Bosch from team array |
-| `src/pages/tours/OmniWellnessRetreat.tsx` | Fix dates to "TBA", remove Joline's number |
-| `src/pages/Contact.tsx` | Update email, add social URLs to buttons |
-| `src/pages/Blog.tsx` | Fix Community Blog button link |
-| `src/pages/ViatorWellnessExperiences.tsx` | Fix "Zenith Yassin" to "Zenith Yasin" |
-| `src/components/Footer.tsx` | Remove 2BeWell link, fix service paths, update copyright year |
-| `src/pages/TravelWellConnectedStore.tsx` | Add Fish Hoek Walk placeholder |
-
-**RoamBuddy logos from Supabase storage** are already in the `Roambuddy` folder under `provider-images` bucket. The ROAM store page at `/roambuddy-store` should already reference these. No additional asset work needed.
+| `src/components/sections/HeroSection.tsx` | Remove 2BeWell card, fix Chief Kingsley href to include #chief-kingsley, change "Our Services" to scroll anchor |
+| `src/components/sections/ToursRetreatsPreview.tsx` | Fix 4 category button links to real routes |
+| `src/components/sections/PartnersSection.tsx` | Remove 2BeWell from partners array |
+| `src/components/sections/TestimonialsSection.tsx` | Remove 2BeWell testimonial |
+| `src/pages/tours/MuizenbergCaveTours.tsx` | Fix Joel's avatar image URL |
+| `src/pages/TravelWellConnectedStore.tsx` | Fix "Ferozza"->"Feroza", update curator photos, make "See Picks" scroll to tours |
+| `src/pages/Blog.tsx` | Make blog cards clickable with Link wrapper |
+| `src/pages/Contact.tsx` | Update CalComBooking fallback email |
+| `src/data/curatorTips.ts` | "Zenith Yasin" -> "Zenith Yassin" |
+| `src/components/sections/TeamPreviewSection.tsx` | "Zenith Yasin" -> "Zenith Yassin" |
+| `src/pages/About.tsx` | "Zenith Yasin" -> "Zenith Yassin" |
+| `src/pages/ViatorWellnessExperiences.tsx` | "Zenith Yasin" -> "Zenith Yassin" |
+| `src/components/roambuddy/WellnessCuratorCard.tsx` | "ferozza" -> "feroza" |
 
