@@ -81,7 +81,7 @@ const About = () => {
       location: "Cape Town, South Africa"
     },
     {
-      name: "Zenith Yasin",
+      name: "Zenith Yassin",
       role: "Operations & Platform Coordination Lead",
       image: IMAGES.team.zenith,
       initials: "ZY",
