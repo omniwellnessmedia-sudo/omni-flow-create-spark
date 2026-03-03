@@ -123,7 +123,7 @@ const ConsciousMediaInfrastructurePage = () => {
             Conscious Media Equipment Guide
           </h1>
           <p className="text-lg lg:text-xl text-foreground/90 max-w-2xl mx-auto drop-shadow-md">
-            Honest recommendations from Ferozza, Chad, and Zenith to help you choose the right tools for your wellness storytelling
+            Honest recommendations from Feroza, Chad, and Zenith to help you choose the right tools for your wellness storytelling
           </p>
           <p className="text-sm text-muted-foreground max-w-3xl mx-auto italic">
             We haven't personally tested every product—these are thoughtful recommendations based on our experience in wellness media production across South Africa

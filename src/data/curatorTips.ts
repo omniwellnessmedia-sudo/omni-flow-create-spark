@@ -36,7 +36,7 @@ export const curators: Record<string, CuratorProfile> = {
   },
   zenith: {
     id: "zenith",
-    name: "Zenith Yasin",
+    name: "Zenith Yassin",
     title: "Operations & Coordination Lead",
     emoji: "🧭",
     image: IMAGES.team.zenith,
