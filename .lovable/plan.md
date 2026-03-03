@@ -1,82 +1,61 @@
 
 
-# Feroza's Complete Fix List -- Implementation Plan
+# ROAM Launch-Ready Site Fixes
 
-This is a large batch of fixes spanning the homepage, tours, travel store, blog, contact, and sitewide name corrections. The issues are organized by page and priority.
+## Summary
 
-## Fixes by File
+10 files modified in one batch to make the site ROAM-launch-ready: ROAM as hero sales section on homepage, Tumelo hidden sitewide, Blog hidden from navigation, chatbot made global and non-intrusive, and critical routing/naming fixes.
 
-### 1. Homepage -- HeroSection.tsx
-- **Remove 2BeWell card** from `workspaceItems` array (line 69-75) -- it still appears in the "curated for you" section
-- **Chief Kingsley card** (line 93-103): Change `href` from `/tours/great-mother-cave-tour` to `/tours/great-mother-cave-tour#chief-kingsley` so it scrolls to Chief Kingsley's section
-- **"Our Services" CTA** (line 291): Currently links to `/services` via React Router `<Link>`. Change to native `<a href="/#curated-services">` to enable proper scroll behavior, and add `id="curated-services"` to the workspace section div
+## Changes by File
 
-### 2. Homepage -- ToursRetreatsPreview.tsx
-- **Category buttons** (lines 127-142): Currently link to `/tours-retreats/indigenous-wisdom`, `/tours-retreats/wellness-retreats`, etc. -- these routes do not exist. Fix to:
-  - Indigenous Wisdom & Healing -> `/tours/great-mother-cave-tour`
-  - Wellness Retreats -> `/tour-detail/winter-wine-country-wellness`
-  - Study Abroad -> `/tours/muizenberg-cave-tours`
-  - Winter Wellness -> `/tour-detail/winter-wine-country-wellness`
+### 1. `src/pages/Index.tsx`
+- Remove `TeamPreviewSection` import and usage (Tumelo hidden, section not needed for launch)
+- Replace `ToursRetreatsPreview` with new ROAM-focused section component
 
-### 3. Homepage -- PartnersSection.tsx
-- **Remove 2BeWell** from partners array (line 9)
+### 2. `src/components/sections/ToursRetreatsPreview.tsx`
+- Complete rewrite as **ROAM Sales Preview** section
+- Show 3 featured ROAM eSIM product cards (South Africa, Africa Explorer, Global) with pricing and CTA linking to `/roambuddy-store`
+- Keep 1 active tour card (Great Mother Cave Tour) below as "Pair with a Wellness Experience"
+- Section title: "Stay Connected on Your Wellness Journey" with ROAM 🧭 branding
+- CTA buttons: "Browse All eSIM Plans" -> `/roambuddy-store`, "Explore Tours" -> `/travel-well-connected-store`
 
-### 4. Homepage -- TestimonialsSection.tsx
-- **Remove 2BeWell testimonial** (lines 16-20)
+### 3. `src/components/sections/TeamPreviewSection.tsx`
+- Remove Tumelo from the `team` array (filter out, keeping Chad, Zenith, Feroza)
+- Change grid from `grid-cols-2 md:grid-cols-4` to `grid-cols-3 md:grid-cols-3`
 
-### 5. Muizenberg Cave Tour -- MuizenbergCaveTours.tsx
-- **Joel's avatar** (line 93): Currently shows Chief Kingsley's image (`indigenous%20tour%20chief%20kingsley%20explaining.jpg`). Replace with Joel's actual portrait. Need to use a different image -- will use the Muizenberg tour guide portrait or a generic fallback since Joel's individual portrait is not in storage
+### 4. `src/pages/About.tsx`
+- Remove Tumelo from team array
+- Fix Youth Empowerment image: change `IMAGES.providers.bwc` (BWC logo) to `IMAGES.wellness.communityProject1` (actual community/youth image)
 
-### 6. Travel Well Connected -- TravelWellConnectedStore.tsx
-- **Name correction**: Change `"Ferozza"` to `"Feroza"` in curator profiles (line 146)
-- **Curator photos**: Replace Zenith's group photo avatar with her individual portrait; add Chad's portrait photo (currently showing initials fallback)
-- **"See Picks" buttons** (lines 505-517): Currently only fires a tracking event with no navigation. Add scroll behavior to scroll to the local/viator tours section when clicked
-- **Viator links** (line 458): Currently uses `search=` parameter which shows all results. This is the intended affiliate partner shop behavior per existing memory -- the Viator partner shop model doesn't support direct product deep links
+### 5. `src/components/navigation/MegaNavigation.tsx`
+- Remove the Blog `NavigationMenuItem` (lines 213-220)
 
-### 7. Wellness Retreat -- OmniWellnessRetreat.tsx
-- **Remove incorrect images**: The retreat page gallery (lines 14-21) contains generic images. Review and ensure no shark/ECD images are present. The current images appear to be from the retreat folder and general wellness -- will verify the actual URLs
-- **Add more gallery images**: Currently 6 images in the gallery array, which is reasonable
+### 6. `src/components/navigation/UnifiedNavigation.tsx`
+- Remove Blog from `navigationItems` array (the object with `title: 'Blog'`)
 
-### 8. Blog -- Blog.tsx
-- **Blog cards not clickable**: The blog cards (line 138-169) are wrapped in `<Card>` with `cursor-pointer` but have no `onClick` or `<Link>` wrapper. Add click navigation to `/blog/{slug}` for each post
-- **Zenith name**: Search confirms Zenith is spelled "Zenith Yasin" throughout -- Feroza requests "Zenith Yassin" (double-s). Need to update sitewide to "Zenith Yassin"
+### 7. `src/App.tsx`
+- Add route: `<Route path="/blog/:slug" element={<BlogPost />} />` (fixes blog cards linking to `/blog/slug` going to homepage)
+- Change catch-all from `<Index />` to `<NotFound />` (prevents broken links silently showing homepage)
+- Add global `<RoamBuddySalesBot />` component outside Routes, after Toaster (makes chatbot available on every page)
 
-### 9. Contact -- Contact.tsx
-- **Discovery Call button**: Uses `CalComBooking` component which loads Cal.com embed. If the `calcom_integration` feature flag is disabled, it falls back to `mailto:hello@omniwellnessmedia.co.za`. Update fallback email to `admin@omniwellnessmedia.co.za`
+### 8. `src/components/roambuddy/RoamBuddySalesBot.tsx`
+- Remove the auto-open `useEffect` timer (lines 67-82) that forces the popup open after 10 seconds
+- Keep the bubble button always visible, user clicks to open
+- Fix scroll issue: add `overflow-y: auto` to the message area if not already doing so
 
-### 10. RoamBuddy Store
-- **Name correction**: No "Feroza/Ferozza" references found in RoamBuddy components -- this may be rendered via WellnessCuratorCard which uses `ferozza` key. Fix to `feroza`
-- **Pop-up**: Need to identify and soften the dominant pop-up -- likely the RoamBuddy sales bot chatbot widget
+### 9. `src/data/roamBuddyProducts.ts`
+- Change type definitions from `'ferozza'` to `'feroza'` in `CuratedESIMPick.curator` and `CuratorProfile.curatorId`
+- Rename the `ferozza` key in `curatorProfiles` object to `feroza`
+- Update all references: `curator: 'ferozza'` -> `curator: 'feroza'`
 
-### 11. Sitewide Name Corrections
-Feroza specifically requests **"Zenith Yassin"** (double-s). Currently the codebase uses "Zenith Yasin" (single-s). Files to update:
-- `src/data/curatorTips.ts`
-- `src/components/sections/TeamPreviewSection.tsx`
-- `src/pages/About.tsx`
-- `src/pages/ViatorWellnessExperiences.tsx`
+### 10. `src/components/roambuddy/WellnessCuratorCard.tsx`
+- Change `case 'ferozza':` to `case 'feroza':` in the switch statement
 
-And "Ferozza" -> "Feroza" across:
-- `src/pages/TravelWellConnectedStore.tsx`
-- `src/pages/ConsciousMediaInfrastructurePage.tsx`
-- `src/components/conscious-media/ProductFilter.tsx`
-- `src/pages/admin/AdminTools.tsx`
-- `src/components/roambuddy/WellnessCuratorCard.tsx`
+## Technical Details
 
-## Files to Modify (13 files)
+**Blog routing fix**: Currently `/blog/:slug` has no route in App.tsx. Only `/blog-post/:slug` exists. Blog cards generate links like `/blog/the-power-of-authentic-storytelling...` which hits the catch-all `*` route that renders `<Index />` -- hence clicking a blog takes you to the homepage. Adding the route and fixing the catch-all solves both issues.
 
-| File | Changes |
-|------|---------|
-| `src/components/sections/HeroSection.tsx` | Remove 2BeWell card, fix Chief Kingsley href to include #chief-kingsley, change "Our Services" to scroll anchor |
-| `src/components/sections/ToursRetreatsPreview.tsx` | Fix 4 category button links to real routes |
-| `src/components/sections/PartnersSection.tsx` | Remove 2BeWell from partners array |
-| `src/components/sections/TestimonialsSection.tsx` | Remove 2BeWell testimonial |
-| `src/pages/tours/MuizenbergCaveTours.tsx` | Fix Joel's avatar image URL |
-| `src/pages/TravelWellConnectedStore.tsx` | Fix "Ferozza"->"Feroza", update curator photos, make "See Picks" scroll to tours |
-| `src/pages/Blog.tsx` | Make blog cards clickable with Link wrapper |
-| `src/pages/Contact.tsx` | Update CalComBooking fallback email |
-| `src/data/curatorTips.ts` | "Zenith Yasin" -> "Zenith Yassin" |
-| `src/components/sections/TeamPreviewSection.tsx` | "Zenith Yasin" -> "Zenith Yassin" |
-| `src/pages/About.tsx` | "Zenith Yasin" -> "Zenith Yassin" |
-| `src/pages/ViatorWellnessExperiences.tsx` | "Zenith Yasin" -> "Zenith Yassin" |
-| `src/components/roambuddy/WellnessCuratorCard.tsx` | "ferozza" -> "feroza" |
+**Global chatbot**: Moving `<RoamBuddySalesBot />` from `RoamBuddyStore.tsx` (page-level) to `App.tsx` (app-level) ensures Roam 🧭 is available on every page. The auto-open behavior is removed so it only shows as a subtle bubble until clicked.
+
+**ROAM homepage section**: The rewritten `ToursRetreatsPreview` will feature 3 eSIM product cards styled consistently with the RoamBuddy store aesthetic, each with destination, data amount, price, and "Get Connected" CTA. This replaces the outdated "Transformative Wellness Journeys" heading.
 
