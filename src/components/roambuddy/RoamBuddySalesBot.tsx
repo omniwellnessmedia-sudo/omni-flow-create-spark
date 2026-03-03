@@ -64,22 +64,7 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Auto-open after 10 seconds on page if not interacted
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (messages.length === 0 && !isOpen) {
-        setIsOpen(true);
-        // Add welcome message
-        setMessages([{
-          role: 'assistant',
-          content: "Hey there! 🧭 I'm Roam, your wellness travel connectivity guide.\n\nBefore we dive in, a quick check - do you prefer:\n• Emojis and casual chat 🌍\n• Clean, professional text only\n\nEither way works great! Now, what wellness journey are you planning?",
-          timestamp: new Date()
-        }]);
-      }
-    }, 10000);
-
-    return () => clearTimeout(timer);
-  }, []);
+  // Auto-open removed — bubble-only interaction for non-intrusive UX
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -307,7 +292,7 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
         </div>
 
         {/* Messages */}
-        <ScrollArea className="h-[350px] p-4" ref={scrollRef}>
+        <ScrollArea className="h-[350px] p-4 overflow-y-auto" ref={scrollRef}>
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div

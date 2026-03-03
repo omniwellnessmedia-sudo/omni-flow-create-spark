@@ -73,14 +73,6 @@ const About = () => {
       location: "Muizenberg, Cape Town"
     },
     {
-      name: "Tumelo Thabo Ncube",
-      role: "Technical Founder | Platform & Systems Architecture",
-      image: "/lovable-uploads/tumelo.png",
-      initials: "TN",
-      description: "Tumelo is the Technical Founder responsible for designing and building the platform's technical architecture, digital systems, and infrastructure. He ensures Omni is technically robust, secure, and scalable.",
-      location: "Cape Town, South Africa"
-    },
-    {
       name: "Zenith Yassin",
       role: "Operations & Platform Coordination Lead",
       image: IMAGES.team.zenith,
@@ -337,7 +329,7 @@ const About = () => {
               <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                 <div className="aspect-[3/4] overflow-hidden">
                   <img
-                    src={IMAGES.providers.bwc}
+                    src={IMAGES.wellness.communityProject1}
                     alt="Youth empowerment and community engagement"
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   />

@@ -1,7 +1,7 @@
 export interface CuratedESIMPick {
   id: string;
   name: string;
-  curator: 'zenith' | 'chad' | 'ferozza';
+  curator: 'zenith' | 'chad' | 'feroza';
   whyWeChoseIt: string;
   whoShouldGet: string[];
   wellnessAngle: string;
@@ -17,7 +17,7 @@ export interface CuratorProfile {
   expertise: string;
   avatar: string;
   quote: string;
-  curatorId: 'zenith' | 'chad' | 'ferozza';
+  curatorId: 'zenith' | 'chad' | 'feroza';
 }
 
 export interface Country {
@@ -61,7 +61,7 @@ export const curatedESIMPicks: CuratedESIMPick[] = [
   {
     id: 'pick-global-zen',
     name: 'Global Zen Connectivity',
-    curator: 'ferozza',
+    curator: 'feroza',
     whyWeChoseIt: "For digital nomads attending wellness events worldwide - no country-hopping SIM swaps. One eSIM covers your entire conscious travel journey.",
     whoShouldGet: ['Digital nomads', 'Frequent travelers', 'Location-independent workers'],
     wellnessAngle: 'digital_nomad_wellness',
@@ -90,13 +90,13 @@ export interface ExtendedCuratorProfile extends CuratorProfile {
 }
 
 export const curatorProfiles: Record<string, ExtendedCuratorProfile> = {
-  ferozza: {
+  feroza: {
     name: 'Feroza',
     role: 'Digital Nomad & Travel Content Creator',
     expertise: 'Global Connectivity Solutions',
     avatar: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Feroza%20Portrait.jpg',
     quote: 'Your wellness journey deserves reliable connectivity. I recommend eSIM plans that keep you present and connected without the roaming stress.',
-    curatorId: 'ferozza',
+    curatorId: 'feroza',
     wellnessSpecialty: 'Multi-Country Explorer',
     wellnessIcon: '🧭'
   },

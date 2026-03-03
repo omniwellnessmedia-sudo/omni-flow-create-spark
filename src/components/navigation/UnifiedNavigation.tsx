@@ -110,11 +110,6 @@ const UnifiedNavigation = () => {
       ]
     },
     {
-      title: 'Blog',
-      href: '/blog',
-      icon: Globe,
-    },
-    {
       title: 'Contact',
       href: '/contact',
       icon: Heart,
