@@ -12,12 +12,6 @@ const team = [
     initials: "CC",
   },
   {
-    name: "Tumelo Thabo Ncube",
-    role: "Technical Founder",
-    image: "/lovable-uploads/tumelo.png",
-    initials: "TN",
-  },
-  {
     name: "Zenith Yassin",
     role: "Operations Lead",
     image: IMAGES.team.zenith,
@@ -48,7 +42,7 @@ export const TeamPreviewSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-10">
+        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-6 mb-10">
           {team.map((member) => (
             <Card 
               key={member.name} 

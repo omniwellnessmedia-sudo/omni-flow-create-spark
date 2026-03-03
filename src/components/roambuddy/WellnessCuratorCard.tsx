@@ -16,7 +16,7 @@ export const WellnessCuratorCard = ({ curator }: WellnessCuratorCardProps) => {
         return { icon: '🧘', label: 'Retreat Specialist' };
       case 'chad':
         return { icon: '📸', label: 'Production & Documentation' };
-      case 'ferozza':
+      case 'feroza':
         return { icon: '🧭', label: 'Multi-Country Explorer' };
       default:
         return { icon: '✨', label: 'Wellness Guide' };

@@ -119,6 +119,7 @@ const LoadingSpinner = () => (
 
 // Import ScrollToHash component
 import ScrollToHash from '@/components/navigation/ScrollToHash';
+import { RoamBuddySalesBot } from '@/components/roambuddy/RoamBuddySalesBot';
 
 function App() {
   return (
@@ -317,16 +318,22 @@ function App() {
                       <RoamMarketingHub />
                     </ProtectedRoute>
                   } />
+                  {/* Blog routing fix */}
+                  <Route path="/blog/:slug" element={<BlogPost />} />
+
                   {/* Error Handling */}
                   <Route path="/404" element={<NotFound />} />
 
-                  {/* Catch-all redirect to homepage */}
-                  <Route path="*" element={<Index />} />
+                  {/* Catch-all - show 404 instead of silently redirecting */}
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
               
               {/* Global Toast Notifications */}
               <Toaster />
+              
+              {/* Global ROAM Chatbot */}
+              <RoamBuddySalesBot />
             </div>
           </Router>
         </CartProvider>
