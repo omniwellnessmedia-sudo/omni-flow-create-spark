@@ -179,7 +179,7 @@ export const GuidePresence = ({
             <img
               src={data.image}
               alt={data.name}
-              className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+              className="w-14 h-14 rounded-full object-cover ring-2 ring-primary/20"
               onError={(e) => {
                 e.currentTarget.src = IMAGES.logos.omniPrimary;
               }}
@@ -271,7 +271,7 @@ export const FloatingDecorations = ({
 }: FloatingDecorationsProps) => {
   if (variant === "hero") {
     return (
-      <div className={cn("absolute inset-0 overflow-hidden pointer-events-none -z-10", className)}>
+      <div className={cn("absolute inset-0 overflow-hidden pointer-events-none -z-10 hidden md:block", className)}>
         <GaiaOrb position="top-20 -left-20" size="xl" colorFrom="from-primary/20" colorTo="to-transparent" />
         <GaiaOrb position="top-40 right-10" size="lg" colorFrom="from-secondary/15" colorTo="to-transparent" />
         <GaiaOrb position="bottom-20 left-1/3" size="md" colorFrom="from-accent/20" colorTo="to-transparent" />
@@ -282,7 +282,7 @@ export const FloatingDecorations = ({
 
   if (variant === "subtle") {
     return (
-      <div className={cn("absolute inset-0 overflow-hidden pointer-events-none -z-10", className)}>
+      <div className={cn("absolute inset-0 overflow-hidden pointer-events-none -z-10 hidden md:block", className)}>
         <GaiaOrb position="top-10 -right-20" size="md" colorFrom="from-primary/10" colorTo="to-transparent" opacity={20} />
         <GaiaOrb position="bottom-10 -left-10" size="sm" colorFrom="from-secondary/10" colorTo="to-transparent" opacity={15} />
       </div>
@@ -291,7 +291,7 @@ export const FloatingDecorations = ({
 
   // Section variant (default)
   return (
-    <div className={cn("absolute inset-0 overflow-hidden pointer-events-none -z-10", className)}>
+    <div className={cn("absolute inset-0 overflow-hidden pointer-events-none -z-10 hidden md:block", className)}>
       <GaiaOrb position="-top-10 -left-10" size="lg" colorFrom="from-primary/15" colorTo="to-transparent" />
       <GaiaOrb position="bottom-0 right-0" size="md" colorFrom="from-secondary/10" colorTo="to-transparent" />
     </div>

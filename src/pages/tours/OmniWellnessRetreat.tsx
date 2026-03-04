@@ -15,8 +15,7 @@ const OmniWellnessRetreat = () => {
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_20241010_175744.jpg',
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg',
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/_MG_0152.jpg',
-    'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg',
-    'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg',
+    'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg',
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%201.jpg',
   ];
 
@@ -43,8 +42,8 @@ const OmniWellnessRetreat = () => {
           </Link>
         </div>
         
-        <div className="relative container mx-auto px-4 h-full flex items-end pb-20">
-          <div className="max-w-4xl text-white space-y-6">
+        <div className="relative container mx-auto px-4 h-full flex items-end pb-20 overflow-hidden">
+          <div className="max-w-4xl text-white space-y-6 max-w-full break-words">
             <Badge className="mb-4 bg-primary/90 text-primary-foreground backdrop-blur-sm border-0 px-4 py-2 text-sm">
               Weekend Retreats
             </Badge>
