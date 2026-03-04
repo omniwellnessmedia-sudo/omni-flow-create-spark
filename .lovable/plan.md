@@ -1,61 +1,113 @@
 
 
-# ROAM Launch-Ready Site Fixes
+# Final Cross-Device Polish -- Feroza's Review Fixes
 
-## Summary
+With 5 credits and limited changes, this plan batches all fixes into minimum file edits.
 
-10 files modified in one batch to make the site ROAM-launch-ready: ROAM as hero sales section on homepage, Tumelo hidden sitewide, Blog hidden from navigation, chatbot made global and non-intrusive, and critical routing/naming fixes.
+## 1. Homepage -- Animation Overlap & Mobile Spacing
 
-## Changes by File
+**Problem**: FloatingDecorations orbs overlap text on mobile; sections stack poorly.
 
-### 1. `src/pages/Index.tsx`
-- Remove `TeamPreviewSection` import and usage (Tumelo hidden, section not needed for launch)
-- Replace `ToursRetreatsPreview` with new ROAM-focused section component
+**Fix** in `HeroSection.tsx`:
+- Hide floating orbs on mobile with `hidden md:block` wrapper
+- Add `overflow-hidden` to the main content container
+- Ensure text containers have proper z-index and `relative` positioning
 
-### 2. `src/components/sections/ToursRetreatsPreview.tsx`
-- Complete rewrite as **ROAM Sales Preview** section
-- Show 3 featured ROAM eSIM product cards (South Africa, Africa Explorer, Global) with pricing and CTA linking to `/roambuddy-store`
-- Keep 1 active tour card (Great Mother Cave Tour) below as "Pair with a Wellness Experience"
-- Section title: "Stay Connected on Your Wellness Journey" with ROAM 🧭 branding
-- CTA buttons: "Browse All eSIM Plans" -> `/roambuddy-store`, "Explore Tours" -> `/travel-well-connected-store`
+**Fix** in `gaia-elements.tsx`:
+- Add `hidden md:block` to all `FloatingDecorations` variants so orbs only show on desktop
 
-### 3. `src/components/sections/TeamPreviewSection.tsx`
-- Remove Tumelo from the `team` array (filter out, keeping Chad, Zenith, Feroza)
-- Change grid from `grid-cols-2 md:grid-cols-4` to `grid-cols-3 md:grid-cols-3`
+## 2. Chief Kingsley Card Scroll
 
-### 4. `src/pages/About.tsx`
-- Remove Tumelo from team array
-- Fix Youth Empowerment image: change `IMAGES.providers.bwc` (BWC logo) to `IMAGES.wellness.communityProject1` (actual community/youth image)
+**Status**: Already fixed -- href is `/tours/great-mother-cave-tour#chief-kingsley` and the target section has `id="chief-kingsley"` with `scroll-mt-24`. The `ScrollToHash` component handles cross-page hash navigation. This should work -- if not scrolling, it may be a timing issue with lazy loading. Add a longer delay (500ms) in `ScrollToHash.tsx`.
 
-### 5. `src/components/navigation/MegaNavigation.tsx`
-- Remove the Blog `NavigationMenuItem` (lines 213-220)
+## 3. About Page -- Story Images & Warren Photo
 
-### 6. `src/components/navigation/UnifiedNavigation.tsx`
-- Remove Blog from `navigationItems` array (the object with `title: 'Blog'`)
+**Problem**: Carousel has 9 images from `IMAGES.*` -- some may resolve to the same URL (duplicates) or broken URLs (blank). Warren uses `warren.png` which may not exist.
 
-### 7. `src/App.tsx`
-- Add route: `<Route path="/blog/:slug" element={<BlogPost />} />` (fixes blog cards linking to `/blog/slug` going to homepage)
-- Change catch-all from `<Index />` to `<NotFound />` (prevents broken links silently showing homepage)
-- Add global `<RoamBuddySalesBot />` component outside Routes, after Toaster (makes chatbot available on every page)
+**Fix** in `About.tsx`:
+- Deduplicate carousel images: Remove entries that resolve to same URL (e.g., `IMAGES.providers.chad` and `IMAGES.sandy.yoga` may overlap)
+- Replace duplicates with distinct images from `IMAGES.community.*`, `IMAGES.services.*`, and `IMAGES.tours.*`
+- Add `onError` handler to carousel images for graceful fallback
+- Warren's photo: change from `warren.png` to the known working path or show initials fallback (already has `onError` handler)
 
-### 8. `src/components/roambuddy/RoamBuddySalesBot.tsx`
-- Remove the auto-open `useEffect` timer (lines 67-82) that forces the popup open after 10 seconds
-- Keep the bubble button always visible, user clicks to open
-- Fix scroll issue: add `overflow-y: auto` to the message area if not already doing so
+## 4. Wellness Retreat Page -- Images & Text Overflow
 
-### 9. `src/data/roamBuddyProducts.ts`
-- Change type definitions from `'ferozza'` to `'feroza'` in `CuratedESIMPick.curator` and `CuratorProfile.curatorId`
-- Rename the `ferozza` key in `curatorProfiles` object to `feroza`
-- Update all references: `curator: 'ferozza'` -> `curator: 'feroza'`
+**Problem**: Feroza reports "Shark Education Centre image still on page" and "Indigenous Heritage image blank" and "words off-screen."
 
-### 10. `src/components/roambuddy/WellnessCuratorCard.tsx`
-- Change `case 'ferozza':` to `case 'feroza':` in the switch statement
+**Fix** in `OmniWellnessRetreat.tsx`:
+- Review all image URLs in the gallery and inline sections. The current images are:
+  - `IMG_20241010_175744.jpg` (retreat folder -- valid)
+  - `IMG_0052 (1).jpg` (retreat folder -- valid)
+  - `_MG_0152.jpg` (retreat folder -- valid)
+  - `wellness group tour.jpg` (General Images -- valid, but generic)
+  - `group tour amazing cave view muizenberg.jpg` (may be the "shark education" confusion -- it's a cave view, not shark)
+  - `community outing 1.jpg` (General Images -- valid)
+- Replace any ambiguous general images with retreat-specific ones
+- The "Indigenous Heritage" image at line 626 uses `khoe indigenous language heritage experience 6.jpg` -- verify URL encoding
+- Add `overflow-hidden` and `break-words` to text containers for mobile overflow fix
+- Wrap the hero text content in a container with `max-w-full overflow-hidden`
 
-## Technical Details
+## 5. Kalk Bay Tour -- 404 Fix
 
-**Blog routing fix**: Currently `/blog/:slug` has no route in App.tsx. Only `/blog-post/:slug` exists. Blog cards generate links like `/blog/the-power-of-authentic-storytelling...` which hits the catch-all `*` route that renders `<Index />` -- hence clicking a blog takes you to the homepage. Adding the route and fixing the catch-all solves both issues.
+**Problem**: `/tours/kalk-bay-tour` has no route in App.tsx but is linked in navigation.
 
-**Global chatbot**: Moving `<RoamBuddySalesBot />` from `RoamBuddyStore.tsx` (page-level) to `App.tsx` (app-level) ensures Roam 🧭 is available on every page. The auto-open behavior is removed so it only shows as a subtle bubble until clicked.
+**Fix**: Create a new `KalkBayTour.tsx` page file based on the `MuizenbergCaveTours.tsx` template, with placeholder content for Zenith's copy. Register route in `App.tsx`.
 
-**ROAM homepage section**: The rewritten `ToursRetreatsPreview` will feature 3 eSIM product cards styled consistently with the RoamBuddy store aesthetic, each with destination, data amount, price, and "Get Connected" CTA. This replaces the outdated "Transformative Wellness Journeys" heading.
+## 6. Joel Erasmus Photo -- Muizenberg Cave Tour
+
+**Problem**: Joel's avatar uses `muizenberg cave view 2.jpg` (a landscape, not a portrait).
+
+**Fix** in `MuizenbergCaveTours.tsx`: Replace avatar `src` with a proper portrait. Since no Joel portrait exists in storage, use the `AvatarFallback` with initials "JE" by removing the broken `AvatarImage` src, or use a placeholder portrait from the team folder.
+
+## 7. Travel Well Connected -- Curator Photos & See Picks
+
+**Problem**: Zenith and Chad show group/generic photos. "See Picks" has no action.
+
+**Fix** in `TravelWellConnectedStore.tsx`:
+- Update `curatorProfiles.zenith.avatar` to `IMAGES.team.zenith` (individual portrait)
+- Update `curatorProfiles.chad.avatar` to `IMAGES.team.chad` (individual portrait)
+- "See Our Picks" buttons already scroll to local tours section (fixed in prior round). Verify the target `id` exists.
+
+## 8. RoamBuddy Store -- Feroza Photo
+
+**Problem**: Feroza's profile picture not visible on laptop.
+
+**Fix**: The `feroza` curator profile image uses `feroza begg - portrait.jpg` in General Images. Verify URL encoding is correct in `roamBuddyProducts.ts` and `WellnessCuratorCard.tsx`.
+
+## 9. Contact Page -- Discovery Call Button
+
+**Problem**: "Book Your Discovery Call" doesn't work.
+
+**Fix** in `CalComBooking.tsx`: Change `fallbackEmail` default from `hello@omniwellnessmedia.co.za` to `admin@omniwellnessmedia.co.za` (line 51). The Cal.com integration may be disabled via feature flag, causing it to use the fallback email. The button itself works -- it opens a mailto link. If Cal.com embed fails to load, the fallback is functional.
+
+## 10. Chatbot -- Scroll & Text Delivery
+
+**Problem**: Bot delivers text in a block and user must scroll.
+
+**Fix** in `RoamBuddySalesBot.tsx`:
+- Already uses `ScrollArea` with auto-scroll `useEffect`
+- Ensure `scrollRef` targets the correct element
+- The `h-[350px]` fixed height may be too small on mobile. Change to `h-[300px] sm:h-[350px]` for responsive sizing
+
+## 11. Curator Tip Images Too Small
+
+**Problem**: Curator quote images are tiny.
+
+**Fix** in `CuratorTip.tsx`: Increase avatar sizes from `w-8 h-8` (banner) and `w-12 h-12` (inline) to `w-12 h-12` and `w-16 h-16` respectively. Also increase in `gaia-elements.tsx` GuidePresence from `w-10 h-10` to `w-14 h-14`.
+
+## Files to Modify (11 files)
+
+| File | Changes |
+|------|---------|
+| `src/components/ui/gaia-elements.tsx` | Hide FloatingDecorations on mobile, increase GuidePresence avatar size |
+| `src/components/navigation/ScrollToHash.tsx` | Increase delay for hash scroll to handle lazy loading |
+| `src/pages/About.tsx` | Deduplicate story carousel images, ensure distinct images |
+| `src/pages/tours/OmniWellnessRetreat.tsx` | Fix image URLs, add mobile overflow protection |
+| `src/pages/tours/KalkBayTour.tsx` | **NEW FILE** -- placeholder tour page |
+| `src/App.tsx` | Add `/tours/kalk-bay-tour` route |
+| `src/pages/tours/MuizenbergCaveTours.tsx` | Remove broken Joel avatar image |
+| `src/pages/TravelWellConnectedStore.tsx` | Update Zenith & Chad curator portrait URLs |
+| `src/components/booking/CalComBooking.tsx` | Change fallback email to admin@ |
+| `src/components/roambuddy/RoamBuddySalesBot.tsx` | Fix mobile height, verify scroll behavior |
+| `src/components/curator/CuratorTip.tsx` | Increase curator avatar sizes |
 
