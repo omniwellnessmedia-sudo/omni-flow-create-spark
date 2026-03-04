@@ -17,9 +17,9 @@ const warrenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/
 const About = () => {
   const storyImages = [
     {
-      src: IMAGES.sandy.yoga,
-      alt: "Community wellness activities - yoga session outdoors",
-      caption: "Wellness in Action - Community yoga sessions bringing people together"
+      src: IMAGES.wellness.retreat,
+      alt: "Community gathering in nature",
+      caption: "Nature Connection - Learning and growing together outdoors"
     },
     {
       src: IMAGES.wellness.communityProject1,
@@ -27,9 +27,9 @@ const About = () => {
       caption: "Youth Engagement - Connecting with the next generation"
     },
     {
-      src: IMAGES.wellness.retreat,
-      alt: "Community gathering in nature",
-      caption: "Nature Connection - Learning and growing together outdoors"
+      src: IMAGES.services.artscape,
+      alt: "Cultural arts and media production",
+      caption: "Creative Expression - Arts and culture in action"
     },
     {
       src: IMAGES.wellness.team,
@@ -37,9 +37,9 @@ const About = () => {
       caption: "Team Spirit - Our collaborative approach to wellness"
     },
     {
-      src: IMAGES.providers.chad,
-      alt: "Animal wellness and connection",
-      caption: "Animal Wellness - Promoting compassionate living"
+      src: IMAGES.community.empowerment,
+      alt: "Women empowerment workshop",
+      caption: "Empowerment - Building stronger communities together"
     },
     {
       src: IMAGES.wellness.communityProject2,
@@ -53,8 +53,8 @@ const About = () => {
     },
     {
       src: IMAGES.wellness.graduation,
-      alt: "Panel discussion and community dialogue",
-      caption: "Community Dialogue - Facilitating important conversations"
+      alt: "Graduation and community achievement",
+      caption: "Achievement - Celebrating community milestones"
     },
     {
       src: IMAGES.wellness.communityProject3,

@@ -68,6 +68,7 @@ const Tours = React.lazy(() => import('@/pages/Tours'));
 const MuizenbergCaveTours = React.lazy(() => import('@/pages/tours/MuizenbergCaveTours'));
 const OmniWellnessRetreat = React.lazy(() => import('@/pages/tours/OmniWellnessRetreat'));
 const GreatMotherCaveTour = React.lazy(() => import('@/pages/tours/GreatMotherCaveTour'));
+const KalkBayTour = React.lazy(() => import('@/pages/tours/KalkBayTour'));
 const ViatorWellnessExperiences = React.lazy(() => import('@/pages/ViatorWellnessExperiences'));
 const ESIMStore = React.lazy(() => import('@/pages/ESIMStore'));
 const TravelWellConnectedESIM = React.lazy(() => import('@/pages/TravelWellConnectedESIM'));
@@ -224,6 +225,7 @@ function App() {
             <Route path="/tour-detail/:id" element={<TourDetail />} />
             <Route path="/tours/muizenberg-cave-tours" element={<MuizenbergCaveTours />} />
             <Route path="/tours/great-mother-cave-tour" element={<GreatMotherCaveTour />} />
+            <Route path="/tours/kalk-bay-tour" element={<KalkBayTour />} />
             <Route path="/experience/:id" element={<TourDetail />} />
             <Route path="/programs/uwc-human-animal" element={<UWCHumanAnimalProgram />} />
             <Route path="/programs/uwc-human-animal/university-partners" element={<UWCUniversityPartners />} />

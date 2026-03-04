@@ -13,11 +13,12 @@ export const ScrollToHash = () => {
     if (hash) {
       // Small delay to ensure the DOM has rendered
       const timeoutId = setTimeout(() => {
+        // Retry mechanism for lazy-loaded content
         const element = document.querySelector(hash);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }, 100);
+      }, 500);
 
       return () => clearTimeout(timeoutId);
     } else {

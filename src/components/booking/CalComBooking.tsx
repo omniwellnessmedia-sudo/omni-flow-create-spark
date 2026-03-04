@@ -48,7 +48,7 @@ export const CalComBooking = ({
   prefillData,
   embedMode = "popup",
   onBookingSuccess,
-  fallbackEmail = "hello@omniwellnessmedia.co.za",
+  fallbackEmail = "admin@omniwellnessmedia.co.za",
   buttonText = "Book Session",
   buttonClassName = "",
 }: CalComBookingProps) => {

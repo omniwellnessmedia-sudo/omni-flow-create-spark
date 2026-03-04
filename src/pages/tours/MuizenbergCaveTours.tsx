@@ -90,7 +90,6 @@ export default function MuizenbergCaveTours() {
               <div className="grid md:grid-cols-5 gap-8 p-8">
                 <div className="md:col-span-2 flex flex-col items-center text-center">
                   <Avatar className="w-40 h-40 mb-6 border-4 border-primary/20">
-                    <AvatarImage src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/muizenberg%20cave%20view%202.jpg" />
                     <AvatarFallback className="bg-primary text-primary-foreground text-4xl">JE</AvatarFallback>
                   </Avatar>
                   <h3 className="text-2xl font-bold mb-2">Joel Erasmus</h3>

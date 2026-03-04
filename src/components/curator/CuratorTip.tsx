@@ -57,7 +57,7 @@ export const CuratorTip = ({
             <img
               src={data.image}
               alt={data.name}
-              className="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20"
+              className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
               onError={(e) => {
                 e.currentTarget.src = IMAGES.logos.omniPrimary;
               }}
@@ -158,7 +158,7 @@ export const CuratorTip = ({
           <img
             src={data.image}
             alt={data.name}
-            className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
+            className="w-16 h-16 rounded-full object-cover ring-2 ring-primary/20"
             onError={(e) => {
               e.currentTarget.src = IMAGES.logos.omniPrimary;
             }}

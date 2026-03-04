@@ -133,14 +133,14 @@ const curatorProfiles = {
     title: "Travel Coordinator & Wellness Guide",
     expertise: "Wellness Retreats • Mindful Travel • Group Coordination",
     bio: "Travel should nourish your soul, not just tick boxes. I curate experiences that create lasting transformation.",
-    avatar: `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`
+    avatar: `${STORAGE_BASE}/General%20Images/Zenith_TNT_OMNI-9.jpg`
   },
   chad: {
     name: "Chad",
     title: "Head of Media & Strategy",
     expertise: "Adventure Travel • Documentary Journeys • Cultural Immersion",
     bio: "The best adventures are those that change your perspective and connect you to something greater.",
-    avatar: `${STORAGE_BASE}/General%20Images/chad%20cupido%20portrait.jpg`
+    avatar: `${STORAGE_BASE}/General%20Images/Chad%20Amazing%20portrait.jpg`
   },
   feroza: {
     name: "Feroza",

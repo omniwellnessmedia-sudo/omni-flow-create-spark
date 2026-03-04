@@ -292,7 +292,7 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
         </div>
 
         {/* Messages */}
-        <ScrollArea className="h-[350px] p-4 overflow-y-auto" ref={scrollRef}>
+        <ScrollArea className="h-[300px] sm:h-[350px] p-4 overflow-y-auto" ref={scrollRef}>
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div
