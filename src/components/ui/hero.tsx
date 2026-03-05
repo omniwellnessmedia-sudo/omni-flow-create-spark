@@ -55,7 +55,7 @@ const Hero = ({
       variant === 'split' ? 'grid lg:grid-cols-2 gap-12 items-center' : 'text-center'
     )}>
       <div className={cn(
-        "animate-fade-in-up",
+        "animate-fade-in-up overflow-hidden",
         variant === 'split' ? 'text-left' : ''
       )}>
         {subtitle && (
@@ -65,8 +65,8 @@ const Hero = ({
         )}
         
         <h1 className={cn(
-          "font-heading font-bold leading-tight mb-6 max-w-4xl",
-          variant === 'minimal' ? 'text-2xl sm:text-3xl lg:text-4xl mx-auto' : 'text-3xl sm:text-4xl lg:text-5xl xl:text-6xl mx-auto'
+          "font-heading font-bold leading-tight mb-6 max-w-4xl break-words",
+          variant === 'minimal' ? 'text-2xl sm:text-3xl lg:text-4xl mx-auto' : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mx-auto'
         )}>
           {title}
         </h1>

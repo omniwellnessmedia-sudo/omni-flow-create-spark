@@ -13,8 +13,8 @@ import {
 
 export default function MuizenbergCaveTours() {
   useTourSEO({
-    tourName: 'Muizenberg Cave & Coastal Wellness Walk',
-    title: 'Muizenberg Cave & Coastal Wellness Walk with Joel Erasmus | Indigenous Healing',
+    tourName: 'Muizenberg Living Heritage Walk',
+    title: 'Muizenberg Living Heritage Walk with Joel Erasmus | Indigenous Healing',
     description: 'Experience indigenous healing through Khoi-San traditions at Muizenberg Cave with expert guide Joel Erasmus. Sacred site meditation, rock art interpretation, and coastal wellness walk.',
     price: 2330,
     currency: 'ZAR',
@@ -28,7 +28,7 @@ export default function MuizenbergCaveTours() {
 
   const tour = {
     id: 'muizenberg-cave-tours',
-    title: 'Muizenberg Cave & Coastal Wellness Walk',
+    title: 'Muizenberg Living Heritage Walk',
     price: 2330,
     price_from: 1800,
     duration: '4 hours',

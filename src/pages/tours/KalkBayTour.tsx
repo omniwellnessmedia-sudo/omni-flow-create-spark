@@ -28,7 +28,7 @@ export default function KalkBayTour() {
               Coastal Cultural Experience • Half Day
             </Badge>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Kalk Bay Coastal & Cultural Tour
+              Kalk Bay Rich Tapestry Walk
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl mb-8 text-white/95 leading-relaxed max-w-2xl">
               Discover the vibrant culture, heritage, and natural beauty of Kalk Bay — 
