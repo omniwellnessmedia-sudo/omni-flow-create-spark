@@ -62,7 +62,7 @@ export default function MuizenbergCaveTours() {
               Indigenous Healing Walk • 4 Hours
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Muizenberg Cave & Coastal Wellness Walk
+              Muizenberg Living Heritage Walk
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-white/95 leading-relaxed">
               Sacred site meditation, Khoi-San rock art interpretation, and indigenous healing practices 
