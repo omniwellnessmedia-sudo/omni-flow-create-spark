@@ -238,8 +238,8 @@ const HeroSection = () => {
           <div className="absolute inset-0 bg-contrast-overlay" aria-hidden="true"></div>
         </div>
 
-        {/* Gaia Magic - Floating Decorative Orbs */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {/* Gaia Magic - Floating Decorative Orbs (desktop only) */}
+        <div className="absolute inset-0 pointer-events-none hidden md:block" aria-hidden="true">
           <div className="absolute top-20 -left-20 w-64 h-64 rounded-full bg-gradient-to-br from-primary/20 to-transparent blur-3xl motion-safe:animate-pulse-slow" />
           <div className="absolute top-40 right-10 w-48 h-48 rounded-full bg-gradient-to-br from-secondary/15 to-transparent blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '1s' }} />
           <div className="absolute bottom-20 left-1/3 w-32 h-32 rounded-full bg-gradient-to-br from-accent/20 to-transparent blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '2s' }} />
@@ -300,15 +300,6 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Scroll Indicator - Hidden from screen readers */}
-        <div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 motion-safe:animate-bounce"
-          aria-hidden="true"
-        >
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2">
-            <div className="w-1 h-3 bg-white/70 rounded-full"></div>
-          </div>
-        </div>
       </section>
 
       {/* Main Content */}

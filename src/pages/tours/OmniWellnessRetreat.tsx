@@ -16,7 +16,7 @@ const OmniWellnessRetreat = () => {
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg',
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/_MG_0152.jpg',
     'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg',
-    'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%201.jpg',
+    'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat3%20portrait.jpg',
   ];
 
   return (
@@ -336,8 +336,8 @@ const OmniWellnessRetreat = () => {
                         </div>
                         <div className="mt-4 rounded-lg overflow-hidden">
                           <img 
-                            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%201.jpg"
-                            alt="Wellness yoga session"
+                            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg"
+                            alt="Wellness retreat session"
                             className="w-full h-48 object-cover"
                           />
                         </div>
@@ -615,8 +615,8 @@ const OmniWellnessRetreat = () => {
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-md">
                   <img 
-                    src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg"
-                    alt="Community connection"
+                    src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/_MG_0152.jpg"
+                    alt="Wellness retreat gathering"
                     className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
                   />
                 </div>

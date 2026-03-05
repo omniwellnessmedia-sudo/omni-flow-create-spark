@@ -1,49 +1,113 @@
 
 
-# Final Polish: Animations, Mobile Overflow, Broken Images & Routing
+# Final Cross-Device Polish -- Feroza's Review Fixes
 
-Fixing all reported issues except tour copy (will be handled separately when PDF content is available).
+With 5 credits and limited changes, this plan batches all fixes into minimum file edits.
 
-## Changes by File (8 files)
+## 1. Homepage -- Animation Overlap & Mobile Spacing
 
-### 1. `src/components/sections/HeroSection.tsx`
-- **Remove scroll indicator** (lines 303-311): Delete the bouncing mouse/scroll animation at bottom of hero that Feroza flagged as distracting and overlapping buttons on mobile
-- **Hide gaia orbs on mobile** (lines 242-247): Add `hidden md:block` wrapper around the 4 floating orb divs to prevent text overlap on small screens
+**Problem**: FloatingDecorations orbs overlap text on mobile; sections stack poorly.
 
-### 2. `src/pages/About.tsx`
-- **Fix mobile overflow**: Add `overflow-x-hidden` to the root `<div className="min-h-screen">` container (line 102)
-- **Fix Hero heading size**: The `split` variant heading is too wide for mobile. Wrap the `omniVoice.pageIntros.about.headline` in a responsive container to prevent overflow
-- **Deduplicate/fix story images**: Some `storyImages` resolve to the same URL or broken URLs. Replace any duplicates with distinct images from `IMAGES.wellness.*`, `IMAGES.services.*`, `IMAGES.community.*`
-- **Fix Warren photo**: Add `onError` handler to show initials fallback when `warren.png` doesn't load (already has gradient initials base layer, so this should work via the existing `onError` pattern at line 241)
+**Fix** in `HeroSection.tsx`:
+- Hide floating orbs on mobile with `hidden md:block` wrapper
+- Add `overflow-hidden` to the main content container
+- Ensure text containers have proper z-index and `relative` positioning
 
-### 3. `src/pages/tours/OmniWellnessRetreat.tsx`
-- **Remove shark/aquarium images**:
-  - Line 339: Replace `community outing 1.jpg` (shows person at aquarium) with `Wellness retreat 2.jpg` or another retreat-folder image
-  - Line 618: Replace `community outing 2.jpg` (kids at dolphin mural) with retreat-specific image from the `Annual Omni Wellness Retreat` folder
-- **Fix broken indigenous heritage image** (line 625): The URL `khoe indigenous language heritage experience 6.jpg` likely has encoding issues. Fix URL encoding (spaces to `%20`)
-- **Add mobile overflow protection**: Add `overflow-x-hidden` to the main container and `break-words` to text-heavy sections
-- **Fix hero text overflow**: Ensure the hero text container at line 46 has proper mobile constraints
+**Fix** in `gaia-elements.tsx`:
+- Add `hidden md:block` to all `FloatingDecorations` variants so orbs only show on desktop
 
-### 4. `src/components/sections/ToursRetreatsPreview.tsx`
-- **Fix retreat card link** (line 137): Change from `/tour-detail/winter-wine-country-wellness` to the correct route. The retreat page route IS `/tour-detail/winter-wine-country-wellness` per App.tsx line 223, so this is actually correct. No change needed.
+## 2. Chief Kingsley Card Scroll
 
-### 5. `src/pages/tours/MuizenbergCaveTours.tsx`
-- **Update tour title**: Change from "Muizenberg Cave & Coastal Wellness Walk" to "Muizenberg Living Heritage Walk" (per Zenith's PDF filename `Walk2-Muizenberg-Living-Heritage.pdf`)
-- **Update SEO and hero copy** to use the new name throughout the page
-- Joel's avatar already uses initials fallback "JE" (fixed in prior round)
+**Status**: Already fixed -- href is `/tours/great-mother-cave-tour#chief-kingsley` and the target section has `id="chief-kingsley"` with `scroll-mt-24`. The `ScrollToHash` component handles cross-page hash navigation. This should work -- if not scrolling, it may be a timing issue with lazy loading. Add a longer delay (500ms) in `ScrollToHash.tsx`.
 
-### 6. `src/pages/tours/KalkBayTour.tsx`
-- **Update tour title**: Change from "Kalk Bay Coastal & Cultural Tour" to "Kalk Bay Rich Tapestry Walk" (per Zenith's PDF filename `Walk3-Kalk-Bay-Rich-Tapestry.pdf`)
-- **Update hero and heading copy** to reflect the new name
+## 3. About Page -- Story Images & Warren Photo
 
-### 7. `src/pages/tours/GreatMotherCaveTour.tsx`
-- Verify title matches "The Great Mother Cave Tour" (per `Walk1-Great-Mother-Cave.pdf`) -- current title is correct, no change needed
+**Problem**: Carousel has 9 images from `IMAGES.*` -- some may resolve to the same URL (duplicates) or broken URLs (blank). Warren uses `warren.png` which may not exist.
 
-### 8. `src/components/ui/hero.tsx`
-- **Fix mobile text overflow for split variant**: Add `overflow-hidden` and `break-words` to the text container in the split variant layout (line 57). Reduce the heading font size slightly on the smallest breakpoint: change `text-3xl` to `text-2xl` for the split variant
+**Fix** in `About.tsx`:
+- Deduplicate carousel images: Remove entries that resolve to same URL (e.g., `IMAGES.providers.chad` and `IMAGES.sandy.yoga` may overlap)
+- Replace duplicates with distinct images from `IMAGES.community.*`, `IMAGES.services.*`, and `IMAGES.tours.*`
+- Add `onError` handler to carousel images for graceful fallback
+- Warren's photo: change from `warren.png` to the known working path or show initials fallback (already has `onError` handler)
 
-## What This Does NOT Cover
-- Full tour copy replacement from Zenith's PDFs (requires content to be pasted manually)
-- Viator individual activity deep links (partner shop model limitation per existing memory)
-- Curator profile photo updates (Zenith and Chad photos use the images available in Supabase storage)
+## 4. Wellness Retreat Page -- Images & Text Overflow
+
+**Problem**: Feroza reports "Shark Education Centre image still on page" and "Indigenous Heritage image blank" and "words off-screen."
+
+**Fix** in `OmniWellnessRetreat.tsx`:
+- Review all image URLs in the gallery and inline sections. The current images are:
+  - `IMG_20241010_175744.jpg` (retreat folder -- valid)
+  - `IMG_0052 (1).jpg` (retreat folder -- valid)
+  - `_MG_0152.jpg` (retreat folder -- valid)
+  - `wellness group tour.jpg` (General Images -- valid, but generic)
+  - `group tour amazing cave view muizenberg.jpg` (may be the "shark education" confusion -- it's a cave view, not shark)
+  - `community outing 1.jpg` (General Images -- valid)
+- Replace any ambiguous general images with retreat-specific ones
+- The "Indigenous Heritage" image at line 626 uses `khoe indigenous language heritage experience 6.jpg` -- verify URL encoding
+- Add `overflow-hidden` and `break-words` to text containers for mobile overflow fix
+- Wrap the hero text content in a container with `max-w-full overflow-hidden`
+
+## 5. Kalk Bay Tour -- 404 Fix
+
+**Problem**: `/tours/kalk-bay-tour` has no route in App.tsx but is linked in navigation.
+
+**Fix**: Create a new `KalkBayTour.tsx` page file based on the `MuizenbergCaveTours.tsx` template, with placeholder content for Zenith's copy. Register route in `App.tsx`.
+
+## 6. Joel Erasmus Photo -- Muizenberg Cave Tour
+
+**Problem**: Joel's avatar uses `muizenberg cave view 2.jpg` (a landscape, not a portrait).
+
+**Fix** in `MuizenbergCaveTours.tsx`: Replace avatar `src` with a proper portrait. Since no Joel portrait exists in storage, use the `AvatarFallback` with initials "JE" by removing the broken `AvatarImage` src, or use a placeholder portrait from the team folder.
+
+## 7. Travel Well Connected -- Curator Photos & See Picks
+
+**Problem**: Zenith and Chad show group/generic photos. "See Picks" has no action.
+
+**Fix** in `TravelWellConnectedStore.tsx`:
+- Update `curatorProfiles.zenith.avatar` to `IMAGES.team.zenith` (individual portrait)
+- Update `curatorProfiles.chad.avatar` to `IMAGES.team.chad` (individual portrait)
+- "See Our Picks" buttons already scroll to local tours section (fixed in prior round). Verify the target `id` exists.
+
+## 8. RoamBuddy Store -- Feroza Photo
+
+**Problem**: Feroza's profile picture not visible on laptop.
+
+**Fix**: The `feroza` curator profile image uses `feroza begg - portrait.jpg` in General Images. Verify URL encoding is correct in `roamBuddyProducts.ts` and `WellnessCuratorCard.tsx`.
+
+## 9. Contact Page -- Discovery Call Button
+
+**Problem**: "Book Your Discovery Call" doesn't work.
+
+**Fix** in `CalComBooking.tsx`: Change `fallbackEmail` default from `hello@omniwellnessmedia.co.za` to `admin@omniwellnessmedia.co.za` (line 51). The Cal.com integration may be disabled via feature flag, causing it to use the fallback email. The button itself works -- it opens a mailto link. If Cal.com embed fails to load, the fallback is functional.
+
+## 10. Chatbot -- Scroll & Text Delivery
+
+**Problem**: Bot delivers text in a block and user must scroll.
+
+**Fix** in `RoamBuddySalesBot.tsx`:
+- Already uses `ScrollArea` with auto-scroll `useEffect`
+- Ensure `scrollRef` targets the correct element
+- The `h-[350px]` fixed height may be too small on mobile. Change to `h-[300px] sm:h-[350px]` for responsive sizing
+
+## 11. Curator Tip Images Too Small
+
+**Problem**: Curator quote images are tiny.
+
+**Fix** in `CuratorTip.tsx`: Increase avatar sizes from `w-8 h-8` (banner) and `w-12 h-12` (inline) to `w-12 h-12` and `w-16 h-16` respectively. Also increase in `gaia-elements.tsx` GuidePresence from `w-10 h-10` to `w-14 h-14`.
+
+## Files to Modify (11 files)
+
+| File | Changes |
+|------|---------|
+| `src/components/ui/gaia-elements.tsx` | Hide FloatingDecorations on mobile, increase GuidePresence avatar size |
+| `src/components/navigation/ScrollToHash.tsx` | Increase delay for hash scroll to handle lazy loading |
+| `src/pages/About.tsx` | Deduplicate story carousel images, ensure distinct images |
+| `src/pages/tours/OmniWellnessRetreat.tsx` | Fix image URLs, add mobile overflow protection |
+| `src/pages/tours/KalkBayTour.tsx` | **NEW FILE** -- placeholder tour page |
+| `src/App.tsx` | Add `/tours/kalk-bay-tour` route |
+| `src/pages/tours/MuizenbergCaveTours.tsx` | Remove broken Joel avatar image |
+| `src/pages/TravelWellConnectedStore.tsx` | Update Zenith & Chad curator portrait URLs |
+| `src/components/booking/CalComBooking.tsx` | Change fallback email to admin@ |
+| `src/components/roambuddy/RoamBuddySalesBot.tsx` | Fix mobile height, verify scroll behavior |
+| `src/components/curator/CuratorTip.tsx` | Increase curator avatar sizes |
 

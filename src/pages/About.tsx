@@ -99,7 +99,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <UnifiedNavigation />
       <div className="px-4 pt-6">
         <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
