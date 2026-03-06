@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Image3D {
   src: string;
@@ -19,9 +20,10 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
   autoPlayDelay = 4000 
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!autoPlay) return;
+    if (!autoPlay || images.length <= 1) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -45,7 +47,7 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto h-96 md:h-[700px] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 perspective-1000">
+    <div className="relative w-full max-w-7xl mx-auto h-64 sm:h-80 md:h-[700px] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 md:perspective-1000">
       {/* 3D Carousel Container */}
       <div className="relative w-full h-full preserve-3d">
         {images.map((image, index) => {
@@ -55,8 +57,12 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
           let transform = '';
           let opacity = 1;
           let zIndex = 10;
-          
-          if (offset === 0) {
+
+          if (isMobile) {
+            transform = offset === 0 ? 'translateX(0) scale(1)' : 'translateX(0) scale(0.98)';
+            opacity = offset === 0 ? 1 : 0;
+            zIndex = offset === 0 ? 20 : 5;
+          } else if (offset === 0) {
             // Center image
             transform = 'translateX(0) translateZ(0) rotateY(0deg) scale(1)';
             opacity = 1;
@@ -101,7 +107,7 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-contain rounded-lg"
+                  className="w-full h-full object-cover rounded-lg"
                   loading="lazy"
                 />
                 {image.caption && (
@@ -118,7 +124,7 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
       {/* Navigation Buttons */}
       <button
         onClick={goToPrevious}
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-30 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
+        className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
         aria-label="Previous image"
       >
         <ChevronLeft size={24} />
@@ -126,14 +132,14 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
       
       <button
         onClick={goToNext}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-30 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
+        className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
         aria-label="Next image"
       >
         <ChevronRight size={24} />
       </button>
 
       {/* Dot Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
+      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
         {images.map((_, index) => (
           <button
             key={index}

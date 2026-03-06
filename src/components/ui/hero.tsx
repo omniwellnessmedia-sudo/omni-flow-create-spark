@@ -52,11 +52,11 @@ const Hero = ({
   const renderContent = () => (
     <div className={cn(
       "relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
-      variant === 'split' ? 'grid lg:grid-cols-2 gap-12 items-center' : 'text-center'
+      variant === 'split' ? 'grid lg:grid-cols-2 gap-8 lg:gap-12 items-center' : 'text-center'
     )}>
       <div className={cn(
         "animate-fade-in-up overflow-hidden",
-        variant === 'split' ? 'text-left' : ''
+        variant === 'split' ? 'text-center lg:text-left' : ''
       )}>
         {subtitle && (
           <p className="text-lg font-medium text-wellhub-accent mb-4">
@@ -66,15 +66,21 @@ const Hero = ({
         
         <h1 className={cn(
           "font-heading font-bold leading-tight mb-6 max-w-full break-words",
-          variant === 'minimal' ? 'text-2xl sm:text-3xl lg:text-4xl mx-auto max-w-4xl' : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mx-auto max-w-4xl'
+          variant === 'minimal'
+            ? 'text-2xl sm:text-3xl lg:text-4xl mx-auto max-w-4xl'
+            : variant === 'split'
+              ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl mx-auto lg:mx-0 max-w-4xl'
+              : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mx-auto max-w-4xl'
         )}>
           {title}
         </h1>
 
         {description && (
           <p className={cn(
-            "text-gray-600 mb-8 leading-relaxed",
-            variant === 'split' ? 'text-lg max-w-lg' : 'text-xl sm:text-2xl max-w-4xl mx-auto'
+            "text-gray-600 mb-8 leading-relaxed break-words",
+            variant === 'split'
+              ? 'text-base sm:text-lg max-w-full lg:max-w-lg mx-auto lg:mx-0'
+              : 'text-xl sm:text-2xl max-w-4xl mx-auto'
           )}>
             {description}
           </p>
@@ -83,7 +89,9 @@ const Hero = ({
         {actions.length > 0 && (
           <div className={cn(
             "flex gap-4",
-            variant === 'split' ? 'justify-start' : 'justify-center flex-wrap'
+            variant === 'split'
+              ? 'justify-center lg:justify-start flex-col sm:flex-row flex-wrap'
+              : 'justify-center flex-wrap'
           )}>
             {actions.map((action, index) => (
               <Button
@@ -91,7 +99,7 @@ const Hero = ({
                 asChild
                 variant={action.variant || (index === 0 ? 'wellness' : 'soft')}
                 size="lg"
-                className="px-8 py-3 text-lg"
+                className="min-h-11 w-full sm:w-auto px-6 sm:px-8 py-3 text-base sm:text-lg"
               >
                 {action.external ? (
                   <a href={action.href} target="_blank" rel="noopener noreferrer">
@@ -113,7 +121,7 @@ const Hero = ({
           <img
             src={image}
             alt={imageAlt || (typeof title === 'string' ? title : 'Hero image')}
-            className="w-full h-96 object-cover rounded-2xl shadow-2xl"
+            className="w-full h-72 sm:h-96 object-cover rounded-2xl shadow-2xl"
           />
         </div>
       )}
