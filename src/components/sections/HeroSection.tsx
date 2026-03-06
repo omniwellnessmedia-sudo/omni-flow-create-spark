@@ -74,11 +74,11 @@ const HeroSection = () => {
       badge: "Cultural"
     },
     {
-      title: "Wellness Classes",
-      description: "Fitness, wellness & community classes",
-      href: "/wellness-community",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Wellness%20retreat%202.jpg",
-      badge: "Wellness"
+      title: "ROAM eSIM Store",
+      description: "Stay connected while you travel",
+      href: "/travel-well-connected",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg",
+      badge: "Travel"
     }
   ];
 
