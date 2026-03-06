@@ -65,8 +65,8 @@ const Hero = ({
         )}
         
         <h1 className={cn(
-          "font-heading font-bold leading-tight mb-6 max-w-4xl break-words",
-          variant === 'minimal' ? 'text-2xl sm:text-3xl lg:text-4xl mx-auto' : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mx-auto'
+          "font-heading font-bold leading-tight mb-6 max-w-full break-words",
+          variant === 'minimal' ? 'text-2xl sm:text-3xl lg:text-4xl mx-auto max-w-4xl' : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mx-auto max-w-4xl'
         )}>
           {title}
         </h1>

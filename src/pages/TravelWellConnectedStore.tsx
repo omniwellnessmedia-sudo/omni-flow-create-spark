@@ -594,14 +594,6 @@ const TravelWellConnectedStore = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 animate-bounce">
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xs uppercase tracking-wider">Scroll to explore</span>
-            <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2">
-              <div className="w-1 h-2 bg-white/60 rounded-full" />
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Meet Your Curators Section */}
