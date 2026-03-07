@@ -179,54 +179,54 @@ const TravelWellConnectedStore = () => {
     },
     {
       id: 'great-mother-cave',
-      title: 'Great Mother Cave Tour with Chief Kingsley',
-      description: 'Sacred indigenous journey through ancient caves with traditional Khoi ceremonies and plant wisdom.',
-      price: 1500,
-      duration: 'Full day (8:30 AM - 4:30 PM)',
-      location: 'Muizenberg, Cape Town',
+      title: 'The Great Mother Cave Tour',
+      description: 'Journey through 12,000 years of sacred heritage with Chief Kingsley at Peer\'s Cave and the Ascension Tunnel.',
+      price: 1850,
+      duration: '4-5 hours',
+      location: 'Fish Hoek, Cape Town',
       image: `${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`,
       link: '/tours/great-mother-cave-tour',
       highlights: [
-        'Indigenous plant identification',
-        'Ancient rock art viewing',
+        'Peer\'s Cave & Ascension Tunnel',
+        'Indigenous plant wisdom',
         'Traditional Khoi ceremonies',
-        'Celestial alignments at Tunnel Cave'
+        'From R1,850 — R2,330 pp'
       ],
       badge: 'Sacred Experience'
     },
     {
-      id: 'muizenberg-wellness-walk',
-      title: 'Muizenberg Cave Wellness Journey',
-      description: 'Evidence-based integration of Khoi-San healing traditions with contemporary wellness science.',
-      price: 3999,
-      duration: '7-10 days',
+      id: 'muizenberg-heritage',
+      title: 'Muizenberg Living Heritage Walk',
+      description: 'An experience of ancient history by the sea — from Surfers Corner through Boyes Drive to ancient shell middens.',
+      price: 1850,
+      duration: '5-6 hours',
       location: 'Muizenberg, Cape Town',
       image: `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`,
       link: '/tours/muizenberg-cave-tours',
       highlights: [
-        'Trauma-informed somatic practices',
-        'Indigenous knowledge integration',
-        'Clinical competencies development',
-        'Community impact partnership'
+        'Surfers Corner to Boyes Drive',
+        'Ancient foraging paths & shell middens',
+        'Marine heritage & coastal ecology',
+        'From R1,850 — R2,330 pp'
       ],
-      badge: 'Academic Program'
+      badge: 'Heritage Walk'
     },
     {
-      id: 'fish-hoek-walk',
-      title: 'Fish Hoek Coastal Walk',
-      description: 'A scenic coastal wellness walk through Fish Hoek, exploring natural beauty and local heritage.',
-      price: 500,
-      duration: 'Half day',
-      location: 'Fish Hoek, Cape Town',
+      id: 'kalk-bay-tapestry',
+      title: 'Kalk Bay Rich Tapestry Walk',
+      description: 'Ancient whispers and healing herbs — explore harbour heritage, Khoi marine knowledge, and plant medicine traditions.',
+      price: 1850,
+      duration: '5-6 hours',
+      location: 'Kalk Bay, Cape Town',
       image: `${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`,
-      link: '/tours/fish-hoek-walk',
+      link: '/tours/kalk-bay-tour',
       highlights: [
-        'Scenic coastal trail',
-        'Local heritage sites',
-        'Nature immersion',
-        'Guided wellness experience'
+        'Historic harbour & herb stands',
+        'Khoi marine knowledge',
+        'Ancient trade routes',
+        'From R1,850 — R2,330 pp'
       ],
-      badge: 'New Experience'
+      badge: 'Heritage Walk'
     }
   ];
 

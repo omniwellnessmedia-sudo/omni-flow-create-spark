@@ -1,14 +1,62 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Clock, Users, Mountain, Heart, Waves, Camera, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { useTourSEO } from '@/lib/seo';
+import TourBookingSidebar from '@/components/tours/TourBookingSidebar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
+import { Link } from 'react-router-dom';
+import { 
+  MapPin, Clock, Users, Mountain, Heart, Waves, Camera, Check, 
+  Leaf, Shield, Gift, User, Sun, Anchor
+} from 'lucide-react';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
 export default function KalkBayTour() {
+  useTourSEO({
+    tourName: 'Kalk Bay Rich Tapestry Walk',
+    title: 'Kalk Bay Rich Tapestry Walk | Ancient Whispers, Healing Herbs | Cape Town',
+    description: 'Explore the rich tapestry of Kalk Bay — ancient whispers and healing herbs. From the Brass Bell to historic harbour herb stands, Khoi marine knowledge, ancient trade routes, and plant medicine. From R1,850pp.',
+    price: 1850,
+    currency: 'ZAR',
+    location: 'Kalk Bay, Cape Town',
+    duration: '5-6 hours',
+    rating: 4.8,
+    reviewCount: 38,
+    images: [],
+    url: window.location.href
+  });
+
+  const tour = {
+    id: 'kalk-bay-tour',
+    title: 'Kalk Bay Rich Tapestry Walk',
+    price: 1850,
+    price_from: 1850,
+    duration: '5-6 hours',
+    destination: 'Kalk Bay, Cape Town',
+    max_participants: 12,
+    overview: 'Ancient whispers and healing herbs — explore Kalk Bay\'s harbour, herb stands, Khoi marine knowledge, and plant medicine traditions',
+    start_date: new Date().toISOString(),
+    end_date: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
+    active: true
+  };
+
+  const pricingTiers = [
+    { range: '1-4 People', label: 'Intimate Experience', price: 'R2,330', perPerson: true },
+    { range: '5-9 People', label: 'Small Group', price: 'R2,050', perPerson: true, popular: true },
+    { range: '10-12 People', label: 'Group Experience', price: 'R1,850', perPerson: true, bestValue: true },
+  ];
+
+  const inclusions = [
+    { icon: User, title: 'Expert Indigenous Guidance', desc: 'Led by Chief Kingsley & Travel and Tours Cape Town team' },
+    { icon: Leaf, title: 'Plant Medicine Knowledge', desc: 'Herb stands, traditional remedies & healing plant identification' },
+    { icon: Anchor, title: 'Marine Heritage', desc: 'Khoi fishing knowledge & harbour cultural history' },
+    { icon: Gift, title: 'Herbal Gift', desc: 'A traditional herbal gift to take home' },
+    { icon: Camera, title: 'Commemorative Gift', desc: 'Certificate of participation' },
+    { icon: Shield, title: 'Safety Support', desc: 'Trained support team and first aid throughout' },
+  ];
+
   return (
     <>
       <UnifiedNavigation />
@@ -16,153 +64,268 @@ export default function KalkBayTour() {
       {/* Hero Section */}
       <section className="relative h-[75vh] overflow-hidden">
         <img 
-          src={`${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`}
+          src={`${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`}
           alt="Kalk Bay coastal views"
           className="absolute inset-0 w-full h-full object-cover"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />
         <div className="relative z-10 container mx-auto h-full flex items-center px-4">
           <div className="max-w-3xl text-white">
             <Badge className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">
               <Waves className="w-3 h-3 mr-1" />
-              Coastal Cultural Experience • Half Day
+              Indigenous Heritage Walk • 5-6 Hours
             </Badge>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight break-words">
               Kalk Bay Rich Tapestry Walk
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl mb-8 text-white/95 leading-relaxed max-w-2xl">
-              Discover the vibrant culture, heritage, and natural beauty of Kalk Bay — 
-              from its historic harbour to hidden caves and artisan treasures.
+            <p className="text-lg sm:text-xl md:text-2xl mb-2 text-white/95 italic">
+              Ancient Whispers, Healing Herbs
+            </p>
+            <p className="text-base sm:text-lg mb-8 text-white/80 max-w-2xl break-words">
+              Discover the rich heritage of Kalk Bay — from the historic harbour and herb stands 
+              to ancient Khoi marine knowledge, trade routes, and the living traditions of plant medicine 
+              that have sustained communities for millennia.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-white text-primary hover:bg-white/90">
-                Enquire Now
+              <Button 
+                size="lg" 
+                className="bg-white text-primary hover:bg-white/90"
+                onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Book Now — From R1,850 pp
               </Button>
-              <Link to="/travel-well-connected-store">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  View All Tours
-                </Button>
-              </Link>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Link to="/contact">Enquire</Link>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Tour Overview */}
+      {/* Quick Info */}
+      <section className="py-8 bg-background border-b">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 justify-center">
+              <Clock className="w-5 h-5 text-primary" />
+              <div><p className="text-xs text-muted-foreground">Duration</p><p className="font-semibold text-sm">5-6 hours</p></div>
+            </div>
+            <div className="flex items-center gap-3 justify-center">
+              <MapPin className="w-5 h-5 text-primary" />
+              <div><p className="text-xs text-muted-foreground">Start Point</p><p className="font-semibold text-sm">Brass Bell</p></div>
+            </div>
+            <div className="flex items-center gap-3 justify-center">
+              <Users className="w-5 h-5 text-primary" />
+              <div><p className="text-xs text-muted-foreground">Group Size</p><p className="font-semibold text-sm">Max 12</p></div>
+            </div>
+            <div className="flex items-center gap-3 justify-center">
+              <Mountain className="w-5 h-5 text-primary" />
+              <div><p className="text-xs text-muted-foreground">Difficulty</p><p className="font-semibold text-sm">Challenging</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About This Experience */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {/* Quick Info */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Clock className="h-6 w-6 mx-auto mb-2 text-primary" />
-                  <p className="text-sm text-muted-foreground">Duration</p>
-                  <p className="font-semibold">4-5 hours</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <MapPin className="h-6 w-6 mx-auto mb-2 text-primary" />
-                  <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="font-semibold">Kalk Bay, CT</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Users className="h-6 w-6 mx-auto mb-2 text-primary" />
-                  <p className="text-sm text-muted-foreground">Group Size</p>
-                  <p className="font-semibold">Max 15</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Mountain className="h-6 w-6 mx-auto mb-2 text-primary" />
-                  <p className="text-sm text-muted-foreground">Difficulty</p>
-                  <p className="font-semibold">Easy-Moderate</p>
-                </CardContent>
-              </Card>
-            </div>
-
             <h2 className="text-3xl font-bold mb-6">About This Experience</h2>
             <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
               <p>
                 Kalk Bay is one of Cape Town's most beloved coastal villages — a place where fishing 
-                heritage, artistic culture, and natural beauty converge. This guided walking tour takes 
-                you through the heart of Kalk Bay, from the bustling harbour where fishermen still 
-                bring in their daily catch, to hidden caves along the coastline, and through the 
-                charming streets lined with antique shops, bookstores, and artisan galleries.
+                heritage, artistic culture, and ancient Khoi knowledge converge. This guided heritage walk takes 
+                you through the heart of Kalk Bay, starting next to the iconic Brass Bell Restaurant.
               </p>
               <p>
-                Along the way, you'll learn about the rich cultural history of the Kalk Bay community, 
-                the indigenous Khoi-San connections to this coastline, and the stories behind the 
-                landmark buildings and natural formations that make this area so special.
+                Explore the historic harbour where fishermen still bring in their daily catch, visit the 
+                traditional herb stands that preserve centuries of plant medicine knowledge, and learn about 
+                the Khoi people's deep understanding of marine resources, tidal patterns, and coastal ecology. 
+                Chief Kingsley and the team reveal ancient trade routes that connected coastal and inland 
+                communities, and the living traditions of healing herbs that continue to this day.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Highlights */}
-            <div className="mt-12">
-              <h3 className="text-2xl font-bold mb-6">Tour Highlights</h3>
-              <div className="grid md:grid-cols-2 gap-4">
-                {[
-                  'Historic Kalk Bay Harbour & fish market',
-                  'Coastal cave exploration',
-                  'Artisan shops & gallery walk',
-                  'Indigenous cultural storytelling',
-                  'Scenic coastal path walk',
-                  'Local cuisine tasting opportunity',
-                  'Photography opportunities',
-                  'Mindful nature connection moments'
-                ].map((highlight, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                    <Check className="h-5 w-5 text-primary shrink-0" />
-                    <span className="text-foreground">{highlight}</span>
+      {/* What's Included */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-center">What's Included</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {inclusions.map((item, i) => (
+                <Card key={i} className="text-center hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <item.icon className="w-8 h-8 text-primary mx-auto mb-3" />
+                    <h3 className="font-semibold mb-2">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <Badge variant="outline" className="text-sm">
+                Optional: Traditional lunch add-on — R200 per person
+              </Badge>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Journey Timeline */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-center">Your Journey</h2>
+            <div className="space-y-6">
+              <Card className="border-l-4 border-l-blue-500">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <MapPin className="w-5 h-5 text-blue-500" />
+                    Gathering: Next to the Brass Bell Restaurant
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p>Welcome ceremony at the entrance to Kalk Bay. Cultural protocols, safety briefing, and an introduction to the deep heritage of this coastal settlement.</p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-l-4 border-l-green-500">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Anchor className="w-5 h-5 text-green-500" />
+                    Historic Harbour & Marine Heritage
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p>Explore the working harbour where fishermen still bring in their daily catch. Learn about the Khoi people's sophisticated understanding of marine resources — tidal patterns, seasonal fishing knowledge, and the sustainable harvesting practices that sustained communities for thousands of years.</p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-l-4 border-l-purple-500">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Leaf className="w-5 h-5 text-purple-500" />
+                    Herb Stands & Plant Medicine
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p>Visit the traditional herb stands — a living connection to centuries of plant medicine knowledge. Chief Kingsley identifies healing plants, explains their traditional uses, and reveals the ancient trade routes that connected coastal and inland communities through the exchange of marine resources and medicinal herbs.</p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-l-4 border-l-orange-500">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Mountain className="w-5 h-5 text-orange-500" />
+                    Coastal Exploration & Ancient Whispers
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p>Walk the coastline exploring hidden caves and rock formations. Learn about the archaeological significance of this area — from ancient shell middens to the geological formations that shaped Khoi cosmology and seasonal calendars.</p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-l-4 border-l-pink-500">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Sun className="w-5 h-5 text-pink-500" />
+                    Integration & Sharing Circle
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p>Traditional refreshments and herbal tea ceremony. Reflective sharing circle, closing ceremony. Receive your herbal gift and certificate of participation.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What to Bring */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-6 text-center">What to Bring</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                'Comfortable walking shoes with good grip',
+                'Sunscreen & hat',
+                'Water bottle (1.5L)',
+                'Camera',
+                'Light jacket (coastal wind)',
+                'Small backpack'
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 text-muted-foreground">
+                  <Check className="h-4 w-4 text-primary shrink-0" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-center">Tour Pricing</h2>
+            <div className="grid sm:grid-cols-3 gap-6">
+              {pricingTiers.map((tier, i) => (
+                <Card key={i} className={`text-center hover:shadow-xl transition-shadow ${tier.popular ? 'border-primary ring-2 ring-primary/20' : ''}`}>
+                  <CardHeader>
+                    {tier.popular && <Badge className="mx-auto mb-2">Most Popular</Badge>}
+                    {tier.bestValue && <Badge variant="secondary" className="mx-auto mb-2">Best Value</Badge>}
+                    <Users className="w-8 h-8 text-primary mx-auto mb-2" />
+                    <CardTitle className="text-xl">{tier.range}</CardTitle>
+                    <p className="text-sm text-muted-foreground">{tier.label}</p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-primary mb-1">{tier.price}</div>
+                    <p className="text-sm text-muted-foreground">per person</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Community Impact */}
+            <Card className="mt-8 border-2 border-green-600/20 bg-gradient-to-br from-green-50/80 to-blue-50/80">
+              <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                  <Heart className="w-10 h-10 text-green-600 shrink-0" />
+                  <div>
+                    <h3 className="font-bold text-lg mb-1">Buy One, Sponsor One</h3>
+                    <p className="text-sm text-muted-foreground">
+                      20% of all tour proceeds support the <strong>Dr. Phil-afel Foundation</strong> community projects — 
+                      youth education, sacred site conservation, and community development. 
+                      <em> Section 18A tax-deductible donations available.</em>
+                    </p>
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <Link to="/drphilafel">
+                    <Button variant="outline" size="sm">Learn About Our Foundation →</Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
 
-            {/* What to Bring */}
-            <div className="mt-12">
-              <h3 className="text-2xl font-bold mb-6">What to Bring</h3>
-              <div className="grid md:grid-cols-2 gap-3">
-                {[
-                  'Comfortable walking shoes',
-                  'Sunscreen & hat',
-                  'Water bottle',
-                  'Camera',
-                  'Light jacket (coastal wind)',
-                  'Spending money for local shops'
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 text-muted-foreground">
-                    <Camera className="h-4 w-4 text-primary shrink-0" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <p className="mt-4 text-xs text-center text-muted-foreground">
+              Operated by Travel & Tours Cape Town Pty Ltd · Contact: traveltourscapetown@gmail.com
+            </p>
+          </div>
+        </div>
+      </section>
 
-            {/* CTA */}
-            <div className="mt-16 text-center bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl p-8 border border-border/30">
-              <Heart className="h-10 w-10 mx-auto mb-4 text-primary" />
-              <h3 className="text-2xl font-bold mb-3">Coming Soon</h3>
-              <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-                This tour is currently being finalised. Contact us to express your interest 
-                or to book a custom Kalk Bay experience for your group.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Link to="/contact">
-                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                    Express Interest
-                  </Button>
-                </Link>
-                <Link to="/travel-well-connected-store">
-                  <Button size="lg" variant="outline">
-                    Browse Other Tours
-                  </Button>
-                </Link>
-              </div>
-            </div>
+      {/* Booking Section */}
+      <section id="booking-section" className="py-16 bg-background scroll-mt-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <TourBookingSidebar tour={tour} />
           </div>
         </div>
       </section>
