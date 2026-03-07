@@ -1,113 +1,88 @@
 
 
-# Final Cross-Device Polish -- Feroza's Review Fixes
+# Comprehensive Fix: Homepage Link, Tour Pages Update & Travel Store Polish
 
-With 5 credits and limited changes, this plan batches all fixes into minimum file edits.
+## Context
+The site is live. Zenith and Mandeep (RoamBuddy) are sharing it. Several issues need immediate attention: broken links, outdated tour copy/pricing, and the Travel Well Connected store page has mobile issues.
 
-## 1. Homepage -- Animation Overlap & Mobile Spacing
+## Changes
 
-**Problem**: FloatingDecorations orbs overlap text on mobile; sections stack poorly.
+### 1. Homepage Hero Card Link Fix (`src/components/sections/HeroSection.tsx`)
+- Line 79: Change `href: "/travel-well-connected"` to `href: "/roambuddy-store"`
+- Line 290: Change the "Travel Store" button link from `/travel-well-connected-store` to `/roambuddy-store`
 
-**Fix** in `HeroSection.tsx`:
-- Hide floating orbs on mobile with `hidden md:block` wrapper
-- Add `overflow-hidden` to the main content container
-- Ensure text containers have proper z-index and `relative` positioning
+### 2. Update All Three Tour Pages with Production Copy from Strategy Doc
 
-**Fix** in `gaia-elements.tsx`:
-- Add `hidden md:block` to all `FloatingDecorations` variants so orbs only show on desktop
+**Great Mother Cave Tour (`src/pages/tours/GreatMotherCaveTour.tsx`)**
+- Update pricing from R1,500 to tiered pricing: R2,330 (1-4 pax), R2,050 (5-9), R1,850 (10-12)
+- Update location from "Muizenberg" to "Fish Hoek, Cape Town" (start: Fish Hoek Athletics Club)
+- Update duration to "4-5 hours"
+- Replace description with production copy from the strategy doc (12,000-year heritage, Ascension Tunnel, Peer's Cave)
+- Update SEO meta description
+- Add "What's Included" section: Expert Indigenous Guidance, Deep Cultural Immersion, Traditional Refreshments, Herbal Gift, Commemorative Gift, Safety Support
+- Add optional lunch add-on (R200/person)
+- Add "Buy One Sponsor One" community impact note linking to Dr. Phil-afel Foundation
+- Update group size to max 12
+- Add partner credit: "Operated by Travel & Tours Cape Town Pty Ltd"
 
-## 2. Chief Kingsley Card Scroll
+**Muizenberg Living Heritage Walk (`src/pages/tours/MuizenbergCaveTours.tsx`)**
+- Update subtitle to "An Experience of Ancient History by the Sea"
+- Replace description with production copy: Surfers Corner start, Boyes Drive ascent, ancient foraging paths, shell middens, marine resources
+- Update start point to "Surfers Corner Circle (Walk of Fame)"
+- Update duration to "5-6 hours"
+- Update difficulty to "Challenging"
+- Update pricing to tiered: R2,330/R2,050/R1,850
+- Update group size to max 12
+- Remove Joel Erasmus references (doc doesn't mention him) -- replace with Chief Kingsley + T&T team
+- Add same inclusions grid and Dr. Phil-afel Foundation link
+- Update SEO meta
 
-**Status**: Already fixed -- href is `/tours/great-mother-cave-tour#chief-kingsley` and the target section has `id="chief-kingsley"` with `scroll-mt-24`. The `ScrollToHash` component handles cross-page hash navigation. This should work -- if not scrolling, it may be a timing issue with lazy loading. Add a longer delay (500ms) in `ScrollToHash.tsx`.
+**Kalk Bay Rich Tapestry Walk (`src/pages/tours/KalkBayTour.tsx`)**
+- Full page rebuild from placeholder to production-ready
+- Subtitle: "Ancient Whispers, Healing Herbs"
+- Replace description with production copy: historic harbour, herb stands, Khoi marine knowledge, ancient trade routes, plant medicine
+- Start point: "Next to the Brass Bell Restaurant entrance"
+- Duration: 5-6 hours, Difficulty: Challenging, Max 12
+- Same tiered pricing and inclusions
+- Add booking sidebar component (same as Great Mother Cave)
+- Change all `/travel-well-connected-store` links to `/roambuddy-store`
+- Remove "Coming Soon" status -- this is a live product
+- Add Dr. Phil-afel Foundation community impact section
 
-## 3. About Page -- Story Images & Warren Photo
+### 3. Travel Well Connected Store Fixes (`src/pages/TravelWellConnectedStore.tsx`)
+- Update local tour data to match new pricing (all walks R1,850-R2,330 tiered)
+- Update Muizenberg tour title to "Muizenberg's Living Heritage" and description
+- Update Fish Hoek walk to link to Great Mother Cave tour (same route, Fish Hoek start)
+- Fix hero image loading: add `fetchPriority="high"` and `loading="eager"`
+- Add `overflow-x-hidden` to root container for mobile
+- Fix tab buttons: add responsive sizing for mobile (`text-sm` on small screens)
 
-**Problem**: Carousel has 9 images from `IMAGES.*` -- some may resolve to the same URL (duplicates) or broken URLs (blank). Warren uses `warren.png` which may not exist.
+### 4. Cross-Site Link Updates
+- `KalkBayTour.tsx` lines 41, 159: `/travel-well-connected-store` → `/roambuddy-store`
+- `ToursRetreatsPreview.tsx` line 155: `/travel-well-connected-store` → `/roambuddy-store`
+- `Footer.tsx` line 286: update Travel Store link to `/roambuddy-store`
 
-**Fix** in `About.tsx`:
-- Deduplicate carousel images: Remove entries that resolve to same URL (e.g., `IMAGES.providers.chad` and `IMAGES.sandy.yoga` may overlap)
-- Replace duplicates with distinct images from `IMAGES.community.*`, `IMAGES.services.*`, and `IMAGES.tours.*`
-- Add `onError` handler to carousel images for graceful fallback
-- Warren's photo: change from `warren.png` to the known working path or show initials fallback (already has `onError` handler)
+### 5. Dr. Phil-afel Foundation Integration
+- Add a shared "Community Impact" card component to all three tour pages showing:
+  - "Buy One Sponsor One" model explanation
+  - 20% of proceeds support Dr. Phil-afel Foundation community projects
+  - Section 18A tax-deductible donation note
+  - Link to foundation (existing drphilafel route or external)
 
-## 4. Wellness Retreat Page -- Images & Text Overflow
+## Files Modified (6 files)
+| File | Change |
+|------|--------|
+| `src/components/sections/HeroSection.tsx` | Fix ROAM card + Travel Store button links to `/roambuddy-store` |
+| `src/pages/tours/GreatMotherCaveTour.tsx` | Full copy update: pricing, description, location, inclusions, Dr. Phil-afel |
+| `src/pages/tours/MuizenbergCaveTours.tsx` | Full copy update: description, pricing, start point, guide references |
+| `src/pages/tours/KalkBayTour.tsx` | Rebuild from placeholder to production page with booking sidebar |
+| `src/pages/TravelWellConnectedStore.tsx` | Update local tour data, fix hero image loading, mobile fixes |
+| `src/components/sections/ToursRetreatsPreview.tsx` | Update store link |
 
-**Problem**: Feroza reports "Shark Education Centre image still on page" and "Indigenous Heritage image blank" and "words off-screen."
-
-**Fix** in `OmniWellnessRetreat.tsx`:
-- Review all image URLs in the gallery and inline sections. The current images are:
-  - `IMG_20241010_175744.jpg` (retreat folder -- valid)
-  - `IMG_0052 (1).jpg` (retreat folder -- valid)
-  - `_MG_0152.jpg` (retreat folder -- valid)
-  - `wellness group tour.jpg` (General Images -- valid, but generic)
-  - `group tour amazing cave view muizenberg.jpg` (may be the "shark education" confusion -- it's a cave view, not shark)
-  - `community outing 1.jpg` (General Images -- valid)
-- Replace any ambiguous general images with retreat-specific ones
-- The "Indigenous Heritage" image at line 626 uses `khoe indigenous language heritage experience 6.jpg` -- verify URL encoding
-- Add `overflow-hidden` and `break-words` to text containers for mobile overflow fix
-- Wrap the hero text content in a container with `max-w-full overflow-hidden`
-
-## 5. Kalk Bay Tour -- 404 Fix
-
-**Problem**: `/tours/kalk-bay-tour` has no route in App.tsx but is linked in navigation.
-
-**Fix**: Create a new `KalkBayTour.tsx` page file based on the `MuizenbergCaveTours.tsx` template, with placeholder content for Zenith's copy. Register route in `App.tsx`.
-
-## 6. Joel Erasmus Photo -- Muizenberg Cave Tour
-
-**Problem**: Joel's avatar uses `muizenberg cave view 2.jpg` (a landscape, not a portrait).
-
-**Fix** in `MuizenbergCaveTours.tsx`: Replace avatar `src` with a proper portrait. Since no Joel portrait exists in storage, use the `AvatarFallback` with initials "JE" by removing the broken `AvatarImage` src, or use a placeholder portrait from the team folder.
-
-## 7. Travel Well Connected -- Curator Photos & See Picks
-
-**Problem**: Zenith and Chad show group/generic photos. "See Picks" has no action.
-
-**Fix** in `TravelWellConnectedStore.tsx`:
-- Update `curatorProfiles.zenith.avatar` to `IMAGES.team.zenith` (individual portrait)
-- Update `curatorProfiles.chad.avatar` to `IMAGES.team.chad` (individual portrait)
-- "See Our Picks" buttons already scroll to local tours section (fixed in prior round). Verify the target `id` exists.
-
-## 8. RoamBuddy Store -- Feroza Photo
-
-**Problem**: Feroza's profile picture not visible on laptop.
-
-**Fix**: The `feroza` curator profile image uses `feroza begg - portrait.jpg` in General Images. Verify URL encoding is correct in `roamBuddyProducts.ts` and `WellnessCuratorCard.tsx`.
-
-## 9. Contact Page -- Discovery Call Button
-
-**Problem**: "Book Your Discovery Call" doesn't work.
-
-**Fix** in `CalComBooking.tsx`: Change `fallbackEmail` default from `hello@omniwellnessmedia.co.za` to `admin@omniwellnessmedia.co.za` (line 51). The Cal.com integration may be disabled via feature flag, causing it to use the fallback email. The button itself works -- it opens a mailto link. If Cal.com embed fails to load, the fallback is functional.
-
-## 10. Chatbot -- Scroll & Text Delivery
-
-**Problem**: Bot delivers text in a block and user must scroll.
-
-**Fix** in `RoamBuddySalesBot.tsx`:
-- Already uses `ScrollArea` with auto-scroll `useEffect`
-- Ensure `scrollRef` targets the correct element
-- The `h-[350px]` fixed height may be too small on mobile. Change to `h-[300px] sm:h-[350px]` for responsive sizing
-
-## 11. Curator Tip Images Too Small
-
-**Problem**: Curator quote images are tiny.
-
-**Fix** in `CuratorTip.tsx`: Increase avatar sizes from `w-8 h-8` (banner) and `w-12 h-12` (inline) to `w-12 h-12` and `w-16 h-16` respectively. Also increase in `gaia-elements.tsx` GuidePresence from `w-10 h-10` to `w-14 h-14`.
-
-## Files to Modify (11 files)
-
-| File | Changes |
-|------|---------|
-| `src/components/ui/gaia-elements.tsx` | Hide FloatingDecorations on mobile, increase GuidePresence avatar size |
-| `src/components/navigation/ScrollToHash.tsx` | Increase delay for hash scroll to handle lazy loading |
-| `src/pages/About.tsx` | Deduplicate story carousel images, ensure distinct images |
-| `src/pages/tours/OmniWellnessRetreat.tsx` | Fix image URLs, add mobile overflow protection |
-| `src/pages/tours/KalkBayTour.tsx` | **NEW FILE** -- placeholder tour page |
-| `src/App.tsx` | Add `/tours/kalk-bay-tour` route |
-| `src/pages/tours/MuizenbergCaveTours.tsx` | Remove broken Joel avatar image |
-| `src/pages/TravelWellConnectedStore.tsx` | Update Zenith & Chad curator portrait URLs |
-| `src/components/booking/CalComBooking.tsx` | Change fallback email to admin@ |
-| `src/components/roambuddy/RoamBuddySalesBot.tsx` | Fix mobile height, verify scroll behavior |
-| `src/components/curator/CuratorTip.tsx` | Increase curator avatar sizes |
+## What This Does NOT Cover
+- Supabase tours table records (Phase 1 DB task per strategy doc)
+- Stripe payment integration (Phase 3, Month 2)
+- Viator/GetYourGuide external listings (done outside platform)
+- WellCoin earn rate configuration (requires DB setup)
+- Automated booking confirmation emails (edge function, Phase 3)
 
