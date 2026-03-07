@@ -283,7 +283,7 @@ const Footer = () => {
                 <Heart className="w-4 h-4 text-white/70" />
                 Tours & Retreats
               </Link></li>
-              <li><Link to="/travel-well-connected-store" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
+              <li><Link to="/roambuddy-store" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
                 <BookOpen className="w-4 h-4 text-white/70" />
                 Travel Store
               </Link></li>

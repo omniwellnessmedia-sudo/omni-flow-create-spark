@@ -152,7 +152,7 @@ const ToursRetreatsPreview = () => {
               <Globe className="ml-2 h-5 w-5" />
             </Button>
           </Link>
-          <Link to="/travel-well-connected-store">
+          <Link to="/roambuddy-store">
             <Button variant="outline" size="lg">
               Explore Tours & Travel
               <MapPin className="ml-2 h-5 w-5" />

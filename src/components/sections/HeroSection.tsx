@@ -76,7 +76,7 @@ const HeroSection = () => {
     {
       title: "ROAM eSIM Store",
       description: "Stay connected while you travel",
-      href: "/travel-well-connected",
+      href: "/roambuddy-store",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg",
       badge: "Travel"
     }
@@ -287,7 +287,7 @@ const HeroSection = () => {
               <Link to="/tours-retreats">{omniVoice.ctas.discover}</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-primary border-2 border-white shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
-              <Link to="/travel-well-connected-store">Travel Store</Link>
+              <Link to="/roambuddy-store">Travel Store</Link>
             </Button>
           </nav>
 
