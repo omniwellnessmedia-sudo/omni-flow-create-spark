@@ -174,7 +174,7 @@ const HeroSection = () => {
     {
       title: "Happy Tour Experiences",
       description: "Joyful moments with our wellness community",
-      href: "/wellness-community",
+      href: "/tours-retreats",
       image: getStorageUrl("happy client on tour.jpg"),
       category: "community",
       author: "Testimonials",
