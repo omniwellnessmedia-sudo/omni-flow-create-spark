@@ -1,113 +1,65 @@
 
 
-# Final Cross-Device Polish -- Feroza's Review Fixes
+# Complete Build Audit & Fix Plan — Launch Phase
 
-With 5 credits and limited changes, this plan batches all fixes into minimum file edits.
+## Issues Found
 
-## 1. Homepage -- Animation Overlap & Mobile Spacing
+### Critical: Broken Links (accessible from navigation/footer/hero)
 
-**Problem**: FloatingDecorations orbs overlap text on mobile; sections stack poorly.
+| Link | Where Used | Problem |
+|------|-----------|---------|
+| `/wellness-community` | Footer, HeroSection (4 community items), FeaturedProjectsSection, App.tsx | Page exists but is a social community hub with auth-dependent features — not a polished public page |
+| `/ai-tools` | Footer, old MegaNavigation, SiteHeader | Route does NOT exist — leads to 404 |
+| `/travel-well-connected-store` | UnifiedNavigation Store dropdown, MegaNavigation Store dropdown, SiteHeader, RecruitmentJourney, useAppTour | Should redirect to `/roambuddy-store` or be consolidated |
 
-**Fix** in `HeroSection.tsx`:
-- Hide floating orbs on mobile with `hidden md:block` wrapper
-- Add `overflow-hidden` to the main content container
-- Ensure text containers have proper z-index and `relative` positioning
+### Navigation Inconsistencies
+- **UnifiedNavigation** Store dropdown still links to `/travel-well-connected-store` (line 99)
+- **MegaNavigation** Store dropdown still links to `/travel-well-connected-store` (line 47)
+- **Old MegaNavigation** (`src/components/MegaNavigation.tsx`) and **SiteHeader** (`src/components/SiteHeader.tsx`) — legacy nav components with stale links
+- Footer links to `/ai-tools` (line 261) and `/wellness-community` (line 278)
 
-**Fix** in `gaia-elements.tsx`:
-- Add `hidden md:block` to all `FloatingDecorations` variants so orbs only show on desktop
+### HeroSection Community Items
+4 items in `communityItems` array link to `/wellness-community` — these should point to real, functional pages instead (tours, about, blog, etc.)
 
-## 2. Chief Kingsley Card Scroll
+### Travel Well Connected Store Mobile Issues
+- Hero text `text-5xl md:text-7xl` is too large on small screens — needs `text-3xl sm:text-4xl md:text-5xl lg:text-7xl`
+- Tab buttons overlap on small screens (partially fixed with `text-xs sm:text-base` but container needs `max-w-full`)
 
-**Status**: Already fixed -- href is `/tours/great-mother-cave-tour#chief-kingsley` and the target section has `id="chief-kingsley"` with `scroll-mt-24`. The `ScrollToHash` component handles cross-page hash navigation. This should work -- if not scrolling, it may be a timing issue with lazy loading. Add a longer delay (500ms) in `ScrollToHash.tsx`.
+## Plan
 
-## 3. About Page -- Story Images & Warren Photo
+### 1. Fix All Broken `/wellness-community` Links (5 files)
+Redirect community items to functional pages:
+- **HeroSection.tsx**: Change 4 community items from `/wellness-community` to relevant live pages (`/about`, `/tours-retreats`, `/blog`, `/contact`)
+- **FeaturedProjectsSection.tsx**: Change "Community Outreach" href to `/about` or `/csr-impact`
+- **Footer.tsx**: Change "Community" link to `/blog` (active, functional page)
 
-**Problem**: Carousel has 9 images from `IMAGES.*` -- some may resolve to the same URL (duplicates) or broken URLs (blank). Warren uses `warren.png` which may not exist.
+### 2. Fix All Stale `/travel-well-connected-store` Links (4 files)
+- **UnifiedNavigation.tsx** line 99: Change to `/roambuddy-store`
+- **MegaNavigation.tsx** line 47: Change to `/roambuddy-store`
+- **SiteHeader.tsx** line 168: Change to `/roambuddy-store`
+- **RecruitmentJourney.tsx** line 105: Change to `/roambuddy-store`
+- **App.tsx** line 189: Add redirect `<Navigate to="/roambuddy-store" replace />`
 
-**Fix** in `About.tsx`:
-- Deduplicate carousel images: Remove entries that resolve to same URL (e.g., `IMAGES.providers.chad` and `IMAGES.sandy.yoga` may overlap)
-- Replace duplicates with distinct images from `IMAGES.community.*`, `IMAGES.services.*`, and `IMAGES.tours.*`
-- Add `onError` handler to carousel images for graceful fallback
-- Warren's photo: change from `warren.png` to the known working path or show initials fallback (already has `onError` handler)
+### 3. Remove `/ai-tools` Dead Link (2 files)
+- **Footer.tsx** line 261: Remove "AI Wellness Tools" link (page commented out)
+- **Old MegaNavigation.tsx** lines 61-66: Remove AI Tools section
 
-## 4. Wellness Retreat Page -- Images & Text Overflow
+### 4. Fix Travel Well Connected Store Mobile (1 file)
+- **TravelWellConnectedStore.tsx**: Fix hero heading responsive sizing (`text-3xl sm:text-4xl md:text-5xl lg:text-7xl`)
 
-**Problem**: Feroza reports "Shark Education Centre image still on page" and "Indigenous Heritage image blank" and "words off-screen."
+### 5. Consolidate Store Navigation Labels
+- Rename "Travel Well Connected" to "ROAM eSIM Store" everywhere to match brand identity and avoid confusion with two store entries in nav
 
-**Fix** in `OmniWellnessRetreat.tsx`:
-- Review all image URLs in the gallery and inline sections. The current images are:
-  - `IMG_20241010_175744.jpg` (retreat folder -- valid)
-  - `IMG_0052 (1).jpg` (retreat folder -- valid)
-  - `_MG_0152.jpg` (retreat folder -- valid)
-  - `wellness group tour.jpg` (General Images -- valid, but generic)
-  - `group tour amazing cave view muizenberg.jpg` (may be the "shark education" confusion -- it's a cave view, not shark)
-  - `community outing 1.jpg` (General Images -- valid)
-- Replace any ambiguous general images with retreat-specific ones
-- The "Indigenous Heritage" image at line 626 uses `khoe indigenous language heritage experience 6.jpg` -- verify URL encoding
-- Add `overflow-hidden` and `break-words` to text containers for mobile overflow fix
-- Wrap the hero text content in a container with `max-w-full overflow-hidden`
-
-## 5. Kalk Bay Tour -- 404 Fix
-
-**Problem**: `/tours/kalk-bay-tour` has no route in App.tsx but is linked in navigation.
-
-**Fix**: Create a new `KalkBayTour.tsx` page file based on the `MuizenbergCaveTours.tsx` template, with placeholder content for Zenith's copy. Register route in `App.tsx`.
-
-## 6. Joel Erasmus Photo -- Muizenberg Cave Tour
-
-**Problem**: Joel's avatar uses `muizenberg cave view 2.jpg` (a landscape, not a portrait).
-
-**Fix** in `MuizenbergCaveTours.tsx`: Replace avatar `src` with a proper portrait. Since no Joel portrait exists in storage, use the `AvatarFallback` with initials "JE" by removing the broken `AvatarImage` src, or use a placeholder portrait from the team folder.
-
-## 7. Travel Well Connected -- Curator Photos & See Picks
-
-**Problem**: Zenith and Chad show group/generic photos. "See Picks" has no action.
-
-**Fix** in `TravelWellConnectedStore.tsx`:
-- Update `curatorProfiles.zenith.avatar` to `IMAGES.team.zenith` (individual portrait)
-- Update `curatorProfiles.chad.avatar` to `IMAGES.team.chad` (individual portrait)
-- "See Our Picks" buttons already scroll to local tours section (fixed in prior round). Verify the target `id` exists.
-
-## 8. RoamBuddy Store -- Feroza Photo
-
-**Problem**: Feroza's profile picture not visible on laptop.
-
-**Fix**: The `feroza` curator profile image uses `feroza begg - portrait.jpg` in General Images. Verify URL encoding is correct in `roamBuddyProducts.ts` and `WellnessCuratorCard.tsx`.
-
-## 9. Contact Page -- Discovery Call Button
-
-**Problem**: "Book Your Discovery Call" doesn't work.
-
-**Fix** in `CalComBooking.tsx`: Change `fallbackEmail` default from `hello@omniwellnessmedia.co.za` to `admin@omniwellnessmedia.co.za` (line 51). The Cal.com integration may be disabled via feature flag, causing it to use the fallback email. The button itself works -- it opens a mailto link. If Cal.com embed fails to load, the fallback is functional.
-
-## 10. Chatbot -- Scroll & Text Delivery
-
-**Problem**: Bot delivers text in a block and user must scroll.
-
-**Fix** in `RoamBuddySalesBot.tsx`:
-- Already uses `ScrollArea` with auto-scroll `useEffect`
-- Ensure `scrollRef` targets the correct element
-- The `h-[350px]` fixed height may be too small on mobile. Change to `h-[300px] sm:h-[350px]` for responsive sizing
-
-## 11. Curator Tip Images Too Small
-
-**Problem**: Curator quote images are tiny.
-
-**Fix** in `CuratorTip.tsx`: Increase avatar sizes from `w-8 h-8` (banner) and `w-12 h-12` (inline) to `w-12 h-12` and `w-16 h-16` respectively. Also increase in `gaia-elements.tsx` GuidePresence from `w-10 h-10` to `w-14 h-14`.
-
-## Files to Modify (11 files)
+## Files Modified (8 files)
 
 | File | Changes |
 |------|---------|
-| `src/components/ui/gaia-elements.tsx` | Hide FloatingDecorations on mobile, increase GuidePresence avatar size |
-| `src/components/navigation/ScrollToHash.tsx` | Increase delay for hash scroll to handle lazy loading |
-| `src/pages/About.tsx` | Deduplicate story carousel images, ensure distinct images |
-| `src/pages/tours/OmniWellnessRetreat.tsx` | Fix image URLs, add mobile overflow protection |
-| `src/pages/tours/KalkBayTour.tsx` | **NEW FILE** -- placeholder tour page |
-| `src/App.tsx` | Add `/tours/kalk-bay-tour` route |
-| `src/pages/tours/MuizenbergCaveTours.tsx` | Remove broken Joel avatar image |
-| `src/pages/TravelWellConnectedStore.tsx` | Update Zenith & Chad curator portrait URLs |
-| `src/components/booking/CalComBooking.tsx` | Change fallback email to admin@ |
-| `src/components/roambuddy/RoamBuddySalesBot.tsx` | Fix mobile height, verify scroll behavior |
-| `src/components/curator/CuratorTip.tsx` | Increase curator avatar sizes |
+| `src/components/sections/HeroSection.tsx` | Redirect 4 `/wellness-community` links to live pages |
+| `src/components/sections/FeaturedProjectsSection.tsx` | Redirect community project href |
+| `src/components/Footer.tsx` | Remove `/ai-tools` link, change `/wellness-community` to `/blog` |
+| `src/components/navigation/UnifiedNavigation.tsx` | Consolidate store links to `/roambuddy-store` |
+| `src/components/navigation/MegaNavigation.tsx` | Consolidate store links to `/roambuddy-store` |
+| `src/components/SiteHeader.tsx` | Update store link |
+| `src/App.tsx` | Add redirect from `/travel-well-connected-store` to `/roambuddy-store` |
+| `src/pages/TravelWellConnectedStore.tsx` | Fix mobile hero text sizing |
 
