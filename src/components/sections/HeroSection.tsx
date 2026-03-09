@@ -141,7 +141,7 @@ const HeroSection = () => {
     {
       title: "Conscious Meditation",
       description: "Guided practices with experienced facilitators",
-      href: "/wellness-community",
+      href: "/about",
       image: getStorageUrl("Chad Amazing portrait.jpg"),
       category: "wellness",
       author: "Practices",
