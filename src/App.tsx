@@ -155,7 +155,7 @@ function App() {
                   <Route path="/wellness-exchange/add-want" element={<AddWant />} />
                   <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
                   <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
-                  <Route path="/wellness-community" element={<WellnessCommunity />} />
+                  <Route path="/wellness-community" element={<Navigate to="/blog" replace />} />
 
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
