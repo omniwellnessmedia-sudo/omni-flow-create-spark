@@ -179,7 +179,7 @@ const SiteHeader = () => {
                   Omni Wellness Services
                 </Link>
                 <Link 
-                  to="/ai-tools" 
+                  to="/exercise-library" 
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

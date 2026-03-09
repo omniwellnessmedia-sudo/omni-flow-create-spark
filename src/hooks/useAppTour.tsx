@@ -104,10 +104,10 @@ const tourSteps: TourConfig = {
       position: 'center'
     }
   ],
-  '/travel-well-connected-store': [
+  '/roambuddy-store': [
     {
       id: 'store-intro',
-      title: 'Travel Well Connected',
+      title: 'ROAM eSIM Store',
       content: 'Browse curated wellness experiences and stay connected with eSIM plans designed for conscious travelers.',
       position: 'center'
     }

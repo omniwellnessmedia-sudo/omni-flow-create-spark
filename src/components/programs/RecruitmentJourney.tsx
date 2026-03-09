@@ -102,7 +102,7 @@ const handleAction = (action: string) => {
     email: () => { window.location.href = 'mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Inquiry'; },
     apply: () => { window.location.href = 'mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Application&body=I would like to express my interest in the UWC Human-Animal Interaction Programme.%0A%0AName:%0AEmail:%0ACountry:%0AInstitution (if applicable):%0A%0AWhy I am interested:'; },
     requirements: () => document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' }),
-    travelstore: () => window.location.href = '/travel-well-connected-store',
+    travelstore: () => window.location.href = '/roambuddy-store',
     guide: () => document.getElementById('getting-ready')?.scrollIntoView({ behavior: 'smooth' }),
     esim: () => window.location.href = '/roambuddy-store',
     checklist: () => document.getElementById('getting-ready')?.scrollIntoView({ behavior: 'smooth' })

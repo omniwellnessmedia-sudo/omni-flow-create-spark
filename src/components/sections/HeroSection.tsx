@@ -389,7 +389,7 @@ const HeroSection = () => {
                     </button>
                   ))}
                 </div>
-                <Link to="/wellness-community" className="shrink-0">
+                <Link to="/blog" className="shrink-0">
                   <Button variant="ghost" size="sm">{omniVoice.ctas.explore}</Button>
                 </Link>
               </div>

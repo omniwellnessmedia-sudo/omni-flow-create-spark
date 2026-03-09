@@ -59,9 +59,7 @@ const MegaNavigation = () => {
     {
       title: 'Omni Wellness AI',
       items: [
-        { name: 'AI Travel Tools', href: '/ai-tools', icon: '🤖' },
-        { name: 'Exercise Library', href: '/exercise-library', icon: '💪' },
-        { name: 'Wellness Calculators', href: '/ai-tools', icon: '🧮' }
+        { name: 'Exercise Library', href: '/exercise-library', icon: '💪' }
       ]
     },
     {

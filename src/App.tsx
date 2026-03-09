@@ -186,7 +186,7 @@ function App() {
                     </ProtectedRoute>
                   } />
                   <Route path="/wellness-deals" element={<WellnessDeals />} />
-                  <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
+                  <Route path="/travel-well-connected-store" element={<Navigate to="/roambuddy-store" replace />} />
                   <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
                   <Route path="/data-products" element={<DataProducts />} />
                   <Route path="/product-detail/:id" element={<ProductDetail />} />
