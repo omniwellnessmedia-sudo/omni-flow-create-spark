@@ -165,7 +165,7 @@ const SiteHeader = () => {
                   Omni Wellness Travel
                 </Link>
                 <Link 
-                  to="/travel-well-connected-store" 
+                  to="/roambuddy-store" 
                   className="block px-3 py-2 text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
