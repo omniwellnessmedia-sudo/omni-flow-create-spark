@@ -258,9 +258,6 @@ const Footer = () => {
               <li><Link to="/web-development" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Web Development
               </Link></li>
-              <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
-                AI Wellness Tools
-              </Link></li>
             </ul>
           </div>
 
