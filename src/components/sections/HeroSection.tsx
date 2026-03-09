@@ -130,7 +130,7 @@ const HeroSection = () => {
     {
       title: "Community Wellness Outings",
       description: "Building connections through shared experiences",
-      href: "/wellness-community",
+      href: "/about",
       image: getStorageUrl("community outing 1.jpg"),
       category: "wellness",
       author: "Community",
