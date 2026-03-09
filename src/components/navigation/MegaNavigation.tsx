@@ -44,8 +44,7 @@ export const MegaNavigation = () => {
     {
       title: 'Shop',
       items: [
-        { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'eSIM & data packages', icon: '📱', featured: true },
-        { title: 'RoamBuddy eSIM', href: '/roambuddy-store', description: 'Global eSIM solutions', icon: '🌐' },
+        { title: 'ROAM eSIM Store', href: '/roambuddy-store', description: 'Global eSIM solutions', icon: '🌐', featured: true },
       ]
     }
   ];

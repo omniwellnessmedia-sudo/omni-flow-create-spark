@@ -258,9 +258,6 @@ const Footer = () => {
               <li><Link to="/web-development" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
                 Web Development
               </Link></li>
-              <li><Link to="/ai-tools" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block">
-                AI Wellness Tools
-              </Link></li>
             </ul>
           </div>
 
@@ -275,9 +272,9 @@ const Footer = () => {
                 <MessageCircle className="w-4 h-4 text-white/70" />
                 Wellness Podcast
               </Link></li>
-              <li><Link to="/wellness-community" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
+              <li><Link to="/blog" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
                 <Users className="w-4 h-4 text-white/70" />
-                Community
+                Community Blog
               </Link></li>
               <li><Link to="/tours-retreats" className="text-gray-300 hover:text-white transition-colors hover:translate-x-1 block flex items-center gap-2">
                 <Heart className="w-4 h-4 text-white/70" />

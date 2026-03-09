@@ -11,7 +11,7 @@ const FeaturedProjectsSection = () => {
       description: "Providing essential resources and support to families and children in our community.",
       image: IMAGES.wellness.communityProject1,
       category: "Community Development",
-      href: "/wellness-community"
+      href: "/about"
     },
     {
       title: "Indigenous Wisdom & Healing",

@@ -155,7 +155,7 @@ function App() {
                   <Route path="/wellness-exchange/add-want" element={<AddWant />} />
                   <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
                   <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
-                  <Route path="/wellness-community" element={<WellnessCommunity />} />
+                  <Route path="/wellness-community" element={<Navigate to="/blog" replace />} />
 
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
@@ -186,7 +186,7 @@ function App() {
                     </ProtectedRoute>
                   } />
                   <Route path="/wellness-deals" element={<WellnessDeals />} />
-                  <Route path="/travel-well-connected-store" element={<TravelWellConnectedStore />} />
+                  <Route path="/travel-well-connected-store" element={<Navigate to="/roambuddy-store" replace />} />
                   <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
                   <Route path="/data-products" element={<DataProducts />} />
                   <Route path="/product-detail/:id" element={<ProductDetail />} />

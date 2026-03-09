@@ -130,7 +130,7 @@ const HeroSection = () => {
     {
       title: "Community Wellness Outings",
       description: "Building connections through shared experiences",
-      href: "/wellness-community",
+      href: "/about",
       image: getStorageUrl("community outing 1.jpg"),
       category: "wellness",
       author: "Community",
@@ -141,7 +141,7 @@ const HeroSection = () => {
     {
       title: "Conscious Meditation",
       description: "Guided practices with experienced facilitators",
-      href: "/wellness-community",
+      href: "/about",
       image: getStorageUrl("Chad Amazing portrait.jpg"),
       category: "wellness",
       author: "Practices",
@@ -174,7 +174,7 @@ const HeroSection = () => {
     {
       title: "Happy Tour Experiences",
       description: "Joyful moments with our wellness community",
-      href: "/wellness-community",
+      href: "/tours-retreats",
       image: getStorageUrl("happy client on tour.jpg"),
       category: "community",
       author: "Testimonials",
@@ -196,7 +196,7 @@ const HeroSection = () => {
     {
       title: "Team Zenith Adventures",
       description: "Behind the scenes with our wellness guides",
-      href: "/wellness-community",
+      href: "/blog",
       image: getStorageUrl("Zenith_TNT_OMNI-9.jpg"),
       category: "community",
       author: "Team",
@@ -389,7 +389,7 @@ const HeroSection = () => {
                     </button>
                   ))}
                 </div>
-                <Link to="/wellness-community" className="shrink-0">
+                <Link to="/blog" className="shrink-0">
                   <Button variant="ghost" size="sm">{omniVoice.ctas.explore}</Button>
                 </Link>
               </div>

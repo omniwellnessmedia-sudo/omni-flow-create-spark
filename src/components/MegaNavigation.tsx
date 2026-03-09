@@ -43,8 +43,7 @@ const MegaNavigation = () => {
     {
       title: 'Omni Wellness Store',
       items: [
-        { name: 'Travel Well Connected', href: '/travel-well-connected-store', icon: '🌐' },
-        { name: 'RoamBuddy eSIM', href: '/roambuddy-store', icon: '📱' }
+        { name: 'ROAM eSIM Store', href: '/roambuddy-store', icon: '📱' }
       ]
     },
     {
@@ -60,9 +59,7 @@ const MegaNavigation = () => {
     {
       title: 'Omni Wellness AI',
       items: [
-        { name: 'AI Travel Tools', href: '/ai-tools', icon: '🤖' },
-        { name: 'Exercise Library', href: '/exercise-library', icon: '💪' },
-        { name: 'Wellness Calculators', href: '/ai-tools', icon: '🧮' }
+        { name: 'Exercise Library', href: '/exercise-library', icon: '💪' }
       ]
     },
     {
