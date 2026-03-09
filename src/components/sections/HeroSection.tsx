@@ -196,7 +196,7 @@ const HeroSection = () => {
     {
       title: "Team Zenith Adventures",
       description: "Behind the scenes with our wellness guides",
-      href: "/wellness-community",
+      href: "/blog",
       image: getStorageUrl("Zenith_TNT_OMNI-9.jpg"),
       category: "community",
       author: "Team",
