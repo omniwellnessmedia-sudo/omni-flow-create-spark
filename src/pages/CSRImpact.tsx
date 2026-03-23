@@ -53,7 +53,7 @@ export default function CSRImpact() {
             </p>
             <div className="bg-muted/50 p-6 rounded-lg space-y-2">
               <p><strong>Registration:</strong> NPC 2024/051687/08</p>
-              <p><strong>Contact:</strong> omniwellnessmedia@gmail.com | +27 74 831 5961</p>
+              <p><strong>Contact:</strong> admin@omniwellnessmedia.co.za | +27 74 831 5961</p>
               <p><strong>Banking:</strong> FNB Gold Business Account - 63093493509</p>
               <p className="text-sm text-muted-foreground mt-4">
                 ✓ All donations are tax-deductible (Section 18A approved)

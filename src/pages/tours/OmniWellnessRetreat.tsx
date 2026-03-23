@@ -48,15 +48,15 @@ const OmniWellnessRetreat = () => {
               Weekend Retreats
             </Badge>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
+            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
               4th Annual Omni<br />Wellness Retreat
             </h1>
             
-            <p className="text-2xl md:text-3xl text-white/90 font-light max-w-2xl">
+            <p className="text-lg sm:text-2xl md:text-3xl text-white/90 font-light max-w-2xl">
               Rejuvenate and Renew in the Serene Greyton Eco Lodge
             </p>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4">
                 <Calendar className="h-6 w-6 mb-2 text-white/80" />
                 <div className="text-sm text-white/60">Dates</div>
@@ -724,13 +724,13 @@ const OmniWellnessRetreat = () => {
                   <CardContent className="p-6">
                     <h3 className="text-lg font-bold text-foreground mb-4">Contact Information</h3>
                     <div className="space-y-3">
-                      <a href="tel:0748315961" className="flex items-center text-sm hover:text-primary transition-colors">
-                        <Phone className="h-4 w-4 mr-2" />
-                        Chad Cupido: 074 831 5961
-                      </a>
                       <a href="mailto:admin@omniwellnessmedia.co.za" className="flex items-center text-sm hover:text-primary transition-colors">
                         <Mail className="h-4 w-4 mr-2" />
                         admin@omniwellnessmedia.co.za
+                      </a>
+                      <a href="mailto:traveltourscapetown@gmail.com" className="flex items-center text-sm hover:text-primary transition-colors">
+                        <Mail className="h-4 w-4 mr-2" />
+                        traveltourscapetown@gmail.com
                       </a>
                     </div>
                   </CardContent>

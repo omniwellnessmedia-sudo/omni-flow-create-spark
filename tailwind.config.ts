@@ -90,12 +90,16 @@ export default {
 					'sans-serif'
 				],
 				heading: [
-					'Inter',
-					'-apple-system',
-					'BlinkMacSystemFont',
-					'"Segoe UI"',
-					'Roboto',
-					'sans-serif'
+					'"DM Serif Display"',
+					'Georgia',
+					'"Times New Roman"',
+					'serif'
+				],
+				serif: [
+					'"DM Serif Display"',
+					'Georgia',
+					'"Times New Roman"',
+					'serif'
 				]
 			},
 			backgroundImage: {

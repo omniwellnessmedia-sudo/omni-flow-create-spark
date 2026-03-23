@@ -83,20 +83,24 @@ const UnifiedNavigation = () => {
       icon: Users,
     },
     {
-      title: 'Travel',
+      title: 'Impact Travel',
       icon: Plane,
       children: [
-        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Transformative 4-day retreat', icon: '🧘‍♀️' },
-        { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: 'Sacred indigenous journey with Chief Kingsley', icon: '⛰️' },
-        { title: 'Muizenberg Cave Tour', href: '/tours/muizenberg-cave-tours', description: 'Wellness cave journey', icon: '🏔️' },
-        { title: 'Kalk Bay Tour', href: '/tours/kalk-bay-tour', description: 'Coastal cultural experience', icon: '🌊' },
+        { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: '12,000 years of sacred heritage — Fish Hoek', icon: '⛰️' },
+        { title: "Muizenberg's Living Heritage", href: '/tours/muizenberg-cave-tours', description: 'Ancient history by the sea — Muizenberg', icon: '🏔️' },
+        { title: "Kalk Bay's Rich Tapestry", href: '/tours/kalk-bay-tour', description: 'Ancient whispers, healing herbs — Kalk Bay', icon: '🌊' },
+        { title: 'Hoofbeats & Healing', href: '/experiences/cart-horse-urban-wellness', description: 'Equine-assisted wellness experience', icon: '🐴' },
+        { title: 'Corporate Wellness Retreats', href: '/experiences/corporate-wellness-retreat', description: 'Bespoke team retreats with measurable impact', icon: '🏢' },
+        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Weekend retreat — Greyton', icon: '🧘‍♀️' },
+        { title: 'All Tours & Experiences', href: '/tours-retreats', description: 'Browse everything', icon: '🗺️' },
       ]
     },
     {
-      title: 'Store',
+      title: 'ROAM Store',
       icon: Store,
       children: [
-        { title: 'ROAM eSIM Store', href: '/roambuddy-store', description: 'Global eSIM solutions', icon: '🌐' },
+        { title: 'ROAM eSIM Store', href: '/roambuddy-store', description: 'Stay connected while you travel — global eSIM plans', icon: '🌐' },
+        { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'Curated wellness experiences & Viator tours', icon: '✈️' },
       ]
     },
     {
@@ -104,8 +108,8 @@ const UnifiedNavigation = () => {
       icon: Briefcase,
       children: [
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic business development', icon: '💼' },
-        { title: 'Media Production', href: '/media-production', description: 'Content creation services', icon: '🎬' },
-        { title: 'Web Development', href: '/web-development', description: 'Digital solutions', icon: '💻' },
+        { title: 'Media Production', href: '/media-production', description: 'Content creation & storytelling', icon: '🎬' },
+        { title: 'Web Development', href: '/web-development', description: 'Digital platforms & systems', icon: '💻' },
       ]
     },
     {

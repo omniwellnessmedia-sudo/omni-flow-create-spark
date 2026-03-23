@@ -53,165 +53,154 @@ const HeroSection = () => {
 
   const workspaceItems = [
     {
-      title: "Business Strategy",
-      description: "Strategic consulting for conscious growth",
-      href: "/business-consulting",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg",
-      badge: "Consulting"
-    },
-    {
-      title: "Content Creation",
-      description: "Video, podcast & social media production", 
-      href: "/media-production",
-      image: IMAGES.services.artscape,
-      badge: "Media"
-    },
-    {
-      title: "Indigenous Wisdom Tours",
-      description: "Ancient healing practices & cultural experiences",
-      href: "/tours/great-mother-cave-tour",
+      title: "Indigenous Walks",
+      description: "Sacred heritage journeys with Chief Kingsley — Fish Hoek, Muizenberg & Kalk Bay",
+      href: "/tours-retreats",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg",
-      badge: "Cultural"
+      badge: "Impact Travel"
+    },
+    {
+      title: "Hoofbeats & Healing",
+      description: "Equine-assisted wellness with rescued working horses",
+      href: "/experiences/cart-horse-urban-wellness",
+      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/wellness%20group%20tour.jpg",
+      badge: "New Experience"
     },
     {
       title: "ROAM eSIM Store",
-      description: "Stay connected while you travel",
+      description: "Stay connected while you travel — global eSIM plans",
       href: "/roambuddy-store",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg",
-      badge: "Travel"
+      badge: "Travel Store"
+    },
+    {
+      title: "Corporate Retreats",
+      description: "Bespoke team wellness programmes with measurable outcomes",
+      href: "/experiences/corporate-wellness-retreat",
+      image: IMAGES.services.artscape,
+      badge: "For Teams"
     }
   ];
 
   const communityItems = [
     {
       title: "Chief Kingsley's Wisdom",
-      description: "Indigenous knowledge & cultural heritage tours",
+      description: "Indigenous knowledge passed down through generations of the Gorachouqua Khoi Nation",
       href: "/tours/great-mother-cave-tour#chief-kingsley",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/chief%20kingsley%201.jpg",
       category: "tours",
       author: "Cultural Experience",
-      badge: "Travel",
+      badge: "Impact Travel",
       orientation: "portrait",
       tags: ["Popular", "Discover", "Personal"]
     },
     {
-      title: "Wellness Group Tours",
-      description: "Transformative group experiences in nature",
+      title: "12,000 Years of Heritage",
+      description: "Explore Peer's Cave and the Ascension Tunnel in Fish Hoek",
       href: "/tours/great-mother-cave-tour",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/tour%20picture%20couple%20with%20chief%20kingsley.jpg",
       category: "tours",
-      author: "Adventures",
-      badge: "Travel",
+      author: "Great Mother Cave",
+      badge: "Impact Travel",
       orientation: "landscape",
       tags: ["Popular", "Discover", "Wellness"]
     },
     {
       title: "Sacred Cave Explorations",
-      description: "Ancient sites for deep spiritual practice",
+      description: "Ancient rock art and spiritual ceremony sites",
       href: "/tours/great-mother-cave-tour",
-      image: getStorageUrl("group tour amazing cave view.jpg"),
-      category: "wellness",
-      author: "Experiences",
-      badge: "Wellness",
+      image: getStorageUrl("group tour amazing cave view muizenberg.jpg"),
+      category: "tours",
+      author: "Heritage Walk",
+      badge: "Impact Travel",
       orientation: "landscape",
       tags: ["Wellness", "Discover", "Personal"]
     },
     {
-      title: "Indigenous Teachings",
-      description: "Learn from Chief Kingsley's ancestral wisdom",
-      href: "/tours/great-mother-cave-tour",
-      image: getStorageUrl("chief kingsley talking to group.jpg"),
-      category: "community",
-      author: "Cultural Learning",
-      badge: "Community",
+      title: "Muizenberg's Living Heritage",
+      description: "Ancient Khoi-San coastal settlements and marine heritage by the sea",
+      href: "/tours/muizenberg-cave-tours",
+      image: getStorageUrl("group tour amazing cave view muizenberg.jpg"),
+      category: "tours",
+      author: "Coastal Journey",
+      badge: "Impact Travel",
       orientation: "landscape",
       tags: ["Popular", "Discover", "Wellness"]
     },
     {
-      title: "Community Wellness Outings",
-      description: "Building connections through shared experiences",
-      href: "/about",
+      title: "Kalk Bay's Healing Herbs",
+      description: "Historic harbour, ancient trade routes, and traditional plant medicine",
+      href: "/tours/kalk-bay-tour",
       image: getStorageUrl("community outing 1.jpg"),
-      category: "wellness",
-      author: "Community",
-      badge: "Wellness",
+      category: "tours",
+      author: "Heritage Walk",
+      badge: "Impact Travel",
       orientation: "landscape",
       tags: ["Popular", "Personal", "Wellness"]
     },
     {
-      title: "Conscious Meditation",
-      description: "Guided practices with experienced facilitators",
+      title: "Meet Chad Cupido",
+      description: "Founding Director — bridging tourism, culture, and community",
       href: "/about",
       image: getStorageUrl("Chad Amazing portrait.jpg"),
-      category: "wellness",
-      author: "Practices",
-      badge: "Wellness",
+      category: "community",
+      author: "Our Team",
+      badge: "About Us",
       orientation: "portrait",
       tags: ["Popular", "Wellness", "Personal"]
     },
     {
-      title: "Ancient Rock Art Tours",
-      description: "Discover South Africa's indigenous heritage",
+      title: "Ancient Rock Art",
+      description: "Direct connection to the spiritual beliefs of the Khoi and San",
       href: "/tours/great-mother-cave-tour",
       image: getStorageUrl("Rock art portrait.jpg"),
       category: "tours",
       author: "Heritage",
-      badge: "Travel",
+      badge: "Impact Travel",
       orientation: "portrait",
       tags: ["Discover", "Personal", "Wellness"]
     },
     {
-      title: "Muizenberg Cave Views",
-      description: "Breathtaking natural formations & meditation spots",
-      href: "/tours/muizenberg-cave-tours",
-      image: getStorageUrl("muizenberg cave view.jpg"),
-      category: "tours",
-      author: "Nature",
-      badge: "Travel",
-      orientation: "landscape",
-      tags: ["Popular", "Discover", "Wellness"]
-    },
-    {
-      title: "Happy Tour Experiences",
-      description: "Joyful moments with our wellness community",
-      href: "/tours-retreats",
-      image: getStorageUrl("happy client on tour.jpg"),
-      category: "community",
-      author: "Testimonials",
-      badge: "Community",
+      title: "Hoofbeats & Healing",
+      description: "Equine-assisted wellness with rescued working horses",
+      href: "/experiences/cart-horse-urban-wellness",
+      image: getStorageUrl("wellness group tour.jpg"),
+      category: "wellness",
+      author: "New Experience",
+      badge: "Wellness",
       orientation: "landscape",
       tags: ["Popular", "Personal", "Wellness"]
     },
     {
       title: "Wellness Retreat Gatherings",
-      description: "Transformative multi-day wellness experiences",
-      href: "/tours-retreats",
-      image: getStorageUrl("Wellness retreat.JPG"),
+      description: "Transformative multi-day wellness experiences at Greyton Eco Lodge",
+      href: "/tour-detail/winter-wine-country-wellness",
+      image: getStorageUrl("Wellness retreat 2.jpg"),
       category: "wellness",
-      author: "Retreats",
+      author: "Annual Retreat",
       badge: "Wellness",
       orientation: "landscape",
       tags: ["Wellness", "Discover", "Personal"]
     },
     {
-      title: "Team Zenith Adventures",
-      description: "Behind the scenes with our wellness guides",
-      href: "/blog",
+      title: "Operations Excellence",
+      description: "Zenith Yassin ensuring every journey runs with care and precision",
+      href: "/about",
       image: getStorageUrl("Zenith_TNT_OMNI-9.jpg"),
       category: "community",
-      author: "Team",
-      badge: "Community",
+      author: "Our Team",
+      badge: "About Us",
       orientation: "landscape",
       tags: ["Personal", "Wellness"]
     },
     {
-      title: "Couples Wellness Journey",
-      description: "Shared transformation & bonding experiences",
-      href: "/tours-retreats",
+      title: "Corporate Wellness Retreats",
+      description: "Rewild your team — bespoke programmes with measurable ESG outcomes",
+      href: "/experiences/corporate-wellness-retreat",
       image: getStorageUrl("tour picture couple with chief kingsley.jpg"),
       category: "wellness",
-      author: "Experiences",
-      badge: "Wellness",
+      author: "For Teams",
+      badge: "Corporate",
       orientation: "landscape",
       tags: ["Popular", "Personal", "Discover"]
     }
@@ -234,69 +223,62 @@ const HeroSection = () => {
             loading="eager"
             onError={(e) => { e.currentTarget.src = IMAGES.locations.view1; }}
           />
-          {/* WCAG 1.4.3 Contrast - Enhanced overlay for 4.5:1 ratio */}
-          <div className="absolute inset-0 bg-contrast-overlay" aria-hidden="true"></div>
+          {/* Cinematic overlay — warm dark with depth */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" aria-hidden="true"></div>
         </div>
 
-        {/* Gaia Magic - Floating Decorative Orbs (desktop only) */}
+        {/* Ambient light — subtle warm glow (desktop only) */}
         <div className="absolute inset-0 pointer-events-none hidden md:block" aria-hidden="true">
-          <div className="absolute top-20 -left-20 w-64 h-64 rounded-full bg-gradient-to-br from-primary/20 to-transparent blur-3xl motion-safe:animate-pulse-slow" />
-          <div className="absolute top-40 right-10 w-48 h-48 rounded-full bg-gradient-to-br from-secondary/15 to-transparent blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '1s' }} />
-          <div className="absolute bottom-20 left-1/3 w-32 h-32 rounded-full bg-gradient-to-br from-accent/20 to-transparent blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '2s' }} />
-          <div className="absolute -bottom-10 -right-10 w-64 h-64 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 blur-3xl motion-safe:animate-pulse-slow" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-teal-500/[0.07] blur-[120px]" />
+          <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full bg-amber-500/[0.05] blur-[100px]" />
         </div>
 
         {/* Hero Content */}
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Brand Logo with Breathing Animation */}
-          <div className="flex justify-center mb-6 sm:mb-8 animate-fade-in">
-            <div className="relative motion-safe:animate-breathing-slow">
-              <img 
-                src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
-                alt="Omni Wellness Media logo"
-                className="h-28 w-28 sm:h-36 sm:w-36 lg:h-44 lg:w-44 object-contain drop-shadow-2xl rounded-full bg-white/90 p-3"
-                loading="eager"
-              />
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 motion-safe:animate-glow-pulse blur-md -z-10" aria-hidden="true"></div>
-            </div>
+          {/* Brand Logo — Clean, confident */}
+          <div className="flex justify-center mb-8 sm:mb-10 animate-fade-in">
+            <img
+              src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
+              alt="Omni Wellness Media logo"
+              className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 object-contain rounded-full bg-white/95 p-2.5 shadow-lg"
+              loading="eager"
+            />
           </div>
           
           {/* Main Headline - Guided, Welcoming Tone */}
-          <h1 
+          <h1
             id="hero-heading"
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 text-white hero-text-shadow animate-fade-in-up leading-tight"
+            className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal mb-5 sm:mb-7 text-white animate-fade-in-up leading-[1.1] tracking-tight"
           >
             {omniVoice.pageIntros.home.headline}
           </h1>
-          
-          {/* Subheadline - Conversational, Guided */}
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 mb-8 sm:mb-12 max-w-4xl mx-auto hero-text-shadow animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.2s' }}>
+
+          {/* Subheadline — light, editorial */}
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 mb-10 sm:mb-14 max-w-2xl mx-auto animate-fade-in-up leading-relaxed font-light" style={{ animationDelay: '0.2s' }}>
             {omniVoice.pageIntros.home.subheadline}
           </p>
 
-          {/* CTA Buttons - Updated with guided copy */}
-          <nav 
+          {/* CTA Buttons — Premium, restrained */}
+          <nav
             aria-label="Primary actions"
-            className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center animate-fade-in-up" 
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center animate-fade-in-up"
             style={{ animationDelay: '0.4s' }}
           >
-            <Button asChild size="lg" className="px-8 py-6 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
-              <a href="/#curated-services" onClick={(e) => { e.preventDefault(); document.getElementById('curated-services')?.scrollIntoView({ behavior: 'smooth' }); }}>{omniVoice.ctas.seeMore}</a>
+            <Button asChild size="lg" className="px-8 py-5 text-base font-medium bg-white text-gray-900 hover:bg-white/90 shadow-lg min-w-[200px] rounded-full transition-all duration-300 hover:shadow-xl">
+              <Link to="/tours-retreats">Explore Experiences</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-primary border-2 border-white shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
-              <Link to="/tours-retreats">{omniVoice.ctas.discover}</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold bg-white/90 hover:bg-white text-primary border-2 border-white shadow-2xl min-w-[200px] motion-safe:hover:scale-105 transition-transform">
-              <Link to="/roambuddy-store">Travel Store</Link>
+            <Button asChild size="lg" variant="outline" className="px-8 py-5 text-base font-medium bg-transparent hover:bg-white/10 text-white border border-white/40 hover:border-white/70 min-w-[200px] rounded-full transition-all duration-300">
+              <a href="/#curated-services" onClick={(e) => { e.preventDefault(); document.getElementById('curated-services')?.scrollIntoView({ behavior: 'smooth' }); }}>Our Services</a>
             </Button>
           </nav>
 
-          {/* Reassurance Badge */}
-          <div className="mt-8 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white/90 text-sm">
-              <Heart className="w-4 h-4" />
-              {omniVoice.reassurance.gotYourBack}
-            </span>
+          {/* Trust signals — editorial */}
+          <div className="mt-10 animate-fade-in flex flex-wrap gap-6 justify-center text-white/60 text-sm" style={{ animationDelay: '0.6s' }}>
+            <span className="flex items-center gap-1.5">Indigenous-led experiences</span>
+            <span className="hidden sm:inline text-white/30">|</span>
+            <span className="flex items-center gap-1.5">Small groups of 12</span>
+            <span className="hidden sm:inline text-white/30">|</span>
+            <span className="flex items-center gap-1.5">Cape Town, South Africa</span>
           </div>
         </div>
 
@@ -318,110 +300,104 @@ const HeroSection = () => {
             />
           </div>
 
-          {/* Workspace Section */}
-          <div id="curated-services" className="mb-8 sm:mb-16">
-            <div className="bg-card rounded-xl shadow-sm border border-border/50 p-4 sm:p-6 motion-safe:animate-fade-in">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                <h2 className="text-lg sm:text-xl font-semibold text-foreground">
-                  {omniVoice.transitions.curated}
-                </h2>
-                <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
-                  <select className="border border-border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm bg-background">
-                    <option>Last edited</option>
-                  </select>
-                  <select className="border border-border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm bg-background">
-                    <option>Newest first</option>
-                  </select>
-                  <select className="border border-border rounded px-2 sm:px-3 py-1 text-xs sm:text-sm bg-background">
-                    <option>All services</option>
-                  </select>
-                  <Link to="/services">
-                    <Button variant="ghost" size="sm" className="text-xs sm:text-sm">{omniVoice.ctas.explore}</Button>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
-                {workspaceItems.map((item, index) => (
-                  <Link key={index} to={item.href} className="group">
-                    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 motion-safe:hover:scale-[1.02] border-border/50">
-                      <div className="aspect-video bg-gradient-to-br from-primary/10 to-secondary/10 relative">
-                        <img 
-                          src={item.image} 
-                          alt={item.title}
-                          className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
-                          onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
-                        />
-                        <div className="absolute top-3 left-3">
-                          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full shadow-sm">
-                            {item.badge}
-                          </span>
-                        </div>
-                      </div>
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground">{item.description}</p>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Community Section */}
-          <div className="mb-16">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-              <h2 className="text-xl font-semibold text-foreground">{omniVoice.sectionIntros.community}</h2>
-              <div className="flex items-center gap-4 w-full sm:w-auto">
-                <div className="flex gap-2 text-sm overflow-x-auto pb-2 sm:pb-0">
-                  {['Popular', 'Discover', 'Wellness', 'Personal'].map((filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setActiveFilter(filter)}
-                      className={`px-3 py-1 rounded-full transition-all duration-200 whitespace-nowrap ${
-                        activeFilter === filter 
-                          ? 'bg-primary text-primary-foreground' 
-                          : 'hover:bg-muted text-foreground'
-                      }`}
-                    >
-                      {filter}
-                    </button>
-                  ))}
-                </div>
-                <Link to="/blog" className="shrink-0">
-                  <Button variant="ghost" size="sm">{omniVoice.ctas.explore}</Button>
-                </Link>
-              </div>
+          {/* Featured Experiences — Editorial grid */}
+          <div id="curated-services" className="mb-20 sm:mb-28">
+            <div className="text-center mb-10 sm:mb-14">
+              <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3">Curated for you</p>
+              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl text-foreground mb-4">
+                Experiences That Matter
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto text-base sm:text-lg leading-relaxed">
+                Indigenous heritage walks, equine-assisted wellness, and transformative corporate retreats — each journey creates lasting impact.
+              </p>
             </div>
 
-            {/* Masonry grid layout - alternating portrait and landscape */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {communityItems
-                .filter(item => item.tags?.includes(activeFilter))
-                .slice(0, showMoreCommunity ? 99 : 6)
-                .map((item, index) => (
-                  <div key={index}>
-                    <CommunityCard 
-                      item={item}
-                      orientation="landscape"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+              {workspaceItems.map((item, index) => (
+                <Link key={index} to={item.href} className="group">
+                  <div className="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                      onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
+                      <span className="inline-block text-xs font-medium tracking-wider uppercase text-white/70 mb-2">{item.badge}</span>
+                      <h3 className="font-heading text-xl sm:text-2xl text-white mb-1">{item.title}</h3>
+                      <p className="text-sm text-white/70 max-w-md">{item.description}</p>
+                    </div>
                   </div>
-                ))}
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              <Link to="/tours-retreats">
+                <Button variant="outline" className="rounded-full px-8 py-5 text-sm font-medium border-border/60 hover:bg-muted/50">
+                  View All Experiences
+                </Button>
+              </Link>
             </div>
           </div>
 
-          {communityItems.filter(item => item.tags?.includes(activeFilter)).length > 6 && (
-              <div className="text-center mt-8">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowMoreCommunity(!showMoreCommunity)}
-                  className="px-6 border-border"
-                >
-                  {showMoreCommunity ? 'Show Less' : `Show More (${communityItems.filter(item => item.tags?.includes(activeFilter)).length - 6} more)`}
-                </Button>
+          {/* Impact strip */}
+          <div className="mb-20 sm:mb-28 py-12 sm:py-16 border-y border-border/40">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <div>
+                <div className="font-heading text-3xl sm:text-4xl text-foreground mb-1">12,000+</div>
+                <p className="text-sm text-muted-foreground">Years of heritage</p>
               </div>
-            )}
+              <div>
+                <div className="font-heading text-3xl sm:text-4xl text-foreground mb-1">3</div>
+                <p className="text-sm text-muted-foreground">Indigenous walks</p>
+              </div>
+              <div>
+                <div className="font-heading text-3xl sm:text-4xl text-foreground mb-1">12</div>
+                <p className="text-sm text-muted-foreground">Max group size</p>
+              </div>
+              <div>
+                <div className="font-heading text-3xl sm:text-4xl text-foreground mb-1">100%</div>
+                <p className="text-sm text-muted-foreground">Community impact</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Community — Curated editorial gallery (3 items max) */}
+          <div className="mb-16">
+            <div className="text-center mb-10">
+              <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3">On the ground</p>
+              <h2 className="font-heading text-3xl sm:text-4xl text-foreground">
+                Stories From the Land
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+              {communityItems
+                .filter(item => item.tags?.includes('Popular'))
+                .slice(0, 3)
+                .map((item, index) => (
+                  <Link key={index} to={item.href} className="group">
+                    <div className="relative overflow-hidden rounded-2xl aspect-[3/4] bg-gray-100">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-5">
+                        <span className="inline-block text-xs font-medium tracking-wider uppercase text-white/60 mb-2">{item.badge}</span>
+                        <h3 className="font-heading text-lg text-white">{item.title}</h3>
+                        <p className="text-sm text-white/60 mt-1">{item.description}</p>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+            </div>
+          </div>
         </div>
       </div>
 

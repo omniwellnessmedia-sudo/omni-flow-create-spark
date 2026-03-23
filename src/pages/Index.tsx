@@ -35,19 +35,11 @@ const Index = () => {
       {/* Main Content Area - WCAG Landmark */}
       <main id="main-content" role="main" aria-label="Main content">
         <HeroSection />
-        <WhatIsOmniSection />
-        <MissionSection />
-        
         <ServicesSection />
         <ToursRetreatsPreview />
-        {/* <AIToolsPreview /> Temporarily hidden */}
-        <FeaturedProjectsSection />
-        {/* TeamPreviewSection hidden for ROAM launch */}
         <TestimonialsSection />
-        <VideoShowcaseSection />
-        <WellnessHumansSection />
+        <FeaturedProjectsSection />
         <PartnersSection />
-        <FacebookFeedSection />
       </main>
       
       {/* Footer - WCAG Landmark */}

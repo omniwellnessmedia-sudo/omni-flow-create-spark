@@ -69,6 +69,8 @@ const MuizenbergCaveTours = React.lazy(() => import('@/pages/tours/MuizenbergCav
 const OmniWellnessRetreat = React.lazy(() => import('@/pages/tours/OmniWellnessRetreat'));
 const GreatMotherCaveTour = React.lazy(() => import('@/pages/tours/GreatMotherCaveTour'));
 const KalkBayTour = React.lazy(() => import('@/pages/tours/KalkBayTour'));
+const CartHorseUrbanWellness = React.lazy(() => import('@/pages/experiences/CartHorseUrbanWellness'));
+const CorporateWellnessRetreat = React.lazy(() => import('@/pages/experiences/CorporateWellnessRetreat'));
 const ViatorWellnessExperiences = React.lazy(() => import('@/pages/ViatorWellnessExperiences'));
 const ESIMStore = React.lazy(() => import('@/pages/ESIMStore'));
 const TravelWellConnectedESIM = React.lazy(() => import('@/pages/TravelWellConnectedESIM'));
@@ -226,12 +228,15 @@ function App() {
             <Route path="/tours/muizenberg-cave-tours" element={<MuizenbergCaveTours />} />
             <Route path="/tours/great-mother-cave-tour" element={<GreatMotherCaveTour />} />
             <Route path="/tours/kalk-bay-tour" element={<KalkBayTour />} />
+            <Route path="/experiences/cart-horse-urban-wellness" element={<CartHorseUrbanWellness />} />
+            <Route path="/experiences/corporate-wellness-retreat" element={<CorporateWellnessRetreat />} />
             <Route path="/experience/:id" element={<TourDetail />} />
             <Route path="/programs/uwc-human-animal" element={<UWCHumanAnimalProgram />} />
             <Route path="/programs/uwc-human-animal/university-partners" element={<UWCUniversityPartners />} />
             <Route path="/programs/uwc-human-animal/sponsors" element={<UWCSponsors />} />
             <Route path="/programs/uwc-human-animal/recruitment" element={<UWCRecruitment />} />
             <Route path="/csr-impact" element={<CSRImpact />} />
+            <Route path="/drphilafel" element={<Navigate to="/csr-impact" replace />} />
             <Route path="/viator-wellness-experiences" element={<ViatorWellnessExperiences />} />
             <Route path="/esim-store" element={<ESIMStore />} />
             <Route path="/travel-well-connected" element={<TravelWellConnectedESIM />} />

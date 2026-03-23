@@ -1,5 +1,7 @@
 import { useTourSEO } from '@/lib/seo';
 import TourBookingSidebar from '@/components/tours/TourBookingSidebar';
+import StickyBookingBar from '@/components/tours/StickyBookingBar';
+import TourImageGallery from '@/components/tours/TourImageGallery';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -64,8 +66,8 @@ export default function KalkBayTour() {
       {/* Hero Section */}
       <section className="relative h-[75vh] overflow-hidden">
         <img 
-          src={`${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`}
-          alt="Kalk Bay coastal views"
+          src={`${STORAGE_BASE}/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg`}
+          alt="Kalk Bay's Rich Tapestry — Chief Kingsley sharing indigenous wisdom"
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
         />
@@ -76,7 +78,7 @@ export default function KalkBayTour() {
               <Waves className="w-3 h-3 mr-1" />
               Indigenous Heritage Walk • 5-6 Hours
             </Badge>
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight break-words">
+            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl mb-4 leading-tight break-words">
               Kalk Bay Rich Tapestry Walk
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl mb-2 text-white/95 italic">
@@ -131,7 +133,7 @@ export default function KalkBayTour() {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">About This Experience</h2>
+            <h2 className="font-heading text-3xl mb-6">About This Experience</h2>
             <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
               <p>
                 Kalk Bay is one of Cape Town's most beloved coastal villages — a place where fishing 
@@ -154,7 +156,7 @@ export default function KalkBayTour() {
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">What's Included</h2>
+            <h2 className="font-heading text-3xl mb-8 text-center">What's Included</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {inclusions.map((item, i) => (
                 <Card key={i} className="text-center hover:shadow-lg transition-shadow">
@@ -171,6 +173,17 @@ export default function KalkBayTour() {
                 Optional: Traditional lunch add-on — R200 per person
               </Badge>
             </div>
+
+            {/* What's Not Included */}
+            <div className="mt-10 bg-muted/50 rounded-lg p-6">
+              <h3 className="font-semibold mb-3">Please Note — Not Included</h3>
+              <ul className="grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Transport to and from venues</li>
+                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Lunch (optional add-on available — see above)</li>
+                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Personal items and hiking gear</li>
+                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Additional drinks</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -179,7 +192,7 @@ export default function KalkBayTour() {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">Your Journey</h2>
+            <h2 className="font-heading text-3xl mb-8 text-center">Your Journey</h2>
             <div className="space-y-6">
               <Card className="border-l-4 border-l-blue-500">
                 <CardHeader>
@@ -245,11 +258,24 @@ export default function KalkBayTour() {
         </div>
       </section>
 
+      {/* Image Gallery */}
+      <TourImageGallery
+        title="Kalk Bay's Rich Tapestry"
+        images={[
+          { src: `${STORAGE_BASE}/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg`, alt: 'Chief Kingsley explaining indigenous heritage', caption: 'Chief Kingsley sharing the deep history of Kalk Bay\'s coastal heritage' },
+          { src: `${STORAGE_BASE}/General%20Images/community%20outing%202.jpg`, alt: 'Community walking along the coast', caption: 'Traversing ancient Khoi trading routes along False Bay' },
+          { src: `${STORAGE_BASE}/General%20Images/chief%20kingsley%20talking%20to%20group.jpg`, alt: 'Chief Kingsley with group', caption: 'Learning about traditional herb knowledge and plant medicine' },
+          { src: `${STORAGE_BASE}/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg`, alt: 'Chief Kingsley portrait', caption: 'Chief Kingsley — custodian of Khoi ancestral wisdom' },
+          { src: `${STORAGE_BASE}/General%20Images/happy%20client%20on%20tour.jpg`, alt: 'Tour participant', caption: 'Breathtaking panoramic views of False Bay from the trail' },
+          { src: `${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`, alt: 'Group at Kalk Bay', caption: 'Archaeological evidence of ancient settlements along the coast' },
+        ]}
+      />
+
       {/* What to Bring */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6 text-center">What to Bring</h2>
+            <h2 className="font-heading text-3xl mb-6 text-center">What to Bring</h2>
             <div className="grid md:grid-cols-2 gap-4">
               {[
                 'Comfortable walking shoes with good grip',
@@ -273,7 +299,7 @@ export default function KalkBayTour() {
       <section className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">Tour Pricing</h2>
+            <h2 className="font-heading text-3xl mb-8 text-center">Tour Pricing</h2>
             <div className="grid sm:grid-cols-3 gap-6">
               {pricingTiers.map((tier, i) => (
                 <Card key={i} className={`text-center hover:shadow-xl transition-shadow ${tier.popular ? 'border-primary ring-2 ring-primary/20' : ''}`}>
@@ -331,6 +357,7 @@ export default function KalkBayTour() {
       </section>
 
       <Footer />
+      <StickyBookingBar price="R1,850" tourName="Kalk Bay Rich Tapestry Walk" />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { products, curatorProfiles, UseCase, Curator, SkillLevel } from "@/data/consciousMediaProducts";
 
 const ConsciousMediaInfrastructurePage = () => {
+  const navigate = useNavigate();
   const { trackAffiliateClick, trackProductView } = useConsciousAffiliate();
   const [searchParams, setSearchParams] = useSearchParams();
   
@@ -211,7 +212,7 @@ const ConsciousMediaInfrastructurePage = () => {
               <Button 
                 variant="link" 
                 className="inline px-1" 
-                onClick={() => window.location.href = '/contact'}
+                onClick={() => navigate('/contact')}
               >
                 Talk to us—we're happy to help you think through it.
               </Button>
@@ -293,7 +294,7 @@ const ConsciousMediaInfrastructurePage = () => {
             <Button
               onClick={() => {
                 handleConsultationClick();
-                window.location.href = '/contact';
+                navigate('/contact');
               }}
               size="lg"
               className="mt-4"
@@ -402,7 +403,7 @@ const ConsciousMediaInfrastructurePage = () => {
               </a>
             </Button>
             <Button
-              onClick={() => window.location.href = '/contact'}
+              onClick={() => navigate('/contact')}
               variant="outline"
               size="lg"
               className="text-lg px-8"

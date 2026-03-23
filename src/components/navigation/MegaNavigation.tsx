@@ -30,21 +30,25 @@ interface MegaNavSection {
 export const MegaNavigation = () => {
   const travelSections: MegaNavSection[] = [
     {
-      title: 'Tours & Retreats',
+      title: 'Impact Travel',
       items: [
-        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Transformative 4-day retreat', icon: '🧘‍♀️', featured: true },
-        { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: 'Sacred indigenous journey', icon: '⛰️' },
-        { title: 'Muizenberg Cave Tour', href: '/tours/muizenberg-cave-tours', description: 'Wellness cave journey', icon: '🏔️' },
-        { title: 'Kalk Bay Tour', href: '/tours/kalk-bay-tour', description: 'Coastal cultural experience', icon: '🌊' },
+        { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: '12,000 years of sacred heritage — Fish Hoek', icon: '⛰️', featured: true },
+        { title: "Muizenberg's Living Heritage", href: '/tours/muizenberg-cave-tours', description: 'Ancient history by the sea', icon: '🏔️' },
+        { title: "Kalk Bay's Rich Tapestry", href: '/tours/kalk-bay-tour', description: 'Ancient whispers, healing herbs', icon: '🌊' },
+        { title: 'Hoofbeats & Healing', href: '/experiences/cart-horse-urban-wellness', description: 'Equine-assisted wellness', icon: '🐴' },
+        { title: 'Corporate Wellness Retreats', href: '/experiences/corporate-wellness-retreat', description: 'Bespoke team retreats', icon: '🏢' },
+        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Weekend retreat — Greyton', icon: '🧘‍♀️' },
+        { title: 'All Tours & Experiences', href: '/tours-retreats', description: 'Browse everything', icon: '🗺️' },
       ]
     }
   ];
 
   const storeSections: MegaNavSection[] = [
     {
-      title: 'Shop',
+      title: 'Travel Store',
       items: [
-        { title: 'ROAM eSIM Store', href: '/roambuddy-store', description: 'Global eSIM solutions', icon: '🌐', featured: true },
+        { title: 'ROAM eSIM Store', href: '/roambuddy-store', description: 'Stay connected — global eSIM plans', icon: '🌐', featured: true },
+        { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'Curated wellness experiences & Viator tours', icon: '✈️' },
       ]
     }
   ];

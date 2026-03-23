@@ -1,5 +1,7 @@
 import { useTourSEO } from '@/lib/seo';
 import TourBookingSidebar from '@/components/tours/TourBookingSidebar';
+import StickyBookingBar from '@/components/tours/StickyBookingBar';
+import TourImageGallery from '@/components/tours/TourImageGallery';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -64,8 +66,8 @@ export default function MuizenbergCaveTours() {
       {/* Hero Section */}
       <section className="relative h-[75vh] overflow-hidden">
         <img 
-          src={`${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`}
-          alt="Muizenberg Living Heritage Walk panoramic view"
+          src={`${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view%202.jpg`}
+          alt="Muizenberg Living Heritage Walk — panoramic False Bay coastline"
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
           onError={(e) => {
@@ -79,7 +81,7 @@ export default function MuizenbergCaveTours() {
               <Mountain className="w-3 h-3 mr-1" />
               Indigenous Heritage Walk • 5-6 Hours
             </Badge>
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight break-words">
+            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl mb-4 leading-tight break-words">
               Muizenberg Living Heritage Walk
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl mb-2 text-white/95 italic">
@@ -136,10 +138,11 @@ export default function MuizenbergCaveTours() {
           <div className="max-w-4xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <img 
+                <img
                   src={`${STORAGE_BASE}/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg`}
                   alt="Chief Kingsley"
                   className="rounded-2xl shadow-2xl"
+                  loading="lazy"
                 />
               </div>
               <div>
@@ -167,7 +170,7 @@ export default function MuizenbergCaveTours() {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">What's Included</h2>
+            <h2 className="font-heading text-3xl mb-8 text-center">What's Included</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {inclusions.map((item, i) => (
                 <Card key={i} className="text-center hover:shadow-lg transition-shadow">
@@ -184,6 +187,17 @@ export default function MuizenbergCaveTours() {
                 Optional: Traditional lunch add-on — R200 per person
               </Badge>
             </div>
+
+            {/* What's Not Included */}
+            <div className="mt-10 bg-muted/50 rounded-lg p-6">
+              <h3 className="font-semibold mb-3">Please Note — Not Included</h3>
+              <ul className="grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Transport to and from venues</li>
+                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Lunch (optional add-on available — see above)</li>
+                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Personal items and hiking gear</li>
+                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Additional drinks</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -192,7 +206,7 @@ export default function MuizenbergCaveTours() {
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">Your Journey Timeline</h2>
+            <h2 className="font-heading text-3xl mb-8 text-center">Your Journey Timeline</h2>
             
             <div className="space-y-6">
               <Card className="border-l-4 border-l-blue-500">
@@ -259,11 +273,24 @@ export default function MuizenbergCaveTours() {
         </div>
       </section>
 
+      {/* Image Gallery */}
+      <TourImageGallery
+        title="Muizenberg's Living Heritage"
+        images={[
+          { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view%202.jpg`, alt: 'Muizenberg cave panoramic view', caption: 'Panoramic views of False Bay from the ancient cave vantage points' },
+          { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view.jpg`, alt: 'Cave formations at Muizenberg', caption: 'Ancient cave formations along the Muizenberg trail' },
+          { src: `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`, alt: 'Group walking the coastal trail', caption: 'Ascending Boyes Drive — ancient foraging and trade paths' },
+          { src: `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`, alt: 'Chief Kingsley on the trail', caption: 'Chief Kingsley sharing Khoi-San coastal heritage' },
+          { src: `${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`, alt: 'Community on the walk', caption: 'Small groups foster deeper cultural connection' },
+          { src: `${STORAGE_BASE}/General%20Images/tour%20picture%20couple%20with%20chief%20kingsley.jpg`, alt: 'Guests with Chief Kingsley', caption: 'Meaningful encounters along the ancient coastline' },
+        ]}
+      />
+
       {/* What to Bring */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">What to Bring</h2>
+            <h2 className="font-heading text-3xl mb-8 text-center">What to Bring</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader><CardTitle className="text-lg">Essential Items</CardTitle></CardHeader>
@@ -329,7 +356,7 @@ export default function MuizenbergCaveTours() {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">Tour Pricing</h2>
+            <h2 className="font-heading text-3xl mb-8 text-center">Tour Pricing</h2>
             <div className="grid sm:grid-cols-3 gap-6">
               {pricingTiers.map((tier, i) => (
                 <Card key={i} className={`text-center hover:shadow-xl transition-shadow ${tier.popular ? 'border-primary ring-2 ring-primary/20' : ''}`}>
@@ -397,6 +424,7 @@ export default function MuizenbergCaveTours() {
       </section>
 
       <Footer />
+      <StickyBookingBar price="R1,850" tourName="Muizenberg Living Heritage Walk" />
     </>
   );
 }

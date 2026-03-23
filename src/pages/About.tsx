@@ -10,6 +10,7 @@ import { IMAGES } from "@/lib/images";
 import { FloatingDecorations } from "@/components/ui/gaia-elements";
 import { CuratorTip } from "@/components/curator/CuratorTip";
 import { omniVoice } from "@/data/omniVoiceGuide";
+import EnquiryCTA from "@/components/sections/EnquiryCTA";
 
 // Supabase storage URLs for team photos
 const warrenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/warren.png";
@@ -192,73 +193,41 @@ const About = () => {
           </div>
         </section>
 
-        {/* Meet Our Team - New Large Image-Focused Layout */}
-        <section className="section-spacing bg-gray-50 relative overflow-hidden">
-          <FloatingDecorations variant="section" />
+        {/* Meet Our Team */}
+        <section className="section-spacing bg-background relative overflow-hidden">
           <div className="container-width relative z-10">
-            {/* Team Curator Intro */}
-            <div className="mb-8">
-              <CuratorTip 
-                curator="zenith" 
-                message={omniVoice.sectionIntros.team}
-                variant="inline"
-              />
-            </div>
-
-            <div className="text-center mb-16">
-              <h2 className="heading-secondary text-gradient-hero no-faded-text">
-                Meet Our <span className="text-rainbow-enhanced">Team</span>
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                {omniVoice.reassurance.goodHands}
+            <div className="text-center mb-14">
+              <p className="text-xs font-medium uppercase tracking-widest text-primary mb-3">The People Behind Omni</p>
+              <h2 className="font-heading text-3xl md:text-4xl mb-4">Meet the Team</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                A multidisciplinary team of tour professionals, Indigenous cultural leaders, systems builders, and governance advisors.
               </p>
             </div>
 
-            {/* Premium Grid Layout with Portrait Images */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
               {team.map((member, index) => (
-                <div 
+                <div
                   key={member.name}
-                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 max-w-sm w-full border border-gray-100"
+                  className="group text-center animate-fade-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  {/* Image or Gradient Initials Avatar */}
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    {/* Always show gradient initials as base layer */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex items-center justify-center z-0">
-                      <span className="text-white text-6xl font-bold tracking-wider">
-                        {member.initials}
-                      </span>
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-muted">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                      <span className="text-primary/40 text-5xl font-heading">{member.initials}</span>
                     </div>
-                    
-                    {/* Image overlay - if exists and loads */}
                     {member.image && (
-                      <img 
+                      <img
                         src={member.image}
                         alt={member.name}
-                        className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 z-10"
+                        className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                         loading="lazy"
-                        onError={(e) => {
-                          // Hide image to show initials underneath
-                          e.currentTarget.style.display = 'none';
-                        }}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     )}
-                    
-                    {/* Gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
                   </div>
-                  
-                  {/* Content */}
-                  <div className="p-6 text-center bg-gradient-to-b from-white to-gray-50">
-                    <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                    <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-pink-600 mb-3">
-                      {member.role}
-                    </p>
-                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
-                      {member.description}
-                    </p>
-                  </div>
+                  <h3 className="font-heading text-lg mb-0.5">{member.name}</h3>
+                  <p className="text-xs text-primary font-medium mb-2">{member.role}</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">{member.description}</p>
                 </div>
               ))}
             </div>
@@ -266,31 +235,26 @@ const About = () => {
         </section>
 
         {/* Values */}
-        <section className="section-spacing bg-white relative overflow-hidden">
-          <FloatingDecorations variant="subtle" />
-          <div className="container-width relative z-10">
-            <div className="text-center mb-16">
-              <h2 className="heading-secondary text-gradient-hero no-faded-text">
-                Our <span className="text-rainbow-enhanced">Values</span>
-              </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                These aren't just words on a page — they guide everything we do.
-              </p>
+        <section className="py-20 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-14">
+              <p className="text-xs font-medium uppercase tracking-widest text-primary mb-3">What Drives Us</p>
+              <h2 className="font-heading text-3xl md:text-4xl mb-4">Our Values</h2>
             </div>
-            <div className="grid-responsive-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
               {[
-                { title: "Inspiration", desc: "We create content that uplifts and motivates communities to positive action." },
-                { title: "Education", desc: "We share knowledge that empowers individuals to make informed decisions." },
-                { title: "Empowerment", desc: "We believe in giving people the tools and confidence to create change." },
-                { title: "Wellness", desc: "We promote holistic health - physical, mental, emotional, and spiritual." }
+                { title: "Inspiration", desc: "Content that uplifts and motivates communities to positive action." },
+                { title: "Education", desc: "Knowledge that empowers individuals to make informed decisions." },
+                { title: "Empowerment", desc: "Giving people the tools and confidence to create lasting change." },
+                { title: "Wellness", desc: "Holistic health — physical, mental, emotional, and spiritual." }
               ].map((value, index) => (
-                <div 
+                <div
                   key={value.title}
-                  className="text-center p-6 bg-rainbow-subtle rounded-lg animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.2}s` }}
+                  className="p-6 rounded-2xl border bg-card animate-fade-in text-center"
+                  style={{ animationDelay: `${index * 0.08}s` }}
                 >
-                  <h3 className="font-heading font-semibold text-xl mb-4 text-gray-800">{value.title}</h3>
-                  <p className="text-gray-600">{value.desc}</p>
+                  <h3 className="font-heading text-lg mb-2">{value.title}</h3>
+                  <p className="text-sm text-muted-foreground">{value.desc}</p>
                 </div>
               ))}
             </div>
@@ -390,33 +354,10 @@ const About = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="section-spacing bg-white relative overflow-hidden">
-          <FloatingDecorations variant="hero" />
-          <div className="container-width relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <CuratorTip 
-                curator="chad" 
-                message={omniVoice.curatorVoices.chad.intro}
-                variant="card"
-                className="mb-8"
-              />
-              <h2 className="heading-secondary text-gradient-hero no-faded-text mb-6">
-                Ready to <span className="text-rainbow-enhanced">Connect</span>?
-              </h2>
-              <p className="text-lg text-gray-600 mb-8">
-                {omniVoice.reassurance.everyStep}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
-                  <Link to="/contact">{omniVoice.ctas.contact}</Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="font-semibold px-8 py-3 text-lg rounded-full">
-                  <Link to="/services">{omniVoice.ctas.seeMore}</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <EnquiryCTA
+          headline="Ready to Connect?"
+          description="Whether you're looking for a partner, planning a project, or want to explore what we do — we'd love to hear from you."
+        />
       </main>
       <Footer />
     </div>

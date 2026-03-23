@@ -454,9 +454,9 @@ const TravelWellConnectedStore = () => {
             className="w-full"
             onClick={() => handleViatorClick(tour)}
           >
-            <a 
-              href={`https://www.viator.com/partner-shop/omniwellnessmedia/?search=${encodeURIComponent(tour.title || '')}&medium=link&medium_version=shop&campaign=omni-wellness`} 
-              target="_blank" 
+            <a
+              href={tour.booking_url || `https://www.viator.com/partner-shop/omniwellnessmedia/?search=${encodeURIComponent(tour.title || '')}&medium=link&medium_version=shop&campaign=omni-wellness`}
+              target="_blank"
               rel="noopener noreferrer"
             >
               <Globe className="w-4 h-4 mr-2" />
@@ -544,7 +544,7 @@ const TravelWellConnectedStore = () => {
               <Globe className="w-4 h-4 mr-2" />
               Curated Wellness Experiences
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
               Travel Well Connected
             </h1>
             <p className="text-xl md:text-2xl mb-4 text-white/90 max-w-2xl leading-relaxed">
@@ -658,13 +658,13 @@ const TravelWellConnectedStore = () => {
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'local' | 'viator')} className="w-full">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12 h-12 sm:h-14">
-              <TabsTrigger value="local" className="text-xs sm:text-base">
+              <TabsTrigger value="local" className="text-sm sm:text-base">
                 <Mountain className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
-                Omni Local Tours
+                <span className="hidden sm:inline">Omni </span>Local Tours
               </TabsTrigger>
-              <TabsTrigger value="viator" className="text-xs sm:text-base">
+              <TabsTrigger value="viator" className="text-sm sm:text-base">
                 <Globe className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
-                Viator Experiences
+                <span className="hidden sm:inline">Viator </span>Experiences
               </TabsTrigger>
             </TabsList>
 

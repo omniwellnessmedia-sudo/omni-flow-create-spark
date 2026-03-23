@@ -50,7 +50,7 @@ const ToursRetreatsPreview = () => {
           <Badge variant="secondary" className="mb-4 px-4 py-1.5 text-sm">
             🧭 ROAM by Omni
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-4">
             Stay Connected on Your Wellness Journey
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
