@@ -16,6 +16,8 @@ import EnquiryCTA from "@/components/sections/EnquiryCTA";
 const warrenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/warren.png";
 
 const About = () => {
+  const STORAGE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
+
   const storyImages = [
     {
       src: IMAGES.wellness.retreat,
@@ -33,9 +35,9 @@ const About = () => {
       caption: "Creative Expression - Arts and culture in action"
     },
     {
-      src: IMAGES.wellness.team,
-      alt: "Team collaboration in nature",
-      caption: "Team Spirit - Our collaborative approach to wellness"
+      src: `${STORAGE}/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg`,
+      alt: "Chief Kingsley — Indigenous cultural guide and knowledge holder",
+      caption: "Indigenous Heritage - Chief Kingsley sharing ancestral wisdom"
     },
     {
       src: IMAGES.community.empowerment,
@@ -48,20 +50,15 @@ const About = () => {
       caption: "Community Building - Bringing diverse groups together"
     },
     {
-      src: IMAGES.tours.hiking,
-      alt: "Outdoor adventure and wellness",
-      caption: "Adventure Wellness - Exploring nature for holistic health"
+      src: `${STORAGE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`,
+      alt: "Indigenous walk group at cave viewpoint",
+      caption: "Impact Travel - Sacred journeys through Cape Town's heritage"
     },
     {
-      src: IMAGES.wellness.graduation,
-      alt: "Graduation and community achievement",
-      caption: "Achievement - Celebrating community milestones"
+      src: `${STORAGE}/General%20Images/wellness%20group%20tour.jpg`,
+      alt: "Wellness group on a guided tour",
+      caption: "Wellness Journeys - Community connection through travel"
     },
-    {
-      src: IMAGES.wellness.communityProject3,
-      alt: "Community garden and sustainable development",
-      caption: "Sustainable Development - Growing community resilience"
-    }
   ];
 
   const team = [
