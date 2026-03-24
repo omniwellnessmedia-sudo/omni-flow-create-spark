@@ -195,137 +195,96 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header with Logo - Mobile Optimized */}
-      <div className="border-b bg-white sticky top-0 z-50">
-        <div className="flex h-14 md:h-16 items-center justify-between px-3 md:px-6">
-          <div className="flex items-center gap-2 min-w-0">
+      {/* Header */}
+      <div className="border-b border-border/50 bg-background/95 backdrop-blur-sm sticky top-0 z-50">
+        <div className="flex h-14 items-center justify-between px-4 md:px-6 max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 min-w-0">
             <Link to="/" className="shrink-0">
-              <img 
-                src={IMAGES.logos.omniHorizontal} 
-                alt="Omni" 
-                className="h-8 md:h-10 w-auto object-contain"
+              <img
+                src={IMAGES.logos.omniHorizontal}
+                alt="Omni"
+                className="h-7 md:h-8 w-auto object-contain"
               />
             </Link>
-            <Badge variant="secondary" className="hidden sm:flex text-xs">Admin</Badge>
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-border">/</span>
+              <span className="text-sm font-medium">Admin</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1 md:gap-2 shrink-0">
-            <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 md:w-auto md:px-3">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Button variant="ghost" size="sm" asChild className="h-8 px-2.5">
               <Link to="/">
-                <Home className="h-4 w-4 md:mr-2" />
-                <span className="hidden md:inline">Home</span>
+                <Home className="h-3.5 w-3.5 md:mr-1.5" />
+                <span className="hidden md:inline text-xs">Site</span>
               </Link>
             </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 md:w-auto md:px-3">
-              <Settings className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Settings</span>
-            </Button>
-            <Button variant="outline" size="sm" onClick={handleLogout} className="h-8">
-              <LogOut className="h-4 w-4 md:mr-2" />
-              <span className="hidden sm:inline">Logout</span>
+            <Button variant="ghost" size="sm" onClick={handleLogout} className="h-8 px-2.5 text-muted-foreground">
+              <LogOut className="h-3.5 w-3.5 md:mr-1.5" />
+              <span className="hidden sm:inline text-xs">Logout</span>
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="p-3 md:p-6 max-w-7xl mx-auto">
-        {/* Quick Actions Row */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Button size="sm" onClick={() => navigate('/blog-editor')} className="h-8 text-xs">
-            <Plus className="h-3 w-3 mr-1" />
-            New Post
-          </Button>
-          <Button size="sm" variant="outline" onClick={() => navigate('/tours')} className="h-8 text-xs">
-            View Tours
-          </Button>
-          <Button size="sm" variant="outline" onClick={() => navigate('/wellness-exchange')} className="h-8 text-xs">
-            View Store
-          </Button>
+      <div className="p-4 md:p-6 max-w-7xl mx-auto">
+        {/* Page Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="font-heading text-2xl">Dashboard</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">Omni Wellness Media — Admin</p>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" onClick={() => navigate('/blog-editor')} className="h-8 text-xs rounded-full">
+              <Plus className="h-3 w-3 mr-1" />
+              New Post
+            </Button>
+          </div>
         </div>
 
-        {/* Stats Cards - Mobile Optimized Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4 mb-4 md:mb-6">
-          <Card className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-1">
-              <CardTitle className="text-[10px] md:text-xs font-medium truncate">Revenue</CardTitle>
-              <DollarSign className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-            </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-base md:text-xl font-bold truncate">R{dashboardData.stats.totalRevenue.toLocaleString()}</div>
-              <p className="text-[9px] md:text-xs text-muted-foreground">Total</p>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-1">
-              <CardTitle className="text-[10px] md:text-xs font-medium truncate">Products</CardTitle>
-              <Package className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-            </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-base md:text-xl font-bold">{dashboardData.stats.totalProducts}</div>
-              <p className="text-[9px] md:text-xs text-muted-foreground">{dashboardData.stats.affiliateProducts} affiliate</p>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-1">
-              <CardTitle className="text-[10px] md:text-xs font-medium truncate">Providers</CardTitle>
-              <Users className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-            </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-base md:text-xl font-bold">{dashboardData.stats.totalProviders}</div>
-              <p className="text-[9px] md:text-xs text-muted-foreground">{dashboardData.stats.activeProviders} verified</p>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-1">
-              <CardTitle className="text-[10px] md:text-xs font-medium truncate">Users</CardTitle>
-              <Users className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-            </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-base md:text-xl font-bold">{dashboardData.stats.totalUsers}</div>
-              <p className="text-[9px] md:text-xs text-muted-foreground">Registered</p>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-1">
-              <CardTitle className="text-[10px] md:text-xs font-medium truncate">Orders</CardTitle>
-              <ShoppingCart className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-            </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-base md:text-xl font-bold">{dashboardData.stats.totalOrders}</div>
-              <p className="text-[9px] md:text-xs text-muted-foreground">{dashboardData.stats.pendingOrders} pending</p>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-1">
-              <CardTitle className="text-[10px] md:text-xs font-medium truncate">Content</CardTitle>
-              <FileText className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground shrink-0" />
-            </CardHeader>
-            <CardContent className="p-3 pt-0">
-              <div className="text-base md:text-xl font-bold">{dashboardData.stats.totalBlogPosts}</div>
-              <p className="text-[9px] md:text-xs text-muted-foreground">{dashboardData.stats.publishedBlogPosts} published</p>
-            </CardContent>
-          </Card>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+          {[
+            { label: 'Revenue', value: `R${dashboardData.stats.totalRevenue.toLocaleString()}`, sub: 'Total', icon: DollarSign },
+            { label: 'Products', value: dashboardData.stats.totalProducts, sub: `${dashboardData.stats.affiliateProducts} affiliate`, icon: Package },
+            { label: 'Providers', value: dashboardData.stats.totalProviders, sub: `${dashboardData.stats.activeProviders} verified`, icon: Users },
+            { label: 'Users', value: dashboardData.stats.totalUsers, sub: 'Registered', icon: Users },
+            { label: 'Orders', value: dashboardData.stats.totalOrders, sub: `${dashboardData.stats.pendingOrders} pending`, icon: ShoppingCart },
+            { label: 'Content', value: dashboardData.stats.totalBlogPosts, sub: `${dashboardData.stats.publishedBlogPosts} published`, icon: FileText },
+          ].map((stat) => (
+            <Card key={stat.label} className="border-border/50">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[11px] text-muted-foreground font-medium">{stat.label}</span>
+                  <stat.icon className="h-3.5 w-3.5 text-muted-foreground/50" />
+                </div>
+                <div className="text-lg md:text-xl font-heading">{stat.value}</div>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{stat.sub}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Main Content Tabs - Mobile Scrollable */}
+        {/* Main Content Tabs */}
         <Tabs defaultValue="overview" className="space-y-4">
           <ScrollArea className="w-full">
-            <TabsList className="inline-flex w-max gap-1 p-1 h-9">
-              <TabsTrigger value="overview" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Overview</TabsTrigger>
-              <TabsTrigger value="content" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Content</TabsTrigger>
-              <TabsTrigger value="tasks" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Tasks</TabsTrigger>
-              <TabsTrigger value="products" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Products</TabsTrigger>
-              <TabsTrigger value="leads" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Leads</TabsTrigger>
-              <TabsTrigger value="team" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Team</TabsTrigger>
-              <TabsTrigger value="orders" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Orders</TabsTrigger>
-              <TabsTrigger value="bookings" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Bookings</TabsTrigger>
-              <TabsTrigger value="tours" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Viator Tours</TabsTrigger>
-              <TabsTrigger value="uwc" className="text-[10px] md:text-xs px-2 md:px-3 h-7">UWC Pipeline</TabsTrigger>
-              <TabsTrigger value="tools" className="text-[10px] md:text-xs px-2 md:px-3 h-7">Tools</TabsTrigger>
+            <TabsList className="inline-flex w-max gap-0.5 p-1 h-9 bg-muted/50">
+              {[
+                { value: 'overview', label: 'Overview' },
+                { value: 'content', label: 'Content' },
+                { value: 'tasks', label: 'Tasks' },
+                { value: 'products', label: 'Products' },
+                { value: 'leads', label: 'Leads' },
+                { value: 'team', label: 'Team' },
+                { value: 'orders', label: 'Orders' },
+                { value: 'bookings', label: 'Bookings' },
+                { value: 'tours', label: 'Viator' },
+                { value: 'uwc', label: 'UWC' },
+                { value: 'tools', label: 'Tools' },
+              ].map((tab) => (
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs px-3 h-7 rounded-md">
+                  {tab.label}
+                </TabsTrigger>
+              ))}
             </TabsList>
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
@@ -333,9 +292,9 @@ const AdminDashboard = () => {
           <TabsContent value="overview" className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Recent Activity */}
-              <Card>
+              <Card className="border-border/50">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base">Recent Activity</CardTitle>
+                  <CardTitle className="font-heading text-base">Recent Activity</CardTitle>
                   <CardDescription className="text-xs">Latest orders and bookings</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -362,9 +321,9 @@ const AdminDashboard = () => {
               </Card>
 
               {/* Platform Stats */}
-              <Card>
+              <Card className="border-border/50">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base">Platform Metrics</CardTitle>
+                  <CardTitle className="font-heading text-base">Platform Metrics</CardTitle>
                   <CardDescription className="text-xs">Key performance indicators</CardDescription>
                 </CardHeader>
                 <CardContent>
