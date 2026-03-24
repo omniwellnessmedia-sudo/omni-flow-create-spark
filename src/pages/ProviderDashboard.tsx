@@ -275,29 +275,29 @@ const ProviderDashboard = () => {
       <UnifiedNavigation />
       <main className="pt-0">
         {/* Header */}
-        <section className="py-8 bg-card border-b">
+        <section className="py-8 border-b border-border/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 text-center">
-                  Provider <span className="text-gray-900 font-semibold">Dashboard</span>
-                </h1>
-                <p className="text-muted-foreground">Welcome back, {providerProfile?.business_name || user?.email}</p>
+                <h1 className="font-heading text-2xl md:text-3xl">Provider Dashboard</h1>
+                <p className="text-sm text-muted-foreground mt-1">Welcome back, {providerProfile?.business_name || user?.email}</p>
               </div>
-              
-              <div className="flex gap-3">
-                <Button 
-                  className="bg-gradient-rainbow hover:opacity-90 text-white"
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  className="rounded-full"
                   onClick={() => navigate('/wellness-exchange/add-service')}
                 >
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-3.5 w-3.5 mr-1.5" />
                   New Service
                 </Button>
-                <Button 
+                <Button
                   variant="outline"
-                  onClick={() => toast.info("Settings panel coming soon! Configure your profile, pricing, and preferences.")}
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => toast.info("Settings panel coming soon!")}
                 >
-                  <Settings className="h-4 w-4 mr-2" />
+                  <Settings className="h-3.5 w-3.5 mr-1.5" />
                   Settings
                 </Button>
               </div>
@@ -305,80 +305,57 @@ const ProviderDashboard = () => {
           </div>
         </section>
 
-        {/* Quick Actions Banner */}
-        <section className="py-4 bg-gradient-to-r from-primary/10 to-secondary/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Bot className="h-6 w-6 text-primary mr-3" />
-                <div>
-                  <p className="font-medium">Welcome to your wellness provider dashboard</p>
-                  <p className="text-sm text-muted-foreground">Manage your services, track earnings, and grow your practice</p>
-                </div>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => navigate('/wellness-exchange/add-service')}
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                New Service
-              </Button>
-            </div>
-          </div>
-        </section>
-
         {/* Stats Overview */}
         <section className="py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">WellCoin Balance</CardTitle>
-                  <Coins className="h-4 w-4 text-omni-orange" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-omni-orange">{wellCoinBalance.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">≈ R{wellCoinBalance.toLocaleString()} value</p>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
+              <Card className="border-border/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] text-muted-foreground font-medium">WellCoin Balance</span>
+                    <Coins className="h-3.5 w-3.5 text-primary/50" />
+                  </div>
+                  <div className="text-xl font-heading text-primary">{wellCoinBalance.toLocaleString()}</div>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">≈ R{wellCoinBalance.toLocaleString()} value</p>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">ZAR Earnings</CardTitle>
-                  <PiggyBank className="h-4 w-4 text-green-600" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-600">R{zarEarnings.toLocaleString()}</div>
+              <Card className="border-border/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] text-muted-foreground font-medium">ZAR Earnings</span>
+                    <PiggyBank className="h-3.5 w-3.5 text-green-600/50" />
+                  </div>
+                  <div className="text-xl font-heading text-green-600">R{zarEarnings.toLocaleString()}</div>
                   <p className="text-xs text-muted-foreground">This month</p>
                 </CardContent>
               </Card>
 
-               <Card className="hover:shadow-lg transition-shadow">
-                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                   <CardTitle className="text-sm font-medium">Active Services</CardTitle>
-                   <Calendar className="h-4 w-4 text-primary" />
-                 </CardHeader>
-                 <CardContent>
-                   <div className="text-2xl font-bold text-primary">{activeListings}</div>
-                   <p className="text-xs text-muted-foreground">Live on marketplace</p>
-                 </CardContent>
-               </Card>
+              <Card className="border-border/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] text-muted-foreground font-medium">Active Services</span>
+                    <Calendar className="h-3.5 w-3.5 text-primary/50" />
+                  </div>
+                  <div className="text-xl font-heading text-primary">{activeListings}</div>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Live on marketplace</p>
+                </CardContent>
+              </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Rating</CardTitle>
-                  <Star className="h-4 w-4 text-yellow-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-yellow-600">{rating || 'New'}</div>
-                  <p className="text-xs text-muted-foreground">Average rating</p>
+              <Card className="border-border/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] text-muted-foreground font-medium">Rating</span>
+                    <Star className="h-3.5 w-3.5 text-amber-500/50" />
+                  </div>
+                  <div className="text-xl font-heading text-amber-600">{rating || 'New'}</div>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Average rating</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* Profile Completion */}
-            <Card className="mb-8 border-omni-orange/20">
+            <Card className="mb-8 border-primary/10">
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Award className="h-5 w-5 text-omni-orange mr-2" />
