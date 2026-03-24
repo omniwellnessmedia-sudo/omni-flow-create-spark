@@ -380,7 +380,7 @@ export default function CartHorseUrbanWellness() {
                   </div>
                 </div>
                 <div className="mt-4 text-center">
-                  <Link to="/drphilafel">
+                  <Link to="/csr-impact">
                     <Button variant="outline" size="sm">Learn About Our Impact Partners →</Button>
                   </Link>
                 </div>

@@ -362,7 +362,7 @@ export default function GreatMotherCaveTour() {
                   </div>
                 </div>
                 <div className="mt-4 text-center">
-                  <Link to="/drphilafel">
+                  <Link to="/csr-impact">
                     <Button variant="outline" size="sm">Learn About Our Foundation →</Button>
                   </Link>
                 </div>

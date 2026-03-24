@@ -467,7 +467,7 @@ export default function CorporateWellnessRetreat() {
                   </div>
                 </div>
                 <div className="mt-6 flex flex-wrap gap-3 justify-center sm:justify-start">
-                  <Link to="/drphilafel">
+                  <Link to="/csr-impact">
                     <Button variant="outline" size="sm">Dr. Phil-afel Foundation →</Button>
                   </Link>
                   <Link to="/csr-impact">
