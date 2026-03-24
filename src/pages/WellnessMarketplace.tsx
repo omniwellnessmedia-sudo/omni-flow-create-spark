@@ -287,7 +287,7 @@ const WellnessMarketplace = () => {
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h1 className="heading-secondary text-gradient-hero no-faded-text text-center">
-                  Wellness <span className="text-gradient-rainbow">Marketplace</span>
+                  Wellness <span className="text-primary">Marketplace</span>
                 </h1>
                 <p className="text-gray-600 mt-1">Discover and book wellness services</p>
               </div>
@@ -296,10 +296,10 @@ const WellnessMarketplace = () => {
               {user && (
                 <Card className="p-3 bg-gradient-to-r from-omni-orange/10 to-omni-yellow/10">
                   <div className="flex items-center">
-                    <Coins className="h-5 w-5 text-omni-orange mr-2" />
+                    <Coins className="h-5 w-5 text-primary mr-2" />
                     <div>
                       <p className="text-xs text-gray-600">Your Balance</p>
-                      <p className="font-bold text-omni-orange">{wellCoinBalance} WC</p>
+                      <p className="font-bold text-primary">{wellCoinBalance} WC</p>
                     </div>
                   </div>
                 </Card>
@@ -341,7 +341,7 @@ const WellnessMarketplace = () => {
               <div className="flex flex-col md:flex-row items-center justify-between">
                 <div className="text-center md:text-left mb-4 md:mb-0">
                   <h3 className="font-bold text-xl mb-2">
-                    🎯 Welcome to Our <span className="text-gradient-rainbow">Wellness Marketplace</span>
+                    🎯 Welcome to Our <span className="text-primary">Wellness Marketplace</span>
                   </h3>
                   <p className="text-gray-600 max-w-2xl">
                     Discover verified wellness practitioners and holistic services designed to support your journey to optimal health and consciousness.
@@ -349,7 +349,7 @@ const WellnessMarketplace = () => {
                 </div>
                 <Button 
                   size="lg" 
-                  className="bg-gradient-rainbow hover:opacity-90 text-white px-8 py-3 whitespace-nowrap"
+                  className="bg-primary hover:bg-primary/90 text-white px-8 py-3 whitespace-nowrap"
                   onClick={() => navigate('/wellness-exchange/provider-signup')}
                 >
                   Become a Partner
@@ -399,7 +399,7 @@ const WellnessMarketplace = () => {
             <div className="text-center py-16">
               <div className="max-w-md mx-auto">
                 <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-omni-blue/20 to-omni-purple/20 rounded-full flex items-center justify-center">
-                  <Plus className="h-12 w-12 text-omni-blue" />
+                  <Plus className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className="font-bold text-xl mb-4">Welcome to the Wellness Marketplace!</h3>
                 <p className="text-gray-600 mb-8">
@@ -408,7 +408,7 @@ const WellnessMarketplace = () => {
                 <div className="space-y-3">
                   <Button 
                     size="lg"
-                    className="bg-gradient-rainbow hover:opacity-90 text-white w-full"
+                    className="bg-primary hover:bg-primary/90 text-white w-full"
                     onClick={() => navigate('/wellness-exchange/provider-signup')}
                   >
                     Become a Wellness Partner
@@ -455,7 +455,7 @@ const WellnessMarketplace = () => {
                         )}
                       </div>
                       <CardTitle
-                        className="text-lg leading-tight cursor-pointer hover:text-omni-blue transition-colors"
+                        className="text-lg leading-tight cursor-pointer hover:text-primary transition-colors"
                         onClick={() => handleViewService(service.id)}
                       >
                         {service.title}
@@ -493,7 +493,7 @@ const WellnessMarketplace = () => {
                               </div>
                             )}
                             {service.price_wellcoins > 0 && (
-                              <div className="flex items-center text-omni-orange">
+                              <div className="flex items-center text-primary">
                                 <Coins className="h-4 w-4 mr-1 flex-shrink-0" />
                                 <span className="font-medium text-sm sm:text-base">{service.price_wellcoins} WC</span>
                               </div>
@@ -510,7 +510,7 @@ const WellnessMarketplace = () => {
                             </Button>
                             <Button 
                               size="sm"
-                              className="bg-gradient-rainbow hover:opacity-90 text-white"
+                              className="bg-primary hover:bg-primary/90 text-white"
                               onClick={() => handleBookService(
                                 service.id, 
                                 service.price_zar, 

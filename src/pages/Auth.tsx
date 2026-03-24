@@ -434,13 +434,13 @@ const Auth = () => {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
+        <p className="text-center text-sm text-muted-foreground mt-6">
           By creating an account, you agree to our{" "}
-          <a href="#" className="text-omni-blue hover:underline">
+          <a href="/terms-of-service" className="text-primary hover:underline">
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="#" className="text-omni-blue hover:underline">
+          <a href="/privacy-policy" className="text-primary hover:underline">
             Privacy Policy
           </a>
           .
