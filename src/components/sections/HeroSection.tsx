@@ -106,12 +106,12 @@ const HeroSection = () => {
       tags: ["Popular", "Discover", "Wellness"]
     },
     {
-      title: "Sacred Cave Explorations",
-      description: "Ancient rock art and spiritual ceremony sites",
-      href: "/tours/great-mother-cave-tour",
-      image: getStorageUrl("group tour amazing cave view muizenberg.jpg"),
+      title: "Hoofbeats & Healing",
+      description: "Equine-assisted wellness with rescued working horses",
+      href: "/experiences/cart-horse-urban-wellness",
+      image: getStorageUrl("community outing 2.jpg"),
       category: "tours",
-      author: "Heritage Walk",
+      author: "Impact Travel",
       badge: "Impact Travel",
       orientation: "landscape",
       tags: ["Wellness", "Discover", "Personal"]
@@ -120,7 +120,7 @@ const HeroSection = () => {
       title: "Muizenberg's Living Heritage",
       description: "Ancient Khoi-San coastal settlements and marine heritage by the sea",
       href: "/tours/muizenberg-cave-tours",
-      image: getStorageUrl("group tour amazing cave view muizenberg.jpg"),
+      image: getStorageUrl("muizenberg cave view 2.jpg"),
       category: "tours",
       author: "Coastal Journey",
       badge: "Impact Travel",

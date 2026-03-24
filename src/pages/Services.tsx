@@ -24,7 +24,7 @@ const Services = () => {
         "Impact Measurement"
       ],
       icon: "🚀",
-      link: "/services/business-consulting"
+      link: "/business-consulting"
     },
     {
       title: "Media & Content Creation",
@@ -38,21 +38,21 @@ const Services = () => {
         "Multimedia Campaigns"
       ],
       icon: "🎬",
-      link: "/services/media-production"
+      link: "/media-production"
     },
     {
       title: "Social Media Strategy",
       description: "Build authentic connections between brands and communities through meaningful engagement strategies.",
       features: [
         "Content Strategy & Planning",
-        "Community Management", 
+        "Community Management",
         "Platform Optimization",
         "Influencer Partnerships",
         "Analytics & Reporting",
         "Paid Social Campaigns"
       ],
       icon: "📱",
-      link: "/services/social-media-strategy"
+      link: "/social-media-strategy"
     },
     {
       title: "Web Development",
@@ -66,7 +66,7 @@ const Services = () => {
         "Analytics & Reporting"
       ],
       icon: "💻",
-      link: "/services/web-development"
+      link: "/web-development"
     },
     {
       title: "Videography Services",
@@ -80,7 +80,7 @@ const Services = () => {
         "Commercial Video Production"
       ],
       icon: "🎥",
-      link: "/services/videography"
+      link: "/media-production"
     },
     {
       title: "Documentary Production",
@@ -94,7 +94,7 @@ const Services = () => {
         "Impact Distribution Strategy"
       ],
       icon: "🎞️",
-      link: "/services/documentary-production"
+      link: "/media-production"
     },
     {
       title: "Custom Art & Illustration",
@@ -108,7 +108,7 @@ const Services = () => {
         "Concept Development"
       ],
       icon: "🎨",
-      link: "/services/custom-art"
+      link: "/contact"
     },
     {
       title: "Strategic Consultation",
@@ -122,7 +122,7 @@ const Services = () => {
         "Partnership Development"
       ],
       icon: "💡",
-      link: "/services/consultation"
+      link: "/contact"
     }
   ];
 

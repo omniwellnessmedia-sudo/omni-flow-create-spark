@@ -30,7 +30,7 @@ const services = [
     title: "Web Development",
     description: "Modern, responsive platforms that reflect your brand and convert.",
     icon: Globe,
-    image: `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`,
+    image: `${STORAGE_BASE}/General%20Images/Zenith_TNT_OMNI-9.jpg`,
     link: "/web-development",
   },
 ];
