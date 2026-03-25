@@ -13,7 +13,7 @@ export const CartItems = () => {
       <div className="flex flex-col items-center justify-center h-64 text-center">
         <p className="text-gray-500 mb-4">Your cart is empty</p>
         <Button asChild>
-          <Link to="/2bewell-shop">Continue Shopping</Link>
+          <Link to="/services">Continue Shopping</Link>
         </Button>
       </div>
     );
@@ -95,7 +95,7 @@ export const CartItems = () => {
         </div>
 
         <div className="space-y-2">
-          <Button asChild className="w-full bg-gradient-rainbow hover:opacity-90 text-white">
+          <Button asChild className="w-full bg-primary hover:bg-primary/90 text-white">
             <Link to="/checkout">Proceed to Checkout</Link>
           </Button>
           <Button 

@@ -22,8 +22,8 @@ const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
 const ProviderDashboard = React.lazy(() => import('@/pages/ProviderDashboard'));
 const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPortal'));
 const TransactionPage = React.lazy(() => import('@/pages/TransactionPage'));
-const TwoBeWellShop = React.lazy(() => import('@/pages/TwoBeWellShop'));
-const TwoBeWellProductDetail = React.lazy(() => import('@/pages/TwoBeWellProductDetail'));
+// 2BeWell routes redirect to services (brand retired)
+
 const WellnessDeals = React.lazy(() => import('@/pages/WellnessDeals'));
 const AuthPage = React.lazy(() => import('@/pages/Auth'));
 const TestPage = React.lazy(() => import('@/pages/TestPage'));
@@ -36,7 +36,7 @@ const TermsOfService = React.lazy(() => import('@/pages/TermsOfService'));
 const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
 const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
-const TwoBeWell = React.lazy(() => import('@/pages/TwoBeWell'));
+// TwoBeWell retired — redirects in routes below
 const TravelWellConnectedStore = React.lazy(() => import('@/pages/TravelWellConnectedStore'));
 const WellnessRoamingPackages = React.lazy(() => import('@/pages/WellnessRoamingPackages'));
 const DataProducts = React.lazy(() => import('@/pages/DataProducts'));
@@ -169,13 +169,14 @@ function App() {
                   <Route path="/add-want" element={<AddWant />} />
 
                   {/* E-commerce & Products */}
-                  <Route path="/two-be-well" element={<TwoBeWell />} />
-                  <Route path="/twobewellshop" element={<TwoBeWellShop />} />
-                  <Route path="/two-be-well-shop" element={<Navigate to="/twobewellshop" replace />} />
-                  <Route path="/2bewell" element={<TwoBeWell />} />
-                  <Route path="/2bewell-shop" element={<Navigate to="/twobewellshop" replace />} />
-                  <Route path="/2bewell/shop" element={<Navigate to="/twobewellshop" replace />} />
-                  <Route path="/2bewell/product/:productId" element={<TwoBeWellProductDetail />} />
+                  {/* 2BeWell brand retired — redirect all routes to services */}
+                  <Route path="/two-be-well" element={<Navigate to="/services" replace />} />
+                  <Route path="/twobewellshop" element={<Navigate to="/services" replace />} />
+                  <Route path="/two-be-well-shop" element={<Navigate to="/services" replace />} />
+                  <Route path="/2bewell" element={<Navigate to="/services" replace />} />
+                  <Route path="/2bewell-shop" element={<Navigate to="/services" replace />} />
+                  <Route path="/2bewell/shop" element={<Navigate to="/services" replace />} />
+                  <Route path="/2bewell/product/:productId" element={<Navigate to="/services" replace />} />
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
                   <Route path="/awin-affiliate-products" element={<AwinAffiliateProducts />} />
                   <Route path="/cj-products/:id" element={<CJProductDetail />} />

@@ -87,7 +87,7 @@ const Resources = () => {
       <Hero
         title={
           <>
-            <span className="text-gradient-rainbow">Resources</span> & Downloads
+            <span className="text-primary">Resources</span> & Downloads
           </>
         }
         description="Access our library of wellness guides, educational content, and community tools to support your journey toward conscious living and positive change."
@@ -114,7 +114,7 @@ const Resources = () => {
         <section id="resources" className="section-spacing bg-white">
           <div className="container-width">
             <div className="text-center mb-16">
-              <h2 className="text-gradient-rainbow text-4xl md:text-5xl font-bold mb-6">
+              <h2 className="text-primary text-4xl md:text-5xl font-bold mb-6">
                 Free Resources for Your Journey
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -128,10 +128,10 @@ const Resources = () => {
                 <Card key={category.category} className="group hover:shadow-lg transition-all duration-300">
                   <CardHeader>
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 bg-gradient-rainbow rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
                         <category.icon className="w-6 h-6 text-white" />
                       </div>
-                      <CardTitle className="text-gradient-rainbow">
+                      <CardTitle className="text-primary">
                         {category.category}
                       </CardTitle>
                     </div>
@@ -143,7 +143,7 @@ const Resources = () => {
                           <div className="flex-1">
                             <h4 className="font-semibold text-gray-800 mb-1">{item.title}</h4>
                             <p className="text-sm text-gray-600 mb-2">{item.description}</p>
-                            <span className="inline-block px-2 py-1 bg-gradient-rainbow text-white text-xs rounded-full">
+                            <span className="inline-block px-2 py-1 bg-primary text-white text-xs rounded-full">
                               {item.type}
                             </span>
                           </div>
@@ -165,7 +165,7 @@ const Resources = () => {
         <section className="section-spacing bg-gray-50">
           <div className="container-width">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-gradient-rainbow text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-primary text-3xl md:text-4xl font-bold mb-6">
                 Stay Updated
               </h2>
               <p className="text-lg text-gray-600 mb-8">
@@ -192,7 +192,7 @@ const Resources = () => {
         <section className="section-spacing bg-white">
           <div className="container-width">
             <div className="text-center mb-16">
-              <h2 className="text-gradient-rainbow text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-primary text-3xl md:text-4xl font-bold mb-6">
                 Join Our Impact Community
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
@@ -200,21 +200,21 @@ const Resources = () => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <Globe className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="font-heading font-semibold text-xl mb-3">Global Network</h3>
                   <p className="text-gray-600">Connect with changemakers worldwide</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="font-heading font-semibold text-xl mb-3">Community Support</h3>
                   <p className="text-gray-600">Share experiences and learn together</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <BookOpen className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="font-heading font-semibold text-xl mb-3">Continuous Learning</h3>

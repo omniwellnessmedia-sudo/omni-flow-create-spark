@@ -242,7 +242,7 @@ export const IMAGES = {
     twoBeWell: CORE.logos.twoBeWell, 
     apex: CORE.logos.apex, 
     mbs: CORE.logos.mbs,
-    drPhil: CORE.logos.drPhil1, 
+    drPhil: CORE.logos.drPhil2,
     amor: CORE.logos.amor, 
     bwc: CORE.logos.bwc,
     baboonConservation: CORE.logos.bwc, 

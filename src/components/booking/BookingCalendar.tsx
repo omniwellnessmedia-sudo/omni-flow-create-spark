@@ -104,7 +104,7 @@ export const BookingCalendar = ({
       <Card className="border-2 border-primary/20 shadow-lg bg-white">
         <CardHeader className="bg-gradient-to-r from-primary/5 to-secondary/5">
           <CardTitle className="text-xl font-bold text-gray-900">
-            Book Your <span className="text-gradient-rainbow">Session</span>
+            Book Your <span className="text-primary">Session</span>
           </CardTitle>
           <CardDescription className="text-lg text-gray-700">
             Select your preferred date and time for "{serviceTitle}"
@@ -150,7 +150,7 @@ export const BookingCalendar = ({
                   Please select a date first
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {getAvailableTimeSlots().map((slot) => (
                     <Button
                       key={slot.time}
@@ -210,7 +210,7 @@ export const BookingCalendar = ({
             <div className="pt-4 border-t">
               <Button 
                 onClick={handleConfirmBooking}
-                className="w-full bg-gradient-rainbow hover:opacity-90 text-white"
+                className="w-full bg-primary hover:bg-primary/90 text-white"
                 disabled={isConfirming}
               >
                 {isConfirming ? "Processing..." : "Confirm Booking"}

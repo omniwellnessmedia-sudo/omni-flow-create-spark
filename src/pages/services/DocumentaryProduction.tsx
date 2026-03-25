@@ -78,20 +78,20 @@ const DocumentaryProduction = () => {
       <main className="pt-16">
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-rainbow opacity-10"></div>
+          <div className="absolute inset-0 bg-primary opacity-10"></div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <Badge className="mb-4 bg-gradient-rainbow text-white">Award-Winning</Badge>
+                <Badge className="mb-4 bg-primary text-white">Award-Winning</Badge>
                 <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                  Documentary <span className="text-gradient-rainbow">Production</span>
+                  Documentary <span className="text-primary">Production</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-gray-300 mb-8 leading-relaxed">
                   Authentic storytelling through documentary films. Quality over speed - we invest in relationships, 
                   deep research, and ethical filmmaking practices to create impactful narratives.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+                  <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
                     <Link to="/contact">Discuss Your Story</Link>
                   </Button>
                   <Button variant="outline" size="lg" className="font-semibold px-8 py-3 text-lg rounded-full border-white text-white hover:bg-white hover:text-black">
@@ -135,7 +135,7 @@ const DocumentaryProduction = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Types of <span className="text-gradient-rainbow">Documentaries</span>
+                Types of <span className="text-primary">Documentaries</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 We specialize in various documentary formats, each tailored to tell your unique story with authenticity and impact.
@@ -185,7 +185,7 @@ const DocumentaryProduction = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Our <span className="text-gradient-rainbow">Process</span>
+                Our <span className="text-primary">Process</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Every documentary follows a meticulous process designed to honor your story and create maximum impact.
@@ -196,7 +196,7 @@ const DocumentaryProduction = () => {
               {processSteps.map((step, index) => (
                 <Card key={step.step} className="text-center hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
                   <CardHeader>
-                    <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                       <span className="text-white font-bold text-lg">{step.step}</span>
                     </div>
                     <step.icon className="w-8 h-8 text-omni-indigo mx-auto mb-2" />
@@ -221,7 +221,7 @@ const DocumentaryProduction = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
                 <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                  Ethical <span className="text-gradient-rainbow">Storytelling</span>
+                  Ethical <span className="text-primary">Storytelling</span>
                 </h2>
                 <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                   We believe in building genuine relationships with our subjects and communities. 
@@ -236,7 +236,7 @@ const DocumentaryProduction = () => {
                     "Environmental responsibility in production"
                   ].map((principle) => (
                     <div key={principle} className="flex items-center">
-                      <div className="w-2 h-2 bg-gradient-rainbow rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
                       <span className="text-gray-700">{principle}</span>
                     </div>
                   ))}
@@ -257,13 +257,13 @@ const DocumentaryProduction = () => {
         <section className="py-20 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Have a Story Worth <span className="text-gradient-rainbow">Telling</span>?
+              Have a Story Worth <span className="text-primary">Telling</span>?
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               Let's explore how documentary storytelling can amplify your message and create lasting impact in your community.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
                 <Link to="/contact">
                   Start the Conversation
                   <ArrowRight className="ml-2 w-5 h-5" />

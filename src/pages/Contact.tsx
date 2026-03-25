@@ -240,17 +240,17 @@ const Contact = () => {
                       Follow Our Journey
                     </h3>
                     <p className="text-gray-600 mb-4">Stay connected with our latest projects and insights</p>
-                    <div className="flex justify-center space-x-4">
-                      <Button variant="outline" size="sm" className="rounded-full" asChild>
+                    <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+                      <Button variant="outline" size="sm" className="rounded-full text-xs sm:text-sm" asChild>
                         <a href="https://www.facebook.com/omniwellnessmedia" target="_blank" rel="noopener noreferrer">📘 Facebook</a>
                       </Button>
-                      <Button variant="outline" size="sm" className="rounded-full" asChild>
+                      <Button variant="outline" size="sm" className="rounded-full text-xs sm:text-sm" asChild>
                         <a href="https://www.instagram.com/omniwellnessmedia/" target="_blank" rel="noopener noreferrer">📷 Instagram</a>
                       </Button>
-                      <Button variant="outline" size="sm" className="rounded-full" asChild>
+                      <Button variant="outline" size="sm" className="rounded-full text-xs sm:text-sm" asChild>
                         <a href="https://www.linkedin.com/company/omniwellnessmedia" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a>
                       </Button>
-                      <Button variant="outline" size="sm" className="rounded-full" asChild>
+                      <Button variant="outline" size="sm" className="rounded-full text-xs sm:text-sm" asChild>
                         <a href="https://www.youtube.com/@omniwellnessmedia" target="_blank" rel="noopener noreferrer">📺 YouTube</a>
                       </Button>
                     </div>

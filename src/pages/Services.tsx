@@ -177,7 +177,7 @@ const Services = () => {
 
             <div className="text-center mb-16">
               <h2 className="heading-secondary text-gradient-hero no-faded-text">
-                What We <span className="text-gradient-rainbow">Create</span>
+                What We <span className="text-primary">Create</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
                 {omniVoice.transitions.curated}
@@ -280,7 +280,7 @@ const Services = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Our <span className="text-gradient-rainbow">Process</span>
+                Our <span className="text-primary">Process</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 {omniVoice.reassurance.everyStep}
@@ -299,7 +299,7 @@ const Services = () => {
                   className="text-center animate-fade-in-up"
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4 motion-safe:animate-breathing-slow">
+                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 motion-safe:animate-breathing-slow">
                     <span className="text-white font-bold text-lg">{phase.step}</span>
                   </div>
                   <h3 className="font-heading font-semibold text-xl mb-2">{phase.title}</h3>
@@ -321,12 +321,12 @@ const Services = () => {
               className="mb-8"
             />
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Ready to Create <span className="text-gradient-rainbow">Positive Change</span>?
+              Ready to Create <span className="text-primary">Positive Change</span>?
             </h2>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               {omniVoice.reassurance.noPressure}
             </p>
-            <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
               <Link to="/contact">{omniVoice.ctas.start}</Link>
             </Button>
           </div>

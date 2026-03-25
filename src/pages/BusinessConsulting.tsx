@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
 import { useState } from "react";
 import { CheckCircle, TrendingUp, Users, Target, Calendar, Download, Calculator } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -100,7 +99,7 @@ const BusinessConsulting = () => {
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg" 
-                  className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
                   onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Calendar className="mr-2 w-5 h-5" />
@@ -166,7 +165,7 @@ const BusinessConsulting = () => {
                       rows={3}
                     />
                   </div>
-                  <Button type="submit" className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full">
+                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-full">
                     Get My Free Assessment
                   </Button>
                 </form>
@@ -181,7 +180,7 @@ const BusinessConsulting = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-              Calculate Your <span className="text-gradient-rainbow">ROI Potential</span>
+              Calculate Your <span className="text-primary">ROI Potential</span>
             </h2>
             <p className="text-lg text-gray-600">See how much our consulting could increase your revenue</p>
           </div>
@@ -230,7 +229,7 @@ const BusinessConsulting = () => {
                 </div>
               </div>
               
-              <Button onClick={calculateROI} className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 mb-6">
+              <Button onClick={calculateROI} className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 mb-6">
                 Calculate My ROI
               </Button>
               
@@ -259,7 +258,7 @@ const BusinessConsulting = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Complete <span className="text-gradient-rainbow">Business Transformation</span>
+              Complete <span className="text-primary">Business Transformation</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Our comprehensive approach covers every aspect of conscious business development
@@ -294,7 +293,7 @@ const BusinessConsulting = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Client <span className="text-gradient-rainbow">Success Stories</span>
+              Client <span className="text-primary">Success Stories</span>
             </h2>
           </div>
           
@@ -303,7 +302,7 @@ const BusinessConsulting = () => {
               <Card key={testimonial.name} className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300">
                 <CardContent className="p-8">
                   <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-gradient-rainbow rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold">
                       {testimonial.name[0]}
                     </div>
                     <div className="ml-4">
@@ -353,7 +352,7 @@ const BusinessConsulting = () => {
             />
             <Button 
               size="lg" 
-              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg mt-4"
+              className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg mt-4"
               asChild
             >
               <a href="mailto:omniwellnessmedia@gmail.com?subject=Business Strategy Session Request">
@@ -370,13 +369,6 @@ const BusinessConsulting = () => {
               />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* 2BeWell CTA */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <TwoBeWellCTA variant="compact" />
         </div>
       </section>
 

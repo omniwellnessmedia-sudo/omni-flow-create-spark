@@ -94,7 +94,7 @@ const Checkout = () => {
             <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
             <p className="text-gray-600 mb-8">Add some items to your cart before checking out.</p>
             <Button asChild>
-              <Link to="/2bewell-shop">Continue Shopping</Link>
+              <Link to="/services">Continue Shopping</Link>
             </Button>
           </div>
         </main>

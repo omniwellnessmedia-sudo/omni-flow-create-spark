@@ -95,7 +95,7 @@ const MediaProduction = () => {
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg" 
-                  className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
                   onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Play className="mr-2 w-5 h-5" />
@@ -173,7 +173,7 @@ const MediaProduction = () => {
                   <Button 
                     onClick={handleQuoteSubmit}
                     disabled={isSubmitting}
-                    className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full"
+                    className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-full"
                   >
                     {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Custom Quote'}
                   </Button>
@@ -189,7 +189,7 @@ const MediaProduction = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-              Project <span className="text-gradient-rainbow">Cost Calculator</span>
+              Project <span className="text-primary">Cost Calculator</span>
             </h2>
             <p className="text-lg text-gray-600">Get an instant estimate for your video production project</p>
           </div>
@@ -242,7 +242,7 @@ const MediaProduction = () => {
                 </div>
               </div>
               
-              <Button onClick={calculateEstimate} className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 mb-6">
+              <Button onClick={calculateEstimate} className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 mb-6">
                 Calculate Project Cost
               </Button>
               
@@ -271,7 +271,7 @@ const MediaProduction = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Complete <span className="text-gradient-rainbow">Production Services</span>
+              Complete <span className="text-primary">Production Services</span>
             </h2>
           </div>
           
@@ -303,7 +303,7 @@ const MediaProduction = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Featured <span className="text-gradient-rainbow">Work</span>
+              Featured <span className="text-primary">Work</span>
             </h2>
           </div>
           
@@ -326,7 +326,7 @@ const MediaProduction = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-xl">Indigenous Heritage Journey</h3>
-                  <span className="bg-gradient-rainbow text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">
                     Cultural
                   </span>
                 </div>
@@ -356,7 +356,7 @@ const MediaProduction = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-xl">Uniting for Our Baboons</h3>
-                  <span className="bg-gradient-rainbow text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">
                     Environmental
                   </span>
                 </div>
@@ -386,7 +386,7 @@ const MediaProduction = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-xl">Transform Your Workout</h3>
-                  <span className="bg-gradient-rainbow text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">
                     Wellness
                   </span>
                 </div>
@@ -416,7 +416,7 @@ const MediaProduction = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-xl">Muizenberg Electric Conference</h3>
-                  <span className="bg-gradient-rainbow text-white px-3 py-1 rounded-full text-xs font-semibold">
+                  <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">
                     Interview
                   </span>
                 </div>
@@ -453,7 +453,7 @@ const MediaProduction = () => {
             </div>
             <Button 
               size="lg" 
-              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
+              className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
               asChild
             >
               <a href="mailto:omniwellnessmedia@gmail.com?subject=Media Production Creative Session Request">

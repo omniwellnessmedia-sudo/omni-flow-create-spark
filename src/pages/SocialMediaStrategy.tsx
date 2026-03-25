@@ -107,7 +107,7 @@ const SocialMediaStrategy = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                Build <span className="text-gradient-rainbow">Engaging Communities</span>
+                Build <span className="text-primary">Engaging Communities</span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Transform your social media presence with strategies that build authentic connections, 
@@ -116,7 +116,7 @@ const SocialMediaStrategy = () => {
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg" 
-                  className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
                   onClick={() => {
                     const nameInput = document.getElementById('name');
                     if (nameInput) {
@@ -128,9 +128,8 @@ const SocialMediaStrategy = () => {
                   <TrendingUp className="mr-2 w-5 h-5" />
                   Get Strategy Audit
                 </Button>
-                <a 
-                  href="/downloads/content-calendar-template.pdf" 
-                  download
+                <a
+                  href="mailto:omniwellnessmedia@gmail.com?subject=Content Calendar Template Request&body=Hi Omni Wellness Media,%0A%0AI'd like to receive the free 30-day Content Calendar Template.%0A%0AThank you!"
                   className="inline-flex items-center justify-center px-8 py-4 text-lg rounded-full border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
                 >
                   <Download className="mr-2 w-5 h-5" />
@@ -207,7 +206,7 @@ const SocialMediaStrategy = () => {
                     <Button 
                       onClick={handleAuditSubmit}
                       disabled={isSubmitting}
-                      className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 rounded-full"
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-full"
                     >
                       {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Free Audit'}
                     </Button>
@@ -224,7 +223,7 @@ const SocialMediaStrategy = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-              Social Media <span className="text-gradient-rainbow">Health Check</span>
+              Social Media <span className="text-primary">Health Check</span>
             </h2>
             <p className="text-lg text-gray-600">Analyze your current social media performance</p>
           </div>
@@ -270,7 +269,7 @@ const SocialMediaStrategy = () => {
                 </div>
               </div>
               
-              <Button onClick={calculateEngagement} className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 mb-6">
+              <Button onClick={calculateEngagement} className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 mb-6">
                 Analyze My Performance
               </Button>
               
@@ -306,7 +305,7 @@ const SocialMediaStrategy = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Premium <span className="text-gradient-rainbow">Strategy Packages</span>
+              Premium <span className="text-primary">Strategy Packages</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Take your social media to the next level with our professional packages
@@ -438,7 +437,7 @@ const SocialMediaStrategy = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Platform-Specific <span className="text-gradient-rainbow">Strategies</span>
+              Platform-Specific <span className="text-primary">Strategies</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Tailored approaches for each social media platform to maximize your reach and engagement
@@ -475,7 +474,7 @@ const SocialMediaStrategy = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Complete <span className="text-gradient-rainbow">Social Media Management</span>
+              Complete <span className="text-primary">Social Media Management</span>
             </h2>
           </div>
           
@@ -524,7 +523,7 @@ const SocialMediaStrategy = () => {
             </div>
             <Button 
               size="lg" 
-              className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
+              className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
               asChild
             >
               <a href="mailto:omniwellnessmedia@gmail.com?subject=Social Media Strategy Session Booking">

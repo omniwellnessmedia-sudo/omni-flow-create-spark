@@ -62,7 +62,7 @@ export default function OrderConfirmation() {
             <p className="text-center text-muted-foreground">Order not found.</p>
             <div className="flex justify-center mt-4">
               <Button asChild>
-                <Link to="/wellness-exchange">Continue Shopping</Link>
+                <Link to="/roambuddy-store">Continue Shopping</Link>
               </Button>
             </div>
           </CardContent>
@@ -182,7 +182,7 @@ export default function OrderConfirmation() {
 
           <div className="flex gap-3 pt-4">
             <Button asChild variant="outline" className="flex-1">
-              <Link to="/wellness-exchange">Continue Shopping</Link>
+              <Link to="/roambuddy-store">Continue Shopping</Link>
             </Button>
             <Button asChild className="flex-1">
               <Link to="/wellness-account">View My Orders</Link>

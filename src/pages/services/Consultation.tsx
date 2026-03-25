@@ -115,16 +115,16 @@ const Consultation = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <Badge className="mb-4 bg-gradient-rainbow text-white">Strategic Guidance</Badge>
+                <Badge className="mb-4 bg-primary text-white">Strategic Guidance</Badge>
                 <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                  Strategic <span className="text-gradient-rainbow">Consultation</span>
+                  Strategic <span className="text-primary">Consultation</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed">
                   Building lasting partnerships through conscious communication. We focus on understanding 
                   your mission deeply and developing strategies that create meaningful, sustainable impact.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+                  <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
                     <Link to="/contact">Book Consultation</Link>
                   </Button>
                   <Button variant="outline" size="lg" className="font-semibold px-8 py-3 text-lg rounded-full">
@@ -153,7 +153,7 @@ const Consultation = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Consultation <span className="text-gradient-rainbow">Services</span>
+                Consultation <span className="text-primary">Services</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Tailored strategic guidance to help your organization communicate authentically and create lasting impact.
@@ -165,7 +165,7 @@ const Consultation = () => {
                 <Card key={consultation.title} className="hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
                   <CardHeader>
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 bg-gradient-rainbow rounded-full flex items-center justify-center">
+                      <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
                         <consultation.icon className="w-6 h-6 text-white" />
                       </div>
                       <div>
@@ -184,12 +184,12 @@ const Consultation = () => {
                     <ul className="space-y-2 mb-6">
                       {consultation.includes.map((item) => (
                         <li key={item} className="flex items-start text-sm text-gray-600">
-                          <span className="w-1.5 h-1.5 bg-gradient-rainbow rounded-full mr-3 mt-2 flex-shrink-0"></span>
+                          <span className="w-1.5 h-1.5 bg-primary rounded-full mr-3 mt-2 flex-shrink-0"></span>
                           {item}
                         </li>
                       ))}
                     </ul>
-                    <Button asChild className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-2 rounded-full">
+                    <Button asChild className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2 rounded-full">
                       <Link to="/contact">Learn More</Link>
                     </Button>
                   </CardContent>
@@ -204,7 +204,7 @@ const Consultation = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Our <span className="text-gradient-rainbow">Methodology</span>
+                Our <span className="text-primary">Methodology</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 A proven four-phase approach that ensures comprehensive understanding and sustainable results.
@@ -215,7 +215,7 @@ const Consultation = () => {
               {methodology.map((phase, index) => (
                 <Card key={phase.phase} className="text-center hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
                   <CardHeader>
-                    <div className="w-16 h-16 bg-gradient-rainbow rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                       <span className="text-white font-bold text-lg">{index + 1}</span>
                     </div>
                     <CardTitle className="font-heading text-xl">{phase.phase}</CardTitle>
@@ -243,7 +243,7 @@ const Consultation = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
                 <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                  Areas of <span className="text-gradient-rainbow">Expertise</span>
+                  Areas of <span className="text-primary">Expertise</span>
                 </h2>
                 <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                   We specialize in helping conscious organizations navigate complex communication challenges 
@@ -261,7 +261,7 @@ const Consultation = () => {
                     "Partnership development"
                   ].map((area, index) => (
                     <div key={area} className="flex items-center animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
-                      <div className="w-2 h-2 bg-gradient-rainbow rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full mr-3"></div>
                       <span className="text-gray-700">{area}</span>
                     </div>
                   ))}
@@ -283,7 +283,7 @@ const Consultation = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Client <span className="text-gradient-rainbow">Success Stories</span>
+                Client <span className="text-primary">Success Stories</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 See how our strategic consultation has helped organizations amplify their impact.
@@ -320,7 +320,7 @@ const Consultation = () => {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Getting <span className="text-gradient-rainbow">Started</span>
+                Getting <span className="text-primary">Started</span>
               </h2>
               <p className="text-lg text-gray-600">
                 Every partnership begins with understanding your unique needs and challenges.
@@ -353,7 +353,7 @@ const Consultation = () => {
                   </div>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button asChild size="lg" className="bg-gradient-rainbow hover:opacity-90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
+                  <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
                     <Link to="/contact">
                       Book Free Consultation
                       <ArrowRight className="ml-2 w-5 h-5" />
