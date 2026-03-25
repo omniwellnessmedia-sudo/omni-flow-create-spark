@@ -111,9 +111,9 @@ const Checkout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <Button variant="ghost" asChild className="mb-4">
-              <Link to="/2bewell-shop">
+              <Link to="/services">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Shop
+                Back to Services
               </Link>
             </Button>
             <h1 className="text-3xl font-bold">Checkout</h1>
