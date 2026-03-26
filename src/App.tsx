@@ -73,7 +73,7 @@ const CartHorseUrbanWellness = React.lazy(() => import('@/pages/experiences/Cart
 const CorporateWellnessRetreat = React.lazy(() => import('@/pages/experiences/CorporateWellnessRetreat'));
 const ViatorWellnessExperiences = React.lazy(() => import('@/pages/ViatorWellnessExperiences'));
 const ESIMStore = React.lazy(() => import('@/pages/ESIMStore'));
-const TravelWellConnectedESIM = React.lazy(() => import('@/pages/TravelWellConnectedESIM'));
+// TravelWellConnectedESIM retired — redirects to ROAM store
 const UWCHumanAnimalProgram = React.lazy(() => import('@/pages/programs/UWCHumanAnimalProgram'));
 const UWCUniversityPartners = React.lazy(() => import('@/pages/programs/UWCUniversityPartners'));
 const UWCSponsors = React.lazy(() => import('@/pages/programs/UWCSponsors'));
@@ -240,7 +240,8 @@ function App() {
             <Route path="/drphilafel" element={<Navigate to="/csr-impact" replace />} />
             <Route path="/viator-wellness-experiences" element={<ViatorWellnessExperiences />} />
             <Route path="/esim-store" element={<ESIMStore />} />
-            <Route path="/travel-well-connected" element={<TravelWellConnectedESIM />} />
+            {/* Travel Well Connected retired — redirect to ROAM store */}
+            <Route path="/travel-well-connected" element={<Navigate to="/roambuddy-store" replace />} />
 
                   {/* Business Services */}
                   <Route path="/business-consulting" element={<BusinessConsulting />} />

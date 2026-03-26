@@ -100,7 +100,6 @@ const UnifiedNavigation = () => {
       icon: Store,
       children: [
         { title: 'ROAM eSIM Store', href: '/roambuddy-store', description: 'Stay connected while you travel — global eSIM plans', icon: '🌐' },
-        { title: 'Travel Well Connected', href: '/travel-well-connected-store', description: 'Curated wellness experiences & Viator tours', icon: '✈️' },
       ]
     },
     {
