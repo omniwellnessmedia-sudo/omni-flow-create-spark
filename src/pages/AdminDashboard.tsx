@@ -1,36 +1,43 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import ProductManagement from "@/pages/admin/ProductManagement";
-import AdminTools from "@/pages/admin/AdminTools";
-import AdminLeads from "@/pages/admin/AdminLeads";
-import AdminInvites from "@/pages/admin/AdminInvites";
-import AdminTasks from "@/pages/admin/AdminTasks";
-import AdminContent from "@/pages/admin/AdminContent";
-import AdminUWCRecruitment from "@/pages/admin/AdminUWCRecruitment";
-import AdminViatorTours from "@/pages/admin/AdminViatorTours";
-import AdminSettings from "@/pages/admin/AdminSettings";
-import AdminSchedule from "@/pages/admin/AdminSchedule";
-import AdminTeamManagement from "@/pages/admin/AdminTeamManagement";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+// Lazy load tab components — only loaded when their tab is activated
+const ProductManagement = lazy(() => import("@/pages/admin/ProductManagement"));
+const AdminTools = lazy(() => import("@/pages/admin/AdminTools"));
+const AdminLeads = lazy(() => import("@/pages/admin/AdminLeads"));
+const AdminInvites = lazy(() => import("@/pages/admin/AdminInvites"));
+const AdminTasks = lazy(() => import("@/pages/admin/AdminTasks"));
+const AdminContent = lazy(() => import("@/pages/admin/AdminContent"));
+const AdminUWCRecruitment = lazy(() => import("@/pages/admin/AdminUWCRecruitment"));
+const AdminViatorTours = lazy(() => import("@/pages/admin/AdminViatorTours"));
+const AdminAnalytics = lazy(() => import("@/pages/admin/AdminAnalytics"));
+const AdminAccounting = lazy(() => import("@/pages/admin/AdminAccounting"));
+const SocialScheduler = lazy(() => import("@/pages/admin/SocialScheduler"));
+const NewsletterEditor = lazy(() => import("@/pages/admin/NewsletterEditor"));
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Users, 
-  ShoppingCart, 
-  Calendar, 
-  FileText, 
+import {
+  Users,
+  ShoppingCart,
+  FileText,
   DollarSign,
   Package,
-  Settings,
   LogOut,
   Plus,
   Home
 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { IMAGES } from "@/lib/images";
+
+const TabLoader = () => (
+  <div className="flex items-center justify-center py-12">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  </div>
+);
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -39,9 +46,6 @@ const AdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState({
     orders: [] as any[],
     bookings: [] as any[],
-    blogPosts: [] as any[],
-    services: [] as any[],
-    tours: [] as any[],
     recentActivity: [] as any[],
     stats: {
       totalRevenue: 0,
@@ -57,26 +61,32 @@ const AdminDashboard = () => {
       affiliateProducts: 0,
       omniProducts: 0,
       totalBlogPosts: 0,
-      publishedBlogPosts: 0
+      publishedBlogPosts: 0,
+      activeTours: 0
     }
   });
 
   useEffect(() => {
-    checkAdminAccess();
-    fetchDashboardData();
+    const init = async () => {
+      const hasAccess = await checkAdminAccess();
+      if (hasAccess) {
+        await fetchDashboardData();
+      }
+    };
+    init();
   }, []);
 
-  const checkAdminAccess = async () => {
+  const checkAdminAccess = async (): Promise<boolean> => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       navigate('/auth');
-      return;
+      return false;
     }
-    
-    const { data: isAdmin, error } = await supabase.rpc('is_admin', { 
-      user_id: user.id 
+
+    const { data: isAdmin, error } = await supabase.rpc('is_admin', {
+      user_id: user.id
     });
-    
+
     if (error || !isAdmin) {
       toast({
         title: 'Access Denied',
@@ -84,17 +94,17 @@ const AdminDashboard = () => {
         variant: 'destructive',
       });
       navigate('/');
-      return;
+      return false;
     }
+    return true;
   };
 
   const fetchDashboardData = async () => {
     try {
-      // Parallel fetch all data
+      // Parallel fetch: display data (limited) + accurate counts (head: true)
       const [
         ordersResult,
         bookingsResult,
-        blogPostsResult,
         usersCountResult,
         servicesResult,
         toursResult,
@@ -102,33 +112,40 @@ const AdminDashboard = () => {
         affiliateResult,
         omniResult,
         providerResult,
-        consumerResult
+        consumerResult,
+        ordersCountResult,
+        bookingsCountResult,
+        blogCountResult,
+        publishedBlogCountResult,
+        pendingOrdersCountResult,
+        revenueResult
       ] = await Promise.all([
+        // Display data (limited for UI)
         supabase.from('orders').select('*').order('created_at', { ascending: false }).limit(10),
         supabase.from('tour_bookings').select('*, tours(title)').order('created_at', { ascending: false }).limit(10),
-        supabase.from('blog_posts').select('*').order('created_at', { ascending: false }).limit(10),
+        // Accurate counts
         supabase.from('profiles').select('*', { count: 'exact', head: true }),
-        supabase.from('services').select('*').eq('active', true),
-        supabase.from('tours').select('*').eq('active', true),
+        supabase.from('services').select('*', { count: 'exact', head: true }).eq('active', true),
+        supabase.from('tours').select('*', { count: 'exact', head: true }).eq('active', true),
         supabase.from('affiliate_products').select('*', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('affiliate_products').select('*', { count: 'exact', head: true }).eq('is_active', true).in('affiliate_program_id', ['cj', 'awin', 'viator']),
         supabase.from('affiliate_products').select('*', { count: 'exact', head: true }).eq('is_active', true).eq('affiliate_program_id', 'omni'),
-        supabase.from('provider_profiles').select('*').eq('verified', true),
-        supabase.from('consumer_profiles').select('wellcoin_balance')
+        supabase.from('provider_profiles').select('*', { count: 'exact', head: true }).eq('verified', true),
+        supabase.from('consumer_profiles').select('wellcoin_balance'),
+        supabase.from('orders').select('*', { count: 'exact', head: true }),
+        supabase.from('tour_bookings').select('*', { count: 'exact', head: true }),
+        supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
+        supabase.from('blog_posts').select('*', { count: 'exact', head: true }).eq('status', 'published'),
+        supabase.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+        supabase.from('orders').select('amount'),
       ]);
 
       const orders = ordersResult.data || [];
       const bookings = bookingsResult.data || [];
-      const blogPosts = blogPostsResult.data || [];
-      const services = servicesResult.data || [];
-      const tours = toursResult.data || [];
-      const providers = providerResult.data || [];
 
-      // Calculate stats
-      const totalRevenue = orders.reduce((sum, order) => sum + (order.amount || 0), 0);
-      const pendingOrders = orders.filter(order => order.status === 'pending').length;
+      // Calculate stats from accurate queries
+      const totalRevenue = (revenueResult.data || []).reduce((sum: number, order: any) => sum + (order.amount || 0), 0);
       const wellcoinTotal = consumerResult.data?.reduce((sum, c) => sum + (c.wellcoin_balance || 0), 0) || 0;
-      const publishedPosts = blogPosts.filter(p => p.status === 'published').length;
 
       // Build recent activity from real data
       const recentActivity = [
@@ -149,25 +166,23 @@ const AdminDashboard = () => {
       setDashboardData({
         orders,
         bookings,
-        blogPosts,
-        services,
-        tours,
         recentActivity,
         stats: {
           totalRevenue,
-          totalOrders: orders.length,
-          totalBookings: bookings.length,
+          totalOrders: ordersCountResult.count || 0,
+          totalBookings: bookingsCountResult.count || 0,
           totalUsers: usersCountResult.count || 0,
-          totalProviders: providers.length,
-          activeProviders: providers.filter(p => p.verified).length,
+          totalProviders: providerResult.count || 0,
+          activeProviders: providerResult.count || 0,
           wellcoinCirculation: wellcoinTotal,
-          pendingOrders,
-          activeServices: services.length,
+          pendingOrders: pendingOrdersCountResult.count || 0,
+          activeServices: servicesResult.count || 0,
           totalProducts: totalProductsResult.count || 0,
           affiliateProducts: affiliateResult.count || 0,
           omniProducts: omniResult.count || 0,
-          totalBlogPosts: blogPosts.length,
-          publishedBlogPosts: publishedPosts
+          totalBlogPosts: blogCountResult.count || 0,
+          publishedBlogPosts: publishedBlogCountResult.count || 0,
+          activeTours: toursResult.count || 0
         }
       });
     } catch (error) {
@@ -270,10 +285,14 @@ const AdminDashboard = () => {
             <TabsList className="inline-flex w-max gap-0.5 p-1 h-9 bg-muted/50">
               {[
                 { value: 'overview', label: 'Overview' },
+                { value: 'analytics', label: 'Analytics' },
+                { value: 'accounting', label: 'Accounting' },
                 { value: 'content', label: 'Content' },
                 { value: 'tasks', label: 'Tasks' },
                 { value: 'products', label: 'Products' },
                 { value: 'leads', label: 'Leads' },
+                { value: 'newsletter', label: 'Newsletter' },
+                { value: 'social', label: 'Social' },
                 { value: 'team', label: 'Team' },
                 { value: 'orders', label: 'Orders' },
                 { value: 'bookings', label: 'Bookings' },
@@ -338,7 +357,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Active Tours</span>
-                      <span className="font-bold">{dashboardData.tours.length}</span>
+                      <span className="font-bold">{dashboardData.stats.activeTours}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Omni Products</span>
@@ -354,24 +373,58 @@ const AdminDashboard = () => {
             </div>
           </TabsContent>
 
+          <TabsContent value="analytics">
+            <Suspense fallback={<TabLoader />}>
+              <AdminAnalytics />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="accounting">
+            <Suspense fallback={<TabLoader />}>
+              <AdminAccounting />
+            </Suspense>
+          </TabsContent>
+
           <TabsContent value="content">
-            <AdminContent />
+            <Suspense fallback={<TabLoader />}>
+              <AdminContent />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="tasks">
-            <AdminTasks />
+            <Suspense fallback={<TabLoader />}>
+              <AdminTasks />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="products">
-            <ProductManagement />
+            <Suspense fallback={<TabLoader />}>
+              <ProductManagement />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="leads">
-            <AdminLeads />
+            <Suspense fallback={<TabLoader />}>
+              <AdminLeads />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="newsletter">
+            <Suspense fallback={<TabLoader />}>
+              <NewsletterEditor />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="social">
+            <Suspense fallback={<TabLoader />}>
+              <SocialScheduler />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="team">
-            <AdminInvites />
+            <Suspense fallback={<TabLoader />}>
+              <AdminInvites />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="orders">
@@ -442,11 +495,21 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="tours">
-            <AdminViatorTours />
+            <Suspense fallback={<TabLoader />}>
+              <AdminViatorTours />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="uwc">
+            <Suspense fallback={<TabLoader />}>
+              <AdminUWCRecruitment />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="tools">
-            <AdminTools />
+            <Suspense fallback={<TabLoader />}>
+              <AdminTools />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </div>
