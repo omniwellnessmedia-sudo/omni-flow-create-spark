@@ -80,7 +80,7 @@ const UWCUniversityPartners: React.FC = () => {
                 size="lg"
                 asChild
               >
-                <a href="mailto:omniwellnessmedia@gmail.com?subject=University Partnership Inquiry">
+                <a href="mailto:admin@omniwellnessmedia.co.za?subject=University Partnership Inquiry">
                   <Handshake className="mr-2 h-5 w-5" />
                   Request Partnership Info
                 </a>
@@ -192,7 +192,7 @@ const UWCUniversityPartners: React.FC = () => {
             className="bg-white text-primary hover:bg-white/90"
             asChild
           >
-            <a href="mailto:omniwellnessmedia@gmail.com?subject=University Partnership Inquiry">
+            <a href="mailto:admin@omniwellnessmedia.co.za?subject=University Partnership Inquiry">
               <Mail className="mr-2 h-5 w-5" />
               Contact Partnership Team
             </a>

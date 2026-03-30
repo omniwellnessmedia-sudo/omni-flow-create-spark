@@ -149,7 +149,7 @@ export const omniVoice = {
   // Contact form responses
   contactResponses: {
     success: "Got it! Your message is in Chad's inbox. He'll get back to you within 24 hours. In the meantime, explore our services or grab a cup of tea with our blog.",
-    error: "Oops! Something went wrong. Please try again, or reach out to us directly at omniwellnessmedia@gmail.com",
+    error: "Oops! Something went wrong. Please try again, or reach out to us directly at admin@omniwellnessmedia.co.za",
   },
 };
 

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { Play, Camera, Mic, Film, Calendar, Download, Calculator, CheckCircle, Loader2 } from "lucide-react";
+import BookSessionCapture from "@/components/booking/BookSessionCapture";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { CalComBooking } from "@/components/booking/CalComBooking";
@@ -83,9 +84,9 @@ const MediaProduction = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-white via-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold text-center mb-6 text-gradient-hero">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-6 text-gradient-hero">
                 Create Powerful Stories That Inspire
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -95,7 +96,7 @@ const MediaProduction = () => {
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-lg"
                   onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Play className="mr-2 w-5 h-5" />
@@ -104,10 +105,10 @@ const MediaProduction = () => {
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="px-8 py-4 text-lg rounded-full border-2"
+                  className="px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full border-2"
                   asChild
                 >
-                  <a href="mailto:omniwellnessmedia@gmail.com?subject=Media Production Guide Request">
+                  <a href="mailto:admin@omniwellnessmedia.co.za?subject=Media Production Guide Request">
                     <Download className="mr-2 w-5 h-5" />
                     Request Production Guide
                   </a>
@@ -119,65 +120,81 @@ const MediaProduction = () => {
                 <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Fast Turnaround</div>
               </div>
             </div>
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 border">
-                <h3 className="font-heading font-bold text-2xl mb-6 text-center">Get Your Project Quote</h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input 
-                      id="name" 
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input 
-                      id="email" 
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="project">Project Type</Label>
-                    <Select onValueChange={(value) => setFormData({...formData, project: value})}>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Select project type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="video">Promotional Video</SelectItem>
-                        <SelectItem value="documentary">Documentary</SelectItem>
-                        <SelectItem value="commercial">Commercial</SelectItem>
-                        <SelectItem value="social">Social Media Content</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="budget">Budget Range</Label>
-                    <Select onValueChange={(value) => setFormData({...formData, budget: value})}>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Select budget range" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="under-5k">Under $5,000</SelectItem>
-                        <SelectItem value="5k-15k">$5,000 - $15,000</SelectItem>
-                        <SelectItem value="15k-30k">$15,000 - $30,000</SelectItem>
-                        <SelectItem value="over-30k">Over $30,000</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button 
-                    onClick={handleQuoteSubmit}
-                    disabled={isSubmitting}
-                    className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-full"
-                  >
-                    {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Custom Quote'}
-                  </Button>
+            <div className="relative hidden lg:block">
+              <div className="rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%201.jpg"
+                  alt="Media production team at work"
+                  className="w-full h-[500px] object-cover"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Project Quote Form */}
+      <section className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative">
+            <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 border">
+              <h3 className="font-heading font-bold text-2xl mb-6 text-center">Get Your Project Quote</h3>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="mt-1"
+                  />
                 </div>
+                <div>
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="project">Project Type</Label>
+                  <Select onValueChange={(value) => setFormData({...formData, project: value})}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select project type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="video">Promotional Video</SelectItem>
+                      <SelectItem value="documentary">Documentary</SelectItem>
+                      <SelectItem value="commercial">Commercial</SelectItem>
+                      <SelectItem value="social">Social Media Content</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="budget">Budget Range</Label>
+                  <Select onValueChange={(value) => setFormData({...formData, budget: value})}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select budget range" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="under-5k">Under $5,000</SelectItem>
+                      <SelectItem value="5k-15k">$5,000 - $15,000</SelectItem>
+                      <SelectItem value="15k-30k">$15,000 - $30,000</SelectItem>
+                      <SelectItem value="over-30k">Over $30,000</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  onClick={handleQuoteSubmit}
+                  disabled={isSubmitting}
+                  className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-full"
+                >
+                  {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Custom Quote'}
+                </Button>
               </div>
             </div>
           </div>
@@ -201,7 +218,7 @@ const MediaProduction = () => {
                 Video Production Calculator
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-8">
+            <CardContent className="p-4 sm:p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div>
                   <Label className="text-sm font-medium">Project Type</Label>
@@ -275,7 +292,7 @@ const MediaProduction = () => {
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {[
               { icon: Film, title: "Documentary Production", desc: "Full-service documentary creation from concept to distribution" },
               { icon: Camera, title: "Commercial Videos", desc: "High-impact promotional content that drives results" },
@@ -307,7 +324,7 @@ const MediaProduction = () => {
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
             {/* Indigenous Heritage Journey in Kalk Bay */}
             <Card className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300 overflow-hidden">
               <div className="aspect-video">
@@ -440,7 +457,7 @@ const MediaProduction = () => {
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
             Book a free creative consultation to discuss your vision and get a detailed project proposal.
           </p>
-          <div className="bg-white rounded-2xl p-8 shadow-2xl">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 shadow-2xl">
             <h3 className="font-heading font-bold text-2xl mb-6 text-gray-900">Schedule Your Creative Consultation</h3>
             <div className="text-gray-900 mb-6">
               <p className="mb-2">🎬 45-minute creative session</p>
@@ -451,16 +468,11 @@ const MediaProduction = () => {
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg mb-6 border border-blue-200">
               <p className="text-blue-800 font-medium">✓ Click below to schedule your free creative consultation</p>
             </div>
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
-              asChild
-            >
-              <a href="mailto:omniwellnessmedia@gmail.com?subject=Media Production Creative Session Request">
-                <Calendar className="mr-2 w-5 h-5" />
-                Email to Book Session
-              </a>
-            </Button>
+            <BookSessionCapture
+              serviceName="Media Production"
+              buttonText="Email to Book Session"
+              buttonClassName="rounded-full px-8 py-4 text-lg"
+            />
             <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"

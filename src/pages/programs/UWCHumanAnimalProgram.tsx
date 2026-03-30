@@ -421,7 +421,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
                   ))}
                 </ul>
                 <Button className="w-full" variant="outline" asChild>
-                  <a href="mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Early Bird Application">Apply Early</a>
+                  <a href="mailto:admin@omniwellnessmedia.co.za?subject=UWC Programme - Early Bird Application">Apply Early</a>
                 </Button>
               </CardContent>
             </Card>
@@ -448,7 +448,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
                   ))}
                 </ul>
                 <Button className="w-full" asChild>
-                  <a href="mailto:omniwellnessmedia@gmail.com?subject=UWC Programme - Full Programme Application">Apply Now</a>
+                  <a href="mailto:admin@omniwellnessmedia.co.za?subject=UWC Programme - Full Programme Application">Apply Now</a>
                 </Button>
               </CardContent>
             </Card>
@@ -602,7 +602,7 @@ const UWCHumanAnimalProgram: React.FC = () => {
                 className="px-8"
                 asChild
               >
-                <a href="mailto:omniwellnessmedia@gmail.com?subject=UWC Programme Interest">
+                <a href="mailto:admin@omniwellnessmedia.co.za?subject=UWC Programme Interest">
                   <Mail className="mr-2 h-5 w-5" />
                   Email Us
                 </a>

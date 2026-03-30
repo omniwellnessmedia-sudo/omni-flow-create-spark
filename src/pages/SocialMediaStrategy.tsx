@@ -12,6 +12,7 @@ import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { CalComBooking } from "@/components/booking/CalComBooking";
+import BookSessionCapture from "@/components/booking/BookSessionCapture";
 
 const SocialMediaStrategy = () => {
   const [auditData, setAuditData] = useState({ followers: '', engagement: '', posts: '' });
@@ -104,7 +105,7 @@ const SocialMediaStrategy = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-white via-gray-50 to-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <div>
               <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
                 Build <span className="text-primary">Engaging Communities</span>
@@ -116,7 +117,7 @@ const SocialMediaStrategy = () => {
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-lg"
                   onClick={() => {
                     const nameInput = document.getElementById('name');
                     if (nameInput) {
@@ -129,8 +130,8 @@ const SocialMediaStrategy = () => {
                   Get Strategy Audit
                 </Button>
                 <a
-                  href="mailto:omniwellnessmedia@gmail.com?subject=Content Calendar Template Request&body=Hi Omni Wellness Media,%0A%0AI'd like to receive the free 30-day Content Calendar Template.%0A%0AThank you!"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg rounded-full border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+                  href="mailto:admin@omniwellnessmedia.co.za?subject=Content Calendar Template Request&body=Hi Omni Wellness Media,%0A%0AI'd like to receive the free 30-day Content Calendar Template.%0A%0AThank you!"
+                  className="inline-flex items-center justify-center px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
                 >
                   <Download className="mr-2 w-5 h-5" />
                   Content Calendar Template
@@ -142,9 +143,26 @@ const SocialMediaStrategy = () => {
                 <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Analytics & Reporting</div>
               </div>
             </div>
-            <div className="relative" id="audit-form">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 border">
-                <h3 className="font-heading font-bold text-2xl mb-6 text-center">Free Social Media Audit</h3>
+            <div className="relative hidden lg:block">
+              <div className="rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg"
+                  alt="Social media strategy planning"
+                  className="w-full h-[500px] object-cover"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Free Social Media Audit Form */}
+      <section className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative" id="audit-form">
+            <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 border">
+              <h3 className="font-heading font-bold text-2xl mb-6 text-center">Free Social Media Audit</h3>
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="name">Full Name</Label>
@@ -211,7 +229,6 @@ const SocialMediaStrategy = () => {
                       {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Free Audit'}
                     </Button>
                   )}
-                </div>
               </div>
             </div>
           </div>
@@ -235,7 +252,7 @@ const SocialMediaStrategy = () => {
                 Engagement Rate Calculator
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-8">
+            <CardContent className="p-4 sm:p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div>
                   <Label className="text-sm font-medium">Total Followers</Label>
@@ -312,7 +329,7 @@ const SocialMediaStrategy = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
             <Card className="border-2 border-gray-200 hover:shadow-lg transition-all duration-300">
               <CardHeader className="text-center">
                 <CardTitle className="text-xl mb-2">Content Calendar</CardTitle>
@@ -444,7 +461,7 @@ const SocialMediaStrategy = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             {strategies.map((strategy, index) => (
               <Card key={strategy.platform} className="hover:shadow-lg transition-all duration-300 border-0 shadow-md overflow-hidden">
                 <div className={`bg-gradient-to-r ${strategy.color} p-6 text-white`}>
@@ -478,7 +495,7 @@ const SocialMediaStrategy = () => {
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {[
               { icon: Hash, title: "Content Strategy", desc: "Develop compelling content themes that resonate with your audience" },
               { icon: MessageCircle, title: "Community Management", desc: "Build and nurture engaged communities around your brand" },
@@ -510,7 +527,7 @@ const SocialMediaStrategy = () => {
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
             Book a free social media strategy session to discover how we can help you build authentic connections and drive meaningful engagement.
           </p>
-          <div className="bg-white rounded-2xl p-8 shadow-2xl">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 shadow-2xl">
             <h3 className="font-heading font-bold text-2xl mb-6 text-gray-900">Schedule Your Strategy Session</h3>
             <div className="text-gray-900 mb-6">
               <p className="mb-2">📱 Complete social media audit</p>
@@ -521,16 +538,11 @@ const SocialMediaStrategy = () => {
             <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg mb-6 border border-green-200">
               <p className="text-green-800 font-medium">✓ Click below to schedule your free strategy session</p>
             </div>
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
-              asChild
-            >
-              <a href="mailto:omniwellnessmedia@gmail.com?subject=Social Media Strategy Session Booking">
-                <Calendar className="mr-2 w-5 h-5" />
-                Email to Book Session
-              </a>
-            </Button>
+            <BookSessionCapture
+              serviceName="Social Media Strategy"
+              buttonText="Email to Book Session"
+              buttonClassName="rounded-full px-8 py-4 text-lg"
+            />
             <div className="mt-6">
               <CalComBooking 
                 eventTypeSlug="social-media-strategy"

@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { BookingCalendar } from "@/components/booking/BookingCalendar";
 import { CalComBooking } from "@/components/booking/CalComBooking";
+import BookSessionCapture from "@/components/booking/BookSessionCapture";
 import { format } from "date-fns";
 
 const BusinessConsulting = () => {
@@ -87,9 +88,9 @@ const BusinessConsulting = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-white via-gray-50 to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <div>
-              <h1 className="text-5xl md:text-6xl font-bold text-center mb-6 text-gradient-hero">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-6 text-gradient-hero">
                 Scale Your Conscious Business
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -99,7 +100,7 @@ const BusinessConsulting = () => {
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 
                   size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-lg"
                   onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Calendar className="mr-2 w-5 h-5" />
@@ -108,10 +109,10 @@ const BusinessConsulting = () => {
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="px-8 py-4 text-lg rounded-full border-2"
+                  className="px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full border-2"
                   asChild
                 >
-                  <a href="mailto:omniwellnessmedia@gmail.com?subject=Business Consulting Free Guide Request">
+                  <a href="mailto:admin@omniwellnessmedia.co.za?subject=Business Consulting Free Guide Request">
                     <Download className="mr-2 w-5 h-5" />
                     Request Free Guide
                   </a>
@@ -123,8 +124,25 @@ const BusinessConsulting = () => {
                 <div className="flex items-center"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Proven Results</div>
               </div>
             </div>
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 border">
+            <div className="relative hidden lg:block">
+              <div className="rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/DSC00124.jpg"
+                  alt="Business consulting session"
+                  className="w-full h-[500px] object-cover"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Free Business Assessment Form */}
+      <section className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 border">
                 <h3 className="font-heading font-bold text-2xl mb-6 text-center">Free Business Assessment</h3>
                 <form onSubmit={handleFormSubmit} className="space-y-4">
                   <div>
@@ -171,7 +189,6 @@ const BusinessConsulting = () => {
                 </form>
               </div>
             </div>
-          </div>
         </div>
       </section>
 
@@ -192,7 +209,7 @@ const BusinessConsulting = () => {
                 Business Growth Calculator
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-8">
+            <CardContent className="p-4 sm:p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div>
                   <Label htmlFor="revenue" className="text-sm font-medium">Current Monthly Revenue ($)</Label>
@@ -265,7 +282,7 @@ const BusinessConsulting = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {[
               { icon: Target, title: "Strategic Planning", desc: "Develop clear roadmaps for sustainable growth and impact measurement" },
               { icon: TrendingUp, title: "Revenue Optimization", desc: "Identify and implement new revenue streams aligned with your values" },
@@ -297,10 +314,10 @@ const BusinessConsulting = () => {
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={testimonial.name} className="bg-white shadow-xl border-0 hover:scale-105 transition-transform duration-300">
-                <CardContent className="p-8">
+                <CardContent className="p-4 sm:p-8">
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold">
                       {testimonial.name[0]}
@@ -330,7 +347,7 @@ const BusinessConsulting = () => {
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
             Book a free 30-minute strategy session to discover how we can help you achieve sustainable growth while making positive impact.
           </p>
-          <div className="bg-white rounded-2xl p-8 shadow-2xl">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 shadow-2xl">
             <h3 className="font-heading font-bold text-2xl mb-6 text-gray-900">Schedule Your Free Consultation</h3>
             <div className="text-gray-900 mb-6">
               <p className="mb-2">📅 30-minute strategy session</p>
@@ -350,16 +367,13 @@ const BusinessConsulting = () => {
                 });
               }}
             />
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg mt-4"
-              asChild
-            >
-              <a href="mailto:omniwellnessmedia@gmail.com?subject=Business Strategy Session Request">
-                <Calendar className="mr-2 w-5 h-5" />
-                Email to Book Session
-              </a>
-            </Button>
+            <div className="mt-4">
+              <BookSessionCapture
+                serviceName="Business Strategy"
+                buttonText="Email to Book Session"
+                buttonClassName="rounded-full px-8 py-4 text-lg"
+              />
+            </div>
             <div className="mt-6">
               <CalComBooking 
                 eventTypeSlug="business-strategy"

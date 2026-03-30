@@ -380,7 +380,7 @@ const RecruitmentOps: React.FC<RecruitmentOpsProps> = ({ onLeadAdded }) => {
                 <Calendar className="w-4 h-4 mr-2" />
                 Calendly
               </Button>
-              <Button size="sm" variant="outline" onClick={() => window.open('mailto:omniwellnessmedia@gmail.com', '_blank')}>
+              <Button size="sm" variant="outline" onClick={() => window.open('mailto:admin@omniwellnessmedia.co.za', '_blank')}>
                 <Mail className="w-4 h-4 mr-2" />
                 Email
               </Button>

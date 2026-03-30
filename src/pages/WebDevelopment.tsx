@@ -12,6 +12,7 @@ import { Code, Smartphone, Zap, Shield, Calendar, Download, Calculator, CheckCir
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { CalComBooking } from "@/components/booking/CalComBooking";
+import BookSessionCapture from "@/components/booking/BookSessionCapture";
 
 const WebDevelopment = () => {
   const [projectData, setProjectData] = useState({ type: '', pages: '', features: [], timeline: '' });
@@ -108,7 +109,7 @@ const WebDevelopment = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-white via-gray-50 to-indigo-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <div>
               <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
                 Build <span className="text-primary">Powerful Websites</span> That Convert
@@ -118,21 +119,21 @@ const WebDevelopment = () => {
                 to robust e-commerce platforms, we create digital experiences that inspire and convert.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button 
-                  size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg"
-                  onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-lg"
+                  onClick={() => document.getElementById('quote-form')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Globe className="mr-2 w-5 h-5" />
-                  View Our Work
+                  Get Started
                 </Button>
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="px-8 py-4 text-lg rounded-full border-2"
+                  className="px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full border-2"
                   asChild
                 >
-                  <a href="mailto:omniwellnessmedia@gmail.com?subject=Web Strategy Guide Request">
+                  <a href="mailto:admin@omniwellnessmedia.co.za?subject=Web Strategy Guide Request">
                   <Download className="mr-2 w-5 h-5" />
                   Request Strategy Guide
                   </a>
@@ -144,61 +145,77 @@ const WebDevelopment = () => {
                 <div className="flex items-center min-h-[44px]"><CheckCircle className="w-4 h-4 text-green-500 mr-2" />Lightning Fast</div>
               </div>
             </div>
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 border">
-                <h3 className="font-heading font-bold text-2xl mb-6 text-center">Get Your Website Quote</h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input 
-                      id="name" 
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input 
-                      id="email" 
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="website">Current Website (if any)</Label>
-                    <Input 
-                      id="website"
-                      value={formData.website}
-                      onChange={(e) => setFormData({...formData, website: e.target.value})}
-                      placeholder="https://yoursite.com"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="needs">Primary Website Need</Label>
-                    <Select onValueChange={(value) => setFormData({...formData, needs: value})}>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue placeholder="Select your main need" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="new">New Website</SelectItem>
-                        <SelectItem value="redesign">Website Redesign</SelectItem>
-                        <SelectItem value="ecommerce">E-commerce Store</SelectItem>
-                        <SelectItem value="optimization">Performance Optimization</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button 
-                    onClick={handleQuoteSubmit}
-                    disabled={isSubmitting}
-                    className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-full"
-                  >
-                    {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Custom Quote'}
-                  </Button>
+            <div className="relative hidden lg:block">
+              <div className="rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/DSC00124.jpg"
+                  alt="Web development workspace"
+                  className="w-full h-[500px] object-cover"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Website Quote Form */}
+      <section className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative">
+            <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 border">
+              <h3 className="font-heading font-bold text-2xl mb-6 text-center">Get Your Website Quote</h3>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="mt-1"
+                  />
                 </div>
+                <div>
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="website">Current Website (if any)</Label>
+                  <Input
+                    id="website"
+                    value={formData.website}
+                    onChange={(e) => setFormData({...formData, website: e.target.value})}
+                    placeholder="https://yoursite.com"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="needs">Primary Website Need</Label>
+                  <Select onValueChange={(value) => setFormData({...formData, needs: value})}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select your main need" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="new">New Website</SelectItem>
+                      <SelectItem value="redesign">Website Redesign</SelectItem>
+                      <SelectItem value="ecommerce">E-commerce Store</SelectItem>
+                      <SelectItem value="optimization">Performance Optimization</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  onClick={handleQuoteSubmit}
+                  disabled={isSubmitting}
+                  className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-full"
+                >
+                  {isSubmitting ? <><Loader2 className="mr-2 w-4 h-4 animate-spin" />Submitting...</> : 'Get My Custom Quote'}
+                </Button>
               </div>
             </div>
           </div>
@@ -222,7 +239,7 @@ const WebDevelopment = () => {
                 Web Development Calculator
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-8">
+            <CardContent className="p-4 sm:p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
                   <Label className="text-sm font-medium">Website Type</Label>
@@ -301,7 +318,7 @@ const WebDevelopment = () => {
             </h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {[
               { icon: Code, title: "Custom Development", desc: "Bespoke web applications built to your exact specifications" },
               { icon: Smartphone, title: "Responsive Design", desc: "Mobile-first designs that look perfect on every device" },
@@ -324,81 +341,6 @@ const WebDevelopment = () => {
         </div>
       </section>
 
-      {/* Portfolio Section */}
-      <section id="portfolio" className="py-20 bg-gray-50 scroll-mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Our <span className="text-primary">Recent Work</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Explore some of our latest web development projects
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { title: "E-commerce Store", type: "Online Shop", desc: "Full-featured online store with secure payments and inventory management" },
-              { title: "Business Website", type: "Corporate", desc: "Professional website with lead generation and CRM integration" },
-              { title: "Community Platform", type: "Web App", desc: "Interactive platform connecting wellness providers with clients" },
-              { title: "Booking System", type: "SaaS", desc: "Custom booking and scheduling solution for service businesses" },
-              { title: "Non-Profit Portal", type: "Non-Profit", desc: "Donation management and volunteer coordination system" },
-              { title: "Health Dashboard", type: "Healthcare", desc: "Patient portal with secure data management and reporting" }
-            ].map((project, index) => (
-              <Card key={project.title} className="hover:shadow-lg transition-all duration-300 border-0 shadow-md overflow-hidden">
-                <div className="h-40 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                  <Globe className="w-16 h-16 text-white/80" />
-                </div>
-                <CardHeader>
-                  <div className="flex justify-between items-start mb-2">
-                    <CardTitle className="text-lg">{project.title}</CardTitle>
-                    <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs font-medium">{project.type}</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-gray-600">{project.desc}</CardDescription>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Technology Stack */}
-      <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Modern <span className="text-primary">Technology Stack</span>
-            </h2>
-            <p className="text-lg text-gray-600">We use cutting-edge technologies to build fast, secure, and scalable websites</p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { name: "React", desc: "Modern UI Framework" },
-              { name: "Next.js", desc: "Full-Stack Framework" },
-              { name: "TypeScript", desc: "Type-Safe Development" },
-              { name: "Tailwind CSS", desc: "Utility-First Styling" },
-              { name: "Node.js", desc: "Server-Side Runtime" },
-              { name: "MongoDB", desc: "NoSQL Database" },
-              { name: "AWS", desc: "Cloud Infrastructure" },
-              { name: "Stripe", desc: "Payment Processing" }
-            ].map((tech, index) => (
-              <Card key={tech.name} className="text-center bg-white hover:shadow-lg transition-all duration-300 border-0 shadow-md">
-                <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Code className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">{tech.name}</h3>
-                  <p className="text-sm text-gray-600">{tech.desc}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Booking Section */}
       <section className="py-20 bg-gray-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -408,7 +350,7 @@ const WebDevelopment = () => {
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
             Book a free technical consultation to discuss your project requirements and get a detailed development roadmap.
           </p>
-          <div className="bg-white rounded-2xl p-8 shadow-2xl">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 shadow-2xl">
             <h3 className="font-heading font-bold text-2xl mb-6 text-gray-900">Schedule Your Technical Consultation</h3>
             <div className="text-gray-900 mb-6">
               <p className="mb-2">💻 Technical requirements analysis</p>
@@ -419,16 +361,11 @@ const WebDevelopment = () => {
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg mb-6 border border-indigo-200">
               <p className="text-indigo-800 font-medium">✓ Click below to schedule your free technical consultation</p>
             </div>
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg min-h-[44px]"
-              asChild
-            >
-              <a href="mailto:omniwellnessmedia@gmail.com?subject=Web Development Consultation Request">
-                <Calendar className="mr-2 w-5 h-5" />
-                Email to Book Consultation
-              </a>
-            </Button>
+            <BookSessionCapture
+              serviceName="Web Development"
+              buttonText="Email to Book Consultation"
+              buttonClassName="rounded-full px-8 py-4 text-lg"
+            />
             <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"

@@ -216,7 +216,7 @@ const UWCRecruitment: React.FC = () => {
               Schedule Discovery Call
             </Button>
             <Button variant="outline" asChild>
-              <a href="mailto:omniwellnessmedia@gmail.com">
+              <a href="mailto:admin@omniwellnessmedia.co.za">
                 <Mail className="mr-2 h-4 w-4" />
                 Email Template
               </a>

@@ -522,7 +522,7 @@ export default function MonetizableURLsReference() {
                 <div>
                   <h3 className="font-semibold text-green-700 dark:text-green-400">Email Notifications Active</h3>
                   <p className="text-sm text-muted-foreground">
-                    All service quotes and contact form submissions are sent to <strong>omniwellnessmedia@gmail.com</strong>
+                    All service quotes and contact form submissions are sent to <strong>admin@omniwellnessmedia.co.za</strong>
                   </p>
                 </div>
               </div>

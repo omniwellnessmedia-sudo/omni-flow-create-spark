@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
+import { IMAGES } from '@/lib/images';
 
 const OmniWellnessRetreat = () => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -53,7 +54,7 @@ const OmniWellnessRetreat = () => {
             </h1>
             
             <p className="text-lg sm:text-2xl md:text-3xl text-white/90 font-light max-w-2xl">
-              Rejuvenate and Renew in the Serene Greyton Eco Lodge
+              Rejuvenate and Renew at the Serene Tufcat Sanctuary
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">
@@ -65,7 +66,7 @@ const OmniWellnessRetreat = () => {
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4">
                 <MapPin className="h-6 w-6 mb-2 text-white/80" />
                 <div className="text-sm text-white/60">Location</div>
-                <div className="font-semibold">Greyton Lodge</div>
+                <div className="font-semibold">Tufcat Sanctuary</div>
               </div>
               <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4">
                 <Clock className="h-6 w-6 mb-2 text-white/80" />
@@ -198,7 +199,7 @@ const OmniWellnessRetreat = () => {
 
               {/* Sacred Land Context */}
               <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl p-8 border border-primary/10">
-                <h2 className="text-3xl font-bold text-foreground mb-6">The Sacred Land of Greyton</h2>
+                <h2 className="text-3xl font-bold text-foreground mb-6">The Sacred Land of Tufcat Sanctuary</h2>
                 
                 <div className="space-y-6">
                   <div>
@@ -207,9 +208,10 @@ const OmniWellnessRetreat = () => {
                       Indigenous Khoe Heritage
                     </h3>
                     <p className="text-muted-foreground leading-relaxed pl-4">
-                      Greyton rests on ancestral lands of the Khoe people, who have inhabited this region for thousands of years. 
-                      The area's indigenous name reflects its spiritual significance as a place of healing waters and sacred mountains. 
-                      Our retreat honors this heritage by incorporating traditional Khoe wellness practices, indigenous plant knowledge, 
+                      Tufcat Sanctuary rests on ancestral lands of the Khoe people, who have inhabited this region for thousands of years.
+                      The area's indigenous significance as a place of healing and sacred mountains is reflected in our partnership with the
+                      <a href="/programs/uwc-human-animal" className="text-primary underline hover:text-primary/80">UWC Academic Programme</a>.
+                      Our retreat honors this heritage by incorporating traditional Khoe wellness practices, indigenous plant knowledge,
                       and respectful cultural exchange guided by local wisdom keepers.
                     </p>
                   </div>
@@ -220,10 +222,10 @@ const OmniWellnessRetreat = () => {
                       The Healing Valley
                     </h3>
                     <p className="text-muted-foreground leading-relaxed pl-4">
-                      Nestled in the Riviersonderend Mountains, Greyton has long been recognized as a place of natural healing. 
-                      The crisp mountain air, mineral-rich springs, and diverse fynbos ecosystem create a unique environment that 
-                      has drawn healers and seekers for generations. The valley's microclimate supports over 1,500 plant species, 
-                      many used traditionally for healing—knowledge that will be shared during our indigenous walks.
+                      Nestled in a biodiverse Cape landscape, Tufcat Sanctuary has long been recognized as a place of natural healing.
+                      The crisp mountain air, diverse fynbos ecosystem, and resident wildlife create a unique environment that
+                      has drawn healers and seekers for generations. The sanctuary supports conservation and rewilding efforts,
+                      with indigenous plant knowledge shared during our guided nature walks.
                     </p>
                   </div>
                   
@@ -233,10 +235,10 @@ const OmniWellnessRetreat = () => {
                       A Living Wellness Tradition
                     </h3>
                     <p className="text-muted-foreground leading-relaxed pl-4">
-                      The Greyton Eco Lodge sits within this living landscape, designed to harmonize with nature while providing 
-                      modern comfort. Our approach blends ancient indigenous wisdom with contemporary wellness practices, creating 
-                      a transformative experience that honors the past while embracing the present. Here, you'll walk where ancestors 
-                      walked, breathe where healers breathed, and discover your own healing journey in this sacred space.
+                      Tufcat Sanctuary sits within this living landscape, designed to harmonize with nature while providing
+                      modern comfort. As a key partner in our <a href="/programs/uwc-human-animal" className="text-primary underline hover:text-primary/80">Study Abroad &amp; UWC Programme</a>,
+                      the sanctuary blends ancient indigenous wisdom with contemporary wellness and conservation practices, creating
+                      a transformative experience that honors the past while embracing the present.
                     </p>
                   </div>
                 </div>
@@ -247,7 +249,7 @@ const OmniWellnessRetreat = () => {
                 <div className="rounded-xl overflow-hidden shadow-lg">
                   <img 
                     src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/_MG_0152.jpg"
-                    alt="Greyton mountain landscape"
+                    alt="Tufcat Sanctuary landscape"
                     className="w-full h-64 object-cover"
                   />
                 </div>
@@ -281,8 +283,8 @@ const OmniWellnessRetreat = () => {
                           <Badge variant="secondary" className="w-fit">Day 1 • 8:45 AM</Badge>
                         </div>
                         <p className="text-muted-foreground leading-relaxed mb-4">
-                          Your journey begins as the morning light kisses the landscapes of Greyton. At Greyton Eco Lodge, 
-                          a sacred opening ceremony awaits. Under the wise guidance of our indigenous leaders, you'll 
+                          Your journey begins as the morning light touches the landscape of Tufcat Sanctuary,
+                          where a sacred opening ceremony awaits. Under the wise guidance of our indigenous leaders, you'll 
                           feel the ancient energy of the land envelop you.
                         </p>
                         <div className="grid sm:grid-cols-2 gap-3 bg-muted/30 rounded-lg p-4">
@@ -550,7 +552,7 @@ const OmniWellnessRetreat = () => {
                       </div>
                       <p className="text-muted-foreground italic mb-4 text-sm leading-relaxed">
                         "This retreat changed my life. The combination of indigenous wisdom, movement, and the sacred land 
-                        of Greyton opened something in me I didn't know was closed. I returned home transformed, carrying 
+                        at Tufcat Sanctuary opened something in me I didn't know was closed. I returned home transformed, carrying 
                         ancestral knowledge that now guides my daily practice."
                       </p>
                       <div className="border-t border-border pt-3">
@@ -622,7 +624,7 @@ const OmniWellnessRetreat = () => {
                 </div>
                 <div className="rounded-lg overflow-hidden shadow-md">
                   <img 
-                    src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/khoe%20indigenous%20language%20heritage%20experience%206.jpg"
+                    src={IMAGES.community.khoe6}
                     alt="Indigenous heritage"
                     className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
                   />
@@ -671,7 +673,7 @@ const OmniWellnessRetreat = () => {
                         size="lg"
                         asChild
                       >
-                        <a href="mailto:omniwellnessmedia@gmail.com?subject=Omni Wellness Retreat Booking&body=Hi,%0A%0AI would like to book a spot for the 4th Annual Omni Wellness Retreat.%0A%0APackage preference:%0ANumber of guests:%0A%0APlease send me more information.%0A%0AThank you!">
+                        <a href="mailto:admin@omniwellnessmedia.co.za?subject=Omni Wellness Retreat Booking&body=Hi,%0A%0AI would like to book a spot for the 4th Annual Omni Wellness Retreat.%0A%0APackage preference:%0ANumber of guests:%0A%0APlease send me more information.%0A%0AThank you!">
                           Book Now
                         </a>
                       </Button>

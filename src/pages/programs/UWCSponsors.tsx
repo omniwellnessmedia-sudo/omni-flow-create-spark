@@ -87,7 +87,7 @@ const UWCSponsors: React.FC = () => {
                 size="lg"
                 asChild
               >
-                <a href="mailto:omniwellnessmedia@gmail.com?subject=Sponsorship Inquiry">
+                <a href="mailto:admin@omniwellnessmedia.co.za?subject=Sponsorship Inquiry">
                   <Heart className="mr-2 h-5 w-5" />
                   Become a Sponsor
                 </a>
@@ -222,7 +222,7 @@ const UWCSponsors: React.FC = () => {
             className="bg-white text-primary hover:bg-white/90"
             asChild
           >
-            <a href="mailto:omniwellnessmedia@gmail.com?subject=Sponsorship Inquiry">
+            <a href="mailto:admin@omniwellnessmedia.co.za?subject=Sponsorship Inquiry">
               <Mail className="mr-2 h-5 w-5" />
               Contact Our Team
             </a>
