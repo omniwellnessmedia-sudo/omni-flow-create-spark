@@ -17,6 +17,7 @@ const AdminAnalytics = lazy(() => import("@/pages/admin/AdminAnalytics"));
 const AdminAccounting = lazy(() => import("@/pages/admin/AdminAccounting"));
 const SocialScheduler = lazy(() => import("@/pages/admin/SocialScheduler"));
 const NewsletterEditor = lazy(() => import("@/pages/admin/NewsletterEditor"));
+const AdminProviders = lazy(() => import("@/pages/admin/AdminProviders"));
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -305,6 +306,7 @@ const AdminDashboard = () => {
                 { value: 'content', label: 'Content' },
                 { value: 'tasks', label: 'Tasks' },
                 { value: 'products', label: 'Products' },
+                { value: 'providers', label: 'Providers' },
                 { value: 'leads', label: 'Leads' },
                 { value: 'newsletter', label: 'Newsletter' },
                 { value: 'social', label: 'Social' },
@@ -415,6 +417,12 @@ const AdminDashboard = () => {
           <TabsContent value="products">
             <Suspense fallback={<TabLoader />}>
               <ProductManagement />
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="providers">
+            <Suspense fallback={<TabLoader />}>
+              <AdminProviders />
             </Suspense>
           </TabsContent>
 
