@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { TrendingUp, TrendingDown, DollarSign, Users, ShoppingCart, Mail, RefreshCw } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, Users, ShoppingCart, Mail, RefreshCw, BarChart3, Globe, MousePointerClick } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format, subDays, startOfDay, parseISO } from "date-fns";
 
@@ -184,26 +185,179 @@ const AdminAnalytics = () => {
 
   return (
     <div className="space-y-6">
-      {/* Period selector */}
-      <div className="flex items-center justify-between">
-        <h3 className="font-heading text-lg">Analytics Overview</h3>
-        <div className="flex items-center gap-2">
-          <Select value={period} onValueChange={setPeriod}>
-            <SelectTrigger className="w-[140px] h-8 text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7">Last 7 days</SelectItem>
-              <SelectItem value="14">Last 14 days</SelectItem>
-              <SelectItem value="30">Last 30 days</SelectItem>
-              <SelectItem value="90">Last 90 days</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button variant="outline" size="sm" className="h-8" onClick={fetchAnalytics}>
-            <RefreshCw className="h-3 w-3" />
-          </Button>
+      <Tabs defaultValue="overview" className="space-y-4">
+        <div className="flex items-center justify-between">
+          <TabsList className="h-9">
+            <TabsTrigger value="overview" className="text-xs gap-1.5">
+              <BarChart3 className="h-3.5 w-3.5" />
+              Business
+            </TabsTrigger>
+            <TabsTrigger value="ga4" className="text-xs gap-1.5">
+              <Globe className="h-3.5 w-3.5" />
+              GA4 Live
+            </TabsTrigger>
+            <TabsTrigger value="clarity" className="text-xs gap-1.5">
+              <MousePointerClick className="h-3.5 w-3.5" />
+              Clarity
+            </TabsTrigger>
+          </TabsList>
+          <div className="flex items-center gap-2">
+            <Select value={period} onValueChange={setPeriod}>
+              <SelectTrigger className="w-[140px] h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7">Last 7 days</SelectItem>
+                <SelectItem value="14">Last 14 days</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="outline" size="sm" className="h-8" onClick={fetchAnalytics}>
+              <RefreshCw className="h-3 w-3" />
+            </Button>
+          </div>
         </div>
-      </div>
+
+        {/* GA4 Live Tab */}
+        <TabsContent value="ga4" className="space-y-4">
+          <div className="grid grid-cols-1 gap-4">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  Google Analytics — Live Dashboard
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Real-time traffic, campaigns, and conversion data from GA4 (G-X9DQ4DEHNB)
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <a
+                    href="https://analytics.google.com/analytics/web/#/p/G-X9DQ4DEHNB/realtime/overview"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                      </div>
+                      <span className="font-medium text-sm">Realtime</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Active users, pages, locations right now</p>
+                  </a>
+                  <a
+                    href="https://analytics.google.com/analytics/web/#/p/G-X9DQ4DEHNB/reports/dashboard"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <BarChart3 className="h-5 w-5 text-blue-600" />
+                      <span className="font-medium text-sm">Reports</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Traffic, acquisition, engagement reports</p>
+                  </a>
+                  <a
+                    href="https://analytics.google.com/analytics/web/#/p/G-X9DQ4DEHNB/reports/acquisition-overview"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <Users className="h-5 w-5 text-purple-600" />
+                      <span className="font-medium text-sm">Acquisition</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Where visitors come from — Google Ads, organic, social, direct</p>
+                  </a>
+                  <a
+                    href="https://analytics.google.com/analytics/web/#/p/G-X9DQ4DEHNB/reports/conversions"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <ShoppingCart className="h-5 w-5 text-green-600" />
+                      <span className="font-medium text-sm">Conversions</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Purchase, lead, and booking events tracked on-site</p>
+                  </a>
+                </div>
+                <div className="mt-4 p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs text-muted-foreground">
+                    <strong>Tracked events:</strong> purchase (eSIM orders), booking (session confirmations), lead_captured (form submissions), roam_chat (bot opens).
+                    Campaign UTM data flows in automatically from Google Ads and social links.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Clarity Tab */}
+        <TabsContent value="clarity" className="space-y-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <MousePointerClick className="h-4 w-4" />
+                Microsoft Clarity — Behavior Analytics
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Heatmaps, session recordings, and user behavior insights (ID: w0lq0tum18)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a
+                  href="https://clarity.microsoft.com/projects/view/w0lq0tum18/dashboard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-4 border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <BarChart3 className="h-5 w-5 text-blue-600" />
+                    <span className="font-medium text-sm">Dashboard</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Sessions, scroll depth, dead clicks, rage clicks</p>
+                </a>
+                <a
+                  href="https://clarity.microsoft.com/projects/view/w0lq0tum18/heatmaps"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-4 border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <MousePointerClick className="h-5 w-5 text-orange-600" />
+                    <span className="font-medium text-sm">Heatmaps</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Where users click, scroll, and interact on each page</p>
+                </a>
+                <a
+                  href="https://clarity.microsoft.com/projects/view/w0lq0tum18/recordings"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-4 border rounded-lg hover:border-primary hover:bg-primary/5 transition-colors"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <Globe className="h-5 w-5 text-green-600" />
+                    <span className="font-medium text-sm">Recordings</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Watch real user sessions — filter by purchase, booking, roam_chat tags</p>
+                </a>
+              </div>
+              <div className="mt-4 p-3 bg-muted/50 rounded-lg">
+                <p className="text-xs text-muted-foreground">
+                  <strong>Custom tags active:</strong> Filter recordings by <code className="bg-muted px-1 rounded">purchase</code>, <code className="bg-muted px-1 rounded">booking</code>, <code className="bg-muted px-1 rounded">lead_captured</code>, <code className="bg-muted px-1 rounded">roam_chat</code> to find conversion sessions.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Business Analytics Tab (existing) */}
+        <TabsContent value="overview" className="space-y-6">
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -395,6 +549,9 @@ const AdminAnalytics = () => {
           </CardContent>
         </Card>
       </div>
+
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

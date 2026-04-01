@@ -27,6 +27,8 @@ interface DashboardStats {
   leadsCapured: number;
   conversionRate: number;
   weeklyGrowth: number;
+  totalOrders: number;
+  totalRevenue: number;
 }
 
 interface Conversation {
@@ -53,7 +55,9 @@ const RoamBuddySalesDashboard = () => {
     totalConversations: 0,
     leadsCapured: 0,
     conversionRate: 0,
-    weeklyGrowth: 0
+    weeklyGrowth: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
   });
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [leads, setLeads] = useState<NewsletterLead[]>([]);
@@ -92,24 +96,33 @@ const RoamBuddySalesDashboard = () => {
         setLeads(leadData || []);
       }
 
+      // Fetch real RoamBuddy eSIM orders
+      const { data: ordersData } = await supabase
+        .from('orders')
+        .select('id, amount, product_name')
+        .or('product_name.ilike.%esim%,product_name.ilike.%roam%,product_name.ilike.%data%plan%');
+
+      const totalOrders = ordersData?.length || 0;
+      const totalRevenue = ordersData?.reduce((sum: number, o: any) => sum + (o.amount || 0), 0) || 0;
+
       // Calculate stats
       const totalConversations = convData?.length || 0;
       const leadsCapured = leadData?.length || 0;
-      const conversionRate = totalConversations > 0 
-        ? Math.round((leadsCapured / totalConversations) * 100) 
+      const conversionRate = totalConversations > 0
+        ? Math.round((leadsCapured / totalConversations) * 100)
         : 0;
 
       // Calculate weekly growth (compare to previous week)
       const weekAgo = subDays(new Date(), 7);
-      const thisWeekLeads = leadData?.filter((l: any) => 
+      const thisWeekLeads = leadData?.filter((l: any) =>
         new Date(l.created_at) > weekAgo
       ).length || 0;
       const previousWeekLeads = leadData?.filter((l: any) => {
         const date = new Date(l.created_at);
         return date > subDays(weekAgo, 7) && date <= weekAgo;
       }).length || 0;
-      
-      const weeklyGrowth = previousWeekLeads > 0 
+
+      const weeklyGrowth = previousWeekLeads > 0
         ? Math.round(((thisWeekLeads - previousWeekLeads) / previousWeekLeads) * 100)
         : thisWeekLeads > 0 ? 100 : 0;
 
@@ -117,7 +130,9 @@ const RoamBuddySalesDashboard = () => {
         totalConversations,
         leadsCapured,
         conversionRate,
-        weeklyGrowth
+        weeklyGrowth,
+        totalOrders,
+        totalRevenue,
       });
 
     } catch (error) {
@@ -209,15 +224,13 @@ const RoamBuddySalesDashboard = () => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Weekly Growth</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">eSIM Orders</CardTitle>
+              <ShoppingCart className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className={`text-2xl font-bold ${stats.weeklyGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {stats.weeklyGrowth >= 0 ? '+' : ''}{stats.weeklyGrowth}%
-              </div>
+              <div className="text-2xl font-bold">{stats.totalOrders}</div>
               <p className="text-xs text-muted-foreground">
-                vs previous week
+                R{stats.totalRevenue.toLocaleString()} revenue
               </p>
             </CardContent>
           </Card>
@@ -344,61 +357,56 @@ const RoamBuddySalesDashboard = () => {
                 <div className="space-y-6">
                   {/* Funnel Stages */}
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                          1
+                    {[
+                      {
+                        step: 1,
+                        label: "Page Visitors",
+                        desc: "RoamBuddy store visits",
+                        value: "See GA4",
+                        color: "bg-blue-500",
+                        link: "https://analytics.google.com/analytics/web/#/p/G-X9DQ4DEHNB/reports/acquisition-overview",
+                      },
+                      {
+                        step: 2,
+                        label: "Bot Conversations",
+                        desc: "Engaged with ROAM AI assistant",
+                        value: stats.totalConversations,
+                        color: "bg-indigo-500",
+                      },
+                      {
+                        step: 3,
+                        label: "Leads Captured",
+                        desc: `${stats.conversionRate}% conversion rate`,
+                        value: stats.leadsCapured,
+                        color: "bg-purple-500",
+                      },
+                      {
+                        step: 4,
+                        label: "eSIM Purchases",
+                        desc: `R${stats.totalRevenue.toLocaleString()} total revenue`,
+                        value: stats.totalOrders,
+                        color: "bg-green-500",
+                      },
+                    ].map((stage) => (
+                      <div key={stage.step} className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-full ${stage.color} flex items-center justify-center text-white`}>
+                            {stage.step}
+                          </div>
+                          <div>
+                            <p className="font-medium">{stage.label}</p>
+                            <p className="text-sm text-muted-foreground">{stage.desc}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium">Page Visitors</p>
-                          <p className="text-sm text-muted-foreground">RoamBuddy store visits</p>
-                        </div>
+                        {stage.link ? (
+                          <a href={stage.link} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:underline">
+                            {stage.value} →
+                          </a>
+                        ) : (
+                          <span className="text-2xl font-bold">{stage.value}</span>
+                        )}
                       </div>
-                      <span className="text-2xl font-bold">—</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white">
-                          2
-                        </div>
-                        <div>
-                          <p className="font-medium">Bot Conversations</p>
-                          <p className="text-sm text-muted-foreground">Engaged with AI assistant</p>
-                        </div>
-                      </div>
-                      <span className="text-2xl font-bold">{stats.totalConversations}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white">
-                          3
-                        </div>
-                        <div>
-                          <p className="font-medium">Leads Captured</p>
-                          <p className="text-sm text-muted-foreground">Email signups</p>
-                        </div>
-                      </div>
-                      <span className="text-2xl font-bold">{stats.leadsCapured}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white">
-                          4
-                        </div>
-                        <div>
-                          <p className="font-medium">Conversions</p>
-                          <p className="text-sm text-muted-foreground">eSIM purchases</p>
-                        </div>
-                      </div>
-                      <span className="text-2xl font-bold">—</span>
-                    </div>
-                  </div>
-
-                  <div className="text-center text-sm text-muted-foreground pt-4 border-t">
-                    <p>📊 Full analytics coming soon — connect your RoamBuddy affiliate dashboard for purchase tracking</p>
+                    ))}
                   </div>
                 </div>
               </CardContent>

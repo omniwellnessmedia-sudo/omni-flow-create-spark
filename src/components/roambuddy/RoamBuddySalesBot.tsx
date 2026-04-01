@@ -125,6 +125,20 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
         onProductRecommended(data.productRecommended);
       }
 
+      // Detect booking/consultation intent and save as lead
+      const bookingKeywords = /\b(book|schedule|consultation|appointment|call|meeting|session)\b/i;
+      if (bookingKeywords.test(userMessage.content)) {
+        supabase.from("contact_submissions").insert({
+          name: "RoamBuddy Chat Lead",
+          email: email || `roam-session-${sessionId}@capture.pending`,
+          message: `Booking intent detected via ROAM chat.\nUser said: "${userMessage.content}"\nRoam replied: "${data.message?.substring(0, 200)}"`,
+          service: "RoamBuddy Consultation",
+          status: "pending",
+        }).then(({ error }) => {
+          if (error) console.error("Booking lead save error:", error);
+        });
+      }
+
     } catch (error) {
       console.error('Chat error:', error);
       setMessages(prev => [...prev, {
@@ -234,6 +248,9 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
 
   const openChat = () => {
     setIsOpen(true);
+    if (typeof window.tagClarityEvent === 'function') {
+      window.tagClarityEvent('roam_chat', 'opened');
+    }
     if (messages.length === 0) {
       setMessages([{
         role: 'assistant',
@@ -245,11 +262,11 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
 
   return (
     <>
-      {/* Chat Button */}
+      {/* Chat Button — bottom-28 on mobile to clear StickyBookingBar + nav */}
       <button
         onClick={openChat}
         className={cn(
-          "fixed bottom-6 right-6 z-50 flex items-center gap-3 px-6 py-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-105",
+          "fixed bottom-28 sm:bottom-6 right-4 sm:right-6 z-40 flex items-center gap-3 px-5 py-3 sm:px-6 sm:py-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-105",
           "bg-gradient-to-r from-blue-600 to-blue-700 text-white",
           isOpen && "scale-0 opacity-0"
         )}
@@ -263,10 +280,10 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
       {/* Chat Window */}
       <div
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] bg-background rounded-2xl shadow-2xl border border-border overflow-hidden transition-all duration-300",
+          "fixed bottom-28 sm:bottom-6 right-4 sm:right-6 z-50 w-[380px] max-w-[calc(100vw-32px)] bg-background rounded-2xl shadow-2xl border border-border overflow-hidden transition-all duration-300",
           isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
         )}
-        style={{ maxHeight: 'calc(100vh - 120px)' }}
+        style={{ maxHeight: 'calc(100vh - 160px)' }}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-teal-600 text-white p-4">
@@ -371,6 +388,26 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
                 <Badge
                   key={item.label}
                   variant="secondary"
+                  className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-xs"
+                  onClick={() => {
+                    setInputValue(item.query);
+                    setTimeout(() => sendMessage(), 100);
+                  }}
+                >
+                  {item.label}
+                </Badge>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground mt-3 mb-2">Or explore our services:</p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { label: '📅 Book a Call', query: "I'd like to book a consultation call" },
+                { label: '🎬 Media Services', query: "Tell me about your media production services" },
+                { label: '💻 Web Development', query: "I need help with web development" },
+              ].map((item) => (
+                <Badge
+                  key={item.label}
+                  variant="outline"
                   className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-xs"
                   onClick={() => {
                     setInputValue(item.query);

@@ -118,30 +118,62 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
     setLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
-      const bookingData = {
+
+      const roambuddyServiceDetails = selectedServices.map(id => {
+        const service = roamBuddyServices.find(s => s.id === id);
+        return { id, name: service?.name, price: service?.price };
+      });
+
+      // Build booking data — omit user_id if not authenticated (column may have FK or NOT NULL)
+      const bookingData: Record<string, unknown> = {
         tour_id: tour.id,
-        user_id: user?.id || 'anonymous',
         booking_date: selectedDate,
         participants,
         total_price: calculateTotal(),
         contact_name: contactName,
         contact_email: contactEmail,
-        contact_phone: contactPhone,
-        special_requirements: specialRequirements,
-        roambuddy_services: selectedServices.map(id => {
-          const service = roamBuddyServices.find(s => s.id === id);
-          return { id, name: service?.name, price: service?.price };
-        }),
+        contact_phone: contactPhone || null,
+        special_requirements: specialRequirements || null,
+        roambuddy_services: roambuddyServiceDetails.length > 0 ? roambuddyServiceDetails : null,
         status: 'pending',
         payment_status: 'pending'
       };
+
+      // Only set user_id if the user is actually authenticated
+      if (user?.id) {
+        bookingData.user_id = user.id;
+      }
 
       const { error } = await supabase
         .from('tour_bookings')
         .insert([bookingData]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Tour booking DB error:', error);
+        // If user_id is required by the DB and user isn't logged in, fall back to email enquiry
+        if (error.message?.includes('user_id') || error.code === '23502') {
+          // Save as lead in contact_submissions instead
+          await supabase.from('contact_submissions').insert({
+            name: contactName,
+            email: contactEmail,
+            message: `Tour Booking Request: ${tour.title}\nDate: ${selectedDate}\nParticipants: ${participants}\nTotal: $${calculateTotal()}\nPhone: ${contactPhone || 'N/A'}\nSpecial Requirements: ${specialRequirements || 'None'}\neSIM Add-ons: ${roambuddyServiceDetails.map(s => s.name).join(', ') || 'None'}`,
+            service: `Tour: ${tour.title}`,
+            status: 'pending',
+          });
+
+          // Also send email notification
+          supabase.functions.invoke('submit-contact', {
+            body: {
+              name: contactName,
+              email: contactEmail,
+              message: `Tour Booking Request: ${tour.title}\nDate: ${selectedDate}\nParticipants: ${participants}\nTotal: $${calculateTotal()}`,
+              service: `Tour: ${tour.title}`,
+            },
+          }).catch(err => console.error('Notification error:', err));
+        } else {
+          throw error;
+        }
+      }
 
       toast({
         title: "Booking Submitted!",

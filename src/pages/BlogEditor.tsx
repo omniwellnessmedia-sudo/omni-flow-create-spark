@@ -9,19 +9,30 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Save, 
-  Eye, 
-  Globe, 
-  ArrowLeft, 
-  Image as ImageIcon, 
+import {
+  Save,
+  Eye,
+  Globe,
+  ArrowLeft,
+  Image as ImageIcon,
   Settings,
   Share2,
   Facebook,
   Twitter,
   Linkedin,
-  Link
+  Link,
+  Bold,
+  Italic,
+  Heading1,
+  Heading2,
+  List,
+  ListOrdered,
+  Quote,
+  Code,
+  LinkIcon,
+  ImagePlus
 } from "lucide-react";
+import { useRef } from "react";
 
 const BlogEditor = () => {
   const { user } = useAuth();
@@ -48,6 +59,25 @@ const BlogEditor = () => {
   const [tagInput, setTagInput] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [estimatedReadTime, setEstimatedReadTime] = useState(1);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  const insertMarkdown = (prefix: string, suffix = "", placeholder = "") => {
+    const el = contentRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = post.content.substring(start, end) || placeholder;
+    const before = post.content.substring(0, start);
+    const after = post.content.substring(end);
+    const newContent = `${before}${prefix}${selected}${suffix}${after}`;
+    setPost(prev => ({ ...prev, content: newContent }));
+    // Restore cursor after state update
+    setTimeout(() => {
+      el.focus();
+      const cursorPos = start + prefix.length + selected.length + suffix.length;
+      el.setSelectionRange(cursorPos, cursorPos);
+    }, 0);
+  };
 
   useEffect(() => {
     if (!user) {
@@ -317,13 +347,50 @@ const BlogEditor = () => {
             )}
           </Card>
 
-          {/* Content Editor */}
-          <div className="space-y-4">
+          {/* Content Editor with Formatting Toolbar */}
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-1 p-2 bg-muted/50 rounded-lg border">
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("**", "**", "bold text")} title="Bold">
+                <Bold className="h-4 w-4" />
+              </Button>
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("*", "*", "italic text")} title="Italic">
+                <Italic className="h-4 w-4" />
+              </Button>
+              <Separator orientation="vertical" className="h-6 mx-1" />
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n## ", "\n", "Heading")} title="Heading">
+                <Heading1 className="h-4 w-4" />
+              </Button>
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n### ", "\n", "Subheading")} title="Subheading">
+                <Heading2 className="h-4 w-4" />
+              </Button>
+              <Separator orientation="vertical" className="h-6 mx-1" />
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n- ", "\n", "list item")} title="Bullet List">
+                <List className="h-4 w-4" />
+              </Button>
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n1. ", "\n", "list item")} title="Numbered List">
+                <ListOrdered className="h-4 w-4" />
+              </Button>
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n> ", "\n", "quote")} title="Blockquote">
+                <Quote className="h-4 w-4" />
+              </Button>
+              <Separator orientation="vertical" className="h-6 mx-1" />
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("[", "](https://)", "link text")} title="Link">
+                <LinkIcon className="h-4 w-4" />
+              </Button>
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("![", "](https://image-url)", "alt text")} title="Image">
+                <ImagePlus className="h-4 w-4" />
+              </Button>
+              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("`", "`", "code")} title="Inline Code">
+                <Code className="h-4 w-4" />
+              </Button>
+              <span className="ml-auto text-xs text-muted-foreground hidden sm:inline">Markdown supported</span>
+            </div>
             <Textarea
-              placeholder="Tell your story..."
+              ref={contentRef}
+              placeholder="Tell your story... Use the toolbar above for formatting, or write markdown directly."
               value={post.content}
               onChange={(e) => setPost(prev => ({ ...prev, content: e.target.value }))}
-              className="min-h-[500px] text-lg leading-relaxed border-none px-0 resize-none focus-visible:ring-0 placeholder:text-gray-400"
+              className="min-h-[500px] text-lg leading-relaxed border-none px-0 resize-none focus-visible:ring-0 placeholder:text-gray-400 font-mono"
               style={{ lineHeight: '1.8' }}
             />
           </div>

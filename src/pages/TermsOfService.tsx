@@ -28,7 +28,7 @@ const TermsOfService = () => {
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">Terms of Service</h1>
               <p className="text-lg text-muted-foreground">
-                Last updated: January 2025
+                Last updated: March 2026
               </p>
             </div>
 
@@ -164,6 +164,121 @@ const TermsOfService = () => {
                   acknowledge and agree that we shall not be responsible or liable for any damage or loss
                   caused by or in connection with the use of any such content, goods, or services available
                   on or through any such websites or services.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
+                <h2 className="text-2xl font-bold mb-4">Acceptable Use Policy</h2>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  When using our platform, you agree not to:
+                </p>
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                  <li>Use the platform for any unlawful purpose or in violation of any applicable laws</li>
+                  <li>Harass, abuse, threaten, or intimidate other users or service providers</li>
+                  <li>Upload or transmit viruses, malware, or other malicious code</li>
+                  <li>Attempt to gain unauthorized access to any part of the platform or its systems</li>
+                  <li>Engage in data scraping, automated access, or use bots without prior written consent</li>
+                  <li>Interfere with or disrupt the platform's infrastructure or other users' experience</li>
+                  <li>Use the platform to send unsolicited communications or spam</li>
+                  <li>Misrepresent your identity, qualifications, or affiliation with any person or entity</li>
+                </ul>
+                <p className="text-gray-700 leading-relaxed mt-4">
+                  Violation of this acceptable use policy may result in immediate suspension or termination of your account.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
+                <h2 className="text-2xl font-bold mb-4">Intellectual Property Rights</h2>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  All content, features, and functionality on the Omni Wellness Media platform -- including but
+                  not limited to text, graphics, logos, icons, images, audio, video, software, and the overall
+                  design -- are the exclusive property of Omni Wellness Media or its licensors and are protected
+                  by South African and international copyright, trademark, and other intellectual property laws.
+                </p>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  User-generated content remains the property of the respective users, but by posting content on
+                  our platform, you grant Omni Wellness Media a non-exclusive, royalty-free, worldwide license to
+                  use, display, reproduce, and distribute such content in connection with operating and promoting
+                  the platform.
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  If you believe your intellectual property rights have been infringed, please contact us at
+                  omnimediawellness@gmail.com with details of the alleged infringement.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
+                <h2 className="text-2xl font-bold mb-4">Indemnification</h2>
+                <p className="text-gray-700 leading-relaxed">
+                  You agree to indemnify, defend, and hold harmless Omni Wellness Media, its officers, directors,
+                  employees, agents, and affiliates from and against any and all claims, damages, losses, liabilities,
+                  costs, and expenses (including reasonable attorney fees) arising from or related to: (a) your use
+                  of the platform; (b) your violation of these Terms of Service; (c) your violation of any rights of
+                  a third party; or (d) any content you submit, post, or transmit through the platform. This
+                  indemnification obligation will survive the termination of your account and these Terms of Service.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
+                <h2 className="text-2xl font-bold mb-4">Force Majeure</h2>
+                <p className="text-gray-700 leading-relaxed">
+                  Omni Wellness Media shall not be liable for any failure or delay in performing its obligations
+                  under these Terms of Service where such failure or delay results from circumstances beyond our
+                  reasonable control, including but not limited to: natural disasters, acts of God, pandemic,
+                  epidemic, war, terrorism, riots, embargoes, acts of civil or military authorities, fire, floods,
+                  power outages, internet or telecommunications failures, cyber attacks, or government restrictions.
+                  During such events, our obligations shall be suspended for the duration of the force majeure event.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
+                <h2 className="text-2xl font-bold mb-4">Dispute Resolution</h2>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  In the event of any dispute arising from or relating to these Terms of Service, the parties
+                  agree to follow this resolution process:
+                </p>
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                  <li><strong>Step 1 - Informal Resolution:</strong> The parties shall first attempt to resolve the dispute informally by contacting us at omnimediawellness@gmail.com within 30 days of the dispute arising</li>
+                  <li><strong>Step 2 - Mediation:</strong> If informal resolution fails, the parties agree to submit the dispute to mediation administered by a mutually agreed-upon mediator in Cape Town, South Africa, before pursuing any litigation</li>
+                  <li><strong>Step 3 - Litigation:</strong> If mediation does not resolve the dispute within 60 days, either party may pursue legal action in the courts of South Africa</li>
+                </ul>
+                <p className="text-gray-700 leading-relaxed mt-4">
+                  Each party shall bear its own costs in connection with mediation. The costs of the mediator shall
+                  be shared equally between the parties.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
+                <h2 className="text-2xl font-bold mb-4">Service Level Commitments</h2>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  Omni Wellness Media strives to maintain high availability and quality of service. While we do not
+                  guarantee uninterrupted service, we commit to:
+                </p>
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                  <li>Targeting 99.5% platform uptime, excluding scheduled maintenance windows</li>
+                  <li>Providing advance notice of scheduled maintenance that may affect service availability</li>
+                  <li>Responding to critical support inquiries within 24 business hours</li>
+                  <li>Resolving payment and booking issues as a priority</li>
+                  <li>Communicating promptly about any service disruptions through our platform and email</li>
+                </ul>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
+                <h2 className="text-2xl font-bold mb-4">ESG and Sustainability Commitment</h2>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  Omni Wellness Media is committed to conducting business in an environmentally and socially
+                  responsible manner. As part of our Terms of Service, we affirm our dedication to:
+                </p>
+                <ul className="list-disc list-inside text-gray-700 space-y-2">
+                  <li>Minimizing the environmental impact of our digital operations</li>
+                  <li>Promoting ethical and sustainable wellness practices through our platform</li>
+                  <li>Supporting community development and social impact programs aligned with the UN Sustainable Development Goals</li>
+                  <li>Maintaining transparent and ethical governance practices</li>
+                  <li>Partnering only with service providers who share our commitment to responsible business practices</li>
+                </ul>
+                <p className="text-gray-700 leading-relaxed mt-4">
+                  For more details on our environmental, social, and governance commitments, please visit our{' '}
+                  <Link to="/esg-policy" className="text-primary hover:underline">ESG Policy</Link> page.
                 </p>
               </div>
 

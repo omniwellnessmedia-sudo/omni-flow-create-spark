@@ -3,9 +3,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Clock, User, Calendar as CalendarIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Clock, CheckCircle } from "lucide-react";
 import { format, addDays, isSameDay, isAfter, isBefore } from "date-fns";
+import { supabase } from "@/integrations/supabase/client";
 
 interface TimeSlot {
   time: string;
@@ -43,6 +45,8 @@ export const BookingCalendar = ({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [isConfirming, setIsConfirming] = useState(false);
+  const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const [contactInfo, setContactInfo] = useState({ name: "", email: "", phone: "" });
 
   // Generate next 30 days for booking
   const today = new Date();
@@ -65,22 +69,42 @@ export const BookingCalendar = ({
   };
 
   const handleConfirmBooking = async () => {
-    if (selectedDate && selectedTime) {
-      setIsConfirming(true);
-      try {
-        console.log("Confirming booking:", { date: selectedDate, time: selectedTime });
-        
-        // Call the booking handler
-        await onBookingSelect(selectedDate, selectedTime);
-        
-        // Reset form on success
-        setSelectedDate(undefined);
-        setSelectedTime("");
-      } catch (error) {
-        console.error("Booking failed:", error);
-      } finally {
-        setIsConfirming(false);
-      }
+    if (!selectedDate || !selectedTime || !contactInfo.name.trim() || !contactInfo.email.trim()) return;
+
+    setIsConfirming(true);
+    try {
+      const bookingDate = format(selectedDate, 'yyyy-MM-dd');
+      const bookingMessage = `Session booking for ${serviceTitle}\nDate: ${format(selectedDate, 'EEEE, MMMM d, yyyy')} at ${selectedTime}\nDuration: ${duration} minutes\nPrice: R${price_zar}`;
+
+      // Save as lead in contact_submissions
+      const fullMessage = `${bookingMessage}${contactInfo.phone ? `\nPhone: ${contactInfo.phone}` : ""}`;
+      await supabase.from("contact_submissions").insert({
+        name: contactInfo.name,
+        email: contactInfo.email,
+        message: fullMessage,
+        service: serviceTitle,
+        status: "pending",
+      });
+
+      // Send email notification via edge function
+      supabase.functions.invoke("submit-contact", {
+        body: {
+          name: contactInfo.name,
+          email: contactInfo.email,
+          phone: contactInfo.phone,
+          message: bookingMessage,
+          service: serviceTitle,
+        },
+      }).catch((err) => console.error("Notification error:", err));
+
+      // Call the parent booking handler
+      await onBookingSelect(selectedDate, selectedTime);
+
+      setBookingConfirmed(true);
+    } catch (error) {
+      console.error("Booking failed:", error);
+    } finally {
+      setIsConfirming(false);
     }
   };
 
@@ -158,6 +182,7 @@ export const BookingCalendar = ({
                       className="justify-start"
                       onClick={() => handleTimeSelect(slot.time)}
                       disabled={!slot.available}
+                      aria-label={`Select time slot ${slot.time}`}
                     >
                       <Clock className="w-4 h-4 mr-2" />
                       {slot.time}
@@ -177,7 +202,7 @@ export const BookingCalendar = ({
       </Card>
 
       {/* Booking Summary */}
-      {selectedDate && selectedTime && (
+      {selectedDate && selectedTime && !bookingConfirmed && (
         <Card className="border-2 border-green-200 bg-green-50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-green-800">
@@ -206,12 +231,47 @@ export const BookingCalendar = ({
                 )}
               </div>
             </div>
-            
+
+            {/* Contact Details */}
+            <div className="pt-4 border-t space-y-3">
+              <h4 className="font-semibold text-sm text-green-800">Your Details</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Full Name *</Label>
+                  <Input
+                    value={contactInfo.name}
+                    onChange={(e) => setContactInfo(p => ({ ...p, name: e.target.value }))}
+                    placeholder="Your name"
+                    className="bg-white"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Email *</Label>
+                  <Input
+                    type="email"
+                    value={contactInfo.email}
+                    onChange={(e) => setContactInfo(p => ({ ...p, email: e.target.value }))}
+                    placeholder="you@email.com"
+                    className="bg-white"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Phone (optional)</Label>
+                <Input
+                  value={contactInfo.phone}
+                  onChange={(e) => setContactInfo(p => ({ ...p, phone: e.target.value }))}
+                  placeholder="+27..."
+                  className="bg-white"
+                />
+              </div>
+            </div>
+
             <div className="pt-4 border-t">
-              <Button 
+              <Button
                 onClick={handleConfirmBooking}
                 className="w-full bg-primary hover:bg-primary/90 text-white"
-                disabled={isConfirming}
+                disabled={isConfirming || !contactInfo.name.trim() || !contactInfo.email.trim()}
               >
                 {isConfirming ? "Processing..." : "Confirm Booking"}
               </Button>
@@ -219,6 +279,35 @@ export const BookingCalendar = ({
                 You'll receive a confirmation email with booking details
               </p>
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Booking Confirmed */}
+      {bookingConfirmed && selectedDate && selectedTime && (
+        <Card className="border-2 border-green-300 bg-green-50">
+          <CardContent className="py-8 text-center space-y-4">
+            <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
+            <div>
+              <h3 className="font-heading text-lg font-semibold text-green-800">Booking Request Sent!</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                {serviceTitle} — {format(selectedDate, 'EEEE, MMMM d, yyyy')} at {selectedTime}
+              </p>
+            </div>
+            <p className="text-sm text-gray-600">
+              We'll confirm your session within 24 hours at <strong>{contactInfo.email}</strong>
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setBookingConfirmed(false);
+                setSelectedDate(undefined);
+                setSelectedTime("");
+                setContactInfo({ name: "", email: "", phone: "" });
+              }}
+            >
+              Book Another Session
+            </Button>
           </CardContent>
         </Card>
       )}

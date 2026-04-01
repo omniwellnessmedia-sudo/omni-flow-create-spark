@@ -9,6 +9,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/components/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import {
   Calendar as CalendarIcon,
@@ -93,35 +94,47 @@ const BookingSystem: React.FC<BookingSystemProps> = ({
   };
 
   const handleBookingSubmit = async () => {
-    if (!user) {
-      toast.error("Please sign in to complete booking");
-      return;
-    }
-
     setIsProcessing(true);
-    
-    try {
-      // Simulate booking API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // In a real app, you'd call your booking API here
-      const bookingData = {
-        serviceId,
-        serviceName,
-        providerId,
-        providerName,
-        ...booking,
-        totalPrice: servicePrice,
-        status: 'confirmed',
-        bookingId: `BK${Date.now()}`,
-        createdAt: new Date().toISOString()
-      };
 
-      console.log('Booking created:', bookingData);
-      
+    try {
+      const bookingDate = booking.date ? booking.date.toISOString().split('T')[0] : '';
+      const bookingMessage = `Service Booking: ${serviceName}\nProvider: ${providerName}\nDate: ${bookingDate} at ${booking.time}\nDuration: ${serviceDuration} minutes\nPrice: R${servicePrice}\nPayment: ${booking.paymentMethod}\nLocation: ${isOnline ? 'Online' : 'In-person'}${booking.notes ? `\nNotes: ${booking.notes}` : ''}`;
+
+      // Save as lead in contact_submissions
+      const fullMessage = `${bookingMessage}${booking.customerPhone ? `\nPhone: ${booking.customerPhone}` : ""}`;
+      const { error: dbError } = await supabase.from("contact_submissions").insert({
+        name: booking.customerName,
+        email: booking.customerEmail,
+        message: fullMessage,
+        service: serviceName,
+        status: "pending",
+      });
+
+      if (dbError) {
+        console.error("DB save error:", dbError);
+        throw dbError;
+      }
+
+      // Send email notification
+      supabase.functions.invoke("submit-contact", {
+        body: {
+          name: booking.customerName,
+          email: booking.customerEmail,
+          phone: booking.customerPhone,
+          message: bookingMessage,
+          service: serviceName,
+        },
+      }).catch((err) => console.error("Notification error:", err));
+
       setStep('confirmation');
       toast.success("Booking confirmed! Check your email for details.");
-      
+
+      // Tag conversion in Clarity
+      if (typeof window.tagClarityEvent === 'function') {
+        window.tagClarityEvent('booking', serviceName);
+        window.tagClarityEvent('booking_value', String(servicePrice));
+      }
+
     } catch (error) {
       toast.error("Failed to create booking. Please try again.");
       console.error('Booking error:', error);

@@ -18,6 +18,7 @@ const WellnessCommunity = React.lazy(() => import('@/pages/WellnessCommunity'));
 const IndividualProviderProfile = React.lazy(() => import('@/pages/IndividualProviderProfile'));
 const SandyMitchellProfile = React.lazy(() => import('@/pages/SandyMitchellProfile'));
 const AddService = React.lazy(() => import('@/pages/AddService'));
+const EditService = React.lazy(() => import('@/pages/EditService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
 const ProviderDashboard = React.lazy(() => import('@/pages/ProviderDashboard'));
 const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPortal'));
@@ -33,6 +34,8 @@ const Contact = React.lazy(() => import('@/pages/Contact'));
 const Services = React.lazy(() => import('@/pages/Services'));
 const PrivacyPolicy = React.lazy(() => import('@/pages/PrivacyPolicy'));
 const TermsOfService = React.lazy(() => import('@/pages/TermsOfService'));
+const CookiePolicy = React.lazy(() => import('@/pages/CookiePolicy'));
+const ESGPolicy = React.lazy(() => import('@/pages/ESGPolicy'));
 const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
 const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
@@ -123,6 +126,7 @@ const LoadingSpinner = () => (
 // Import ScrollToHash component
 import ScrollToHash from '@/components/navigation/ScrollToHash';
 import { RoamBuddySalesBot } from '@/components/roambuddy/RoamBuddySalesBot';
+import AccessibilitySettings from '@/components/accessibility/AccessibilitySettings';
 
 function App() {
   return (
@@ -142,6 +146,8 @@ function App() {
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms-of-service" element={<TermsOfService />} />
+                  <Route path="/cookie-policy" element={<CookiePolicy />} />
+                  <Route path="/esg-policy" element={<ESGPolicy />} />
                   <Route path="/auth" element={<AuthPage />} />
                   <Route path="/update-password" element={<UpdatePassword />} />
 
@@ -154,6 +160,7 @@ function App() {
                   <Route path="/wellness-exchange/community" element={<WellnessCommunity />} />
                   <Route path="/wellness-exchange/search" element={<SearchServices />} />
                   <Route path="/wellness-exchange/add-service" element={<AddService />} />
+                  <Route path="/wellness-exchange/edit-service/:serviceId" element={<EditService />} />
                   <Route path="/wellness-exchange/add-want" element={<AddWant />} />
                   <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
                   <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
@@ -209,11 +216,17 @@ function App() {
                   <Route path="/provider-dashboard" element={<ProviderDashboard />} />
                   <Route path="/provider-portal" element={<ModernProviderPortal />} />
                   <Route path="/add-service" element={<AddService />} />
+                  <Route path="/edit-service/:serviceId" element={<EditService />} />
                   
                   {/* Community & Content */}
                   <Route path="/community" element={<CommunityBlog />} />
+                  <Route path="/community-blog" element={<CommunityBlog />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog-editor" element={<BlogEditor />} />
+                  <Route path="/blog/editor/new" element={<BlogEditor />} />
+                  <Route path="/blog/editor/:postId" element={<BlogEditor />} />
+                  <Route path="/blog/post/:slug" element={<BlogPost />} />
+                  <Route path="/blog/community" element={<CommunityBlog />} />
                   <Route path="/blog-post/:slug" element={<BlogPost />} />
                   <Route path="/podcast" element={<Podcast />} />
                   <Route path="/portfolio" element={<Portfolio />} />
@@ -343,6 +356,9 @@ function App() {
               
               {/* Global ROAM Chatbot */}
               <RoamBuddySalesBot />
+
+              {/* Global Accessibility Settings */}
+              <AccessibilitySettings />
             </div>
           </Router>
         </CartProvider>

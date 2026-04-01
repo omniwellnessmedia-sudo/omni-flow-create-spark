@@ -5,8 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Wand2, UserPlus, RefreshCw, CheckCircle, AlertCircle, Users, Info } from 'lucide-react';
+import { Wand2, UserPlus, RefreshCw, CheckCircle, AlertCircle, Users, Info, Database } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import sandyMitchellData from '@/data/sandyMitchellProfile';
 
 const AdminTools = () => {
   const [loading, setLoading] = useState(false);
@@ -183,6 +184,90 @@ const AdminTools = () => {
     });
 
     setLoading(false);
+  };
+
+  const [seedResult, setSeedResult] = useState<{ success: boolean; message: string } | null>(null);
+
+  const seedSandyProvider = async () => {
+    setLoading(true);
+    setSeedResult(null);
+    try {
+      const { profile, services: sandyServices } = sandyMitchellData;
+
+      // Find Sandy's user account by email, or create provider profile with a generated ID
+      const { data: userData } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', profile.email)
+        .maybeSingle();
+
+      const providerId = userData?.id || crypto.randomUUID();
+
+      // Upsert provider profile
+      const { error: profileError } = await supabase
+        .from('provider_profiles')
+        .upsert({
+          id: providerId,
+          business_name: profile.business_name,
+          description: profile.description,
+          specialties: profile.specialties,
+          location: profile.location,
+          phone: profile.phone,
+          website: profile.website,
+          experience_years: profile.years_experience,
+          certifications: profile.certifications,
+          profile_image_url: profile.profile_image_url,
+          verified: true,
+          wellcoin_balance: 2840,
+        }, { onConflict: 'id' });
+
+      if (profileError) throw profileError;
+
+      // Insert services (skip duplicates by title)
+      let servicesCreated = 0;
+      for (const svc of sandyServices) {
+        const { error: svcError } = await supabase
+          .from('services')
+          .upsert({
+            provider_id: providerId,
+            title: svc.title,
+            description: svc.description,
+            category: svc.category,
+            price_zar: svc.price_zar,
+            price_wellcoins: svc.price_wellcoins,
+            duration_minutes: svc.duration_minutes,
+            location: svc.location || profile.location,
+            is_online: svc.is_online,
+            images: svc.images,
+            active: true,
+          }, { onConflict: 'id', ignoreDuplicates: true });
+
+        if (!svcError) servicesCreated++;
+      }
+
+      setSeedResult({
+        success: true,
+        message: `Provider "${profile.business_name}" seeded with ${servicesCreated} services (ID: ${providerId.slice(0, 8)}...)`
+      });
+
+      toast({
+        title: 'Provider Seeded',
+        description: `Sandy's profile and ${servicesCreated} services are now live in Supabase`,
+      });
+    } catch (error) {
+      console.error('Seed error:', error);
+      setSeedResult({
+        success: false,
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+      toast({
+        title: 'Seed Failed',
+        description: 'Check console for details',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const teamMembers = [
@@ -388,6 +473,47 @@ const AdminTools = () => {
               Add Team Admins
             </Button>
           </div>
+        </CardContent>
+      </Card>
+      {/* Provider Onboarding Seed */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Database className="w-5 h-5 text-primary" />
+            Provider Onboarding
+          </CardTitle>
+          <CardDescription>
+            Seed provider profiles and services into the database from static data
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="p-4 bg-muted/50 rounded-lg">
+            <h4 className="font-medium mb-1">Sandy Mitchell — Dru Yoga Cape Town</h4>
+            <p className="text-xs text-muted-foreground">
+              6 services, certifications, profile image, contact details.
+              This will create/update her provider profile and services in Supabase so her public profile page loads live data.
+            </p>
+          </div>
+          <Button onClick={seedSandyProvider} disabled={loading}>
+            {loading ? (
+              <><RefreshCw className="w-4 h-4 mr-2 animate-spin" />Seeding...</>
+            ) : (
+              <><Database className="w-4 h-4 mr-2" />Seed Sandy's Profile</>
+            )}
+          </Button>
+
+          {seedResult && (
+            <div className={`p-4 rounded-lg ${seedResult.success ? 'bg-green-500/10 border border-green-500/20' : 'bg-red-500/10 border border-red-500/20'}`}>
+              <div className="flex items-center gap-2">
+                {seedResult.success ? (
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 text-red-600" />
+                )}
+                <span className="text-sm">{seedResult.message}</span>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

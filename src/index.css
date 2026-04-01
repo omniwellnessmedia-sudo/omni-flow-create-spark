@@ -989,3 +989,14 @@ textarea:focus-visible,
   white-space: nowrap;
   border: 0;
 }
+
+/* Accessibility Settings */
+html.high-contrast body { filter: contrast(1.4); }
+html.high-contrast .text-muted-foreground { color: hsl(var(--foreground)) !important; }
+html.reduce-motion * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+html.dyslexia-font body { font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important; letter-spacing: 0.05em; word-spacing: 0.1em; }
+html.font-size-default body { font-size: 16px; }
+html.font-size-small body { font-size: 14px; }
+html.font-size-large body { font-size: 18px; }
+html.font-size-xl body { font-size: 20px; }
+html.focus-visible-enhanced *:focus-visible { outline: 3px solid #339999 !important; outline-offset: 2px !important; }

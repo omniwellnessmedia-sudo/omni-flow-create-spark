@@ -546,7 +546,7 @@ const ProviderDashboard = () => {
                                     <ToggleLeft className="h-4 w-4 text-gray-400" />
                                   )}
                                 </Button>
-                                <Button variant="ghost" size="sm">
+                                <Button variant="ghost" size="sm" onClick={() => navigate(`/wellness-exchange/edit-service/${service.id}`)}>
                                   <Edit className="h-4 w-4" />
                                 </Button>
                                 <Button 

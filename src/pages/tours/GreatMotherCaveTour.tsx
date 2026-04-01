@@ -63,7 +63,7 @@ export default function GreatMotherCaveTour() {
       {/* Hero Section */}
       <section className="relative h-[80vh] overflow-hidden">
         <img 
-          src={`${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`}
+          src={`${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view%202.jpg`}
           alt="Great Mother Cave with Chief Kingsley"
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
@@ -112,8 +112,8 @@ export default function GreatMotherCaveTour() {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <img
-                  src={`${STORAGE_BASE}/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg`}
-                  alt="Chief Kingsley"
+                  src={`${STORAGE_BASE}/General%20Images/khoe%20indigenous%20language%20heritage%20experience%207.jpg`}
+                  alt="Indigenous heritage trail"
                   className="rounded-2xl shadow-2xl"
                   loading="lazy"
                 />
@@ -243,12 +243,12 @@ export default function GreatMotherCaveTour() {
       <TourImageGallery
         title="The Great Mother Cave Experience"
         images={[
-          { src: `${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`, alt: 'View from inside the sacred cave', caption: 'Breathtaking views from Peer\'s Cave — 12,000 years of heritage' },
+          { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view%202.jpg`, alt: 'Panoramic view from Peer\'s Cave', caption: 'Breathtaking panoramic views of False Bay from the ancient cave vantage point' },
           { src: `${STORAGE_BASE}/General%20Images/Rock%20art%20portrait.jpg`, alt: 'Ancient rock art', caption: 'Ancient San rock art — spiritual storytelling preserved in stone' },
-          { src: `${STORAGE_BASE}/General%20Images/chief%20kingsley%20talking%20to%20group.jpg`, alt: 'Chief Kingsley sharing wisdom', caption: 'Chief Kingsley sharing ancestral knowledge with the group' },
-          { src: `${STORAGE_BASE}/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg`, alt: 'Chief Kingsley explaining heritage', caption: 'Learning about indigenous plant medicine along the trail' },
-          { src: `${STORAGE_BASE}/General%20Images/tour%20picture%20couple%20with%20chief%20kingsley.jpg`, alt: 'Guests with Chief Kingsley', caption: 'Guests connecting with Chief Kingsley after the ceremony' },
-          { src: `${STORAGE_BASE}/General%20Images/happy%20client%20on%20tour.jpg`, alt: 'Happy tour participant', caption: 'Transformative experiences that stay with you' },
+          { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view.jpg`, alt: 'Cave formations along the trail', caption: 'Sacred cave formations along the Muizenberg mountain trail' },
+          { src: `${STORAGE_BASE}/General%20Images/khoe%20indigenous%20language%20heritage%20experience%206.jpg`, alt: 'Indigenous heritage landscape', caption: 'The indigenous Khoe heritage landscape — where ancient wisdom meets the natural world' },
+          { src: `${STORAGE_BASE}/General%20Images/khoe%20indigenous%20language%20heritage%20experience%207.jpg`, alt: 'Heritage trail through fynbos', caption: 'Walking the ancestral trails through Cape fynbos — a living botanical heritage' },
+          { src: `${STORAGE_BASE}/General%20Images/Wellness%20retreat%202.jpg`, alt: 'Wellness in nature', caption: 'Connecting with the healing energy of the mountain landscape' },
         ]}
       />
 

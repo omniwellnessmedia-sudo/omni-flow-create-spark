@@ -48,7 +48,7 @@ const tourSteps: TourConfig = {
     {
       id: 'retreat',
       title: '4th Annual Omni Wellness Retreat',
-      content: 'Join our flagship wellness retreat featuring wine country exploration, nature immersion, and transformative wellness experiences at the beautiful Greyton Eco Lodge.',
+      content: 'Join our flagship wellness retreat featuring wine country exploration, nature immersion, and transformative wellness experiences at the beautiful Tufcat Sanctuary.',
       position: 'center',
       action: {
         label: 'Explore Retreat',

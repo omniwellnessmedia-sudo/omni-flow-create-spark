@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import BookingSystem from '@/components/booking/BookingSystem';
+import { supabase } from '@/integrations/supabase/client';
 import sandyMitchellData from '@/data/sandyMitchellProfile';
 import { IMAGES, getSandyImage } from '@/lib/images';
 import {
@@ -49,35 +50,75 @@ const SandyMitchellProfile = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('services');
-  const { profile, services, packages } = sandyMitchellData;
 
-  const { isProvider, hasProviderPermission } = useAuth();
+  // Live data state — falls back to static data
+  const [profile, setProfile] = useState(sandyMitchellData.profile);
+  const [services, setServices] = useState(sandyMitchellData.services);
+  const [packages] = useState(sandyMitchellData.packages);
+  const [liveDataLoaded, setLiveDataLoaded] = useState(false);
 
-  // Check if user is authenticated and authorized to view Sandy's profile
+  // Fetch live data from Supabase — if Sandy's profile exists in DB, use it
   useEffect(() => {
-    if (!user) {
-      toast.error("Please sign in to access provider profiles", {
-        description: "Authentication required for provider access"
-      });
-      navigate('/auth');
-      return;
-    }
-    
-    // Check if user has provider access to Sandy's profile
-    const canViewSandyProfile = isProvider('sandy-mitchell') || 
-                               hasProviderPermission('sandy-mitchell', 'view_profile') ||
-                               user.email === 'admin@omniwellness.co.za';
-    
-    // For demo: temporarily allow all authenticated users
-    // In production, uncomment below to restrict access
-    if (!canViewSandyProfile) {
-      console.log('Demo mode: Allowing all authenticated users to view Sandy\'s profile');
-      // toast.error("Access Denied", {
-      //   description: "You don't have permission to access this provider profile"
-      // });
-      // navigate('/marketplace');
-    }
-  }, [user, navigate, isProvider, hasProviderPermission]);
+    const fetchLiveData = async () => {
+      try {
+        // Try to find Sandy's provider profile by business name
+        const { data: providerData } = await supabase
+          .from('provider_profiles')
+          .select('*')
+          .ilike('business_name', '%sandy%dru%yoga%')
+          .limit(1)
+          .maybeSingle();
+
+        if (providerData) {
+          // Merge live profile data with static defaults
+          setProfile(prev => ({
+            ...prev,
+            business_name: providerData.business_name || prev.business_name,
+            description: providerData.description || prev.description,
+            specialties: providerData.specialties?.length ? providerData.specialties : prev.specialties,
+            certifications: providerData.certifications?.length ? providerData.certifications : prev.certifications,
+            location: providerData.location || prev.location,
+            phone: providerData.phone || prev.phone,
+            website: providerData.website || prev.website,
+            profile_image_url: providerData.profile_image_url || prev.profile_image_url,
+            years_experience: providerData.experience_years || prev.years_experience,
+          }));
+
+          // Fetch live services for this provider
+          const { data: servicesData } = await supabase
+            .from('services')
+            .select('*')
+            .eq('provider_id', providerData.id)
+            .eq('active', true)
+            .order('created_at', { ascending: false });
+
+          if (servicesData && servicesData.length > 0) {
+            const mappedServices = servicesData.map(s => ({
+              id: s.id,
+              title: s.title,
+              description: s.description || '',
+              category: s.category || 'Wellness',
+              price_zar: s.price_zar || 0,
+              price_wellcoins: s.price_wellcoins || 0,
+              duration_minutes: s.duration_minutes || 60,
+              location: s.location || providerData.location || '',
+              is_online: s.is_online || false,
+              images: s.images?.length ? s.images : [IMAGES.sandy.yoga],
+              suitableFor: ['All Levels'],
+            }));
+            setServices(mappedServices);
+          }
+
+          setLiveDataLoaded(true);
+        }
+      } catch (error) {
+        console.error('Error fetching live provider data:', error);
+        // Static data remains as fallback — no user-facing error needed
+      }
+    };
+
+    fetchLiveData();
+  }, []);
 
   const handleBookService = (serviceId: string) => {
     toast.success("Redirecting to booking system...", {

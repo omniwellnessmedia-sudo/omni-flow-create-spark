@@ -147,10 +147,14 @@ const Resources = () => {
                               {item.type}
                             </span>
                           </div>
-                          <Button variant="outline" size="sm" className="ml-4">
-                            <Download className="w-4 h-4 mr-2" />
-                            Download
-                          </Button>
+                          <a
+                            href={`mailto:admin@omniwellnessmedia.co.za?subject=Resource Request: ${encodeURIComponent(item.title)}&body=Hi, I would like to request the ${encodeURIComponent(item.title)} resource. Thank you.`}
+                          >
+                            <Button variant="outline" size="sm" className="ml-4">
+                              <Download className="w-4 h-4 mr-2" />
+                              Download
+                            </Button>
+                          </a>
                         </div>
                       ))}
                     </div>

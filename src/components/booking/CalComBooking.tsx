@@ -163,10 +163,23 @@ export const CalComBooking = ({
       action: "bookingSuccessful",
       callback: (e: unknown) => {
         console.log("Cal.com booking successful:", e);
+        const bookingUid = (e as { detail?: { data?: { uid?: string } } })?.detail?.data?.uid || "";
+
+        // Save booking lead to DB for dashboard sync
+        supabase.from("contact_submissions").insert({
+          name: prefillData?.name || "Cal.com Booking",
+          email: prefillData?.email || "calcom-booking@capture.com",
+          message: `Cal.com booking confirmed: ${eventSlug} (ID: ${bookingUid})`,
+          service: eventSlug.replace(/-/g, " "),
+          status: "pending",
+        }).then(({ error }) => {
+          if (error) console.error("Cal.com lead save error:", error);
+        });
+
         if (onBookingSuccess) {
           onBookingSuccess({
             eventTypeSlug: eventSlug,
-            bookingId: (e as { detail?: { data?: { uid?: string } } })?.detail?.data?.uid || "",
+            bookingId: bookingUid,
             date: new Date().toISOString(),
           });
         }
@@ -204,7 +217,21 @@ export const CalComBooking = ({
     }
   }, [calUsername, eventTypeSlug, embedMode, prefillData, globalSettings]);
 
-  const handleFallbackClick = () => {
+  const handleFallbackClick = async () => {
+    // Save lead to DB even when using email fallback
+    const slug = eventTypeSlug || globalSettings?.default_event_slug || "discovery-call";
+    try {
+      await supabase.from("contact_submissions").insert({
+        name: prefillData?.name || "Website Visitor",
+        email: prefillData?.email || "pending@capture.com",
+        message: `Booking request via Cal.com fallback for: ${slug}`,
+        service: slug.replace(/-/g, " "),
+        status: "pending",
+      });
+    } catch (err) {
+      console.error("Lead capture error:", err);
+    }
+
     const subject = encodeURIComponent("Booking Request - Omni Wellness Media");
     const body = encodeURIComponent(
       `Hi,\n\nI would like to book a session.\n\nName: ${prefillData?.name || ""}\nPreferred Date/Time: \n\nThank you!`

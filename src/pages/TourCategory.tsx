@@ -136,11 +136,11 @@ const TourCategory = () => {
             id: '2',
             title: '4th Annual Omni Wellness Retreat',
             slug: 'winter-wine-country-wellness',
-            subtitle: 'Rejuvenate and Renew in the Serene Greyton Eco Lodge',
+            subtitle: 'Rejuvenate and Renew at the Serene Tufcat Sanctuary',
             duration: '4 days / 3 nights',
             max_participants: 30,
             price_from: 3000,
-            destination: 'Greyton Eco Lodge, Greyton, South Africa',
+            destination: 'Tufcat Sanctuary, Western Cape, South Africa',
             hero_image_url: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg',
             difficulty_level: 'beginner',
             highlights: [

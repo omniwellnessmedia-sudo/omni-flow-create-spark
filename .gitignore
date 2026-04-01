@@ -34,3 +34,6 @@ public/images/
 *.webp
 *.ARW
 *.pdf
+
+# Local Netlify folder
+.netlify

@@ -34,7 +34,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#1a1a1a] text-white mt-0">
+    <footer className="bg-[#1a1a1a] text-white mt-0 pb-20 sm:pb-0">
       {/* Newsletter Strip */}
       <div className="border-b border-white/10">
         <div className="container mx-auto px-4 py-12">
@@ -49,7 +49,7 @@ const Footer = () => {
                 placeholder="Your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/30 min-w-[220px]"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/30 min-w-0 w-full sm:min-w-[220px]"
                 disabled={isSubscribing}
               />
               <Button type="submit" className="bg-white text-[#1a1a1a] hover:bg-white/90 font-medium shrink-0" disabled={isSubscribing}>
@@ -63,7 +63,7 @@ const Footer = () => {
 
       {/* Main Footer */}
       <div className="container mx-auto px-4 py-14">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-5">
@@ -122,6 +122,7 @@ const Footer = () => {
             <ul className="space-y-2.5 text-sm">
               <li><Link to="/about" className="text-white/60 hover:text-white transition-colors">About Us</Link></li>
               <li><Link to="/csr-impact" className="text-white/60 hover:text-white transition-colors">CSR Impact</Link></li>
+              <li><Link to="/esg-policy" className="text-white/60 hover:text-white transition-colors">ESG Policy</Link></li>
               <li><Link to="/contact" className="text-white/60 hover:text-white transition-colors">Contact</Link></li>
               <li><a href="mailto:admin@omniwellnessmedia.co.za" className="text-white/60 hover:text-white transition-colors">admin@omniwellnessmedia.co.za</a></li>
             </ul>
@@ -136,6 +137,8 @@ const Footer = () => {
           <div className="flex gap-5 text-xs">
             <Link to="/privacy-policy" className="text-white/30 hover:text-white/60 transition-colors">Privacy</Link>
             <Link to="/terms-of-service" className="text-white/30 hover:text-white/60 transition-colors">Terms</Link>
+            <Link to="/cookie-policy" className="text-white/30 hover:text-white/60 transition-colors">Cookies</Link>
+            <Link to="/esg-policy" className="text-white/30 hover:text-white/60 transition-colors">ESG</Link>
           </div>
         </div>
       </div>
@@ -143,7 +146,7 @@ const Footer = () => {
       {/* Back to top */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-6 left-6 p-2.5 bg-[#1a1a1a] text-white/60 hover:text-white rounded-full border border-white/10 hover:border-white/20 transition-all z-40"
+        className="fixed bottom-16 sm:bottom-6 left-6 p-2.5 bg-[#1a1a1a] text-white/60 hover:text-white rounded-full border border-white/10 hover:border-white/20 transition-all z-40"
         aria-label="Back to top"
       >
         <ArrowUp className="w-4 h-4" />

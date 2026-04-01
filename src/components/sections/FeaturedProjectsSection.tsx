@@ -23,7 +23,7 @@ const FeaturedProjectsSection = () => {
     {
       title: "Wellness Education & Growth",
       description: "Sharing knowledge and fostering growth through educational programs and community workshops.",
-      image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Wellness-Tours**(travelandtourscapetow)/_MG_0148.jpg",
+      image: IMAGES.community.empowerment,
       category: "Education & Development",
       href: "/services"
     }

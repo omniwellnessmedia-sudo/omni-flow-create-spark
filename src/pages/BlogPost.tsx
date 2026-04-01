@@ -385,18 +385,49 @@ const BlogPost = () => {
               </div>
             )}
 
-            {/* Content */}
-            <div className="prose prose-lg max-w-none">
-              {post.content.split('\n').map((paragraph, index) => (
-                paragraph.trim() ? (
-                  <p key={index} className="mb-6 text-gray-800 leading-relaxed">
-                    {paragraph}
-                  </p>
-                ) : (
-                  <br key={index} />
-                )
-              ))}
-            </div>
+            {/* Content — renders markdown */}
+            <div
+              className="prose prose-lg max-w-none prose-headings:font-heading prose-a:text-primary prose-blockquote:border-primary/30"
+              dangerouslySetInnerHTML={{
+                __html: (() => {
+                  let html = post.content
+                    // Escape HTML entities first
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    // Headings
+                    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+                    // Bold and italic
+                    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                    // Inline code
+                    .replace(/`([^`]+)`/g, '<code>$1</code>')
+                    // Images
+                    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="rounded-lg my-6" />')
+                    // Links
+                    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+                    // Blockquotes
+                    .replace(/^&gt; (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
+                    // Unordered lists
+                    .replace(/^- (.+)$/gm, '<li>$1</li>')
+                    // Ordered lists
+                    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+                    // Wrap consecutive <li> in <ul>
+                    .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+                    // Paragraphs — double newlines
+                    .replace(/\n\n+/g, '</p><p>')
+                    // Single newlines to <br>
+                    .replace(/\n/g, '<br />');
+
+                  // Wrap in paragraph tags
+                  if (!html.startsWith('<')) html = `<p>${html}</p>`;
+
+                  return html;
+                })()
+              }}
+            />
 
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (

@@ -91,7 +91,7 @@ const UnifiedNavigation = () => {
         { title: "Kalk Bay's Rich Tapestry", href: '/tours/kalk-bay-tour', description: 'Ancient whispers, healing herbs — Kalk Bay', icon: '🌊' },
         { title: 'Hoofbeats & Healing', href: '/experiences/cart-horse-urban-wellness', description: 'Equine-assisted wellness experience', icon: '🐴' },
         { title: 'Corporate Wellness Retreats', href: '/experiences/corporate-wellness-retreat', description: 'Bespoke team retreats with measurable impact', icon: '🏢' },
-        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Weekend retreat — Greyton', icon: '🧘‍♀️' },
+        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Weekend retreat — Tufcat Sanctuary', icon: '🧘‍♀️' },
         { title: 'All Tours & Experiences', href: '/tours-retreats', description: 'Browse everything', icon: '🗺️' },
       ]
     },
@@ -250,7 +250,7 @@ const UnifiedNavigation = () => {
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80">
+              <SheetContent side="right" className="w-[calc(100vw-16px)] sm:w-80">
                 <SheetHeader>
                   <SheetTitle className="text-left flex items-center">
                     <img src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/Omni%20Horizontal%20Logo-07.png" alt="Omni" className="h-8 w-auto" />

@@ -46,11 +46,13 @@ const AdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState({
     orders: [] as any[],
     bookings: [] as any[],
+    serviceBookings: [] as any[],
     recentActivity: [] as any[],
     stats: {
       totalRevenue: 0,
       totalOrders: 0,
       totalBookings: 0,
+      totalServiceBookings: 0,
       totalUsers: 0,
       totalProviders: 0,
       activeProviders: 0,
@@ -105,6 +107,7 @@ const AdminDashboard = () => {
       const [
         ordersResult,
         bookingsResult,
+        serviceBookingsResult,
         usersCountResult,
         servicesResult,
         toursResult,
@@ -115,6 +118,7 @@ const AdminDashboard = () => {
         consumerResult,
         ordersCountResult,
         bookingsCountResult,
+        serviceBookingsCountResult,
         blogCountResult,
         publishedBlogCountResult,
         pendingOrdersCountResult,
@@ -123,6 +127,7 @@ const AdminDashboard = () => {
         // Display data (limited for UI)
         supabase.from('orders').select('*').order('created_at', { ascending: false }).limit(10),
         supabase.from('tour_bookings').select('*, tours(title)').order('created_at', { ascending: false }).limit(10),
+        supabase.from('contact_submissions').select('*').order('created_at', { ascending: false }).limit(10),
         // Accurate counts
         supabase.from('profiles').select('*', { count: 'exact', head: true }),
         supabase.from('services').select('*', { count: 'exact', head: true }).eq('active', true),
@@ -134,6 +139,7 @@ const AdminDashboard = () => {
         supabase.from('consumer_profiles').select('wellcoin_balance'),
         supabase.from('orders').select('*', { count: 'exact', head: true }),
         supabase.from('tour_bookings').select('*', { count: 'exact', head: true }),
+        supabase.from('contact_submissions').select('*', { count: 'exact', head: true }),
         supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
         supabase.from('blog_posts').select('*', { count: 'exact', head: true }).eq('status', 'published'),
         supabase.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
@@ -142,12 +148,13 @@ const AdminDashboard = () => {
 
       const orders = ordersResult.data || [];
       const bookings = bookingsResult.data || [];
+      const serviceBookings = serviceBookingsResult.data || [];
 
       // Calculate stats from accurate queries
       const totalRevenue = (revenueResult.data || []).reduce((sum: number, order: any) => sum + (order.amount || 0), 0);
       const wellcoinTotal = consumerResult.data?.reduce((sum, c) => sum + (c.wellcoin_balance || 0), 0) || 0;
 
-      // Build recent activity from real data
+      // Build recent activity from real data (orders + tour bookings + service leads)
       const recentActivity = [
         ...(orders.slice(0, 3).map(o => ({
           type: 'order',
@@ -160,17 +167,25 @@ const AdminDashboard = () => {
           description: `Tour booking: ${b.tours?.title || 'Tour'}`,
           time: new Date(b.created_at).toLocaleString(),
           amount: b.total_price
+        }))),
+        ...(serviceBookings.slice(0, 3).map(s => ({
+          type: 'lead',
+          description: `${s.service ? `${s.service} lead` : 'New inquiry'}: ${s.name}`,
+          time: new Date(s.created_at).toLocaleString(),
+          amount: null
         })))
-      ];
+      ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 8);
 
       setDashboardData({
         orders,
         bookings,
+        serviceBookings,
         recentActivity,
         stats: {
           totalRevenue,
           totalOrders: ordersCountResult.count || 0,
           totalBookings: bookingsCountResult.count || 0,
+          totalServiceBookings: serviceBookingsCountResult.count || 0,
           totalUsers: usersCountResult.count || 0,
           totalProviders: providerResult.count || 0,
           activeProviders: providerResult.count || 0,
@@ -460,38 +475,81 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="bookings">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Tour Bookings</CardTitle>
-                <CardDescription className="text-xs">Manage tour reservations</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {dashboardData.bookings.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8 text-sm">No bookings yet</p>
-                ) : (
-                  <div className="space-y-3">
-                    {dashboardData.bookings.map((booking: any) => (
-                      <div key={booking.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-sm truncate">{booking.contact_name || 'Guest'}</p>
-                          <p className="text-xs text-muted-foreground truncate">{booking.contact_email}</p>
-                          <p className="text-xs truncate">{booking.tours?.title || 'Tour'}</p>
-                          <p className="text-[10px] text-muted-foreground">
-                            {booking.participants} guests • {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString() : 'TBD'}
-                          </p>
+            <div className="space-y-4">
+              {/* Service Session Bookings / Leads */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Service Bookings & Leads</CardTitle>
+                  <CardDescription className="text-xs">
+                    Session requests and inquiries ({dashboardData.stats.totalServiceBookings} total)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {dashboardData.serviceBookings.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8 text-sm">No service bookings yet</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {dashboardData.serviceBookings.map((lead: any) => (
+                        <div key={lead.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-sm truncate">{lead.name || 'Anonymous'}</p>
+                            <p className="text-xs text-muted-foreground truncate">{lead.email}</p>
+                            {lead.service && (
+                              <p className="text-xs text-primary truncate">{lead.service}</p>
+                            )}
+                            <p className="text-[10px] text-muted-foreground truncate">
+                              {lead.message?.substring(0, 80)}{lead.message?.length > 80 ? '...' : ''}
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2">
+                            <p className="text-[10px] text-muted-foreground">
+                              {new Date(lead.created_at).toLocaleDateString()}
+                            </p>
+                            <Badge variant={lead.status === 'responded' ? 'default' : lead.status === 'in_progress' ? 'outline' : 'secondary'} className="text-[10px]">
+                              {lead.status || 'pending'}
+                            </Badge>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2">
-                          <p className="font-bold text-sm">R{booking.total_price?.toLocaleString() || 0}</p>
-                          <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'} className="text-[10px]">
-                            {booking.status}
-                          </Badge>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Tour Bookings */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Tour Bookings</CardTitle>
+                  <CardDescription className="text-xs">Manage tour reservations ({dashboardData.stats.totalBookings} total)</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {dashboardData.bookings.length === 0 ? (
+                    <p className="text-center text-muted-foreground py-8 text-sm">No tour bookings yet</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {dashboardData.bookings.map((booking: any) => (
+                        <div key={booking.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-sm truncate">{booking.contact_name || 'Guest'}</p>
+                            <p className="text-xs text-muted-foreground truncate">{booking.contact_email}</p>
+                            <p className="text-xs truncate">{booking.tours?.title || 'Tour'}</p>
+                            <p className="text-[10px] text-muted-foreground">
+                              {booking.participants} guests • {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString() : 'TBD'}
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2">
+                            <p className="font-bold text-sm">R{booking.total_price?.toLocaleString() || 0}</p>
+                            <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'} className="text-[10px]">
+                              {booking.status}
+                            </Badge>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="tours">

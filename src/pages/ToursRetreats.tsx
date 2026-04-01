@@ -77,8 +77,8 @@ const tours = [
   {
     title: "4th Annual Omni Wellness Retreat",
     subtitle: "Rejuvenate and Renew",
-    description: "A weekend wellness retreat at the serene Greyton Eco Lodge. Yoga, meditation, community connection, and holistic wellness programming.",
-    location: "Greyton, Western Cape",
+    description: "A weekend wellness retreat at the serene Tufcat Sanctuary. Yoga, meditation, community connection, and holistic wellness programming.",
+    location: "Tufcat Sanctuary, Western Cape",
     duration: "Weekend",
     difficulty: "All Levels",
     price: "Contact for pricing",

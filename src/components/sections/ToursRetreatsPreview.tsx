@@ -133,7 +133,7 @@ const ToursRetreatsPreview = () => {
               <CardContent className="p-5 sm:w-2/3 flex flex-col justify-center">
                 <Badge variant="secondary" className="w-fit mb-2 text-xs">Weekend Retreats</Badge>
                 <h4 className="text-lg font-semibold text-foreground mb-1">4th Annual Omni Wellness Retreat</h4>
-                <p className="text-sm text-muted-foreground mb-3">Greyton Eco Lodge · 4 days / 3 nights · From R3,000</p>
+                <p className="text-sm text-muted-foreground mb-3">Tufcat Sanctuary · 4 days / 3 nights · From R3,000</p>
                 <Link to="/tour-detail/winter-wine-country-wellness">
                   <Button variant="outline" size="sm">
                     View Details <ArrowRight className="ml-1 h-3 w-3" />

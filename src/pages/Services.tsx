@@ -185,7 +185,7 @@ const Services = () => {
             </div>
 
             {/* Core 4 Services */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mb-16">
               {services.slice(0, 4).map((service, index) => (
                 <Card 
                   key={service.title}
@@ -240,7 +240,7 @@ const Services = () => {
                   </svg>
                 </summary>
                 
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                   {services.slice(4).map((service, index) => (
                     <Card 
                       key={service.title}
@@ -287,7 +287,7 @@ const Services = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
               {[
                 { step: "01", title: "Discovery", desc: "Understanding your vision, values, and goals" },
                 { step: "02", title: "Strategy", desc: "Developing a comprehensive plan for success" },

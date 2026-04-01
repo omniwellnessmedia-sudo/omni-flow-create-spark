@@ -37,7 +37,7 @@ export const MegaNavigation = () => {
         { title: "Kalk Bay's Rich Tapestry", href: '/tours/kalk-bay-tour', description: 'Ancient whispers, healing herbs', icon: '🌊' },
         { title: 'Hoofbeats & Healing', href: '/experiences/cart-horse-urban-wellness', description: 'Equine-assisted wellness', icon: '🐴' },
         { title: 'Corporate Wellness Retreats', href: '/experiences/corporate-wellness-retreat', description: 'Bespoke team retreats', icon: '🏢' },
-        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Weekend retreat — Greyton', icon: '🧘‍♀️' },
+        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Weekend retreat — Tufcat Sanctuary', icon: '🧘‍♀️' },
         { title: 'All Tours & Experiences', href: '/tours-retreats', description: 'Browse everything', icon: '🗺️' },
       ]
     }

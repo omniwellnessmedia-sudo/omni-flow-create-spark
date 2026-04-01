@@ -173,7 +173,7 @@ const HeroSection = () => {
     },
     {
       title: "Wellness Retreat Gatherings",
-      description: "Transformative multi-day wellness experiences at Greyton Eco Lodge",
+      description: "Transformative multi-day wellness experiences at Tufcat Sanctuary",
       href: "/tour-detail/winter-wine-country-wellness",
       image: getStorageUrl("Wellness retreat 2.jpg"),
       category: "wellness",

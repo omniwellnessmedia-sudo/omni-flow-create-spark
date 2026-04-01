@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
-import { Search, TrendingUp } from 'lucide-react';
+import { Search, TrendingUp, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import curatedSeed from '@/data/curated_wellness_seed.json';
@@ -13,6 +13,27 @@ interface SearchResult {
   price_zar: number;
   image_url: string;
 }
+
+const SearchProductThumbnail = ({ src, alt }: { src: string; alt: string }) => {
+  const [failed, setFailed] = useState(false);
+
+  if (!src || failed) {
+    return (
+      <div className="w-12 h-12 rounded bg-gradient-to-br from-teal-50 to-teal-100 flex items-center justify-center flex-shrink-0">
+        <Package className="w-5 h-5 text-teal-400" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-12 h-12 object-cover rounded flex-shrink-0"
+      onError={() => setFailed(true)}
+    />
+  );
+};
 
 interface SearchAutocompleteProps {
   onResultClick?: () => void;
@@ -129,11 +150,7 @@ export const SearchAutocomplete = ({ onResultClick }: SearchAutocompleteProps) =
                     >
                       <CommandItem className="cursor-pointer">
                         <div className="flex items-center gap-3 w-full">
-                          <img
-                            src={product.image_url}
-                            alt={product.name}
-                            className="w-12 h-12 object-cover rounded"
-                          />
+                          <SearchProductThumbnail src={product.image_url} alt={product.name} />
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-sm truncate">
                               {product.name}

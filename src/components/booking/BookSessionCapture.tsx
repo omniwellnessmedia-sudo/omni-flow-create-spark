@@ -46,28 +46,43 @@ const BookSessionCapture = ({
     setLoading(true);
     try {
       // Save as lead in contact_submissions
-      await supabase.from("contact_submissions").insert({
+      const fullMessage = `${form.message || `Booking request for ${serviceName}`}${form.phone ? `\nPhone: ${form.phone}` : ""}`;
+      const { error: dbError } = await supabase.from("contact_submissions").insert({
         name: form.name,
         email: form.email,
-        message: form.message || `Booking request for ${serviceName}`,
+        message: fullMessage,
         organization: null,
         service: serviceName,
         status: "pending",
       });
 
-      // Also try the edge function for email notification
-      supabase.functions.invoke("submit-contact", {
+      if (dbError) {
+        console.error("DB save error:", dbError);
+      }
+
+      // Send email notification via edge function
+      const { error: fnError } = await supabase.functions.invoke("submit-contact", {
         body: {
           name: form.name,
           email: form.email,
+          phone: form.phone,
           message: form.message || `Booking request for ${serviceName}`,
           service: serviceName,
         },
-      }).catch(() => {});
+      });
+
+      if (fnError) {
+        console.error("Email notification error:", fnError);
+      }
 
       setSubmitted(true);
 
-      // After a brief moment, open email client as fallback
+      // Tag conversion in Clarity
+      if (typeof window.tagClarityEvent === 'function') {
+        window.tagClarityEvent('lead_captured', serviceName);
+      }
+
+      // After a brief moment, open email client as backup
       setTimeout(() => {
         const body = `Hi,\n\nI'd like to book a ${serviceName} session.\n\nName: ${form.name}\nEmail: ${form.email}${form.phone ? `\nPhone: ${form.phone}` : ""}\n\n${form.message || ""}\n\nThank you!`;
         window.location.href = `mailto:admin@omniwellnessmedia.co.za?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
