@@ -194,41 +194,80 @@ const AdminTools = () => {
     try {
       const { profile, services: sandyServices } = sandyMitchellData;
 
-      // Find Sandy's user account by email, or create provider profile with a generated ID
-      const { data: userData } = await supabase
-        .from('profiles')
+      // Use the current admin's auth ID — RLS requires id = auth.uid() for inserts
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('You must be logged in to seed provider data');
+
+      const providerId = user.id;
+
+      // First check if this admin already has a provider profile
+      const { data: existing } = await supabase
+        .from('provider_profiles')
         .select('id')
-        .eq('email', profile.email)
+        .eq('id', providerId)
         .maybeSingle();
 
-      const providerId = userData?.id || crypto.randomUUID();
+      if (existing) {
+        // Update existing profile
+        const { error: updateError } = await supabase
+          .from('provider_profiles')
+          .update({
+            business_name: profile.business_name,
+            description: profile.description,
+            specialties: profile.specialties,
+            location: profile.location,
+            phone: profile.phone,
+            website: profile.website,
+            experience_years: profile.years_experience,
+            certifications: profile.certifications,
+            profile_image_url: profile.profile_image_url,
+            verified: true,
+            wellcoin_balance: 2840,
+          })
+          .eq('id', providerId);
 
-      // Upsert provider profile
-      const { error: profileError } = await supabase
-        .from('provider_profiles')
-        .upsert({
-          id: providerId,
-          business_name: profile.business_name,
-          description: profile.description,
-          specialties: profile.specialties,
-          location: profile.location,
-          phone: profile.phone,
-          website: profile.website,
-          experience_years: profile.years_experience,
-          certifications: profile.certifications,
-          profile_image_url: profile.profile_image_url,
-          verified: true,
-          wellcoin_balance: 2840,
-        }, { onConflict: 'id' });
+        if (updateError) throw updateError;
+      } else {
+        // Insert new profile — id must match auth.uid() for RLS
+        const { error: insertError } = await supabase
+          .from('provider_profiles')
+          .insert({
+            id: providerId,
+            business_name: profile.business_name,
+            description: profile.description,
+            specialties: profile.specialties,
+            location: profile.location,
+            phone: profile.phone,
+            website: profile.website,
+            experience_years: profile.years_experience,
+            certifications: profile.certifications,
+            profile_image_url: profile.profile_image_url,
+            verified: true,
+            wellcoin_balance: 2840,
+          });
 
-      if (profileError) throw profileError;
+        if (insertError) throw insertError;
+      }
 
-      // Insert services (skip duplicates by title)
+      // Insert services — use provider_id matching auth.uid()
       let servicesCreated = 0;
       for (const svc of sandyServices) {
+        // Check if service with same title already exists for this provider
+        const { data: existingSvc } = await supabase
+          .from('services')
+          .select('id')
+          .eq('provider_id', providerId)
+          .eq('title', svc.title)
+          .maybeSingle();
+
+        if (existingSvc) {
+          servicesCreated++; // Already exists, count it
+          continue;
+        }
+
         const { error: svcError } = await supabase
           .from('services')
-          .upsert({
+          .insert({
             provider_id: providerId,
             title: svc.title,
             description: svc.description,
@@ -240,14 +279,15 @@ const AdminTools = () => {
             is_online: svc.is_online,
             images: svc.images,
             active: true,
-          }, { onConflict: 'id', ignoreDuplicates: true });
+          });
 
         if (!svcError) servicesCreated++;
+        else console.error('Service insert error:', svc.title, svcError);
       }
 
       setSeedResult({
         success: true,
-        message: `Provider "${profile.business_name}" seeded with ${servicesCreated} services (ID: ${providerId.slice(0, 8)}...)`
+        message: `Provider "${profile.business_name}" seeded with ${servicesCreated} services under your admin account`
       });
 
       toast({
