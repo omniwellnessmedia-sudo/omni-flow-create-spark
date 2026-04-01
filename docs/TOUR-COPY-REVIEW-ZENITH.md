@@ -24,7 +24,7 @@ This document is for you to verify that all tour page content matches the offici
 | Page title | "The Great Mother Cave Tour" | [ ] Yes / [ ] No |
 | Subtitle | "with Chief Kingsley of the Gorachouqua Khoi Nation" | [ ] Yes / [ ] No |
 | Location | Fish Hoek | [ ] Yes / [ ] No |
-| Duration | 4-5 hours | [ ] Yes / [ ] No |
+| Duration | 4-5 hours | [ ] Yes /D [ ] No |
 | Difficulty | Moderate | [ ] Yes / [ ] No |
 | Group Size | Max 12 | [ ] Yes / [ ] No |
 | Start/End Point | Fish Hoek Athletics Club parking lot | [ ] Yes / [ ] No |

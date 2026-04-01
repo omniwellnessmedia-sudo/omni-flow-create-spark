@@ -54,10 +54,10 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 | Service editing | Live | Edit any field, changes sync to public profile instantly |
 | Service toggle | Live | Activate/deactivate from dashboard |
 | Service deletion | Live | With confirmation |
-| Provider dashboard | Live | 9 tabs: Overview, Services, Bookings, Transactions, Media, Website, Reviews, AI Insights, Blog |
+| Provider dashboard | Live | 7 tabs: Overview, Services, Bookings, Earnings, Media, Blog, Reviews — optimized with component extraction, memoization, and lazy-loaded media tab |
 | Admin providers tab | Live | List all providers, verify/unverify, manage all services, add new providers |
 | Provider directory | Live | Public listing with search/filter |
-| Sandy Mitchell profile | Live | Branded profile page with live Supabase data + static fallback |
+| Sandy Mitchell profile | Live | Branded profile page with live Supabase data |
 | Provider seed tool | Live | One-click onboarding in Admin > Tools |
 
 **Revenue status:** Infrastructure ready. Sandy Mitchell is the first live provider. No payment processing for provider services yet (booking creates leads, not transactions).
@@ -198,6 +198,15 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 | WellCoins redemption | Complete loyalty loop | 1 week |
 | Multi-tenant dashboard | Sell dashboard access to clients | 2-3 weeks |
 
+### Recently Completed (1 April 2026)
+| Item | What Changed |
+|------|-------------|
+| Provider dashboard optimization | Removed hardcoded demo data, now fully driven by live Supabase queries |
+| Component extraction | Header, StatsGrid, ProfileCompletionBar, ServiceCard extracted to `src/components/provider-dashboard/` |
+| Performance | Added `React.memo`, `useMemo`, `useCallback` throughout; lazy-loaded Media tab |
+| Dead code removal | Deleted `sandyDemoData.ts` (602 lines), removed unused DudaSiteManager import and 7 unused icon imports |
+| Tab consolidation | Reduced from 9 tabs to 7 (removed Website and AI Insights tabs that had no real functionality) |
+
 ---
 
 ## 4. IMMEDIATE ACTION ITEMS
@@ -264,5 +273,5 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 
 ---
 
-*Report generated 1 April 2026 — Omni Wellness Media*
-*Platform version: fc2c750 (main branch)*
+*Report updated 1 April 2026 — Omni Wellness Media*
+*Platform version: main branch (latest)*

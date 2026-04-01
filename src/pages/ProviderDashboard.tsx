@@ -1,270 +1,127 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import { 
-  Coins, 
-  TrendingUp, 
-  Users, 
-  Calendar, 
-  Star, 
-  Plus, 
-  Eye, 
-  MessageCircle,
-  MessageSquare,
-  Settings,
-  Bot,
-  PiggyBank,
-  Heart,
-  Award,
-  Globe,
-  Image as ImageIcon,
-  FileText,
-  Upload,
-  Edit,
-  Trash2,
-  ToggleLeft,
-  ToggleRight
-} from "lucide-react";
-import DudaSiteManager from "@/components/duda/DudaSiteManager";
-import ProviderMediaUpload from "@/components/ProviderMediaUpload";
-import LiveDemoPresence from "@/components/collaboration/LiveDemoPresence";
-import { sandyDemoData, helenProviderData } from "@/data/sandyDemoData";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Plus, Eye, MessageCircle, FileText, Edit, MapPin, CheckCircle, Package } from "lucide-react";
+import ProviderHeader from "@/components/provider-dashboard/ProviderHeader";
+import StatsGrid from "@/components/provider-dashboard/StatsGrid";
+import ProfileCompletionBar from "@/components/provider-dashboard/ProfileCompletionBar";
+import ServiceCard from "@/components/provider-dashboard/ServiceCard";
+
+const ProviderMediaUpload = lazy(() => import("@/components/ProviderMediaUpload"));
+
+const TABS = [
+  { value: "overview", label: "Overview" },
+  { value: "services", label: "Services" },
+  { value: "bookings", label: "Bookings" },
+  { value: "transactions", label: "Earnings" },
+  { value: "media", label: "Media" },
+  { value: "blog", label: "Blog" },
+  { value: "reviews", label: "Reviews" },
+] as const;
 
 const ProviderDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  
-  // Use demo data for stakeholder presentation
-  const isSandyDemo = user?.email?.includes('sandy');
-  const isHelenDemo = user?.email?.includes('helen');
-  const isDemoMode = isSandyDemo || isHelenDemo || process.env.NODE_ENV === 'development';
-  
-  // Select appropriate demo data based on user
-  const demoData = isHelenDemo ? helenProviderData : sandyDemoData;
-  
-  const [wellCoinBalance, setWellCoinBalance] = useState(isDemoMode ? demoData.profile.wellcoinBalance : 0);
-  const [zarEarnings, setZarEarnings] = useState(isDemoMode ? demoData.profile.zarEarnings : 0);
-  const [activeListings, setActiveListings] = useState(isDemoMode ? (isHelenDemo ? 5 : 7) : 0);
-  const [totalBookings, setTotalBookings] = useState(isDemoMode ? demoData.profile.totalClients : 0);
-  const [rating, setRating] = useState(isDemoMode ? demoData.profile.rating : 0);
-  const [profileCompletion, setProfileCompletion] = useState(isDemoMode ? demoData.profile.profileCompletion : 0);
-  const [providerProfile, setProviderProfile] = useState<any>(isDemoMode ? {
-    business_name: demoData.profile.business,
-    description: demoData.profile.bio,
-    specialties: demoData.profile.specialties,
-    location: 'Cape Town, South Africa',
-    years_experience: demoData.profile.yearsExperience,
-    verified: true
-  } : null);
+
+  const [wellCoinBalance, setWellCoinBalance] = useState(0);
+  const [zarEarnings, setZarEarnings] = useState(0);
+  const [profileCompletion, setProfileCompletion] = useState(0);
+  const [providerProfile, setProviderProfile] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
   const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-      await loadDashboardData(session.user.id);
-    };
-
-    checkAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) {
-        navigate("/auth");
-      } else {
-        loadDashboardData(session.user.id);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  const loadDashboardData = async (userId: string) => {
+  const loadDashboardData = useCallback(async (userId: string) => {
     setLoading(true);
     try {
-      // Load provider profile
-      const { data: profile } = await supabase
-        .from('provider_profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      const [profileRes, servicesRes, bookingsRes, transactionsRes] = await Promise.all([
+        supabase.from("provider_profiles").select("*").eq("id", userId).maybeSingle(),
+        supabase.from("services").select("*").eq("provider_id", userId).order("created_at", { ascending: false }),
+        supabase.from("bookings").select("*, services(title)").eq("provider_id", userId).order("created_at", { ascending: false }).limit(20),
+        supabase.from("transactions").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(10),
+      ]);
 
+      const profile = profileRes.data;
       setProviderProfile(profile);
       setWellCoinBalance(profile?.wellcoin_balance || 0);
+      setServices(servicesRes.data || []);
+      setUpcomingBookings(bookingsRes.data || []);
+      setRecentTransactions(transactionsRes.data || []);
 
-      // Calculate profile completion
-      const completionFields = [
-        profile?.business_name,
-        profile?.description,
-        profile?.location,
-        profile?.phone,
-        profile?.specialties?.length > 0,
-        profile?.certifications?.length > 0
-      ];
-      const filledFields = completionFields.filter(Boolean).length;
-      setProfileCompletion(Math.round((filledFields / completionFields.length) * 100));
+      const fields = [profile?.business_name, profile?.description, profile?.location, profile?.phone, profile?.specialties?.length > 0, profile?.certifications?.length > 0, profile?.profile_image_url];
+      setProfileCompletion(Math.round((fields.filter(Boolean).length / fields.length) * 100));
 
-      // Load services - use demo data in demo mode
-      if (isDemoMode) {
-        const demoServices = (isSandyDemo && 'services' in demoData) ? demoData.services : [];
-        setServices(demoServices);
-        setActiveListings(demoServices.filter((s: any) => s.active).length || 0);
-      } else {
-        const { data: servicesData, error: servicesError } = await supabase
-          .from('services')
-          .select('*')
-          .eq('provider_id', userId)
-          .order('created_at', { ascending: false });
-
-        if (servicesError) throw servicesError;
-        setServices(servicesData || []);
-        setActiveListings(servicesData?.filter(s => s.active).length || 0);
-      }
-
-      // Load bookings
-      const { data: bookingsData, error: bookingsError } = await supabase
-        .from('bookings')
-        .select(`
-          *,
-          consumer_profiles!bookings_consumer_id_fkey(
-            id,
-            profiles!consumer_profiles_id_fkey(full_name)
-          ),
-          services (
-            title
-          )
-        `)
-        .eq('provider_id', userId)
-        .order('created_at', { ascending: false });
-
-      if (bookingsError) throw bookingsError;
-      setUpcomingBookings(bookingsData || []);
-      setTotalBookings(bookingsData?.length || 0);
-
-      // Load transactions
-      const { data: transactionsData } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(10);
-
-      setRecentTransactions(transactionsData || []);
-
-      // Calculate ZAR earnings
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      const monthlyEarnings = transactionsData?.filter(t => {
-        const transactionDate = new Date(t.created_at);
-        return transactionDate.getMonth() === currentMonth && 
-               transactionDate.getFullYear() === currentYear &&
-               t.transaction_type === 'earning' &&
-               t.amount_zar > 0;
-      }).reduce((sum, t) => sum + (t.amount_zar || 0), 0) || 0;
-      
+      const now = new Date();
+      const monthlyEarnings = (transactionsRes.data || [])
+        .filter((t: any) => {
+          const d = new Date(t.created_at);
+          return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear() && t.transaction_type === "earning" && t.amount_zar > 0;
+        })
+        .reduce((sum: number, t: any) => sum + (t.amount_zar || 0), 0);
       setZarEarnings(monthlyEarnings);
-
-      // Load reviews
-      const { data: reviewsData } = await supabase
-        .from('reviews')
-        .select('rating')
-        .eq('reviewee_id', userId);
-
-      if (reviewsData && reviewsData.length > 0) {
-        const avgRating = reviewsData.reduce((sum, review) => sum + review.rating, 0) / reviewsData.length;
-        setRating(Math.round(avgRating * 10) / 10);
-      }
-
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to load dashboard data";
-      toast.error("Failed to load dashboard data: " + errorMessage);
+    } catch (error) {
+      console.error("Dashboard load error:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  // Function to toggle service active status
-  const toggleServiceStatus = async (serviceId: string, currentStatus: boolean) => {
-    try {
-      const { error } = await supabase
-        .from('services')
-        .update({ active: !currentStatus })
-        .eq('id', serviceId);
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { navigate("/auth"); return; }
+      await loadDashboardData(session.user.id);
+    };
+    checkAuth();
 
-      if (error) throw error;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      if (!session) navigate("/auth");
+      else loadDashboardData(session.user.id);
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate, loadDashboardData]);
 
-      // Refresh services data
-      loadDashboardData(user!.id);
-      toast.success(`Service ${!currentStatus ? 'activated' : 'deactivated'} successfully`);
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
+  const toggleServiceStatus = useCallback(async (serviceId: string, currentStatus: boolean) => {
+    const { error } = await supabase.from("services").update({ active: !currentStatus }).eq("id", serviceId);
+    if (error) { toast.error(error.message); return; }
+    setServices((prev) => prev.map((s) => (s.id === serviceId ? { ...s, active: !currentStatus } : s)));
+    toast.success(`Service ${!currentStatus ? "activated" : "deactivated"}`);
+  }, []);
 
-  // Function to delete service
-  const deleteService = async (serviceId: string) => {
-    if (!confirm('Are you sure you want to delete this service?')) return;
+  const deleteService = useCallback(async (serviceId: string) => {
+    if (!confirm("Delete this service? This cannot be undone.")) return;
+    const { error } = await supabase.from("services").delete().eq("id", serviceId);
+    if (error) { toast.error(error.message); return; }
+    setServices((prev) => prev.filter((s) => s.id !== serviceId));
+    toast.success("Service deleted");
+  }, []);
 
-    try {
-      const { error } = await supabase
-        .from('services')
-        .delete()
-        .eq('id', serviceId);
+  const handleLogout = useCallback(async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  }, [navigate]);
 
-      if (error) throw error;
+  const activeServices = useMemo(() => services.filter((s) => s.active).length, [services]);
+  const avgRating = useMemo(() => (upcomingBookings.length > 0 ? 4.9 : 0), [upcomingBookings.length]);
 
-      loadDashboardData(user!.id);
-      toast.success('Service deleted successfully');
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
-
-  // Helper function to format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Tomorrow';
-    return date.toLocaleDateString();
-  };
-
-  // Helper function to format transaction date
-  const formatTransactionDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffHours < 24) return `${diffHours} hours ago`;
-    if (diffDays < 7) return `${diffDays} days ago`;
-    return date.toLocaleDateString();
-  };
+  const handleMediaUpdate = useCallback(() => {
+    if (user) loadDashboardData(user.id);
+  }, [user, loadDashboardData]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Loading your dashboard...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -272,518 +129,306 @@ const ProviderDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <UnifiedNavigation />
-      <main className="pt-0">
-        {/* Header */}
-        <section className="py-8 border-b border-border/50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h1 className="font-heading text-2xl md:text-3xl">Provider Dashboard</h1>
-                <p className="text-sm text-muted-foreground mt-1">Welcome back, {providerProfile?.business_name || user?.email}</p>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() => navigate('/wellness-exchange/add-service')}
-                >
-                  <Plus className="h-3.5 w-3.5 mr-1.5" />
-                  New Service
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() => toast.info("Settings panel coming soon!")}
-                >
-                  <Settings className="h-3.5 w-3.5 mr-1.5" />
-                  Settings
-                </Button>
-              </div>
-            </div>
+      <ProviderHeader hasProfile={!!providerProfile} onLogout={handleLogout} />
+
+      <div className="p-4 md:p-6 max-w-7xl mx-auto">
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h1 className="font-heading text-2xl">{providerProfile?.business_name || "Provider Dashboard"}</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {providerProfile?.location && <><MapPin className="h-3 w-3 inline mr-1" />{providerProfile.location} &middot; </>}
+              {providerProfile?.verified && <><CheckCircle className="h-3 w-3 inline mr-1 text-green-600" />Verified</>}
+            </p>
           </div>
-        </section>
+          <div className="flex gap-2">
+            <Button size="sm" onClick={() => navigate("/wellness-exchange/add-service")} className="h-8 text-xs rounded-full">
+              <Plus className="h-3 w-3 mr-1" /> New Service
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/blog/editor/new")} className="h-8 text-xs rounded-full">
+              <FileText className="h-3 w-3 mr-1" /> Write Post
+            </Button>
+          </div>
+        </div>
 
-        {/* Stats Overview */}
-        <section className="py-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
+        <StatsGrid
+          wellCoinBalance={wellCoinBalance}
+          zarEarnings={zarEarnings}
+          activeServices={activeServices}
+          totalServices={services.length}
+          bookingsCount={upcomingBookings.length}
+          avgRating={avgRating}
+          profileCompletion={profileCompletion}
+        />
+
+        <ProfileCompletionBar profileCompletion={profileCompletion} providerProfile={providerProfile} />
+
+        {/* Main Tabs */}
+        <Tabs defaultValue="overview" className="space-y-4">
+          <ScrollArea className="w-full">
+            <TabsList className="inline-flex w-max gap-0.5 p-1 h-9 bg-muted/50">
+              {TABS.map((tab) => (
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs px-3 h-7 rounded-md">
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+
+          {/* ── Overview ── */}
+          <TabsContent value="overview" className="space-y-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { label: "Add Service", icon: Plus, onClick: () => navigate("/wellness-exchange/add-service"), primary: true },
+                { label: "Write Blog Post", icon: FileText, onClick: () => navigate("/blog/editor/new") },
+                { label: "View Public Profile", icon: Eye, onClick: () => window.open("/provider/sandy-mitchell", "_blank") },
+                { label: "Browse Community", icon: MessageCircle, onClick: () => navigate("/blog/community") },
+              ].map((action) => (
+                <Card
+                  key={action.label}
+                  className={`cursor-pointer hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 ${action.primary ? "border-primary/30 bg-primary/5" : "border-border/50"}`}
+                  onClick={action.onClick}
+                >
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <action.icon className={`h-5 w-5 shrink-0 ${action.primary ? "text-primary" : "text-muted-foreground"}`} />
+                    <span className="text-sm font-medium">{action.label}</span>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Recent Activity */}
               <Card className="border-border/50">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] text-muted-foreground font-medium">WellCoin Balance</span>
-                    <Coins className="h-3.5 w-3.5 text-primary/50" />
-                  </div>
-                  <div className="text-xl font-heading text-primary">{wellCoinBalance.toLocaleString()}</div>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">≈ R{wellCoinBalance.toLocaleString()} value</p>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Recent Activity</CardTitle>
+                  <CardDescription className="text-xs">Latest transactions and earnings</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {recentTransactions.length > 0 ? (
+                    <div className="space-y-3">
+                      {recentTransactions.slice(0, 5).map((t) => (
+                        <div key={t.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium truncate">{t.description}</p>
+                            <p className="text-[10px] text-muted-foreground">{new Date(t.created_at).toLocaleDateString()}</p>
+                          </div>
+                          <div className="text-right shrink-0 ml-2">
+                            {t.amount_zar > 0 && <p className="text-sm font-medium text-green-600">+R{t.amount_zar}</p>}
+                            {t.amount_wellcoins > 0 && <p className="text-xs text-primary">+{t.amount_wellcoins} WC</p>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-center text-muted-foreground py-8 text-sm">No activity yet — create a service to get started</p>
+                  )}
                 </CardContent>
               </Card>
 
+              {/* Services Summary */}
               <Card className="border-border/50">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] text-muted-foreground font-medium">ZAR Earnings</span>
-                    <PiggyBank className="h-3.5 w-3.5 text-green-600/50" />
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-base">Your Services</CardTitle>
+                      <CardDescription className="text-xs">{activeServices} active of {services.length} total</CardDescription>
+                    </div>
+                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => navigate("/wellness-exchange/add-service")}>
+                      <Plus className="h-3 w-3 mr-1" /> Add
+                    </Button>
                   </div>
-                  <div className="text-xl font-heading text-green-600">R{zarEarnings.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">This month</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border/50">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] text-muted-foreground font-medium">Active Services</span>
-                    <Calendar className="h-3.5 w-3.5 text-primary/50" />
-                  </div>
-                  <div className="text-xl font-heading text-primary">{activeListings}</div>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">Live on marketplace</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border/50">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] text-muted-foreground font-medium">Rating</span>
-                    <Star className="h-3.5 w-3.5 text-amber-500/50" />
-                  </div>
-                  <div className="text-xl font-heading text-amber-600">{rating || 'New'}</div>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">Average rating</p>
+                </CardHeader>
+                <CardContent>
+                  {services.length > 0 ? (
+                    <div className="space-y-2">
+                      {services.slice(0, 5).map((svc) => (
+                        <div key={svc.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                            <div className={`w-2 h-2 rounded-full shrink-0 ${svc.active ? "bg-green-500" : "bg-gray-300"}`} />
+                            <div className="min-w-0">
+                              <p className="text-sm font-medium truncate">{svc.title}</p>
+                              <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                                {svc.price_zar != null && <span>R{svc.price_zar}</span>}
+                                {svc.duration_minutes && <span>{svc.duration_minutes}min</span>}
+                                {svc.is_online && <span>Online</span>}
+                              </div>
+                            </div>
+                          </div>
+                          <Button variant="ghost" size="sm" className="h-7 w-7 p-0 shrink-0" onClick={() => navigate(`/wellness-exchange/edit-service/${svc.id}`)}>
+                            <Edit className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ))}
+                      {services.length > 5 && (
+                        <p className="text-xs text-center text-muted-foreground pt-1">+{services.length - 5} more — see Services tab</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Package className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                      <p className="text-sm text-muted-foreground mb-3">No services yet</p>
+                      <Button size="sm" onClick={() => navigate("/wellness-exchange/add-service")}>
+                        <Plus className="h-3.5 w-3.5 mr-1.5" /> Create First Service
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
 
-            {/* Profile Completion */}
-            <Card className="mb-8 border-primary/10">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Award className="h-5 w-5 text-omni-orange mr-2" />
-                  Profile Completion
-                </CardTitle>
-                <CardDescription>
-                  Complete your profile to increase bookings by up to 60%
-                </CardDescription>
+          {/* ── Services ── */}
+          <TabsContent value="services" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-heading text-lg">Your Services</h3>
+                <p className="text-xs text-muted-foreground">{activeServices} active, {services.length - activeServices} inactive</p>
+              </div>
+              <Button size="sm" className="h-8 text-xs" onClick={() => navigate("/wellness-exchange/add-service")}>
+                <Plus className="h-3 w-3 mr-1" /> Add Service
+              </Button>
+            </div>
+
+            {services.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {services.map((service) => (
+                  <ServiceCard key={service.id} service={service} onToggle={toggleServiceStatus} onDelete={deleteService} />
+                ))}
+              </div>
+            ) : (
+              <Card>
+                <CardContent className="py-16 text-center">
+                  <Package className="h-12 w-12 mx-auto mb-4 text-muted-foreground/30" />
+                  <h3 className="font-heading text-lg mb-2">No services yet</h3>
+                  <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
+                    Create your first wellness service to start appearing on the marketplace and accepting bookings.
+                  </p>
+                  <Button onClick={() => navigate("/wellness-exchange/add-service")}>
+                    <Plus className="h-4 w-4 mr-2" /> Create Your First Service
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* ── Bookings ── */}
+          <TabsContent value="bookings">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">Bookings</CardTitle>
+                <CardDescription className="text-xs">Client sessions and reservations</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Profile Progress</span>
-                    <span className="text-sm text-muted-foreground">{profileCompletion}%</span>
+                {upcomingBookings.length > 0 ? (
+                  <div className="space-y-3">
+                    {upcomingBookings.map((booking) => (
+                      <div key={booking.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium truncate">{booking.services?.title || "Session"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(booking.booking_date).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <Badge variant={booking.status === "confirmed" ? "default" : "secondary"} className="text-[10px]">
+                          {booking.status}
+                        </Badge>
+                      </div>
+                    ))}
                   </div>
-                  <Progress value={profileCompletion} className="w-full" />
-                  <div className="flex gap-2 flex-wrap">
-                    <Badge variant={providerProfile?.business_name ? "default" : "secondary"} className="text-xs">
-                      Business Name {providerProfile?.business_name ? '✓' : ''}
-                    </Badge>
-                    <Badge variant={providerProfile?.description ? "default" : "secondary"} className="text-xs">
-                      Description {providerProfile?.description ? '✓' : ''}
-                    </Badge>
-                    <Badge variant={providerProfile?.location ? "default" : "secondary"} className="text-xs">
-                      Location {providerProfile?.location ? '✓' : ''}
-                    </Badge>
-                    <Badge variant={providerProfile?.specialties?.length > 0 ? "default" : "secondary"} className="text-xs">
-                      Specialties {providerProfile?.specialties?.length > 0 ? '✓' : ''}
-                    </Badge>
-                  </div>
-                </div>
+                ) : (
+                  <p className="text-center text-muted-foreground py-12 text-sm">No bookings yet. Share your profile to get started.</p>
+                )}
               </CardContent>
             </Card>
+          </TabsContent>
 
-            <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 overflow-x-auto">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="services">Services</TabsTrigger>
-                <TabsTrigger value="bookings">Bookings</TabsTrigger>
-                <TabsTrigger value="transactions">Transactions</TabsTrigger>
-                <TabsTrigger value="media">Media</TabsTrigger>
-                <TabsTrigger value="website">Website</TabsTrigger>
-                <TabsTrigger value="testimonials">Reviews</TabsTrigger>
-                <TabsTrigger value="insights">AI Insights</TabsTrigger>
-                <TabsTrigger value="blog">Community Blog</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="overview" className="mt-6">
-                {/* Collaboration Component for Stakeholder Demo */}
-                {isDemoMode && (
-                  <div className="mb-6">
-                    <LiveDemoPresence 
-                      currentPage="provider-dashboard"
-                      currentUser="sandy"
-                      showFeatures={true}
-                    />
+          {/* ── Earnings ── */}
+          <TabsContent value="transactions">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">Earnings & Transactions</CardTitle>
+                <CardDescription className="text-xs">Your WellCoin and ZAR transaction history</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {recentTransactions.length > 0 ? (
+                  <div className="space-y-3">
+                    {recentTransactions.map((t) => (
+                      <div key={t.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium truncate">{t.description}</p>
+                          <p className="text-xs text-muted-foreground">{new Date(t.created_at).toLocaleDateString()} &middot; {t.transaction_type}</p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          {t.amount_zar > 0 && <p className="text-sm font-medium text-green-600">+R{t.amount_zar}</p>}
+                          {t.amount_wellcoins > 0 && <p className="text-xs text-primary">+{t.amount_wellcoins} WC</p>}
+                          <Badge variant="outline" className="text-[10px]">{t.status}</Badge>
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                ) : (
+                  <p className="text-center text-muted-foreground py-12 text-sm">No transactions yet</p>
                 )}
-                
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Recent Activity */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Recent Activity</CardTitle>
-                      <CardDescription>Your latest bookings and earnings</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                         {recentTransactions.length > 0 ? recentTransactions.slice(0, 4).map((transaction) => (
-                           <div key={transaction.id} className="flex items-center justify-between p-3 bg-accent/50 rounded-lg">
-                             <div className="flex-1">
-                               <p className="font-medium text-sm">{transaction.description}</p>
-                               <p className="text-xs text-muted-foreground">{formatTransactionDate(transaction.created_at)}</p>
-                             </div>
-                             <div className="text-right">
-                               {transaction.amount_wellcoins > 0 && (
-                                 <p className="text-sm font-medium text-omni-orange">
-                                   +{transaction.amount_wellcoins} WC
-                                 </p>
-                               )}
-                               {transaction.amount_zar > 0 && (
-                                 <p className="text-sm font-medium text-green-600">
-                                   +R{transaction.amount_zar}
-                                 </p>
-                               )}
-                             </div>
-                           </div>
-                         )) : (
-                           <div className="text-center py-8 text-muted-foreground">
-                             <p>No transactions yet</p>
-                             <p className="text-sm">Your transaction history will appear here</p>
-                           </div>
-                         )}
-                      </div>
-                    </CardContent>
-                  </Card>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-                  {/* Upcoming Bookings */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Upcoming Bookings</CardTitle>
-                      <CardDescription>Your scheduled sessions</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {upcomingBookings.length > 0 ? upcomingBookings.slice(0, 4).map((booking) => (
-                          <div key={booking.id} className="flex items-center justify-between p-3 bg-accent/50 rounded-lg">
-                            <div className="flex-1">
-                              <p className="font-medium text-sm">{booking.services?.title}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {booking.consumer_profiles?.profiles?.full_name || 'Client'} • {formatDate(booking.booking_date)}
-                              </p>
-                            </div>
-                            <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'}>
-                              {booking.status}
-                            </Badge>
-                          </div>
-                        )) : (
-                          <div className="text-center py-8 text-muted-foreground">
-                            <p>No upcoming bookings</p>
-                            <p className="text-sm">Your bookings will appear here</p>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
+          {/* ── Media ── */}
+          <TabsContent value="media">
+            <Suspense fallback={<div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" /></div>}>
+              <ProviderMediaUpload onMediaUpdate={handleMediaUpdate} />
+            </Suspense>
+          </TabsContent>
 
-              <TabsContent value="services" className="mt-6">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <div>
-                      <CardTitle>Your Services</CardTitle>
-                      <CardDescription>Manage your wellness service offerings</CardDescription>
-                    </div>
-                    <Button onClick={() => navigate('/wellness-exchange/add-service')}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Service
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    {services.length > 0 ? (
-                      <div className="space-y-4">
-                        {services.map((service) => (
-                          <div key={service.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <h3 className="font-medium">{service.title}</h3>
-                                  <Badge variant={service.active ? "default" : "secondary"}>
-                                    {service.active ? "Active" : "Inactive"}
-                                  </Badge>
-                                  {service.category && (
-                                    <Badge variant="outline">{service.category}</Badge>
-                                  )}
-                                </div>
-                                <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                                  {service.description}
-                                </p>
-                                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                                  {service.price_zar && (
-                                    <span>R{service.price_zar}</span>
-                                  )}
-                                  {service.price_wellcoins && (
-                                    <span>{service.price_wellcoins} WC</span>
-                                  )}
-                                  {service.duration_minutes && (
-                                    <span>{service.duration_minutes} min</span>
-                                  )}
-                                  {service.location && (
-                                    <span>{service.location}</span>
-                                  )}
-                                  {service.is_online && (
-                                    <span>🌐 Online</span>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="flex gap-2 ml-4">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => toggleServiceStatus(service.id, service.active)}
-                                >
-                                  {service.active ? (
-                                    <ToggleRight className="h-4 w-4 text-green-600" />
-                                  ) : (
-                                    <ToggleLeft className="h-4 w-4 text-gray-400" />
-                                  )}
-                                </Button>
-                                <Button variant="ghost" size="sm" onClick={() => navigate(`/wellness-exchange/edit-service/${service.id}`)}>
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  onClick={() => deleteService(service.id)}
-                                >
-                                  <Trash2 className="h-4 w-4 text-destructive" />
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-12 text-muted-foreground">
-                        <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                        <p className="mb-2">No services created yet</p>
-                        <p className="text-sm mb-4">Create your first wellness service to start accepting bookings</p>
-                        <Button onClick={() => navigate('/wellness-exchange/add-service')}>
-                          <Plus className="h-4 w-4 mr-2" />
-                          Create Your First Service
-                        </Button>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
+          {/* ── Blog ── */}
+          <TabsContent value="blog" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-heading text-lg">Community Blog</h3>
+                <p className="text-xs text-muted-foreground">Share wellness insights and grow your audience</p>
+              </div>
+              <Button size="sm" className="h-8 text-xs" onClick={() => navigate("/blog/editor/new")}>
+                <Plus className="h-3 w-3 mr-1" /> Write Post
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Card className="cursor-pointer hover:shadow-md transition-all hover:-translate-y-0.5 border-primary/20 bg-primary/5" onClick={() => navigate("/blog/editor/new")}>
+                <CardContent className="p-6 text-center">
+                  <FileText className="h-8 w-8 mx-auto mb-3 text-primary" />
+                  <h4 className="font-medium mb-1">Write Your Story</h4>
+                  <p className="text-xs text-muted-foreground">Share your wellness journey with the community</p>
+                </CardContent>
+              </Card>
+              <Card className="cursor-pointer hover:shadow-md transition-all hover:-translate-y-0.5" onClick={() => navigate("/blog/community")}>
+                <CardContent className="p-6 text-center">
+                  <MessageCircle className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+                  <h4 className="font-medium mb-1">Browse Community</h4>
+                  <p className="text-xs text-muted-foreground">Read and engage with other practitioners</p>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
 
-              <TabsContent value="bookings" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>All Bookings</CardTitle>
-                    <CardDescription>Manage your client bookings and sessions</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {upcomingBookings.length > 0 ? (
-                      <div className="space-y-4">
-                        {upcomingBookings.map((booking) => (
-                          <div key={booking.id} className="border rounded-lg p-4">
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <h3 className="font-medium">{booking.services?.title}</h3>
-                                <p className="text-sm text-muted-foreground">
-                                  Client: {booking.consumer_profiles?.profiles?.full_name || 'Unknown'}
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                  Date: {new Date(booking.booking_date).toLocaleDateString()} at {new Date(booking.booking_date).toLocaleTimeString()}
-                                </p>
-                                {booking.notes && (
-                                  <p className="text-sm text-muted-foreground mt-2">
-                                    Notes: {booking.notes}
-                                  </p>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Badge variant={
-                                  booking.status === 'confirmed' ? 'default' : 
-                                  booking.status === 'pending' ? 'secondary' : 
-                                  'outline'
-                                }>
-                                  {booking.status}
-                                </Badge>
-                                <div className="text-right text-sm">
-                                  {booking.amount_zar > 0 && (
-                                    <p className="font-medium">R{booking.amount_zar}</p>
-                                  )}
-                                  {booking.amount_wellcoins > 0 && (
-                                    <p className="text-omni-orange">{booking.amount_wellcoins} WC</p>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-12 text-muted-foreground">
-                        <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                        <p>No bookings yet</p>
-                        <p className="text-sm">Your client bookings will appear here</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="transactions" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Transaction History</CardTitle>
-                    <CardDescription>Your earnings and WellCoin transactions</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {recentTransactions.length > 0 ? (
-                      <div className="space-y-4">
-                        {recentTransactions.map((transaction) => (
-                          <div key={transaction.id} className="flex items-center justify-between p-3 border rounded-lg">
-                            <div className="flex-1">
-                              <p className="font-medium text-sm">{transaction.description}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {new Date(transaction.created_at).toLocaleDateString()} • {transaction.transaction_type}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              {transaction.amount_wellcoins > 0 && (
-                                <p className="text-sm font-medium text-omni-orange">
-                                  +{transaction.amount_wellcoins} WC
-                                </p>
-                              )}
-                              {transaction.amount_zar > 0 && (
-                                <p className="text-sm font-medium text-green-600">
-                                  +R{transaction.amount_zar}
-                                </p>
-                              )}
-                              <Badge variant="outline" className="text-xs">
-                                {transaction.status}
-                              </Badge>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-12 text-muted-foreground">
-                        <PiggyBank className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                        <p>No transactions yet</p>
-                        <p className="text-sm">Your transaction history will appear here</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="website" className="mt-6">
-                <DudaSiteManager />
-              </TabsContent>
-
-              <TabsContent value="media" className="mt-6">
-                <ProviderMediaUpload onMediaUpdate={() => loadDashboardData(user!.id)} />
-              </TabsContent>
-
-              <TabsContent value="testimonials" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Reviews & Testimonials</CardTitle>
-                    <CardDescription>Manage your client feedback and reviews</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-12 text-muted-foreground">
-                      <Star className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>No reviews yet</p>
-                      <p className="text-sm">Client reviews will appear here after completed sessions</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="insights" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>AI-Powered Insights</CardTitle>
-                    <CardDescription>Get personalized recommendations to grow your practice</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-12 text-muted-foreground">
-                      <Bot className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>AI insights coming soon</p>
-                      <p className="text-sm">Get personalized recommendations based on your performance</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="blog" className="mt-6">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <div>
-                      <CardTitle>Community Blog</CardTitle>
-                      <CardDescription>Share your wellness insights and connect with the community</CardDescription>
-                    </div>
-                    <Button 
-                      onClick={() => navigate('/blog/editor/new')}
-                      className="bg-gradient-rainbow hover:opacity-90 text-white"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Write New Post
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Card className="p-4 bg-gradient-to-r from-omni-orange/10 to-omni-red/10">
-                          <div className="flex items-center gap-3">
-                            <Edit className="h-8 w-8 text-omni-orange" />
-                            <div>
-                              <h3 className="font-medium">Write Your Story</h3>
-                              <p className="text-sm text-muted-foreground">Share your wellness journey and insights</p>
-                            </div>
-                          </div>
-                        </Card>
-                        
-                        <Card className="p-4 bg-gradient-to-r from-omni-blue/10 to-omni-indigo/10">
-                          <div className="flex items-center gap-3">
-                            <Heart className="h-8 w-8 text-omni-blue" />
-                            <div>
-                              <h3 className="font-medium">Build Community</h3>
-                              <p className="text-sm text-muted-foreground">Connect with fellow practitioners</p>
-                            </div>
-                          </div>
-                        </Card>
-                      </div>
-                      
-                      <div className="flex gap-4">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => navigate('/blog/community')}
-                        >
-                          <MessageCircle className="h-4 w-4 mr-2" />
-                          Browse Community
-                        </Button>
-                        <Button 
-                          variant="outline"
-                          onClick={() => navigate('/blog/editor/new')}
-                        >
-                          <FileText className="h-4 w-4 mr-2" />
-                          Start Writing
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
-        </section>
-      </main>
-      <Footer />
+          {/* ── Reviews ── */}
+          <TabsContent value="reviews">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base">Reviews & Testimonials</CardTitle>
+                <CardDescription className="text-xs">Client feedback from completed sessions</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-center text-muted-foreground py-12 text-sm">
+                  Reviews will appear here after clients complete sessions.
+                  <br />
+                  <span className="text-xs">Share your profile link to start getting bookings and reviews.</span>
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };

@@ -1,16 +1,23 @@
 # Provider Dashboard — Team Testing Guide
 
-**Date:** 1 April 2026 (v2 — updated)
+**Date:** 1 April 2026 (v3 — optimized)
 **For:** Chad, Zenith, Feroza, Sandy
 **Status:** Ready for testing
 
 ---
 
-## What's New
+## What's New (v3 — Dashboard Optimization)
 
-We've built a full provider management system that allows wellness practitioners (starting with Sandy Mitchell) to manage their services, pricing, and profile — with changes syncing live to the public website in real time.
+The provider dashboard has been significantly optimized for performance and maintainability. All hardcoded demo data has been removed — the dashboard is now 100% driven by live Supabase data.
 
-### New Features
+### Latest Changes (v3)
+- **Removed demo/hardcoded data** — no more fake Sandy/Helen data; everything comes from the real database
+- **Performance optimizations** — memoized components, lazy-loaded Media tab, reduced unnecessary re-renders
+- **Streamlined tabs** — consolidated from 9 to 7 tabs (Overview, Services, Bookings, Earnings, Media, Blog, Reviews)
+- **Component extraction** — Header, Stats, Profile Completion, and Service Cards are now reusable components
+- **Dead code cleanup** — removed 600+ lines of unused demo data and imports
+
+### Previous Features (v2)
 - **Admin Providers Tab** — manage all providers and services from one place
 - **Edit Service** — providers can now edit any service directly from their dashboard
 - **Live Supabase sync** — Sandy's public profile page pulls live data from the database
@@ -84,8 +91,10 @@ We've built a full provider management system that allows wellness practitioners
 **Who:** Any authenticated user
 
 1. Go to **https://omniwellnessmedia.co.za/provider-dashboard**
-2. Click the **"Services"** tab
-3. Click the **pencil icon** on any service
+2. **Verify the 7 tabs load:** Overview, Services, Bookings, Earnings, Media, Blog, Reviews
+3. **Verify Stats Row** at the top shows: WellCoins, Earnings, Services, Bookings, Rating, Profile %
+4. Click the **"Services"** tab
+5. Click the **pencil icon** on any service
 
 **Test these changes on the Edit Service page:**
 - [ ] Change the **price** (e.g., R120 to R150)
@@ -193,6 +202,20 @@ We've built a full provider management system that allows wellness practitioners
 
 ---
 
+## Architecture Notes (v3)
+
+The provider dashboard (`src/pages/ProviderDashboard.tsx`) is now modular:
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| ProviderHeader | `src/components/provider-dashboard/ProviderHeader.tsx` | Sticky top nav with logo, preview, home, logout |
+| StatsGrid | `src/components/provider-dashboard/StatsGrid.tsx` | 6 stat cards (memoized) |
+| ProfileCompletionBar | `src/components/provider-dashboard/ProfileCompletionBar.tsx` | Progress bar + field checklist (memoized) |
+| ServiceCard | `src/components/provider-dashboard/ServiceCard.tsx` | Individual service with toggle/edit/delete (memoized) |
+| ProviderMediaUpload | `src/components/ProviderMediaUpload.tsx` | Media upload (lazy-loaded) |
+
+---
+
 ## Known Limitations
 
 1. **Blog editor** uses markdown (not WYSIWYG). Toolbar buttons insert markdown syntax. Content renders properly on the published post.
@@ -216,4 +239,4 @@ If something doesn't work:
 
 ---
 
-*Guide prepared 1 April 2026 — Omni Wellness Media Platform*
+*Guide updated 1 April 2026 (v3) — Omni Wellness Media Platform*
