@@ -125,12 +125,14 @@ const BlogEditor = () => {
   };
 
   const generateSlug = (title: string) => {
-    return title
+    const base = title
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .trim();
+    // Append short timestamp to avoid UNIQUE constraint violations
+    return `${base}-${Date.now().toString(36)}`;
   };
 
   const saveDraft = async () => {
@@ -142,26 +144,38 @@ const BlogEditor = () => {
     setIsLoading(true);
     try {
       const slug = generateSlug(post.title);
-      const postData = {
-        ...post,
-        user_id: user.id,
-        slug: postId === "new" ? slug : undefined,
-        excerpt: post.excerpt || post.content.substring(0, 200) + "...",
-        read_time_minutes: estimatedReadTime,
-        status: "draft" as const
-      };
 
       let result;
       if (postId === "new") {
         result = await supabase
           .from('blog_posts')
-          .insert([postData])
+          .insert([{
+            title: post.title,
+            subtitle: post.subtitle || null,
+            content: post.content,
+            excerpt: post.excerpt || post.content.substring(0, 200) + "...",
+            tags: post.tags,
+            featured_image_url: post.featured_image_url || null,
+            user_id: user.id,
+            slug,
+            read_time_minutes: estimatedReadTime,
+            status: "draft",
+          }])
           .select()
           .single();
       } else {
         result = await supabase
           .from('blog_posts')
-          .update(postData)
+          .update({
+            title: post.title,
+            subtitle: post.subtitle || null,
+            content: post.content,
+            excerpt: post.excerpt || post.content.substring(0, 200) + "...",
+            tags: post.tags,
+            featured_image_url: post.featured_image_url || null,
+            read_time_minutes: estimatedReadTime,
+            status: "draft",
+          })
           .eq('id', postId)
           .eq('user_id', user.id)
           .select()
@@ -190,29 +204,39 @@ const BlogEditor = () => {
     setIsLoading(true);
     try {
       const slug = generateSlug(post.title);
-      const postData = {
-        ...post,
-        user_id: user.id,
-        slug: postId === "new" ? slug : undefined,
-        excerpt: post.excerpt || post.content.substring(0, 200) + "...",
-        read_time_minutes: estimatedReadTime,
-        status: "published" as const,
-        published_at: new Date().toISOString()
-      };
 
       let result;
       if (postId === "new") {
         result = await supabase
           .from('blog_posts')
-          .insert([postData])
+          .insert([{
+            title: post.title,
+            subtitle: post.subtitle || null,
+            content: post.content,
+            excerpt: post.excerpt || post.content.substring(0, 200) + "...",
+            tags: post.tags,
+            featured_image_url: post.featured_image_url || null,
+            user_id: user.id,
+            slug,
+            read_time_minutes: estimatedReadTime,
+            status: "published",
+            published_at: new Date().toISOString(),
+          }])
           .select()
           .single();
       } else {
         result = await supabase
           .from('blog_posts')
           .update({
-            ...postData,
-            published_at: post.status === "draft" ? new Date().toISOString() : undefined
+            title: post.title,
+            subtitle: post.subtitle || null,
+            content: post.content,
+            excerpt: post.excerpt || post.content.substring(0, 200) + "...",
+            tags: post.tags,
+            featured_image_url: post.featured_image_url || null,
+            read_time_minutes: estimatedReadTime,
+            status: "published",
+            published_at: post.status === "draft" ? new Date().toISOString() : undefined,
           })
           .eq('id', postId)
           .eq('user_id', user.id)

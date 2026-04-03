@@ -50,14 +50,14 @@ const About = () => {
       caption: "Community Building - Bringing diverse groups together"
     },
     {
-      src: `${STORAGE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`,
-      alt: "Indigenous walk group at cave viewpoint",
-      caption: "Impact Travel - Sacred journeys through Cape Town's heritage"
+      src: IMAGES.community.khoe,
+      alt: "Khoe cultural heritage celebration",
+      caption: "Cultural Heritage - Celebrating indigenous traditions and knowledge"
     },
     {
-      src: `${STORAGE}/General%20Images/wellness%20group%20tour.jpg`,
-      alt: "Wellness group on a guided tour",
-      caption: "Wellness Journeys - Community connection through travel"
+      src: IMAGES.wellness.communityProject3,
+      alt: "Community wellness outreach",
+      caption: "Wellness Outreach - Bringing wellness to local communities"
     },
   ];
 
