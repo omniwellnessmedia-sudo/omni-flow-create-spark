@@ -1,14 +1,21 @@
 # Omni Wellness Media — Platform Status Report
 
-**Date:** 1 April 2026
+**Date:** 3 April 2026
 **Prepared by:** Tumelo (Technical Lead)
 **For:** Chad Cupido, Zenith, Feroza, Investors, Partners
+**Platform:** https://omniwellnessmedia.co.za
 
 ---
 
 ## Executive Summary
 
-The Omni Wellness Media platform is a two-sided marketplace connecting wellness service providers with conscious consumers. This report details what is built, what is functional, what is monetizable today, and what needs work before scaling.
+The Omni Wellness Media platform is a two-sided marketplace connecting wellness service providers with conscious consumers. Since the last report (1 April), we've completed a full dashboard redesign, fixed critical bugs reported by Feroza, and modernized the admin, provider, and consumer experiences.
+
+**Key wins this sprint:**
+- Modern sidebar-based admin dashboard with smart greetings and contextual alerts
+- Fixed blog draft saving and tour booking errors
+- Removed all hardcoded demo data — platform is 100% live data
+- First international booking confirmed at new rates (2 pax @ R2,330pp)
 
 ---
 
@@ -35,15 +42,15 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Tour listings | Live | Great Mother Cave, Muizenberg Cave, and more |
+| Tour listings | Live | Great Mother Cave, Muizenberg Heritage, Kalk Bay, and more |
 | Booking form | Live | Date, participants, contact info, eSIM add-ons |
-| Booking to DB | Live | Saves to `tour_bookings` or `contact_submissions` (fallback for anonymous) |
-| Email notification | Live | Via `submit-contact` edge function |
+| Booking to DB | Live | Authenticated → `tour_bookings`; Anonymous → `contact_submissions` fallback |
+| Email notification | Live | Via `submit-contact` edge function (fire-and-forget) |
 | Request-to-book | Live | Alternative flow with operator confirmation |
 | Capacity management | Live | `tour_operator_availability` table with lease system |
-| Admin bookings tab | Live | Shows both tour bookings and service leads |
+| Admin bookings section | Live | Shows both tour bookings and service leads |
 
-**Revenue status:** Booking requests flow in. Payment is manual (email/WhatsApp confirmation with operator).
+**Revenue status:** First international booking confirmed. Payment is manual (email/WhatsApp confirmation with operator).
 
 ### 1.3 Service Provider System
 
@@ -54,26 +61,22 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 | Service editing | Live | Edit any field, changes sync to public profile instantly |
 | Service toggle | Live | Activate/deactivate from dashboard |
 | Service deletion | Live | With confirmation |
-| Provider dashboard | Live | 7 tabs: Overview, Services, Bookings, Earnings, Media, Blog, Reviews — optimized with component extraction, memoization, and lazy-loaded media tab |
-| Admin providers tab | Live | List all providers, verify/unverify, manage all services, add new providers |
+| Provider dashboard | Live | 7 tabs with smart greeting, stats grid, and memoized components |
+| Admin providers section | Live | Sidebar nav → "Providers" — verify/add/manage all providers and services |
 | Provider directory | Live | Public listing with search/filter |
 | Sandy Mitchell profile | Live | Branded profile page with live Supabase data |
-| Provider seed tool | Live | One-click onboarding in Admin > Tools |
-
-**Revenue status:** Infrastructure ready. Sandy Mitchell is the first live provider. No payment processing for provider services yet (booking creates leads, not transactions).
+| Provider seed tool | Live | One-click onboarding in Admin → Tools |
 
 ### 1.4 Lead Capture & CRM
 
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Contact form | Live | Saves to `contact_submissions` + email notification |
-| Booking forms | Live | All "Email to Book Session" and "Book Strategy Session" buttons save leads |
+| Booking forms | Live | All booking buttons save leads |
+| Tour booking fallback | **Fixed** | Anonymous users now save to `contact_submissions` instead of failing |
 | ROAM chat leads | Live | Email capture + booking intent detection |
-| Admin leads tab | Live | View all leads, update status, reply via email, mass email |
-| Service quote requests | Live | Separate form for detailed service quotes |
+| Admin leads section | Live | Sidebar nav → "Leads" — view all, update status, reply, mass email |
 | Lead status tracking | Live | pending → in_progress → responded → closed |
-
-**Revenue status:** Leads are being captured. The team needs to follow up manually.
 
 ### 1.5 Blog & Content
 
@@ -81,13 +84,11 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 |-----------|--------|-------|
 | Blog listing | Live | `/blog/community` with search, tags, author profiles |
 | Blog editor | Live | Markdown toolbar (bold, italic, headings, lists, links, images, code) |
-| Draft/publish | Live | Save drafts, publish when ready |
+| Draft/publish | **Fixed** | Save drafts now works reliably (slug uniqueness issue resolved) |
 | Comments | Live | Authenticated users can comment |
 | Likes | Live | Toggle like/unlike with count |
 | View tracking | Live | Auto-increments on page load |
 | Social sharing | Live | Facebook, Twitter, LinkedIn share buttons |
-
-**Revenue status:** Content marketing asset. Drives organic traffic and SEO.
 
 ### 1.6 Analytics & Tracking
 
@@ -97,29 +98,32 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 | Microsoft Clarity | Live | Heatmaps, session recordings, rage click detection |
 | Conversion tagging | Live | Purchase, booking, lead_captured, roam_chat events |
 | UTM campaign tracking | Live | Full UTM URL system for Google Ads, social, affiliates |
-| Admin analytics tab | Live | Business metrics + GA4 Live + Clarity dashboards |
-| RoamBuddy sales funnel | Live | Real data: conversations → leads → purchases |
+| Admin analytics section | Live | Sidebar nav → "Analytics" — Business metrics + GA4 + Clarity |
 
-### 1.7 Admin Dashboard
+### 1.7 Admin Dashboard (Redesigned — v4)
 
-| Tab | Status | What it does |
-|-----|--------|-------------|
-| Overview | Live | Revenue, orders, activity feed, platform metrics |
-| Analytics | Live | Business charts + GA4 + Clarity links |
-| Accounting | Live | Revenue, commissions, payouts, CSV export |
-| Content | Live | Blog post management |
-| Tasks | Live | Internal task tracking |
-| Products | Live | Affiliate product management |
-| Providers | Live | Provider & service management, verify/add providers |
-| Leads | Live | Contact submissions, quotes, mass email |
-| Newsletter | Live | Campaign builder, subscriber management |
-| Social | Live | Social post scheduling, AI generation |
-| Team | Live | Team member invitations |
-| Orders | Live | eSIM and product orders |
-| Bookings | Live | Tour bookings + service session leads |
-| Viator | Live | Viator tour sync |
-| UWC | Live | University recruitment pipeline |
-| Tools | Live | Auto-curation, admin users, provider seeding |
+The admin dashboard has been completely redesigned with a modern sidebar layout:
+
+**Layout:**
+- Persistent sidebar navigation (desktop) with grouped sections and icons
+- Mobile: hamburger menu opens sidebar in slide-out drawer
+- Smart greeting with time-aware message, date, and contextual alert pills
+- Home screen with quick actions, at-a-glance stats, recent activity, and platform health
+
+**Sidebar Sections:**
+
+| Group | Sections |
+|-------|---------|
+| **Core** | Home, Analytics, Leads, Bookings, Orders |
+| **Manage** | Providers, Products, Content, Newsletter, Social |
+| **System** | Accounting, Team, Tasks, Viator, UWC, Tools |
+
+**Home Screen Features:**
+- Quick actions: New Blog Post, View Leads, Send Newsletter, View Site
+- At-a-glance stats: Revenue, Orders, Leads, Providers, Users, Content
+- Recent activity feed (orders, bookings, leads)
+- Platform health metrics (WellCoins, services, tours, providers)
+- Contextual alerts: pending bookings, unanswered leads, pending orders, unverified providers
 
 ### 1.8 Other Functional Systems
 
@@ -144,85 +148,50 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 |---------------|--------|---------------|
 | **RoamBuddy eSIM sales** | Active | Continue ad campaigns, optimize ROAM bot conversion |
 | **Affiliate commissions** | Active | CJ, AWIN, Viator, SafariNow products in marketplace |
+| **Tour bookings** | Active | First international booking confirmed at R2,330pp |
 
 ### Tier 2 — Ready to Sell (Infrastructure Built)
 | Revenue Stream | Pricing Suggestion | What's Needed to Start |
 |---------------|-------------------|----------------------|
-| **Web development services** | R10,000–R50,000 per project | Follow up on existing leads in Admin > Leads |
+| **Web development services** | R10,000–R50,000 per project | Follow up on existing leads in Admin → Leads |
 | **Media production services** | R5,000–R25,000 per project | Follow up on existing leads |
 | **Social media strategy** | R3,000–R10,000/month retainer | Follow up on existing leads |
 | **Business consulting** | R500/session (already priced) | Booking system works, Cal.com ready |
-| **Tour bookings** | R1,850pp (Great Mother Cave) | Booking form works, operator confirms manually |
 
 ### Tier 3 — Needs 1-3 Fixes Before Selling
 | Revenue Stream | Fix Required | Effort |
 |---------------|-------------|--------|
-| **Newsletter service for clients** | 1. Verify domain in Resend (sender shows `onboarding@resend.dev`). 2. Build unsubscribe endpoint. 3. Set up cron for scheduled sends. | 2-4 hours |
-| **Provider subscriptions** | Build Stripe/PayPal recurring billing for provider premium tier | 1-2 weeks |
-| **Social media management** | Configure Zapier webhook + platform workflows | 1-2 days |
-
-### Tier 4 — Future Revenue (Architecture Exists)
-| Revenue Stream | Status |
-|---------------|--------|
-| Provider website builder | Duda API expired. GrapesJS replacement architected, not built. |
-| WellCoins redemption/marketplace | Earning works. Redemption logic not built. |
-| Dashboard-as-a-service | No multi-tenancy. Each client would see all data. |
-| Buy One Sponsor One (BOSO) | Not built. Needs architecture decision on fund routing. |
+| **Newsletter service** | 1. Verify domain in Resend. 2. Build unsubscribe endpoint. 3. Set up cron. | 2-4 hours |
+| **Provider subscriptions** | Build Stripe/PayPal recurring billing | 1-2 weeks |
+| **Social media management** | Configure Zapier webhook + workflows | 1-2 days |
 
 ---
 
-## 3. WHAT NEEDS WORK
+## 3. BUGS FIXED (This Sprint)
 
-### Critical (Blocking Revenue)
-| Item | Impact | Effort |
-|------|--------|--------|
-| Resend domain verification | Newsletter emails look unprofessional | 30 min |
-| Resend API key renewal | Email notifications may fail | 5 min (Supabase secrets) |
-| Meta Pixel ID (placeholder) | Can't track Facebook ad conversions | 5 min once you have the ID |
-
-### Important (Blocking Scale)
-| Item | Impact | Effort |
-|------|--------|--------|
-| Provider self-signup flow | Providers can't onboard themselves without admin | 1-2 days |
-| Payment for provider services | Bookings create leads, not transactions | 1-2 weeks (Stripe/PayPal) |
-| Newsletter unsubscribe endpoint | Legal requirement (POPIA/CAN-SPAM) | 2-3 hours |
-| Newsletter scheduled auto-send | Admin must manually trigger each campaign | 1 hour (Supabase cron) |
-| Open/click tracking for newsletters | Can't measure campaign performance | 1 day (Resend webhooks) |
-
-### Nice to Have
-| Item | Impact | Effort |
-|------|--------|--------|
-| Rich text blog editor (WYSIWYG) | Better writing experience (markdown works but less intuitive) | 1-2 days |
-| Provider image upload to Supabase storage | Currently URL-only | 2-3 hours |
-| GrapesJS website builder | Replace expired Duda API | 2-3 weeks |
-| WellCoins redemption | Complete loyalty loop | 1 week |
-| Multi-tenant dashboard | Sell dashboard access to clients | 2-3 weeks |
-
-### Recently Completed (1 April 2026)
-| Item | What Changed |
-|------|-------------|
-| Provider dashboard optimization | Removed hardcoded demo data, now fully driven by live Supabase queries |
-| Component extraction | Header, StatsGrid, ProfileCompletionBar, ServiceCard extracted to `src/components/provider-dashboard/` |
-| Performance | Added `React.memo`, `useMemo`, `useCallback` throughout; lazy-loaded Media tab |
-| Dead code removal | Deleted `sandyDemoData.ts` (602 lines), removed unused DudaSiteManager import and 7 unused icon imports |
-| Tab consolidation | Reduced from 9 tabs to 7 (removed Website and AI Insights tabs that had no real functionality) |
+| Bug | Reported By | Fix |
+|-----|------------|-----|
+| Blog drafts not saving | Feroza | Explicit field mapping for insert/update; timestamp appended to slugs for uniqueness |
+| Great Mother Cave booking error | Feroza | Authenticated users → `tour_bookings`; anonymous → `contact_submissions` fallback; no more silent failures |
+| About page showing tour people | Feroza | Replaced Mother Cave group photos with community/heritage images |
+| Provider dashboard using demo data | — | Removed 602 lines of hardcoded Sandy/Helen demo data; all live Supabase queries |
 
 ---
 
 ## 4. IMMEDIATE ACTION ITEMS
 
 ### This Week
-1. **Follow up on existing leads** — Admin > Leads tab has real inquiries waiting for response
-2. **Verify Resend domain** — Resend dashboard > Domains > add `omniwellnessmedia.co.za`
-3. **Set Resend API key** — Supabase dashboard > Edge Functions > Secrets
-4. **Seed Sandy's profile** — Admin > Tools > "Seed Sandy's Profile"
-5. **Test the full provider flow** — use the Team Testing Guide
+1. **Follow up on existing leads** — Admin → Leads has real inquiries waiting
+2. **Verify Resend domain** — Resend dashboard → Domains → add `omniwellnessmedia.co.za`
+3. **Test the new admin dashboard** — use the Team Testing Guide v4
+4. **Test blog draft save** — Feroza's reported bug should be fixed
+5. **Test tour booking** — Great Mother Cave should now work without errors
 
 ### Next Sprint
 1. Build provider self-signup form (public `/become-a-provider` page)
 2. Fix newsletter blockers (domain, unsubscribe, cron)
 3. Package first service offering and price it
-4. Set up Zapier for social posting
+4. Make `tour_bookings.user_id` nullable in Supabase (optional DB improvement)
 
 ---
 
@@ -242,26 +211,7 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 
 ---
 
-## 6. DATABASE TABLES (Key)
-
-| Table | Records | Purpose |
-|-------|---------|---------|
-| `orders` | Active | eSIM purchases, product orders |
-| `tour_bookings` | Active | Tour reservations |
-| `contact_submissions` | Active | All leads, booking requests, inquiries |
-| `newsletter_subscribers` | Active | Email list (website + ROAM bot) |
-| `newsletter_campaigns` | Active | Email campaigns |
-| `chatbot_conversations` | Active | ROAM chat transcripts |
-| `provider_profiles` | Active | Wellness provider businesses |
-| `services` | Active | Provider service offerings |
-| `blog_posts` | Active | Community blog content |
-| `affiliate_products` | 665 | Curated affiliate marketplace |
-| `profiles` | Active | User accounts |
-| `feature_flags` | Active | Feature toggles (Cal.com, etc.) |
-
----
-
-## 7. TEAM ACCESS
+## 6. TEAM ACCESS
 
 | Person | Role | Dashboard Access |
 |--------|------|-----------------|
@@ -273,5 +223,5 @@ The Omni Wellness Media platform is a two-sided marketplace connecting wellness 
 
 ---
 
-*Report updated 1 April 2026 — Omni Wellness Media*
-*Platform version: main branch (latest)*
+*Report updated 3 April 2026 — Omni Wellness Media*
+*Platform version: ecf69ab (main branch)*

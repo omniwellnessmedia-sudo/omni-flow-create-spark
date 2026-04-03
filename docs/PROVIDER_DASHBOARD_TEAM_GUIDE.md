@@ -1,79 +1,173 @@
-# Provider Dashboard — Team Testing Guide
+# Omni Wellness Media — Team Testing Guide v4
 
-**Date:** 1 April 2026 (v3 — optimized)
+**Date:** 3 April 2026
 **For:** Chad, Zenith, Feroza, Sandy
 **Status:** Ready for testing
+**Site:** https://omniwellnessmedia.co.za
 
 ---
 
-## What's New (v3 — Dashboard Optimization)
+## What's New (v4 — Dashboard Redesign + Bug Fixes)
 
-The provider dashboard has been significantly optimized for performance and maintainability. All hardcoded demo data has been removed — the dashboard is now 100% driven by live Supabase data.
+This update is a significant step forward. The admin dashboard has been completely redesigned with a modern sidebar layout, and all three dashboards (admin, provider, consumer) now feature smart, time-aware greetings with contextual alerts.
 
-### Latest Changes (v3)
-- **Removed demo/hardcoded data** — no more fake Sandy/Helen data; everything comes from the real database
-- **Performance optimizations** — memoized components, lazy-loaded Media tab, reduced unnecessary re-renders
-- **Streamlined tabs** — consolidated from 9 to 7 tabs (Overview, Services, Bookings, Earnings, Media, Blog, Reviews)
-- **Component extraction** — Header, Stats, Profile Completion, and Service Cards are now reusable components
-- **Dead code cleanup** — removed 600+ lines of unused demo data and imports
+### Dashboard Redesign
+- **Sidebar navigation** — 16 horizontal tabs replaced with a grouped sidebar (Core, Manage, System) with icons
+- **Smart greeting** — "Good morning, Chad" with live time, date, and role badge
+- **Contextual alerts** — colored pills showing pending bookings, unanswered leads, unverified providers
+- **Home screen** — quick actions, at-a-glance stats, recent activity, platform health
+- **Mobile** — hamburger menu opens sidebar in a slide-out drawer
+- **"+ Create Content"** dropdown — Blog Post (live), Podcast & Video (coming soon)
 
-### Previous Features (v2)
-- **Admin Providers Tab** — manage all providers and services from one place
-- **Edit Service** — providers can now edit any service directly from their dashboard
-- **Live Supabase sync** — Sandy's public profile page pulls live data from the database
-- **Provider seed tool** — admin can onboard new providers with one click
-- **Blog system** — fully functional with markdown formatting toolbar
-- **GA4 + Clarity analytics** — live traffic and behavior tracking in the Analytics tab
-- **Booking fixes** — tour booking error resolved, all booking forms now save to database
-- **Mobile fixes** — "Need eSIM help?" no longer overlaps footer/booking bar
+### Bug Fixes (from Feroza's feedback)
+- **Blog drafts now save** — fixed slug uniqueness issue that was preventing draft saves
+- **Tour booking now works** — anonymous bookings fall back to contact form instead of failing
+- **About page** — removed Mother Cave tour people photos, replaced with community images
 
 ---
 
 ## Step-by-Step Testing
 
-### Test 1: Admin Providers Tab (NEW)
+### Test 1: Admin Dashboard — New Sidebar Layout
 
-**Who:** Chad or Tumelo (admin access required)
+**Who:** Chad, Zenith, or Feroza (admin access required)
+**URL:** https://omniwellnessmedia.co.za/admin
 
-1. Go to **https://omniwellnessmedia.co.za/admin**
-2. Log in with your admin account
-3. Click the **"Providers"** tab (between Products and Leads)
+1. Log in and go to `/admin`
+2. You should see:
 
-**What you should see:**
-- **Stats row** at the top: total providers, verified count, total services, active services
-- **Search bar** to filter by name, location, or specialty
-- **Two sub-tabs**: "Providers" (cards with full detail) and "All Services" (flat list)
+**Desktop (laptop/monitor):**
+- [ ] **Smart greeting** at the top — "Good [morning/afternoon/evening], [Name]" with current time and date
+- [ ] **Sidebar on the left** with three groups: Core, Manage, System
+- [ ] **Home screen** in the main area with Quick Actions, At a Glance stats, Recent Activity, and Platform Health
+- [ ] **Alert pills** below the greeting (amber for warnings, blue for info) — e.g. "3 pending bookings", "5 unanswered leads"
 
-**Test these actions:**
-- [ ] Click **"Add Provider"** button — fill in a test provider name and click "Add Provider Lead"
-- [ ] On any provider card, click **"Verify"** — badge should change from "Pending" to "Verified"
-- [ ] On any service, click the **green circle** to toggle it inactive — dot turns grey
-- [ ] On any service, click the **pencil icon** — opens the Edit Service page
-- [ ] Click the **"All Services"** sub-tab — see a flat list of every service across all providers
+**Mobile (phone):**
+- [ ] **Hamburger menu** (☰) in the top-left
+- [ ] Tapping it opens a **slide-out sidebar** with all navigation sections
+- [ ] Tapping a section closes the drawer and loads the content
 
----
-
-### Test 2: Seed Sandy's Provider Profile (Admin Only)
-
-**Who:** Chad or Tumelo (admin access required)
-
-1. Go to **https://omniwellnessmedia.co.za/admin**
-2. Click the **"Tools"** tab (scroll right if on mobile)
-3. Scroll down to the **"Provider Onboarding"** card
-4. Click **"Seed Sandy's Profile"**
-5. Wait for the green success message
-
-**Expected result:** Green confirmation showing Sandy's profile seeded with 6 services.
-
-**Then verify:** Go to the **"Providers"** tab — Sandy should appear with her 6 services listed.
+**Test the sidebar navigation:**
+- [ ] Click **"Leads"** in the sidebar → leads list loads
+- [ ] Click **"Providers"** → provider management loads
+- [ ] Click **"Home"** → returns to the welcome/home screen
+- [ ] Click **"Analytics"** → GA4 + Clarity dashboards load
+- [ ] Badge counts appear next to sections with pending items (e.g. Leads, Bookings)
 
 ---
 
-### Test 3: View Sandy's Public Profile
+### Test 2: "Create Content" Button
+
+**Who:** Any admin
+**URL:** https://omniwellnessmedia.co.za/admin
+
+1. Click the **"+ Create"** button in the top-right header
+2. A dropdown should appear with:
+   - [ ] **Blog Post** — clickable, opens `/blog/editor/new`
+   - [ ] **Podcast** — greyed out with "Soon" badge
+   - [ ] **Video** — greyed out with "Soon" badge
+
+---
+
+### Test 3: Blog — Save Draft (Bug Fix)
+
+**Who:** Any authenticated user
+**URL:** https://omniwellnessmedia.co.za/blog/editor/new
+
+1. Write a **title** (e.g. "Test Draft Post")
+2. Write some **content** (at least a sentence)
+3. Click **"Save Draft"**
+
+**Expected result:**
+- [ ] Green toast: **"Draft saved successfully"** — NOT the error Feroza reported
+- [ ] URL changes from `/blog/editor/new` to `/blog/editor/{id}`
+- [ ] You can continue editing and save again
+
+4. Try saving a **second** draft with the **same title**
+- [ ] Should also save without errors (no duplicate slug conflict)
+
+---
+
+### Test 4: Tour Booking (Bug Fix)
+
+**Who:** Anyone (logged in OR logged out)
+**URL:** https://omniwellnessmedia.co.za/tours/great-mother-cave-tour
+
+1. Select a date (7+ days out)
+2. Enter name and email
+3. Click **"Book Now"**
+
+**Expected result:**
+- [ ] Green toast: **"Booking Submitted!"** — NOT the red "Booking Error" Feroza reported
+- [ ] Works **without** being logged in (saves as a lead)
+- [ ] Works **with** being logged in (saves to tour_bookings)
+
+---
+
+### Test 5: About Page (Photo Fix)
+
+**Who:** Anyone
+**URL:** https://omniwellnessmedia.co.za/about
+
+1. Scroll to the **"Our Story"** image carousel section
+
+**Expected result:**
+- [ ] No photos of **tour group participants** from the Mother Cave walk
+- [ ] Should show community/heritage images instead (Khoe cultural celebration, community outreach)
+
+---
+
+### Test 6: Provider Dashboard — Smart Greeting
+
+**Who:** Any authenticated user
+**URL:** https://omniwellnessmedia.co.za/provider-dashboard
+
+1. Navigate to the provider dashboard
+
+**Expected result:**
+- [ ] **Smart greeting** at the top: "Good [morning/afternoon/evening], [Business Name]"
+- [ ] **Time and date** displayed
+- [ ] **Role badge** showing "Provider"
+- [ ] **Alert pills** showing profile completion % and any pending bookings
+- [ ] Stats grid below with WellCoins, Earnings, Services, Bookings, Rating, Profile %
+- [ ] Profile completion bar (if < 100%) with field checklist
+
+---
+
+### Test 7: Consumer Account — Smart Greeting
+
+**Who:** Any authenticated user
+**URL:** https://omniwellnessmedia.co.za/wellness-exchange/account
+
+1. Navigate to your account page
+
+**Expected result:**
+- [ ] **Smart greeting** at the top: "Good [morning/afternoon/evening], [Name]"
+- [ ] **Role badge** showing "Member"
+- [ ] **WellCoin alert** showing your balance (green pill)
+
+---
+
+### Test 8: Admin — Quick Actions from Home
+
+**Who:** Any admin
+**URL:** https://omniwellnessmedia.co.za/admin
+
+1. On the Home screen, test each **Quick Action** card:
+
+| Quick Action | Expected Behavior |
+|-------------|------------------|
+| **New Blog Post** | Opens `/blog/editor/new` |
+| **View Leads** | Switches to Leads section in sidebar |
+| **Send Newsletter** | Switches to Newsletter section |
+| **View Site** | Opens the public site in a new tab |
+
+---
+
+### Test 9: Sandy's Public Profile
 
 **Who:** Anyone (no login required)
-
-1. Go to **https://omniwellnessmedia.co.za/provider/sandy-mitchell**
+**URL:** https://omniwellnessmedia.co.za/provider/sandy-mitchell
 
 **Check these tabs:**
 
@@ -86,103 +180,18 @@ The provider dashboard has been significantly optimized for performance and main
 
 ---
 
-### Test 4: Provider Dashboard — View & Edit Services
+### Test 10: Edit a Service (Live Sync)
 
 **Who:** Any authenticated user
+**URL:** https://omniwellnessmedia.co.za/provider-dashboard → Services tab
 
-1. Go to **https://omniwellnessmedia.co.za/provider-dashboard**
-2. **Verify the 7 tabs load:** Overview, Services, Bookings, Earnings, Media, Blog, Reviews
-3. **Verify Stats Row** at the top shows: WellCoins, Earnings, Services, Bookings, Rating, Profile %
-4. Click the **"Services"** tab
-5. Click the **pencil icon** on any service
+1. Click the **pencil icon** on any service
+2. Change the **price** (e.g. R120 → R150)
+3. Click **"Save Changes"**
 
-**Test these changes on the Edit Service page:**
-- [ ] Change the **price** (e.g., R120 to R150)
-- [ ] Edit the **description**
-- [ ] Toggle **"Available online"**
-- [ ] Toggle **"Service Status"** (active/inactive)
-- [ ] Click **"Save Changes"**
-
-**Expected result:** Toast "Service updated successfully!" — redirects to dashboard.
-
-**Verify live sync:** Go to `/provider/sandy-mitchell` — the updated price/description should show immediately.
-
----
-
-### Test 5: Add a New Service
-
-**Who:** Any authenticated user
-
-1. Go to **https://omniwellnessmedia.co.za/wellness-exchange/add-service**
-2. Fill in the form (Title, Description, Category, Price, Duration, Location)
-3. Click **"Publish Service"**
-
-**Expected result:** Toast "Service created successfully!" — service appears in provider dashboard.
-
----
-
-### Test 6: Blog — Create and Publish a Post
-
-**Who:** Any authenticated user
-
-1. Go to **https://omniwellnessmedia.co.za/blog/editor/new**
-2. Write a title and content
-3. Use the **formatting toolbar** — Bold, Heading, Lists, Links, Images, Code
-4. Add tags, then click **"Save Draft"** then **"Publish"**
-
-**Expected result:** Post published with markdown formatting rendered. Visible at `/blog/community`.
-
----
-
-### Test 7: Tour Booking (Bug Fix Verification)
-
-**Who:** Anyone
-
-1. Go to **https://omniwellnessmedia.co.za/tours/great-mother-cave-tour**
-2. Select a date (7+ days out), enter name and email
-3. Click **"Book Now"**
-
-**Expected result:** Green toast "Booking Submitted!" — NOT the red error Feroza reported.
-
-**Also verify:** Image gallery shows cave views and landscapes — no individual faces.
-
----
-
-### Test 8: "Need eSIM Help" (Mobile Overlap Fix)
-
-**Who:** Anyone on mobile
-
-1. Open any page on mobile
-2. Scroll to the bottom
-
-**Expected result:** The blue "Need eSIM help?" button sits **above** the footer and sticky bars — no overlap.
-
----
-
-### Test 9: Admin Analytics — GA4 + Clarity
-
-**Who:** Chad or Tumelo (admin access)
-
-1. Go to **https://omniwellnessmedia.co.za/admin** > **Analytics** tab
-2. You should see **3 sub-tabs**: Business, GA4 Live, Clarity
-
-| Sub-tab | What to verify |
-|---------|---------------|
-| **Business** | Revenue chart, orders, leads, subscribers |
-| **GA4 Live** | 4 clickable cards → Google Analytics (Realtime, Reports, Acquisition, Conversions) |
-| **Clarity** | 3 clickable cards → Microsoft Clarity (Dashboard, Heatmaps, Recordings) |
-
----
-
-### Test 10: Admin Bookings Tab (Enhanced)
-
-**Who:** Chad or Tumelo (admin access)
-
-1. Go to **https://omniwellnessmedia.co.za/admin** > **Bookings** tab
-
-**Expected result:** Two cards:
-- **Service Bookings & Leads** — session requests from booking forms, ROAM chat leads, contact submissions
-- **Tour Bookings** — tour reservations with guest count and status
+**Expected result:**
+- [ ] Toast: **"Service updated successfully!"**
+- [ ] Go to `/provider/sandy-mitchell` — the updated price shows **immediately**
 
 ---
 
@@ -190,21 +199,30 @@ The provider dashboard has been significantly optimized for performance and main
 
 | Page | URL |
 |------|-----|
-| Admin Dashboard | `/admin` |
-| Admin Providers Tab | `/admin` → Providers tab |
-| Provider Dashboard | `/provider-dashboard` |
-| Add Service | `/wellness-exchange/add-service` |
-| Edit Service | `/wellness-exchange/edit-service/{id}` |
-| Sandy's Public Profile | `/provider/sandy-mitchell` |
-| Blog Listing | `/blog/community` |
-| New Blog Post | `/blog/editor/new` |
-| Great Mother Cave Tour | `/tours/great-mother-cave-tour` |
+| **Admin Dashboard** | https://omniwellnessmedia.co.za/admin |
+| **Provider Dashboard** | https://omniwellnessmedia.co.za/provider-dashboard |
+| **Consumer Account** | https://omniwellnessmedia.co.za/wellness-exchange/account |
+| **Add Service** | https://omniwellnessmedia.co.za/wellness-exchange/add-service |
+| **Sandy's Public Profile** | https://omniwellnessmedia.co.za/provider/sandy-mitchell |
+| **Blog Listing** | https://omniwellnessmedia.co.za/blog/community |
+| **New Blog Post** | https://omniwellnessmedia.co.za/blog/editor/new |
+| **Great Mother Cave Tour** | https://omniwellnessmedia.co.za/tours/great-mother-cave-tour |
+| **Muizenberg Heritage Walk** | https://omniwellnessmedia.co.za/tours/muizenberg-cave-tours |
+| **About Page** | https://omniwellnessmedia.co.za/about |
 
 ---
 
-## Architecture Notes (v3)
+## Architecture Notes (v4)
 
-The provider dashboard (`src/pages/ProviderDashboard.tsx`) is now modular:
+### New Dashboard Components
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| SmartGreeting | `src/components/dashboard/SmartGreeting.tsx` | Time-aware greeting, date, role badge, alert pills (shared across all dashboards) |
+| AdminSidebar | `src/components/dashboard/AdminSidebar.tsx` | Grouped sidebar nav with icons and alert badge counts |
+| AdminHome | `src/components/dashboard/AdminHome.tsx` | Smart home screen with quick actions, stats, activity, health |
+
+### Provider Dashboard Components
 
 | Component | File | Purpose |
 |-----------|------|---------|
@@ -212,7 +230,6 @@ The provider dashboard (`src/pages/ProviderDashboard.tsx`) is now modular:
 | StatsGrid | `src/components/provider-dashboard/StatsGrid.tsx` | 6 stat cards (memoized) |
 | ProfileCompletionBar | `src/components/provider-dashboard/ProfileCompletionBar.tsx` | Progress bar + field checklist (memoized) |
 | ServiceCard | `src/components/provider-dashboard/ServiceCard.tsx` | Individual service with toggle/edit/delete (memoized) |
-| ProviderMediaUpload | `src/components/ProviderMediaUpload.tsx` | Media upload (lazy-loaded) |
 
 ---
 
@@ -220,23 +237,26 @@ The provider dashboard (`src/pages/ProviderDashboard.tsx`) is now modular:
 
 1. **Blog editor** uses markdown (not WYSIWYG). Toolbar buttons insert markdown syntax. Content renders properly on the published post.
 
-2. **Provider images** — Edit Service accepts image URLs but doesn't upload to Supabase storage yet. Use existing Supabase image URLs.
+2. **Provider images** — Edit Service accepts image URLs but doesn't upload to Supabase storage yet.
 
-3. **Provider seed** — creates Sandy's profile under the admin's auth ID (RLS constraint). When Sandy creates her own account, data can be transferred.
+3. **Tour bookings (anonymous)** — saved as leads in `contact_submissions`, not in `tour_bookings`. Full fix requires a DB migration to make `user_id` nullable.
 
-4. **Newsletter emails** — currently send from `onboarding@resend.dev` (sandbox). Verify a custom domain in Resend to fix sender name.
+4. **Newsletter emails** — currently send from `onboarding@resend.dev` (sandbox). Verify a custom domain in Resend to fix.
+
+5. **Podcast & Video** — buttons visible in Create Content dropdown but marked "coming soon".
 
 ---
 
 ## Reporting Issues
 
 If something doesn't work:
-1. Note the **exact URL**
+1. Note the **exact URL** (copy from browser)
 2. Note **logged in or not**
-3. **Screenshot** the error
+3. **Screenshot** the error (or screen recording for interactions)
 4. **Mobile or desktop**
-5. Send to Tumelo
+5. Send to Tumelo via WhatsApp or email
 
 ---
 
-*Guide updated 1 April 2026 (v3) — Omni Wellness Media Platform*
+*Guide updated 3 April 2026 (v4) — Omni Wellness Media Platform*
+*Build: ecf69ab*
