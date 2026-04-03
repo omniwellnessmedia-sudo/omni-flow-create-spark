@@ -8,11 +8,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Plus, Eye, MessageCircle, FileText, Edit, MapPin, CheckCircle, Package } from "lucide-react";
+import { Plus, Eye, MessageCircle, FileText, Edit, Package } from "lucide-react";
 import ProviderHeader from "@/components/provider-dashboard/ProviderHeader";
 import StatsGrid from "@/components/provider-dashboard/StatsGrid";
 import ProfileCompletionBar from "@/components/provider-dashboard/ProfileCompletionBar";
 import ServiceCard from "@/components/provider-dashboard/ServiceCard";
+import SmartGreeting from "@/components/dashboard/SmartGreeting";
 
 const ProviderMediaUpload = lazy(() => import("@/components/ProviderMediaUpload"));
 
@@ -132,16 +133,17 @@ const ProviderDashboard = () => {
       <ProviderHeader hasProfile={!!providerProfile} onLogout={handleLogout} />
 
       <div className="p-4 md:p-6 max-w-7xl mx-auto">
-        {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <h1 className="font-heading text-2xl">{providerProfile?.business_name || "Provider Dashboard"}</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {providerProfile?.location && <><MapPin className="h-3 w-3 inline mr-1" />{providerProfile.location} &middot; </>}
-              {providerProfile?.verified && <><CheckCircle className="h-3 w-3 inline mr-1 text-green-600" />Verified</>}
-            </p>
-          </div>
-          <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <SmartGreeting
+            userName={providerProfile?.business_name || user?.email?.split("@")[0]}
+            role="provider"
+            alerts={[
+              ...(profileCompletion < 100 ? [{ type: "info" as const, message: `Profile ${profileCompletion}% complete` }] : []),
+              ...(upcomingBookings.filter(b => b.status === "pending").length > 0 ? [{ type: "warning" as const, message: `${upcomingBookings.filter(b => b.status === "pending").length} pending booking${upcomingBookings.filter(b => b.status === "pending").length > 1 ? "s" : ""}` }] : []),
+            ]}
+            subtitle={providerProfile?.location}
+          />
+          <div className="flex gap-2 shrink-0">
             <Button size="sm" onClick={() => navigate("/wellness-exchange/add-service")} className="h-8 text-xs rounded-full">
               <Plus className="h-3 w-3 mr-1" /> New Service
             </Button>
