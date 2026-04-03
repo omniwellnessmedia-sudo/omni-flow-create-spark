@@ -29,9 +29,16 @@ import {
   Package,
   LogOut,
   Plus,
-  Home
+  Home,
+  AlertTriangle,
+  Clock,
+  UserX,
+  ChevronDown,
+  Mic,
+  Video,
 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { IMAGES } from "@/lib/images";
 
 const TabLoader = () => (
@@ -49,6 +56,7 @@ const AdminDashboard = () => {
     bookings: [] as any[],
     serviceBookings: [] as any[],
     recentActivity: [] as any[],
+    alerts: [] as { type: 'warning' | 'info'; message: string; action?: string; tab?: string }[],
     stats: {
       totalRevenue: 0,
       totalOrders: 0,
@@ -123,7 +131,8 @@ const AdminDashboard = () => {
         blogCountResult,
         publishedBlogCountResult,
         pendingOrdersCountResult,
-        revenueResult
+        revenueResult,
+        allProvidersResult
       ] = await Promise.all([
         // Display data (limited for UI)
         supabase.from('orders').select('*').order('created_at', { ascending: false }).limit(10),
@@ -145,6 +154,7 @@ const AdminDashboard = () => {
         supabase.from('blog_posts').select('*', { count: 'exact', head: true }).eq('status', 'published'),
         supabase.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
         supabase.from('orders').select('amount'),
+        supabase.from('provider_profiles').select('*', { count: 'exact', head: true }),
       ]);
 
       const orders = ordersResult.data || [];
@@ -177,18 +187,39 @@ const AdminDashboard = () => {
         })))
       ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()).slice(0, 8);
 
+      // Build alerts from real data
+      const alerts: { type: 'warning' | 'info'; message: string; action?: string; tab?: string }[] = [];
+      const pendingBookings = bookings.filter((b: any) => b.status === 'pending');
+      if (pendingBookings.length > 0) {
+        alerts.push({ type: 'warning', message: `${pendingBookings.length} pending booking${pendingBookings.length > 1 ? 's' : ''} awaiting confirmation`, action: 'Review', tab: 'bookings' });
+      }
+      const pendingLeads = serviceBookings.filter((s: any) => s.status === 'pending');
+      if (pendingLeads.length > 0) {
+        alerts.push({ type: 'warning', message: `${pendingLeads.length} unanswered lead${pendingLeads.length > 1 ? 's' : ''} need follow-up`, action: 'View Leads', tab: 'leads' });
+      }
+      if ((pendingOrdersCountResult.count || 0) > 0) {
+        alerts.push({ type: 'info', message: `${pendingOrdersCountResult.count} pending order${(pendingOrdersCountResult.count || 0) > 1 ? 's' : ''} to process`, action: 'View Orders', tab: 'orders' });
+      }
+      const totalProviderCount = (allProvidersResult.count || 0);
+      const verifiedProviderCount = (providerResult.count || 0);
+      if (totalProviderCount > verifiedProviderCount) {
+        const unverified = totalProviderCount - verifiedProviderCount;
+        alerts.push({ type: 'info', message: `${unverified} provider${unverified > 1 ? 's' : ''} pending verification`, action: 'Verify', tab: 'providers' });
+      }
+
       setDashboardData({
         orders,
         bookings,
         serviceBookings,
         recentActivity,
+        alerts,
         stats: {
           totalRevenue,
           totalOrders: ordersCountResult.count || 0,
           totalBookings: bookingsCountResult.count || 0,
           totalServiceBookings: serviceBookingsCountResult.count || 0,
           totalUsers: usersCountResult.count || 0,
-          totalProviders: providerResult.count || 0,
+          totalProviders: allProvidersResult.count || 0,
           activeProviders: providerResult.count || 0,
           wellcoinCirculation: wellcoinTotal,
           pendingOrders: pendingOrdersCountResult.count || 0,
@@ -264,12 +295,29 @@ const AdminDashboard = () => {
             <h1 className="font-heading text-2xl">Dashboard</h1>
             <p className="text-xs text-muted-foreground mt-0.5">Omni Wellness Media — Admin</p>
           </div>
-          <div className="flex gap-2">
-            <Button size="sm" onClick={() => navigate('/blog-editor')} className="h-8 text-xs rounded-full">
-              <Plus className="h-3 w-3 mr-1" />
-              New Post
-            </Button>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" className="h-8 text-xs rounded-full">
+                <Plus className="h-3 w-3 mr-1" />
+                Create Content
+                <ChevronDown className="h-3 w-3 ml-1" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => navigate('/blog/editor/new')}>
+                <FileText className="h-3.5 w-3.5 mr-2" />
+                Blog Post
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/blog/community')} disabled>
+                <Mic className="h-3.5 w-3.5 mr-2" />
+                Podcast Episode <Badge variant="outline" className="ml-2 text-[9px]">Soon</Badge>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/blog/community')} disabled>
+                <Video className="h-3.5 w-3.5 mr-2" />
+                Video <Badge variant="outline" className="ml-2 text-[9px]">Soon</Badge>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Stats Cards */}
@@ -299,20 +347,37 @@ const AdminDashboard = () => {
         <Tabs defaultValue="overview" className="space-y-4">
           <ScrollArea className="w-full">
             <TabsList className="inline-flex w-max gap-0.5 p-1 h-9 bg-muted/50">
+              {/* Core */}
               {[
                 { value: 'overview', label: 'Overview' },
                 { value: 'analytics', label: 'Analytics' },
-                { value: 'accounting', label: 'Accounting' },
-                { value: 'content', label: 'Content' },
-                { value: 'tasks', label: 'Tasks' },
-                { value: 'products', label: 'Products' },
-                { value: 'providers', label: 'Providers' },
                 { value: 'leads', label: 'Leads' },
+                { value: 'bookings', label: 'Bookings' },
+                { value: 'orders', label: 'Orders' },
+              ].map((tab) => (
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs px-3 h-7 rounded-md">
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+              <div className="w-px h-5 bg-border/50 mx-1 self-center shrink-0" />
+              {/* Management */}
+              {[
+                { value: 'providers', label: 'Providers' },
+                { value: 'products', label: 'Products' },
+                { value: 'content', label: 'Content' },
                 { value: 'newsletter', label: 'Newsletter' },
                 { value: 'social', label: 'Social' },
+              ].map((tab) => (
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs px-3 h-7 rounded-md">
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+              <div className="w-px h-5 bg-border/50 mx-1 self-center shrink-0" />
+              {/* System */}
+              {[
+                { value: 'accounting', label: 'Accounting' },
                 { value: 'team', label: 'Team' },
-                { value: 'orders', label: 'Orders' },
-                { value: 'bookings', label: 'Bookings' },
+                { value: 'tasks', label: 'Tasks' },
                 { value: 'tours', label: 'Viator' },
                 { value: 'uwc', label: 'UWC' },
                 { value: 'tools', label: 'Tools' },
@@ -326,6 +391,31 @@ const AdminDashboard = () => {
           </ScrollArea>
 
           <TabsContent value="overview" className="space-y-4">
+            {/* Alerts */}
+            {dashboardData.alerts.length > 0 && (
+              <div className="space-y-2">
+                {dashboardData.alerts.map((alert, i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center justify-between p-3 rounded-lg border ${
+                      alert.type === 'warning'
+                        ? 'bg-amber-50 border-amber-200 dark:bg-amber-950/20 dark:border-amber-800'
+                        : 'bg-blue-50 border-blue-200 dark:bg-blue-950/20 dark:border-blue-800'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      {alert.type === 'warning' ? (
+                        <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
+                      ) : (
+                        <Clock className="h-4 w-4 text-blue-600 shrink-0" />
+                      )}
+                      <span className="text-sm truncate">{alert.message}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Recent Activity */}
               <Card className="border-border/50">
