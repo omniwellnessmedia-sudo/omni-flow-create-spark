@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
+import { Toaster as SonnerToaster } from 'sonner';
 import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/components/CartProvider';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -353,6 +354,7 @@ function App() {
               
               {/* Global Toast Notifications */}
               <Toaster />
+              <SonnerToaster position="top-right" richColors closeButton />
               
               {/* Global ROAM Chatbot */}
               <RoamBuddySalesBot />

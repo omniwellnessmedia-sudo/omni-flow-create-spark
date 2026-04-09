@@ -91,19 +91,25 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
             zIndex = 5;
           }
 
+          // Only render images within 2 positions of current for performance
+          if (absOffset > 2 && absOffset < images.length - 2) {
+            return null;
+          }
+
           return (
             <div
               key={index}
-              className="absolute inset-0 transition-all duration-700 ease-out cursor-pointer"
+              className="absolute inset-0 cursor-pointer will-change-transform"
               style={{
                 transform,
                 opacity,
                 zIndex,
                 transformStyle: 'preserve-3d',
+                transition: 'transform 0.5s ease-out, opacity 0.5s ease-out',
               }}
               onClick={() => goToSlide(index)}
             >
-              <div className="w-full h-full rounded-xl overflow-hidden shadow-2xl bg-white p-2">
+              <div className="w-full h-full rounded-xl overflow-hidden shadow-lg bg-white p-2">
                 <img
                   src={image.src}
                   alt={image.alt}

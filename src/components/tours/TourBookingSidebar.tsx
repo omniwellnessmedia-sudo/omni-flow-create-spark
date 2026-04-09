@@ -156,17 +156,28 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
 
       // Fallback: save as lead in contact_submissions (works for all users, auth or not)
       if (!bookingSuccess) {
-        const { error: leadError } = await supabase.from('contact_submissions').insert({
+        const { data: leadData, error: leadError } = await supabase.from('contact_submissions').insert({
           name: contactName,
           email: contactEmail,
           message: bookingMessage,
           service: `Tour: ${tour.title}`,
           status: 'pending',
-        });
+        }).select('id').single();
 
-        if (leadError) {
+        if (leadError || !leadData) {
           console.error('Lead save error:', leadError);
-          throw new Error('Unable to submit booking. Please email traveltourscapetown@gmail.com directly.');
+          // If rate-limited or RLS blocked, try without .select() as a last resort
+          const { error: retryError } = await supabase.from('contact_submissions').insert({
+            name: contactName,
+            email: contactEmail,
+            message: bookingMessage,
+            service: `Tour: ${tour.title}`,
+            status: 'pending',
+          });
+          if (retryError) {
+            console.error('Retry error:', retryError);
+            throw new Error('Unable to submit booking. Please email traveltourscapetown@gmail.com directly.');
+          }
         }
       }
 
