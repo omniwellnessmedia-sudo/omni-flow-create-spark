@@ -136,13 +136,22 @@ const BlogEditor = () => {
   };
 
   const saveDraft = async () => {
-    if (!user || !post.title.trim() || !post.content.trim()) {
+    if (!post.title.trim() || !post.content.trim()) {
       toast.error("Please add a title and content");
       return;
     }
 
     setIsLoading(true);
     try {
+      // Always get a fresh session to ensure valid auth
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user?.id) {
+        toast.error("Please log in to save drafts");
+        navigate("/auth");
+        return;
+      }
+
+      const userId = session.user.id;
       const slug = generateSlug(post.title);
 
       let result;
@@ -154,9 +163,9 @@ const BlogEditor = () => {
             subtitle: post.subtitle || null,
             content: post.content,
             excerpt: post.excerpt || post.content.substring(0, 200) + "...",
-            tags: post.tags,
+            tags: post.tags.length > 0 ? post.tags : null,
             featured_image_url: post.featured_image_url || null,
-            user_id: user.id,
+            user_id: userId,
             slug,
             read_time_minutes: estimatedReadTime,
             status: "draft",
@@ -171,13 +180,13 @@ const BlogEditor = () => {
             subtitle: post.subtitle || null,
             content: post.content,
             excerpt: post.excerpt || post.content.substring(0, 200) + "...",
-            tags: post.tags,
+            tags: post.tags.length > 0 ? post.tags : null,
             featured_image_url: post.featured_image_url || null,
             read_time_minutes: estimatedReadTime,
             status: "draft",
           })
           .eq('id', postId)
-          .eq('user_id', user.id)
+          .eq('user_id', userId)
           .select()
           .single();
       }
@@ -185,24 +194,33 @@ const BlogEditor = () => {
       if (result.error) throw result.error;
 
       toast.success("Draft saved successfully");
-      if (postId === "new") {
-        navigate(`/blog/editor/${result.data.id}`);
+      if (postId === "new" && result.data?.id) {
+        navigate(`/blog/editor/${result.data.id}`, { replace: true });
       }
     } catch (error: any) {
-      toast.error("Failed to save draft: " + error.message);
+      console.error("Save draft error:", error);
+      toast.error("Failed to save draft: " + (error.message || "Unknown error"));
     } finally {
       setIsLoading(false);
     }
   };
 
   const publishPost = async () => {
-    if (!user || !post.title.trim() || !post.content.trim()) {
+    if (!post.title.trim() || !post.content.trim()) {
       toast.error("Please add a title and content");
       return;
     }
 
     setIsLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user?.id) {
+        toast.error("Please log in to publish");
+        navigate("/auth");
+        return;
+      }
+
+      const userId = session.user.id;
       const slug = generateSlug(post.title);
 
       let result;
@@ -214,9 +232,9 @@ const BlogEditor = () => {
             subtitle: post.subtitle || null,
             content: post.content,
             excerpt: post.excerpt || post.content.substring(0, 200) + "...",
-            tags: post.tags,
+            tags: post.tags.length > 0 ? post.tags : null,
             featured_image_url: post.featured_image_url || null,
-            user_id: user.id,
+            user_id: userId,
             slug,
             read_time_minutes: estimatedReadTime,
             status: "published",
@@ -232,14 +250,14 @@ const BlogEditor = () => {
             subtitle: post.subtitle || null,
             content: post.content,
             excerpt: post.excerpt || post.content.substring(0, 200) + "...",
-            tags: post.tags,
+            tags: post.tags.length > 0 ? post.tags : null,
             featured_image_url: post.featured_image_url || null,
             read_time_minutes: estimatedReadTime,
             status: "published",
             published_at: post.status === "draft" ? new Date().toISOString() : undefined,
           })
           .eq('id', postId)
-          .eq('user_id', user.id)
+          .eq('user_id', userId)
           .select()
           .single();
       }

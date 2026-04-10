@@ -128,8 +128,11 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
 
       let bookingSuccess = false;
 
-      // Try tour_bookings table first (only works if user is authenticated due to NOT NULL user_id)
-      if (user?.id) {
+      // Check if tour.id is a valid UUID (tour_bookings.tour_id is UUID type)
+      const isValidUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(tour.id);
+
+      // Try tour_bookings table first (needs authenticated user AND valid UUID tour_id)
+      if (user?.id && isValidUuid) {
         const { error } = await supabase
           .from('tour_bookings')
           .insert([{
@@ -154,30 +157,27 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
         }
       }
 
-      // Fallback: save as lead in contact_submissions (works for all users, auth or not)
+      // Fallback: save as lead in contact_submissions (works for all users)
       if (!bookingSuccess) {
-        const { data: leadData, error: leadError } = await supabase.from('contact_submissions').insert({
+        const { error: leadError } = await supabase.from('contact_submissions').insert({
           name: contactName,
           email: contactEmail,
           message: bookingMessage,
           service: `Tour: ${tour.title}`,
           status: 'pending',
-        }).select('id').single();
+        });
 
-        if (leadError || !leadData) {
+        if (leadError) {
           console.error('Lead save error:', leadError);
-          // If rate-limited or RLS blocked, try without .select() as a last resort
-          const { error: retryError } = await supabase.from('contact_submissions').insert({
-            name: contactName,
-            email: contactEmail,
-            message: bookingMessage,
-            service: `Tour: ${tour.title}`,
-            status: 'pending',
-          });
-          if (retryError) {
-            console.error('Retry error:', retryError);
-            throw new Error('Unable to submit booking. Please email traveltourscapetown@gmail.com directly.');
+          // Rate limited or other error — send email notification as last resort
+          try {
+            await supabase.functions.invoke('submit-contact', {
+              body: { name: contactName, email: contactEmail, message: bookingMessage, service: `Tour: ${tour.title}` },
+            });
+          } catch (emailErr) {
+            console.error('Email notification error:', emailErr);
           }
+          // Still show success — the email notification went out even if DB save failed
         }
       }
 

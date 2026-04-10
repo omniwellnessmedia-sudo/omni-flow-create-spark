@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Image3D {
   src: string;
@@ -14,146 +13,87 @@ interface ImageCarousel3DProps {
   autoPlayDelay?: number;
 }
 
-const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({ 
-  images, 
-  autoPlay = true, 
-  autoPlayDelay = 4000 
+const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
+  images,
+  autoPlay = true,
+  autoPlayDelay = 5000
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const isMobile = useIsMobile();
+
+  const goToNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  }, [images.length]);
+
+  const goToPrevious = useCallback(() => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  }, [images.length]);
 
   useEffect(() => {
     if (!autoPlay || images.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, autoPlayDelay);
-
+    const interval = setInterval(goToNext, autoPlayDelay);
     return () => clearInterval(interval);
-  }, [autoPlay, autoPlayDelay, images.length]);
-
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
+  }, [autoPlay, autoPlayDelay, goToNext, images.length]);
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto h-64 sm:h-80 md:h-[700px] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 md:perspective-1000">
-      {/* 3D Carousel Container */}
-      <div className="relative w-full h-full preserve-3d">
-        {images.map((image, index) => {
-          const offset = index - currentIndex;
-          const absOffset = Math.abs(offset);
-          
-          let transform = '';
-          let opacity = 1;
-          let zIndex = 10;
+    <div className="relative w-full max-w-7xl mx-auto aspect-[16/9] md:aspect-[21/9] overflow-hidden rounded-2xl bg-muted">
+      {/* Images — only render current and adjacent for performance */}
+      {images.map((image, index) => {
+        const isCurrent = index === currentIndex;
+        const isAdjacent = Math.abs(index - currentIndex) === 1
+          || (currentIndex === 0 && index === images.length - 1)
+          || (currentIndex === images.length - 1 && index === 0);
 
-          if (isMobile) {
-            transform = offset === 0 ? 'translateX(0) scale(1)' : 'translateX(0) scale(0.98)';
-            opacity = offset === 0 ? 1 : 0;
-            zIndex = offset === 0 ? 20 : 5;
-          } else if (offset === 0) {
-            // Center image
-            transform = 'translateX(0) translateZ(0) rotateY(0deg) scale(1)';
-            opacity = 1;
-            zIndex = 20;
-          } else if (offset === 1 || (offset === -(images.length - 1))) {
-            // Right image
-            transform = 'translateX(60%) translateZ(-200px) rotateY(-25deg) scale(0.85)';
-            opacity = 0.7;
-            zIndex = 15;
-          } else if (offset === -1 || (offset === images.length - 1)) {
-            // Left image
-            transform = 'translateX(-60%) translateZ(-200px) rotateY(25deg) scale(0.85)';
-            opacity = 0.7;
-            zIndex = 15;
-          } else if (absOffset === 2 || absOffset === images.length - 2) {
-            // Far side images
-            transform = offset > 0 
-              ? 'translateX(120%) translateZ(-400px) rotateY(-45deg) scale(0.7)'
-              : 'translateX(-120%) translateZ(-400px) rotateY(45deg) scale(0.7)';
-            opacity = 0.4;
-            zIndex = 10;
-          } else {
-            // Hidden images
-            transform = 'translateX(200%) translateZ(-600px) rotateY(-60deg) scale(0.5)';
-            opacity = 0;
-            zIndex = 5;
-          }
+        if (!isCurrent && !isAdjacent) return null;
 
-          // Only render images within 2 positions of current for performance
-          if (absOffset > 2 && absOffset < images.length - 2) {
-            return null;
-          }
-
-          return (
-            <div
-              key={index}
-              className="absolute inset-0 cursor-pointer will-change-transform"
-              style={{
-                transform,
-                opacity,
-                zIndex,
-                transformStyle: 'preserve-3d',
-                transition: 'transform 0.5s ease-out, opacity 0.5s ease-out',
-              }}
-              onClick={() => goToSlide(index)}
-            >
-              <div className="w-full h-full rounded-xl overflow-hidden shadow-lg bg-white p-2">
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-full object-cover rounded-lg"
-                  loading="lazy"
-                />
-                {image.caption && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                    <p className="text-white text-sm font-medium">{image.caption}</p>
-                  </div>
-                )}
+        return (
+          <div
+            key={index}
+            className="absolute inset-0"
+            style={{
+              opacity: isCurrent ? 1 : 0,
+              zIndex: isCurrent ? 10 : 5,
+              transition: 'opacity 0.6s ease-in-out',
+            }}
+          >
+            <img
+              src={image.src}
+              alt={image.alt}
+              className="w-full h-full object-cover"
+              loading={isCurrent ? "eager" : "lazy"}
+            />
+            {image.caption && (
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-6">
+                <p className="text-white text-sm sm:text-base font-medium">{image.caption}</p>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            )}
+          </div>
+        );
+      })}
 
-      {/* Navigation Buttons */}
+      {/* Navigation */}
       <button
         onClick={goToPrevious}
-        className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
+        className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-2.5 rounded-full transition-colors"
         aria-label="Previous image"
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft size={20} />
       </button>
-      
       <button
         onClick={goToNext}
-        className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
+        className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 bg-black/30 backdrop-blur-sm hover:bg-black/50 text-white p-2.5 rounded-full transition-colors"
         aria-label="Next image"
       >
-        <ChevronRight size={24} />
+        <ChevronRight size={20} />
       </button>
 
-      {/* Dot Indicators */}
-      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
+      {/* Dots */}
+      <div className="absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
         {images.map((_, index) => (
           <button
             key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 shadow-md ${
-              index === currentIndex
-                ? 'bg-white scale-125'
-                : 'bg-white/60 hover:bg-white/80'
+            onClick={() => setCurrentIndex(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentIndex ? 'bg-white w-6' : 'bg-white/50 hover:bg-white/80'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
