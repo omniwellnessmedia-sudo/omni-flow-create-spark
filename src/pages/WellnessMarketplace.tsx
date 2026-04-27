@@ -548,7 +548,7 @@ const WellnessMarketplace = () => {
           {/* 2BeWell CTA */}
           {services.length > 0 && (
             <div className="mt-16">
-              <TwoBeWellCTA variant="sidebar" />
+              <TwoBeWellCTA />
             </div>
           )}
         </div>
