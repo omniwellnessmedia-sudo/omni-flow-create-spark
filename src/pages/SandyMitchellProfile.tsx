@@ -97,7 +97,7 @@ const SandyMitchellProfile = () => {
               id: s.id,
               title: s.title,
               description: s.description || '',
-              category: s.category || 'Wellness',
+              category: 'Yoga' as const,
               price_zar: s.price_zar || 0,
               price_wellcoins: s.price_wellcoins || 0,
               duration_minutes: s.duration_minutes || 60,

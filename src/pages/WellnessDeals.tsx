@@ -846,7 +846,7 @@ const WellnessDeals = () => {
           {/* 2BeWell CTA Section */}
           {!loading && filteredDeals.length > 0 && (
             <div className="mt-16">
-              <TwoBeWellCTA variant="compact" />
+              <TwoBeWellCTA />
             </div>
           )}
         </div>
