@@ -58,8 +58,12 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
             <img
               src={image.src}
               alt={image.alt}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover will-change-transform"
               loading={isCurrent ? "eager" : "lazy"}
+              decoding="async"
+              onError={(e) => {
+                e.currentTarget.src = "/placeholder.svg";
+              }}
             />
             {image.caption && (
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 sm:p-6">

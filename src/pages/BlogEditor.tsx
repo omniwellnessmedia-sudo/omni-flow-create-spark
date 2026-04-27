@@ -38,7 +38,9 @@ const BlogEditor = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { postId } = useParams();
+  const isNewPost = !postId || postId === "new";
   const [isLoading, setIsLoading] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
   const [post, setPost] = useState<{
     title: string;
     subtitle: string;
@@ -85,10 +87,10 @@ const BlogEditor = () => {
       return;
     }
 
-    if (postId && postId !== "new") {
+    if (!isNewPost) {
       loadPost();
     }
-  }, [user, postId]);
+  }, [user, postId, isNewPost]);
 
   useEffect(() => {
     const words = post.content.split(/\s+/).filter(word => word.length > 0).length;
@@ -97,7 +99,7 @@ const BlogEditor = () => {
   }, [post.content]);
 
   const loadPost = async () => {
-    if (!postId || postId === "new") return;
+    if (isNewPost) return;
 
     try {
       const { data, error } = await supabase
@@ -155,7 +157,7 @@ const BlogEditor = () => {
       const slug = generateSlug(post.title);
 
       let result;
-      if (postId === "new") {
+      if (isNewPost) {
         result = await supabase
           .from('blog_posts')
           .insert([{
@@ -194,7 +196,9 @@ const BlogEditor = () => {
       if (result.error) throw result.error;
 
       toast.success("Draft saved successfully");
-      if (postId === "new" && result.data?.id) {
+      setPost(prev => ({ ...prev, status: "draft" }));
+      setLastSavedAt(new Date().toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" }));
+      if (isNewPost && result.data?.id) {
         navigate(`/blog/editor/${result.data.id}`, { replace: true });
       }
     } catch (error: any) {
@@ -224,7 +228,7 @@ const BlogEditor = () => {
       const slug = generateSlug(post.title);
 
       let result;
-      if (postId === "new") {
+      if (isNewPost) {
         result = await supabase
           .from('blog_posts')
           .insert([{
@@ -314,6 +318,7 @@ const BlogEditor = () => {
               </Button>
               <div className="text-sm text-muted-foreground">
                 {wordCount} words • {estimatedReadTime} min read
+                {lastSavedAt && <span className="ml-2 text-primary">Saved {lastSavedAt}</span>}
               </div>
             </div>
             
@@ -325,7 +330,7 @@ const BlogEditor = () => {
                 disabled={isLoading}
               >
                 <Save className="h-4 w-4 mr-2" />
-                Save Draft
+                {isLoading ? "Saving..." : "Save Draft"}
               </Button>
               
               <Button

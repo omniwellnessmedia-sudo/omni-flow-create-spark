@@ -157,39 +157,22 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
         }
       }
 
-      // Fallback: save as lead in contact_submissions (works for all users)
+      // Fallback: submit as a lead via the secure contact function (works for guests and logged-in users)
       if (!bookingSuccess) {
-        const { error: leadError } = await supabase.from('contact_submissions').insert({
-          name: contactName,
-          email: contactEmail,
-          message: bookingMessage,
-          service: `Tour: ${tour.title}`,
-          status: 'pending',
+        const { error: leadError } = await supabase.functions.invoke('submit-contact', {
+          body: {
+            name: contactName,
+            email: contactEmail,
+            message: bookingMessage,
+            service: `Tour booking: ${tour.title}`,
+          },
         });
 
         if (leadError) {
-          console.error('Lead save error:', leadError);
-          // Rate limited or other error — send email notification as last resort
-          try {
-            await supabase.functions.invoke('submit-contact', {
-              body: { name: contactName, email: contactEmail, message: bookingMessage, service: `Tour: ${tour.title}` },
-            });
-          } catch (emailErr) {
-            console.error('Email notification error:', emailErr);
-          }
-          // Still show success — the email notification went out even if DB save failed
+          throw new Error(leadError.message || 'Unable to submit booking enquiry');
         }
+        bookingSuccess = true;
       }
-
-      // Send email notification (fire-and-forget)
-      supabase.functions.invoke('submit-contact', {
-        body: {
-          name: contactName,
-          email: contactEmail,
-          message: bookingMessage,
-          service: `Tour: ${tour.title}`,
-        },
-      }).catch(err => console.error('Notification error:', err));
 
       toast({
         title: "Booking Submitted!",

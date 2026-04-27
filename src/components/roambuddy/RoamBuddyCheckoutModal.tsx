@@ -147,14 +147,14 @@ export const RoamBuddyCheckoutModal = ({ product, isOpen, onClose }: RoamBuddyCh
         // Tag conversion in Clarity & GA4
         if (typeof window.tagClarityEvent === 'function') {
           window.tagClarityEvent('purchase', product?.name || 'eSIM');
-          window.tagClarityEvent('order_value', String(finalAmount));
+          window.tagClarityEvent('order_value', String(finalPriceUSD));
         }
         if (typeof window.trackRoamEvent === 'function') {
           window.trackRoamEvent('purchase', {
             transaction_id: result.data?.id || `ORD-${Date.now()}`,
-            value: finalAmount,
+            value: finalPriceUSD,
             currency: 'USD',
-            items: [{ item_name: product?.name, price: finalAmount }],
+            items: [{ item_name: product?.name, price: finalPriceUSD }],
           });
         }
       } else {

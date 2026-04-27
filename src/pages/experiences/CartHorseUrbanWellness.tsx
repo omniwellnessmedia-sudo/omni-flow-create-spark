@@ -34,7 +34,7 @@ export default function CartHorseUrbanWellness() {
     price: 1800,
     currency: 'ZAR',
     location: 'Cape Town, South Africa',
-    duration: 'Half Day',
+    duration: 'Full Day',
     rating: 5.0,
     reviewCount: 23,
     images: [],
@@ -46,10 +46,10 @@ export default function CartHorseUrbanWellness() {
     title: 'Hoofbeats & Healing — Cart Horse Urban Wellness Experience',
     price: 1800,
     price_from: 1800,
-    duration: 'Half Day',
+    duration: 'Full Day, 9am–4pm',
     destination: 'Cape Town, South Africa',
     max_participants: 20,
-    overview: 'CPD-accredited equine-assisted wellness experience with rescued working horses',
+    overview: 'CPD-accredited full-day equine-assisted wellness experience with rescued working horses',
     start_date: new Date().toISOString(),
     end_date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
     active: true
@@ -132,7 +132,7 @@ export default function CartHorseUrbanWellness() {
               Equine-Assisted Wellness & Impact Travel Experience
             </p>
             <p className="text-base sm:text-lg mb-8 text-white/80 max-w-2xl break-words">
-              A transformative half-day experience connecting you with rescued working horses through the Pegasus Programme.
+              A transformative full-day experience connecting you with rescued working horses through the Pegasus Programme.
               Evidence-based, CPD-accredited, and rooted in conscious impact travel that changes lives — human and animal.
             </p>
             <div className="flex flex-wrap gap-4 items-center">
@@ -154,7 +154,7 @@ export default function CartHorseUrbanWellness() {
               <div className="flex items-center gap-4 text-white/90 text-sm">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  <span>Half Day</span>
+                  <span>9am–4pm</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" />

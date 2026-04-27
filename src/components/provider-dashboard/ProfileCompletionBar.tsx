@@ -4,7 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Award } from "lucide-react";
 
-const PROFILE_FIELDS = [
+type ProfileField = {
+  key: string;
+  label: string;
+  check?: (value: any) => boolean;
+};
+
+const PROFILE_FIELDS: ProfileField[] = [
   { key: "business_name", label: "Name" },
   { key: "description", label: "Bio" },
   { key: "location", label: "Location" },
@@ -12,7 +18,7 @@ const PROFILE_FIELDS = [
   { key: "specialties", label: "Specialties", check: (v: any) => v?.length > 0 },
   { key: "certifications", label: "Certifications", check: (v: any) => v?.length > 0 },
   { key: "profile_image_url", label: "Photo" },
-] as const;
+];
 
 interface ProfileCompletionBarProps {
   profileCompletion: number;

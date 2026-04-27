@@ -1,6 +1,6 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Clock, CheckCircle, Sparkles } from "lucide-react";
+import { AlertTriangle, Clock, CheckCircle, Sparkles, X } from "lucide-react";
 
 interface Alert {
   type: "warning" | "info" | "success";
@@ -15,6 +15,22 @@ interface SmartGreetingProps {
 }
 
 const SmartGreeting = memo(({ userName, role, alerts = [], subtitle }: SmartGreetingProps) => {
+  const [dismissedAlerts, setDismissedAlerts] = useState<string[]>(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem("dashboard-dismissed-alerts") || "[]");
+    } catch {
+      return [];
+    }
+  });
+
+  const visibleAlerts = alerts.filter((alert) => !dismissedAlerts.includes(alert.message));
+
+  const dismissAlert = (message: string) => {
+    const next = [...dismissedAlerts, message];
+    setDismissedAlerts(next);
+    sessionStorage.setItem("dashboard-dismissed-alerts", JSON.stringify(next));
+  };
+
   const { greeting, emoji, timeStr, dateStr } = useMemo(() => {
     const now = new Date();
     const hour = now.getHours();
@@ -56,9 +72,9 @@ const SmartGreeting = memo(({ userName, role, alerts = [], subtitle }: SmartGree
         )}
       </div>
 
-      {alerts.length > 0 && (
+      {visibleAlerts.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-3">
-          {alerts.map((alert, i) => (
+          {visibleAlerts.map((alert, i) => (
             <div
               key={i}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
@@ -76,7 +92,10 @@ const SmartGreeting = memo(({ userName, role, alerts = [], subtitle }: SmartGree
               ) : (
                 <Clock className="h-3 w-3" />
               )}
-              {alert.message}
+              <span>{alert.message}</span>
+              <button type="button" onClick={() => dismissAlert(alert.message)} aria-label="Dismiss alert" className="ml-1 rounded-full hover:bg-background/40">
+                <X className="h-3 w-3" />
+              </button>
             </div>
           ))}
         </div>
