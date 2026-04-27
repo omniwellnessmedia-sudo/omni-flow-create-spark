@@ -318,6 +318,7 @@ const BlogEditor = () => {
               </Button>
               <div className="text-sm text-muted-foreground">
                 {wordCount} words • {estimatedReadTime} min read
+                {lastSavedAt && <span className="ml-2 text-primary">Saved {lastSavedAt}</span>}
               </div>
             </div>
             
@@ -329,7 +330,7 @@ const BlogEditor = () => {
                 disabled={isLoading}
               >
                 <Save className="h-4 w-4 mr-2" />
-                Save Draft
+                {isLoading ? "Saving..." : "Save Draft"}
               </Button>
               
               <Button
