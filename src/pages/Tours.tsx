@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   MapPin, Clock, Star, Users, ExternalLink, Search, 
-  Mountain, Waves, Leaf, Camera, Heart, Filter, Globe
+  Mountain, Waves, Leaf, Camera, Heart, Filter, Globe, Building2, ArrowRight
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { FloatingDecorations } from '@/components/ui/gaia-elements';
 import { CuratorTip } from '@/components/curator/CuratorTip';
 import { omniVoice } from '@/data/omniVoiceGuide';
+import { IMAGES } from '@/lib/images';
 
 interface ViatorTour {
   id: string;
@@ -44,6 +45,27 @@ const categoryIcons: Record<string, any> = {
   'Adventure': Mountain,
   'Wellness': Heart,
 };
+
+const featuredExperiences = [
+  {
+    title: 'Hoofbeats & Healing',
+    description: 'A full-day equine-assisted urban wellness experience supporting Cart Horse Protection Association and impact partners.',
+    meta: 'Cape Town · 9am–4pm · R1,800pp',
+    href: '/experiences/cart-horse-urban-wellness',
+    image: IMAGES.services.humanAnimal1,
+    icon: Heart,
+    badge: 'Bookable Day Experience',
+  },
+  {
+    title: 'Rewild Your Team',
+    description: 'Bespoke corporate wellness retreats combining equine connection, indigenous heritage and measurable CSI/ESG impact.',
+    meta: 'Cape Town · 1–3 days · From R80,000',
+    href: '/experiences/corporate-wellness-retreat',
+    image: IMAGES.services.chief,
+    icon: Building2,
+    badge: 'Corporate Wellness',
+  },
+];
 
 const formatDuration = (duration: any): string => {
   if (!duration) return 'Varies';
@@ -268,6 +290,46 @@ export default function Tours() {
       <section className="py-8 md:py-12 bg-background relative overflow-hidden">
         <FloatingDecorations variant="subtle" />
         <div className="container mx-auto px-4 relative z-10">
+          <div className="mb-10">
+            <div className="flex items-center justify-between gap-4 mb-5">
+              <div>
+                <Badge variant="secondary" className="mb-2">Omni Featured Experiences</Badge>
+                <h2 className="text-2xl md:text-3xl font-bold">Book directly with our impact partners</h2>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              {featuredExperiences.map((experience) => (
+                <Card key={experience.href} className="group overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="grid sm:grid-cols-[0.42fr_0.58fr] h-full">
+                    <div className="aspect-[4/3] sm:aspect-auto overflow-hidden bg-muted">
+                      <img
+                        src={experience.image}
+                        alt={experience.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
+                      />
+                    </div>
+                    <CardContent className="p-5 flex flex-col gap-3">
+                      <Badge variant="outline" className="w-fit gap-1">
+                        <experience.icon className="h-3.5 w-3.5" />
+                        {experience.badge}
+                      </Badge>
+                      <div>
+                        <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">{experience.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">{experience.description}</p>
+                      </div>
+                      <p className="text-sm font-medium text-primary">{experience.meta}</p>
+                      <Button className="mt-auto w-fit" variant="outline" onClick={() => navigate(experience.href)}>
+                        View Experience <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardContent>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+
           {/* Filters */}
           <div className="flex flex-wrap gap-3 mb-8 p-4 bg-muted/30 rounded-lg">
             <div className="flex items-center gap-2 text-sm font-medium">
