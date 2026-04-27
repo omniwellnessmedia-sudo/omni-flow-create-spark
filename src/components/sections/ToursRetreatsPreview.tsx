@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MapPin, Clock, Users, Wifi, Globe, Signal } from 'lucide-react';
+import { ArrowRight, MapPin, Clock, Users, Wifi, Globe, Signal, Heart, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { IMAGES } from '@/lib/images';
 
 const roamPlans = [
   {
@@ -38,6 +39,36 @@ const roamPlans = [
     priceZAR: 1199,
     description: 'Worldwide connectivity for digital nomads & frequent travelers',
     popular: false,
+  },
+];
+
+const featuredExperiences = [
+  {
+    title: 'Hoofbeats & Healing',
+    subtitle: 'Cart Horse Urban Wellness Day',
+    meta: 'Salt River / Woodstock · 9am–4pm · From R1,800',
+    href: '/experiences/cart-horse-urban-wellness',
+    image: IMAGES.services.humanAnimal1,
+    badge: 'Bookable Day Experience',
+    icon: Heart,
+  },
+  {
+    title: 'Rewild Your Team',
+    subtitle: 'Corporate Wellness Retreats',
+    meta: 'Cape Town · 1–3 days · From R80,000',
+    href: '/experiences/corporate-wellness-retreat',
+    image: IMAGES.services.chief,
+    badge: 'Corporate Impact Travel',
+    icon: Building2,
+  },
+  {
+    title: '4th Annual Omni Wellness Retreat',
+    subtitle: 'Weekend sanctuary retreat',
+    meta: 'Tufcat Sanctuary · 4 days / 3 nights · From R3,000',
+    href: '/tour-detail/winter-wine-country-wellness',
+    image: 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg',
+    badge: 'Weekend Retreats',
+    icon: Users,
   },
 ];
 
@@ -116,32 +147,42 @@ const ToursRetreatsPreview = () => {
           ))}
         </div>
 
-        {/* Active Tour Card */}
+        {/* Featured Experience Cards */}
         <div className="mb-10">
           <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
             🧘 Pair with a Wellness Experience
           </h3>
-          <Card className="group hover:shadow-xl transition-all duration-300 max-w-2xl mx-auto">
-            <div className="flex flex-col sm:flex-row overflow-hidden">
-              <div className="sm:w-1/3 h-48 sm:h-auto overflow-hidden">
-                <img
-                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Annual%20Omni%20Wellness%20Retreat/IMG_0052%20(1).jpg"
-                  alt="Omni Wellness Retreat"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <CardContent className="p-5 sm:w-2/3 flex flex-col justify-center">
-                <Badge variant="secondary" className="w-fit mb-2 text-xs">Weekend Retreats</Badge>
-                <h4 className="text-lg font-semibold text-foreground mb-1">4th Annual Omni Wellness Retreat</h4>
-                <p className="text-sm text-muted-foreground mb-3">Tufcat Sanctuary · 4 days / 3 nights · From R3,000</p>
-                <Link to="/tour-detail/winter-wine-country-wellness">
-                  <Button variant="outline" size="sm">
-                    View Details <ArrowRight className="ml-1 h-3 w-3" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </div>
-          </Card>
+          <div className="grid gap-5 md:grid-cols-3">
+            {featuredExperiences.map((experience) => (
+              <Card key={experience.href} className="group overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                  <img
+                    src={experience.image}
+                    alt={experience.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
+                  />
+                </div>
+                <CardContent className="p-5 flex flex-col gap-3">
+                  <Badge variant="secondary" className="w-fit text-xs gap-1">
+                    <experience.icon className="h-3 w-3" />
+                    {experience.badge}
+                  </Badge>
+                  <div>
+                    <h4 className="text-lg font-semibold text-foreground">{experience.title}</h4>
+                    <p className="text-sm text-muted-foreground">{experience.subtitle}</p>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{experience.meta}</p>
+                  <Link to={experience.href} className="mt-auto">
+                    <Button variant="outline" size="sm" className="w-full">
+                      View Details <ArrowRight className="ml-1 h-3 w-3" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
 
         {/* CTAs */}
