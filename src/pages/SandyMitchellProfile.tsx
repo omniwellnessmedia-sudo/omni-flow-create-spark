@@ -104,6 +104,11 @@ const SandyMitchellProfile = () => {
               location: s.location || providerData.location || '',
               is_online: s.is_online || false,
               images: s.images?.length ? s.images : [IMAGES.sandy.yoga],
+              longDescription: s.description || '',
+              active: s.active ?? true,
+              benefits: ['Personalised wellness support', 'Gentle guidance', 'Mind-body connection'],
+              requirements: ['Comfortable clothing', 'Open mind'],
+              specialFeatures: ['Dru Yoga inspired', 'Beginner friendly'],
               suitableFor: ['All Levels'],
             }));
             setServices(mappedServices);
