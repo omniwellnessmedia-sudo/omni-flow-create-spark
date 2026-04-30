@@ -36,19 +36,27 @@ const ProviderDashboard = () => {
   const [profileCompletion, setProfileCompletion] = useState(0);
   const [providerProfile, setProviderProfile] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dashboardError, setDashboardError] = useState<string | null>(null);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
 
-  const loadDashboardData = useCallback(async (userId: string) => {
-    setLoading(true);
+  const loadDashboardData = useCallback(async (userId: string, showLoader = true) => {
+    if (showLoader) setLoading(true);
+    setDashboardError(null);
     try {
-      const [profileRes, servicesRes, bookingsRes, transactionsRes] = await Promise.all([
+      const [profileRes, servicesRes, bookingsRes, transactionsRes, blogPostsRes] = await Promise.all([
         supabase.from("provider_profiles").select("*").eq("id", userId).maybeSingle(),
         supabase.from("services").select("*").eq("provider_id", userId).order("created_at", { ascending: false }),
         supabase.from("bookings").select("*, services(title)").eq("provider_id", userId).order("created_at", { ascending: false }).limit(20),
         supabase.from("transactions").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(10),
+        supabase.from("blog_posts").select("id,title,slug,status,updated_at,published_at,views_count,likes_count,comments_count").eq("user_id", userId).order("updated_at", { ascending: false }).limit(10),
       ]);
+
+      const firstError = profileRes.error || servicesRes.error || bookingsRes.error || transactionsRes.error || blogPostsRes.error;
+      if (firstError) throw firstError;
 
       const profile = profileRes.data;
       setProviderProfile(profile);
@@ -56,6 +64,7 @@ const ProviderDashboard = () => {
       setServices(servicesRes.data || []);
       setUpcomingBookings(bookingsRes.data || []);
       setRecentTransactions(transactionsRes.data || []);
+      setBlogPosts(blogPostsRes.data || []);
 
       const fields = [profile?.business_name, profile?.description, profile?.location, profile?.phone, profile?.specialties?.length > 0, profile?.certifications?.length > 0, profile?.profile_image_url];
       setProfileCompletion(Math.round((fields.filter(Boolean).length / fields.length) * 100));
@@ -68,10 +77,12 @@ const ProviderDashboard = () => {
         })
         .reduce((sum: number, t: any) => sum + (t.amount_zar || 0), 0);
       setZarEarnings(monthlyEarnings);
-    } catch (error) {
+      setLastSyncedAt(new Date().toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" }));
+    } catch (error: any) {
       console.error("Dashboard load error:", error);
+      setDashboardError(error?.message || "Some dashboard data could not load.");
     } finally {
-      setLoading(false);
+      if (showLoader) setLoading(false);
     }
   }, []);
 
