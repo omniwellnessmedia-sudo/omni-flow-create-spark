@@ -101,6 +101,30 @@ const ProviderDashboard = () => {
     return () => subscription.unsubscribe();
   }, [navigate, loadDashboardData]);
 
+  useEffect(() => {
+    if (!user?.id) return;
+
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    const refreshDashboard = () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => loadDashboardData(user.id, false), 350);
+    };
+
+    const channel = supabase
+      .channel(`provider-dashboard-${user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "provider_profiles", filter: `id=eq.${user.id}` }, refreshDashboard)
+      .on("postgres_changes", { event: "*", schema: "public", table: "services", filter: `provider_id=eq.${user.id}` }, refreshDashboard)
+      .on("postgres_changes", { event: "*", schema: "public", table: "bookings", filter: `provider_id=eq.${user.id}` }, refreshDashboard)
+      .on("postgres_changes", { event: "*", schema: "public", table: "transactions", filter: `user_id=eq.${user.id}` }, refreshDashboard)
+      .on("postgres_changes", { event: "*", schema: "public", table: "blog_posts", filter: `user_id=eq.${user.id}` }, refreshDashboard)
+      .subscribe();
+
+    return () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id, loadDashboardData]);
+
   const toggleServiceStatus = useCallback(async (serviceId: string, currentStatus: boolean) => {
     const { error } = await supabase.from("services").update({ active: !currentStatus }).eq("id", serviceId);
     if (error) { toast.error(error.message); return; }
@@ -163,6 +187,12 @@ const ProviderDashboard = () => {
             </Button>
           </div>
         </div>
+
+        {(dashboardError || lastSyncedAt) && (
+          <div className="mt-3 rounded-lg border border-border/50 bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+            {dashboardError ? `Some live data could not load: ${dashboardError}` : `Live data synced ${lastSyncedAt}`}
+          </div>
+        )}
 
         <StatsGrid
           wellCoinBalance={wellCoinBalance}
