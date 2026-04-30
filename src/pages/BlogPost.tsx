@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -68,12 +69,19 @@ const BlogPost = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
 
-  useEffect(() => {
-    if (slug) {
-      loadPost();
-    }
-  }, [slug]);
+  const safeText = (value: string) => value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+  const safeUrl = (value: string) => {
+    const trimmed = value.trim();
+    return /^(https?:\/\/|mailto:|tel:|\/)/i.test(trimmed) ? trimmed.replace(/"/g, '&quot;') : '#';
+  };
 
   useEffect(() => {
     if (post && user) {
@@ -81,7 +89,8 @@ const BlogPost = () => {
     }
   }, [post, user]);
 
-  const loadPost = async () => {
+  const loadPost = useCallback(async (showLoader = true) => {
+    if (showLoader) setIsLoading(true);
     try {
       // Load post
       const { data: postData, error: postError } = await supabase
@@ -98,17 +107,16 @@ const BlogPost = () => {
         .from('profiles')
         .select('full_name, avatar_url')
         .eq('id', postData.user_id)
-        .single();
+        .maybeSingle();
 
       if (profileError) throw profileError;
 
-      setPost({ ...postData, profiles: authorProfile });
+      setPost({ ...postData, profiles: authorProfile || { full_name: 'Omni Wellness', avatar_url: null } });
 
       // Increment view count
-      await supabase
-        .from('blog_posts')
-        .update({ views_count: postData.views_count + 1 })
-        .eq('id', postData.id);
+      if (showLoader) {
+        await (supabase as any).rpc('increment_blog_post_views', { _post_id: postData.id });
+      }
 
       // Load comments
       const { data: commentsData, error: commentsError } = await supabase
@@ -147,9 +155,35 @@ const BlogPost = () => {
       toast.error("Failed to load post: " + error.message);
       navigate("/blog/community");
     } finally {
-      setIsLoading(false);
+      if (showLoader) setIsLoading(false);
     }
-  };
+  }, [navigate, slug]);
+
+  useEffect(() => {
+    if (slug) loadPost();
+  }, [slug, loadPost]);
+
+  useEffect(() => {
+    if (!post?.id) return;
+
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    const refresh = () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => loadPost(false), 300);
+    };
+
+    const channel = supabase
+      .channel(`blog-post-${post.id}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_posts', filter: `id=eq.${post.id}` }, refresh)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_comments', filter: `blog_post_id=eq.${post.id}` }, refresh)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_likes', filter: `blog_post_id=eq.${post.id}` }, refresh)
+      .subscribe();
+
+    return () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      supabase.removeChannel(channel);
+    };
+  }, [post?.id, loadPost]);
 
   const checkIfLiked = async () => {
     if (!post || !user) return;
@@ -276,6 +310,29 @@ const BlogPost = () => {
     }
   };
 
+  const renderedContent = useMemo(() => {
+    if (!post?.content) return "";
+
+    let html = safeText(post.content)
+      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/^# (.+)$/gm, '<h2>$1</h2>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, url) => `<img src="${safeUrl(url)}" alt="${safeText(alt)}" class="rounded-lg my-6" loading="lazy" decoding="async" />`)
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text, url) => `<a href="${safeUrl(url)}" target="_blank" rel="noopener noreferrer">${text}</a>`)
+      .replace(/^&gt; (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
+      .replace(/^- (.+)$/gm, '<li>$1</li>')
+      .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+      .replace(/\n\n+/g, '</p><p>')
+      .replace(/\n/g, '<br />');
+
+    if (!html.startsWith('<')) html = `<p>${html}</p>`;
+    return DOMPurify.sanitize(html);
+  }, [post?.content]);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -375,11 +432,14 @@ const BlogPost = () => {
             </div>
 
             {/* Featured Image */}
-            {post.featured_image_url && (
+            {post.featured_image_url && !featuredImageFailed && (
               <div className="my-8">
                 <img 
                   src={post.featured_image_url} 
                   alt={post.title}
+                  loading="eager"
+                  decoding="async"
+                  onError={() => setFeaturedImageFailed(true)}
                   className="w-full h-96 object-cover rounded-lg"
                 />
               </div>
@@ -388,45 +448,7 @@ const BlogPost = () => {
             {/* Content — renders markdown */}
             <div
               className="prose prose-lg max-w-none prose-headings:font-heading prose-a:text-primary prose-blockquote:border-primary/30"
-              dangerouslySetInnerHTML={{
-                __html: (() => {
-                  let html = post.content
-                    // Escape HTML entities first
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    // Headings
-                    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-                    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-                    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-                    // Bold and italic
-                    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-                    // Inline code
-                    .replace(/`([^`]+)`/g, '<code>$1</code>')
-                    // Images
-                    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="rounded-lg my-6" />')
-                    // Links
-                    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-                    // Blockquotes
-                    .replace(/^&gt; (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
-                    // Unordered lists
-                    .replace(/^- (.+)$/gm, '<li>$1</li>')
-                    // Ordered lists
-                    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-                    // Wrap consecutive <li> in <ul>
-                    .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
-                    // Paragraphs — double newlines
-                    .replace(/\n\n+/g, '</p><p>')
-                    // Single newlines to <br>
-                    .replace(/\n/g, '<br />');
-
-                  // Wrap in paragraph tags
-                  if (!html.startsWith('<')) html = `<p>${html}</p>`;
-
-                  return html;
-                })()
-              }}
+              dangerouslySetInnerHTML={{ __html: renderedContent }}
             />
 
             {/* Tags */}

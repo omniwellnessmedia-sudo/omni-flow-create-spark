@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,14 +57,8 @@ const CommunityBlog = () => {
   const [selectedTag, setSelectedTag] = useState("");
   const [allTags, setAllTags] = useState<string[]>([]);
 
-  useEffect(() => {
-    loadPosts();
-    if (user) {
-      loadMyPosts();
-    }
-  }, [user]);
-
-  const loadPosts = async () => {
+  const loadPosts = useCallback(async (showLoader = true) => {
+    if (showLoader) setLoading(true);
     try {
       const { data, error } = await supabase
         .from('blog_posts')
@@ -112,11 +106,11 @@ const CommunityBlog = () => {
     } catch (error: any) {
       toast.error("Failed to load posts: " + error.message);
     } finally {
-      setLoading(false);
+      if (showLoader) setLoading(false);
     }
-  };
+  }, []);
 
-  const loadMyPosts = async () => {
+  const loadMyPosts = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -134,7 +128,7 @@ const CommunityBlog = () => {
           .from('profiles')
           .select('full_name, avatar_url')
           .eq('id', user.id)
-          .single();
+          .maybeSingle();
 
         if (profileError) throw profileError;
 
@@ -151,7 +145,35 @@ const CommunityBlog = () => {
     } catch (error: any) {
       toast.error("Failed to load your posts: " + error.message);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    loadPosts();
+    if (user) loadMyPosts();
+  }, [user, loadPosts, loadMyPosts]);
+
+  useEffect(() => {
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    const refresh = () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => {
+        loadPosts(false);
+        if (user) loadMyPosts();
+      }, 350);
+    };
+
+    const channel = supabase
+      .channel('community-blog-feed')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_posts' }, refresh)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_comments' }, refresh)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_likes' }, refresh)
+      .subscribe();
+
+    return () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      supabase.removeChannel(channel);
+    };
+  }, [user, loadPosts, loadMyPosts]);
 
   const filteredPosts = posts.filter(post => {
     const matchesSearch = !searchTerm || 
@@ -164,20 +186,31 @@ const CommunityBlog = () => {
     return matchesSearch && matchesTag;
   });
 
-  const PostCard = ({ post }: { post: BlogPost }) => (
+  const PostCard = ({ post }: { post: BlogPost }) => {
+    const [imageFailed, setImageFailed] = useState(false);
+
+    return (
     <Card 
       className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
       onClick={() => navigate(`/blog/post/${post.slug}`)}
     >
-      {post.featured_image_url && (
-        <div className="aspect-video overflow-hidden">
+      <div className="aspect-video overflow-hidden bg-muted flex items-center justify-center">
+        {post.featured_image_url && !imageFailed ? (
           <img 
             src={post.featured_image_url}
             alt={post.title}
+            loading="lazy"
+            decoding="async"
+            onError={() => setImageFailed(true)}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
           />
-        </div>
-      )}
+        ) : (
+          <div className="flex flex-col items-center gap-2 text-muted-foreground">
+            <BookOpen className="h-8 w-8" />
+            <span className="text-sm font-medium text-center px-4">Community story</span>
+          </div>
+        )}
+      </div>
       <CardHeader>
         <div className="flex items-center gap-3 mb-3">
           <Avatar className="h-8 w-8">
@@ -246,7 +279,8 @@ const CommunityBlog = () => {
         </div>
       </CardContent>
     </Card>
-  );
+    );
+  };
 
   const MyPostCard = ({ post }: { post: BlogPost }) => (
     <Card className="hover:shadow-md transition-shadow">

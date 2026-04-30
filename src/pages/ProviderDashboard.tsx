@@ -36,19 +36,27 @@ const ProviderDashboard = () => {
   const [profileCompletion, setProfileCompletion] = useState(0);
   const [providerProfile, setProviderProfile] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dashboardError, setDashboardError] = useState<string | null>(null);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
 
-  const loadDashboardData = useCallback(async (userId: string) => {
-    setLoading(true);
+  const loadDashboardData = useCallback(async (userId: string, showLoader = true) => {
+    if (showLoader) setLoading(true);
+    setDashboardError(null);
     try {
-      const [profileRes, servicesRes, bookingsRes, transactionsRes] = await Promise.all([
+      const [profileRes, servicesRes, bookingsRes, transactionsRes, blogPostsRes] = await Promise.all([
         supabase.from("provider_profiles").select("*").eq("id", userId).maybeSingle(),
         supabase.from("services").select("*").eq("provider_id", userId).order("created_at", { ascending: false }),
         supabase.from("bookings").select("*, services(title)").eq("provider_id", userId).order("created_at", { ascending: false }).limit(20),
         supabase.from("transactions").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(10),
+        supabase.from("blog_posts").select("id,title,slug,status,updated_at,published_at,views_count,likes_count,comments_count").eq("user_id", userId).order("updated_at", { ascending: false }).limit(10),
       ]);
+
+      const firstError = profileRes.error || servicesRes.error || bookingsRes.error || transactionsRes.error || blogPostsRes.error;
+      if (firstError) throw firstError;
 
       const profile = profileRes.data;
       setProviderProfile(profile);
@@ -56,6 +64,7 @@ const ProviderDashboard = () => {
       setServices(servicesRes.data || []);
       setUpcomingBookings(bookingsRes.data || []);
       setRecentTransactions(transactionsRes.data || []);
+      setBlogPosts(blogPostsRes.data || []);
 
       const fields = [profile?.business_name, profile?.description, profile?.location, profile?.phone, profile?.specialties?.length > 0, profile?.certifications?.length > 0, profile?.profile_image_url];
       setProfileCompletion(Math.round((fields.filter(Boolean).length / fields.length) * 100));
@@ -68,10 +77,12 @@ const ProviderDashboard = () => {
         })
         .reduce((sum: number, t: any) => sum + (t.amount_zar || 0), 0);
       setZarEarnings(monthlyEarnings);
-    } catch (error) {
+      setLastSyncedAt(new Date().toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" }));
+    } catch (error: any) {
       console.error("Dashboard load error:", error);
+      setDashboardError(error?.message || "Some dashboard data could not load.");
     } finally {
-      setLoading(false);
+      if (showLoader) setLoading(false);
     }
   }, []);
 
@@ -89,6 +100,30 @@ const ProviderDashboard = () => {
     });
     return () => subscription.unsubscribe();
   }, [navigate, loadDashboardData]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    const refreshDashboard = () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => loadDashboardData(user.id, false), 350);
+    };
+
+    const channel = supabase
+      .channel(`provider-dashboard-${user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "provider_profiles", filter: `id=eq.${user.id}` }, refreshDashboard)
+      .on("postgres_changes", { event: "*", schema: "public", table: "services", filter: `provider_id=eq.${user.id}` }, refreshDashboard)
+      .on("postgres_changes", { event: "*", schema: "public", table: "bookings", filter: `provider_id=eq.${user.id}` }, refreshDashboard)
+      .on("postgres_changes", { event: "*", schema: "public", table: "transactions", filter: `user_id=eq.${user.id}` }, refreshDashboard)
+      .on("postgres_changes", { event: "*", schema: "public", table: "blog_posts", filter: `user_id=eq.${user.id}` }, refreshDashboard)
+      .subscribe();
+
+    return () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id, loadDashboardData]);
 
   const toggleServiceStatus = useCallback(async (serviceId: string, currentStatus: boolean) => {
     const { error } = await supabase.from("services").update({ active: !currentStatus }).eq("id", serviceId);
@@ -152,6 +187,12 @@ const ProviderDashboard = () => {
             </Button>
           </div>
         </div>
+
+        {(dashboardError || lastSyncedAt) && (
+          <div className="mt-3 rounded-lg border border-border/50 bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+            {dashboardError ? `Some live data could not load: ${dashboardError}` : `Live data synced ${lastSyncedAt}`}
+          </div>
+        )}
 
         <StatsGrid
           wellCoinBalance={wellCoinBalance}
@@ -395,6 +436,34 @@ const ProviderDashboard = () => {
                 <Plus className="h-3 w-3 mr-1" /> Write Post
               </Button>
             </div>
+            {blogPosts.length > 0 && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Your latest posts</CardTitle>
+                  <CardDescription className="text-xs">Drafts and published stories stay synced here</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {blogPosts.slice(0, 5).map((post) => (
+                    <button
+                      key={post.id}
+                      type="button"
+                      onClick={() => navigate(`/blog/editor/${post.id}`)}
+                      className="w-full min-h-[44px] rounded-lg border px-3 py-2 text-left transition-colors hover:bg-muted/50"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="truncate text-sm font-medium">{post.title}</span>
+                        <Badge variant={post.status === "published" ? "default" : "secondary"} className="shrink-0 text-[10px]">
+                          {post.status}
+                        </Badge>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {post.views_count || 0} views · {post.likes_count || 0} likes · {post.comments_count || 0} comments
+                      </p>
+                    </button>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Card className="cursor-pointer hover:shadow-md transition-all hover:-translate-y-0.5 border-primary/20 bg-primary/5" onClick={() => navigate("/blog/editor/new")}>
                 <CardContent className="p-6 text-center">

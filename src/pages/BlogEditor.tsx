@@ -61,7 +61,13 @@ const BlogEditor = () => {
   const [tagInput, setTagInput] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [estimatedReadTime, setEstimatedReadTime] = useState(1);
+  const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
   const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  const getExcerpt = () => {
+    const source = post.excerpt.trim() || post.content.trim();
+    return source.length > 200 ? `${source.substring(0, 200)}...` : source;
+  };
 
   const insertMarkdown = (prefix: string, suffix = "", placeholder = "") => {
     const el = contentRef.current;
@@ -126,15 +132,15 @@ const BlogEditor = () => {
     }
   };
 
-  const generateSlug = (title: string) => {
+  const generateSlug = (title: string, withSuffix = true) => {
     const base = title
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
-      .trim();
+      .trim() || "community-story";
     // Append short timestamp to avoid UNIQUE constraint violations
-    return `${base}-${Date.now().toString(36)}`;
+    return withSuffix ? `${base}-${Date.now().toString(36)}` : base;
   };
 
   const saveDraft = async () => {
@@ -164,7 +170,7 @@ const BlogEditor = () => {
             title: post.title,
             subtitle: post.subtitle || null,
             content: post.content,
-            excerpt: post.excerpt || post.content.substring(0, 200) + "...",
+            excerpt: getExcerpt(),
             tags: post.tags.length > 0 ? post.tags : null,
             featured_image_url: post.featured_image_url || null,
             user_id: userId,
@@ -181,7 +187,7 @@ const BlogEditor = () => {
             title: post.title,
             subtitle: post.subtitle || null,
             content: post.content,
-            excerpt: post.excerpt || post.content.substring(0, 200) + "...",
+            excerpt: getExcerpt(),
             tags: post.tags.length > 0 ? post.tags : null,
             featured_image_url: post.featured_image_url || null,
             read_time_minutes: estimatedReadTime,
@@ -235,7 +241,7 @@ const BlogEditor = () => {
             title: post.title,
             subtitle: post.subtitle || null,
             content: post.content,
-            excerpt: post.excerpt || post.content.substring(0, 200) + "...",
+            excerpt: getExcerpt(),
             tags: post.tags.length > 0 ? post.tags : null,
             featured_image_url: post.featured_image_url || null,
             user_id: userId,
@@ -253,7 +259,7 @@ const BlogEditor = () => {
             title: post.title,
             subtitle: post.subtitle || null,
             content: post.content,
-            excerpt: post.excerpt || post.content.substring(0, 200) + "...",
+            excerpt: getExcerpt(),
             tags: post.tags.length > 0 ? post.tags : null,
             featured_image_url: post.featured_image_url || null,
             read_time_minutes: estimatedReadTime,
@@ -388,8 +394,17 @@ const BlogEditor = () => {
                 <img 
                   src={post.featured_image_url} 
                   alt="Featured" 
+                  loading="lazy"
+                  decoding="async"
+                  onLoad={() => setFeaturedImageFailed(false)}
+                  onError={() => setFeaturedImageFailed(true)}
                   className="w-full h-64 object-cover rounded-lg"
                 />
+                {featuredImageFailed && (
+                  <p className="mt-2 text-sm text-destructive">
+                    This image URL is not loading. The post can still be saved, but the image will not appear publicly.
+                  </p>
+                )}
               </div>
             )}
           </Card>
@@ -506,11 +521,11 @@ const BlogEditor = () => {
               <div className="space-y-4">
                 <div className="bg-white p-4 rounded border">
                   <div className="font-medium text-blue-600 text-sm">
-                    {window.location.origin}/blog/post/{generateSlug(post.title)}
+                    {window.location.origin}/blog/post/{isNewPost ? generateSlug(post.title, false) : postId}
                   </div>
                   <div className="font-semibold mt-1">{post.title}</div>
                   <div className="text-gray-600 text-sm mt-1">
-                    {post.excerpt || post.content.substring(0, 160) + "..."}
+                    {getExcerpt().substring(0, 160)}
                   </div>
                 </div>
                 <div className="flex gap-2">

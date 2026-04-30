@@ -3748,6 +3748,10 @@ export type Database = {
         Args: { role: Database["public"]["Enums"]["app_role"]; user_id: string }
         Returns: boolean
       }
+      increment_blog_post_views: {
+        Args: { _post_id: string }
+        Returns: undefined
+      }
       increment_resource_download: {
         Args: { resource_id: string }
         Returns: undefined
