@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -68,12 +68,19 @@ const BlogPost = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
 
-  useEffect(() => {
-    if (slug) {
-      loadPost();
-    }
-  }, [slug]);
+  const safeText = (value: string) => value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+  const safeUrl = (value: string) => {
+    const trimmed = value.trim();
+    return /^(https?:\/\/|mailto:|tel:|\/)/i.test(trimmed) ? trimmed.replace(/"/g, '&quot;') : '#';
+  };
 
   useEffect(() => {
     if (post && user) {
@@ -81,7 +88,8 @@ const BlogPost = () => {
     }
   }, [post, user]);
 
-  const loadPost = async () => {
+  const loadPost = useCallback(async (showLoader = true) => {
+    if (showLoader) setIsLoading(true);
     try {
       // Load post
       const { data: postData, error: postError } = await supabase
@@ -98,17 +106,16 @@ const BlogPost = () => {
         .from('profiles')
         .select('full_name, avatar_url')
         .eq('id', postData.user_id)
-        .single();
+        .maybeSingle();
 
       if (profileError) throw profileError;
 
-      setPost({ ...postData, profiles: authorProfile });
+      setPost({ ...postData, profiles: authorProfile || { full_name: 'Omni Wellness', avatar_url: null } });
 
       // Increment view count
-      await supabase
-        .from('blog_posts')
-        .update({ views_count: postData.views_count + 1 })
-        .eq('id', postData.id);
+      if (showLoader) {
+        await (supabase as any).rpc('increment_blog_post_views', { _post_id: postData.id });
+      }
 
       // Load comments
       const { data: commentsData, error: commentsError } = await supabase
@@ -147,9 +154,35 @@ const BlogPost = () => {
       toast.error("Failed to load post: " + error.message);
       navigate("/blog/community");
     } finally {
-      setIsLoading(false);
+      if (showLoader) setIsLoading(false);
     }
-  };
+  }, [navigate, slug]);
+
+  useEffect(() => {
+    if (slug) loadPost();
+  }, [slug, loadPost]);
+
+  useEffect(() => {
+    if (!post?.id) return;
+
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    const refresh = () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => loadPost(false), 300);
+    };
+
+    const channel = supabase
+      .channel(`blog-post-${post.id}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_posts', filter: `id=eq.${post.id}` }, refresh)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_comments', filter: `blog_post_id=eq.${post.id}` }, refresh)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'blog_likes', filter: `blog_post_id=eq.${post.id}` }, refresh)
+      .subscribe();
+
+    return () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      supabase.removeChannel(channel);
+    };
+  }, [post?.id, loadPost]);
 
   const checkIfLiked = async () => {
     if (!post || !user) return;
