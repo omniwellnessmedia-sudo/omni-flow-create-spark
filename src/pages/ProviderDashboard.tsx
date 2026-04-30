@@ -436,6 +436,34 @@ const ProviderDashboard = () => {
                 <Plus className="h-3 w-3 mr-1" /> Write Post
               </Button>
             </div>
+            {blogPosts.length > 0 && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Your latest posts</CardTitle>
+                  <CardDescription className="text-xs">Drafts and published stories stay synced here</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {blogPosts.slice(0, 5).map((post) => (
+                    <button
+                      key={post.id}
+                      type="button"
+                      onClick={() => navigate(`/blog/editor/${post.id}`)}
+                      className="w-full min-h-[44px] rounded-lg border px-3 py-2 text-left transition-colors hover:bg-muted/50"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="truncate text-sm font-medium">{post.title}</span>
+                        <Badge variant={post.status === "published" ? "default" : "secondary"} className="shrink-0 text-[10px]">
+                          {post.status}
+                        </Badge>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {post.views_count || 0} views · {post.likes_count || 0} likes · {post.comments_count || 0} comments
+                      </p>
+                    </button>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Card className="cursor-pointer hover:shadow-md transition-all hover:-translate-y-0.5 border-primary/20 bg-primary/5" onClick={() => navigate("/blog/editor/new")}>
                 <CardContent className="p-6 text-center">
