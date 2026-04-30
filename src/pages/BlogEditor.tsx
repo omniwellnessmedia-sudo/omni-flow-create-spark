@@ -394,8 +394,17 @@ const BlogEditor = () => {
                 <img 
                   src={post.featured_image_url} 
                   alt="Featured" 
+                  loading="lazy"
+                  decoding="async"
+                  onLoad={() => setFeaturedImageFailed(false)}
+                  onError={() => setFeaturedImageFailed(true)}
                   className="w-full h-64 object-cover rounded-lg"
                 />
+                {featuredImageFailed && (
+                  <p className="mt-2 text-sm text-destructive">
+                    This image URL is not loading. The post can still be saved, but the image will not appear publicly.
+                  </p>
+                )}
               </div>
             )}
           </Card>
@@ -512,11 +521,11 @@ const BlogEditor = () => {
               <div className="space-y-4">
                 <div className="bg-white p-4 rounded border">
                   <div className="font-medium text-blue-600 text-sm">
-                    {window.location.origin}/blog/post/{generateSlug(post.title)}
+                    {window.location.origin}/blog/post/{isNewPost ? generateSlug(post.title, false) : postId}
                   </div>
                   <div className="font-semibold mt-1">{post.title}</div>
                   <div className="text-gray-600 text-sm mt-1">
-                    {post.excerpt || post.content.substring(0, 160) + "..."}
+                    {getExcerpt().substring(0, 160)}
                   </div>
                 </div>
                 <div className="flex gap-2">
