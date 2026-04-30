@@ -61,7 +61,13 @@ const BlogEditor = () => {
   const [tagInput, setTagInput] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [estimatedReadTime, setEstimatedReadTime] = useState(1);
+  const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
   const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  const getExcerpt = () => {
+    const source = post.excerpt.trim() || post.content.trim();
+    return source.length > 200 ? `${source.substring(0, 200)}...` : source;
+  };
 
   const insertMarkdown = (prefix: string, suffix = "", placeholder = "") => {
     const el = contentRef.current;
@@ -126,15 +132,15 @@ const BlogEditor = () => {
     }
   };
 
-  const generateSlug = (title: string) => {
+  const generateSlug = (title: string, withSuffix = true) => {
     const base = title
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
-      .trim();
+      .trim() || "community-story";
     // Append short timestamp to avoid UNIQUE constraint violations
-    return `${base}-${Date.now().toString(36)}`;
+    return withSuffix ? `${base}-${Date.now().toString(36)}` : base;
   };
 
   const saveDraft = async () => {
