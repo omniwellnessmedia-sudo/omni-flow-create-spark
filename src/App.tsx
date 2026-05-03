@@ -112,6 +112,7 @@ const RoamMarketingHub = React.lazy(() => import('@/pages/admin/RoamMarketingHub
 const Wishlist = React.lazy(() => import('@/pages/Wishlist'));
 const StoreProductDetail = React.lazy(() => import('@/pages/StoreProductDetail'));
 const UpdatePassword = React.lazy(() => import('@/pages/UpdatePassword'));
+const UpgradePage = React.lazy(() => import('@/pages/UpgradePage'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -151,6 +152,7 @@ function App() {
                   <Route path="/esg-policy" element={<ESGPolicy />} />
                   <Route path="/auth" element={<AuthPage />} />
                   <Route path="/update-password" element={<UpdatePassword />} />
+                  <Route path="/upgrade" element={<UpgradePage />} />
 
                   {/* Wellness Exchange Routes */}
                   <Route path="/wellness-exchange" element={<WellnessExchange />} />

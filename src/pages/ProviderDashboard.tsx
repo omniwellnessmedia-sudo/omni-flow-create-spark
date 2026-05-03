@@ -8,12 +8,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Plus, Eye, MessageCircle, FileText, Edit, Package } from "lucide-react";
+import { Plus, Eye, MessageCircle, FileText, Edit, Package, Zap } from "lucide-react";
 import ProviderHeader from "@/components/provider-dashboard/ProviderHeader";
 import StatsGrid from "@/components/provider-dashboard/StatsGrid";
 import ProfileCompletionBar from "@/components/provider-dashboard/ProfileCompletionBar";
 import ServiceCard from "@/components/provider-dashboard/ServiceCard";
 import SmartGreeting from "@/components/dashboard/SmartGreeting";
+import AnalyticsDashboard from "@/components/provider-dashboard/AnalyticsDashboard";
+import CRMDashboard from "@/components/provider-dashboard/CRMDashboard";
+import FinancialDashboard from "@/components/provider-dashboard/FinancialDashboard";
+import ProUpgradeCard from "@/components/provider-dashboard/ProUpgradeCard";
+import { useProSubscription } from "@/hooks/useProSubscription";
 
 const ProviderMediaUpload = lazy(() => import("@/components/ProviderMediaUpload"));
 
@@ -22,6 +27,9 @@ const TABS = [
   { value: "services", label: "Services" },
   { value: "bookings", label: "Bookings" },
   { value: "transactions", label: "Earnings" },
+  { value: "analytics", label: "Analytics" },
+  { value: "clients", label: "Clients" },
+  { value: "financial", label: "Financial" },
   { value: "media", label: "Media" },
   { value: "blog", label: "Blog" },
   { value: "reviews", label: "Reviews" },
@@ -43,6 +51,8 @@ const ProviderDashboard = () => {
   const [dashboardError, setDashboardError] = useState<string | null>(null);
   const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
 
+  const { isPro } = useProSubscription(providerProfile?.pricing_info);
+
   const loadDashboardData = useCallback(async (userId: string, showLoader = true) => {
     if (showLoader) setLoading(true);
     setDashboardError(null);
@@ -50,8 +60,8 @@ const ProviderDashboard = () => {
       const [profileRes, servicesRes, bookingsRes, transactionsRes, blogPostsRes] = await Promise.all([
         supabase.from("provider_profiles").select("*").eq("id", userId).maybeSingle(),
         supabase.from("services").select("*").eq("provider_id", userId).order("created_at", { ascending: false }),
-        supabase.from("bookings").select("*, services(title)").eq("provider_id", userId).order("created_at", { ascending: false }).limit(20),
-        supabase.from("transactions").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(10),
+        supabase.from("bookings").select("*, services(title)").eq("provider_id", userId).order("created_at", { ascending: false }).limit(50),
+        supabase.from("transactions").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(50),
         supabase.from("blog_posts").select("id,title,slug,status,updated_at,published_at,views_count,likes_count,comments_count").eq("user_id", userId).order("updated_at", { ascending: false }).limit(10),
       ]);
 
@@ -179,6 +189,23 @@ const ProviderDashboard = () => {
             subtitle={providerProfile?.location}
           />
           <div className="flex gap-2 shrink-0">
+            {!isPro && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 text-xs rounded-full border-primary/30 text-primary hover:bg-primary/5 gap-1"
+                onClick={() => navigate("/upgrade")}
+              >
+                <Zap className="h-3 w-3" />
+                Upgrade to Pro
+              </Button>
+            )}
+            {isPro && (
+              <Badge className="h-8 px-3 text-xs bg-primary/10 text-primary border-primary/20 gap-1">
+                <Zap className="h-3 w-3" />
+                Provider Pro
+              </Badge>
+            )}
             <Button size="sm" onClick={() => navigate("/wellness-exchange/add-service")} className="h-8 text-xs rounded-full">
               <Plus className="h-3 w-3 mr-1" /> New Service
             </Button>
@@ -211,8 +238,11 @@ const ProviderDashboard = () => {
           <ScrollArea className="w-full">
             <TabsList className="inline-flex w-max gap-0.5 p-1 h-9 bg-muted/50">
               {TABS.map((tab) => (
-                <TabsTrigger key={tab.value} value={tab.value} className="text-xs px-3 h-7 rounded-md">
+                <TabsTrigger key={tab.value} value={tab.value} className="text-xs px-3 h-7 rounded-md relative">
                   {tab.label}
+                  {(tab.value === "analytics" || tab.value === "clients" || tab.value === "financial") && !isPro && (
+                    <span className="ml-1 text-[9px] text-primary">Pro</span>
+                  )}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -270,55 +300,59 @@ const ProviderDashboard = () => {
                 </CardContent>
               </Card>
 
-              {/* Services Summary */}
-              <Card className="border-border/50">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-base">Your Services</CardTitle>
-                      <CardDescription className="text-xs">{activeServices} active of {services.length} total</CardDescription>
-                    </div>
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => navigate("/wellness-exchange/add-service")}>
-                      <Plus className="h-3 w-3 mr-1" /> Add
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {services.length > 0 ? (
-                    <div className="space-y-2">
-                      {services.slice(0, 5).map((svc) => (
-                        <div key={svc.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-muted/50 transition-colors">
-                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                            <div className={`w-2 h-2 rounded-full shrink-0 ${svc.active ? "bg-green-500" : "bg-gray-300"}`} />
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium truncate">{svc.title}</p>
-                              <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                                {svc.price_zar != null && <span>R{svc.price_zar}</span>}
-                                {svc.duration_minutes && <span>{svc.duration_minutes}min</span>}
-                                {svc.is_online && <span>Online</span>}
-                              </div>
-                            </div>
-                          </div>
-                          <Button variant="ghost" size="sm" className="h-7 w-7 p-0 shrink-0" onClick={() => navigate(`/wellness-exchange/edit-service/${svc.id}`)}>
-                            <Edit className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      ))}
-                      {services.length > 5 && (
-                        <p className="text-xs text-center text-muted-foreground pt-1">+{services.length - 5} more — see Services tab</p>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <Package className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
-                      <p className="text-sm text-muted-foreground mb-3">No services yet</p>
-                      <Button size="sm" onClick={() => navigate("/wellness-exchange/add-service")}>
-                        <Plus className="h-3.5 w-3.5 mr-1.5" /> Create First Service
+              {/* Pro upgrade teaser or services summary */}
+              {!isPro ? (
+                <ProUpgradeCard />
+              ) : (
+                <Card className="border-border/50">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-base">Your Services</CardTitle>
+                        <CardDescription className="text-xs">{activeServices} active of {services.length} total</CardDescription>
+                      </div>
+                      <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => navigate("/wellness-exchange/add-service")}>
+                        <Plus className="h-3 w-3 mr-1" /> Add
                       </Button>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
+                  </CardHeader>
+                  <CardContent>
+                    {services.length > 0 ? (
+                      <div className="space-y-2">
+                        {services.slice(0, 5).map((svc) => (
+                          <div key={svc.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-muted/50 transition-colors">
+                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                              <div className={`w-2 h-2 rounded-full shrink-0 ${svc.active ? "bg-green-500" : "bg-gray-300"}`} />
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium truncate">{svc.title}</p>
+                                <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                                  {svc.price_zar != null && <span>R{svc.price_zar}</span>}
+                                  {svc.duration_minutes && <span>{svc.duration_minutes}min</span>}
+                                  {svc.is_online && <span>Online</span>}
+                                </div>
+                              </div>
+                            </div>
+                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 shrink-0" onClick={() => navigate(`/wellness-exchange/edit-service/${svc.id}`)}>
+                              <Edit className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                        {services.length > 5 && (
+                          <p className="text-xs text-center text-muted-foreground pt-1">+{services.length - 5} more — see Services tab</p>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <Package className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                        <p className="text-sm text-muted-foreground mb-3">No services yet</p>
+                        <Button size="sm" onClick={() => navigate("/wellness-exchange/add-service")}>
+                          <Plus className="h-3.5 w-3.5 mr-1.5" /> Create First Service
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </TabsContent>
 
@@ -416,6 +450,26 @@ const ProviderDashboard = () => {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* ── Analytics (Pro) ── */}
+          <TabsContent value="analytics">
+            <AnalyticsDashboard
+              transactions={recentTransactions}
+              bookings={upcomingBookings}
+              services={services}
+              isPro={isPro}
+            />
+          </TabsContent>
+
+          {/* ── Clients / CRM (Pro) ── */}
+          <TabsContent value="clients">
+            <CRMDashboard bookings={upcomingBookings} isPro={isPro} />
+          </TabsContent>
+
+          {/* ── Financial Suite (Pro) ── */}
+          <TabsContent value="financial">
+            <FinancialDashboard transactions={recentTransactions} isPro={isPro} />
           </TabsContent>
 
           {/* ── Media ── */}
