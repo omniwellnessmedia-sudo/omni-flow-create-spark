@@ -12,3 +12,15 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin-dashboard
+Disallow: /provider-dashboard
+Disallow: /wellness-exchange/account
+Disallow: /checkout
+Disallow: /order-confirmation/
+Disallow: /payment-success
+Disallow: /payment-cancelled
+Disallow: /test
+Disallow: /test-simple
+
+Sitemap: https://www.omniwellnessmedia.co.za/sitemap.xml

@@ -44,9 +44,12 @@ const Footer = () => {
               <p className="text-white/50 text-sm">Stories, tours, and community updates — no spam.</p>
             </div>
             <form onSubmit={handleSubscribe} className="flex gap-2 w-full md:w-auto">
+              <label htmlFor="newsletter-email" className="sr-only">Email address for newsletter</label>
               <Input
+                id="newsletter-email"
                 type="email"
                 placeholder="Your email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-white/5 border-white/10 text-white placeholder:text-white/30 min-w-0 w-full sm:min-w-[220px]"

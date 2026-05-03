@@ -103,41 +103,44 @@ const Contact = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="name">Full Name *</Label>
-                        <Input 
-                          id="name" 
-                          required 
-                          value={formData.name} 
-                          onChange={e => handleInputChange("name", e.target.value)} 
-                          placeholder="Your full name" 
+                        <Input
+                          id="name"
+                          required
+                          autoComplete="name"
+                          value={formData.name}
+                          onChange={e => handleInputChange("name", e.target.value)}
+                          placeholder="Your full name"
                         />
                       </div>
                       <div>
                         <Label htmlFor="email">Email Address *</Label>
-                        <Input 
-                          id="email" 
-                          type="email" 
-                          required 
-                          value={formData.email} 
-                          onChange={e => handleInputChange("email", e.target.value)} 
-                          placeholder="your.email@example.com" 
+                        <Input
+                          id="email"
+                          type="email"
+                          required
+                          autoComplete="email"
+                          value={formData.email}
+                          onChange={e => handleInputChange("email", e.target.value)}
+                          placeholder="your.email@example.com"
                         />
                       </div>
                     </div>
                     
                     <div>
                       <Label htmlFor="organization">Organization/Company</Label>
-                      <Input 
-                        id="organization" 
-                        value={formData.organization} 
-                        onChange={e => handleInputChange("organization", e.target.value)} 
-                        placeholder="Your organization name (optional)" 
+                      <Input
+                        id="organization"
+                        autoComplete="organization"
+                        value={formData.organization}
+                        onChange={e => handleInputChange("organization", e.target.value)}
+                        placeholder="Your organization name (optional)"
                       />
                     </div>
 
                     <div>
                       <Label htmlFor="service">Service of Interest</Label>
                       <Select value={formData.service} onValueChange={value => handleInputChange("service", value)}>
-                        <SelectTrigger>
+                        <SelectTrigger id="service">
                           <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
                         <SelectContent>

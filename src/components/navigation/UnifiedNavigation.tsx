@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { handleKeyboardNavigation, announceToScreenReader } from '@/lib/accessibility';
+import SkipNavigation from '@/components/accessibility/SkipNavigation';
 import { CartIcon } from '@/components/cart/CartIcon';
 
 import { SearchAutocomplete } from '@/components/product/SearchAutocomplete';
@@ -140,7 +141,9 @@ const UnifiedNavigation = () => {
   };
 
   return (
-    <header 
+    <>
+    <SkipNavigation />
+    <header
       role="banner"
       aria-label="Site header"
       className={`sticky top-0 z-50 w-full border-b transition-all duration-200 ${
@@ -324,6 +327,7 @@ const UnifiedNavigation = () => {
         </div>
       </div>
     </header>
+    </>
   );
 };
 

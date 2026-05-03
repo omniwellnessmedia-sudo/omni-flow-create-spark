@@ -11,25 +11,10 @@ import WellnessHumansSection from "@/components/sections/WellnessHumansSection";
 import PartnersSection from "@/components/sections/PartnersSection";
 import FacebookFeedSection from "@/components/sections/FacebookFeedSection";
 import WhatIsOmniSection from "@/components/sections/WhatIsOmniSection";
-import SkipNavigation from "@/components/accessibility/SkipNavigation";
-
-
-/**
- * Index Page - WCAG 2.2 / ISO 9241 Compliant
- * 
- * Implements:
- * - Skip navigation (WCAG 2.4.1)
- * - ARIA landmarks (WCAG 4.1.2)
- * - Semantic HTML structure
- * - Proper heading hierarchy
- */
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Skip Navigation - WCAG 2.4.1 Bypass Blocks */}
-      <SkipNavigation />
-      
-      {/* Header with navigation */}
+      {/* Header with navigation — includes skip links */}
       <UnifiedNavigation />
       
       {/* Main Content Area - WCAG Landmark */}
