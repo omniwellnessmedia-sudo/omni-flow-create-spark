@@ -3,28 +3,31 @@ import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { 
-  MapPin, 
-  Star, 
-  Clock, 
-  Globe, 
-  Phone, 
-  Award, 
+import {
+  MapPin,
+  Star,
+  Clock,
+  Globe,
+  Phone,
+  Award,
   Calendar,
-  DollarSign,
   Coins,
-  ArrowLeft,
+  ChevronLeft,
   Play,
-  Image as ImageIcon,
-  FileText,
-  MessageSquare,
   Heart,
   Eye,
-  ExternalLink
+  ExternalLink,
+  Mail,
+  CheckCircle,
+  ShieldCheck,
+  Sparkles,
+  MessageSquare,
+  FileText,
+  Share2,
 } from "lucide-react";
 
 interface PartnerProfile {
@@ -99,29 +102,23 @@ const PartnerProfile = () => {
   const [partner, setPartner] = useState<PartnerProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [activeTab, setActiveTab] = useState<'about' | 'services' | 'gallery' | 'reviews' | 'articles'>('about');
 
   useEffect(() => {
-    if (id) {
-      fetchPartner(id);
-    }
+    if (id) fetchPartner(id);
   }, [id]);
 
   const fetchPartner = async (partnerId: string) => {
     try {
-      // Fetch provider profile
       const { data: profileData, error: profileError } = await supabase
         .from('provider_profiles')
-        .select(`
-          *,
-          profile:profiles(full_name, email, avatar_url),
-          services(*)
-        `)
+        .select(`*, profile:profiles(full_name, email, avatar_url), services(*)`)
         .eq('id', partnerId)
         .single();
 
       if (profileError) throw profileError;
 
-      // Fetch media
       const { data: mediaData } = await supabase
         .from('provider_media')
         .select('*')
@@ -131,7 +128,6 @@ const PartnerProfile = () => {
         .order('created_at', { ascending: false })
         .limit(6);
 
-      // Fetch testimonials
       const { data: testimonialsData } = await supabase
         .from('provider_testimonials')
         .select('*')
@@ -141,7 +137,6 @@ const PartnerProfile = () => {
         .order('created_at', { ascending: false })
         .limit(4);
 
-      // Fetch blog posts
       const { data: postsData } = await supabase
         .from('provider_posts')
         .select('id, title, excerpt, featured_image_url, category, view_count, created_at')
@@ -151,54 +146,64 @@ const PartnerProfile = () => {
         .order('created_at', { ascending: false })
         .limit(3);
 
-      // Fetch website info
       const { data: websiteData } = await supabase
         .from('provider_websites')
         .select('id, page_title, published, custom_domain')
         .eq('provider_id', partnerId)
         .single();
 
-      // Combine all data
-      const combinedData = {
+      setPartner({
         ...profileData,
         media: mediaData || [],
         testimonials: testimonialsData || [],
         posts: postsData || [],
-        website_info: websiteData
-      };
-
-      setPartner(combinedData);
-    } catch (error: any) {
-      setError(error.message);
+        website_info: websiteData,
+      });
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const getDisplayName = () => {
-    return partner?.business_name || partner?.profile?.full_name || 'Wellness Provider';
-  };
+  const getDisplayName = () =>
+    partner?.business_name || partner?.profile?.full_name || 'Wellness Provider';
 
-  const getProfileImage = () => {
-    return partner?.profile_image_url || partner?.profile?.avatar_url || '/placeholder.svg';
-  };
+  const getProfileImage = () =>
+    partner?.profile_image_url || partner?.profile?.avatar_url || '';
 
   const formatDuration = (minutes: number | null) => {
     if (!minutes) return null;
     if (minutes < 60) return `${minutes} min`;
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return m > 0 ? `${h}h ${m}m` : `${h}h`;
   };
+
+  const avgRating = partner?.testimonials?.length
+    ? (partner.testimonials.reduce((s, t) => s + t.rating, 0) / partner.testimonials.length).toFixed(1)
+    : null;
+
+  const lowestPrice = partner?.services?.length
+    ? Math.min(...partner.services.map(s => s.price_zar ?? Infinity).filter(p => p !== Infinity))
+    : null;
+
+  const tabs = [
+    { id: 'about' as const, label: 'About' },
+    ...(partner?.services?.length ? [{ id: 'services' as const, label: `Services (${partner.services.length})` }] : []),
+    ...(partner?.media?.length ? [{ id: 'gallery' as const, label: 'Gallery' }] : []),
+    ...(partner?.testimonials?.length ? [{ id: 'reviews' as const, label: `Reviews (${partner.testimonials.length})` }] : []),
+    ...(partner?.posts?.length ? [{ id: 'articles' as const, label: 'Articles' }] : []),
+  ];
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-purple/5">
+      <div className="min-h-screen bg-background flex flex-col">
         <UnifiedNavigation />
-        <div className="pt-20 pb-20 flex items-center justify-center">
+        <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-omni-orange mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading partner profile...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+            <p className="text-muted-foreground text-sm">Loading profile…</p>
           </div>
         </div>
       </div>
@@ -207,422 +212,573 @@ const PartnerProfile = () => {
 
   if (error || !partner) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-purple/5">
+      <div className="min-h-screen bg-background flex flex-col">
         <UnifiedNavigation />
-        <div className="pt-20 pb-20 flex items-center justify-center">
+        <main id="main-content" className="flex-1 flex items-center justify-center px-4">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Partner Not Found</h1>
-            <p className="text-gray-600 mb-6">The partner profile you're looking for doesn't exist.</p>
+            <div className="text-6xl mb-4">🌿</div>
+            <h1 className="font-heading text-3xl mb-3">Partner Not Found</h1>
+            <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
+              This partner profile may have moved or is no longer available.
+            </p>
             <Button asChild>
-              <Link to="/partners">Back to Partners</Link>
+              <Link to="/partners-directory">Back to Partners</Link>
             </Button>
           </div>
-        </div>
+        </main>
+        <Footer />
       </div>
     );
   }
 
+  const displayName = getDisplayName();
+  const profileImage = getProfileImage();
+  const initials = displayName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-omni-blue/5 to-omni-purple/5">
+    <div className="min-h-screen bg-background flex flex-col">
       <UnifiedNavigation />
-      
-      <main className="pt-20 pb-20">
+
+      <main id="main-content" className="flex-1">
+        {/* ── HERO COVER ── */}
+        <div className="relative h-[300px] sm:h-[360px] lg:h-[400px] overflow-hidden bg-muted">
+          {partner.media?.[0] ? (
+            <img
+              src={partner.media[0].thumbnail_url || partner.media[0].media_url}
+              alt={`${displayName} cover`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary/25 via-omni-violet/15 to-omni-orange/10" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/15 to-transparent" />
+
+          {/* Nav */}
+          <div className="absolute top-4 left-4 z-10">
+            <Button variant="secondary" size="sm" asChild
+              className="bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white">
+              <Link to="/partners-directory">
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Partners
+              </Link>
+            </Button>
+          </div>
+          <div className="absolute top-4 right-4 flex gap-2 z-10">
+            <button
+              onClick={() => setSaved(s => !s)}
+              className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors"
+              aria-label={saved ? 'Unsave' : 'Save partner'}
+            >
+              <Heart className={`h-4 w-4 transition-colors ${saved ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+            </button>
+            <button
+              onClick={() => navigator.share?.({ title: displayName, url: window.location.href })}
+              className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors"
+              aria-label="Share"
+            >
+              <Share2 className="h-4 w-4 text-gray-600" />
+            </button>
+          </div>
+        </div>
+
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Button */}
-          <Button variant="ghost" asChild className="mb-6">
-            <Link to="/partners">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Partners
-            </Link>
-          </Button>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Partner Info Sidebar */}
-            <div className="lg:col-span-1">
-              <Card className="sticky top-8">
-                <CardHeader className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-omni-orange/20">
-                    <img
-                      src={getProfileImage()}
-                      alt={getDisplayName()}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.currentTarget.src = '/placeholder.svg';
-                      }}
-                    />
-                  </div>
-                  <CardTitle className="flex items-center justify-center gap-2 flex-wrap">
-                    {getDisplayName()}
-                    {partner.verified && (
-                      <Badge className="bg-green-100 text-green-700">
-                        <Star className="w-3 h-3 mr-1 fill-current" />
-                        Verified
-                      </Badge>
-                    )}
-                  </CardTitle>
-                  {partner.profile?.email && (
-                    <CardDescription>{partner.profile.email}</CardDescription>
-                  )}
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  {/* Contact Info */}
-                  {partner.location && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="w-4 h-4 text-gray-500" />
-                      <span>{partner.location}</span>
-                    </div>
-                  )}
-                  
-                  {partner.phone && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Phone className="w-4 h-4 text-gray-500" />
-                      <span>{partner.phone}</span>
-                    </div>
-                  )}
-                  
-                  {partner.website && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Globe className="w-4 h-4 text-gray-500" />
-                      <a 
-                        href={partner.website} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-omni-orange hover:underline"
-                      >
-                        Visit Website
-                      </a>
-                    </div>
-                  )}
-
-                  {partner.experience_years && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Clock className="w-4 h-4 text-gray-500" />
-                      <span>{partner.experience_years} years experience</span>
-                    </div>
-                  )}
-
-                  <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="w-4 h-4 text-gray-500" />
-                    <span>Partner since {new Date(partner.created_at).getFullYear()}</span>
-                  </div>
-
-                  <Separator />
-
-                  {/* Specialties */}
-                  {partner.specialties && partner.specialties.length > 0 && (
-                    <div>
-                      <h3 className="font-semibold mb-2">Specialties</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {partner.specialties.map((specialty, index) => (
-                          <Badge key={index} variant="outline">
-                            {specialty}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Certifications */}
-                  {partner.certifications && partner.certifications.length > 0 && (
-                    <div>
-                      <h3 className="font-semibold mb-2 flex items-center gap-2">
-                        <Award className="w-4 h-4" />
-                        Certifications
-                      </h3>
-                      <ul className="space-y-1">
-                        {partner.certifications.map((cert, index) => (
-                          <li key={index} className="text-sm text-gray-600">
-                            • {cert}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+          {/* ── IDENTITY STRIP ── */}
+          <div className="flex items-end gap-5 -mt-14 mb-5 relative z-10">
+            <div className="relative shrink-0">
+              <Avatar className="h-24 w-24 sm:h-28 sm:w-28 border-4 border-background shadow-xl">
+                <AvatarImage src={profileImage} alt={displayName} />
+                <AvatarFallback className="text-2xl font-heading bg-primary/10 text-primary">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              {partner.verified && (
+                <span className="absolute -bottom-1 -right-1 bg-primary rounded-full p-1 border-2 border-background">
+                  <ShieldCheck className="h-3.5 w-3.5 text-white" />
+                </span>
+              )}
             </div>
 
-            {/* Main Content */}
+            <div className="pb-1 flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                <h1 className="font-heading text-2xl sm:text-3xl leading-tight">{displayName}</h1>
+                {partner.verified && (
+                  <Badge className="bg-gradient-to-r from-primary/90 to-omni-green/80 text-white border-0 shrink-0">
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    Omni Partner
+                  </Badge>
+                )}
+              </div>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+                {partner.location && (
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5 text-primary" />
+                    {partner.location}
+                  </span>
+                )}
+                {avgRating && (
+                  <span className="flex items-center gap-1">
+                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                    <strong className="text-foreground">{avgRating}</strong>
+                    &nbsp;·&nbsp;{partner.testimonials!.length} reviews
+                  </span>
+                )}
+                {partner.experience_years && (
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5" />
+                    {partner.experience_years} yrs experience
+                  </span>
+                )}
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3.5 w-3.5" />
+                  Partner since {new Date(partner.created_at).getFullYear()}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Specialties */}
+          {partner.specialties?.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {partner.specialties.map(s => (
+                <span key={s}
+                  className="px-3 py-1 rounded-full text-xs font-medium bg-primary/8 text-primary border border-primary/15">
+                  {s}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <Separator className="mb-8" />
+
+          {/* ── MAIN LAYOUT ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 pb-24 lg:pb-16">
+
+            {/* LEFT: scrollable content */}
             <div className="lg:col-span-2 space-y-8">
-              {/* About Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>About</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 leading-relaxed">
-                    {partner.description || "This wellness provider hasn't added a description yet."}
-                  </p>
-                </CardContent>
-              </Card>
 
-              {/* Website Link Section */}
-              {partner.website_info?.published && (
-                <Card className="border-omni-orange/20 bg-gradient-to-r from-omni-orange/5 to-omni-yellow/5">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <ExternalLink className="w-5 h-5 text-omni-orange" />
-                      Personal Website
-                    </CardTitle>
-                    <CardDescription>
-                      {getDisplayName()} has their own wellness website
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-semibold">{partner.website_info.page_title}</h3>
-                        <p className="text-sm text-gray-600">
-                          {partner.website_info.custom_domain || `${getDisplayName()}'s Wellness Hub`}
-                        </p>
+              {/* Tab nav */}
+              {tabs.length > 1 && (
+                <div className="border-b border-border">
+                  <nav className="flex gap-0 -mb-px overflow-x-auto" role="tablist" aria-label="Partner sections">
+                    {tabs.map(tab => (
+                      <button
+                        key={tab.id}
+                        role="tab"
+                        aria-selected={activeTab === tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`px-4 sm:px-5 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                          activeTab === tab.id
+                            ? 'border-primary text-primary'
+                            : 'border-transparent text-muted-foreground hover:text-foreground'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+              )}
+
+              {/* ── ABOUT ── */}
+              {activeTab === 'about' && (
+                <div className="space-y-8">
+                  <section>
+                    <h2 className="font-heading text-2xl mb-4">About</h2>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {partner.description || `${displayName} hasn't added a description yet.`}
+                    </p>
+                  </section>
+
+                  {partner.certifications?.length > 0 && (
+                    <section>
+                      <h2 className="font-heading text-2xl mb-4">Certifications</h2>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {partner.certifications.map(cert => (
+                          <div key={cert} className="flex items-start gap-3 p-3 rounded-xl bg-muted/50 border border-border/40">
+                            <CheckCircle className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                            <span className="text-sm">{cert}</span>
+                          </div>
+                        ))}
                       </div>
-                      <Button className="bg-omni-orange hover:bg-omni-orange/90 text-white">
-                        Visit Website
-                        <ExternalLink className="w-4 h-4 ml-2" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </section>
+                  )}
+
+                  {partner.website_info?.published && (
+                    <section className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-5 sm:p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <ExternalLink className="h-4 w-4 text-primary" />
+                            <h3 className="font-heading text-lg text-primary">Personal Website</h3>
+                          </div>
+                          <p className="text-sm font-medium">{partner.website_info.page_title}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            {partner.website_info.custom_domain || `${displayName}'s Wellness Hub`}
+                          </p>
+                        </div>
+                        <Button variant="outline" size="sm" className="gap-1.5 shrink-0">
+                          Visit
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </section>
+                  )}
+                </div>
               )}
 
-              {/* Media Gallery Section */}
-              {partner.media && partner.media.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <ImageIcon className="w-5 h-5" />
-                      Media Gallery
-                    </CardTitle>
-                    <CardDescription>
-                      Videos, images, and content shared by {getDisplayName()}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {partner.media.map((media) => (
-                        <div key={media.id} className="relative group cursor-pointer">
-                          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                            {media.media_type === 'video' ? (
-                              <div className="relative w-full h-full">
-                                <img
-                                  src={media.thumbnail_url || media.media_url}
-                                  alt={media.title}
-                                  className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
-                                  <Play className="w-12 h-12 text-white" />
-                                </div>
-                              </div>
-                            ) : (
-                              <img
-                                src={media.media_url}
-                                alt={media.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                              />
-                            )}
-                          </div>
-                          <div className="mt-2">
-                            <h4 className="font-medium text-sm">{media.title}</h4>
-                            {media.description && (
-                              <p className="text-xs text-gray-600 mt-1 line-clamp-2">{media.description}</p>
-                            )}
-                            <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                              <Eye className="w-3 h-3" />
-                              <span>{media.view_count} views</span>
-                              {media.featured && (
-                                <Badge variant="outline" className="text-xs">Featured</Badge>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Services Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Services ({partner.services?.length || 0})</CardTitle>
-                  <CardDescription>
-                    Professional wellness services offered by this provider
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {partner.services && partner.services.length > 0 ? (
-                    <div className="grid gap-6">
-                      {partner.services.map((service) => (
-                        <div key={service.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-                          <div className="flex justify-between items-start mb-3">
-                            <div>
-                              <h3 className="font-semibold text-lg">{service.title}</h3>
-                              {service.category && (
-                                <Badge variant="secondary" className="mt-1">
-                                  {service.category}
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="text-right">
-                              {service.price_zar && (
-                                <div className="flex items-center gap-1 text-lg font-semibold">
-                                  <DollarSign className="w-4 h-4" />
-                                  R{service.price_zar}
-                                </div>
-                              )}
-                              {service.price_wellcoins && (
-                                <div className="flex items-center gap-1 text-sm text-omni-orange">
-                                  <Coins className="w-4 h-4" />
-                                  {service.price_wellcoins} WellCoins
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {service.description && (
-                            <p className="text-gray-600 mb-3">{service.description}</p>
-                          )}
-
-                          <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                            {service.duration_minutes && (
-                              <div className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
-                                {formatDuration(service.duration_minutes)}
-                              </div>
-                            )}
-                            {service.location && (
-                              <div className="flex items-center gap-1">
-                                <MapPin className="w-4 h-4" />
-                                {service.location}
-                              </div>
-                            )}
-                            {service.is_online && (
-                              <Badge variant="outline" className="text-xs">
-                                Available Online
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+              {/* ── SERVICES ── */}
+              {activeTab === 'services' && (
+                <section className="space-y-5">
+                  {partner.services.length === 0 ? (
+                    <div className="text-center py-12 text-muted-foreground">
+                      No services listed yet.
                     </div>
                   ) : (
-                    <p className="text-gray-500 text-center py-8">
-                      No services listed yet.
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Testimonials Section */}
-              {partner.testimonials && partner.testimonials.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <MessageSquare className="w-5 h-5" />
-                      Client Testimonials
-                    </CardTitle>
-                    <CardDescription>
-                      What clients are saying about {getDisplayName()}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid gap-6">
-                      {partner.testimonials.map((testimonial) => (
-                        <div key={testimonial.id} className="border-l-4 border-omni-orange/30 pl-6 py-4">
-                          <div className="flex items-start gap-4">
-                            <div className="flex-shrink-0">
-                              <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100">
-                                <img
-                                  src={testimonial.client_image_url || '/placeholder.svg'}
-                                  alt={testimonial.client_name}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <div className="flex">
-                                  {[...Array(5)].map((_, i) => (
-                                    <Star
-                                      key={i}
-                                      className={`w-4 h-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
-                                    />
-                                  ))}
-                                </div>
-                                {testimonial.service_type && (
-                                  <Badge variant="outline" className="text-xs">
-                                    {testimonial.service_type}
-                                  </Badge>
-                                )}
-                                {testimonial.featured && (
-                                  <Badge className="bg-omni-orange text-white text-xs">Featured</Badge>
-                                )}
-                              </div>
-                              <p className="text-gray-600 italic mb-2">"{testimonial.testimonial_text}"</p>
-                              <p className="text-sm font-medium">— {testimonial.client_name}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Blog Posts Section */}
-              {partner.posts && partner.posts.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FileText className="w-5 h-5" />
-                      Latest Articles
-                    </CardTitle>
-                    <CardDescription>
-                      Insights and articles by {getDisplayName()}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid gap-6">
-                      {partner.posts.map((post) => (
-                        <div key={post.id} className="flex gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer">
-                          {post.featured_image_url && (
-                            <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gray-100">
-                              <img
-                                src={post.featured_image_url}
-                                alt={post.title}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          )}
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-lg mb-2">{post.title}</h3>
-                            {post.excerpt && (
-                              <p className="text-gray-600 text-sm mb-2 line-clamp-2">{post.excerpt}</p>
-                            )}
-                            <div className="flex items-center gap-4 text-xs text-gray-500">
-                              {post.category && (
-                                <Badge variant="outline" className="text-xs">
-                                  {post.category}
+                    partner.services.map(service => (
+                      <div key={service.id}
+                        className="rounded-2xl border border-border/50 bg-card p-5 sm:p-6 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          <div className="min-w-0">
+                            <div className="flex flex-wrap items-center gap-2 mb-1">
+                              <h3 className="font-heading text-lg">{service.title}</h3>
+                              {service.category && (
+                                <Badge variant="secondary" className="text-xs shrink-0">{service.category}</Badge>
+                              )}
+                              {service.is_online && (
+                                <Badge variant="outline" className="text-xs text-green-700 border-green-300 bg-green-50 shrink-0">
+                                  Online
                                 </Badge>
                               )}
-                              <div className="flex items-center gap-1">
-                                <Eye className="w-3 h-3" />
-                                {post.view_count} views
-                              </div>
-                              <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
+                              {service.duration_minutes && (
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {formatDuration(service.duration_minutes)}
+                                </span>
+                              )}
+                              {service.location && (
+                                <span className="flex items-center gap-1">
+                                  <MapPin className="h-3 w-3" />
+                                  {service.location}
+                                </span>
+                              )}
                             </div>
                           </div>
+                          <div className="text-right shrink-0">
+                            {service.price_zar && (
+                              <div className="font-heading text-xl text-primary">R{service.price_zar}</div>
+                            )}
+                            {service.price_wellcoins && (
+                              <div className="flex items-center justify-end gap-1 text-xs text-muted-foreground mt-0.5">
+                                <Coins className="h-3 w-3 text-omni-orange" />
+                                {service.price_wellcoins} WC
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                        {service.description && (
+                          <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                            {service.description}
+                          </p>
+                        )}
+                        <div className="flex gap-2">
+                          <Button className="flex-1 bg-primary hover:bg-primary/90" size="sm">
+                            <Calendar className="h-3.5 w-3.5 mr-2" />
+                            Book
+                          </Button>
+                          <Button variant="outline" size="sm">Enquire</Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </section>
               )}
+
+              {/* ── GALLERY ── */}
+              {activeTab === 'gallery' && (
+                <section>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {partner.media?.map(media => (
+                      <div key={media.id}
+                        className="group relative aspect-square rounded-2xl overflow-hidden bg-muted cursor-pointer">
+                        <img
+                          src={media.thumbnail_url || media.media_url}
+                          alt={media.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        {media.media_type === 'video' && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+                            <div className="h-12 w-12 rounded-full bg-white/90 flex items-center justify-center">
+                              <Play className="h-5 w-5 text-foreground ml-0.5" />
+                            </div>
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute bottom-2 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <p className="text-white text-xs font-medium truncate">{media.title}</p>
+                          <div className="flex items-center gap-1 text-white/70 text-xs mt-0.5">
+                            <Eye className="h-3 w-3" />
+                            {media.view_count}
+                          </div>
+                        </div>
+                        {media.featured && (
+                          <div className="absolute top-2 right-2">
+                            <span className="px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-primary text-white">
+                              Featured
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* ── REVIEWS ── */}
+              {activeTab === 'reviews' && (
+                <section>
+                  {avgRating && (
+                    <div className="flex items-center gap-6 p-6 rounded-2xl bg-muted/50 border border-border/50 mb-6">
+                      <div className="text-center">
+                        <div className="font-heading text-5xl text-primary leading-none mb-1">{avgRating}</div>
+                        <div className="flex justify-center gap-0.5 mb-1">
+                          {[1,2,3,4,5].map(i => (
+                            <Star key={i} className={`h-4 w-4 ${i <= Math.round(Number(avgRating)) ? 'fill-amber-400 text-amber-400' : 'text-muted'}`} />
+                          ))}
+                        </div>
+                        <div className="text-xs text-muted-foreground">Overall</div>
+                      </div>
+                      <Separator orientation="vertical" className="h-16" />
+                      <div className="flex-1">
+                        <p className="text-sm text-muted-foreground">
+                          Based on {partner.testimonials!.length} client testimonial{partner.testimonials!.length > 1 ? 's' : ''}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {partner.testimonials?.map(t => (
+                      <div key={t.id} className="p-5 rounded-2xl border border-border/50 bg-card">
+                        <div className="flex items-center gap-3 mb-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={t.client_image_url || ''} alt={t.client_name} />
+                            <AvatarFallback className="bg-primary/10 text-primary text-sm font-medium">
+                              {t.client_name.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-sm">{t.client_name}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {new Date(t.created_at).toLocaleDateString('en-ZA', { month: 'long', year: 'numeric' })}
+                            </div>
+                          </div>
+                          <div className="flex gap-0.5 shrink-0">
+                            {[1,2,3,4,5].map(i => (
+                              <Star key={i} className={`h-3.5 w-3.5 ${i <= t.rating ? 'fill-amber-400 text-amber-400' : 'text-muted'}`} />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-3 italic">
+                          "{t.testimonial_text}"
+                        </p>
+                        <div className="flex items-center justify-between">
+                          {t.service_type && (
+                            <span className="text-xs text-primary/70">{t.service_type}</span>
+                          )}
+                          {t.featured && (
+                            <Badge variant="outline" className="text-xs border-primary/30 text-primary ml-auto">
+                              <Sparkles className="h-3 w-3 mr-1" />
+                              Featured
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* ── ARTICLES ── */}
+              {activeTab === 'articles' && (
+                <section className="space-y-4">
+                  {partner.posts?.map(post => (
+                    <div key={post.id}
+                      className="flex gap-4 rounded-2xl border border-border/50 bg-card p-4 hover:shadow-md transition-shadow cursor-pointer">
+                      {post.featured_image_url && (
+                        <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-muted">
+                          <img
+                            src={post.featured_image_url}
+                            alt={post.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-heading text-base sm:text-lg leading-snug mb-1 line-clamp-2">
+                          {post.title}
+                        </h3>
+                        {post.excerpt && (
+                          <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                            {post.excerpt}
+                          </p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                          {post.category && (
+                            <span className="px-2 py-0.5 rounded-full bg-primary/8 text-primary border border-primary/15">
+                              {post.category}
+                            </span>
+                          )}
+                          <span className="flex items-center gap-1">
+                            <Eye className="h-3 w-3" />{post.view_count}
+                          </span>
+                          <span>{new Date(post.created_at).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </section>
+              )}
+            </div>
+
+            {/* RIGHT: sticky card */}
+            <div className="hidden lg:block">
+              <div className="sticky top-24 space-y-4">
+                {/* Booking card */}
+                <div className="rounded-2xl border border-border/60 shadow-elegant bg-card p-6">
+                  {lowestPrice !== null && lowestPrice !== Infinity && (
+                    <div className="mb-4">
+                      <span className="text-xs text-muted-foreground uppercase tracking-wide">Starting from</span>
+                      <div className="flex items-baseline gap-2 mt-0.5">
+                        <span className="font-heading text-3xl text-primary">R{lowestPrice}</span>
+                        <span className="text-sm text-muted-foreground">/ session</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <Button className="w-full mb-3 bg-primary hover:bg-primary/90 text-white" size="lg">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Book a Session
+                  </Button>
+
+                  {partner.profile?.email && (
+                    <Button variant="outline" className="w-full mb-4" size="lg" asChild>
+                      <a href={`mailto:${partner.profile.email}`}>
+                        <Mail className="h-4 w-4 mr-2" />
+                        Send Message
+                      </a>
+                    </Button>
+                  )}
+
+                  <div className="text-xs text-center text-muted-foreground mb-4">
+                    No charge until confirmed
+                  </div>
+
+                  <Separator className="mb-4" />
+
+                  <div className="space-y-3 text-sm">
+                    {avgRating && (
+                      <div className="flex items-center gap-3">
+                        <Star className="h-4 w-4 fill-amber-400 text-amber-400 shrink-0" />
+                        <span><strong>{avgRating}</strong> · {partner.testimonials!.length} reviews</span>
+                      </div>
+                    )}
+                    {partner.experience_years && (
+                      <div className="flex items-center gap-3">
+                        <Clock className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <span>{partner.experience_years} years of practice</span>
+                      </div>
+                    )}
+                    {partner.location && (
+                      <div className="flex items-center gap-3">
+                        <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <span>{partner.location}</span>
+                      </div>
+                    )}
+                    {partner.phone && (
+                      <div className="flex items-center gap-3">
+                        <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <a href={`tel:${partner.phone}`} className="hover:text-primary transition-colors">
+                          {partner.phone}
+                        </a>
+                      </div>
+                    )}
+                    {partner.website && (
+                      <div className="flex items-center gap-3">
+                        <Globe className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <a href={partner.website} target="_blank" rel="noopener noreferrer"
+                          className="hover:text-primary transition-colors flex items-center gap-1">
+                          Website
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Verified badge */}
+                {partner.verified && (
+                  <div className="rounded-xl border border-border/40 bg-green-50/50 p-4 space-y-2">
+                    <div className="flex items-center gap-2 text-sm font-medium text-green-800">
+                      <ShieldCheck className="h-4 w-4" />
+                      Verified Omni Partner
+                    </div>
+                    <p className="text-xs text-green-700/80 leading-relaxed">
+                      Independently verified by the Omni Wellness team for quality and authenticity.
+                    </p>
+                  </div>
+                )}
+
+                {/* Quick stats */}
+                <div className="rounded-xl border border-border/40 bg-card p-4">
+                  <div className="grid grid-cols-2 gap-3 text-center">
+                    <div>
+                      <div className="font-heading text-xl text-primary">{partner.services?.length || 0}</div>
+                      <div className="text-xs text-muted-foreground">Services</div>
+                    </div>
+                    <div>
+                      <div className="font-heading text-xl text-primary">{partner.testimonials?.length || 0}</div>
+                      <div className="text-xs text-muted-foreground">Reviews</div>
+                    </div>
+                    <div>
+                      <div className="font-heading text-xl text-primary">{partner.media?.length || 0}</div>
+                      <div className="text-xs text-muted-foreground">Media</div>
+                    </div>
+                    <div>
+                      <div className="font-heading text-xl text-primary">{partner.posts?.length || 0}</div>
+                      <div className="text-xs text-muted-foreground">Articles</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </main>
+
+      {/* Mobile sticky bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-background/95 backdrop-blur-md border-t border-border/50 px-4 py-3 flex items-center gap-3">
+        <div className="flex-1">
+          {lowestPrice !== null && lowestPrice !== Infinity && (
+            <div className="flex items-baseline gap-1">
+              <span className="font-heading text-lg text-primary">R{lowestPrice}</span>
+              <span className="text-xs text-muted-foreground">/ session</span>
+            </div>
+          )}
+        </div>
+        <Button className="bg-primary hover:bg-primary/90 text-white px-6">
+          <Calendar className="h-4 w-4 mr-2" />
+          Book
+        </Button>
+        {partner.profile?.email && (
+          <Button variant="outline" size="icon" asChild>
+            <a href={`mailto:${partner.profile.email}`} aria-label="Send email">
+              <Mail className="h-4 w-4" />
+            </a>
+          </Button>
+        )}
+      </div>
 
       <Footer />
     </div>
