@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Omni Wellness Media — Testing Guide v5 May 2026</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #1a1a2e;
+    max-width: 100%;
+  }
+  h1 { font-size: 20pt; color: #1a6e6e; margin: 0 0 4px 0; font-weight: 700; }
+  h2 { font-size: 13pt; color: #1a6e6e; margin: 18px 0 6px 0; border-bottom: 1.5px solid #d4f0f0; padding-bottom: 4px; }
+  h3 { font-size: 11pt; color: #2a5555; margin: 14px 0 4px 0; }
+  h4 { font-size: 10.5pt; color: #2a5555; margin: 10px 0 4px 0; }
+  p { margin: 4px 0 8px 0; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 14px 0; }
+  a { color: #1a6e6e; text-decoration: none; }
+  code { background: #f1f5f9; padding: 1px 4px; border-radius: 3px; font-size: 9.5pt; font-family: 'Consolas', monospace; }
+  strong { color: #111; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px 0;
+    font-size: 9.5pt;
+    page-break-inside: auto;
+  }
+  th {
+    background: #e8f4f4;
+    color: #1a6e6e;
+    font-weight: 700;
+    padding: 6px 8px;
+    text-align: left;
+    border: 1px solid #c5e8e8;
+  }
+  td {
+    padding: 5px 8px;
+    border: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f9fafb; }
+  ul, ol { margin: 4px 0 8px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  ul.checklist { list-style: none; padding-left: 4px; }
+  ul.checklist li { display: flex; align-items: flex-start; gap: 6px; margin: 4px 0; }
+  .cb { font-size: 11pt; line-height: 1.3; }
+  li.checked { color: #444; }
+  li.unchecked { color: #555; }
+  .meta { color: #64748b; font-size: 9pt; border-left: 3px solid #1a6e6e; padding-left: 10px; margin: 4px 0 16px 0; line-height: 1.8; }
+  .page-break { page-break-before: always; }
+  @media print {
+    a { color: #1a6e6e !important; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<h1>Omni Wellness Media — Team Testing Guide v5</h1>
+<h2>May 2026</h2>
+
+<p><strong>Date:</strong> 4 May 2026</p>
+<p><strong>For:</strong> Zenith Yassin · Feroza Begg · Chad Cupido · Sandy Mitchell</p>
+<p><strong>Status:</strong> Ready for testing — please complete by end of week</p>
+<p><strong>Site:</strong> https://www.omniwellnessmedia.co.za</p>
+<p><strong>Admin:</strong> https://www.omniwellnessmedia.co.za/admin</p>
+<p><strong>Provider Dashboard:</strong> https://www.omniwellnessmedia.co.za/provider-dashboard</p>
+
+<hr>
+
+<h2>What's New in v5</h2>
+
+<p>This is the biggest release since the platform launched. Three major areas were updated:</p>
+
+<h3>1. Provider Pro Monetization Dashboard</h3>
+<p>The provider dashboard now has <strong>10 tabs</strong> including three new Pro-gated sections:</p>
+<ul>
+<li><strong>Analytics tab</strong> — revenue chart (last 30 days), top services, booking conversion rate</li>
+<li><strong>Clients tab</strong> — full CRM with VIP/follow-up badges, repeat client tracking</li>
+<li><strong>Financial tab</strong> — month-over-month comparison, revenue mix chart, CSV export</li>
+<li><strong>Upgrade page</strong> at <code>/upgrade</code> — Free vs Pro pricing, FAQs, activation via WhatsApp/email</li>
+</ul>
+
+<p>Free users see a blurred preview of these sections with an upgrade prompt. Pro users see live data.</p>
+
+<h3>2. Airbnb-Style Profile Redesign</h3>
+<p>All four profile types have been completely rebuilt:</p>
+<ul>
+<li>Individual provider profiles (hero cover, sticky booking card, specialty pills)</li>
+<li>Sandy Mitchell's branded profile (teal design, live service cards with booking)</li>
+<li>Partner profiles (dynamic tabs — Gallery, Reviews, Articles)</li>
+<li>Consumer account (WellCoin wallet, profile completeness tracker, quick links)</li>
+</ul>
+
+<h3>3. Site Audit — SEO, Accessibility, Performance</h3>
+<ul>
+<li>Skip-to-content links on every page (WCAG 2.2 AA)</li>
+<li>Open Graph / Twitter Card meta tags</li>
+<li>JSON-LD structured data (Google search results)</li>
+<li>Sitemap.xml with 50+ prioritised URLs</li>
+<li><code>aria-current</code> on navigation links</li>
+<li>Autocomplete attributes on all forms</li>
+</ul>
+
+<hr>
+
+<h2>How to Test</h2>
+
+<ol>
+<li>Open the site on a <strong>laptop or desktop</strong> first, then repeat key tests on your <strong>phone</strong></li>
+<li>Use <strong>Chrome</strong> (or your usual browser) — logged in AND logged out for different tests</li>
+<li>For each checkbox below: <span style="color:#22c55e">✅</span> tick it if it passes, ✗ and add a note if something is wrong</li>
+<li>Send your findings to Tumelo via WhatsApp or email — <strong>include the URL and a screenshot</strong></li>
+</ul>
+
+<p><strong>Contact for issues:</strong></p>
+<ul>
+<li><strong>Tumelo (Technical):</strong> ttncube01@gmail.com | WhatsApp</li>
+<li><strong>Zenith (Coordination):</strong> zenithyassin@gmail.com</li>
+</ul>
+
+<hr>
+
+<h2>TEST 1: Homepage & Navigation</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za</p>
+<p><strong>Logged in:</strong> Not required</p>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Homepage loads — hero image visible, text readable</li>
+<li class="unchecked"><span class="cb">☐</span> Navigation bar loads correctly</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Services</strong> section shows cards</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Tours & Retreats</strong> preview section loads</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Partners</strong> section loads</li>
+<li class="unchecked"><span class="cb">☐</span> Footer shows — newsletter form, social icons, links, copyright 2026</li>
+<li class="unchecked"><span class="cb">☐</span> No horizontal scroll on phone</li>
+</ul>
+
+<p><strong>Navigation — test each menu item:</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> <strong>Home</strong> → homepage</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>About</strong> → About page loads</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Impact Travel</strong> dropdown → tour links all appear</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>ROAM Store</strong> → eSIM store loads</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Services</strong> → Services page loads</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Contact</strong> → Contact page loads with form</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Mobile:</strong> hamburger menu (☰) opens and closes correctly</li>
+</ul>
+
+<hr>
+
+<h2>TEST 2: Provider Pro Upgrade Page ⭐ NEW</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/upgrade</p>
+<p><strong>Logged in:</strong> Not required</p>
+
+<p>This is a brand new page — please test carefully.</p>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Page loads without errors</li>
+<li class="unchecked"><span class="cb">☐</span> "Provider Pro" heading and R499/month price display correctly</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Free vs Pro side-by-side pricing cards</strong> are visible</li>
+<li class="unchecked"><span class="cb">☐</span> Free column shows free features with tick marks ✓</li>
+<li class="unchecked"><span class="cb">☐</span> Free column shows locked Pro features with a strikethrough ✗</li>
+<li class="unchecked"><span class="cb">☐</span> Pro column shows gradient header (teal-to-purple)</li>
+<li class="unchecked"><span class="cb">☐</span> "Most popular" badge shows on the Pro card</li>
+<li class="unchecked"><span class="cb">☐</span> "Activate via WhatsApp" button is visible — clicking it should open WhatsApp (or prompt to install it)</li>
+<li class="unchecked"><span class="cb">☐</span> "Activate via Email" button is visible — clicking it should open your email app with a pre-filled subject line</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Feature deep-dive section</strong> shows 6 Pro feature cards with icons</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>FAQ section</strong> shows 4 questions and answers</li>
+<li class="unchecked"><span class="cb">☐</span> "Back to dashboard" link at the top navigates back</li>
+<li class="unchecked"><span class="cb">☐</span> Page looks correct on <strong>phone</strong> (cards stack vertically)</li>
+</ul>
+
+<hr>
+
+<h2>TEST 3: Provider Dashboard — New Tabs ⭐ NEW</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/provider-dashboard</p>
+<p><strong>Logged in:</strong> YES — requires a provider account</p>
+
+<p>> If you don't have provider access, ask Tumelo to create a test account.</p>
+
+<h3>3a. Dashboard Header and Tab Bar</h3>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Smart greeting shows: "Good [morning/afternoon/evening], [Name]"</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>"Upgrade to Pro"</strong> button appears in the header (for free accounts) with a lightning bolt icon</li>
+<li class="unchecked"><span class="cb">☐</span> The <strong>scrollable tab bar</strong> shows all 10 tabs:</li>
+</ul>
+<p>  <code>Overview | Services | Bookings | Earnings | Analytics | Clients | Financial | Media | Blog | Reviews</code></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> The word <strong>"Pro"</strong> appears in small text next to Analytics, Clients, and Financial tabs</li>
+<li class="unchecked"><span class="cb">☐</span> Tabs are horizontally scrollable on mobile</li>
+</ul>
+
+<h3>3b. Analytics Tab (Free — should show upgrade prompt)</h3>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Click the <strong>Analytics</strong> tab</li>
+<li class="unchecked"><span class="cb">☐</span> A <strong>blurred teaser</strong> should be visible behind a gradient overlay card</li>
+<li class="unchecked"><span class="cb">☐</span> The upgrade card shows: "Unlock with Provider Pro" heading, R499/month price, list of features, and a CTA button</li>
+<li class="unchecked"><span class="cb">☐</span> Clicking the "Start Free Trial" button navigates to <code>/upgrade</code></li>
+<li class="unchecked"><span class="cb">☐</span> The blurred preview shows a revenue chart and stat cards (even though they're blurred)</li>
+</ul>
+
+<h3>3c. Clients Tab (Free — should show upgrade prompt)</h3>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Click the <strong>Clients</strong> tab</li>
+<li class="unchecked"><span class="cb">☐</span> Three blurred client card skeletons should be visible behind an upgrade overlay</li>
+<li class="unchecked"><span class="cb">☐</span> Upgrade card shows with "Client CRM" as the feature name</li>
+</ul>
+
+<h3>3d. Financial Tab (Free — should show upgrade prompt)</h3>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Click the <strong>Financial</strong> tab</li>
+<li class="unchecked"><span class="cb">☐</span> Blurred teaser shows two monthly comparison cards and a pie chart preview</li>
+<li class="unchecked"><span class="cb">☐</span> Upgrade card shows with "Financial Suite" as the feature name</li>
+</ul>
+
+<h3>3e. Overview Tab</h3>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Overview tab loads with 4 Quick Action cards</li>
+<li class="unchecked"><span class="cb">☐</span> If the account is Free: a <strong>"Provider Pro" upgrade card</strong> appears on the right side instead of the Services Summary</li>
+<li class="unchecked"><span class="cb">☐</span> Recent Activity card shows if there are transactions</li>
+<li class="unchecked"><span class="cb">☐</span> Quick action cards work: "Add Service", "Write Blog Post", "View Public Profile", "Browse Community"</li>
+</ul>
+
+<hr>
+
+<h2>TEST 4: Airbnb-Style Provider Profile ⭐ NEW</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/provider/sandy-mitchell</p>
+<p><strong>Logged in:</strong> Not required</p>
+
+<p>This profile has been completely redesigned. Test each section:</p>
+
+<p><strong>Hero Section:</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Large <strong>cover photo strip</strong> at the top (teal/gradient background)</li>
+<li class="unchecked"><span class="cb">☐</span> Sandy's <strong>avatar</strong> is lifted up, overlapping the cover strip (not inside it)</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Save (heart)</strong> and <strong>Share</strong> buttons appear top-right on the cover</li>
+<li class="unchecked"><span class="cb">☐</span> Name "Sandy Mitchell" and subtitle "Dru Yoga & Wellness" are visible</li>
+<li class="unchecked"><span class="cb">☐</span> Location shows (e.g. "Cape Town")</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Star rating</strong> and <strong>years of experience</strong> show in the identity strip</li>
+</ul>
+
+<p><strong>Specialty Pills:</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Specialty tags (e.g. "Dru Yoga", "Buteyko Breathing", "Mental Wellness") show as pill badges below the identity strip</li>
+</ul>
+
+<p><strong>Tab Navigation:</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Four tabs are visible: <strong>Services · About Sandy · Packages · Gallery</strong></li>
+<li class="unchecked"><span class="cb">☐</span> Clicking each tab switches the content below — no page reload</li>
+</ul>
+
+<p><strong>Services Tab:</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> At least 6 service cards visible</li>
+<li class="unchecked"><span class="cb">☐</span> Each card shows: service title, price, duration, short description</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>"Book Session"</strong> button on each card</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>"Enquire"</strong> button on each card</li>
+<li class="unchecked"><span class="cb">☐</span> WellCoin badges on appropriate services</li>
+</ul>
+
+<p><strong>Packages Tab:</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Monthly Unlimited package (R1,890) visible</li>
+<li class="unchecked"><span class="cb">☐</span> Beginner's Journey package (R2,200) visible</li>
+</ul>
+
+<p><strong>About Sandy Tab:</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Bio paragraph</li>
+<li class="unchecked"><span class="cb">☐</span> Certifications section</li>
+<li class="unchecked"><span class="cb">☐</span> Connect / contact links</li>
+</ul>
+
+<p><strong>Sticky Booking Card (desktop only):</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> On a desktop/laptop, a <strong>sticky card on the right side</strong> should stay visible as you scroll</li>
+<li class="unchecked"><span class="cb">☐</span> It shows: "From R120 / session", a "Book a Session" CTA, and "Send a Message" button</li>
+<li class="unchecked"><span class="cb">☐</span> Trust stats show below (rating, sessions, years)</li>
+</ul>
+
+<p><strong>Mobile Sticky Bar:</strong></p>
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> On phone, a <strong>sticky bar at the bottom</strong> of the screen shows the price and a Book button</li>
+</ul>
+
+<hr>
+
+<h2>TEST 5: Consumer Account Page ⭐ NEW DESIGN</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/wellness-exchange/account</p>
+<p><strong>Logged in:</strong> YES — any account</p>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> <strong>Cover strip</strong> with gradient colours loads at the top</li>
+<li class="unchecked"><span class="cb">☐</span> Avatar/initials display, lifted over the cover strip</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Member since [Month Year]</strong> shows correctly</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Badges row</strong> shows "Verified Member" (green badge)</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Stats strip</strong> shows: WellCoins, Services Saved, Tours Booked (numbers may be 0)</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>WellCoin Wallet</strong> card shows current balance and "Spend WellCoins" button</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Your Profile</strong> card shows completeness checklist with green ticks for completed fields</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Explore Omni</strong> quick links grid (Browse Services, Read Blog, Book a Tour, Contact)</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Account section</strong> shows email, Privacy & Security row, and Sign Out button</li>
+<li class="unchecked"><span class="cb">☐</span> Sign Out works — logs you out and redirects to homepage</li>
+</ul>
+
+<hr>
+
+<h2>TEST 6: Existing Tests — Blog Save Draft (Keep Testing)</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/blog/editor/new</p>
+<p><strong>Logged in:</strong> YES</p>
+
+<p>This was fixed in v4 — please confirm it still works.</p>
+
+<ol>
+<li>Write a title (e.g. "Test Draft 4 May 2026")</li>
+<li>Write a sentence of content</li>
+<li>Click <strong>"Save Draft"</strong></li>
+</ul>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Green toast: "Draft saved successfully" — <strong>NOT</strong> a red error</li>
+<li class="unchecked"><span class="cb">☐</span> URL changes from <code>/blog/editor/new</code> to <code>/blog/editor/{id}</code></li>
+<li class="unchecked"><span class="cb">☐</span> Save again — no errors</li>
+</ul>
+
+<hr>
+
+<h2>TEST 7: Existing Tests — Tour Booking (Keep Testing)</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/tours/great-mother-cave-tour</p>
+<p><strong>Logged in:</strong> Test BOTH logged in and logged out</p>
+
+<ol>
+<li>Select a date (choose a date at least 7 days away)</li>
+<li>Enter: Name, Email, Number of guests</li>
+<li>Click <strong>"Book Now"</strong> (or "Enquire Now" on mobile)</li>
+</ul>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Green toast: <strong>"Booking Submitted!"</strong> — NOT a red error</li>
+<li class="unchecked"><span class="cb">☐</span> Works <strong>without</strong> being logged in</li>
+<li class="unchecked"><span class="cb">☐</span> Works <strong>with</strong> being logged in</li>
+<li class="unchecked"><span class="cb">☐</span> Form clears after submission</li>
+</ul>
+
+<hr>
+
+<h2>TEST 8: Admin Dashboard (Existing — Keep Testing)</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/admin</p>
+<p><strong>Logged in:</strong> YES — admin account required</p>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Smart greeting shows with time and date</li>
+<li class="unchecked"><span class="cb">☐</span> Sidebar shows three groups: <strong>Core, Manage, System</strong></li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Leads</strong> section loads</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Providers</strong> section loads — list of providers shows</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Analytics</strong> section loads — GA4 and Clarity embeds visible</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Bookings</strong> section loads — tour bookings visible</li>
+<li class="unchecked"><span class="cb">☐</span> <strong>Orders</strong> section loads</li>
+<li class="unchecked"><span class="cb">☐</span> "<strong>+ Create</strong>" button opens dropdown with Blog Post, Podcast (Soon), Video (Soon)</li>
+<li class="unchecked"><span class="cb">☐</span> Mobile: hamburger menu opens sidebar drawer</li>
+</ul>
+
+<hr>
+
+<h2>TEST 9: ROAM eSIM Store</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/roambuddy-store</p>
+<p><strong>Logged in:</strong> Not required</p>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Page loads with product cards</li>
+<li class="unchecked"><span class="cb">☐</span> Country search/filter works</li>
+<li class="unchecked"><span class="cb">☐</span> Clicking a product opens product detail</li>
+<li class="unchecked"><span class="cb">☐</span> "Add to Cart" button works</li>
+<li class="unchecked"><span class="cb">☐</span> Checkout page loads</li>
+<li class="unchecked"><span class="cb">☐</span> PayPal button is visible</li>
+</ul>
+
+<hr>
+
+<h2>TEST 10: Contact Form</h2>
+
+<p><strong>URL:</strong> https://www.omniwellnessmedia.co.za/contact</p>
+<p><strong>Logged in:</strong> Not required</p>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> All form fields accept input</li>
+<li class="unchecked"><span class="cb">☐</span> "Service interested in" dropdown opens and has options</li>
+<li class="unchecked"><span class="cb">☐</span> Submit button sends the form — success message appears</li>
+<li class="unchecked"><span class="cb">☐</span> No page errors</li>
+</ul>
+
+<hr>
+
+<h2>TEST 11: Mobile Testing — Full Walkthrough</h2>
+
+<p>Open the site on your <strong>phone</strong> and check:</p>
+
+<ul class="checklist">
+<li class="unchecked"><span class="cb">☐</span> Homepage hero image loads, text is readable</li>
+<li class="unchecked"><span class="cb">☐</span> Navigation hamburger opens/closes</li>
+<li class="unchecked"><span class="cb">☐</span> Sandy Mitchell profile: sticky booking bar visible at bottom</li>
+<li class="unchecked"><span class="cb">☐</span> Provider dashboard: tab bar is horizontally scrollable</li>
+<li class="unchecked"><span class="cb">☐</span> Upgrade page: pricing cards stack vertically and are readable</li>
+<li class="unchecked"><span class="cb">☐</span> Consumer account: avatar lifted over cover strip (same as desktop)</li>
+<li class="unchecked"><span class="cb">☐</span> All buttons are tap-friendly (large enough touch targets)</li>
+<li class="unchecked"><span class="cb">☐</span> No horizontal scrolling on any page</li>
+</ul>
+
+<hr>
+
+<h2>Quick Reference — All Key URLs</h2>
+
+<table><thead><tr><th>Page</th><th>URL</th></tr></thead><tbody>
+<tr><td><strong>Homepage</strong></td><td>https://www.omniwellnessmedia.co.za</td></tr>
+<tr><td><strong>Admin Dashboard</strong></td><td>https://www.omniwellnessmedia.co.za/admin</td></tr>
+<tr><td><strong>Provider Dashboard</strong></td><td>https://www.omniwellnessmedia.co.za/provider-dashboard</td></tr>
+<tr><td><strong>Provider Pro Upgrade</strong></td><td>https://www.omniwellnessmedia.co.za/upgrade</td></tr>
+<tr><td><strong>Sandy Mitchell Profile</strong></td><td>https://www.omniwellnessmedia.co.za/provider/sandy-mitchell</td></tr>
+<tr><td><strong>Consumer Account</strong></td><td>https://www.omniwellnessmedia.co.za/wellness-exchange/account</td></tr>
+<tr><td><strong>Services Marketplace</strong></td><td>https://www.omniwellnessmedia.co.za/services</td></tr>
+<tr><td><strong>Tours Hub</strong></td><td>https://www.omniwellnessmedia.co.za/tours-retreats</td></tr>
+<tr><td><strong>Great Mother Cave Tour</strong></td><td>https://www.omniwellnessmedia.co.za/tours/great-mother-cave-tour</td></tr>
+<tr><td><strong>Muizenberg Cave Tour</strong></td><td>https://www.omniwellnessmedia.co.za/tours/muizenberg-cave-tours</td></tr>
+<tr><td><strong>Kalk Bay Tour</strong></td><td>https://www.omniwellnessmedia.co.za/tours/kalk-bay-tour</td></tr>
+<tr><td><strong>ROAM eSIM Store</strong></td><td>https://www.omniwellnessmedia.co.za/roambuddy-store</td></tr>
+<tr><td><strong>Blog / Community</strong></td><td>https://www.omniwellnessmedia.co.za/blog/community</td></tr>
+<tr><td><strong>New Blog Post</strong></td><td>https://www.omniwellnessmedia.co.za/blog/editor/new</td></tr>
+<tr><td><strong>About Page</strong></td><td>https://www.omniwellnessmedia.co.za/about</td></tr>
+<tr><td><strong>Contact Page</strong></td><td>https://www.omniwellnessmedia.co.za/contact</td></tr>
+<tr><td><strong>Partner Directory</strong></td><td>https://www.omniwellnessmedia.co.za/partners-directory</td></tr>
+</tbody></table>
+
+<hr>
+
+<h2>Known Limitations (Not Bugs — Working as Expected)</h2>
+
+<table><thead><tr><th>Limitation</th><th>Detail</th></tr></thead><tbody>
+<tr><td><strong>Blog editor is markdown</strong></td><td>Uses markdown formatting (not WYSIWYG like Google Docs). Toolbar buttons insert <code><strong>bold</strong></code> syntax. Content renders correctly on the published post page.</td></tr>
+<tr><td><strong>Provider Pro activation is manual</strong></td><td>Currently activated by Tumelo via Supabase. Stripe/PayPal recurring billing integration is the next major technical sprint.</td></tr>
+<tr><td><strong>Anonymous tour bookings</strong></td><td>If you book a tour without being logged in, it saves as a contact form lead (not in the bookings table). The tour operator is still notified. Full fix requires a small database migration.</td></tr>
+<tr><td><strong>Newsletter emails send from sandbox</strong></td><td>Emails currently show as <code>onboarding@resend.dev</code> sender. This is fixed once Resend domain verification is done for <code>omniwellnessmedia.co.za</code>.</td></tr>
+<tr><td><strong>Podcast & Video creation</strong></td><td>Visible in the "Create Content" dropdown as "Coming Soon" — not yet functional.</td></tr>
+<tr><td><strong>AI Content Studio</strong></td><td>Visible in the upgrade page as a Pro feature. The interface is teased but the generation feature launches in the next sprint.</td></tr>
+</tbody></table>
+
+<hr>
+
+<h2>How to Report Issues</h2>
+
+<p>When something doesn't work as expected, please send a report with:</p>
+
+<ol>
+<li><strong>URL</strong> — copy and paste the exact address from your browser</li>
+<li><strong>What you expected</strong> to happen</li>
+<li><strong>What actually happened</strong> — be specific (e.g. "red error toast appeared with the text: '...'" or "blank white screen")</li>
+<li><strong>Screenshot or screen recording</strong> — the easiest way on phone is to hold the side + volume button</li>
+<li><strong>Device and browser</strong> — e.g. "iPhone 13, Safari" or "Windows laptop, Chrome"</li>
+<li><strong>Logged in or not</strong> — this matters for many tests</li>
+</ul>
+
+<p><strong>Send to:</strong></p>
+<ul>
+<li>Tumelo: ttncube01@gmail.com</li>
+<li>Zenith: zenithyassin@gmail.com</li>
+<li>Or via WhatsApp</li>
+</ul>
+
+<hr>
+
+<p><em>Testing Guide v5 · 4 May 2026 · Omni Wellness Media</em></p>
+<p><em>Build: f31cf37 (main branch)</em></p>
+<p><em>Thank you — your testing makes the platform better for every wellness practitioner and client we serve.</em></p>
+
+
+</body>
+</html>
