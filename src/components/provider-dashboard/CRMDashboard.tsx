@@ -75,7 +75,7 @@ const CRMDashboard = ({ bookings, isPro }: CRMDashboardProps) => {
 
   if (!isPro) {
     return (
-      <div className="relative rounded-2xl overflow-hidden">
+      <div className="relative rounded-2xl overflow-hidden min-h-[560px]">
         <div className="blur-sm pointer-events-none select-none opacity-60 space-y-3">
           {[1, 2, 3].map((i) => (
             <Card key={i}>

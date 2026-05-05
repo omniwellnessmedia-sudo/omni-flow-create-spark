@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Check } from "lucide-react";
 import { useCart, CartItem } from "@/components/CartProvider";
-import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 interface AddToCartButtonProps {
@@ -12,28 +11,25 @@ interface AddToCartButtonProps {
   disabled?: boolean;
 }
 
-export const AddToCartButton = ({ 
-  item, 
-  variant = "default", 
-  size = "default", 
+export const AddToCartButton = ({
+  item,
+  variant = "default",
+  size = "default",
   className = "",
   disabled = false
 }: AddToCartButtonProps) => {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const { toast } = useToast();
-  const [isAdded, setIsAdded] = useState(false);
+
+  const isInCart = items.some((i) => i.id === item.id);
 
   const handleAddToCart = () => {
+    if (isInCart) return;
     addItem(item);
-    setIsAdded(true);
-    
     toast({
       title: "Added to cart!",
       description: `${item.title} has been added to your cart.`,
     });
-
-    // Reset the added state after 2 seconds
-    setTimeout(() => setIsAdded(false), 2000);
   };
 
   return (
@@ -41,10 +37,10 @@ export const AddToCartButton = ({
       variant={variant}
       size={size}
       onClick={handleAddToCart}
-      className={`${className} ${isAdded ? 'bg-green-600 hover:bg-green-700' : ''}`}
-      disabled={isAdded || disabled}
+      className={`${className} ${isInCart ? 'bg-green-600 hover:bg-green-700' : ''}`}
+      disabled={isInCart || disabled}
     >
-      {isAdded ? (
+      {isInCart ? (
         <>
           <Check className="w-4 h-4 mr-2" />
           Added!

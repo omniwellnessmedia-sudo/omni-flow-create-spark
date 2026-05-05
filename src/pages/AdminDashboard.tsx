@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { LogOut, Plus, Home, ChevronDown, FileText, Mic, Video, Menu } from "lucide-react";
+import { LogOut, Plus, Home, ChevronDown, FileText, Mic, Video, Menu, CheckCircle, XCircle, Mail } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 import SmartGreeting from "@/components/dashboard/SmartGreeting";
 import AdminSidebar from "@/components/dashboard/AdminSidebar";
@@ -177,6 +177,21 @@ const AdminDashboard = () => {
     setMobileNavOpen(false);
   }, []);
 
+  const updateTourBookingStatus = async (id: string, status: string) => {
+    try {
+      const { error } = await supabase.from("tour_bookings").update({ status }).eq("id", id);
+      if (error) throw error;
+      setDashboardData((prev) => ({
+        ...prev,
+        bookings: prev.bookings.map((b) => (b.id === id ? { ...b, status } : b)),
+      }));
+      toast({ title: "Booking updated", description: `Status set to ${status}` });
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Error", description: "Failed to update booking", variant: "destructive" });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -238,16 +253,29 @@ const AdminDashboard = () => {
                 ) : (
                   <div className="space-y-3">
                     {dashboardData.bookings.map((booking: any) => (
-                      <div key={booking.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-sm truncate">{booking.contact_name || "Guest"}</p>
-                          <p className="text-xs text-muted-foreground truncate">{booking.contact_email}</p>
-                          <p className="text-xs truncate">{booking.tours?.title || "Tour"}</p>
-                          <p className="text-[10px] text-muted-foreground">{booking.participants} guests &middot; {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString() : "TBD"}</p>
+                      <div key={booking.id} className="p-3 border rounded-lg space-y-2">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-sm truncate">{booking.contact_name || "Guest"}</p>
+                            <p className="text-xs text-muted-foreground truncate">{booking.contact_email}</p>
+                            <p className="text-xs truncate">{booking.tours?.title || "Tour"}</p>
+                            <p className="text-[10px] text-muted-foreground">{booking.participants} guests &middot; {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString() : "TBD"}</p>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="font-bold text-sm">R{booking.total_price?.toLocaleString() || 0}</p>
+                            <Badge variant={booking.status === "confirmed" ? "default" : booking.status === "closed" ? "secondary" : "outline"} className="text-[10px]">{booking.status || "pending"}</Badge>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2">
-                          <p className="font-bold text-sm">R{booking.total_price?.toLocaleString() || 0}</p>
-                          <Badge variant={booking.status === "confirmed" ? "default" : "secondary"} className="text-[10px]">{booking.status}</Badge>
+                        <div className="flex flex-wrap gap-1.5">
+                          <Button size="sm" variant="outline" className="h-7 text-xs text-green-600" onClick={() => updateTourBookingStatus(booking.id, "confirmed")}>
+                            <CheckCircle className="w-3 h-3 mr-1" />Confirm
+                          </Button>
+                          <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => updateTourBookingStatus(booking.id, "closed")}>
+                            <XCircle className="w-3 h-3 mr-1" />Close
+                          </Button>
+                          <Button size="sm" className="h-7 text-xs" onClick={() => (window.location.href = `mailto:${booking.contact_email}?subject=Your%20Tour%20Booking%20%E2%80%94%20${encodeURIComponent(booking.tours?.title || "Tour")}`)}>
+                            <Mail className="w-3 h-3 mr-1" />Reply
+                          </Button>
                         </div>
                       </div>
                     ))}

@@ -262,28 +262,28 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
 
   return (
     <>
-      {/* Chat Button — bottom-28 on mobile to clear StickyBookingBar + nav */}
+      {/* Chat Button */}
       <button
         onClick={openChat}
         className={cn(
-          "fixed bottom-28 sm:bottom-6 right-4 sm:right-6 z-40 flex items-center gap-3 px-5 py-3 sm:px-6 sm:py-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-105",
+          "fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 flex items-center gap-2 px-4 py-3 rounded-full shadow-2xl transition-all duration-300 hover:scale-105",
           "bg-gradient-to-r from-blue-600 to-blue-700 text-white",
           isOpen && "scale-0 opacity-0"
         )}
         aria-label="Chat with Roam"
       >
-        <MessageCircle className="h-6 w-6" />
-        <span className="font-medium">Need eSIM help?</span>
-        <Sparkles className="h-4 w-4 animate-pulse" />
+        <MessageCircle className="h-5 w-5 shrink-0" />
+        <span className="font-medium text-sm hidden xs:inline sm:inline">Need eSIM help?</span>
+        <Sparkles className="h-3.5 w-3.5 animate-pulse shrink-0" />
       </button>
 
       {/* Chat Window */}
       <div
         className={cn(
-          "fixed bottom-28 sm:bottom-6 right-4 sm:right-6 z-50 w-[380px] max-w-[calc(100vw-32px)] bg-background rounded-2xl shadow-2xl border border-border overflow-hidden transition-all duration-300",
+          "fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-50 w-[380px] max-w-[calc(100vw-16px)] bg-background rounded-2xl shadow-2xl border border-border overflow-hidden transition-all duration-300",
           isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
         )}
-        style={{ maxHeight: 'calc(100vh - 160px)' }}
+        style={{ maxHeight: 'calc(100vh - 120px)' }}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-teal-600 text-white p-4">

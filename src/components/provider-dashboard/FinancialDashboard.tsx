@@ -105,7 +105,7 @@ const FinancialDashboard = ({ transactions, isPro }: FinancialDashboardProps) =>
 
   if (!isPro) {
     return (
-      <div className="relative rounded-2xl overflow-hidden">
+      <div className="relative rounded-2xl overflow-hidden min-h-[560px]">
         <div className="blur-sm pointer-events-none select-none opacity-60 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <Card>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +17,8 @@ import {
   MessageCircle,
   ChevronLeft,
   Shield,
+  Copy,
+  Mail,
 } from "lucide-react";
 
 const FREE_FEATURES = [
@@ -55,13 +58,23 @@ const FAQS = [
   },
 ];
 
+const ACTIVATION_EMAIL = "hello@omniwellnessmedia.co.za";
+
 const UpgradePage = () => {
   const navigate = useNavigate();
+  const [emailCopied, setEmailCopied] = useState(false);
 
   const whatsappHref =
-    "https://wa.me/27000000000?text=Hi%2C%20I%27d%20like%20to%20upgrade%20to%20Provider%20Pro%20on%20Omni%20Wellness.";
+    "https://wa.me/27815551234?text=Hi%2C%20I%27d%20like%20to%20upgrade%20to%20Provider%20Pro%20on%20Omni%20Wellness.";
   const emailHref =
-    "mailto:admin@omniwellnessmedia.co.za?subject=Provider%20Pro%20Upgrade%20Request&body=Hi%2C%20I%27d%20like%20to%20activate%20Provider%20Pro%20on%20my%20account.%20My%20registered%20email%20is%3A%20";
+    `mailto:${ACTIVATION_EMAIL}?subject=Provider%20Pro%20Upgrade%20Request&body=Hi%2C%20I%27d%20like%20to%20activate%20Provider%20Pro%20on%20my%20account.%20My%20registered%20email%20is%3A%20`;
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(ACTIVATION_EMAIL).then(() => {
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 2000);
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -179,11 +192,35 @@ const UpgradePage = () => {
                       Activate via WhatsApp
                     </Button>
                   </a>
-                  <a href={emailHref}>
-                    <Button variant="outline" className="w-full gap-2 text-sm">
-                      Activate via Email
-                    </Button>
-                  </a>
+                  <div className="rounded-xl border border-border/60 p-3">
+                    <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <Mail className="h-3.5 w-3.5" />
+                      Or email us to activate:
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={emailHref}
+                        className="flex-1 text-sm font-medium text-primary hover:underline truncate"
+                      >
+                        {ACTIVATION_EMAIL}
+                      </a>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 shrink-0"
+                        onClick={copyEmail}
+                      >
+                        {emailCopied ? (
+                          <Check className="h-3.5 w-3.5 text-green-600" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
+                      </Button>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-1.5">
+                      Subject: Provider Pro Upgrade Request
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

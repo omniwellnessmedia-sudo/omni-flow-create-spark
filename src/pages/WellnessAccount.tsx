@@ -4,6 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
@@ -24,6 +34,7 @@ import {
   ShieldCheck,
   Sparkles,
   ChevronRight,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -48,6 +59,9 @@ const WellnessAccount = () => {
   } | null>(null);
   const [wellCoinBalance, setWellCoinBalance] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState({ full_name: "", bio: "", location: "" });
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (user) fetchUserData();
@@ -83,6 +97,39 @@ const WellnessAccount = () => {
     await signOut();
     toast.success("Signed out successfully");
     navigate("/");
+  };
+
+  const openEdit = () => {
+    setEditForm({
+      full_name: userProfile?.full_name || "",
+      bio: userProfile?.bio || "",
+      location: userProfile?.location || "",
+    });
+    setEditOpen(true);
+  };
+
+  const saveProfile = async () => {
+    if (!user) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          full_name: editForm.full_name.trim() || null,
+          bio: editForm.bio.trim() || null,
+          location: editForm.location.trim() || null,
+        })
+        .eq("id", user.id);
+      if (error) throw error;
+      setUserProfile((p) => p ? { ...p, ...editForm } : p);
+      toast.success("Profile updated");
+      setEditOpen(false);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save profile");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const displayName = userProfile?.full_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "Wellness Member";
@@ -152,7 +199,7 @@ const WellnessAccount = () => {
               </div>
 
               <div className="hidden sm:flex gap-2 pb-1">
-                <Button variant="outline" size="sm" className="gap-1.5">
+                <Button variant="outline" size="sm" className="gap-1.5" onClick={openEdit}>
                   <Edit3 className="h-3.5 w-3.5" />
                   Edit Profile
                 </Button>
@@ -245,7 +292,7 @@ const WellnessAccount = () => {
                 <ProfileRow icon={MapPin} label="Location" done={!!userProfile?.location} />
                 <ProfileRow icon={BookOpen} label="Bio added" done={!!userProfile?.bio} />
               </div>
-              <Button variant="outline" size="sm" className="w-full mt-4 gap-1.5">
+              <Button variant="outline" size="sm" className="w-full mt-4 gap-1.5" onClick={openEdit}>
                 <Edit3 className="h-3.5 w-3.5" />
                 Complete Profile
               </Button>
@@ -297,6 +344,49 @@ const WellnessAccount = () => {
       </main>
 
       <Footer />
+
+      {/* Edit Profile Dialog */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Profile</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Display Name</Label>
+              <Input
+                value={editForm.full_name}
+                onChange={(e) => setEditForm((p) => ({ ...p, full_name: e.target.value }))}
+                placeholder="Your name"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Location</Label>
+              <Input
+                value={editForm.location}
+                onChange={(e) => setEditForm((p) => ({ ...p, location: e.target.value }))}
+                placeholder="e.g. Cape Town, South Africa"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Bio</Label>
+              <Textarea
+                value={editForm.bio}
+                onChange={(e) => setEditForm((p) => ({ ...p, bio: e.target.value }))}
+                placeholder="Tell the community a little about yourself…"
+                rows={4}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditOpen(false)}>Cancel</Button>
+            <Button onClick={saveProfile} disabled={saving}>
+              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
+              {saving ? "Saving…" : "Save Changes"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

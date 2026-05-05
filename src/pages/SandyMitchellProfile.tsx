@@ -381,12 +381,20 @@ const SandyMitchellProfile = () => {
                       ))}
                     </div>
                     <div className="flex gap-3 mt-4">
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Instagram className="h-4 w-4" />Instagram
-                      </Button>
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Facebook className="h-4 w-4" />Facebook
-                      </Button>
+                      {profile.social_media?.instagram && (
+                        <a href={profile.social_media.instagram} target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline" size="sm" className="gap-2">
+                            <Instagram className="h-4 w-4" />Instagram
+                          </Button>
+                        </a>
+                      )}
+                      {profile.social_media?.facebook && (
+                        <a href={profile.social_media.facebook} target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline" size="sm" className="gap-2">
+                            <Facebook className="h-4 w-4" />Facebook
+                          </Button>
+                        </a>
+                      )}
                     </div>
                   </section>
                 </div>

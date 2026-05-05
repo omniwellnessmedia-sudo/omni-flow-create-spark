@@ -34,8 +34,8 @@ I also collaborate with Omni Wellness Media on workshops, content, and a longer-
   location: 'Cape Town, South Africa (Observatory, Stonehurst)',
   phone: '+27 21 XXX XXXX',
   email: 'sandy@druyogacapetown.co.za',
-  website: 'https://sandymitchell.co.za/book-a-call/',
-  calendly: 'https://sandymitchell.co.za/book-a-call/',
+  website: 'https://www.druyogacapetown.co.za',
+  calendly: 'https://www.druyogacapetown.co.za',
   specialties: [
     'Dru Yoga',
     'Buteyko Breathing',
@@ -56,9 +56,9 @@ I also collaborate with Omni Wellness Media on workshops, content, and a longer-
   cover_image: IMAGES.sandy.hero,
   philosophy: "All bodies are welcome. I believe in creating a relaxed, friendly environment where everyone can experience the benefits of yoga, regardless of their physical abilities or experience level.",
   social_media: {
-    instagram: '@druyogacapetown',
-    facebook: 'Dru Yoga Cape Town',
-    linkedin: 'Sandy Mitchell Yoga',
+    instagram: 'https://www.instagram.com/druyogacapetown',
+    facebook: 'https://www.facebook.com/DruyogaCT',
+    linkedin: 'https://www.linkedin.com/in/sandy-mitchell-yoga',
   },
   rating: 4.9,
   total_clients: 150,
