@@ -32,7 +32,7 @@ I aim to create a space where people feel safe to be themselves, guided by a bel
 
 I also collaborate with Omni Wellness Media on workshops, content, and a longer-term vision of co-creating accessible tools for combating stress and living life more in tune with nature and one's self.`,
   location: 'Cape Town, South Africa (Observatory, Stonehurst)',
-  phone: '+27 21 XXX XXXX',
+  phone: '',
   email: 'sandy@druyogacapetown.co.za',
   website: 'https://www.druyogacapetown.co.za',
   calendly: 'https://www.druyogacapetown.co.za',

@@ -9,7 +9,7 @@ import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import BookingSystem from '@/components/booking/BookingSystem';
 import { supabase } from '@/integrations/supabase/client';
 import sandyMitchellData from '@/data/sandyMitchellProfile';
-import { IMAGES } from '@/lib/images';
+import { IMAGES, getImageWithFallback } from '@/lib/images';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 import {
@@ -22,7 +22,6 @@ import {
   Heart,
   Users,
   Award,
-  Phone,
   Mail,
   Instagram,
   Facebook,
@@ -127,7 +126,7 @@ const SandyMitchellProfile = () => {
         {/* ── HERO ── */}
         <div className="relative h-[320px] sm:h-[380px] lg:h-[420px] overflow-hidden bg-muted">
           <img
-            src={IMAGES.sandy.hero}
+            {...getImageWithFallback(IMAGES.sandy.hero, IMAGES.sandy.yoga)}
             alt="Sandy Mitchell — Dru Yoga"
             className="w-full h-full object-cover"
           />
@@ -257,14 +256,19 @@ const SandyMitchellProfile = () => {
                       {/* Service image */}
                       <div className="relative h-44 overflow-hidden">
                         <img
-                          src={service.images?.[0]}
+                          {...getImageWithFallback(service.images?.[0] || IMAGES.sandy.yoga, IMAGES.sandy.yoga)}
                           alt={service.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute top-3 left-3">
+                        <div className="absolute top-3 left-3 flex gap-1.5">
                           <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 text-[#2a9d8f] backdrop-blur-sm">
                             {service.category}
                           </span>
+                          {service.price_zar === 0 && (
+                            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#2a9d8f] text-white">
+                              FREE
+                            </span>
+                          )}
                         </div>
                         {service.is_online && (
                           <div className="absolute top-3 right-3">
@@ -318,21 +322,24 @@ const SandyMitchellProfile = () => {
                               providerId={profile.id}
                               providerName={profile.business_name}
                               isOnline={service.is_online}
+                              buttonClassName="bg-[#2a9d8f] hover:bg-[#21857a] text-white border-0"
                             />
                           </div>
-                          <AddToCartButton
-                            item={{
-                              id: service.id,
-                              title: service.title,
-                              price_zar: service.price_zar,
-                              price_wellcoins: service.price_wellcoins,
-                              image: service.images?.[0],
-                              category: service.category,
-                            }}
-                            variant="outline"
-                            size="default"
-                            className="px-3"
-                          />
+                          {service.price_zar > 0 && (
+                            <AddToCartButton
+                              item={{
+                                id: service.id,
+                                title: service.title,
+                                price_zar: service.price_zar,
+                                price_wellcoins: service.price_wellcoins,
+                                image: service.images?.[0],
+                                category: service.category,
+                              }}
+                              variant="outline"
+                              size="default"
+                              className="px-3 shrink-0"
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -345,10 +352,11 @@ const SandyMitchellProfile = () => {
                 <div className="space-y-8">
                   <section>
                     <h2 className="font-heading text-2xl mb-4">Sandy's Journey</h2>
-                    <p className="text-muted-foreground leading-relaxed mb-4">{profile.description}</p>
-                    <p className="text-muted-foreground leading-relaxed">
-                      With {profile.years_experience} years of dedicated practice and teaching, Sandy has helped hundreds of students discover the transformative power of gentle, accessible yoga. Her approach combines traditional wisdom with modern understanding of body mechanics and breath work.
-                    </p>
+                    <div className="space-y-3 text-muted-foreground leading-relaxed">
+                      {profile.description.split(/\n\n+/).map((para, i) => (
+                        <p key={i}>{para.trim()}</p>
+                      ))}
+                    </div>
                   </section>
 
                   <section>
@@ -366,13 +374,14 @@ const SandyMitchellProfile = () => {
                   <section>
                     <h2 className="font-heading text-2xl mb-4">Connect with Sandy</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {[
-                        { icon: Phone, label: profile.phone, href: `tel:${profile.phone}` },
-                        { icon: Mail, label: profile.email, href: `mailto:${profile.email}` },
-                        { icon: Globe, label: 'Visit Website', href: profile.website },
-                      ].filter(l => l.label).map(link => (
+                      {(
+                        [
+                          profile.email ? { icon: Mail, label: profile.email, href: `mailto:${profile.email}`, external: false } : null,
+                          profile.website ? { icon: Globe, label: 'Visit Website', href: profile.website, external: true } : null,
+                        ] as ({ icon: React.ElementType; label: string; href: string; external: boolean } | null)[]
+                      ).filter((l): l is NonNullable<typeof l> => l !== null).map(link => (
                         <a key={link.href} href={link.href}
-                          target={link.icon === Globe ? '_blank' : undefined}
+                          target={link.external ? '_blank' : undefined}
                           rel="noopener noreferrer"
                           className="flex items-center gap-3 p-3 rounded-xl bg-muted/50 border border-border/40 hover:bg-muted transition-colors text-sm">
                           <link.icon className="h-4 w-4 text-[#2a9d8f] shrink-0" />
@@ -439,6 +448,7 @@ const SandyMitchellProfile = () => {
                         providerId={profile.id}
                         providerName={profile.business_name}
                         isOnline={false}
+                        buttonClassName="bg-[#2a9d8f] hover:bg-[#21857a] text-white border-0"
                       />
                     </div>
                   ))}
@@ -449,10 +459,10 @@ const SandyMitchellProfile = () => {
               {activeTab === 'gallery' && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {galleryImages.map((img, i) => (
-                    <div key={i} className="aspect-square rounded-2xl overflow-hidden group">
+                    <div key={i} className="aspect-square rounded-2xl overflow-hidden group bg-muted">
                       <img
-                        src={img}
-                        alt={`Sandy's studio ${i + 1}`}
+                        {...getImageWithFallback(img, IMAGES.sandy.profile)}
+                        alt={`Sandy Mitchell — photo ${i + 1}`}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
