@@ -575,12 +575,30 @@ const AdminLeads = () => {
         </Button>
       </div>
 
+      {/* Pipeline filter */}
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {[
+          { k: "active", label: "Active", match: (s: string | null) => !s || ["pending","in_progress"].includes(s) },
+          { k: "quoted", label: "Quoted/Responded", match: (s: string | null) => s === "responded" || s === "quoted" },
+          { k: "closed", label: "Closed", match: (s: string | null) => s === "closed" },
+          { k: "archived", label: "Archived", match: (s: string | null) => s === "archived" },
+          { k: "all", label: "All", match: () => true },
+        ].map((p) => (
+          <Button key={p.k} size="sm" variant={pipelineFilter === p.k ? "default" : "outline"} className="h-7 text-xs" onClick={() => setPipelineFilter(p.k)}>
+            {p.label}
+          </Button>
+        ))}
+      </div>
+
       {/* Leads Tabs */}
       <Tabs defaultValue="contacts" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="contacts">Contacts ({contacts.length})</TabsTrigger>
-          <TabsTrigger value="quotes">Quotes ({quotes.length})</TabsTrigger>
+          <TabsTrigger value="contacts">Contacts ({filteredContacts.length})</TabsTrigger>
+          <TabsTrigger value="quotes">Quotes ({filteredQuotes.length})</TabsTrigger>
+          <TabsTrigger value="outreach">Outreach Pipeline</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="outreach"><OutreachPipeline /></TabsContent>
 
         <TabsContent value="contacts" className="space-y-3">
           {contacts.length === 0 ? (
