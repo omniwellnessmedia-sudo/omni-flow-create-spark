@@ -131,7 +131,7 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
     if (!email) { toast({ title: "No email on record", variant: "destructive" }); return; }
     const t = TEMPLATES[key];
     const sub = t.subject;
-    const body = t.body.replaceAll("{{name}}", (name || "there").split(" ")[0]).replaceAll("{{org}}", org || "your organisation");
+    const body = t.body.split("{{name}}").join((name || "there").split(" ")[0]).split("{{org}}").join(org || "your organisation");
     window.location.href = `mailto:${email}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
     logActivity("email_sent", { template: key });
   };
