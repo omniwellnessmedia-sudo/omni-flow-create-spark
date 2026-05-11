@@ -21,6 +21,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Mail, Phone, Building, Clock, MessageSquare, FileText, RefreshCw, CheckCircle, XCircle, Plus, Send, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import OutreachPipeline from "@/components/admin/OutreachPipeline";
+
+const PIPELINE_FILTERS = [
+  { k: "active", label: "Active", match: (s: string | null) => !s || ["pending", "in_progress"].includes(s) },
+  { k: "quoted", label: "Quoted/Responded", match: (s: string | null) => s === "responded" || s === "quoted" },
+  { k: "closed", label: "Closed", match: (s: string | null) => s === "closed" },
+  { k: "archived", label: "Archived", match: (s: string | null) => s === "archived" },
+  { k: "all", label: "All", match: () => true },
+] as const;
 
 interface ContactSubmission {
   id: string;
@@ -93,6 +102,12 @@ const AdminLeads = () => {
   const [sending, setSending] = useState(false);
   const [selectedEmails, setSelectedEmails] = useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = useState(false);
+
+  // Pipeline filter for the leads view (active / quoted / closed / archived / all)
+  const [pipelineFilter, setPipelineFilter] = useState<typeof PIPELINE_FILTERS[number]["k"]>("active");
+  const matchStatus = PIPELINE_FILTERS.find((p) => p.k === pipelineFilter)?.match ?? (() => true);
+  const filteredContacts = contacts.filter((c) => matchStatus(c.status ?? null));
+  const filteredQuotes = quotes.filter((q) => matchStatus(q.status ?? null));
 
   useEffect(() => {
     fetchLeadsData();
@@ -577,13 +592,7 @@ const AdminLeads = () => {
 
       {/* Pipeline filter */}
       <div className="flex flex-wrap gap-1.5 mb-3">
-        {[
-          { k: "active", label: "Active", match: (s: string | null) => !s || ["pending","in_progress"].includes(s) },
-          { k: "quoted", label: "Quoted/Responded", match: (s: string | null) => s === "responded" || s === "quoted" },
-          { k: "closed", label: "Closed", match: (s: string | null) => s === "closed" },
-          { k: "archived", label: "Archived", match: (s: string | null) => s === "archived" },
-          { k: "all", label: "All", match: () => true },
-        ].map((p) => (
+        {PIPELINE_FILTERS.map((p) => (
           <Button key={p.k} size="sm" variant={pipelineFilter === p.k ? "default" : "outline"} className="h-7 text-xs" onClick={() => setPipelineFilter(p.k)}>
             {p.label}
           </Button>
@@ -601,12 +610,12 @@ const AdminLeads = () => {
         <TabsContent value="outreach"><OutreachPipeline /></TabsContent>
 
         <TabsContent value="contacts" className="space-y-3">
-          {contacts.length === 0 ? (
+          {filteredContacts.length === 0 ? (
             <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">No contact submissions yet</CardContent>
+              <CardContent className="py-8 text-center text-muted-foreground">No contact submissions in this view</CardContent>
             </Card>
           ) : (
-            contacts.map((contact) => (
+            filteredContacts.map((contact) => (
               <Card key={contact.id}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between gap-2">
@@ -671,12 +680,12 @@ const AdminLeads = () => {
         </TabsContent>
 
         <TabsContent value="quotes" className="space-y-3">
-          {quotes.length === 0 ? (
+          {filteredQuotes.length === 0 ? (
             <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">No service quote requests yet</CardContent>
+              <CardContent className="py-8 text-center text-muted-foreground">No service quote requests in this view</CardContent>
             </Card>
           ) : (
-            quotes.map((quote) => (
+            filteredQuotes.map((quote) => (
               <Card key={quote.id}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between gap-2">
