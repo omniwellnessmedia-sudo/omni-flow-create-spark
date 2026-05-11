@@ -624,7 +624,7 @@ const AdminLeads = () => {
               <CardContent className="py-8 text-center text-muted-foreground">No contact submissions yet</CardContent>
             </Card>
           ) : (
-            contacts.map((contact) => (
+            filteredContacts.map((contact) => (
               <Card key={contact.id}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between gap-2">
@@ -694,7 +694,7 @@ const AdminLeads = () => {
               <CardContent className="py-8 text-center text-muted-foreground">No service quote requests yet</CardContent>
             </Card>
           ) : (
-            quotes.map((quote) => (
+            filteredQuotes.map((quote) => (
               <Card key={quote.id}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between gap-2">
@@ -766,6 +766,14 @@ const AdminLeads = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      <LeadDrawer
+        open={!!drawerLead}
+        onOpenChange={(v) => !v && setDrawerLead(null)}
+        leadType={drawerLead?.type || "contact"}
+        lead={drawerLead?.data || null}
+        onUpdated={fetchLeadsData}
+      />
     </div>
   );
 };
