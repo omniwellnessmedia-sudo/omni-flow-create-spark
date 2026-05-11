@@ -67,6 +67,7 @@ export default function GreatMotherCaveTour() {
           alt="Great Mother Cave with Chief Kingsley"
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
+          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
         <div className="relative z-10 container mx-auto h-full flex items-center px-4">
@@ -116,6 +117,7 @@ export default function GreatMotherCaveTour() {
                   alt="Indigenous heritage trail"
                   className="rounded-2xl shadow-2xl"
                   loading="lazy"
+                  onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
                 />
               </div>
               <div>
