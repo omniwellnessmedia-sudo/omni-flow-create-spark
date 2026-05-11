@@ -96,6 +96,22 @@ const AdminLeads = () => {
   const [selectedEmails, setSelectedEmails] = useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = useState(false);
 
+  // Pipeline + drawer
+  const [pipelineFilter, setPipelineFilter] = useState<string>("active");
+  const [drawerLead, setDrawerLead] = useState<{ type: LeadType; data: any } | null>(null);
+
+  const matchPipeline = (s: string | null | undefined) => {
+    switch (pipelineFilter) {
+      case "active": return !s || ["pending", "in_progress"].includes(s);
+      case "quoted": return s === "responded" || s === "quoted";
+      case "closed": return s === "closed";
+      case "archived": return s === "archived";
+      default: return true;
+    }
+  };
+  const filteredContacts = contacts.filter((c) => matchPipeline(c.status));
+  const filteredQuotes = quotes.filter((q) => matchPipeline(q.status));
+
   useEffect(() => {
     fetchLeadsData();
   }, []);
