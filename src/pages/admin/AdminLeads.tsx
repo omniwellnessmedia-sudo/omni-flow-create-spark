@@ -681,6 +681,9 @@ const AdminLeads = () => {
                       <Mail className="w-3 h-3 mr-1" />
                       Reply
                     </Button>
+                    <Button size="sm" variant="ghost" className="h-7 text-xs ml-auto" onClick={() => setDrawerLead({ type: "contact", data: contact })}>
+                      Expand <ChevronRight className="w-3 h-3 ml-1" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -758,6 +761,9 @@ const AdminLeads = () => {
                     <Button size="sm" className="h-7 text-xs" onClick={() => (window.location.href = `mailto:${quote.email}?subject=Your ${quote.service_type} Quote Request`)}>
                       <Mail className="w-3 h-3 mr-1" />
                       Send Quote
+                    </Button>
+                    <Button size="sm" variant="ghost" className="h-7 text-xs ml-auto" onClick={() => setDrawerLead({ type: "quote", data: quote })}>
+                      Expand <ChevronRight className="w-3 h-3 ml-1" />
                     </Button>
                   </div>
                 </CardContent>
