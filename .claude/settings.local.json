@@ -22,7 +22,8 @@
       "Bash(dir \"C:\\Users\\tumel\\omni-flow-create-spark\\src\\pages\")",
       "Bash(del \"src\\pages\\Home.tsx\")",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "mcp__f39bea25-6ac0-49e4-b1a3-613f275fc2b6__create_draft"
     ],
     "deny": [],
     "ask": []
