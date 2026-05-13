@@ -18,18 +18,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Mail, Phone, Building, Clock, MessageSquare, FileText, RefreshCw, CheckCircle, XCircle, Plus, Send, Users } from "lucide-react";
+import { Mail, Phone, Building, Clock, MessageSquare, FileText, RefreshCw, CheckCircle, XCircle, Plus, Send, Users, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import OutreachPipeline from "@/components/admin/OutreachPipeline";
-
-const PIPELINE_FILTERS = [
-  { k: "active", label: "Active", match: (s: string | null) => !s || ["pending", "in_progress"].includes(s) },
-  { k: "quoted", label: "Quoted/Responded", match: (s: string | null) => s === "responded" || s === "quoted" },
-  { k: "closed", label: "Closed", match: (s: string | null) => s === "closed" },
-  { k: "archived", label: "Archived", match: (s: string | null) => s === "archived" },
-  { k: "all", label: "All", match: () => true },
-] as const;
+import LeadDrawer, { LeadType } from "@/components/admin/LeadDrawer";
 
 interface ContactSubmission {
   id: string;
@@ -103,11 +96,21 @@ const AdminLeads = () => {
   const [selectedEmails, setSelectedEmails] = useState<Set<string>>(new Set());
   const [selectMode, setSelectMode] = useState(false);
 
-  // Pipeline filter for the leads view (active / quoted / closed / archived / all)
-  const [pipelineFilter, setPipelineFilter] = useState<typeof PIPELINE_FILTERS[number]["k"]>("active");
-  const matchStatus = PIPELINE_FILTERS.find((p) => p.k === pipelineFilter)?.match ?? (() => true);
-  const filteredContacts = contacts.filter((c) => matchStatus(c.status ?? null));
-  const filteredQuotes = quotes.filter((q) => matchStatus(q.status ?? null));
+  // Pipeline + drawer
+  const [pipelineFilter, setPipelineFilter] = useState<string>("active");
+  const [drawerLead, setDrawerLead] = useState<{ type: LeadType; data: any } | null>(null);
+
+  const matchPipeline = (s: string | null | undefined) => {
+    switch (pipelineFilter) {
+      case "active": return !s || ["pending", "in_progress"].includes(s);
+      case "quoted": return s === "responded" || s === "quoted";
+      case "closed": return s === "closed";
+      case "archived": return s === "archived";
+      default: return true;
+    }
+  };
+  const filteredContacts = contacts.filter((c) => matchPipeline(c.status));
+  const filteredQuotes = quotes.filter((q) => matchPipeline(q.status));
 
   useEffect(() => {
     fetchLeadsData();
@@ -592,7 +595,13 @@ const AdminLeads = () => {
 
       {/* Pipeline filter */}
       <div className="flex flex-wrap gap-1.5 mb-3">
-        {PIPELINE_FILTERS.map((p) => (
+        {[
+          { k: "active", label: "Active", match: (s: string | null) => !s || ["pending","in_progress"].includes(s) },
+          { k: "quoted", label: "Quoted/Responded", match: (s: string | null) => s === "responded" || s === "quoted" },
+          { k: "closed", label: "Closed", match: (s: string | null) => s === "closed" },
+          { k: "archived", label: "Archived", match: (s: string | null) => s === "archived" },
+          { k: "all", label: "All", match: () => true },
+        ].map((p) => (
           <Button key={p.k} size="sm" variant={pipelineFilter === p.k ? "default" : "outline"} className="h-7 text-xs" onClick={() => setPipelineFilter(p.k)}>
             {p.label}
           </Button>
@@ -610,9 +619,9 @@ const AdminLeads = () => {
         <TabsContent value="outreach"><OutreachPipeline /></TabsContent>
 
         <TabsContent value="contacts" className="space-y-3">
-          {filteredContacts.length === 0 ? (
+          {contacts.length === 0 ? (
             <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">No contact submissions in this view</CardContent>
+              <CardContent className="py-8 text-center text-muted-foreground">No contact submissions yet</CardContent>
             </Card>
           ) : (
             filteredContacts.map((contact) => (
@@ -672,6 +681,9 @@ const AdminLeads = () => {
                       <Mail className="w-3 h-3 mr-1" />
                       Reply
                     </Button>
+                    <Button size="sm" variant="ghost" className="h-7 text-xs ml-auto" onClick={() => setDrawerLead({ type: "contact", data: contact })}>
+                      Expand <ChevronRight className="w-3 h-3 ml-1" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -680,9 +692,9 @@ const AdminLeads = () => {
         </TabsContent>
 
         <TabsContent value="quotes" className="space-y-3">
-          {filteredQuotes.length === 0 ? (
+          {quotes.length === 0 ? (
             <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">No service quote requests in this view</CardContent>
+              <CardContent className="py-8 text-center text-muted-foreground">No service quote requests yet</CardContent>
             </Card>
           ) : (
             filteredQuotes.map((quote) => (
@@ -750,6 +762,9 @@ const AdminLeads = () => {
                       <Mail className="w-3 h-3 mr-1" />
                       Send Quote
                     </Button>
+                    <Button size="sm" variant="ghost" className="h-7 text-xs ml-auto" onClick={() => setDrawerLead({ type: "quote", data: quote })}>
+                      Expand <ChevronRight className="w-3 h-3 ml-1" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -757,6 +772,14 @@ const AdminLeads = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      <LeadDrawer
+        open={!!drawerLead}
+        onOpenChange={(v) => !v && setDrawerLead(null)}
+        leadType={drawerLead?.type || "contact"}
+        lead={drawerLead?.data || null}
+        onUpdated={fetchLeadsData}
+      />
     </div>
   );
 };
