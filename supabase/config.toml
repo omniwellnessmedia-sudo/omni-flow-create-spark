@@ -36,6 +36,9 @@ verify_jwt = false
 [functions.paypal-payment]
 verify_jwt = true
 
+[functions.create-payment]
+verify_jwt = true
+
 [functions.track-affiliate-click]
 verify_jwt = false
 
