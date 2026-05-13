@@ -389,20 +389,27 @@ const SandyMitchellProfile = () => {
                         </a>
                       ))}
                     </div>
-                    <div className="flex gap-3 mt-4">
+                    <div className="flex flex-wrap gap-3 mt-4">
                       {profile.social_media?.instagram && (
-                        <a href={profile.social_media.instagram} target="_blank" rel="noopener noreferrer">
-                          <Button variant="outline" size="sm" className="gap-2">
+                        <Button asChild variant="outline" size="sm" className="gap-2">
+                          <a href={profile.social_media.instagram} target="_blank" rel="noopener noreferrer">
                             <Instagram className="h-4 w-4" />Instagram
-                          </Button>
-                        </a>
+                          </a>
+                        </Button>
                       )}
                       {profile.social_media?.facebook && (
-                        <a href={profile.social_media.facebook} target="_blank" rel="noopener noreferrer">
-                          <Button variant="outline" size="sm" className="gap-2">
+                        <Button asChild variant="outline" size="sm" className="gap-2">
+                          <a href={profile.social_media.facebook} target="_blank" rel="noopener noreferrer">
                             <Facebook className="h-4 w-4" />Facebook
-                          </Button>
-                        </a>
+                          </a>
+                        </Button>
+                      )}
+                      {profile.social_media?.linkedin && (
+                        <Button asChild variant="outline" size="sm" className="gap-2">
+                          <a href={profile.social_media.linkedin} target="_blank" rel="noopener noreferrer">
+                            <Globe className="h-4 w-4" />LinkedIn
+                          </a>
+                        </Button>
                       )}
                     </div>
                   </section>

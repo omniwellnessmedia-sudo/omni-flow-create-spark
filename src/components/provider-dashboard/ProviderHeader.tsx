@@ -6,9 +6,10 @@ import { IMAGES } from "@/lib/images";
 interface ProviderHeaderProps {
   hasProfile: boolean;
   onLogout: () => void;
+  providerId?: string | null;
 }
 
-const ProviderHeader = ({ hasProfile, onLogout }: ProviderHeaderProps) => (
+const ProviderHeader = ({ hasProfile, onLogout, providerId }: ProviderHeaderProps) => (
   <div className="border-b border-border/50 bg-background/95 backdrop-blur-sm sticky top-0 z-50">
     <div className="flex h-14 items-center justify-between px-4 md:px-6 max-w-7xl mx-auto">
       <div className="flex items-center gap-3 min-w-0">
@@ -23,7 +24,7 @@ const ProviderHeader = ({ hasProfile, onLogout }: ProviderHeaderProps) => (
       <div className="flex items-center gap-1.5 shrink-0">
         {hasProfile && (
           <Button variant="ghost" size="sm" asChild className="h-8 px-2.5 text-primary">
-            <Link to="/provider/sandy-mitchell" target="_blank">
+            <Link to={providerId ? `/provider/${providerId}` : "/provider/sandy-mitchell"} target="_blank">
               <Eye className="h-3.5 w-3.5 md:mr-1.5" />
               <span className="hidden md:inline text-xs">Preview Profile</span>
             </Link>

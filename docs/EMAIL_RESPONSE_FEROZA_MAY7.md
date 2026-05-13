@@ -35,17 +35,21 @@ New tables: `outreach_leads`, `lead_activities`. Existing `contact_submissions` 
 - **Realtime publication**: blog_posts, blog_comments, blog_likes, provider_profiles, services, bookings, transactions are now broadcasting changes.
 - **Navigation**: legacy `/wellness-community` rolled into `/blog` redirects; store routes consolidated to `/roambuddy-store`.
 - **Experience pages**: Cart Horse Urban Wellness and Corporate Wellness Retreat live at `/experiences/...` and featured on Tours + homepage.
+- **Provider Pro-tab gating**: upgrade card now uses the compact variant on Analytics, CRM and Financial tabs so it's no longer cut off inside the bounded blurred container.
+- **Sandy Mitchell socials**: Instagram, Facebook (and now LinkedIn) buttons now click reliably on desktop browsers — the previous `<Button>` inside `<a>` was invalid HTML and silently broke clicks on some browsers.
+- **Provider Pro Upgrade page**: WhatsApp activation CTA hardened with the same fix; email activation uses `hello@omniwellnessmedia.co.za` with a Copy fallback for laptops without a default mail handler.
+- **Provider preview link**: "View Public Profile" / "Preview Profile" now route to the logged-in provider's own public profile, not Sandy's.
 
 ## 4. Still in flight (next pass)
 
 These remain on the board for the next sprint — flagging now so you can re-test the above without confusion:
 
-- Provider Pro-tab blur containers (CRM tab works; Analytics + Financial replicate)
 - WellnessAccount profile-edit form upsert + mobile skeleton
-- Sandy Mitchell: image dedupe, website/socials button polish, persistent "Added" cart state
+- Sandy Mitchell: image dedupe + persistent "Added" cart state (cart already persists in localStorage, but the visual confirmation needs a longer-lived state)
 - Floating eSIM help button: sizing + repositioning
 - AdminDashboard: persistent dismissal for pending-tour banners
 - Sitewide collapsible provider cards with admin inline CMS edit
+- Provider Pro Upgrade page: full mobile responsive pass
 
 ## 5. Deployment note
 

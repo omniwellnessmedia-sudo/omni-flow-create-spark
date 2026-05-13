@@ -175,7 +175,7 @@ const ProviderDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <ProviderHeader hasProfile={!!providerProfile} onLogout={handleLogout} />
+      <ProviderHeader hasProfile={!!providerProfile} onLogout={handleLogout} providerId={providerProfile?.id ?? null} />
 
       <div className="p-4 md:p-6 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -255,7 +255,7 @@ const ProviderDashboard = () => {
               {[
                 { label: "Add Service", icon: Plus, onClick: () => navigate("/wellness-exchange/add-service"), primary: true },
                 { label: "Write Blog Post", icon: FileText, onClick: () => navigate("/blog/editor/new") },
-                { label: "View Public Profile", icon: Eye, onClick: () => window.open("/provider/sandy-mitchell", "_blank") },
+                { label: "View Public Profile", icon: Eye, onClick: () => window.open(providerProfile?.id ? `/provider/${providerProfile.id}` : "/provider/sandy-mitchell", "_blank") },
                 { label: "Browse Community", icon: MessageCircle, onClick: () => navigate("/blog/community") },
               ].map((action) => (
                 <Card
