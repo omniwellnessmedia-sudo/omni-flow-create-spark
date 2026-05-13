@@ -7,11 +7,12 @@ import { SecurityMonitor } from '@/lib/securityMonitoring';
 interface ProtectedRouteProps {
   children: ReactNode;
   requireAdmin?: boolean;
+  requireAccountant?: boolean;
 }
 
-const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ children, requireAdmin = false, requireAccountant = false }: ProtectedRouteProps) => {
   const { user, loading: authLoading } = useAuth();
-  const { isAdmin, loading: roleLoading } = useSecureUserRole();
+  const { isAdmin, isAccountant, loading: roleLoading } = useSecureUserRole();
   const location = useLocation();
 
   if (authLoading || roleLoading) {
@@ -38,6 +39,22 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
           <div className="text-red-500 text-6xl mb-4">🔒</div>
           <h2 className="text-2xl font-bold text-gray-800">Access Denied</h2>
           <p className="text-gray-600">You need administrator privileges to access this page.</p>
+          <button onClick={() => window.history.back()} className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (requireAccountant && !isAccountant && !isAdmin) {
+    SecurityMonitor.logFailedAdminAccess(user.id, location.pathname);
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 flex items-center justify-center">
+        <div className="text-center space-y-4 max-w-md mx-auto p-8">
+          <div className="text-red-500 text-6xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-gray-800">Access Denied</h2>
+          <p className="text-gray-600">This area is reserved for the accountant team.</p>
           <button onClick={() => window.history.back()} className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
             Go Back
           </button>

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface UserRoleData {
   isAdmin: boolean;
+  isAccountant: boolean;
   roles: string[];
   userId: string | null;
   loading: boolean;
@@ -12,6 +13,7 @@ interface UserRoleData {
 export const useSecureUserRole = () => {
   const [roleData, setRoleData] = useState<UserRoleData>({
     isAdmin: false,
+    isAccountant: false,
     roles: [],
     userId: null,
     loading: true,
@@ -25,6 +27,7 @@ export const useSecureUserRole = () => {
       if (!user) {
         setRoleData({
           isAdmin: false,
+          isAccountant: false,
           roles: [],
           userId: null,
           loading: false,
@@ -40,9 +43,11 @@ export const useSecureUserRole = () => {
 
       if (error) throw error;
 
+      const roles: string[] = data.roles || [];
       setRoleData({
         isAdmin: data.isAdmin || false,
-        roles: data.roles || [],
+        isAccountant: roles.includes('accountant'),
+        roles,
         userId: data.userId,
         loading: false,
         error: null,
@@ -51,6 +56,7 @@ export const useSecureUserRole = () => {
       console.error('Error checking user role:', error);
       setRoleData({
         isAdmin: false,
+        isAccountant: false,
         roles: [],
         userId: null,
         loading: false,
