@@ -135,7 +135,7 @@ const FinancialDashboard = ({ transactions, isPro }: FinancialDashboardProps) =>
         </div>
         <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-[2px] p-4">
           <div className="w-full max-w-sm">
-            <ProUpgradeCard featureName="Financial Suite" />
+            <ProUpgradeCard featureName="Financial Suite" compact />
           </div>
         </div>
       </div>

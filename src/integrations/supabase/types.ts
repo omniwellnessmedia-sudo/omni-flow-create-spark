@@ -1072,9 +1072,12 @@ export type Database = {
       }
       contact_submissions: {
         Row: {
+          archived_at: string | null
+          assigned_to: string | null
           created_at: string
           email: string
           id: string
+          internal_notes: string | null
           message: string
           name: string
           organization: string | null
@@ -1082,9 +1085,12 @@ export type Database = {
           status: string | null
         }
         Insert: {
+          archived_at?: string | null
+          assigned_to?: string | null
           created_at?: string
           email: string
           id?: string
+          internal_notes?: string | null
           message: string
           name: string
           organization?: string | null
@@ -1092,9 +1098,12 @@ export type Database = {
           status?: string | null
         }
         Update: {
+          archived_at?: string | null
+          assigned_to?: string | null
           created_at?: string
           email?: string
           id?: string
+          internal_notes?: string | null
           message?: string
           name?: string
           organization?: string | null
@@ -1190,6 +1199,36 @@ export type Database = {
           is_enabled?: boolean | null
           updated_at?: string | null
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      lead_activities: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          lead_id: string
+          lead_type: string
+          payload: Json | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          lead_id: string
+          lead_type: string
+          payload?: Json | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          lead_id?: string
+          lead_type?: string
+          payload?: Json | null
         }
         Relationships: []
       }
@@ -1542,6 +1581,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      outreach_leads: {
+        Row: {
+          campaign: string | null
+          contact_email: string | null
+          contact_method: string | null
+          contact_person: string | null
+          created_at: string
+          csr_url: string | null
+          follow_up_due: string | null
+          id: string
+          last_contacted: string | null
+          notes: string | null
+          organisation: string
+          owner_id: string | null
+          programme: string | null
+          sector: string | null
+          status: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          campaign?: string | null
+          contact_email?: string | null
+          contact_method?: string | null
+          contact_person?: string | null
+          created_at?: string
+          csr_url?: string | null
+          follow_up_due?: string | null
+          id?: string
+          last_contacted?: string | null
+          notes?: string | null
+          organisation: string
+          owner_id?: string | null
+          programme?: string | null
+          sector?: string | null
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          campaign?: string | null
+          contact_email?: string | null
+          contact_method?: string | null
+          contact_person?: string | null
+          created_at?: string
+          csr_url?: string | null
+          follow_up_due?: string | null
+          id?: string
+          last_contacted?: string | null
+          notes?: string | null
+          organisation?: string
+          owner_id?: string | null
+          programme?: string | null
+          sector?: string | null
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
       }
       partner_applications: {
         Row: {
@@ -2667,11 +2766,14 @@ export type Database = {
       }
       service_quotes: {
         Row: {
+          archived_at: string | null
+          assigned_to: string | null
           budget_range: string | null
           company: string | null
           created_at: string
           email: string
           id: string
+          internal_notes: string | null
           name: string
           phone: string | null
           project_details: string
@@ -2680,11 +2782,14 @@ export type Database = {
           timeline: string | null
         }
         Insert: {
+          archived_at?: string | null
+          assigned_to?: string | null
           budget_range?: string | null
           company?: string | null
           created_at?: string
           email: string
           id?: string
+          internal_notes?: string | null
           name: string
           phone?: string | null
           project_details: string
@@ -2693,11 +2798,14 @@ export type Database = {
           timeline?: string | null
         }
         Update: {
+          archived_at?: string | null
+          assigned_to?: string | null
           budget_range?: string | null
           company?: string | null
           created_at?: string
           email?: string
           id?: string
+          internal_notes?: string | null
           name?: string
           phone?: string | null
           project_details?: string

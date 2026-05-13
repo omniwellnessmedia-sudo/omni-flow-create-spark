@@ -1,67 +1,93 @@
+# Phase 1 CRM Workspace + Feroza QA Fixes
 
+Credit-efficient plan: one focused build pass covering the highest-impact items from Feroza's QA + the new CRM operationalization request.
 
-# Build Plan: Two New Experience Product Pages
+## 1. AdminLeads → CRM Workspace (`src/pages/admin/AdminLeads.tsx`)
 
-## Overview
-Create two new product pages following existing tour page patterns (GreatMotherCaveTour.tsx as template): same imports, component library, layout structure, and booking sidebar.
+Replace the flat Contacts/Quotes tabs with a pipeline-style workspace:
 
-## Files to Create
+**New tab structure (per record type):**
+- Active (status: pending / in_progress / null)
+- Quoted / Responded
+- Closed
+- Archived
 
-### 1. `src/pages/experiences/CartHorseUrbanWellness.tsx` (~450 lines)
-Route: `/experiences/cart-horse-urban-wellness`
+Driven by client-side filtering on existing `status` column — no DB migration needed. Counts shown per tab.
 
-Sections (following existing tour page pattern):
-- **Hero**: Full-width banner, "Hoofbeats & Healing" headline, two CTAs, 3 badges (CPD Accredited, Evidence-Based, UWC Research Partner)
-- **Story block**: Narrative text + pull quote in a styled blockquote card
-- **Experience Highlights**: 4-column icon grid (Pegasus Programme, Equine Interaction, Handler Session, CPD Certificate)
-- **Itinerary Timeline**: Vertical stepper using Card components with colored left borders (same pattern as GreatMotherCaveTour)
-- **Who Is This For**: 3-column target audience cards (Healthcare, Corporate, Wellness Seekers)
-- **What's Included**: Checklist with Check/X icons (13 items)
-- **Pricing Table**: 2 side-by-side cards (Individual R1,800pp | Corporate R14,500)
-- **Impact Banner**: Styled card with partner logos text
-- **Upcoming Dates**: 4-slot grid (Apr 19, May 10, May 31, Jun 21 2026) with book buttons
-- **Booking Modal**: Dialog with form fields (name, email, phone, org, date, ticket type, attendees, dietary, discipline dropdown). Submit sends toast confirmation.
-- **Testimonials**: 3 placeholder quote cards
-- **FAQ Accordion**: 5 items using existing Accordion component
+**Per-row capabilities (manage, capture, sort, save, file, edit, delete, share, expand):**
+- Expand row → drawer (Sheet) with full detail, inline edit (name, email, phone, org, notes), notes timeline, activity log, assigned-to selector
+- Quick-actions: Reply (mailto), Send Quote (mailto template), WhatsApp, Copy email, Share (clipboard link), Archive, Delete (admin-only, soft via status='archived')
+- Bulk select: mass email, mass status change, mass archive, CSV export
+- Filter bar: search, sector, date range, sort
 
-### 2. `src/pages/experiences/CorporateWellnessRetreat.tsx` (~600 lines)
-Route: `/experiences/corporate-wellness-retreat`
+**Outreach Tracker (new sub-tab):**
+- Loads from a new `outreach_leads` table (org, sector, contact_method, status, last_contacted, notes, source_campaign, owner)
+- Seeded with Feroza's tracker: Overall Organisation, Zacri Campaign, Youth Sports, Women Empowerment, ECD/Reading, Tech/Digital sheets (~80 rows)
+- Same expand drawer + pipeline columns
 
-Sections:
-- **Hero**: Dark atmospheric banner, "Rewild Your Team" headline, 2 CTAs, 4 trust badges
-- **Problem Section**: Split layout (text left, visual right) — burnout narrative
-- **3 Retreat Format Cards**: Horizontal pricing cards (The Reset R80k, The Reconnect R130k, The Transformation R200k) with badges and tiered inclusions
-- **Differentiators**: 4-column grid (Research-Backed, Animal-Assisted, Impact-Generating, CPD Eligible)
-- **Programme Architecture**: Tabs component (1-Day / 2-Day / 3-Day) with itinerary timelines inside each tab
-- **Outcomes & Measurement**: 2-column layout (experience vs measurables)
-- **CSI/ESG Callout**: Highlighted panel with Section 18A info and CTA
-- **Who Books This**: 3 client profile cards
-- **Enquiry Form**: Premium B2B form with 12 fields (company, role, size dropdown, retreat format multiselect, group size, date window, primary goal dropdown, source, context textarea)
-- **Testimonials + Logo Strip**: 3 quotes + placeholder partner row
-- FAQ Accordion
+## 2. DB additions (one migration)
 
-### 3. `src/App.tsx` — Add 2 routes
+```sql
+-- Outreach pipeline
+create table outreach_leads (
+  id uuid primary key default gen_random_uuid(),
+  organisation text not null, sector text, contact_method text,
+  contact_email text, contact_person text, programme text,
+  website text, csr_url text,
+  status text default 'no_response',  -- no_response, contacted, positive, declined, applied, registered, awaiting, archived
+  campaign text,                       -- 'overall','zacri','youth_sports','women','ecd','tech','foundation','funder'
+  last_contacted date, follow_up_due date, notes text,
+  owner_id uuid, created_at timestamptz default now(), updated_at timestamptz default now()
+);
+-- RLS: admins manage all (is_admin)
+
+-- Lightweight per-lead notes/activity (works for contacts, quotes, outreach)
+create table lead_activities (
+  id uuid primary key default gen_random_uuid(),
+  lead_type text not null,    -- 'contact' | 'quote' | 'outreach'
+  lead_id uuid not null,
+  actor_id uuid, action text not null, -- 'note','status_change','email_sent','assigned'
+  payload jsonb default '{}', created_at timestamptz default now()
+);
+-- RLS: admins manage all
+
+-- Add to contact_submissions/service_quotes: archived_at timestamptz, assigned_to uuid, internal_notes text
 ```
-const CartHorseUrbanWellness = React.lazy(() => import('@/pages/experiences/CartHorseUrbanWellness'));
-const CorporateWellnessRetreat = React.lazy(() => import('@/pages/experiences/CorporateWellnessRetreat'));
-```
-Routes in the Travel & Tours section:
-```
-<Route path="/experiences/cart-horse-urban-wellness" element={<CartHorseUrbanWellness />} />
-<Route path="/experiences/corporate-wellness-retreat" element={<CorporateWellnessRetreat />} />
-```
 
-## Technical Approach
-- Reuse: `UnifiedNavigation`, `Footer`, `Card`, `Badge`, `Button`, `Tabs`, `Accordion`, `Dialog` (for booking modal), `Select`, `Input`, `Label`, `Textarea`
-- SEO: Use `useTourSEO` hook
-- Forms: Toast confirmation on submit (no backend wiring needed now)
-- Images: Use existing Supabase storage images from `provider-images/General Images/`
-- No new dependencies or global style changes
+Seed `outreach_leads` from the parsed XLSX (one INSERT migration with the ~80 rows).
 
-## Files Modified
-| File | Change |
-|------|--------|
-| `src/pages/experiences/CartHorseUrbanWellness.tsx` | New file |
-| `src/pages/experiences/CorporateWellnessRetreat.tsx` | New file |
-| `src/App.tsx` | Add 2 lazy imports + 2 routes |
+## 3. Marketing Suite link-in (CRM ↔ resources)
 
+In the lead drawer add a "Resources" panel pulling from existing `roamMarketingAssets` / partner resources docs:
+- Quick-attach onboarding sequence (Influencer / Partner / Foundation) → opens prefilled mailto with template + Cal.com link + brand brief PDF link
+- Copy-link buttons for: ROAM Executive Resources doc, Cal.com booking, brand assets folder
+
+## 4. Admin Copilot helper (`src/components/admin/LeadCopilot.tsx`)
+
+Small inline component in the drawer:
+- Suggested next action based on status + days since contact ("Follow up overdue", "Send quote", "Move to closed")
+- One-click templates: First contact, Follow-up #1/#2, Quote, Decline thanks, Archive
+- Calls existing `submit-contact` / mailto for delivery (no new edge fn needed)
+
+## 5. Feroza QA fixes (rolled into same pass)
+
+- **AdminDashboard notifications**: persist dismissal — currently `SmartGreeting` already does sessionStorage; pending-tour banner in `AdminDashboard.tsx` needs `dismissed_at` write to local state + filter on status change. Patch the pending-tours list to re-fetch after status update.
+- **Provider Dashboard Pro gating**: `CRMDashboard` is correct; replicate the same `relative + absolute overlay` blur pattern used there in the other two Pro tabs (Analytics works → mirror its container) so cards don't get clipped. Verify `min-h` on each blur container.
+- **UpgradePage mobile**: tighten hero stack spacing, fix email button (use native `<a href="mailto:...">` not `window.open`), confirm `admin@omniwellnessmedia.co.za` is intended (yes per memory: admin@ = public).
+- **WellnessAccount** edit: wire profile edit form to `consumer_profiles` upsert; add loading skeleton instead of indefinite spinner on mobile.
+- **Sandy Mitchell**: dedupe images (filter unique URLs), fix website link, fix socials button on desktop, persistent "Added" cart-button state via `useState` toggle.
+- **Floating "Need eSIM Help?" mobile button**: reduce size, reposition to `bottom-20 right-3`, lower z-index.
+- **Great Mother Cave Tour**: add fallback for missing tour images + Chief Kingsley portrait.
+
+## 6. Email to Feroza & team
+
+Generate `docs/EMAIL_RESPONSE_FEROZA_MAY7.md` recapping: CRM workspace shipped, all 7 QA items addressed, deployment confirmation, ask for re-test pass.
+
+## Files
+**New:** `src/components/admin/LeadDrawer.tsx`, `src/components/admin/LeadCopilot.tsx`, `src/components/admin/OutreachPipeline.tsx`, `supabase/migrations/<ts>_crm_workspace.sql`, `supabase/migrations/<ts>_seed_outreach.sql`, `docs/EMAIL_RESPONSE_FEROZA_MAY7.md`
+**Edited:** `src/pages/admin/AdminLeads.tsx`, `src/pages/AdminDashboard.tsx`, `src/pages/UpgradePage.tsx`, `src/pages/ProviderDashboard.tsx` (mirror Pro blur pattern), `src/pages/WellnessAccount.tsx`, `src/pages/SandyMitchellProfile.tsx`, `src/pages/tours/GreatMotherCaveTour.tsx`, `src/components/RoamHelpFAB.tsx` (or wherever the eSIM help button lives — to be located)
+
+## Out of scope (next pass)
+- Per-record email-thread sync (needs IMAP/Gmail API)
+- Provider-side lead pipeline (this pass = admin only; provider extension uses same components later)
+- Automated follow-up scheduler (cron edge function — Phase 2)
