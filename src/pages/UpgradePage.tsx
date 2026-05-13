@@ -186,12 +186,12 @@ const UpgradePage = () => {
                   ))}
                 </div>
                 <div className="space-y-2.5">
-                  <a href={whatsappHref} target="_blank" rel="noreferrer">
-                    <Button className="w-full bg-gradient-to-r from-primary to-violet-600 hover:opacity-90 text-white border-0 gap-2">
+                  <Button asChild className="w-full bg-gradient-to-r from-primary to-violet-600 hover:opacity-90 text-white border-0 gap-2">
+                    <a href={whatsappHref} target="_blank" rel="noreferrer">
                       <MessageCircle className="h-4 w-4" />
                       Activate via WhatsApp
-                    </Button>
-                  </a>
+                    </a>
+                  </Button>
                   <div className="rounded-xl border border-border/60 p-3">
                     <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
                       <Mail className="h-3.5 w-3.5" />

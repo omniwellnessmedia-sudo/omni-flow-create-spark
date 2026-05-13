@@ -167,7 +167,7 @@ const AnalyticsDashboard = ({ transactions, bookings, services, isPro }: Analyti
           {/* Upgrade overlay */}
           <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-[2px] p-4">
             <div className="w-full max-w-sm">
-              <ProUpgradeCard featureName="Business Analytics" />
+              <ProUpgradeCard featureName="Business Analytics" compact />
             </div>
           </div>
         </div>

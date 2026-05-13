@@ -92,7 +92,7 @@ const CRMDashboard = ({ bookings, isPro }: CRMDashboardProps) => {
         </div>
         <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-[2px] p-4">
           <div className="w-full max-w-sm">
-            <ProUpgradeCard featureName="Client CRM" />
+            <ProUpgradeCard featureName="Client CRM" compact />
           </div>
         </div>
       </div>
