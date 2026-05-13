@@ -70,14 +70,10 @@ const AdminTours = () => {
       return;
     }
 
-    const { data: roles } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user.id);
+    const { data: isAdmin, error: adminError } = await supabase
+      .rpc('is_admin', { user_id: user.id });
 
-    const isAdmin = roles?.some(r => r.role === 'admin' || r.role === 'super_admin');
-    
-    if (!isAdmin) {
+    if (adminError || !isAdmin) {
       toast.error('Admin access required');
       navigate('/');
     }
