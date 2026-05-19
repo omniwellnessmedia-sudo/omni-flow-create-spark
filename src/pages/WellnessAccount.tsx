@@ -58,6 +58,7 @@ const WellnessAccount = () => {
     avatar_url?: string;
   } | null>(null);
   const [wellCoinBalance, setWellCoinBalance] = useState(0);
+  const [toursBooked, setToursBooked] = useState(0);
   const [loading, setLoading] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState({ full_name: "", bio: "", location: "" });
@@ -74,7 +75,7 @@ const WellnessAccount = () => {
         .from("profiles")
         .select("*")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
       setUserProfile(profile);
 
@@ -83,9 +84,16 @@ const WellnessAccount = () => {
         .from(table)
         .select("wellcoin_balance")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
       setWellCoinBalance(walletData?.wellcoin_balance || 0);
+
+      // Real "Tours Booked" count for the stats strip (was hardcoded 0)
+      const { count: tourCount } = await supabase
+        .from("tour_bookings")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      setToursBooked(tourCount || 0);
     } catch (err) {
       console.error("Error fetching user data:", err);
     } finally {
@@ -121,9 +129,10 @@ const WellnessAccount = () => {
         })
         .eq("id", user.id);
       if (error) throw error;
-      setUserProfile((p) => p ? { ...p, ...editForm } : p);
       toast.success("Profile updated");
       setEditOpen(false);
+      // Refetch authoritative server state instead of trusting optimistic merge — a DB trigger may have normalised values
+      await fetchUserData();
     } catch (err) {
       console.error(err);
       toast.error("Failed to save profile");
@@ -243,11 +252,10 @@ const WellnessAccount = () => {
           <Separator className="mb-8" />
 
           {/* ── STATS STRIP ── */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-2 gap-4 mb-8">
             {[
               { label: "WellCoins", value: wellCoinBalance, icon: Coins, color: "text-omni-orange" },
-              { label: "Services Saved", value: 0, icon: Heart, color: "text-rose-500" },
-              { label: "Tours Booked", value: 0, icon: Compass, color: "text-primary" },
+              { label: "Tours Booked", value: toursBooked, icon: Compass, color: "text-primary" },
             ].map(stat => (
               <div key={stat.label} className="rounded-2xl border border-border/50 bg-card p-4 sm:p-5 text-center">
                 <stat.icon className={`h-5 w-5 mx-auto mb-2 ${stat.color}`} />
@@ -287,7 +295,7 @@ const WellnessAccount = () => {
                 <h2 className="font-heading text-lg">Your Profile</h2>
               </div>
               <div className="space-y-3 text-sm">
-                <ProfileRow icon={ShieldCheck} label="Email verified" done={true} />
+                <ProfileRow icon={ShieldCheck} label="Email verified" done={!!user?.email_confirmed_at} />
                 <ProfileRow icon={User} label="Display name" done={!!userProfile?.full_name} />
                 <ProfileRow icon={MapPin} label="Location" done={!!userProfile?.location} />
                 <ProfileRow icon={BookOpen} label="Bio added" done={!!userProfile?.bio} />
