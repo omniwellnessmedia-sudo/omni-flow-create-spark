@@ -303,9 +303,13 @@ const HeroSection = () => {
           {/* Featured Experiences — Editorial grid */}
           <div id="curated-services" className="mb-20 sm:mb-28">
             <div className="text-center mb-10 sm:mb-14">
-              <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3">Curated for you</p>
-              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl text-foreground mb-4">
-                Experiences That Matter
+              <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3 inline-flex items-center gap-2">
+                <Sparkles className="h-3.5 w-3.5 magic-sparkle" />
+                Curated for you
+                <Sparkles className="h-3.5 w-3.5 magic-sparkle" style={{ animationDelay: "0.8s" }} />
+              </p>
+              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl mb-4">
+                <span className="magic-shimmer-text">Experiences That Matter</span>
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto text-base sm:text-lg leading-relaxed">
                 Indigenous heritage walks, equine-assisted wellness, and transformative corporate retreats — each journey creates lasting impact.
@@ -314,8 +318,8 @@ const HeroSection = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
               {workspaceItems.map((item, index) => (
-                <Link key={index} to={item.href} className="group">
-                  <div className="relative overflow-hidden rounded-2xl aspect-[16/9] bg-gray-100">
+                <Link key={index} to={item.href} className="group" data-cursor="hover">
+                  <div className="magic-card relative overflow-hidden rounded-3xl aspect-[16/9] bg-gray-100 border border-transparent">
                     <img
                       src={item.image}
                       alt={item.title}
@@ -368,9 +372,12 @@ const HeroSection = () => {
           {/* Community — Curated editorial gallery (3 items max) */}
           <div className="mb-16">
             <div className="text-center mb-10">
-              <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3">On the ground</p>
-              <h2 className="font-heading text-3xl sm:text-4xl text-foreground">
-                Stories From the Land
+              <p className="text-sm font-medium tracking-widest uppercase text-primary mb-3 inline-flex items-center gap-2">
+                <Sparkles className="h-3.5 w-3.5 magic-sparkle" />
+                On the ground
+              </p>
+              <h2 className="font-heading text-3xl sm:text-4xl">
+                <span className="magic-shimmer-text">Stories From the Land</span>
               </h2>
             </div>
 
@@ -379,8 +386,8 @@ const HeroSection = () => {
                 .filter(item => item.tags?.includes('Popular'))
                 .slice(0, 3)
                 .map((item, index) => (
-                  <Link key={index} to={item.href} className="group">
-                    <div className="relative overflow-hidden rounded-2xl aspect-[3/4] bg-gray-100">
+                  <Link key={index} to={item.href} className="group" data-cursor="hover">
+                    <div className="magic-card relative overflow-hidden rounded-3xl aspect-[3/4] bg-gray-100 border border-transparent">
                       <img
                         src={item.image}
                         alt={item.title}
