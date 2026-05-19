@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from "react
 import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +38,15 @@ const TABS = [
 const ProviderDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get("tab") || "overview";
+  const setActiveTab = (value: string) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (value === "overview") next.delete("tab"); else next.set("tab", value);
+      return next;
+    }, { replace: true });
+  };
 
   const [wellCoinBalance, setWellCoinBalance] = useState(0);
   const [zarEarnings, setZarEarnings] = useState(0);
@@ -97,16 +106,24 @@ const ProviderDashboard = () => {
   }, []);
 
   useEffect(() => {
+    let initialised = false;
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate("/auth"); return; }
       await loadDashboardData(session.user.id);
+      initialised = true;
     };
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      if (!session) navigate("/auth");
-      else loadDashboardData(session.user.id);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        navigate("/auth");
+        return;
+      }
+      // Only reload on real auth transitions, not the initial-session replay that fires alongside checkAuth above
+      if (initialised && (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "USER_UPDATED")) {
+        loadDashboardData(session.user.id, false);
+      }
     });
     return () => subscription.unsubscribe();
   }, [navigate, loadDashboardData]);
@@ -156,7 +173,8 @@ const ProviderDashboard = () => {
   }, [navigate]);
 
   const activeServices = useMemo(() => services.filter((s) => s.active).length, [services]);
-  const avgRating = useMemo(() => (upcomingBookings.length > 0 ? 4.9 : 0), [upcomingBookings.length]);
+  // Real reviews aren't wired up yet — show "New" via the StatsGrid falsy-value fallback rather than a fake 4.9
+  const avgRating = 0;
 
   const handleMediaUpdate = useCallback(() => {
     if (user) loadDashboardData(user.id);
@@ -234,7 +252,7 @@ const ProviderDashboard = () => {
         <ProfileCompletionBar profileCompletion={profileCompletion} providerProfile={providerProfile} />
 
         {/* Main Tabs */}
-        <Tabs defaultValue="overview" className="space-y-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <ScrollArea className="w-full">
             <TabsList className="inline-flex w-max gap-0.5 p-1 h-9 bg-muted/50">
               {TABS.map((tab) => (

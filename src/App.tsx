@@ -91,6 +91,7 @@ const DeviceCompatibility = React.lazy(() => import('@/pages/DeviceCompatibility
 const RoamBuddyOverview = React.lazy(() => import('@/pages/partner/RoamBuddyOverview'));
 const NotFound = React.lazy(() => import('@/pages/NotFound'));
 const AdminDashboard = React.lazy(() => import('@/pages/AdminDashboard'));
+const AccountantDashboard = React.lazy(() => import('@/pages/AccountantDashboard'));
 const ProductManagement = React.lazy(() => import('@/pages/admin/ProductManagement'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
@@ -288,6 +289,11 @@ function App() {
                   <Route path="/admin" element={
                     <ProtectedRoute requireAdmin={true}>
                       <AdminDashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/accountant" element={
+                    <ProtectedRoute requireAccountant={true}>
+                      <AccountantDashboard />
                     </ProtectedRoute>
                   } />
                   <Route path="/admin-dashboard" element={

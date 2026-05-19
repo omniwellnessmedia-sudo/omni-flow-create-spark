@@ -72,6 +72,28 @@ const AdminDashboard = () => {
     init();
   }, []);
 
+  // Realtime: refresh stats + alerts when any of the tables driving dashboard counts changes.
+  // Debounced to avoid hammering Supabase when bulk updates land.
+  useEffect(() => {
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    const refresh = () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => fetchDashboardData(), 400);
+    };
+    const channel = supabase
+      .channel("admin-dashboard")
+      .on("postgres_changes", { event: "*", schema: "public", table: "tour_bookings" }, refresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "contact_submissions" }, refresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "service_quotes" }, refresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, refresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "provider_profiles" }, refresh)
+      .subscribe();
+    return () => {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      supabase.removeChannel(channel);
+    };
+  }, [fetchDashboardData]);
+
   const fetchDashboardData = useCallback(async () => {
     try {
       const [
@@ -181,11 +203,9 @@ const AdminDashboard = () => {
     try {
       const { error } = await supabase.from("tour_bookings").update({ status }).eq("id", id);
       if (error) throw error;
-      setDashboardData((prev) => ({
-        ...prev,
-        bookings: prev.bookings.map((b) => (b.id === id ? { ...b, status } : b)),
-      }));
       toast({ title: "Booking updated", description: `Status set to ${status}` });
+      // Realtime subscription will also refresh, but trigger immediately so the operator sees the update without a 400ms debounce
+      await fetchDashboardData();
     } catch (err) {
       console.error(err);
       toast({ title: "Error", description: "Failed to update booking", variant: "destructive" });
