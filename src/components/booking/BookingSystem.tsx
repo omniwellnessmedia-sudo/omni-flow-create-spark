@@ -21,6 +21,12 @@ import {
   Coins,
 } from 'lucide-react';
 
+interface ProviderAvailability {
+  days?: string[];
+  startTime?: string;
+  endTime?: string;
+}
+
 interface BookingSystemProps {
   serviceId: string;
   serviceName: string;
@@ -28,9 +34,11 @@ interface BookingSystemProps {
   serviceDuration: number;
   providerId: string;
   providerName: string;
+  providerEmail?: string;
   isOnline?: boolean;
   buttonClassName?: string;
   buttonLabel?: string;
+  providerAvailability?: ProviderAvailability;
 }
 
 interface BookingDetails {
@@ -43,11 +51,21 @@ interface BookingDetails {
   paymentMethod: 'eft' | 'wellcoins' | 'cash';
 }
 
-const timeSlots = [
-  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-  '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
-  '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+const ALL_TIME_SLOTS = [
+  '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+  '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
+  '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30',
+  '19:00', '19:30', '20:00',
 ];
+
+const DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+function getAvailableSlots(av?: ProviderAvailability): string[] {
+  if (!av) return ALL_TIME_SLOTS.filter(t => t >= '09:00' && t <= '17:30');
+  const start = av.startTime || '09:00';
+  const end = av.endTime || '17:30';
+  return ALL_TIME_SLOTS.filter(t => t >= start && t <= end);
+}
 
 const BookingSystem: React.FC<BookingSystemProps> = ({
   serviceId,
@@ -56,9 +74,11 @@ const BookingSystem: React.FC<BookingSystemProps> = ({
   serviceDuration,
   providerId,
   providerName,
+  providerEmail,
   isOnline = false,
   buttonClassName = '',
   buttonLabel,
+  providerAvailability,
 }) => {
   const { user } = useAuth();
   const isFree = servicePrice === 0;
@@ -80,8 +100,17 @@ const BookingSystem: React.FC<BookingSystemProps> = ({
     ? ['datetime', 'details', 'confirmation']
     : ['datetime', 'details', 'payment', 'confirmation'];
 
+  const availableDays = providerAvailability?.days || ['mon', 'tue', 'wed', 'thu', 'fri'];
+  const availableSlots = getAvailableSlots(providerAvailability);
+
+  const isDateDisabled = (date: Date) => {
+    if (date < new Date(new Date().setHours(0, 0, 0, 0))) return true;
+    const dayKey = DAY_KEYS[date.getDay()];
+    return !availableDays.includes(dayKey);
+  };
+
   const handleDateSelect = (date: Date | undefined) => {
-    setBooking(prev => ({ ...prev, date }));
+    setBooking(prev => ({ ...prev, date, time: '' }));
   };
 
   const handleTimeSelect = (time: string) => {
@@ -122,6 +151,7 @@ const BookingSystem: React.FC<BookingSystemProps> = ({
         status: 'pending',
       });
 
+      // Notify the client
       supabase.functions.invoke('submit-contact', {
         body: {
           name: data.customerName,
@@ -131,6 +161,19 @@ const BookingSystem: React.FC<BookingSystemProps> = ({
           service: serviceName,
         },
       }).catch(() => {});
+
+      // Notify the provider
+      if (providerEmail) {
+        supabase.functions.invoke('submit-contact', {
+          body: {
+            name: `Booking request from ${data.customerName}`,
+            email: providerEmail,
+            phone: data.customerPhone,
+            message: `New booking request!\n\n${fullMessage}\n\nClient email: ${data.customerEmail}`,
+            service: serviceName,
+          },
+        }).catch(() => {});
+      }
 
       if (typeof window.tagClarityEvent === 'function') {
         window.tagClarityEvent('booking', serviceName);
@@ -173,15 +216,20 @@ const BookingSystem: React.FC<BookingSystemProps> = ({
             mode="single"
             selected={booking.date}
             onSelect={handleDateSelect}
-            disabled={(date) => date < new Date() || date.getDay() === 0}
+            disabled={isDateDisabled}
             className="rounded-md border"
           />
+          {providerAvailability?.days && (
+            <p className="text-xs text-muted-foreground mt-1">
+              Available: {availableDays.map(d => d.charAt(0).toUpperCase() + d.slice(1)).join(', ')}
+            </p>
+          )}
         </div>
         <div>
           <Label className="text-sm font-medium mb-2 block">Choose Time</Label>
           {booking.date ? (
             <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
-              {timeSlots.map((time) => (
+              {availableSlots.map((time) => (
                 <Button
                   key={time}
                   variant={booking.time === time ? 'default' : 'outline'}

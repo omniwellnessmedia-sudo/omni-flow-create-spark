@@ -321,8 +321,10 @@ const SandyMitchellProfile = () => {
                               serviceDuration={service.duration_minutes}
                               providerId={profile.id}
                               providerName={profile.business_name}
+                              providerEmail={profile.email}
                               isOnline={service.is_online}
                               buttonClassName="bg-[#2a9d8f] hover:bg-[#21857a] text-white border-0"
+                              providerAvailability={{ days: ['mon', 'tue', 'wed', 'thu', 'fri'], startTime: '09:00', endTime: '17:30' }}
                             />
                           </div>
                           {service.price_zar > 0 && (
@@ -454,8 +456,10 @@ const SandyMitchellProfile = () => {
                         serviceDuration={120}
                         providerId={profile.id}
                         providerName={profile.business_name}
+                        providerEmail={profile.email}
                         isOnline={false}
                         buttonClassName="bg-[#2a9d8f] hover:bg-[#21857a] text-white border-0"
+                        providerAvailability={{ days: ['mon', 'tue', 'wed', 'thu', 'fri'], startTime: '09:00', endTime: '17:30' }}
                       />
                     </div>
                   ))}

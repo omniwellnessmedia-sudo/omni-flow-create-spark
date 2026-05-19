@@ -36,19 +36,20 @@ export const useSecureUserRole = () => {
         return;
       }
 
-      // Call the secure edge function
-      const { data, error } = await supabase.functions.invoke('check-user-role', {
-        body: { user_id: user.id }
-      });
+      const { data: roles, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id);
 
       if (error) throw error;
 
-      const roles: string[] = data.roles || [];
+      const roleList = (roles || []).map(r => r.role);
+
       setRoleData({
-        isAdmin: data.isAdmin || false,
-        isAccountant: roles.includes('accountant'),
-        roles,
-        userId: data.userId,
+        isAdmin: roleList.includes('admin') || roleList.includes('super_admin'),
+        isAccountant: roleList.includes('accountant'),
+        roles: roleList,
+        userId: user.id,
         loading: false,
         error: null,
       });
