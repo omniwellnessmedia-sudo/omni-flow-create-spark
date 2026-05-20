@@ -71,6 +71,7 @@ const AdminDashboard = () => {
       await fetchDashboardData();
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Realtime: refresh stats + alerts when any of the tables driving dashboard counts changes.
@@ -93,7 +94,10 @@ const AdminDashboard = () => {
       if (refreshTimer) clearTimeout(refreshTimer);
       supabase.removeChannel(channel);
     };
-  }, [fetchDashboardData]);
+    // fetchDashboardData is a stable useCallback with [] deps — referencing it via closure
+    // is fine and keeps this hook out of the TDZ that an explicit dep would trigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchDashboardData = useCallback(async () => {
     try {
