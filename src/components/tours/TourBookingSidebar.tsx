@@ -204,7 +204,7 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
   const handleEnquiry = () => {
     const subject = `Enquiry about ${tour.title}`;
     const body = `Hi,\n\nI'm interested in learning more about the ${tour.title} tour.\n\nPlease send me more information.\n\nBest regards,\n${contactName || '[Your Name]'}`;
-    const mailtoLink = `mailto:traveltourscapetown@gmail.com?cc=admin@omniwellnessmedia.co.za&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoLink = `mailto:traveltourscapetown@gmail.com?cc=omniwellnessmedia@gmail.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailtoLink;
   };
 

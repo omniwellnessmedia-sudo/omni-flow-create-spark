@@ -127,7 +127,7 @@ const Footer = () => {
               <li><Link to="/csr-impact" className="text-white/60 hover:text-white transition-colors">CSR Impact</Link></li>
               <li><Link to="/esg-policy" className="text-white/60 hover:text-white transition-colors">ESG Policy</Link></li>
               <li><Link to="/contact" className="text-white/60 hover:text-white transition-colors">Contact</Link></li>
-              <li><a href="mailto:admin@omniwellnessmedia.co.za" className="text-white/60 hover:text-white transition-colors">admin@omniwellnessmedia.co.za</a></li>
+              <li><a href="mailto:omniwellnessmedia@gmail.com" className="text-white/60 hover:text-white transition-colors">omniwellnessmedia@gmail.com</a></li>
             </ul>
           </div>
         </div>

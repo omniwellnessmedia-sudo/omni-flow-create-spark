@@ -85,12 +85,12 @@ const BookSessionCapture = ({
       // After a brief moment, open email client as backup
       setTimeout(() => {
         const body = `Hi,\n\nI'd like to book a ${serviceName} session.\n\nName: ${form.name}\nEmail: ${form.email}${form.phone ? `\nPhone: ${form.phone}` : ""}\n\n${form.message || ""}\n\nThank you!`;
-        window.location.href = `mailto:admin@omniwellnessmedia.co.za?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = `mailto:omniwellnessmedia@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       }, 1500);
     } catch (error) {
       console.error("Error saving lead:", error);
       // Still open email even if DB save fails
-      window.location.href = `mailto:admin@omniwellnessmedia.co.za?subject=${encodeURIComponent(subject)}`;
+      window.location.href = `mailto:omniwellnessmedia@gmail.com?subject=${encodeURIComponent(subject)}`;
     } finally {
       setLoading(false);
     }

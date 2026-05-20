@@ -73,7 +73,7 @@ const MobileEnhancements: React.FC = () => {
             addHapticFeedback();
           }}
           size="lg"
-          className="fixed bottom-20 right-4 z-50 rounded-full w-14 h-14 shadow-lg bg-gradient-to-r from-omni-blue to-omni-purple hover:shadow-xl transition-all duration-300 border-2 border-white/20"
+          className="fixed bottom-20 left-4 z-50 rounded-full w-12 h-12 shadow-lg bg-gradient-to-r from-omni-blue to-omni-purple hover:shadow-xl transition-all duration-300 border-2 border-white/20"
           style={{
             paddingBottom: 'env(safe-area-inset-bottom)',
           }}

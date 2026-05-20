@@ -90,7 +90,7 @@ export default function CSRImpact() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-white rounded-full px-8" asChild>
-                <a href="mailto:admin@omniwellnessmedia.co.za?subject=CSR Donation Inquiry">
+                <a href="mailto:omniwellnessmedia@gmail.com?subject=CSR Donation Inquiry">
                   <HandHeart className="mr-2 w-5 h-5" />
                   Make a Donation
                 </a>
@@ -193,7 +193,7 @@ export default function CSRImpact() {
                 20% of every tour booking.
               </p>
               <div className="bg-muted/50 p-5 rounded-lg space-y-2 text-sm">
-                <p><strong>Contact:</strong> admin@omniwellnessmedia.co.za</p>
+                <p><strong>Contact:</strong> omniwellnessmedia@gmail.com</p>
                 <p><strong>Banking:</strong> FNB Gold Business Account — 63093493509</p>
                 <p className="text-primary font-medium mt-3">
                   All donations are tax-deductible (Section 18A approved)
