@@ -36,26 +36,57 @@ interface Partner {
 const PartnersDirectory = () => {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPartners();
   }, []);
 
+  // Fetches partners in three independent queries instead of one big embedded select.
+  // PostgREST embeds inherit RLS from each joined table, so a strict policy on
+  // public.profiles or public.services would fail the entire query and blank the page.
+  // Separating them means an RLS gap suppresses one piece, not the whole directory.
   const fetchPartners = async () => {
+    setFetchError(null);
     try {
-      const { data, error } = await supabase
+      const { data: providers, error: providersError } = await supabase
         .from('provider_profiles')
-        .select(`
-          *,
-          profile:profiles(full_name, avatar_url),
-          services(id, title, category, price_zar, price_wellcoins)
-        `)
+        .select('*')
         .eq('verified', true);
 
-      if (error) throw error;
-      setPartners(data || []);
-    } catch (error) {
+      if (providersError) throw providersError;
+      if (!providers || providers.length === 0) {
+        setPartners([]);
+        return;
+      }
+
+      const ids = providers.map(p => p.id);
+
+      // Enrich with profiles + services in parallel; tolerate either failing.
+      const [profilesRes, servicesRes] = await Promise.all([
+        supabase.from('profiles').select('id, full_name, avatar_url').in('id', ids),
+        supabase.from('services').select('id, provider_id, title, category, price_zar, price_wellcoins').in('provider_id', ids),
+      ]);
+
+      if (profilesRes.error) console.warn('Partner profiles lookup failed:', profilesRes.error.message);
+      if (servicesRes.error) console.warn('Partner services lookup failed:', servicesRes.error.message);
+
+      const profileById = new Map((profilesRes.data || []).map(p => [p.id, p]));
+      const servicesByProvider = new Map<string, any[]>();
+      (servicesRes.data || []).forEach(s => {
+        const arr = servicesByProvider.get(s.provider_id) || [];
+        arr.push(s);
+        servicesByProvider.set(s.provider_id, arr);
+      });
+
+      setPartners(providers.map(p => ({
+        ...p,
+        profile: profileById.get(p.id) || { full_name: null, avatar_url: null },
+        services: servicesByProvider.get(p.id) || [],
+      })) as Partner[]);
+    } catch (error: any) {
       console.error('Error fetching partners:', error);
+      setFetchError(error?.message || 'Could not load partners.');
     } finally {
       setLoading(false);
     }
@@ -199,6 +230,14 @@ const PartnersDirectory = () => {
           </div>
 
           {/* Partners Grid */}
+          {fetchError && (
+            <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+              <strong>We couldn&apos;t load the partner list.</strong> {fetchError}.
+              Try refreshing the page, or contact us at{' '}
+              <a href="mailto:admin@omniwellnessmedia.co.za" className="underline">admin@omniwellnessmedia.co.za</a>{' '}
+              if the issue persists.
+            </div>
+          )}
           {partners.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {partners.map((partner) => (
