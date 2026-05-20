@@ -112,7 +112,7 @@ const BusinessConsulting = () => {
                   className="px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full border-2"
                   asChild
                 >
-                  <a href="mailto:admin@omniwellnessmedia.co.za?subject=Business Consulting Free Guide Request">
+                  <a href="mailto:omniwellnessmedia@gmail.com?subject=Business Consulting Free Guide Request">
                     <Download className="mr-2 w-5 h-5" />
                     Request Free Guide
                   </a>
@@ -127,10 +127,13 @@ const BusinessConsulting = () => {
             <div className="relative hidden lg:block">
               <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/DSC00124.jpg"
-                  alt="Business consulting session"
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Omni%20wellness%20team.jpg"
+                  alt="Omni Wellness consulting team in session"
                   className="w-full h-[500px] object-cover"
                   loading="eager"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg";
+                  }}
                 />
               </div>
             </div>

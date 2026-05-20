@@ -234,7 +234,7 @@ const PartnersDirectory = () => {
             <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
               <strong>We couldn&apos;t load the partner list.</strong> {fetchError}.
               Try refreshing the page, or contact us at{' '}
-              <a href="mailto:admin@omniwellnessmedia.co.za" className="underline">admin@omniwellnessmedia.co.za</a>{' '}
+              <a href="mailto:omniwellnessmedia@gmail.com" className="underline">omniwellnessmedia@gmail.com</a>{' '}
               if the issue persists.
             </div>
           )}

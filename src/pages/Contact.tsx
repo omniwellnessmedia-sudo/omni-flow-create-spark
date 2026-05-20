@@ -211,7 +211,7 @@ const Contact = () => {
                       Get in Touch
                     </h3>
                     <div className="space-y-2 text-gray-600">
-                      <p>📧 admin@omniwellnessmedia.co.za</p>
+                      <p>📧 omniwellnessmedia@gmail.com</p>
                       <p>📱 +27 74 831 5961</p>
                       <p>🕐 Mon - Fri, 9AM - 5PM SAST</p>
                     </div>
