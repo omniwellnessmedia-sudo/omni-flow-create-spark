@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
@@ -40,7 +40,8 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState("home");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeSection = searchParams.get("section") || "home";
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [dashboardData, setDashboardData] = useState({
     orders: [] as any[],
@@ -70,6 +71,7 @@ const AdminDashboard = () => {
       await fetchDashboardData();
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Realtime: refresh stats + alerts when any of the tables driving dashboard counts changes.
@@ -92,7 +94,10 @@ const AdminDashboard = () => {
       if (refreshTimer) clearTimeout(refreshTimer);
       supabase.removeChannel(channel);
     };
-  }, [fetchDashboardData]);
+    // fetchDashboardData is a stable useCallback with [] deps — referencing it via closure
+    // is fine and keeps this hook out of the TDZ that an explicit dep would trigger.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -195,9 +200,13 @@ const AdminDashboard = () => {
   }, [navigate]);
 
   const handleSectionChange = useCallback((section: string) => {
-    setActiveSection(section);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (section === "home") next.delete("section"); else next.set("section", section);
+      return next;
+    }, { replace: true });
     setMobileNavOpen(false);
-  }, []);
+  }, [setSearchParams]);
 
   const updateTourBookingStatus = async (id: string, status: string) => {
     try {

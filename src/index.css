@@ -2,6 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== MAGIC CURSOR ===== */
+/* When MagicCursor mounts it adds .magic-cursor-active to <html>. We hide the
+   native cursor everywhere except inputs/contenteditable so users can still see
+   the caret. .magic-cursor-hide-native toggles on/off depending on what's under
+   the pointer (see MagicCursor.tsx). */
+html.magic-cursor-active.magic-cursor-hide-native,
+html.magic-cursor-active.magic-cursor-hide-native * {
+  cursor: none !important;
+}
+html.magic-cursor-active input,
+html.magic-cursor-active textarea,
+html.magic-cursor-active [contenteditable="true"],
+html.magic-cursor-active [contenteditable=""] {
+  cursor: text !important;
+}
+
+/* ===== GEN-Z POLISH UTILITIES ===== */
+/* Tiny, reusable accents — sprinkle these on cards, buttons, heroes for a less
+   corporate, more playful feel. */
+@keyframes magic-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+}
+@keyframes magic-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes magic-sparkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.8) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.1) rotate(180deg); }
+}
+.magic-float { animation: magic-float 4s ease-in-out infinite; }
+.magic-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--primary)),
+    hsl(var(--omni-violet)),
+    hsl(var(--omni-orange)),
+    hsl(var(--primary))
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: magic-shimmer 4s linear infinite;
+}
+.magic-sparkle { animation: magic-sparkle 2.5s ease-in-out infinite; }
+.magic-card {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s;
+}
+.magic-card:hover {
+  transform: translateY(-4px) rotate(-0.3deg);
+  box-shadow:
+    0 12px 32px -8px hsl(var(--primary) / 0.25),
+    0 0 0 1px hsl(var(--omni-violet) / 0.15);
+}
+@media (prefers-reduced-motion: reduce) {
+  .magic-float, .magic-shimmer-text, .magic-sparkle { animation: none; }
+  .magic-card:hover { transform: none; }
+}
+
 /* ===== OMNI WELLNESS DESIGN SYSTEM ===== */
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 

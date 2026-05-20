@@ -13,6 +13,8 @@ import { CalComBooking } from "@/components/booking/CalComBooking";
 import { FloatingDecorations } from "@/components/ui/gaia-elements";
 import { CuratorTip } from "@/components/curator/CuratorTip";
 import { omniVoice } from "@/data/omniVoiceGuide";
+import { IMAGES } from "@/lib/images";
+import { Sparkles } from "lucide-react";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -64,13 +66,28 @@ const Contact = () => {
       <UnifiedNavigation />
       <main className="pt-16">
         {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-br from-white via-gray-50 to-white relative overflow-hidden">
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0">
+            <img
+              src={IMAGES.community.empowerment}
+              alt=""
+              aria-hidden="true"
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/70 to-background" />
+          </div>
           <FloatingDecorations variant="hero" />
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h1 className="heading-secondary text-gradient-hero no-faded-text">
-              {omniVoice.pageIntros.contact.headline}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center relative z-10">
+            <p className="text-xs font-medium tracking-widest uppercase text-primary mb-3 inline-flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 magic-sparkle" />
+              Say hello
+              <Sparkles className="h-3.5 w-3.5 magic-sparkle" style={{ animationDelay: "0.8s" }} />
+            </p>
+            <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl mb-4">
+              <span className="magic-shimmer-text">{omniVoice.pageIntros.contact.headline}</span>
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
+            <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
               {omniVoice.pageIntros.contact.subheadline}
             </p>
             
