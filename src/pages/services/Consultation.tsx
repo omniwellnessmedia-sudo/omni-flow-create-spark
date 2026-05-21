@@ -95,13 +95,14 @@ const Consultation = () => {
       quote: "The strategic consultation transformed how we communicate our impact. Our community engagement increased by 300%.",
       author: "Sarah Johnson",
       role: "Director, Valley of Hope Foundation",
-      image: IMAGES.sandy.portrait2
+      // Anonymous testimonial — initials fallback rather than misattributed staff portrait
+      image: ""
     },
     {
       quote: "Their ethical storytelling workshop helped us find our authentic voice and connect with supporters on a deeper level.",
       author: "Marcus Thompson",
       role: "CEO, Urban Gardens Initiative",
-      image: IMAGES.sandy.portrait1
+      image: ""
     }
   ];
 
@@ -298,11 +299,17 @@ const Consultation = () => {
                       "{testimonial.quote}"
                     </blockquote>
                     <div className="flex items-center">
-                      <img 
-                        src={testimonial.image}
-                        alt={testimonial.author}
-                        className="w-12 h-12 rounded-full mr-4 object-cover"
-                      />
+                      {testimonial.image ? (
+                        <img
+                          src={testimonial.image}
+                          alt={testimonial.author}
+                          className="w-12 h-12 rounded-full mr-4 object-cover"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full mr-4 bg-primary/10 text-primary flex items-center justify-center font-semibold text-sm">
+                          {testimonial.author.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                        </div>
+                      )}
                       <div>
                         <p className="font-semibold text-gray-800">{testimonial.author}</p>
                         <p className="text-sm text-gray-600">{testimonial.role}</p>
