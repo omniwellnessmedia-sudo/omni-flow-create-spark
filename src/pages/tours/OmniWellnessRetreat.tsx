@@ -46,15 +46,15 @@ const OmniWellnessRetreat = () => {
         <div className="relative container mx-auto px-4 h-full flex items-end pb-20 overflow-hidden">
           <div className="max-w-4xl text-white space-y-6 max-w-full break-words">
             <Badge className="mb-4 bg-primary/90 text-primary-foreground backdrop-blur-sm border-0 px-4 py-2 text-sm">
-              Winter Wine Country Wellness · Weekend Retreat
+              4th Annual Omni Wellness Retreat
             </Badge>
 
             <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
-              4th Annual Omni Wellness Retreat
+              Winter Wine Country<br />Wellness Retreat
             </h1>
 
             <p className="text-lg sm:text-2xl md:text-3xl text-white/90 font-light max-w-2xl">
-              Winter in the Wine Country — Rejuvenate and Renew at the Serene Tufcat Sanctuary
+              Rejuvenate and Renew at the Serene Tufcat Sanctuary
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">

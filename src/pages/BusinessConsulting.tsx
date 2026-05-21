@@ -127,12 +127,12 @@ const BusinessConsulting = () => {
             <div className="relative hidden lg:block">
               <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Omni%20wellness%20team.jpg"
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Omni%20wellness%20team.jpg"
                   alt="Omni Wellness consulting team in session"
                   className="w-full h-[500px] object-cover"
                   loading="eager"
                   onError={(e) => {
-                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg";
+                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/chief%20kingsley%201.jpg";
                   }}
                 />
               </div>

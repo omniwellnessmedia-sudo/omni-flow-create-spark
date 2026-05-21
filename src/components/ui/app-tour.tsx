@@ -218,7 +218,7 @@ export const TourTrigger = ({ onClick }: { onClick: () => void }) => {
       onClick={onClick}
       variant="outline"
       size="sm"
-      className="fixed bottom-6 right-6 z-40 shadow-lg bg-white border-omni-orange text-omni-orange hover:bg-omni-orange hover:text-white"
+      className="fixed bottom-24 right-6 sm:bottom-24 sm:right-6 z-40 shadow-lg bg-white border-omni-orange text-omni-orange hover:bg-omni-orange hover:text-white"
     >
       <Target className="w-4 h-4 mr-2" />
       Take Tour
