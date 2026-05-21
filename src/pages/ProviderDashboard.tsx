@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Plus, Eye, MessageCircle, FileText, Edit, Package, Zap } from "lucide-react";
+import { Plus, Eye, MessageCircle, FileText, Package, Zap } from "lucide-react";
 import ProviderHeader from "@/components/provider-dashboard/ProviderHeader";
 import StatsGrid from "@/components/provider-dashboard/StatsGrid";
 import ProfileCompletionBar from "@/components/provider-dashboard/ProfileCompletionBar";
@@ -17,7 +17,9 @@ import SmartGreeting from "@/components/dashboard/SmartGreeting";
 import AnalyticsDashboard from "@/components/provider-dashboard/AnalyticsDashboard";
 import CRMDashboard from "@/components/provider-dashboard/CRMDashboard";
 import FinancialDashboard from "@/components/provider-dashboard/FinancialDashboard";
-import ProUpgradeCard from "@/components/provider-dashboard/ProUpgradeCard";
+import PlanStatusCard from "@/components/dashboard/PlanStatusCard";
+import CommunityCalendar from "@/components/dashboard/CommunityCalendar";
+import ImpactOpportunities from "@/components/dashboard/ImpactOpportunities";
 import { useProSubscription } from "@/hooks/useProSubscription";
 
 const ProviderMediaUpload = lazy(() => import("@/components/ProviderMediaUpload"));
@@ -268,7 +270,7 @@ const ProviderDashboard = () => {
           </ScrollArea>
 
           {/* ── Overview ── */}
-          <TabsContent value="overview" className="space-y-4">
+          <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
                 { label: "Add Service", icon: Plus, onClick: () => navigate("/wellness-exchange/add-service"), primary: true },
@@ -280,6 +282,7 @@ const ProviderDashboard = () => {
                   key={action.label}
                   className={`cursor-pointer hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 ${action.primary ? "border-primary/30 bg-primary/5" : "border-border/50"}`}
                   onClick={action.onClick}
+                  data-cursor="hover"
                 >
                   <CardContent className="p-4 flex items-center gap-3">
                     <action.icon className={`h-5 w-5 shrink-0 ${action.primary ? "text-primary" : "text-muted-foreground"}`} />
@@ -289,89 +292,58 @@ const ProviderDashboard = () => {
               ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Recent Activity */}
-              <Card className="border-border/50">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base">Recent Activity</CardTitle>
-                  <CardDescription className="text-xs">Latest transactions and earnings</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {recentTransactions.length > 0 ? (
-                    <div className="space-y-3">
-                      {recentTransactions.slice(0, 5).map((t) => (
-                        <div key={t.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm font-medium truncate">{t.description}</p>
-                            <p className="text-[10px] text-muted-foreground">{new Date(t.created_at).toLocaleDateString()}</p>
-                          </div>
-                          <div className="text-right shrink-0 ml-2">
-                            {t.amount_zar > 0 && <p className="text-sm font-medium text-green-600">+R{t.amount_zar}</p>}
-                            {t.amount_wellcoins > 0 && <p className="text-xs text-primary">+{t.amount_wellcoins} WC</p>}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-center text-muted-foreground py-8 text-sm">No activity yet — create a service to get started</p>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Pro upgrade teaser or services summary */}
-              {!isPro ? (
-                <ProUpgradeCard compact />
-              ) : (
+            {/* Two-column layout: wider main column + slim sidebar with plan + impact (per Feroza's mockup) */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                {/* Recent Activity */}
                 <Card className="border-border/50">
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle className="text-base">Your Services</CardTitle>
-                        <CardDescription className="text-xs">{activeServices} active of {services.length} total</CardDescription>
-                      </div>
-                      <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => navigate("/wellness-exchange/add-service")}>
-                        <Plus className="h-3 w-3 mr-1" /> Add
-                      </Button>
-                    </div>
+                    <CardTitle className="text-base">Recent Activity</CardTitle>
+                    <CardDescription className="text-xs">Latest transactions and earnings</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {services.length > 0 ? (
-                      <div className="space-y-2">
-                        {services.slice(0, 5).map((svc) => (
-                          <div key={svc.id} className="flex items-center justify-between p-2.5 rounded-lg hover:bg-muted/50 transition-colors">
-                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                              <div className={`w-2 h-2 rounded-full shrink-0 ${svc.active ? "bg-green-500" : "bg-gray-300"}`} />
-                              <div className="min-w-0">
-                                <p className="text-sm font-medium truncate">{svc.title}</p>
-                                <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                                  {svc.price_zar != null && <span>R{svc.price_zar}</span>}
-                                  {svc.duration_minutes && <span>{svc.duration_minutes}min</span>}
-                                  {svc.is_online && <span>Online</span>}
-                                </div>
-                              </div>
+                    {recentTransactions.length > 0 ? (
+                      <div className="space-y-3">
+                        {recentTransactions.slice(0, 5).map((t) => (
+                          <div key={t.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-medium truncate">{t.description}</p>
+                              <p className="text-[10px] text-muted-foreground">{new Date(t.created_at).toLocaleDateString()}</p>
                             </div>
-                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 shrink-0" onClick={() => navigate(`/wellness-exchange/edit-service/${svc.id}`)}>
-                              <Edit className="h-3 w-3" />
-                            </Button>
+                            <div className="text-right shrink-0 ml-2">
+                              {t.amount_zar > 0 && <p className="text-sm font-medium text-green-600">+R{t.amount_zar}</p>}
+                              {t.amount_wellcoins > 0 && <p className="text-xs text-primary">+{t.amount_wellcoins} WC</p>}
+                            </div>
                           </div>
                         ))}
-                        {services.length > 5 && (
-                          <p className="text-xs text-center text-muted-foreground pt-1">+{services.length - 5} more — see Services tab</p>
-                        )}
                       </div>
                     ) : (
-                      <div className="text-center py-8">
-                        <Package className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
-                        <p className="text-sm text-muted-foreground mb-3">No services yet</p>
-                        <Button size="sm" onClick={() => navigate("/wellness-exchange/add-service")}>
-                          <Plus className="h-3.5 w-3.5 mr-1.5" /> Create First Service
-                        </Button>
-                      </div>
+                      <p className="text-center text-muted-foreground py-8 text-sm">No activity yet — create a service to get started</p>
                     )}
                   </CardContent>
                 </Card>
-              )}
+
+                {/* Community Calendar — Feroza's redesign */}
+                <CommunityCalendar />
+              </div>
+
+              {/* Sidebar */}
+              <div className="space-y-6">
+                <PlanStatusCard
+                  isPro={isPro}
+                  daysLeft={(() => {
+                    const created = user?.created_at ? new Date(user.created_at) : null;
+                    if (!created) return null;
+                    const totalDays = 30;
+                    const used = Math.floor((Date.now() - created.getTime()) / 86400000);
+                    const left = totalDays - used;
+                    return left > 0 && left <= totalDays ? left : null;
+                  })()}
+                />
+                <ImpactOpportunities />
+              </div>
             </div>
+
           </TabsContent>
 
           {/* ── Services ── */}
