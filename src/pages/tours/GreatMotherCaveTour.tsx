@@ -113,11 +113,11 @@ export default function GreatMotherCaveTour() {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <img
-                  src={`${STORAGE_BASE}/General%20Images/khoe%20indigenous%20language%20heritage%20experience%207.jpg`}
-                  alt="Indigenous heritage trail"
+                  src={`${STORAGE_BASE}/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg`}
+                  alt="Chief Kingsley of the Gorachouqua Khoi Nation"
                   className="rounded-2xl shadow-2xl"
                   loading="lazy"
-                  onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                  onError={(e) => { (e.target as HTMLImageElement).src = `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`; }}
                 />
               </div>
               <div>
@@ -248,8 +248,8 @@ export default function GreatMotherCaveTour() {
           { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view%202.jpg`, alt: 'Panoramic view from Peer\'s Cave', caption: 'Breathtaking panoramic views of False Bay from the ancient cave vantage point' },
           { src: `${STORAGE_BASE}/General%20Images/Rock%20art%20portrait.jpg`, alt: 'Ancient rock art', caption: 'Ancient San rock art — spiritual storytelling preserved in stone' },
           { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view.jpg`, alt: 'Cave formations along the trail', caption: 'Sacred cave formations along the Muizenberg mountain trail' },
-          { src: `${STORAGE_BASE}/General%20Images/khoe%20indigenous%20language%20heritage%20experience%206.jpg`, alt: 'Indigenous heritage landscape', caption: 'The indigenous Khoe heritage landscape — where ancient wisdom meets the natural world' },
-          { src: `${STORAGE_BASE}/General%20Images/khoe%20indigenous%20language%20heritage%20experience%207.jpg`, alt: 'Heritage trail through fynbos', caption: 'Walking the ancestral trails through Cape fynbos — a living botanical heritage' },
+          { src: `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`, alt: 'Chief Kingsley sharing indigenous knowledge', caption: 'Chief Kingsley sharing the indigenous Khoi heritage that has shaped this landscape for millennia' },
+          { src: `${STORAGE_BASE}/General%20Images/tour%20picture%20couple%20with%20chief%20kingsley.jpg`, alt: 'Heritage trail with Chief Kingsley', caption: 'Walking the ancestral trails through Cape fynbos — a living botanical heritage' },
           { src: `${STORAGE_BASE}/General%20Images/Wellness%20retreat%202.jpg`, alt: 'Wellness in nature', caption: 'Connecting with the healing energy of the mountain landscape' },
         ]}
       />

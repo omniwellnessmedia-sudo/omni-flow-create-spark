@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -52,7 +53,21 @@ interface RoamBuddySalesBotProps {
   onProductRecommended?: (productId: string) => void;
 }
 
+// Routes where the floating eSIM chatbot should NOT appear — auth screens, dashboards,
+// and admin sections per Feroza's redesign feedback ("adds visual clutter").
+const HIDDEN_PATH_PREFIXES = [
+  "/auth",
+  "/admin",
+  "/accountant",
+  "/provider-dashboard",
+  "/provider-portal",
+  "/wellness-account",
+  "/blog/editor",
+];
+
 export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotProps) => {
+  const location = useLocation();
+  const shouldHide = HIDDEN_PATH_PREFIXES.some((p) => location.pathname.startsWith(p));
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -259,6 +274,8 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
       }]);
     }
   };
+
+  if (shouldHide) return null;
 
   return (
     <>

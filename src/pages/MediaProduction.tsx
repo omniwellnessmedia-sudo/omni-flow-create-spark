@@ -108,7 +108,7 @@ const MediaProduction = () => {
                   className="px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full border-2"
                   asChild
                 >
-                  <a href="mailto:admin@omniwellnessmedia.co.za?subject=Media Production Guide Request">
+                  <a href="mailto:omniwellnessmedia@gmail.com?subject=Media Production Guide Request">
                     <Download className="mr-2 w-5 h-5" />
                     Request Production Guide
                   </a>

@@ -320,7 +320,7 @@ const ProviderDashboard = () => {
 
               {/* Pro upgrade teaser or services summary */}
               {!isPro ? (
-                <ProUpgradeCard />
+                <ProUpgradeCard compact />
               ) : (
                 <Card className="border-border/50">
                   <CardHeader className="pb-3">

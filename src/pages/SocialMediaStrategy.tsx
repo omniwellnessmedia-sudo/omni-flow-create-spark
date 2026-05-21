@@ -130,7 +130,7 @@ const SocialMediaStrategy = () => {
                   Get Strategy Audit
                 </Button>
                 <a
-                  href="mailto:admin@omniwellnessmedia.co.za?subject=Content Calendar Template Request&body=Hi Omni Wellness Media,%0A%0AI'd like to receive the free 30-day Content Calendar Template.%0A%0AThank you!"
+                  href="mailto:omniwellnessmedia@gmail.com?subject=Content Calendar Template Request&body=Hi Omni Wellness Media,%0A%0AI'd like to receive the free 30-day Content Calendar Template.%0A%0AThank you!"
                   className="inline-flex items-center justify-center px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
                 >
                   <Download className="mr-2 w-5 h-5" />

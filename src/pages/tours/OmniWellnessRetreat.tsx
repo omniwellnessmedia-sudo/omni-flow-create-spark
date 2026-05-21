@@ -46,15 +46,15 @@ const OmniWellnessRetreat = () => {
         <div className="relative container mx-auto px-4 h-full flex items-end pb-20 overflow-hidden">
           <div className="max-w-4xl text-white space-y-6 max-w-full break-words">
             <Badge className="mb-4 bg-primary/90 text-primary-foreground backdrop-blur-sm border-0 px-4 py-2 text-sm">
-              Weekend Retreats
+              Winter Wine Country Wellness · Weekend Retreat
             </Badge>
-            
+
             <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight">
-              4th Annual Omni<br />Wellness Retreat
+              4th Annual Omni Wellness Retreat
             </h1>
-            
+
             <p className="text-lg sm:text-2xl md:text-3xl text-white/90 font-light max-w-2xl">
-              Rejuvenate and Renew at the Serene Tufcat Sanctuary
+              Winter in the Wine Country — Rejuvenate and Renew at the Serene Tufcat Sanctuary
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-4">
@@ -673,7 +673,7 @@ const OmniWellnessRetreat = () => {
                         size="lg"
                         asChild
                       >
-                        <a href="mailto:admin@omniwellnessmedia.co.za?subject=Omni Wellness Retreat Booking&body=Hi,%0A%0AI would like to book a spot for the 4th Annual Omni Wellness Retreat.%0A%0APackage preference:%0ANumber of guests:%0A%0APlease send me more information.%0A%0AThank you!">
+                        <a href="mailto:omniwellnessmedia@gmail.com?subject=Omni Wellness Retreat Booking&body=Hi,%0A%0AI would like to book a spot for the 4th Annual Omni Wellness Retreat.%0A%0APackage preference:%0ANumber of guests:%0A%0APlease send me more information.%0A%0AThank you!">
                           Book Now
                         </a>
                       </Button>
@@ -726,9 +726,9 @@ const OmniWellnessRetreat = () => {
                   <CardContent className="p-6">
                     <h3 className="text-lg font-bold text-foreground mb-4">Contact Information</h3>
                     <div className="space-y-3">
-                      <a href="mailto:admin@omniwellnessmedia.co.za" className="flex items-center text-sm hover:text-primary transition-colors">
+                      <a href="mailto:omniwellnessmedia@gmail.com" className="flex items-center text-sm hover:text-primary transition-colors">
                         <Mail className="h-4 w-4 mr-2" />
-                        admin@omniwellnessmedia.co.za
+                        omniwellnessmedia@gmail.com
                       </a>
                       <a href="mailto:traveltourscapetown@gmail.com" className="flex items-center text-sm hover:text-primary transition-colors">
                         <Mail className="h-4 w-4 mr-2" />
