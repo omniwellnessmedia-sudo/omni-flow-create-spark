@@ -69,6 +69,13 @@ const AccessibilitySettings: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // FloatingActionDock dispatches this to toggle the panel
+  useEffect(() => {
+    const handler = () => setOpen((v) => !v);
+    window.addEventListener("omni:toggle-accessibility", handler);
+    return () => window.removeEventListener("omni:toggle-accessibility", handler);
+  }, []);
+
   const update = (patch: Partial<AccessibilityState>) =>
     setSettings((prev) => ({ ...prev, ...patch }));
 
@@ -161,16 +168,8 @@ const AccessibilitySettings: React.FC = () => {
         </div>
       )}
 
-      <Button
-        variant="outline"
-        size="icon"
-        className="h-10 w-10 rounded-full shadow-lg bg-card border-border"
-        onClick={() => setOpen((prev) => !prev)}
-        aria-label={open ? 'Close accessibility settings' : 'Open accessibility settings'}
-        aria-expanded={open}
-      >
-        <Settings className="w-4 h-4" />
-      </Button>
+      {/* Standalone gear button removed — FloatingActionDock now toggles this panel via
+          the "omni:toggle-accessibility" event. One CTA per corner is the new rule. */}
     </div>
   );
 };

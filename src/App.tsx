@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as SonnerToaster } from 'sonner';
 import MagicCursor from '@/components/MagicCursor';
+import FloatingActionDock from '@/components/FloatingActionDock';
 import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/components/CartProvider';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -368,10 +369,15 @@ function App() {
               {/* Sparkle-trail cursor (auto-disables on touch + reduced-motion) */}
               <MagicCursor />
               
-              {/* Global ROAM Chatbot */}
+              {/* Unified floating dock — single CTA that expands to eSIM chat,
+                  WhatsApp, tour, and accessibility. Dispatches custom events the
+                  hidden ROAM chatbot + accessibility panel listen for. */}
+              <FloatingActionDock />
+
+              {/* ROAM Chatbot window (button removed; opened via dock event) */}
               <RoamBuddySalesBot />
 
-              {/* Global Accessibility Settings */}
+              {/* Accessibility panel (gear removed; toggled via dock event) */}
               <AccessibilitySettings />
             </div>
           </Router>

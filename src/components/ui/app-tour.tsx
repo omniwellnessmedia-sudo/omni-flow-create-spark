@@ -211,19 +211,10 @@ const AppTour = ({
   );
 };
 
-// Tour trigger button component
-export const TourTrigger = ({ onClick }: { onClick: () => void }) => {
-  return (
-    <Button
-      onClick={onClick}
-      variant="outline"
-      size="sm"
-      className="fixed bottom-24 right-6 sm:bottom-24 sm:right-6 z-40 shadow-lg bg-white border-omni-orange text-omni-orange hover:bg-omni-orange hover:text-white"
-    >
-      <Target className="w-4 h-4 mr-2" />
-      Take Tour
-    </Button>
-  );
-};
+// Tour trigger button — the standalone floating button is no longer rendered.
+// FloatingActionDock now drives tour start via the "omni:start-tour" custom event.
+// HeroSection listens for that event and calls startTour(). Kept the named export so
+// anything previously importing TourTrigger doesn't break the build.
+export const TourTrigger = (_: { onClick: () => void }) => null;
 
 export default AppTour;

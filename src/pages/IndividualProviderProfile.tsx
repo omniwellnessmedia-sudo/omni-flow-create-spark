@@ -35,10 +35,19 @@ import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 
 const IndividualProviderProfile = () => {
-  const { providerId } = useParams<{ providerId: string }>();
+  // Route is /provider/:id — match the param name. Old code used providerId which never resolved,
+  // sent everyone to the "Provider Not Found" / redirect loop.
+  const { id: providerId } = useParams<{ id: string }>();
   const { user } = useAuth();
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'services' | 'packages' | 'reviews'>('overview');
+
+  // Sandy has a richer custom page at /provider/sandy-mitchell with full hero, gallery, and
+  // BookingSystem integration. Redirect any IDs that resolve to her record so the user always
+  // lands on the canonical version (kills the duplicate-profile issue).
+  if (providerId === 'sandy-mitchell-dru-yoga' || providerId === 'sandy-mitchell') {
+    return <Navigate to="/provider/sandy-mitchell" replace />;
+  }
 
   if (!providerId) return <Navigate to="/provider-directory" replace />;
 
