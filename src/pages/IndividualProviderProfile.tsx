@@ -271,15 +271,19 @@ const IndividualProviderProfile = () => {
                   <MapPin className="h-3.5 w-3.5 text-primary" />
                   {profile.location}
                 </span>
-                <span className="flex items-center gap-1">
-                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                  <strong className="text-foreground">{profile.rating}</strong>
-                  &nbsp;·&nbsp;{profile.total_clients} clients
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" />
-                  {profile.years_experience} yrs experience
-                </span>
+                {profile.rating > 0 && (
+                  <span className="flex items-center gap-1">
+                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                    <strong className="text-foreground">{profile.rating}</strong>
+                    {profile.total_clients > 0 && <>&nbsp;·&nbsp;{profile.total_clients} clients</>}
+                  </span>
+                )}
+                {profile.years_experience > 0 && (
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5" />
+                    {profile.years_experience} yrs experience
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -369,32 +373,54 @@ const IndividualProviderProfile = () => {
                     </div>
                   )}
 
-                  {/* Languages + Availability */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <h3 className="font-heading text-xl mb-3">Languages</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {profile.languages?.map(lang => (
-                          <span key={lang} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-muted border border-border/50">
-                            <Languages className="h-3.5 w-3.5 text-muted-foreground" />
-                            {lang}
-                          </span>
-                        ))}
-                      </div>
+                  {/* Languages + Availability — each only shown when it has content */}
+                  {(profile.languages?.length > 0 || profile.availability?.days?.length > 0 || profile.availability?.hours) && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {profile.languages?.length > 0 && (
+                        <div>
+                          <h3 className="font-heading text-xl mb-3">Languages</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {profile.languages.map(lang => (
+                              <span key={lang} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-muted border border-border/50">
+                                <Languages className="h-3.5 w-3.5 text-muted-foreground" />
+                                {lang}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {(profile.availability?.days?.length > 0 || profile.availability?.hours) && (
+                        <div>
+                          <h3 className="font-heading text-xl mb-3">Availability</h3>
+                          <div className="text-sm text-muted-foreground space-y-1">
+                            {profile.availability?.days?.length > 0 && <p>{profile.availability.days.join(', ')}</p>}
+                            {profile.availability?.hours && <p>{profile.availability.hours}</p>}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <h3 className="font-heading text-xl mb-3">Availability</h3>
-                      <div className="text-sm text-muted-foreground space-y-1">
-                        <p>{profile.availability?.days?.join(', ')}</p>
-                        <p>{profile.availability?.hours}</p>
-                      </div>
-                    </div>
-                  </div>
+                  )}
+
+                  {/* If a real provider has no enrichment yet, give the overview something meaningful */}
+                  {!profile.badges?.length && !profile.languages?.length && !profile.availability?.days?.length && !profile.availability?.hours && (
+                    <p className="text-sm text-muted-foreground">
+                      {profile.description || "This provider is still completing their profile. Check back soon for more details."}
+                    </p>
+                  )}
                 </section>
               )}
 
               {activeTab === 'services' && (
                 <section className="space-y-5">
+                  {services.length === 0 && (
+                    <div className="text-center py-16 px-4 rounded-2xl border border-border/50 bg-muted/30">
+                      <Sparkles className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                      <h3 className="font-heading text-lg mb-1">No services listed yet</h3>
+                      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                        This provider is still setting up their offerings. Reach out to enquire about availability.
+                      </p>
+                    </div>
+                  )}
                   {services.map((service) => (
                     <div
                       key={service.id}
@@ -460,6 +486,15 @@ const IndividualProviderProfile = () => {
 
               {activeTab === 'packages' && (
                 <section className="space-y-5">
+                  {packages.length === 0 && (
+                    <div className="text-center py-16 px-4 rounded-2xl border border-border/50 bg-muted/30">
+                      <Award className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                      <h3 className="font-heading text-lg mb-1">No packages yet</h3>
+                      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                        This provider offers individual services — see the Services tab to book.
+                      </p>
+                    </div>
+                  )}
                   {packages.map((pkg) => (
                     <div key={pkg.id} className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/4 to-transparent p-5 sm:p-6">
                       <div className="flex items-start justify-between gap-4 mb-3">
@@ -504,6 +539,8 @@ const IndividualProviderProfile = () => {
 
               {activeTab === 'reviews' && (
                 <section>
+                  {profile.rating > 0 ? (
+                  <>
                   {/* Rating summary */}
                   <div className="flex items-center gap-6 p-6 rounded-2xl bg-muted/50 border border-border/50 mb-6">
                     <div className="text-center">
@@ -554,6 +591,16 @@ const IndividualProviderProfile = () => {
                       </div>
                     ))}
                   </div>
+                  </>
+                  ) : (
+                    <div className="text-center py-16 px-4 rounded-2xl border border-border/50 bg-muted/30">
+                      <Star className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                      <h3 className="font-heading text-lg mb-1">No reviews yet</h3>
+                      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                        This provider hasn't received reviews yet. Be the first to book a session and share your experience.
+                      </p>
+                    </div>
+                  )}
                 </section>
               )}
             </div>
