@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { getProviderById } from '@/data/providerDirectory';
 import { useAuth } from '@/components/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 
@@ -41,6 +42,83 @@ const IndividualProviderProfile = () => {
   const { user } = useAuth();
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'services' | 'packages' | 'reviews'>('overview');
+  // Start with the static directory hit (Sandy/Chad/Chief/2BeWell) if present, else load from DB.
+  const [providerData, setProviderData] = useState(() => (providerId ? getProviderById(providerId) : undefined));
+  const [loading, setLoading] = useState(false);
+
+  // Real providers live in Supabase, not the hardcoded directory. When the id isn't a static
+  // entry, fetch provider_profiles + services and map them into the same shape the page renders.
+  // This is what "View Public Profile" from the Provider Dashboard hits — previously every real
+  // provider got "Provider Not Found" because their UUID wasn't in the static list.
+  useEffect(() => {
+    if (!providerId) return;
+    const staticHit = getProviderById(providerId);
+    if (staticHit) { setProviderData(staticHit); return; }
+
+    let cancelled = false;
+    setLoading(true);
+    (async () => {
+      const { data: prof } = await supabase
+        .from('provider_profiles')
+        .select('*')
+        .eq('id', providerId)
+        .maybeSingle();
+
+      if (cancelled) return;
+      if (!prof) { setProviderData(undefined); setLoading(false); return; }
+
+      const { data: svcs } = await supabase
+        .from('services')
+        .select('*')
+        .eq('provider_id', providerId)
+        .eq('active', true)
+        .order('created_at', { ascending: false });
+
+      if (cancelled) return;
+
+      setProviderData({
+        profile: {
+          id: prof.id,
+          business_name: prof.business_name || 'Wellness Provider',
+          description: prof.description || '',
+          philosophy: '',
+          specialties: prof.specialties || [],
+          certifications: prof.certifications || [],
+          badges: prof.certifications || [],
+          languages: [],
+          location: prof.location || 'South Africa',
+          email: '',
+          website: prof.website || '',
+          profile_image_url: prof.profile_image_url || '',
+          cover_image: prof.profile_image_url || '',
+          years_experience: prof.experience_years || 0,
+          total_clients: 0,
+          rating: 0,
+          verified: prof.verified ?? false,
+          featured: false,
+          category: 'Wellness',
+          social_media: {},
+          availability: prof.availability || { days: [], hours: '' },
+        },
+        services: (svcs || []).map((s: any) => ({
+          id: s.id,
+          title: s.title,
+          description: s.description || '',
+          category: s.category || 'Wellness',
+          price_zar: s.price_zar || 0,
+          price_wellcoins: s.price_wellcoins || 0,
+          duration_minutes: s.duration_minutes || 60,
+          location: s.location || prof.location || '',
+          is_online: s.is_online || false,
+          benefits: [],
+        })),
+        packages: [],
+      } as any);
+      setLoading(false);
+    })();
+
+    return () => { cancelled = true; };
+  }, [providerId]);
 
   // Sandy has a richer custom page at /provider/sandy-mitchell with full hero, gallery, and
   // BookingSystem integration. Redirect any IDs that resolve to her record so the user always
@@ -51,7 +129,20 @@ const IndividualProviderProfile = () => {
 
   if (!providerId) return <Navigate to="/provider-directory" replace />;
 
-  const providerData = getProviderById(providerId);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <UnifiedNavigation />
+        <main id="main-content" className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+            <p className="text-muted-foreground text-sm">Loading provider…</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!providerData) {
     return (
