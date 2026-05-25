@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Sparkles, MessageCircle, Settings, X, ChevronUp, Eye, EyeOff } from "lucide-react";
+import { Sparkles, MessageCircle, X, ChevronUp, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -62,7 +62,7 @@ export const FloatingActionDock = () => {
         <button
           type="button"
           onClick={() => { localStorage.removeItem(STORAGE_KEY); setHidden(false); }}
-          className="fixed bottom-4 right-4 z-40 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm border border-border/60 text-muted-foreground hover:text-foreground hover:bg-background shadow-md flex items-center justify-center transition-colors"
+          className="fixed bottom-16 right-4 sm:bottom-20 sm:right-6 z-40 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm border border-border/60 text-muted-foreground hover:text-foreground hover:bg-background shadow-md flex items-center justify-center transition-colors"
           aria-label="Show quick actions"
         >
           <Eye className="h-4 w-4" />
@@ -94,17 +94,12 @@ export const FloatingActionDock = () => {
       onClick: () => window.dispatchEvent(new CustomEvent("omni:start-tour")),
       tone: "from-omni-orange to-amber-500",
     },
-    {
-      id: "accessibility",
-      label: "Accessibility",
-      icon: Settings,
-      onClick: () => window.dispatchEvent(new CustomEvent("omni:toggle-accessibility")),
-      tone: "from-omni-violet to-purple-600",
-    },
+    // Accessibility intentionally omitted — it has its own subtle always-on button
+    // (AccessibilitySettings) so it's reachable on operator routes too, where this dock is hidden.
   ];
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2.5 pointer-events-none">
+    <div className="fixed bottom-16 right-4 sm:bottom-20 sm:right-6 z-40 flex flex-col items-end gap-2.5 pointer-events-none">
       {expanded && (
         <div className="flex flex-col items-end gap-2 mb-1 pointer-events-auto animate-in slide-in-from-bottom-2 fade-in duration-200">
           {actions.map((a, i) => (

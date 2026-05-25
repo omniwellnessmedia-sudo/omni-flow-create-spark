@@ -1057,8 +1057,10 @@ html.high-contrast body { filter: contrast(1.4); }
 html.high-contrast .text-muted-foreground { color: hsl(var(--foreground)) !important; }
 html.reduce-motion * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 html.dyslexia-font body { font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important; letter-spacing: 0.05em; word-spacing: 0.1em; }
-html.font-size-default body { font-size: 16px; }
-html.font-size-small body { font-size: 14px; }
-html.font-size-large body { font-size: 18px; }
-html.font-size-xl body { font-size: 20px; }
+/* Font scale — set on <html> as a percentage so every rem-based Tailwind text
+   utility (text-sm, text-base, text-lg…) scales proportionally. Setting it on
+   <body> in px did nothing because the utility classes override body font-size. */
+html.font-size-small { font-size: 87.5%; }   /* ~14px base */
+html.font-size-large { font-size: 112.5%; }  /* ~18px base */
+html.font-size-xl { font-size: 125%; }        /* ~20px base */
 html.focus-visible-enhanced *:focus-visible { outline: 3px solid #339999 !important; outline-offset: 2px !important; }

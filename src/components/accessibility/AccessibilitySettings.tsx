@@ -80,7 +80,7 @@ const AccessibilitySettings: React.FC = () => {
     setSettings((prev) => ({ ...prev, ...patch }));
 
   return (
-    <div className="fixed bottom-32 sm:bottom-24 right-4 z-[60] flex flex-col items-end gap-2">
+    <div className="fixed bottom-4 right-4 z-[60] flex flex-col items-end gap-2">
       {open && (
         <div
           className="bg-card border border-border rounded-xl shadow-elegant p-4 w-72 max-w-[calc(100vw-32px)] space-y-4 animate-scale-in"
@@ -168,8 +168,19 @@ const AccessibilitySettings: React.FC = () => {
         </div>
       )}
 
-      {/* Standalone gear button removed — FloatingActionDock now toggles this panel via
-          the "omni:toggle-accessibility" event. One CTA per corner is the new rule. */}
+      {/* Subtle accessibility toggle — semi-transparent so it doesn't compete with the
+          page, lowered to the bottom corner. Also responds to the FloatingActionDock's
+          "omni:toggle-accessibility" event on consumer routes. */}
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-label={open ? 'Close accessibility settings' : 'Open accessibility settings'}
+        aria-expanded={open}
+        className="h-9 w-9 rounded-full border-border/50 bg-background/60 backdrop-blur-sm text-muted-foreground shadow-sm opacity-60 hover:opacity-100 hover:bg-background transition-all"
+      >
+        <Settings className="w-4 h-4" />
+      </Button>
     </div>
   );
 };

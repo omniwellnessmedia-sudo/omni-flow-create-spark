@@ -1,8 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import DOMPurify from "dompurify";
+
+// Same markdown-lite → HTML conversion the public BlogPost page uses, so the
+// editor preview matches exactly what readers will see.
+const renderMarkdownPreview = (raw: string): string => {
+  if (!raw) return "";
+  const looksLikeHtml = /<\w+[\s/>]/.test(raw);
+  if (looksLikeHtml) return DOMPurify.sanitize(raw);
+  const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  let html = esc(raw)
+    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+    .replace(/^## (.+)$/gm, "<h2>$1</h2>")
+    .replace(/^# (.+)$/gm, "<h2>$1</h2>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, url) => `<img src="${url}" alt="${esc(alt)}" class="rounded-lg my-4" />`)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, t, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${t}</a>`)
+    .replace(/^&gt; (.+)$/gm, "<blockquote><p>$1</p></blockquote>")
+    .replace(/^- (.+)$/gm, "<li>$1</li>")
+    .replace(/^\d+\. (.+)$/gm, "<li>$1</li>")
+    .replace(/(<li>.*<\/li>\n?)+/g, "<ul>$&</ul>")
+    .replace(/\n\n+/g, "</p><p>")
+    .replace(/\n/g, "<br />");
+  if (!html.startsWith("<")) html = `<p>${html}</p>`;
+  return DOMPurify.sanitize(html);
+};
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -59,6 +86,7 @@ const BlogEditor = () => {
     status: "draft"
   });
   const [tagInput, setTagInput] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const [estimatedReadTime, setEstimatedReadTime] = useState(1);
   const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
@@ -445,16 +473,44 @@ const BlogEditor = () => {
               <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("`", "`", "code")} title="Inline Code">
                 <Code className="h-4 w-4" />
               </Button>
-              <span className="ml-auto text-xs text-muted-foreground hidden sm:inline">Markdown supported</span>
+              <div className="ml-auto flex items-center gap-1">
+                <Button
+                  type="button"
+                  variant={showPreview ? "ghost" : "secondary"}
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={() => setShowPreview(false)}
+                >
+                  Write
+                </Button>
+                <Button
+                  type="button"
+                  variant={showPreview ? "secondary" : "ghost"}
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={() => setShowPreview(true)}
+                >
+                  <Eye className="h-3.5 w-3.5 mr-1" />
+                  Preview
+                </Button>
+              </div>
             </div>
-            <Textarea
-              ref={contentRef}
-              placeholder="Tell your story... Use the toolbar above for formatting, or write markdown directly."
-              value={post.content}
-              onChange={(e) => setPost(prev => ({ ...prev, content: e.target.value }))}
-              className="min-h-[500px] text-lg leading-relaxed border-none px-0 resize-none focus-visible:ring-0 placeholder:text-gray-400 font-mono"
-              style={{ lineHeight: '1.8' }}
-            />
+            {showPreview ? (
+              <div
+                className="prose prose-lg max-w-none min-h-[500px] px-1 prose-headings:font-heading prose-a:text-primary"
+                style={{ lineHeight: "1.8" }}
+                dangerouslySetInnerHTML={{ __html: renderMarkdownPreview(post.content) || '<p class="text-gray-400">Nothing to preview yet — switch to Write and start typing.</p>' }}
+              />
+            ) : (
+              <Textarea
+                ref={contentRef}
+                placeholder="Tell your story... Use the toolbar above for formatting, or write markdown directly."
+                value={post.content}
+                onChange={(e) => setPost(prev => ({ ...prev, content: e.target.value }))}
+                className="min-h-[500px] text-lg leading-relaxed border-none px-0 resize-none focus-visible:ring-0 placeholder:text-gray-400 font-mono"
+                style={{ lineHeight: '1.8' }}
+              />
+            )}
           </div>
 
           <Separator />
