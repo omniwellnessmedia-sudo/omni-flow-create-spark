@@ -426,9 +426,9 @@ const AdminDashboard = () => {
                   <Menu className="h-4 w-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-56 p-4">
+              <SheetContent side="left" className="w-64 p-4 overflow-y-auto">
                 <div className="mt-4">
-                  <AdminSidebar activeSection={activeSection} onSectionChange={handleSectionChange} alerts={dashboardData.alertCounts} />
+                  <AdminSidebar activeSection={activeSection} onSectionChange={handleSectionChange} alerts={dashboardData.alertCounts} className="block w-full" />
                 </div>
               </SheetContent>
             </Sheet>
