@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { format, subDays, startOfMonth, endOfMonth, subMonths, parseISO } from "date-fns";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import PortfolioOverview from "@/components/admin/accounting/PortfolioOverview";
 
 interface Order {
   id: string;
@@ -416,14 +417,20 @@ const AdminAccounting = () => {
       )}
 
       {/* Detail Tabs */}
-      <Tabs defaultValue="orders" className="space-y-4">
+      <Tabs defaultValue="portfolio" className="space-y-4">
         <TabsList>
+          <TabsTrigger value="portfolio" className="text-xs">Portfolio</TabsTrigger>
           <TabsTrigger value="orders" className="text-xs">Orders ({orders.length})</TabsTrigger>
           <TabsTrigger value="commissions" className="text-xs">Commissions ({commissions.length})</TabsTrigger>
           <TabsTrigger value="payouts" className="text-xs">Payouts ({payouts.length})</TabsTrigger>
           <TabsTrigger value="transactions" className="text-xs">Transactions ({transactions.length})</TabsTrigger>
           <TabsTrigger value="breakdown" className="text-xs">Breakdown</TabsTrigger>
         </TabsList>
+
+        {/* Multi-entity portfolio overview */}
+        <TabsContent value="portfolio">
+          <PortfolioOverview />
+        </TabsContent>
 
         {/* Orders Table */}
         <TabsContent value="orders">
