@@ -49,6 +49,26 @@ html.magic-cursor-active [contenteditable=""] {
   animation: magic-shimmer 4s linear infinite;
 }
 .magic-sparkle { animation: magic-sparkle 2.5s ease-in-out infinite; }
+
+/* Omni lotus logo button — gentle idle breathing, a full magical spin on click,
+   and a brand-colour glow that ties it to the MagicCursor sparkle trail. */
+@keyframes magic-logo-spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  55%  { transform: rotate(370deg) scale(1.12); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+@keyframes magic-logo-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+.magic-logo {
+  animation: magic-logo-breathe 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px hsl(var(--primary) / 0.45))
+          drop-shadow(0 0 12px hsl(var(--omni-violet) / 0.3));
+}
+.magic-logo.is-spinning {
+  animation: magic-logo-spin 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 .magic-card {
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
@@ -62,6 +82,7 @@ html.magic-cursor-active [contenteditable=""] {
 }
 @media (prefers-reduced-motion: reduce) {
   .magic-float, .magic-shimmer-text, .magic-sparkle { animation: none; }
+  .magic-logo, .magic-logo.is-spinning { animation: none; }
   .magic-card:hover { transform: none; }
 }
 

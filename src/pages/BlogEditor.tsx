@@ -3,33 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import DOMPurify from "dompurify";
-
-// Same markdown-lite → HTML conversion the public BlogPost page uses, so the
-// editor preview matches exactly what readers will see.
-const renderMarkdownPreview = (raw: string): string => {
-  if (!raw) return "";
-  const looksLikeHtml = /<\w+[\s/>]/.test(raw);
-  if (looksLikeHtml) return DOMPurify.sanitize(raw);
-  const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  let html = esc(raw)
-    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-    .replace(/^## (.+)$/gm, "<h2>$1</h2>")
-    .replace(/^# (.+)$/gm, "<h2>$1</h2>")
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/`([^`]+)`/g, "<code>$1</code>")
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_m, alt, url) => `<img src="${url}" alt="${esc(alt)}" class="rounded-lg my-4" />`)
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, t, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${t}</a>`)
-    .replace(/^&gt; (.+)$/gm, "<blockquote><p>$1</p></blockquote>")
-    .replace(/^- (.+)$/gm, "<li>$1</li>")
-    .replace(/^\d+\. (.+)$/gm, "<li>$1</li>")
-    .replace(/(<li>.*<\/li>\n?)+/g, "<ul>$&</ul>")
-    .replace(/\n\n+/g, "</p><p>")
-    .replace(/\n/g, "<br />");
-  if (!html.startsWith("<")) html = `<p>${html}</p>`;
-  return DOMPurify.sanitize(html);
-};
+import { renderPostContent } from "@/lib/renderPost";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -499,9 +473,14 @@ const BlogEditor = () => {
               <div
                 className="prose prose-lg max-w-none min-h-[500px] px-1 prose-headings:font-heading prose-a:text-primary"
                 style={{ lineHeight: "1.8" }}
-                dangerouslySetInnerHTML={{ __html: renderMarkdownPreview(post.content) || '<p class="text-gray-400">Nothing to preview yet — switch to Write and start typing.</p>' }}
+                dangerouslySetInnerHTML={{ __html: renderPostContent(post.content) || '<p class="text-gray-400">Nothing to preview yet — switch to Write and start typing.</p>' }}
               />
             ) : (
+              <>
+                <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
+                  <Eye className="h-3 w-3" />
+                  You're in <strong className="font-medium">Write</strong> mode — markdown like <code className="bg-muted px-1 rounded">**bold**</code> shows as plain text here. Click <strong className="font-medium">Preview</strong> to see it formatted.
+                </p>
               <Textarea
                 ref={contentRef}
                 placeholder="Tell your story... Use the toolbar above for formatting, or write markdown directly."
@@ -510,6 +489,7 @@ const BlogEditor = () => {
                 className="min-h-[500px] text-lg leading-relaxed border-none px-0 resize-none focus-visible:ring-0 placeholder:text-gray-400 font-mono"
                 style={{ lineHeight: '1.8' }}
               />
+              </>
             )}
           </div>
 

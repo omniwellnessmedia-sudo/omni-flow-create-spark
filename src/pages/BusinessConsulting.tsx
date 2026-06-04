@@ -126,13 +126,15 @@ const BusinessConsulting = () => {
             </div>
             <div className="relative hidden lg:block">
               <div className="rounded-2xl overflow-hidden shadow-2xl">
+                {/* People-free Cape Town landscape — swapped off the team group photo at
+                    Feroza's request (Abbi must not appear in site photos). Confirm choice. */}
                 <img
-                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/Omni%20wellness%20team.jpg"
-                  alt="Omni Wellness consulting team in session"
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/location-images%2A%2A%20(Cape%20Town%20Locations)/_MG_0220.jpg"
+                  alt="Cape Town landscape — conscious business in context"
                   className="w-full h-[500px] object-cover"
                   loading="eager"
                   onError={(e) => {
-                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/chief%20kingsley%201.jpg";
+                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg";
                   }}
                 />
               </div>

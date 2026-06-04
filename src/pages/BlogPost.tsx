@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { renderPostContent } from "@/lib/renderPost";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -310,39 +311,7 @@ const BlogPost = () => {
     }
   };
 
-  const renderedContent = useMemo(() => {
-    if (!post?.content) return "";
-    const raw = post.content;
-
-    // If the post was authored in the rich-text editor it already arrives as HTML
-    // (<p>, <h2>, <img>, etc.). The old pipeline always ran safeText() first, which
-    // escaped < and > and made the HTML render as literal text — most noticeable on
-    // mobile because the long unescaped runs of tag markup wrap awkwardly.
-    // Detect HTML up front and sanitize directly in that case.
-    const looksLikeHtml = /<\w+[\s/>]/.test(raw);
-    if (looksLikeHtml) return DOMPurify.sanitize(raw);
-
-    // Otherwise treat as the legacy markdown-lite format: escape entities, then
-    // transform a small set of patterns into HTML.
-    let html = safeText(raw)
-      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-      .replace(/^# (.+)$/gm, '<h2>$1</h2>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, url) => `<img src="${safeUrl(url)}" alt="${safeText(alt)}" class="rounded-lg my-6" loading="lazy" decoding="async" />`)
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text, url) => `<a href="${safeUrl(url)}" target="_blank" rel="noopener noreferrer">${text}</a>`)
-      .replace(/^&gt; (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
-      .replace(/^- (.+)$/gm, '<li>$1</li>')
-      .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
-      .replace(/\n\n+/g, '</p><p>')
-      .replace(/\n/g, '<br />');
-
-    if (!html.startsWith('<')) html = `<p>${html}</p>`;
-    return DOMPurify.sanitize(html);
-  }, [post?.content]);
+  const renderedContent = useMemo(() => renderPostContent(post?.content), [post?.content]);
 
   if (isLoading) {
     return (

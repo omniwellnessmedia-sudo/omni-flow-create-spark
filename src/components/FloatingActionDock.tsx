@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Sparkles, MessageCircle, X, ChevronUp, Eye, EyeOff } from "lucide-react";
+import { MessageCircle, X, Compass, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { IMAGES } from "@/lib/images";
 
 /**
  * FloatingActionDock — one floating button that expands to a stack of contextual actions.
@@ -45,6 +46,8 @@ type Action = {
 export const FloatingActionDock = () => {
   const location = useLocation();
   const [expanded, setExpanded] = useState(false);
+  const [spinning, setSpinning] = useState(false);
+  const spinTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [hidden, setHidden] = useState(() => {
     if (typeof window === "undefined") return false;
     return localStorage.getItem(STORAGE_KEY) === "1";
@@ -52,6 +55,15 @@ export const FloatingActionDock = () => {
 
   // Auto-collapse when the route changes so the dock doesn't stay open across navigations
   useEffect(() => { setExpanded(false); }, [location.pathname]);
+  useEffect(() => () => { if (spinTimer.current) clearTimeout(spinTimer.current); }, []);
+
+  // Trigger the logo's magical spin, then toggle the menu. CSS handles reduced-motion.
+  const handleTriggerClick = () => {
+    setSpinning(true);
+    if (spinTimer.current) clearTimeout(spinTimer.current);
+    spinTimer.current = setTimeout(() => setSpinning(false), 900);
+    setExpanded(v => !v);
+  };
 
   const onOperatorRoute = HIDDEN_PATH_PREFIXES.some(p => location.pathname.startsWith(p));
   if (onOperatorRoute || hidden) {
@@ -76,7 +88,7 @@ export const FloatingActionDock = () => {
     {
       id: "esim",
       label: "Need eSIM help?",
-      icon: Sparkles,
+      icon: MessageCircle,
       onClick: () => window.dispatchEvent(new CustomEvent("omni:open-roambuddy-chat")),
       tone: "from-blue-600 to-blue-700",
     },
@@ -90,7 +102,7 @@ export const FloatingActionDock = () => {
     {
       id: "tour",
       label: "Take the tour",
-      icon: Eye,
+      icon: Compass,
       onClick: () => window.dispatchEvent(new CustomEvent("omni:start-tour")),
       tone: "from-omni-orange to-amber-500",
     },
@@ -133,30 +145,27 @@ export const FloatingActionDock = () => {
         </div>
       )}
 
-      {/* Main trigger */}
+      {/* Main trigger — the Omni lotus logo. Breathes gently, spins on click. */}
       <button
         type="button"
-        onClick={() => setExpanded(v => !v)}
+        onClick={handleTriggerClick}
         className={cn(
-          "pointer-events-auto h-12 px-4 rounded-full shadow-2xl text-white font-medium flex items-center gap-2 transition-all",
-          "bg-gradient-to-r from-primary via-primary to-omni-violet hover:shadow-xl",
-          expanded && "h-11 px-3"
+          "pointer-events-auto h-14 w-14 rounded-full shadow-2xl flex items-center justify-center transition-all",
+          "bg-white/95 backdrop-blur-sm ring-1 ring-border/40 hover:shadow-xl hover:scale-105"
         )}
         aria-expanded={expanded}
         aria-label={expanded ? "Close quick actions" : "Open quick actions"}
         data-cursor="hover"
       >
         {expanded ? (
-          <>
-            <X className="h-4 w-4" />
-            <span className="text-sm">Close</span>
-          </>
+          <X className="h-5 w-5 text-foreground" />
         ) : (
-          <>
-            <Sparkles className="h-4 w-4 animate-pulse" />
-            <span className="text-sm">Help</span>
-            <ChevronUp className="h-3.5 w-3.5 opacity-70" />
-          </>
+          <img
+            src={IMAGES.logos.omniPrimary}
+            alt="Omni — open quick actions"
+            className={cn("h-10 w-10 object-contain magic-logo", spinning && "is-spinning")}
+            draggable={false}
+          />
         )}
       </button>
     </div>
