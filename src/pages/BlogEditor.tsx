@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { renderPostContent } from "@/lib/renderPost";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -59,6 +60,7 @@ const BlogEditor = () => {
     status: "draft"
   });
   const [tagInput, setTagInput] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const [estimatedReadTime, setEstimatedReadTime] = useState(1);
   const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
@@ -445,16 +447,50 @@ const BlogEditor = () => {
               <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("`", "`", "code")} title="Inline Code">
                 <Code className="h-4 w-4" />
               </Button>
-              <span className="ml-auto text-xs text-muted-foreground hidden sm:inline">Markdown supported</span>
+              <div className="ml-auto flex items-center gap-1">
+                <Button
+                  type="button"
+                  variant={showPreview ? "ghost" : "secondary"}
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={() => setShowPreview(false)}
+                >
+                  Write
+                </Button>
+                <Button
+                  type="button"
+                  variant={showPreview ? "secondary" : "ghost"}
+                  size="sm"
+                  className="h-7 text-xs"
+                  onClick={() => setShowPreview(true)}
+                >
+                  <Eye className="h-3.5 w-3.5 mr-1" />
+                  Preview
+                </Button>
+              </div>
             </div>
-            <Textarea
-              ref={contentRef}
-              placeholder="Tell your story... Use the toolbar above for formatting, or write markdown directly."
-              value={post.content}
-              onChange={(e) => setPost(prev => ({ ...prev, content: e.target.value }))}
-              className="min-h-[500px] text-lg leading-relaxed border-none px-0 resize-none focus-visible:ring-0 placeholder:text-gray-400 font-mono"
-              style={{ lineHeight: '1.8' }}
-            />
+            {showPreview ? (
+              <div
+                className="prose prose-lg max-w-none min-h-[500px] px-1 prose-headings:font-heading prose-a:text-primary"
+                style={{ lineHeight: "1.8" }}
+                dangerouslySetInnerHTML={{ __html: renderPostContent(post.content) || '<p class="text-gray-400">Nothing to preview yet — switch to Write and start typing.</p>' }}
+              />
+            ) : (
+              <>
+                <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
+                  <Eye className="h-3 w-3" />
+                  You're in <strong className="font-medium">Write</strong> mode — markdown like <code className="bg-muted px-1 rounded">**bold**</code> shows as plain text here. Click <strong className="font-medium">Preview</strong> to see it formatted.
+                </p>
+              <Textarea
+                ref={contentRef}
+                placeholder="Tell your story... Use the toolbar above for formatting, or write markdown directly."
+                value={post.content}
+                onChange={(e) => setPost(prev => ({ ...prev, content: e.target.value }))}
+                className="min-h-[500px] text-lg leading-relaxed border-none px-0 resize-none focus-visible:ring-0 placeholder:text-gray-400 font-mono"
+                style={{ lineHeight: '1.8' }}
+              />
+              </>
+            )}
           </div>
 
           <Separator />

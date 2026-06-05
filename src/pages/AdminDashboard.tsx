@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { LogOut, Plus, Home, ChevronDown, FileText, Mic, Video, Menu, CheckCircle, XCircle, Mail } from "lucide-react";
+import { LogOut, Plus, Home, ChevronDown, ChevronRight, FileText, Mic, Video, Menu, CheckCircle, XCircle, Mail } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 import SmartGreeting from "@/components/dashboard/SmartGreeting";
 import AdminSidebar from "@/components/dashboard/AdminSidebar";
@@ -43,6 +43,7 @@ const AdminDashboard = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeSection = searchParams.get("section") || "home";
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [expandedBooking, setExpandedBooking] = useState<string | null>(null);
   const [dashboardData, setDashboardData] = useState({
     orders: [] as any[],
     bookings: [] as any[],
@@ -221,6 +222,20 @@ const AdminDashboard = () => {
     }
   };
 
+  // Service bookings live in contact_submissions; let admins respond + set status without
+  // hopping to the Leads section. Refetch so the stats + alert counts update too.
+  const updateServiceBookingStatus = async (id: string, status: string) => {
+    try {
+      const { error } = await supabase.from("contact_submissions").update({ status }).eq("id", id);
+      if (error) throw error;
+      toast({ title: "Lead updated", description: `Status set to ${status}` });
+      await fetchDashboardData();
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Error", description: "Failed to update lead", variant: "destructive" });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -253,20 +268,47 @@ const AdminDashboard = () => {
                   <p className="text-center text-muted-foreground py-8 text-sm">No service bookings yet</p>
                 ) : (
                   <div className="space-y-3">
-                    {dashboardData.serviceBookings.map((lead: any) => (
-                      <div key={lead.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
-                        <div className="min-w-0 flex-1">
-                          <p className="font-medium text-sm truncate">{lead.name || "Anonymous"}</p>
-                          <p className="text-xs text-muted-foreground truncate">{lead.email}</p>
-                          {lead.service && <p className="text-xs text-primary truncate">{lead.service}</p>}
-                          <p className="text-[10px] text-muted-foreground truncate">{lead.message?.substring(0, 80)}{lead.message?.length > 80 ? "..." : ""}</p>
-                        </div>
-                        <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2">
-                          <p className="text-[10px] text-muted-foreground">{new Date(lead.created_at).toLocaleDateString()}</p>
-                          <Badge variant={lead.status === "responded" ? "default" : lead.status === "in_progress" ? "outline" : "secondary"} className="text-[10px]">{lead.status || "pending"}</Badge>
-                        </div>
+                    {dashboardData.serviceBookings.map((lead: any) => {
+                      const isExpanded = expandedBooking === lead.id;
+                      return (
+                      <div key={lead.id} className="border rounded-lg overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() => setExpandedBooking(isExpanded ? null : lead.id)}
+                          className="w-full flex items-center justify-between p-3 gap-2 text-left hover:bg-muted/40 transition-colors"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-sm truncate">{lead.name || "Anonymous"}</p>
+                            <p className="text-xs text-muted-foreground truncate">{lead.email}</p>
+                            {lead.service && <p className="text-xs text-primary truncate">{lead.service}</p>}
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <Badge variant={lead.status === "responded" ? "default" : lead.status === "closed" ? "secondary" : lead.status === "in_progress" ? "outline" : "secondary"} className="text-[10px] capitalize">{lead.status || "pending"}</Badge>
+                            <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                          </div>
+                        </button>
+                        {isExpanded && (
+                          <div className="px-3 pb-3 pt-1 border-t bg-muted/20 space-y-3">
+                            <p className="text-xs text-muted-foreground whitespace-pre-wrap">{lead.message || "No message provided."}</p>
+                            <p className="text-[10px] text-muted-foreground">Received {new Date(lead.created_at).toLocaleString()}</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              <Button size="sm" className="h-7 text-xs" onClick={() => (window.location.href = `mailto:${lead.email}?subject=${encodeURIComponent(`Re: ${lead.service || "Your inquiry to Omni Wellness Media"}`)}`)}>
+                                <Mail className="w-3 h-3 mr-1" />Reply
+                              </Button>
+                              <Button size="sm" variant="outline" className={`h-7 text-xs ${lead.status === "responded" ? "bg-green-600 text-white border-green-600 hover:bg-green-700" : "text-green-600"}`} onClick={() => updateServiceBookingStatus(lead.id, "responded")}>
+                                <CheckCircle className="w-3 h-3 mr-1" />Responded
+                              </Button>
+                              <Button size="sm" variant="outline" className={`h-7 text-xs ${lead.status === "closed" ? "bg-gray-600 text-white border-gray-600 hover:bg-gray-700" : ""}`} onClick={() => updateServiceBookingStatus(lead.id, "closed")}>
+                                <XCircle className="w-3 h-3 mr-1" />Close
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-7 text-xs ml-auto" onClick={() => handleSectionChange("leads")}>
+                                Manage in Leads <ChevronRight className="w-3 h-3 ml-1" />
+                              </Button>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    ))}
+                    );})}
                   </div>
                 )}
               </CardContent>
@@ -384,9 +426,9 @@ const AdminDashboard = () => {
                   <Menu className="h-4 w-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-56 p-4">
+              <SheetContent side="left" className="w-64 p-4 overflow-y-auto">
                 <div className="mt-4">
-                  <AdminSidebar activeSection={activeSection} onSectionChange={handleSectionChange} alerts={dashboardData.alertCounts} />
+                  <AdminSidebar activeSection={activeSection} onSectionChange={handleSectionChange} alerts={dashboardData.alertCounts} className="block w-full" />
                 </div>
               </SheetContent>
             </Sheet>

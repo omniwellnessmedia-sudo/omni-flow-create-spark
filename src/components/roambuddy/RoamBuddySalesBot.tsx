@@ -79,6 +79,13 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Listen for the FloatingActionDock's "open eSIM" event so the dock's pill can drive this chat
+  useEffect(() => {
+    const handler = () => setIsOpen(true);
+    window.addEventListener("omni:open-roambuddy-chat", handler);
+    return () => window.removeEventListener("omni:open-roambuddy-chat", handler);
+  }, []);
+
   // Auto-open removed — bubble-only interaction for non-intrusive UX
 
   // Scroll to bottom on new messages
@@ -279,20 +286,8 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
 
   return (
     <>
-      {/* Chat Button */}
-      <button
-        onClick={openChat}
-        className={cn(
-          "fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 flex items-center gap-2 px-4 py-3 rounded-full shadow-2xl transition-all duration-300 hover:scale-105",
-          "bg-gradient-to-r from-blue-600 to-blue-700 text-white",
-          isOpen && "scale-0 opacity-0"
-        )}
-        aria-label="Chat with Roam"
-      >
-        <MessageCircle className="h-5 w-5 shrink-0" />
-        <span className="font-medium text-sm hidden xs:inline sm:inline">Need eSIM help?</span>
-        <Sparkles className="h-3.5 w-3.5 animate-pulse shrink-0" />
-      </button>
+      {/* Standalone chat button removed — FloatingActionDock now drives this chat via
+          the "omni:open-roambuddy-chat" custom event. Keeps only one floating CTA on screen. */}
 
       {/* Chat Window */}
       <div

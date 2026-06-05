@@ -666,14 +666,14 @@ const AdminLeads = () => {
                   )}
                   <p className="text-sm text-muted-foreground mb-3">{contact.message}</p>
                   <div className="flex flex-wrap gap-1.5">
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => updateContactStatus(contact.id, "in_progress")}>
+                    <Button size="sm" variant="outline" className={`h-7 text-xs ${contact.status === "in_progress" ? "bg-blue-500 text-white border-blue-500 hover:bg-blue-600" : ""}`} onClick={() => updateContactStatus(contact.id, "in_progress")}>
                       In Progress
                     </Button>
-                    <Button size="sm" variant="outline" className="h-7 text-xs text-green-600" onClick={() => updateContactStatus(contact.id, "responded")}>
+                    <Button size="sm" variant="outline" className={`h-7 text-xs ${contact.status === "responded" ? "bg-green-600 text-white border-green-600 hover:bg-green-700" : "text-green-600"}`} onClick={() => updateContactStatus(contact.id, "responded")}>
                       <CheckCircle className="w-3 h-3 mr-1" />
                       Responded
                     </Button>
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => updateContactStatus(contact.id, "closed")}>
+                    <Button size="sm" variant="outline" className={`h-7 text-xs ${contact.status === "closed" ? "bg-gray-600 text-white border-gray-600 hover:bg-gray-700" : ""}`} onClick={() => updateContactStatus(contact.id, "closed")}>
                       <XCircle className="w-3 h-3 mr-1" />
                       Close
                     </Button>
@@ -747,14 +747,14 @@ const AdminLeads = () => {
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">{quote.project_details}</p>
                   <div className="flex flex-wrap gap-1.5">
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => updateQuoteStatus(quote.id, "in_progress")}>
+                    <Button size="sm" variant="outline" className={`h-7 text-xs ${quote.status === "in_progress" ? "bg-blue-500 text-white border-blue-500 hover:bg-blue-600" : ""}`} onClick={() => updateQuoteStatus(quote.id, "in_progress")}>
                       In Progress
                     </Button>
-                    <Button size="sm" variant="outline" className="h-7 text-xs text-green-600" onClick={() => updateQuoteStatus(quote.id, "responded")}>
+                    <Button size="sm" variant="outline" className={`h-7 text-xs ${quote.status === "responded" || quote.status === "quoted" ? "bg-green-600 text-white border-green-600 hover:bg-green-700" : "text-green-600"}`} onClick={() => updateQuoteStatus(quote.id, "responded")}>
                       <CheckCircle className="w-3 h-3 mr-1" />
                       Quoted
                     </Button>
-                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => updateQuoteStatus(quote.id, "closed")}>
+                    <Button size="sm" variant="outline" className={`h-7 text-xs ${quote.status === "closed" ? "bg-gray-600 text-white border-gray-600 hover:bg-gray-700" : ""}`} onClick={() => updateQuoteStatus(quote.id, "closed")}>
                       <XCircle className="w-3 h-3 mr-1" />
                       Close
                     </Button>

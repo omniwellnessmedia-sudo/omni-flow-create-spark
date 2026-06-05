@@ -148,12 +148,12 @@ const WebDevelopment = () => {
             <div className="relative hidden lg:block">
               <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg"
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg"
                   alt="Conscious media production workspace"
                   className="w-full h-[500px] object-cover"
                   loading="eager"
                   onError={(e) => {
-                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/CAPTCHA_OMNI_IMAGES_DAILY_MUIZ-7.jpg";
+                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg";
                   }}
                 />
               </div>

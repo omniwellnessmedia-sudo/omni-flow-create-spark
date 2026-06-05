@@ -25,6 +25,10 @@ import {
 } from "lucide-react";
 import { format, subDays, startOfMonth, endOfMonth, subMonths, parseISO } from "date-fns";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import PortfolioOverview from "@/components/admin/accounting/PortfolioOverview";
+import { XeroExportButton } from "@/components/admin/accounting/XeroExportButton";
+import { RevenueStreamsBreakdown } from "@/components/admin/accounting/RevenueStreamsBreakdown";
+import { AccountingChecklist } from "@/components/admin/accounting/AccountingChecklist";
 
 interface Order {
   id: string;
@@ -307,6 +311,7 @@ const AdminAccounting = () => {
               <Input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="h-8 w-[140px] text-xs" />
             </>
           )}
+          <XeroExportButton />
           <Button variant="outline" size="sm" className="h-8" onClick={fetchData}>
             <RefreshCw className="h-3 w-3" />
           </Button>
@@ -416,14 +421,29 @@ const AdminAccounting = () => {
       )}
 
       {/* Detail Tabs */}
-      <Tabs defaultValue="orders" className="space-y-4">
-        <TabsList>
+      <Tabs defaultValue="portfolio" className="space-y-4">
+        <TabsList className="flex-wrap h-auto">
+          <TabsTrigger value="portfolio" className="text-xs">Portfolio</TabsTrigger>
+          <TabsTrigger value="ops" className="text-xs">Streams & Checklist</TabsTrigger>
           <TabsTrigger value="orders" className="text-xs">Orders ({orders.length})</TabsTrigger>
           <TabsTrigger value="commissions" className="text-xs">Commissions ({commissions.length})</TabsTrigger>
           <TabsTrigger value="payouts" className="text-xs">Payouts ({payouts.length})</TabsTrigger>
           <TabsTrigger value="transactions" className="text-xs">Transactions ({transactions.length})</TabsTrigger>
           <TabsTrigger value="breakdown" className="text-xs">Breakdown</TabsTrigger>
         </TabsList>
+
+        {/* Multi-entity portfolio overview */}
+        <TabsContent value="portfolio">
+          <PortfolioOverview />
+        </TabsContent>
+
+        {/* Operations — revenue streams + monthly checklist (Steven's daily view) */}
+        <TabsContent value="ops">
+          <div className="grid gap-4 lg:grid-cols-2">
+            <RevenueStreamsBreakdown />
+            <AccountingChecklist />
+          </div>
+        </TabsContent>
 
         {/* Orders Table */}
         <TabsContent value="orders">

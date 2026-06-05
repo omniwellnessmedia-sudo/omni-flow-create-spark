@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { TourTrigger } from "@/components/ui/app-tour";
 import { useAppTour } from "@/hooks/useAppTour";
@@ -32,6 +32,13 @@ const getStorageUrl = (filename: string) =>
 
 const HeroSection = () => {
   const { isOpen, hasSeenTour, steps, startTour, completeTour, skipTour } = useAppTour();
+
+  // FloatingActionDock dispatches this when the user picks "Take the tour"
+  useEffect(() => {
+    const handler = () => startTour();
+    window.addEventListener("omni:start-tour", handler);
+    return () => window.removeEventListener("omni:start-tour", handler);
+  }, [startTour]);
 
   // Helper function to get unique images based on category using centralized system
   const getImageForCategory = (category: string) => {

@@ -37,7 +37,11 @@ const CORE = {
     community1: `${SUPABASE_URL}/${FOLDERS.providerImages}/Omni%20wellness%20community%20project%201.JPG`,
     community2: `${SUPABASE_URL}/${FOLDERS.providerImages}/Omni%20wellness%20community%20project%202.JPG`,
     community3: `${SUPABASE_URL}/${FOLDERS.providerImages}/Omni%20wellness%20community%20project%203.jpg`,
-    team: `${SUPABASE_URL}/${FOLDERS.providerImages}/Omni%20wellness%20team.jpg`,
+    // NOTE: the original "Omni wellness team.jpg" group photo contained Abbi (red-haired),
+    // who must not appear on the site. Repointed to an Abbi-free Cape Town landscape so every
+    // alias that reused this (business/consulting/teamwork/chad cards) is cleared at the source.
+    // Supply a preferred Abbi-free team photo to swap back a people shot.
+    team: `${SUPABASE_URL}/${FOLDERS.locationImages}/_MG_0220.jpg`,
     wellness1: `${SUPABASE_URL}/${FOLDERS.providerImages}/wellness.jpg`,
     wellness2: `${SUPABASE_URL}/${FOLDERS.providerImages}/wellness%202.jpg`,
     landmark: `${SUPABASE_URL}/${FOLDERS.providerImages}/OMNI_LANDMARK%20FOUNDATION_IMAGES_JUNE%202024-2.jpg`,
