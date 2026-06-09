@@ -190,6 +190,18 @@ function App() {
                   <Route path="/2bewell-shop" element={<Navigate to="/services" replace />} />
                   <Route path="/2bewell/shop" element={<Navigate to="/services" replace />} />
                   <Route path="/2bewell/product/:productId" element={<Navigate to="/services" replace />} />
+
+                  {/* Legacy / convenience redirects — these paths are linked from various
+                      surfaces but never had a route. Route audit (June 2026) added them so
+                      no nav hits the SPA fallback or NotFound. */}
+                  <Route path="/partners" element={<Navigate to="/partners-directory" replace />} />
+                  <Route path="/impact" element={<Navigate to="/csr-impact" replace />} />
+                  <Route path="/wellness-account" element={<Navigate to="/wellness-exchange/account" replace />} />
+                  <Route path="/community/events" element={<Navigate to="/community" replace />} />
+                  <Route path="/ai-tools" element={<Navigate to="/services" replace />} />
+                  <Route path="/wellness-exchange/provider-signup" element={<Navigate to="/auth?tab=signup&role=provider" replace />} />
+                  <Route path="/provider-signup" element={<Navigate to="/auth?tab=signup&role=provider" replace />} />
+
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
                   <Route path="/awin-affiliate-products" element={<AwinAffiliateProducts />} />
                   <Route path="/cj-products/:id" element={<CJProductDetail />} />

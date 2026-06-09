@@ -86,6 +86,50 @@ html.magic-cursor-active [contenteditable=""] {
   .magic-card:hover { transform: none; }
 }
 
+/* ===== FLUID LAYOUT POLISH =====
+   Tone-down for the boxy/retro feel. Use .surface (replaces hard borders + heavy
+   shadows with a soft ring + subtle gradient), .soft-shadow (warm tonal shadow
+   instead of grey), and .section-divider (subtle hairline instead of a hard rule).
+   Use sparingly — these are utilities, not a redesign. */
+.surface {
+  background-color: hsl(var(--card));
+  border-radius: 1rem;
+  box-shadow:
+    0 1px 2px hsl(var(--foreground) / 0.04),
+    0 0 0 1px hsl(var(--border) / 0.6);
+  transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.surface:hover {
+  box-shadow:
+    0 6px 16px -4px hsl(var(--primary) / 0.12),
+    0 0 0 1px hsl(var(--primary) / 0.2);
+}
+.surface-warm {
+  background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--card)) 70%, hsl(var(--omni-orange) / 0.04) 100%);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 1px 3px hsl(var(--foreground) / 0.05),
+    0 0 0 1px hsl(var(--border) / 0.5);
+}
+.soft-shadow {
+  box-shadow:
+    0 4px 16px -4px hsl(var(--primary) / 0.1),
+    0 1px 3px hsl(var(--foreground) / 0.06);
+}
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, hsl(var(--border) / 0.7), transparent);
+  border: 0;
+}
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: hsl(var(--primary));
+  margin-bottom: 0.75rem;
+}
+
 /* ===== OMNI WELLNESS DESIGN SYSTEM ===== */
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 
