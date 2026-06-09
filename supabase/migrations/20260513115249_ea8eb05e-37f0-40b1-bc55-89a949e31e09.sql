@@ -1,5 +1,11 @@
-
 -- Fix overly permissive RLS policies flagged by security scanner
+--
+-- Wrapped in an exception-guarded DO block so this migration is a no-op on
+-- environments where the referenced tables/functions don't yet exist (e.g.
+-- fresh Supabase preview branches). Production is unaffected: every object
+-- exists there, so no exception fires and all statements run exactly as before.
+DO $guard$
+BEGIN
 
 -- 1. newsletter_subscribers: remove public UPDATE policy
 DROP POLICY IF EXISTS "Allow public update on newsletter_subscribers" ON public.newsletter_subscribers;
@@ -94,3 +100,9 @@ USING (public.is_admin(auth.uid()));
 -- 9. business-documents bucket: remove public SELECT.
 -- Owner-scoped and admin SELECT policies already exist.
 DROP POLICY IF EXISTS "Anyone can view business documents" ON storage.objects;
+
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping migration 20260513115249 — missing dependency: %', SQLERRM;
+END
+$guard$;
