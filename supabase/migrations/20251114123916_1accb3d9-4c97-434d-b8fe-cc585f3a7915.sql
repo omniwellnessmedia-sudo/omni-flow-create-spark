@@ -2,9 +2,18 @@
 -- DUDA PARTNER WEBSITE PLATFORM - DATABASE SCHEMA
 -- Phase 1: Database Architecture
 -- =====================================================
+--
+-- Wrapped in an exception-guarded DO block so this migration is a no-op on
+-- environments where referenced objects (e.g. provider_websites,
+-- provider_profiles, update_updated_at_column) don't yet exist — such as fresh
+-- Supabase preview branches replaying history out of prod-state. Production is
+-- unaffected: every object exists there, so no exception fires and all
+-- statements run exactly as before.
+DO $guard$
+BEGIN
 
 -- Step 1: Extend provider_websites table with Duda integration columns
-ALTER TABLE public.provider_websites 
+ALTER TABLE public.provider_websites
 ADD COLUMN IF NOT EXISTS duda_site_name TEXT UNIQUE,
 ADD COLUMN IF NOT EXISTS duda_site_url TEXT,
 ADD COLUMN IF NOT EXISTS duda_external_id TEXT,
@@ -18,10 +27,10 @@ ADD COLUMN IF NOT EXISTS custom_css_override TEXT,
 ADD COLUMN IF NOT EXISTS branding_config JSONB DEFAULT '{}'::jsonb;
 
 -- Create indexes for Duda lookups
-CREATE INDEX IF NOT EXISTS idx_provider_websites_duda_site_name 
+CREATE INDEX IF NOT EXISTS idx_provider_websites_duda_site_name
   ON public.provider_websites(duda_site_name);
 
-CREATE INDEX IF NOT EXISTS idx_provider_websites_site_status 
+CREATE INDEX IF NOT EXISTS idx_provider_websites_site_status
   ON public.provider_websites(site_status);
 
 -- Step 2: Create partner website stats table for commission tracking
@@ -29,7 +38,7 @@ CREATE TABLE IF NOT EXISTS public.partner_website_stats (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
   website_id UUID REFERENCES provider_websites(id) ON DELETE CASCADE,
-  
+
   -- Traffic Stats (from Duda API)
   period_start DATE NOT NULL,
   period_end DATE NOT NULL,
@@ -37,22 +46,22 @@ CREATE TABLE IF NOT EXISTS public.partner_website_stats (
   unique_visitors INTEGER DEFAULT 0,
   bounce_rate DECIMAL(5,2),
   avg_session_duration INTEGER, -- seconds
-  
+
   -- Conversion Stats
   form_submissions INTEGER DEFAULT 0,
   bookings_generated INTEGER DEFAULT 0,
   revenue_generated_zar DECIMAL(10,2) DEFAULT 0,
-  
+
   -- Commission
   commission_rate DECIMAL(5,4) DEFAULT 0.10, -- 10% default
   commission_earned_zar DECIMAL(10,2) DEFAULT 0,
   commission_earned_wellcoins INTEGER DEFAULT 0,
   commission_status TEXT DEFAULT 'pending' CHECK (commission_status IN ('pending', 'approved', 'paid')),
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now(),
-  
+
   UNIQUE(website_id, period_start, period_end)
 );
 
@@ -88,28 +97,28 @@ CREATE TABLE IF NOT EXISTS public.website_ai_content (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   provider_id UUID REFERENCES provider_profiles(id) ON DELETE CASCADE,
   website_id UUID REFERENCES provider_websites(id) ON DELETE CASCADE,
-  
+
   content_type TEXT NOT NULL CHECK (content_type IN (
-    'hero_headline', 
-    'hero_subheadline', 
-    'about_section', 
+    'hero_headline',
+    'hero_subheadline',
+    'about_section',
     'service_description',
     'meta_description',
     'call_to_action',
     'testimonial_request',
     'blog_post'
   )),
-  
+
   prompt_used TEXT,
   generated_content TEXT NOT NULL,
   is_applied BOOLEAN DEFAULT false,
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
-  
+
   -- AI Metadata
   model_used TEXT DEFAULT 'google/gemini-2.5-flash',
   generation_time_ms INTEGER,
   tokens_used INTEGER,
-  
+
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -130,3 +139,9 @@ DROP POLICY IF EXISTS "Providers can manage their own AI content" ON public.webs
 CREATE POLICY "Providers can manage their own AI content"
   ON public.website_ai_content FOR INSERT
   WITH CHECK (provider_id = auth.uid());
+
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping migration 20251114123916 — missing dependency: %', SQLERRM;
+END
+$guard$;

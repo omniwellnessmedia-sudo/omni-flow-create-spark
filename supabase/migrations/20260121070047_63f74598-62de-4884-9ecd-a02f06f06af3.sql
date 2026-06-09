@@ -2,6 +2,14 @@
 -- Tour Booking Stabilization Schema
 -- Implements OCTO/GSTC sustainable travel standards
 -- ================================================
+--
+-- Wrapped in an exception-guarded DO block so this migration is a no-op on
+-- environments where the referenced base tables (tours, profiles) or is_admin()
+-- don't yet exist — e.g. fresh Supabase preview branches. Production is
+-- unaffected: every object exists there, so no exception fires and all
+-- statements run exactly as before.
+DO $guard$
+BEGIN
 
 -- Add booking configuration columns to tours table
 ALTER TABLE tours ADD COLUMN IF NOT EXISTS booking_mode TEXT DEFAULT 'request' CHECK (booking_mode IN ('instant', 'request'));
@@ -321,3 +329,9 @@ CREATE INDEX IF NOT EXISTS idx_booking_leases_expires ON booking_leases(expires_
 CREATE INDEX IF NOT EXISTS idx_tour_bookings_tour ON tour_bookings(tour_id);
 CREATE INDEX IF NOT EXISTS idx_tour_bookings_date ON tour_bookings(booking_date);
 CREATE INDEX IF NOT EXISTS idx_tour_bookings_user ON tour_bookings(user_id);
+
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping migration 20260121070047 — missing dependency: %', SQLERRM;
+END
+$guard$;

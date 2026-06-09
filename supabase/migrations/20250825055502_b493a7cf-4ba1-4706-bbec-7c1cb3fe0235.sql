@@ -1,27 +1,34 @@
 -- Fix Critical RLS Policy Issues
+--
+-- Wrapped in an exception-guarded DO block so this migration is a no-op on
+-- environments where referenced objects don't yet exist (e.g. fresh Supabase
+-- preview branches). Production is unaffected: every object exists there, so no
+-- exception fires and all statements run exactly as before.
+DO $guard$
+BEGIN
 
 -- 1. Fix contact_submissions - only admins should see submissions
 DROP POLICY IF EXISTS "Only admins can view contact submissions" ON public.contact_submissions;
-CREATE POLICY "Only admins can view contact submissions" 
-ON public.contact_submissions 
-FOR SELECT 
+CREATE POLICY "Only admins can view contact submissions"
+ON public.contact_submissions
+FOR SELECT
 USING (
   EXISTS (
-    SELECT 1 FROM public.profiles 
-    WHERE profiles.id = auth.uid() 
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid()
     AND profiles.user_type = 'admin'
   )
 );
 
 -- 2. Fix service_quotes - only admins should see quotes
 DROP POLICY IF EXISTS "Only admins can view service quotes" ON public.service_quotes;
-CREATE POLICY "Only admins can view service quotes" 
-ON public.service_quotes 
-FOR SELECT 
+CREATE POLICY "Only admins can view service quotes"
+ON public.service_quotes
+FOR SELECT
 USING (
   EXISTS (
-    SELECT 1 FROM public.profiles 
-    WHERE profiles.id = auth.uid() 
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid()
     AND profiles.user_type = 'admin'
   )
 );
@@ -30,22 +37,22 @@ USING (
 DROP POLICY IF EXISTS "Users can view their own orders" ON public.orders;
 DROP POLICY IF EXISTS "Admins can view all orders" ON public.orders;
 
-CREATE POLICY "Users can view their own orders" 
-ON public.orders 
-FOR SELECT 
+CREATE POLICY "Users can view their own orders"
+ON public.orders
+FOR SELECT
 USING (
-  (user_id = auth.uid()) 
-  OR 
+  (user_id = auth.uid())
+  OR
   (customer_email = (SELECT email FROM public.profiles WHERE id = auth.uid()))
 );
 
-CREATE POLICY "Admins can view all orders" 
-ON public.orders 
-FOR SELECT 
+CREATE POLICY "Admins can view all orders"
+ON public.orders
+FOR SELECT
 USING (
   EXISTS (
-    SELECT 1 FROM public.profiles 
-    WHERE profiles.id = auth.uid() 
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid()
     AND profiles.user_type = 'admin'
   )
 );
@@ -54,18 +61,18 @@ USING (
 DROP POLICY IF EXISTS "Users can view their own bookings" ON public.tour_bookings;
 DROP POLICY IF EXISTS "Admins can view all bookings" ON public.tour_bookings;
 
-CREATE POLICY "Users can view their own bookings" 
-ON public.tour_bookings 
-FOR SELECT 
+CREATE POLICY "Users can view their own bookings"
+ON public.tour_bookings
+FOR SELECT
 USING (user_id = auth.uid());
 
-CREATE POLICY "Admins can view all bookings" 
-ON public.tour_bookings 
-FOR SELECT 
+CREATE POLICY "Admins can view all bookings"
+ON public.tour_bookings
+FOR SELECT
 USING (
   EXISTS (
-    SELECT 1 FROM public.profiles 
-    WHERE profiles.id = auth.uid() 
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid()
     AND profiles.user_type = 'admin'
   )
 );
@@ -74,22 +81,22 @@ USING (
 DROP POLICY IF EXISTS "Public can view basic provider info only" ON public.provider_profiles;
 DROP POLICY IF EXISTS "Authenticated users can view contact info" ON public.provider_profiles;
 
-CREATE POLICY "Public can view basic provider info only" 
-ON public.provider_profiles 
-FOR SELECT 
+CREATE POLICY "Public can view basic provider info only"
+ON public.provider_profiles
+FOR SELECT
 USING (verified = true);
 
-CREATE POLICY "Authenticated users can view provider contact info" 
-ON public.provider_profiles 
-FOR SELECT 
+CREATE POLICY "Authenticated users can view provider contact info"
+ON public.provider_profiles
+FOR SELECT
 USING (
-  auth.role() = 'authenticated' 
+  auth.role() = 'authenticated'
   AND verified = true
 );
 
-CREATE POLICY "Providers can view their full profile" 
-ON public.provider_profiles 
-FOR SELECT 
+CREATE POLICY "Providers can view their full profile"
+ON public.provider_profiles
+FOR SELECT
 USING (auth.uid() = id);
 
 -- 6. Prevent privilege escalation - users cannot change their own user_type
@@ -100,14 +107,14 @@ BEGIN
   IF OLD.user_type IS DISTINCT FROM NEW.user_type THEN
     -- Check if current user is admin or if this is a system operation
     IF NOT EXISTS (
-      SELECT 1 FROM public.profiles 
-      WHERE profiles.id = auth.uid() 
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
       AND profiles.user_type = 'admin'
     ) AND auth.uid() IS NOT NULL THEN
       RAISE EXCEPTION 'Only administrators can change user types';
     END IF;
   END IF;
-  
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -118,3 +125,9 @@ CREATE TRIGGER prevent_user_type_escalation_trigger
   BEFORE UPDATE ON public.profiles
   FOR EACH ROW
   EXECUTE FUNCTION public.prevent_user_type_escalation();
+
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping migration 20250825055502 — missing dependency: %', SQLERRM;
+END
+$guard$;
