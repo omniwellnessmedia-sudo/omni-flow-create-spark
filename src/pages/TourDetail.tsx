@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
+import { useSavedTours } from '@/hooks/useSavedTours';
 import TourBookingSidebar from '@/components/tours/TourBookingSidebar';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
@@ -55,6 +57,7 @@ interface Testimonial {
 
 const TourDetail = () => {
   const { category, slug, id } = useParams();
+  const { toggleSaved, isSaved } = useSavedTours();
   const [tour, setTour] = useState<Tour | null>(null);
   const [itinerary, setItinerary] = useState<Itinerary[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -216,8 +219,14 @@ const TourDetail = () => {
             <span className="hidden sm:inline">EXCLUSIVE</span>
             <span className="sm:hidden">EXC</span>
           </Badge>
-          <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0">
-            <Heart className="h-3 w-3" />
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => toggleSaved(tour.id)}
+            aria-label={isSaved(tour.id) ? "Remove from favorites" : "Save to favorites"}
+            className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0"
+          >
+            <Heart className={`h-3 w-3 transition-colors ${isSaved(tour.id) ? "fill-rose-500 text-rose-500" : ""}`} />
           </Button>
           <Button size="sm" variant="ghost" className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 h-6 w-6 p-0">
             <Share2 className="h-3 w-3" />
@@ -367,43 +376,61 @@ const TourDetail = () => {
                   )}
                 </TabsContent>
 
-                <TabsContent value="itinerary" className="space-y-4">
+                <TabsContent value="itinerary">
                   {itinerary.length > 0 ? (
-                    itinerary.map((day, index) => (
-                      <Card key={index}>
-                        <CardHeader>
-                          <CardTitle className="flex items-center space-x-3">
-                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
-                              {day.day_number}
-                            </span>
-                            <span>{day.title}</span>
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-muted-foreground mb-4">{day.description}</p>
-                          {day.location && (
-                            <div className="flex items-center text-sm text-muted-foreground mb-2">
-                              <MapPin className="h-4 w-4 mr-1" />
-                              {day.location}
+                    /* Day-by-day accordion — day 1 expanded by default, others collapsed.
+                       Replaces the stacked all-expanded Cards that made long itineraries
+                       feel like an endless wall of text. */
+                    <Accordion
+                      type="single"
+                      collapsible
+                      defaultValue={`day-${itinerary[0].day_number}`}
+                      className="rounded-2xl border border-border/60 bg-card overflow-hidden divide-y divide-border/40"
+                    >
+                      {itinerary.map((day) => (
+                        <AccordionItem key={day.day_number} value={`day-${day.day_number}`} className="border-0">
+                          <AccordionTrigger className="px-5 py-4 hover:bg-muted/40 hover:no-underline">
+                            <div className="flex items-center gap-4 text-left">
+                              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-primary/10 text-primary text-sm font-semibold ring-1 ring-primary/20 shrink-0">
+                                {day.day_number}
+                              </span>
+                              <div className="min-w-0">
+                                <p className="text-[11px] uppercase tracking-wider text-muted-foreground/80">Day {day.day_number}</p>
+                                <p className="font-medium leading-snug">{day.title}</p>
+                              </div>
                             </div>
-                          )}
-                          {day.activities && day.activities.length > 0 && (
-                            <div className="mt-3">
-                              <h4 className="font-semibold text-sm mb-2">Activities:</h4>
-                              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                                {day.activities.map((activity, i) => (
-                                  <li key={i}>{activity}</li>
-                                ))}
-                              </ul>
+                          </AccordionTrigger>
+                          <AccordionContent className="px-5 pb-5">
+                            <div className="pl-13 ml-13 space-y-3" style={{ marginLeft: "3.25rem" }}>
+                              <p className="text-muted-foreground leading-relaxed">{day.description}</p>
+                              {day.location && (
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                  <MapPin className="h-4 w-4 mr-1.5 text-primary/70" />
+                                  {day.location}
+                                </div>
+                              )}
+                              {day.activities && day.activities.length > 0 && (
+                                <div>
+                                  <h4 className="font-semibold text-xs uppercase tracking-wider text-muted-foreground mb-2">Activities</h4>
+                                  <ul className="space-y-1.5">
+                                    {day.activities.map((activity, i) => (
+                                      <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
+                                        <Check className="h-3.5 w-3.5 mt-0.5 text-primary shrink-0" />
+                                        <span>{activity}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                    ))
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
                   ) : (
                     <Card>
                       <CardContent className="p-8 text-center">
-                        <p className="text-muted-foreground">Detailed itinerary coming soon...</p>
+                        <p className="text-muted-foreground">Detailed itinerary coming soon…</p>
                       </CardContent>
                     </Card>
                   )}
