@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
+import { useSavedTours } from '@/hooks/useSavedTours';
 import { toast } from 'sonner';
 import { FloatingDecorations } from '@/components/ui/gaia-elements';
 import { CuratorTip } from '@/components/curator/CuratorTip';
@@ -102,6 +103,7 @@ const formatDuration = (duration: any): string => {
 
 export default function Tours() {
   const navigate = useNavigate();
+  const { toggleSaved, isSaved } = useSavedTours();
   const [tours, setTours] = useState<ViatorTour[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -191,7 +193,7 @@ export default function Tours() {
               {tour.category || 'Tour'}
             </Badge>
           </div>
-          <div className="absolute top-3 right-3">
+          <div className="absolute top-3 right-3 flex items-center gap-2">
             <Badge variant="secondary" className="bg-background/90">
               <Star className="w-3 h-3 mr-1 text-yellow-500 fill-yellow-500" />
               {tour.rating?.toFixed(1) || 'New'}
@@ -199,6 +201,14 @@ export default function Tours() {
                 <span className="ml-1 text-muted-foreground">({tour.review_count})</span>
               )}
             </Badge>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); toggleSaved(tour.id); }}
+              aria-label={isSaved(tour.id) ? "Remove from favorites" : "Save to favorites"}
+              className="h-8 w-8 rounded-full bg-background/90 backdrop-blur-sm border border-border/50 flex items-center justify-center hover:scale-110 hover:bg-background transition-all"
+            >
+              <Heart className={`h-4 w-4 transition-colors ${isSaved(tour.id) ? "fill-rose-500 text-rose-500" : "text-foreground/70"}`} />
+            </button>
           </div>
         </div>
         
@@ -329,6 +339,49 @@ export default function Tours() {
               ))}
             </div>
           </div>
+
+          {/* Explore by category — visual chip strip above the dropdowns.
+              Replaces the "pick a category from a dropdown buried in filters" flow with
+              browsable, iconic cards that double as the active-state for selectedCategory. */}
+          {categories.length > 0 && (
+            <div className="mb-8">
+              <h3 className="font-heading text-2xl mb-1">Explore by category</h3>
+              <p className="text-sm text-muted-foreground mb-5">Pick a vibe — we'll narrow it down for you.</p>
+              <div className="flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCategory('all')}
+                  className={`shrink-0 snap-start flex flex-col items-center justify-center gap-2 w-28 h-28 rounded-2xl border transition-all ${
+                    selectedCategory === 'all'
+                      ? 'border-primary bg-primary/5 soft-shadow'
+                      : 'border-border/60 hover:border-primary/40 hover:bg-muted/40'
+                  }`}
+                >
+                  <Compass className={`h-6 w-6 ${selectedCategory === 'all' ? 'text-primary' : 'text-muted-foreground'}`} />
+                  <span className="text-xs font-medium">All</span>
+                </button>
+                {categories.map(cat => {
+                  const Icon = categoryIcons[cat] || Mountain;
+                  const active = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`shrink-0 snap-start flex flex-col items-center justify-center gap-2 w-28 h-28 rounded-2xl border transition-all ${
+                        active
+                          ? 'border-primary bg-primary/5 soft-shadow'
+                          : 'border-border/60 hover:border-primary/40 hover:bg-muted/40'
+                      }`}
+                    >
+                      <Icon className={`h-6 w-6 ${active ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <span className="text-xs font-medium text-center leading-tight px-1">{cat}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Filters */}
           <div className="flex flex-wrap gap-3 mb-8 p-4 bg-muted/30 rounded-lg">
