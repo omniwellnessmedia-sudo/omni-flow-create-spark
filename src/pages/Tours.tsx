@@ -267,8 +267,8 @@ export default function Tours() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               {omniVoice.pageIntros.tours.headline}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8">
-              {omniVoice.pageIntros.tours.subheadline}
+            <p className="text-lg md:text-xl mb-8">
+              <span className="magic-shimmer-text">{omniVoice.pageIntros.tours.subheadline}</span>
             </p>
             
             {/* Curator Welcome */}

@@ -87,8 +87,8 @@ const Contact = () => {
             <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl mb-4">
               <span className="magic-shimmer-text">{omniVoice.pageIntros.contact.headline}</span>
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              {omniVoice.pageIntros.contact.subheadline}
+            <p className="text-lg sm:text-xl mb-8 max-w-3xl mx-auto leading-relaxed">
+              <span className="magic-shimmer-text">{omniVoice.pageIntros.contact.subheadline}</span>
             </p>
             
             {/* Curator Welcome */}

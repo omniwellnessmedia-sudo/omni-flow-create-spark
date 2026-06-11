@@ -262,7 +262,7 @@ const HeroSection = () => {
 
           {/* Subheadline — light, editorial */}
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 mb-10 sm:mb-14 max-w-2xl mx-auto animate-fade-in-up leading-relaxed font-light" style={{ animationDelay: '0.2s' }}>
-            {omniVoice.pageIntros.home.subheadline}
+            <span className="magic-shimmer-text">{omniVoice.pageIntros.home.subheadline}</span>
           </p>
 
           {/* CTA Buttons — Premium, restrained */}

@@ -77,12 +77,12 @@ const Hero = ({
 
         {description && (
           <p className={cn(
-            "text-gray-600 mb-8 leading-relaxed break-words",
+            "mb-8 leading-relaxed break-words",
             variant === 'split'
               ? 'text-base sm:text-lg max-w-full lg:max-w-lg mx-auto lg:mx-0'
               : 'text-xl sm:text-2xl max-w-4xl mx-auto'
           )}>
-            {description}
+            <span className="magic-shimmer-text">{description}</span>
           </p>
         )}
 
