@@ -44,8 +44,10 @@ import {
   Upload
 } from 'lucide-react';
 import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
-import SiteHeader from '@/components/SiteHeader';
-import Footer from '@/components/Footer';
+// NOTE: rendered inside AdminDashboard, which already supplies the header,
+// sidebar and padded content area — so this view must NOT add the public
+// SiteHeader/Footer (that produced a double header + a stray public footer
+// inside the admin calendar). Kept as plain section content.
 
 interface ScheduledPost {
   id: string;
@@ -418,10 +420,8 @@ const SocialScheduler = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <SiteHeader />
-      
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+    <div>
+      <main className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">Social Media Scheduler</h1>
@@ -858,8 +858,6 @@ const SocialScheduler = () => {
           </TabsContent>
         </Tabs>
       </main>
-
-      <Footer />
     </div>
   );
 };

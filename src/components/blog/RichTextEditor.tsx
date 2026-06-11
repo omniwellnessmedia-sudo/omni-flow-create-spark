@@ -100,7 +100,10 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
     setUploading(true);
     try {
       const ext = file.name.split(".").pop();
-      const path = `blog/${userId || "anon"}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      // Path MUST start with the user's id: the storage RLS INSERT policy checks
+      // auth.uid() = (storage.foldername(name))[1], i.e. the FIRST path segment.
+      // (Previously `blog/<uid>/…` put the literal "blog" first → policy rejected it.)
+      const path = `${userId || "anon"}/blog/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
       const { error } = await supabase.storage.from(STORAGE_BUCKET).upload(path, file, {
         cacheControl: "3600",
         upsert: false,
@@ -138,7 +141,7 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
   return (
     <div className="rounded-2xl border border-border/60 overflow-hidden bg-card">
       {/* Sticky toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-border/60 bg-muted/40 sticky top-16 z-10">
+      <div className="flex flex-wrap items-center gap-1 p-2 border-b border-border/60 bg-muted sticky top-16 z-20">
         <ToolbarButton onClick={() => exec("bold")} title="Bold"><Bold className="h-4 w-4" /></ToolbarButton>
         <ToolbarButton onClick={() => exec("italic")} title="Italic"><Italic className="h-4 w-4" /></ToolbarButton>
         <span className="w-px h-6 bg-border mx-1" />
