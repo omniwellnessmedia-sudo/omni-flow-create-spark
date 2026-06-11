@@ -86,14 +86,12 @@ const MediaProduction = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-6 text-gradient-hero">
-                Create Powerful Stories That Inspire
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-6">
+                <span className="magic-shimmer-text">Create Powerful Stories That Inspire</span>
               </h1>
-              <p className="text-xl mb-8 leading-relaxed">
-                <span className="magic-shimmer-text">
-                  From documentaries to social media content, we craft authentic visual narratives that connect,
-                  educate, and drive meaningful change. Award-winning production quality meets conscious storytelling.
-                </span>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                From documentaries to social media content, we craft authentic visual narratives that connect, 
+                educate, and drive meaningful change. Award-winning production quality meets conscious storytelling.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button 

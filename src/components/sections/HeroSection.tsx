@@ -257,12 +257,12 @@ const HeroSection = () => {
             id="hero-heading"
             className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal mb-5 sm:mb-7 text-white animate-fade-in-up leading-[1.1] tracking-tight"
           >
-            {omniVoice.pageIntros.home.headline}
+            <span className="magic-shimmer-text">{omniVoice.pageIntros.home.headline}</span>
           </h1>
 
           {/* Subheadline — light, editorial */}
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 mb-10 sm:mb-14 max-w-2xl mx-auto animate-fade-in-up leading-relaxed font-light" style={{ animationDelay: '0.2s' }}>
-            <span className="magic-shimmer-text">{omniVoice.pageIntros.home.subheadline}</span>
+            {omniVoice.pageIntros.home.subheadline}
           </p>
 
           {/* CTA Buttons — Premium, restrained */}

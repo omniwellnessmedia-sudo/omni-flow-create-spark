@@ -112,13 +112,11 @@ const WebDevelopment = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <div>
               <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                Build <span className="text-primary">Powerful Websites</span> That Convert
+                <span className="magic-shimmer-text">Build Powerful Websites That Convert</span>
               </h1>
-              <p className="text-xl mb-8 leading-relaxed">
-                <span className="magic-shimmer-text">
-                  Custom web solutions that reflect your brand values and drive results. From stunning designs
-                  to robust e-commerce platforms, we create digital experiences that inspire and convert.
-                </span>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                Custom web solutions that reflect your brand values and drive results. From stunning designs 
+                to robust e-commerce platforms, we create digital experiences that inspire and convert.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button

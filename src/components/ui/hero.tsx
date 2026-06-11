@@ -72,17 +72,17 @@ const Hero = ({
               ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl mx-auto lg:mx-0 max-w-4xl'
               : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mx-auto max-w-4xl'
         )}>
-          {title}
+          <span className="magic-shimmer-text">{title}</span>
         </h1>
 
         {description && (
           <p className={cn(
-            "mb-8 leading-relaxed break-words",
+            "text-gray-600 mb-8 leading-relaxed break-words",
             variant === 'split'
               ? 'text-base sm:text-lg max-w-full lg:max-w-lg mx-auto lg:mx-0'
               : 'text-xl sm:text-2xl max-w-4xl mx-auto'
           )}>
-            <span className="magic-shimmer-text">{description}</span>
+            {description}
           </p>
         )}
 
