@@ -257,7 +257,7 @@ const HeroSection = () => {
             id="hero-heading"
             className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal mb-5 sm:mb-7 text-white animate-fade-in-up leading-[1.1] tracking-tight"
           >
-            <span className="magic-shimmer-text">{omniVoice.pageIntros.home.headline}</span>
+            {omniVoice.pageIntros.home.headline}
           </h1>
 
           {/* Subheadline — light, editorial */}
