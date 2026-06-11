@@ -136,7 +136,7 @@ const SocialScheduler = () => {
         .from('social_automation_settings' as any)
         .select('setting_value')
         .eq('setting_key', 'zapier_webhook_url')
-        .single() as any);
+        .maybeSingle() as any);  // maybeSingle: no row yet returns null, not a 406
       
       if (data) {
         setZapierWebhookUrl(data.setting_value || '');
