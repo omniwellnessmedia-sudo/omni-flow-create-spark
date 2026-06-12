@@ -1,49 +1,13 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Leaf, Users, Heart, ArrowRight } from "lucide-react";
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { addMonths, endOfMonth, format, isSameDay, isSameMonth, startOfMonth, startOfWeek, endOfWeek, eachDayOfInterval } from "date-fns";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-
-interface CommunityEvent {
-  id: string;
-  title: string;
-  location?: string;
-  date: Date;
-  category: "cleanup" | "workshop" | "tour" | "drive" | "volunteer";
-}
-
-// Sample events — will move to a `community_events` table once the schema lands.
-// Dates are anchored on today so the calendar always feels live.
-const SAMPLE_EVENTS = (): CommunityEvent[] => {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = now.getMonth();
-  return [
-    { id: "1", title: "Beach Cleanup", location: "Muizenberg Beach", date: new Date(y, m, 7, 9, 0), category: "cleanup" },
-    { id: "2", title: "Youth Empowerment Workshop", date: new Date(y, m, 16, 10, 0), category: "workshop" },
-    { id: "3", title: "Community Food Drive", location: "Hanover Park", date: new Date(y, m, 28, 11, 0), category: "drive" },
-  ];
-};
-
-const CATEGORY_ICON: Record<CommunityEvent["category"], typeof Leaf> = {
-  cleanup: Leaf,
-  workshop: Users,
-  tour: ArrowRight,
-  drive: Heart,
-  volunteer: Users,
-};
-
-const CATEGORY_STYLE: Record<CommunityEvent["category"], string> = {
-  cleanup: "bg-omni-green/10 text-omni-green",
-  workshop: "bg-omni-orange/10 text-omni-orange",
-  tour: "bg-omni-violet/10 text-omni-violet",
-  drive: "bg-omni-blue/10 text-omni-blue",
-  volunteer: "bg-primary/10 text-primary",
-};
+import { getCommunityEvents, CATEGORY_ICON, CATEGORY_STYLE } from "@/data/communityEvents";
 
 const CommunityCalendar = () => {
-  const events = useMemo(SAMPLE_EVENTS, []);
+  const events = useMemo(getCommunityEvents, []);
   const [monthCursor, setMonthCursor] = useState(() => startOfMonth(new Date()));
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
