@@ -3,12 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { renderPostContent } from "@/lib/renderPost";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import RichTextEditor from "@/components/blog/RichTextEditor";
 import {
   Save,
   Eye,
@@ -21,18 +23,8 @@ import {
   Twitter,
   Linkedin,
   Link,
-  Bold,
-  Italic,
-  Heading1,
-  Heading2,
-  List,
-  ListOrdered,
-  Quote,
-  Code,
-  LinkIcon,
-  ImagePlus
+  Loader2,
 } from "lucide-react";
-import { useRef } from "react";
 
 const BlogEditor = () => {
   const { user } = useAuth();
@@ -62,29 +54,36 @@ const BlogEditor = () => {
   const [wordCount, setWordCount] = useState(0);
   const [estimatedReadTime, setEstimatedReadTime] = useState(1);
   const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
-  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const [uploadingFeatured, setUploadingFeatured] = useState(false);
+
+  // Featured cover upload → Supabase storage → public URL (mirrors RichTextEditor inline images)
+  const uploadFeatured = async (file: File) => {
+    if (!file.type.startsWith("image/")) { toast.error("Please choose an image file."); return; }
+    if (file.size > 8 * 1024 * 1024) { toast.error("Image is larger than 8MB."); return; }
+    setUploadingFeatured(true);
+    try {
+      const ext = file.name.split(".").pop();
+      // User id MUST be the first path segment — the storage RLS INSERT policy
+      // checks auth.uid() = (storage.foldername(name))[1]. (Was `blog-covers/<uid>/…`,
+      // which put "blog-covers" first and got rejected.)
+      const path = `${user?.id || "anon"}/blog-covers/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error } = await supabase.storage.from("provider-profiles").upload(path, file, { cacheControl: "3600", upsert: false });
+      if (error) throw error;
+      const { data: { publicUrl } } = supabase.storage.from("provider-profiles").getPublicUrl(path);
+      setPost(prev => ({ ...prev, featured_image_url: publicUrl }));
+      setFeaturedImageFailed(false);
+      toast.success("Cover image added");
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Upload failed: " + (err?.message || "unknown error"));
+    } finally {
+      setUploadingFeatured(false);
+    }
+  };
 
   const getExcerpt = () => {
     const source = post.excerpt.trim() || post.content.trim();
     return source.length > 200 ? `${source.substring(0, 200)}...` : source;
-  };
-
-  const insertMarkdown = (prefix: string, suffix = "", placeholder = "") => {
-    const el = contentRef.current;
-    if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const selected = post.content.substring(start, end) || placeholder;
-    const before = post.content.substring(0, start);
-    const after = post.content.substring(end);
-    const newContent = `${before}${prefix}${selected}${suffix}${after}`;
-    setPost(prev => ({ ...prev, content: newContent }));
-    // Restore cursor after state update
-    setTimeout(() => {
-      el.focus();
-      const cursorPos = start + prefix.length + selected.length + suffix.length;
-      el.setSelectionRange(cursorPos, cursorPos);
-    }, 0);
   };
 
   useEffect(() => {
@@ -120,7 +119,9 @@ const BlogEditor = () => {
       setPost({
         title: data.title,
         subtitle: data.subtitle || "",
-        content: data.content,
+        // Old posts were stored as markdown; the new WYSIWYG works in HTML.
+        // Normalise to HTML on load so legacy drafts open formatted, not as raw **markdown**.
+        content: renderPostContent(data.content),
         excerpt: data.excerpt || "",
         tags: data.tags || [],
         featured_image_url: data.featured_image_url || "",
@@ -376,86 +377,59 @@ const BlogEditor = () => {
 
           <Separator />
 
-          {/* Featured Image */}
-          <Card className="p-6 border-dashed">
-            <div className="flex items-center gap-4">
-              <ImageIcon className="h-8 w-8 text-gray-400" />
-              <div className="flex-1">
-                <Input
-                  placeholder="Featured image URL (optional)"
-                  value={post.featured_image_url}
-                  onChange={(e) => setPost(prev => ({ ...prev, featured_image_url: e.target.value }))}
-                  className="border-none px-0 focus-visible:ring-0"
-                />
-              </div>
+          {/* Featured Image — drag-drop / click to upload (with URL paste as fallback) */}
+          {post.featured_image_url ? (
+            <div className="relative rounded-2xl overflow-hidden group">
+              <img
+                src={post.featured_image_url}
+                alt="Featured"
+                loading="lazy"
+                decoding="async"
+                onError={() => setFeaturedImageFailed(true)}
+                className="w-full h-64 object-cover"
+              />
+              <button
+                type="button"
+                onClick={() => { setPost(prev => ({ ...prev, featured_image_url: "" })); setFeaturedImageFailed(false); }}
+                className="absolute top-3 right-3 bg-black/60 hover:bg-black/80 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur-sm transition-colors"
+              >
+                Remove
+              </button>
+              {featuredImageFailed && (
+                <p className="absolute bottom-0 inset-x-0 bg-destructive/90 text-white text-xs px-4 py-2">
+                  This image is not loading. The post can still be saved, but the cover won't appear publicly.
+                </p>
+              )}
             </div>
-            {post.featured_image_url && (
-              <div className="mt-4">
-                <img 
-                  src={post.featured_image_url} 
-                  alt="Featured" 
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={() => setFeaturedImageFailed(false)}
-                  onError={() => setFeaturedImageFailed(true)}
-                  className="w-full h-64 object-cover rounded-lg"
-                />
-                {featuredImageFailed && (
-                  <p className="mt-2 text-sm text-destructive">
-                    This image URL is not loading. The post can still be saved, but the image will not appear publicly.
-                  </p>
-                )}
-              </div>
-            )}
-          </Card>
+          ) : (
+            <label
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) uploadFeatured(f); }}
+              className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border/60 hover:border-primary/40 hover:bg-muted/30 transition-colors py-10 cursor-pointer text-center"
+            >
+              {uploadingFeatured ? (
+                <Loader2 className="h-7 w-7 text-primary animate-spin" />
+              ) : (
+                <ImageIcon className="h-7 w-7 text-muted-foreground" />
+              )}
+              <div className="text-sm font-medium">{uploadingFeatured ? "Uploading…" : "Add a cover image"}</div>
+              <div className="text-xs text-muted-foreground">Drag & drop, or click to choose · JPG/PNG up to 8MB</div>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadFeatured(f); e.target.value = ""; }}
+              />
+            </label>
+          )}
 
-          {/* Content Editor with Formatting Toolbar */}
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-1 p-2 bg-muted/50 rounded-lg border">
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("**", "**", "bold text")} title="Bold">
-                <Bold className="h-4 w-4" />
-              </Button>
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("*", "*", "italic text")} title="Italic">
-                <Italic className="h-4 w-4" />
-              </Button>
-              <Separator orientation="vertical" className="h-6 mx-1" />
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n## ", "\n", "Heading")} title="Heading">
-                <Heading1 className="h-4 w-4" />
-              </Button>
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n### ", "\n", "Subheading")} title="Subheading">
-                <Heading2 className="h-4 w-4" />
-              </Button>
-              <Separator orientation="vertical" className="h-6 mx-1" />
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n- ", "\n", "list item")} title="Bullet List">
-                <List className="h-4 w-4" />
-              </Button>
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n1. ", "\n", "list item")} title="Numbered List">
-                <ListOrdered className="h-4 w-4" />
-              </Button>
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("\n> ", "\n", "quote")} title="Blockquote">
-                <Quote className="h-4 w-4" />
-              </Button>
-              <Separator orientation="vertical" className="h-6 mx-1" />
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("[", "](https://)", "link text")} title="Link">
-                <LinkIcon className="h-4 w-4" />
-              </Button>
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("![", "](https://image-url)", "alt text")} title="Image">
-                <ImagePlus className="h-4 w-4" />
-              </Button>
-              <Button type="button" variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => insertMarkdown("`", "`", "code")} title="Inline Code">
-                <Code className="h-4 w-4" />
-              </Button>
-              <span className="ml-auto text-xs text-muted-foreground hidden sm:inline">Markdown supported</span>
-            </div>
-            <Textarea
-              ref={contentRef}
-              placeholder="Tell your story... Use the toolbar above for formatting, or write markdown directly."
-              value={post.content}
-              onChange={(e) => setPost(prev => ({ ...prev, content: e.target.value }))}
-              className="min-h-[500px] text-lg leading-relaxed border-none px-0 resize-none focus-visible:ring-0 placeholder:text-gray-400 font-mono"
-              style={{ lineHeight: '1.8' }}
-            />
-          </div>
+          {/* Content Editor — true WYSIWYG (live bold/italic/headings, real image upload) */}
+          <RichTextEditor
+            value={post.content}
+            onChange={(html) => setPost(prev => ({ ...prev, content: html }))}
+            placeholder="Tell your story…"
+            userId={user?.id}
+          />
 
           <Separator />
 

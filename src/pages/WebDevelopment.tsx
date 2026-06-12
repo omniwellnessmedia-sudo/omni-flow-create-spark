@@ -112,7 +112,7 @@ const WebDevelopment = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <div>
               <h1 className="font-heading font-bold text-4xl sm:text-5xl lg:text-6xl mb-6">
-                Build <span className="text-primary">Powerful Websites</span> That Convert
+                <span className="magic-shimmer-text">Build Powerful Websites That Convert</span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Custom web solutions that reflect your brand values and drive results. From stunning designs 
@@ -148,12 +148,12 @@ const WebDevelopment = () => {
             <div className="relative hidden lg:block">
               <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg"
+                  src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/provider-images/SAGA_HKL_OMNI_Artscape-9.jpg"
                   alt="Conscious media production workspace"
                   className="w-full h-[500px] object-cover"
                   loading="eager"
                   onError={(e) => {
-                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/CAPTCHA_OMNI_IMAGES_DAILY_MUIZ-7.jpg";
+                    e.currentTarget.src = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg";
                   }}
                 />
               </div>

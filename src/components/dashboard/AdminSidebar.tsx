@@ -24,6 +24,9 @@ interface AdminSidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
   alerts?: Record<string, number>;
+  // Wrapper classes. Desktop usage keeps the default (hidden below lg); the mobile
+  // Sheet passes "block w-full" so the nav is actually visible inside the drawer.
+  className?: string;
 }
 
 const NAV_GROUPS = [
@@ -60,9 +63,9 @@ const NAV_GROUPS = [
   },
 ];
 
-const AdminSidebar = memo(({ activeSection, onSectionChange, alerts = {} }: AdminSidebarProps) => {
+const AdminSidebar = memo(({ activeSection, onSectionChange, alerts = {}, className = "w-48 shrink-0 hidden lg:block" }: AdminSidebarProps) => {
   return (
-    <nav className="w-48 shrink-0 hidden lg:block">
+    <nav className={className}>
       <div className="sticky top-[72px] space-y-1">
         {NAV_GROUPS.map((group, gi) => (
           <div key={group.label}>

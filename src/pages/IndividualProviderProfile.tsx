@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,18 +31,118 @@ import {
 } from 'lucide-react';
 import { getProviderById } from '@/data/providerDirectory';
 import { useAuth } from '@/components/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 
 const IndividualProviderProfile = () => {
-  const { providerId } = useParams<{ providerId: string }>();
+  // Route is /provider/:id — match the param name. Old code used providerId which never resolved,
+  // sent everyone to the "Provider Not Found" / redirect loop.
+  const { id: providerId } = useParams<{ id: string }>();
   const { user } = useAuth();
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'services' | 'packages' | 'reviews'>('overview');
+  // Start with the static directory hit (Sandy/Chad/Chief/2BeWell) if present, else load from DB.
+  const [providerData, setProviderData] = useState(() => (providerId ? getProviderById(providerId) : undefined));
+  const [loading, setLoading] = useState(false);
+
+  // Real providers live in Supabase, not the hardcoded directory. When the id isn't a static
+  // entry, fetch provider_profiles + services and map them into the same shape the page renders.
+  // This is what "View Public Profile" from the Provider Dashboard hits — previously every real
+  // provider got "Provider Not Found" because their UUID wasn't in the static list.
+  useEffect(() => {
+    if (!providerId) return;
+    const staticHit = getProviderById(providerId);
+    if (staticHit) { setProviderData(staticHit); return; }
+
+    let cancelled = false;
+    setLoading(true);
+    (async () => {
+      const { data: prof } = await supabase
+        .from('provider_profiles')
+        .select('*')
+        .eq('id', providerId)
+        .maybeSingle();
+
+      if (cancelled) return;
+      if (!prof) { setProviderData(undefined); setLoading(false); return; }
+
+      const { data: svcs } = await supabase
+        .from('services')
+        .select('*')
+        .eq('provider_id', providerId)
+        .eq('active', true)
+        .order('created_at', { ascending: false });
+
+      if (cancelled) return;
+
+      setProviderData({
+        profile: {
+          id: prof.id,
+          business_name: prof.business_name || 'Wellness Provider',
+          description: prof.description || '',
+          philosophy: '',
+          specialties: prof.specialties || [],
+          certifications: prof.certifications || [],
+          badges: prof.certifications || [],
+          languages: [],
+          location: prof.location || 'South Africa',
+          email: '',
+          website: prof.website || '',
+          profile_image_url: prof.profile_image_url || '',
+          cover_image: prof.profile_image_url || '',
+          years_experience: prof.experience_years || 0,
+          total_clients: 0,
+          rating: 0,
+          verified: prof.verified ?? false,
+          featured: false,
+          category: 'Wellness',
+          social_media: {},
+          availability: prof.availability || { days: [], hours: '' },
+        },
+        services: (svcs || []).map((s: any) => ({
+          id: s.id,
+          title: s.title,
+          description: s.description || '',
+          category: s.category || 'Wellness',
+          price_zar: s.price_zar || 0,
+          price_wellcoins: s.price_wellcoins || 0,
+          duration_minutes: s.duration_minutes || 60,
+          location: s.location || prof.location || '',
+          is_online: s.is_online || false,
+          benefits: [],
+        })),
+        packages: [],
+      } as any);
+      setLoading(false);
+    })();
+
+    return () => { cancelled = true; };
+  }, [providerId]);
+
+  // Sandy has a richer custom page at /provider/sandy-mitchell with full hero, gallery, and
+  // BookingSystem integration. Redirect any IDs that resolve to her record so the user always
+  // lands on the canonical version (kills the duplicate-profile issue).
+  if (providerId === 'sandy-mitchell-dru-yoga' || providerId === 'sandy-mitchell') {
+    return <Navigate to="/provider/sandy-mitchell" replace />;
+  }
 
   if (!providerId) return <Navigate to="/provider-directory" replace />;
 
-  const providerData = getProviderById(providerId);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <UnifiedNavigation />
+        <main id="main-content" className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+            <p className="text-muted-foreground text-sm">Loading provider…</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!providerData) {
     return (
@@ -171,15 +271,19 @@ const IndividualProviderProfile = () => {
                   <MapPin className="h-3.5 w-3.5 text-primary" />
                   {profile.location}
                 </span>
-                <span className="flex items-center gap-1">
-                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                  <strong className="text-foreground">{profile.rating}</strong>
-                  &nbsp;·&nbsp;{profile.total_clients} clients
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" />
-                  {profile.years_experience} yrs experience
-                </span>
+                {profile.rating > 0 && (
+                  <span className="flex items-center gap-1">
+                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                    <strong className="text-foreground">{profile.rating}</strong>
+                    {profile.total_clients > 0 && <>&nbsp;·&nbsp;{profile.total_clients} clients</>}
+                  </span>
+                )}
+                {profile.years_experience > 0 && (
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5" />
+                    {profile.years_experience} yrs experience
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -269,32 +373,54 @@ const IndividualProviderProfile = () => {
                     </div>
                   )}
 
-                  {/* Languages + Availability */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                      <h3 className="font-heading text-xl mb-3">Languages</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {profile.languages?.map(lang => (
-                          <span key={lang} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-muted border border-border/50">
-                            <Languages className="h-3.5 w-3.5 text-muted-foreground" />
-                            {lang}
-                          </span>
-                        ))}
-                      </div>
+                  {/* Languages + Availability — each only shown when it has content */}
+                  {(profile.languages?.length > 0 || profile.availability?.days?.length > 0 || profile.availability?.hours) && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {profile.languages?.length > 0 && (
+                        <div>
+                          <h3 className="font-heading text-xl mb-3">Languages</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {profile.languages.map(lang => (
+                              <span key={lang} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm bg-muted border border-border/50">
+                                <Languages className="h-3.5 w-3.5 text-muted-foreground" />
+                                {lang}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {(profile.availability?.days?.length > 0 || profile.availability?.hours) && (
+                        <div>
+                          <h3 className="font-heading text-xl mb-3">Availability</h3>
+                          <div className="text-sm text-muted-foreground space-y-1">
+                            {profile.availability?.days?.length > 0 && <p>{profile.availability.days.join(', ')}</p>}
+                            {profile.availability?.hours && <p>{profile.availability.hours}</p>}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <h3 className="font-heading text-xl mb-3">Availability</h3>
-                      <div className="text-sm text-muted-foreground space-y-1">
-                        <p>{profile.availability?.days?.join(', ')}</p>
-                        <p>{profile.availability?.hours}</p>
-                      </div>
-                    </div>
-                  </div>
+                  )}
+
+                  {/* If a real provider has no enrichment yet, give the overview something meaningful */}
+                  {!profile.badges?.length && !profile.languages?.length && !profile.availability?.days?.length && !profile.availability?.hours && (
+                    <p className="text-sm text-muted-foreground">
+                      {profile.description || "This provider is still completing their profile. Check back soon for more details."}
+                    </p>
+                  )}
                 </section>
               )}
 
               {activeTab === 'services' && (
                 <section className="space-y-5">
+                  {services.length === 0 && (
+                    <div className="text-center py-16 px-4 rounded-2xl border border-border/50 bg-muted/30">
+                      <Sparkles className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                      <h3 className="font-heading text-lg mb-1">No services listed yet</h3>
+                      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                        This provider is still setting up their offerings. Reach out to enquire about availability.
+                      </p>
+                    </div>
+                  )}
                   {services.map((service) => (
                     <div
                       key={service.id}
@@ -360,6 +486,15 @@ const IndividualProviderProfile = () => {
 
               {activeTab === 'packages' && (
                 <section className="space-y-5">
+                  {packages.length === 0 && (
+                    <div className="text-center py-16 px-4 rounded-2xl border border-border/50 bg-muted/30">
+                      <Award className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                      <h3 className="font-heading text-lg mb-1">No packages yet</h3>
+                      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                        This provider offers individual services — see the Services tab to book.
+                      </p>
+                    </div>
+                  )}
                   {packages.map((pkg) => (
                     <div key={pkg.id} className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/4 to-transparent p-5 sm:p-6">
                       <div className="flex items-start justify-between gap-4 mb-3">
@@ -404,6 +539,8 @@ const IndividualProviderProfile = () => {
 
               {activeTab === 'reviews' && (
                 <section>
+                  {profile.rating > 0 ? (
+                  <>
                   {/* Rating summary */}
                   <div className="flex items-center gap-6 p-6 rounded-2xl bg-muted/50 border border-border/50 mb-6">
                     <div className="text-center">
@@ -454,6 +591,16 @@ const IndividualProviderProfile = () => {
                       </div>
                     ))}
                   </div>
+                  </>
+                  ) : (
+                    <div className="text-center py-16 px-4 rounded-2xl border border-border/50 bg-muted/30">
+                      <Star className="h-10 w-10 mx-auto mb-3 text-muted-foreground/30" />
+                      <h3 className="font-heading text-lg mb-1">No reviews yet</h3>
+                      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                        This provider hasn't received reviews yet. Be the first to book a session and share your experience.
+                      </p>
+                    </div>
+                  )}
                 </section>
               )}
             </div>

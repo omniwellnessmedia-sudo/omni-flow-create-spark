@@ -69,11 +69,18 @@ const AccessibilitySettings: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // FloatingActionDock dispatches this to toggle the panel
+  useEffect(() => {
+    const handler = () => setOpen((v) => !v);
+    window.addEventListener("omni:toggle-accessibility", handler);
+    return () => window.removeEventListener("omni:toggle-accessibility", handler);
+  }, []);
+
   const update = (patch: Partial<AccessibilityState>) =>
     setSettings((prev) => ({ ...prev, ...patch }));
 
   return (
-    <div className="fixed bottom-32 sm:bottom-24 right-4 z-[60] flex flex-col items-end gap-2">
+    <div className="fixed bottom-4 right-4 z-[60] flex flex-col items-end gap-2">
       {open && (
         <div
           className="bg-card border border-border rounded-xl shadow-elegant p-4 w-72 max-w-[calc(100vw-32px)] space-y-4 animate-scale-in"
@@ -161,13 +168,16 @@ const AccessibilitySettings: React.FC = () => {
         </div>
       )}
 
+      {/* Subtle accessibility toggle — semi-transparent so it doesn't compete with the
+          page, lowered to the bottom corner. Also responds to the FloatingActionDock's
+          "omni:toggle-accessibility" event on consumer routes. */}
       <Button
         variant="outline"
         size="icon"
-        className="h-10 w-10 rounded-full shadow-lg bg-card border-border"
         onClick={() => setOpen((prev) => !prev)}
         aria-label={open ? 'Close accessibility settings' : 'Open accessibility settings'}
         aria-expanded={open}
+        className="h-9 w-9 rounded-full border-border/50 bg-background/60 backdrop-blur-sm text-muted-foreground shadow-sm opacity-60 hover:opacity-100 hover:bg-background transition-all"
       >
         <Settings className="w-4 h-4" />
       </Button>

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { renderPostContent } from "@/lib/renderPost";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -310,28 +311,7 @@ const BlogPost = () => {
     }
   };
 
-  const renderedContent = useMemo(() => {
-    if (!post?.content) return "";
-
-    let html = safeText(post.content)
-      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-      .replace(/^# (.+)$/gm, '<h2>$1</h2>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt, url) => `<img src="${safeUrl(url)}" alt="${safeText(alt)}" class="rounded-lg my-6" loading="lazy" decoding="async" />`)
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text, url) => `<a href="${safeUrl(url)}" target="_blank" rel="noopener noreferrer">${text}</a>`)
-      .replace(/^&gt; (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
-      .replace(/^- (.+)$/gm, '<li>$1</li>')
-      .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
-      .replace(/\n\n+/g, '</p><p>')
-      .replace(/\n/g, '<br />');
-
-    if (!html.startsWith('<')) html = `<p>${html}</p>`;
-    return DOMPurify.sanitize(html);
-  }, [post?.content]);
+  const renderedContent = useMemo(() => renderPostContent(post?.content), [post?.content]);
 
   if (isLoading) {
     return (
@@ -367,87 +347,84 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <UnifiedNavigation />
-      <main className="pt-16">
-        {/* Article Header */}
-        <article className="max-w-4xl mx-auto px-4 py-12">
-          <div className="space-y-6">
-            {/* Back Navigation */}
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate("/blog/community")}
-              className="mb-8"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Community Blog
-            </Button>
+      <main className="pt-16 flex-1">
+        {/* ── Editorial header ── */}
+        <header className="max-w-3xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/blog/community")}
+            className="mb-8 -ml-2 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Community Blog
+          </Button>
 
-            {/* Title */}
-            <div className="space-y-4">
-              <h1 className="text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
-                {post.title}
-              </h1>
-              {post.subtitle && (
-                <p className="text-xl text-gray-600">
-                  {post.subtitle}
-                </p>
-              )}
-            </div>
+          {post.tags?.[0] && (
+            <p className="eyebrow">{post.tags[0]}</p>
+          )}
 
-            {/* Meta Info */}
-            <div className="flex items-center justify-between flex-wrap gap-4 py-4">
-              <div className="flex items-center gap-4">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage src={post.profiles.avatar_url} />
-                  <AvatarFallback>
-                    <User className="h-6 w-6" />
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="font-medium">{post.profiles.full_name}</div>
-                  <div className="text-sm text-gray-500 flex items-center gap-4">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {new Date(post.published_at).toLocaleDateString()}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <BookOpen className="h-3 w-3" />
-                      {post.read_time_minutes} min read
-                    </span>
-                  </div>
+          <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl leading-[1.1] tracking-tight mb-4">
+            {post.title}
+          </h1>
+          {post.subtitle && (
+            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed mb-8">
+              {post.subtitle}
+            </p>
+          )}
+
+          {/* Author + meta */}
+          <div className="flex items-center justify-between flex-wrap gap-4 pb-8 border-b border-border/50">
+            <div className="flex items-center gap-3">
+              <Avatar className="h-11 w-11">
+                <AvatarImage src={post.profiles.avatar_url} />
+                <AvatarFallback><User className="h-5 w-5" /></AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="font-medium text-sm">{post.profiles.full_name}</div>
+                <div className="text-xs text-muted-foreground flex items-center gap-3 mt-0.5">
+                  <span className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    {new Date(post.published_at).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <BookOpen className="h-3 w-3" />
+                    {post.read_time_minutes} min read
+                  </span>
                 </div>
               </div>
-
-              {user && user.id === post.user_id && (
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={() => navigate(`/blog/editor/${post.id}`)}
-                >
-                  <Edit className="h-4 w-4 mr-2" />
-                  Edit
-                </Button>
-              )}
             </div>
-
-            {/* Featured Image */}
-            {post.featured_image_url && !featuredImageFailed && (
-              <div className="my-8">
-                <img 
-                  src={post.featured_image_url} 
-                  alt={post.title}
-                  loading="eager"
-                  decoding="async"
-                  onError={() => setFeaturedImageFailed(true)}
-                  className="w-full h-96 object-cover rounded-lg"
-                />
-              </div>
+            {user && user.id === post.user_id && (
+              <Button variant="outline" size="sm" onClick={() => navigate(`/blog/editor/${post.id}`)}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
             )}
+          </div>
+        </header>
 
-            {/* Content — renders markdown */}
+        {/* ── Full-bleed cover ── */}
+        {post.featured_image_url && !featuredImageFailed && (
+          <figure className="max-w-4xl mx-auto px-4 sm:px-6 mt-10">
+            <img
+              src={post.featured_image_url}
+              alt={post.title}
+              loading="eager"
+              decoding="async"
+              onError={() => setFeaturedImageFailed(true)}
+              className="w-full h-[280px] sm:h-[420px] object-cover rounded-2xl soft-shadow"
+            />
+          </figure>
+        )}
+
+        {/* ── Reading column ── */}
+        <article className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+          <div className="space-y-6">
             <div
-              className="prose prose-lg max-w-none prose-headings:font-heading prose-a:text-primary prose-blockquote:border-primary/30"
+              className="prose prose-lg max-w-none prose-headings:font-heading prose-a:text-primary prose-blockquote:border-primary/30 prose-img:rounded-2xl prose-img:soft-shadow"
+              style={{ lineHeight: 1.8 }}
               dangerouslySetInnerHTML={{ __html: renderedContent }}
             />
 
