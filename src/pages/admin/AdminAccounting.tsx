@@ -29,6 +29,7 @@ import PortfolioOverview from "@/components/admin/accounting/PortfolioOverview";
 import { XeroExportButton } from "@/components/admin/accounting/XeroExportButton";
 import { RevenueStreamsBreakdown } from "@/components/admin/accounting/RevenueStreamsBreakdown";
 import { AccountingChecklist } from "@/components/admin/accounting/AccountingChecklist";
+import { TransactionQueryDialog } from "@/components/admin/accounting/TransactionQueryDialog";
 
 interface Order {
   id: string;
@@ -87,7 +88,7 @@ interface Transaction {
   created_at: string;
 }
 
-const AdminAccounting = () => {
+const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
   const [commissions, setCommissions] = useState<Commission[]>([]);
@@ -124,26 +125,34 @@ const AdminAccounting = () => {
 
   useEffect(() => {
     fetchData();
-  }, [dateRange, dateFrom, dateTo]);
+  }, [dateRange, dateFrom, dateTo, entityFilter]);
 
   const fetchData = async () => {
     setLoading(true);
     const { from, to } = getDateRange();
+    // entityFilter is the entities.id UUID (or undefined = all). Only orders and
+    // affiliate_commissions carry entity_id today; payouts/transactions don't,
+    // so we filter what we can and leave the rest unfiltered.
+    const applyEntity = (q: any) => (entityFilter ? q.eq("entity_id", entityFilter) : q);
 
     try {
       const [ordersRes, commissionsRes, payoutsRes, transactionsRes] = await Promise.all([
-        supabase
-          .from("orders")
-          .select("*")
-          .gte("created_at", from)
-          .lte("created_at", to)
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("affiliate_commissions")
-          .select("*")
-          .gte("created_at", from)
-          .lte("created_at", to)
-          .order("created_at", { ascending: false }),
+        applyEntity(
+          supabase
+            .from("orders")
+            .select("*")
+            .gte("created_at", from)
+            .lte("created_at", to)
+            .order("created_at", { ascending: false })
+        ),
+        applyEntity(
+          supabase
+            .from("affiliate_commissions")
+            .select("*")
+            .gte("created_at", from)
+            .lte("created_at", to)
+            .order("created_at", { ascending: false })
+        ),
         supabase
           .from("affiliate_payouts")
           .select("*")
@@ -656,12 +665,13 @@ const AdminAccounting = () => {
                       <TableHead className="text-xs text-right">Amount (ZAR)</TableHead>
                       <TableHead className="text-xs text-right">WellCoins</TableHead>
                       <TableHead className="text-xs">Status</TableHead>
+                      <TableHead className="text-xs">Notes</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {transactions.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground text-sm">
+                        <TableCell colSpan={7} className="text-center py-8 text-muted-foreground text-sm">
                           No transactions in this period
                         </TableCell>
                       </TableRow>
@@ -681,6 +691,9 @@ const AdminAccounting = () => {
                             <Badge className={`text-[10px] ${t.status === "completed" ? "bg-green-500" : "bg-yellow-500"}`}>
                               {t.status}
                             </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <TransactionQueryDialog targetTable="transactions" targetId={t.id} />
                           </TableCell>
                         </TableRow>
                       ))
