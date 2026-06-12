@@ -72,7 +72,7 @@ const Hero = ({
               ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl mx-auto lg:mx-0 max-w-4xl'
               : 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mx-auto max-w-4xl'
         )}>
-          {title}
+          <span className="magic-shimmer-text">{title}</span>
         </h1>
 
         {description && (
