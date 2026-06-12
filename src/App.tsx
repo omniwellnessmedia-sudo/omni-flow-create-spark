@@ -23,6 +23,7 @@ const SandyMitchellProfile = React.lazy(() => import('@/pages/SandyMitchellProfi
 const AddService = React.lazy(() => import('@/pages/AddService'));
 const EditService = React.lazy(() => import('@/pages/EditService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
+const CommunityEvents = React.lazy(() => import('@/pages/CommunityEvents'));
 const ProviderDashboard = React.lazy(() => import('@/pages/ProviderDashboard'));
 const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPortal'));
 const TransactionPage = React.lazy(() => import('@/pages/TransactionPage'));
@@ -197,7 +198,7 @@ function App() {
                   <Route path="/partners" element={<Navigate to="/partners-directory" replace />} />
                   <Route path="/impact" element={<Navigate to="/csr-impact" replace />} />
                   <Route path="/wellness-account" element={<Navigate to="/wellness-exchange/account" replace />} />
-                  <Route path="/community/events" element={<Navigate to="/community" replace />} />
+                  <Route path="/community/events" element={<CommunityEvents />} />
                   <Route path="/ai-tools" element={<Navigate to="/services" replace />} />
                   <Route path="/wellness-exchange/provider-signup" element={<Navigate to="/auth?tab=signup&role=provider" replace />} />
                   <Route path="/provider-signup" element={<Navigate to="/auth?tab=signup&role=provider" replace />} />
