@@ -90,8 +90,8 @@ const BusinessConsulting = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-6 text-gradient-hero">
-                Scale Your Conscious Business
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-6">
+                <span className="magic-shimmer-text">Scale Your Conscious Business</span>
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Transform your business with strategic guidance that aligns profit with purpose. 

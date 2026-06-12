@@ -151,8 +151,15 @@
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', 'XXXXXXXXXXXXXXXX');
-      fbq('track', 'PageView');
+      // Only initialise the Meta Pixel once a REAL numeric Pixel ID is set below.
+      // The placeholder left here fired fbq('init', …) with an invalid id, which
+      // logged "Invalid PixelID" on every page load and tracked nothing. Replace
+      // XXXXXXXXXXXXXXXX with the real Pixel ID (digits) to enable tracking.
+      var OMNI_FB_PIXEL_ID = 'XXXXXXXXXXXXXXXX';
+      if (/^[0-9]{6,}$/.test(OMNI_FB_PIXEL_ID)) {
+        fbq('init', OMNI_FB_PIXEL_ID);
+        fbq('track', 'PageView');
+      }
     </script>
   </head>
 

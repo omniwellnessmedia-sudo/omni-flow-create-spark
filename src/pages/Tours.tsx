@@ -265,7 +265,7 @@ export default function Tours() {
               Powered by Viator
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              {omniVoice.pageIntros.tours.headline}
+              <span className="magic-shimmer-text">{omniVoice.pageIntros.tours.headline}</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8">
               {omniVoice.pageIntros.tours.subheadline}

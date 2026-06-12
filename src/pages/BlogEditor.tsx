@@ -63,7 +63,10 @@ const BlogEditor = () => {
     setUploadingFeatured(true);
     try {
       const ext = file.name.split(".").pop();
-      const path = `blog-covers/${user?.id || "anon"}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      // User id MUST be the first path segment — the storage RLS INSERT policy
+      // checks auth.uid() = (storage.foldername(name))[1]. (Was `blog-covers/<uid>/…`,
+      // which put "blog-covers" first and got rejected.)
+      const path = `${user?.id || "anon"}/blog-covers/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
       const { error } = await supabase.storage.from("provider-profiles").upload(path, file, { cacheControl: "3600", upsert: false });
       if (error) throw error;
       const { data: { publicUrl } } = supabase.storage.from("provider-profiles").getPublicUrl(path);
