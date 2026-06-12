@@ -11,6 +11,7 @@ import WellnessHumansSection from "@/components/sections/WellnessHumansSection";
 import PartnersSection from "@/components/sections/PartnersSection";
 import FacebookFeedSection from "@/components/sections/FacebookFeedSection";
 import WhatIsOmniSection from "@/components/sections/WhatIsOmniSection";
+import FoundationSection from "@/components/sections/FoundationSection";
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -24,6 +25,7 @@ const Index = () => {
         <ToursRetreatsPreview />
         <TestimonialsSection />
         <FeaturedProjectsSection />
+        <FoundationSection />
         <PartnersSection />
       </main>
       
