@@ -54,6 +54,36 @@ const PayPalCheckoutInner = () => {
 
   const onApprove = async (data: any, actions: any) => {
     try {
+      // Event tickets: reserve seats BEFORE capturing payment, so a buyer is never
+      // charged for a session that just sold out. reserve_screening_seats is atomic
+      // and refuses while the event is still draft. If any reservation fails we
+      // simply don't capture — the PayPal authorization lapses, no charge.
+      const seatsBySession = new Map<string, number>();
+      for (const item of items) {
+        if (item.item_type === "event_ticket" && item.event_session_id) {
+          const seats = (item.seats_per_unit ?? 1) * item.quantity;
+          seatsBySession.set(
+            item.event_session_id,
+            (seatsBySession.get(item.event_session_id) ?? 0) + seats
+          );
+        }
+      }
+      for (const [sessionId, seats] of seatsBySession) {
+        const { data: reserved, error: reserveError } = await (supabase as any).rpc(
+          "reserve_screening_seats",
+          { p_session_id: sessionId, p_seats: seats }
+        );
+        if (reserveError || !reserved) {
+          toast({
+            title: "Session sold out",
+            description:
+              "Those seats were taken while you were checking out. You have not been charged — please pick another session.",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
       const order = await actions.order.capture();
       
       console.log("PayPal Order Captured:", order);
@@ -130,6 +160,19 @@ const PayPalCheckoutInner = () => {
       }));
 
       await supabase.from("order_items").insert(orderItems);
+
+      // Campaign analytics: ticket purchases are the stunningpigs conversion event
+      if (seatsBySession.size > 0) {
+        const w = window as any;
+        const ticketItems = items.filter((i) => i.item_type === "event_ticket");
+        w.gtag?.("event", "purchase_ticket", {
+          campaign: "stunningpigs",
+          value: ticketItems.reduce((s, i) => s + i.price_zar * i.quantity, 0),
+          currency: "ZAR",
+          ticket_types: ticketItems.map((i) => i.id).join(","),
+        });
+        w.tagClarityEvent?.("purchase_ticket", "stunningpigs");
+      }
 
       // Success!
       toast({
