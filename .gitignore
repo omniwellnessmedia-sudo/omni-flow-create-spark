@@ -37,3 +37,10 @@ public/images/
 
 # Local Netlify folder
 .netlify
+
+# Secrets & credentials — never commit these
+LOGIN_CREDENTIALS.md
+*.credentials
+credentials.*
+.env.local
+.env.*.local

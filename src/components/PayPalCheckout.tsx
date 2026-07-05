@@ -1,12 +1,18 @@
 // Phase 7: PayPal Checkout Component
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { useCart } from "@/components/CartProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { PAYPAL_OPTIONS_ZAR } from "@/config/paypal";
 import { Loader2 } from "lucide-react";
 
-export const PayPalCheckout = () => {
+// The app root loads the PayPal SDK in USD (for the RoamBuddy/eSIM store), but the
+// main store bills in ZAR. Loading the SDK in one currency and creating an order in
+// another makes PayPal reject the order, so the store checkout gets its own ZAR
+// script context (with a distinct data-namespace so the two SDK instances don't
+// collide on the same page).
+const PayPalCheckoutInner = () => {
   const { items, totalZAR, totalWellCoins, clearCart } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -59,6 +65,11 @@ export const PayPalCheckout = () => {
       const { data: orderData, error } = await supabase
         .from("orders")
         .insert({
+          // orders RLS requires auth.uid() = user_id OR auth.uid() IS NULL.
+          // Without this, a logged-in buyer's insert is rejected AFTER PayPal has
+          // captured payment — charged, but no order saved. user?.id for members,
+          // null for guests (both satisfy the policy).
+          user_id: user?.id ?? null,
           customer_email: order.payer.email_address,
           customer_name: `${order.payer.name.given_name} ${order.payer.name.surname}`,
           amount: totalZAR,
@@ -176,3 +187,11 @@ export const PayPalCheckout = () => {
     </div>
   );
 };
+
+// Public component: provides the ZAR PayPal SDK context around the checkout so the
+// SDK currency matches the ZAR orders created above.
+export const PayPalCheckout = () => (
+  <PayPalScriptProvider options={{ ...PAYPAL_OPTIONS_ZAR, dataNamespace: "paypal_zar" }}>
+    <PayPalCheckoutInner />
+  </PayPalScriptProvider>
+);

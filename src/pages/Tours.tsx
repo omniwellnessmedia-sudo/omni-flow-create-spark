@@ -9,8 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
-  MapPin, Clock, Star, Users, ExternalLink, Search, 
-  Mountain, Waves, Leaf, Camera, Heart, Filter, Globe, Building2, ArrowRight
+  MapPin, Clock, Star, Users, ExternalLink, Search,
+  Mountain, Waves, Leaf, Camera, Heart, Filter, Globe, Building2, ArrowRight, Compass
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
