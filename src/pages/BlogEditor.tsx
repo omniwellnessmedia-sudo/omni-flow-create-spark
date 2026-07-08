@@ -31,6 +31,13 @@ const BlogEditor = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const isNewPost = !postId || postId === "new";
+  // Gates the form behind a spinner while an existing draft is fetched. Without
+  // this, the (empty) form rendered immediately and RichTextEditor mounted with
+  // value="" — if the user started typing before loadPost()'s fetch resolved,
+  // the incoming setPost() below overwrote `content` wholesale, wiping what
+  // they'd typed and reseeding the editor's innerHTML mid-keystroke. Reported as
+  // "the editor doesn't let me type" — it types, then the load silently erases it.
+  const [postLoading, setPostLoading] = useState(!isNewPost);
   const [isLoading, setIsLoading] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
   const [post, setPost] = useState<{
@@ -130,6 +137,8 @@ const BlogEditor = () => {
     } catch (error: any) {
       toast.error("Failed to load post: " + error.message);
       navigate("/blog/community");
+    } finally {
+      setPostLoading(false);
     }
   };
 
@@ -307,6 +316,17 @@ const BlogEditor = () => {
       addTag();
     }
   };
+
+  if (postLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-3" />
+          <p className="text-muted-foreground text-sm">Loading your draft...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

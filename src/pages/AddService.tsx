@@ -14,6 +14,7 @@ import Footer from "@/components/Footer";
 import { ArrowLeft, Plus, Coins, Clock, MapPin, Sparkles, Loader2, PiggyBank, Search } from "lucide-react";
 import { toast } from "sonner";
 import { wellnessSpecialties, wellnessCategories, getCategoryForSpecialty } from "@/data/wellnessGlossary";
+import { describeFunctionError } from "@/lib/edgeFunctionError";
 
 const AddService = () => {
   const { user } = useAuth();
@@ -120,11 +121,13 @@ const AddService = () => {
         },
       });
 
-      // invoke() surfaces non-2xx as `error`; the function itself returns
-      // { error } when the server-side OPENAI_API_KEY secret is missing. Surface
-      // both instead of failing silently (the old code only checked data.content,
-      // so any server error left the button doing nothing with no feedback).
-      if (error) throw error;
+      // invoke() surfaces non-2xx as `error`, but error.message is always the
+      // generic "Edge Function returned a non-2xx status code" — the function's
+      // real { error } body lives on error.context and needs to be read
+      // separately (describeFunctionError does this). Without it, every failure
+      // — missing API key, OpenAI outage, bad input — looked identical and gave
+      // no actionable signal.
+      if (error) throw new Error(await describeFunctionError(error));
       if (data?.error) throw new Error(data.error);
       if (!data?.content) throw new Error("The AI service returned no content.");
 

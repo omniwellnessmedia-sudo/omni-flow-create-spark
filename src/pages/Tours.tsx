@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
+import {
   MapPin, Clock, Star, Users, ExternalLink, Search,
-  Mountain, Waves, Leaf, Camera, Heart, Filter, Globe, Building2, ArrowRight, Compass
+  Mountain, Waves, Leaf, Camera, Heart, Filter, Globe, Building2, ArrowRight, Compass,
+  Grape, Anchor, Landmark, Smile
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
@@ -20,6 +21,7 @@ import { FloatingDecorations } from '@/components/ui/gaia-elements';
 import { CuratorTip } from '@/components/curator/CuratorTip';
 import { omniVoice } from '@/data/omniVoiceGuide';
 import { IMAGES } from '@/lib/images';
+import { classifyTour, TOUR_CATEGORIES, type TourCategory } from '@/lib/tourCategories';
 
 interface ViatorTour {
   id: string;
@@ -38,13 +40,14 @@ interface ViatorTour {
   is_active: boolean;
 }
 
-const categoryIcons: Record<string, any> = {
-  'Tours': Mountain,
-  'Nature': Leaf,
-  'Wildlife': Camera,
-  'Ocean': Waves,
-  'Adventure': Mountain,
-  'Wellness': Heart,
+const categoryIcons: Record<TourCategory, any> = {
+  'Cape Winelands': Grape,
+  'Ocean Adventures': Waves,
+  'Boat Experiences': Anchor,
+  'Indigenous Heritage': Landmark,
+  'Wellness & Retreats': Heart,
+  'Hiking & Nature': Mountain,
+  'Family-Friendly': Smile,
 };
 
 const featuredExperiences = [
@@ -135,19 +138,24 @@ export default function Tours() {
     }
   };
 
-  // Get unique locations and categories
+  // Get unique locations. Categories are derived, not read from tour.category:
+  // the Viator sync only ever sets that field to "Tour"/"Tours", which isn't a
+  // usable taxonomy — classifyTour buckets each tour into a real experience
+  // type from its title/description instead. Ordered per the canonical list so
+  // the chip strip and dropdown are stable rather than "whatever order showed up".
   const locations = [...new Set(tours.map(t => t.location).filter(Boolean))];
-  const categories = [...new Set(tours.map(t => t.category).filter(Boolean))];
+  const presentCategories = new Set(tours.map(t => classifyTour(t)));
+  const categories = TOUR_CATEGORIES.filter(c => presentCategories.has(c));
 
   // Filter tours
   const filteredTours = tours.filter(tour => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       tour.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tour.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tour.location?.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesLocation = selectedLocation === 'all' || tour.location === selectedLocation;
-    const matchesCategory = selectedCategory === 'all' || tour.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || classifyTour(tour) === selectedCategory;
     
     let matchesPrice = true;
     if (priceRange === 'budget') matchesPrice = tour.price_from < 100;
@@ -173,7 +181,8 @@ export default function Tours() {
   };
 
   const TourCard = ({ tour }: { tour: ViatorTour }) => {
-    const IconComponent = categoryIcons[tour.category] || Mountain;
+    const tourCategory = classifyTour(tour);
+    const IconComponent = categoryIcons[tourCategory] || Mountain;
     
     return (
       <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer motion-safe:hover:-translate-y-1"
@@ -190,7 +199,7 @@ export default function Tours() {
           <div className="absolute top-3 left-3 flex gap-2">
             <Badge className="bg-primary/90 text-primary-foreground">
               <IconComponent className="w-3 h-3 mr-1" />
-              {tour.category || 'Tour'}
+              {tourCategory}
             </Badge>
           </div>
           <div className="absolute top-3 right-3 flex items-center gap-2">

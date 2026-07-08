@@ -43,6 +43,7 @@ import { CartIcon } from '@/components/cart/CartIcon';
 
 import { SearchAutocomplete } from '@/components/product/SearchAutocomplete';
 import { MegaNavigation } from './MegaNavigation';
+import { IMAGES } from '@/lib/images';
 
 interface NavItem {
   title: string;
@@ -113,6 +114,14 @@ const UnifiedNavigation = () => {
       ]
     },
     {
+      title: 'Community',
+      icon: Users,
+      children: [
+        { title: 'Events Calendar', href: '/community/events', description: 'Upcoming community events, month by month', icon: '📅' },
+        { title: 'Community Blog', href: '/community', description: 'Stories, updates and impact from the community', icon: '📰' },
+      ]
+    },
+    {
       title: 'Contact',
       href: '/contact',
       icon: Heart,
@@ -156,12 +165,15 @@ const UnifiedNavigation = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center">
-              <img 
-                src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/Omni%20Horizontal%20Logo-07.png" 
-                alt="Omni Wellness Media" 
-                className="h-10 w-auto object-contain"
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                src={IMAGES.logos.omniCircularBadge}
+                alt="Omni Wellness Media"
+                className="h-10 w-10 rounded-full object-cover shrink-0"
               />
+              <span aria-hidden="true" className="hidden sm:inline font-heading text-base leading-tight text-foreground">
+                Omni Wellness Media
+              </span>
             </Link>
           </div>
 
@@ -255,8 +267,9 @@ const UnifiedNavigation = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[calc(100vw-16px)] sm:w-80">
                 <SheetHeader>
-                  <SheetTitle className="text-left flex items-center">
-                    <img src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/Omni%20Horizontal%20Logo-07.png" alt="Omni" className="h-8 w-auto" />
+                  <SheetTitle className="text-left flex items-center gap-2">
+                    <img src={IMAGES.logos.omniCircularBadge} alt="Omni Wellness Media" className="h-9 w-9 rounded-full object-cover shrink-0" />
+                    <span className="font-heading text-sm">Omni Wellness Media</span>
                   </SheetTitle>
                 </SheetHeader>
                 

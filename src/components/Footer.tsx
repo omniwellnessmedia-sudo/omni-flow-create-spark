@@ -71,9 +71,9 @@ const Footer = () => {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-5">
               <img
-                src={IMAGES.logos.omniPrimary}
+                src={IMAGES.logos.omniCircularBadge}
                 alt="Omni Wellness Media"
-                className="h-12 w-12 rounded-full"
+                className="h-12 w-12 rounded-full object-cover"
               />
               <span className="font-heading text-lg">Omni Wellness</span>
             </div>
@@ -124,6 +124,7 @@ const Footer = () => {
             <h4 className="text-xs font-medium uppercase tracking-wider text-white/30 mb-4">Company</h4>
             <ul className="space-y-2.5 text-sm">
               <li><Link to="/about" className="text-white/60 hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/community/events" className="text-white/60 hover:text-white transition-colors">Events Calendar</Link></li>
               <li><Link to="/csr-impact" className="text-white/60 hover:text-white transition-colors">CSR Impact</Link></li>
               <li><Link to="/esg-policy" className="text-white/60 hover:text-white transition-colors">ESG Policy</Link></li>
               <li><Link to="/contact" className="text-white/60 hover:text-white transition-colors">Contact</Link></li>

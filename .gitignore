@@ -34,6 +34,8 @@ public/images/
 *.webp
 *.ARW
 *.pdf
+# Exception: small tracked brand assets (nav/footer logo mark) — not bulk media
+!public/branding/*.png
 
 # Local Netlify folder
 .netlify

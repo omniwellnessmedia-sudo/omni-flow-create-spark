@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
-  Home, Plane, Store, Briefcase
+  Home, Plane, Store, Briefcase, Users
 } from 'lucide-react';
 import {
   NavigationMenu,
@@ -61,6 +61,16 @@ export const MegaNavigation = () => {
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic growth', icon: '📊' },
         { title: 'Media Production', href: '/media-production', description: 'Video & content', icon: '🎬' },
         { title: 'Web Development', href: '/web-development', description: 'Websites & apps', icon: '💻' },
+      ]
+    }
+  ];
+
+  const communitySections: MegaNavSection[] = [
+    {
+      title: 'Community',
+      items: [
+        { title: 'Events Calendar', href: '/community/events', description: 'Upcoming community events, month by month', icon: '📅', featured: true },
+        { title: 'Community Blog', href: '/community', description: 'Stories, updates and impact from the community', icon: '📰' },
       ]
     }
   ];
@@ -222,6 +232,48 @@ export const MegaNavigation = () => {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
+
+        {/* Community Mega Menu */}
+        <NavigationMenuItem>
+          <NavigationMenuTrigger className="bg-background">
+            <Users className="mr-2 h-4 w-4" />
+            Community
+          </NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <div className="grid gap-3 p-6 w-[400px] bg-background">
+              {communitySections.map((section) => (
+                <div key={section.title} className="space-y-3">
+                  <h4 className="text-sm font-semibold leading-none text-foreground/80 uppercase tracking-wide">
+                    {section.title}
+                  </h4>
+                  <ul className="space-y-2">
+                    {section.items.map((item) => (
+                      <li key={item.href}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className={cn(
+                              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-all hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground hover:shadow-sm",
+                              item.featured && "bg-gradient-to-r from-primary/10 to-transparent border border-primary/20"
+                            )}
+                          >
+                            <div className="flex items-center gap-2">
+                              {item.icon && <span className="text-lg">{item.icon}</span>}
+                              <div className="text-sm font-medium leading-none text-foreground">{item.title}</div>
+                            </div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
 
         {/* Contact */}
         <NavigationMenuItem>

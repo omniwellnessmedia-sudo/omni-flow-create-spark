@@ -13,6 +13,7 @@ import Footer from "@/components/Footer";
 import { ArrowLeft, Save, Coins, Clock, MapPin, Sparkles, Loader2, PiggyBank, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { wellnessSpecialties, getCategoryForSpecialty } from "@/data/wellnessGlossary";
+import { describeFunctionError } from "@/lib/edgeFunctionError";
 
 const EditService = () => {
   const { user } = useAuth();
@@ -120,27 +121,30 @@ const EditService = () => {
     }
     setAiLoading((prev) => ({ ...prev, [type]: true }));
     try {
-      const response = await fetch(
-        `https://dtjmhieeywdvhjxqyxad.supabase.co/functions/v1/generate-content`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            type: type === "title" ? "service_title" : "service_description",
-            specialties: [formData.category],
-          }),
-        }
+      // Use the supabase client, not a hand-rolled fetch: invoke() sends both the
+      // apikey and Authorization headers the edge gateway expects, and (via
+      // describeFunctionError) lets us surface the function's real failure reason
+      // instead of silently doing nothing when data.content is missing.
+      const { data, error } = await supabase.functions.invoke("generate-content", {
+        body: {
+          type: type === "title" ? "service_title" : "service_description",
+          specialties: [formData.category],
+        },
+      });
+      if (error) throw new Error(await describeFunctionError(error));
+      if (data?.error) throw new Error(data.error);
+      if (!data?.content) throw new Error("The AI service returned no content.");
+
+      handleInputChange(type === "title" ? "title" : "description", data.content);
+      toast.success(`${type === "title" ? "Title" : "Description"} regenerated!`);
+    } catch (error: any) {
+      console.error("generate-content failed:", error);
+      const msg = String(error?.message || "");
+      toast.error(
+        /OPENAI_API_KEY|api key|unauthor/i.test(msg)
+          ? "AI generation isn't configured yet (missing API key). Please contact the site admin."
+          : `Couldn't generate ${type}: ${msg || "please try again."}`
       );
-      const data = await response.json();
-      if (data.content) {
-        handleInputChange(type === "title" ? "title" : "description", data.content);
-        toast.success(`${type === "title" ? "Title" : "Description"} regenerated!`);
-      }
-    } catch {
-      toast.error("Failed to generate content");
     } finally {
       setAiLoading((prev) => ({ ...prev, [type]: false }));
     }
