@@ -115,6 +115,12 @@ serve(async (req) => {
     });
 
     const data = await response.json();
+
+    if (!response.ok || !data.choices?.[0]?.message?.content) {
+      const upstreamMessage = data.error?.message || `OpenAI request failed with status ${response.status}`;
+      throw new Error(upstreamMessage);
+    }
+
     const generatedContent = data.choices[0].message.content.trim();
 
     return new Response(JSON.stringify({ content: generatedContent }), {

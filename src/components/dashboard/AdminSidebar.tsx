@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   BarChart3,
@@ -10,6 +11,7 @@ import {
   FileText,
   Mail,
   Share2,
+  CalendarDays,
   DollarSign,
   UserPlus,
   ListTodo,
@@ -29,7 +31,16 @@ interface AdminSidebarProps {
   className?: string;
 }
 
-const NAV_GROUPS = [
+interface NavItem {
+  id: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  // Present for items that link to a standalone route instead of switching
+  // the admin ?section= (e.g. Community Calendar, its own page).
+  to?: string;
+}
+
+const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   {
     label: "Core",
     items: [
@@ -48,6 +59,11 @@ const NAV_GROUPS = [
       { id: "content", label: "Content", icon: FileText },
       { id: "newsletter", label: "Newsletter", icon: Mail },
       { id: "social", label: "Social", icon: Share2 },
+      // Community Calendar is its own page (not an admin ?section=), so it
+      // navigates via `to` instead of onSectionChange. Distinct icon/label
+      // from "Social" (the Social Media Planner) to avoid the two calendars
+      // being confused for one another.
+      { id: "community", label: "Community", icon: CalendarDays, to: "/community/events" },
     ],
   },
   {
@@ -64,6 +80,7 @@ const NAV_GROUPS = [
 ];
 
 const AdminSidebar = memo(({ activeSection, onSectionChange, alerts = {}, className = "w-48 shrink-0 hidden lg:block" }: AdminSidebarProps) => {
+  const navigate = useNavigate();
   return (
     <nav className={className}>
       <div className="sticky top-[72px] space-y-1">
@@ -79,7 +96,7 @@ const AdminSidebar = memo(({ activeSection, onSectionChange, alerts = {}, classN
               return (
                 <button
                   key={item.id}
-                  onClick={() => onSectionChange(item.id)}
+                  onClick={() => (item.to ? navigate(item.to) : onSectionChange(item.id))}
                   className={cn(
                     "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm transition-colors",
                     isActive

@@ -187,7 +187,12 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
           onDrop={onDrop}
           onDragOver={(e) => e.preventDefault()}
           className={cn(
-            "prose prose-lg max-w-none min-h-[460px] p-6 focus:outline-none",
+            // relative + z-30 keeps this above the sticky (z-20) toolbar once the
+            // page scrolls - without it the toolbar's own stacking context paints
+            // over this static sibling, so clicks/typing here never reach the
+            // editable element (title/subtitle inputs sit outside this overlap,
+            // which is why only the body text area was affected).
+            "relative z-30 prose prose-lg max-w-none min-h-[460px] p-6 focus:outline-none",
             "prose-headings:font-heading prose-a:text-primary prose-blockquote:border-primary/30",
             "prose-img:rounded-xl"
           )}

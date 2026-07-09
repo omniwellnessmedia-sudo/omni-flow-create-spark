@@ -142,10 +142,13 @@ const CanvaDesignStudio = () => {
     } catch (error) {
       console.error('Design generation error:', error);
       
-      // For demo purposes, show a mock result
+      // For demo purposes, show a mock result. Was previously an external
+      // via.placeholder.com URL - a third-party dependency that can be slow,
+      // blocked, or 404, leaving an empty image box. Use the local placeholder
+      // asset instead so the demo preview always renders.
       setGeneratedDesign({
         id: 'demo-' + Date.now(),
-        url: 'https://via.placeholder.com/400x300/6366f1/ffffff?text=Your+Design+Preview',
+        url: '/placeholder.svg',
         editUrl: '#edit-demo',
         downloadUrl: '#download-demo'
       });

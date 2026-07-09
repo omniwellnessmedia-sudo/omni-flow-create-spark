@@ -120,11 +120,21 @@ const AddService = () => {
         },
       });
 
-      // invoke() surfaces non-2xx as `error`; the function itself returns
-      // { error } when the server-side OPENAI_API_KEY secret is missing. Surface
-      // both instead of failing silently (the old code only checked data.content,
-      // so any server error left the button doing nothing with no feedback).
-      if (error) throw error;
+      // invoke() surfaces non-2xx as `error`, but FunctionsHttpError.message is
+      // hardcoded to "Edge Function returned a non-2xx status code" - it does not
+      // include the JSON body the function actually returned. Read the real body
+      // off error.context so the toast (and the OPENAI_API_KEY sniff below) sees
+      // the actual failure reason instead of that generic string.
+      if (error) {
+        let message = error.message;
+        try {
+          const body = await error.context?.json?.();
+          if (body?.error) message = body.error;
+        } catch {
+          // context wasn't JSON - fall back to the generic SDK message
+        }
+        throw new Error(message);
+      }
       if (data?.error) throw new Error(data.error);
       if (!data?.content) throw new Error("The AI service returned no content.");
 

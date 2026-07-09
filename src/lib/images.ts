@@ -113,8 +113,10 @@ const CORE = {
     roze: `${SUPABASE_URL}/${FOLDERS.communityImages}/ROZE.jpg`,
   },
   logos: {
-    // Omni brand logos - in partner-logos** (Brand Assets) subfolder
-    omniPrimary: `${SUPABASE_URL}/${FOLDERS.partnerLogos}/OMNI%20LOGO%20FA-06(1)%20(1).png`,
+    // Circular brand mark supplied by the client (July 2026) - served locally from
+    // public/ so header/nav/footer don't depend on the Supabase storage round-trip.
+    // Used everywhere the logo renders inside a rounded-full frame.
+    omniPrimary: '/logo-circle.png',
     omniHorizontal: `${SUPABASE_URL}/${FOLDERS.partnerLogos}/Omni%20Horizontal%20Logo-07.png`,
     omniIcon: `${SUPABASE_URL}/${FOLDERS.partnerLogos}/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
     omniWhite: `${SUPABASE_URL}/${FOLDERS.partnerLogos}/omni%20brand%20white%20logo%20for%20black%20transparent.png`,

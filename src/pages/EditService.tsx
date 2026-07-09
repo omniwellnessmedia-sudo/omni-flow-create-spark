@@ -120,27 +120,40 @@ const EditService = () => {
     }
     setAiLoading((prev) => ({ ...prev, [type]: true }));
     try {
-      const response = await fetch(
-        `https://dtjmhieeywdvhjxqyxad.supabase.co/functions/v1/generate-content`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            type: type === "title" ? "service_title" : "service_description",
-            specialties: [formData.category],
-          }),
+      // Use the supabase client so auth + the project's anon key are handled for
+      // us, matching AddService's flow (the previous hand-rolled fetch to a
+      // hardcoded URL never checked response.ok, so server errors here were
+      // silently swallowed - the button would just stop spinning with no toast).
+      const { data, error } = await supabase.functions.invoke("generate-content", {
+        body: {
+          type: type === "title" ? "service_title" : "service_description",
+          specialties: [formData.category],
+        },
+      });
+
+      if (error) {
+        let message = error.message;
+        try {
+          const body = await error.context?.json?.();
+          if (body?.error) message = body.error;
+        } catch {
+          // context wasn't JSON - fall back to the generic SDK message
         }
-      );
-      const data = await response.json();
-      if (data.content) {
-        handleInputChange(type === "title" ? "title" : "description", data.content);
-        toast.success(`${type === "title" ? "Title" : "Description"} regenerated!`);
+        throw new Error(message);
       }
-    } catch {
-      toast.error("Failed to generate content");
+      if (data?.error) throw new Error(data.error);
+      if (!data?.content) throw new Error("The AI service returned no content.");
+
+      handleInputChange(type === "title" ? "title" : "description", data.content);
+      toast.success(`${type === "title" ? "Title" : "Description"} regenerated!`);
+    } catch (error: any) {
+      console.error("generate-content failed:", error);
+      const msg = String(error?.message || "");
+      toast.error(
+        /OPENAI_API_KEY|api key|unauthor/i.test(msg)
+          ? "AI generation isn't configured yet (missing API key). Please contact the site admin."
+          : `Couldn't generate ${type}: ${msg || "please try again."}`
+      );
     } finally {
       setAiLoading((prev) => ({ ...prev, [type]: false }));
     }

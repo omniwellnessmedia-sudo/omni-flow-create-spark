@@ -9,8 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
-  MapPin, Clock, Star, Users, ExternalLink, Search, 
-  Mountain, Waves, Leaf, Camera, Heart, Filter, Globe, Building2, ArrowRight
+  MapPin, Clock, Star, Users, ExternalLink, Search,
+  Mountain, Heart, Filter, Globe, Building2, ArrowRight, Compass
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
@@ -20,6 +20,7 @@ import { FloatingDecorations } from '@/components/ui/gaia-elements';
 import { CuratorTip } from '@/components/curator/CuratorTip';
 import { omniVoice } from '@/data/omniVoiceGuide';
 import { IMAGES } from '@/lib/images';
+import { TOUR_CATEGORIES, resolveTourCategory, getTourCategoryIcon } from '@/data/tourCategories';
 
 interface ViatorTour {
   id: string;
@@ -37,15 +38,6 @@ interface ViatorTour {
   category: string;
   is_active: boolean;
 }
-
-const categoryIcons: Record<string, any> = {
-  'Tours': Mountain,
-  'Nature': Leaf,
-  'Wildlife': Camera,
-  'Ocean': Waves,
-  'Adventure': Mountain,
-  'Wellness': Heart,
-};
 
 const featuredExperiences = [
   {
@@ -135,19 +127,23 @@ export default function Tours() {
     }
   };
 
-  // Get unique locations and categories
+  // Get unique locations. Categories are the fixed, client-curated set (see
+  // src/data/tourCategories.ts) rather than Viator's raw per-tour tag, which was
+  // too inconsistent to browse by ("Tour", "Tours", whatever the first tag was).
   const locations = [...new Set(tours.map(t => t.location).filter(Boolean))];
-  const categories = [...new Set(tours.map(t => t.category).filter(Boolean))];
+  const categories = TOUR_CATEGORIES.map(c => c.label).filter(label =>
+    tours.some(t => resolveTourCategory(t) === label)
+  );
 
   // Filter tours
   const filteredTours = tours.filter(tour => {
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       tour.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tour.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tour.location?.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesLocation = selectedLocation === 'all' || tour.location === selectedLocation;
-    const matchesCategory = selectedCategory === 'all' || tour.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || resolveTourCategory(tour) === selectedCategory;
     
     let matchesPrice = true;
     if (priceRange === 'budget') matchesPrice = tour.price_from < 100;
@@ -173,7 +169,7 @@ export default function Tours() {
   };
 
   const TourCard = ({ tour }: { tour: ViatorTour }) => {
-    const IconComponent = categoryIcons[tour.category] || Mountain;
+    const IconComponent = getTourCategoryIcon(resolveTourCategory(tour));
     
     return (
       <Card className="group overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer motion-safe:hover:-translate-y-1"
@@ -361,7 +357,7 @@ export default function Tours() {
                   <span className="text-xs font-medium">All</span>
                 </button>
                 {categories.map(cat => {
-                  const Icon = categoryIcons[cat] || Mountain;
+                  const Icon = getTourCategoryIcon(cat);
                   const active = selectedCategory === cat;
                   return (
                     <button

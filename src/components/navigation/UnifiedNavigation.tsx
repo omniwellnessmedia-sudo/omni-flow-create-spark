@@ -34,7 +34,8 @@ import {
   Globe,
   Search,
   ChevronDown,
-  Users
+  Users,
+  CalendarDays
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import { handleKeyboardNavigation, announceToScreenReader } from '@/lib/accessibility';
@@ -111,6 +112,11 @@ const UnifiedNavigation = () => {
         { title: 'Media Production', href: '/media-production', description: 'Content creation & storytelling', icon: '🎬' },
         { title: 'Web Development', href: '/web-development', description: 'Digital platforms & systems', icon: '💻' },
       ]
+    },
+    {
+      title: 'Community',
+      href: '/community/events',
+      icon: CalendarDays,
     },
     {
       title: 'Contact',
