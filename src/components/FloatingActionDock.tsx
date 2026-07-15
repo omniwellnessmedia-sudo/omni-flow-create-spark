@@ -150,7 +150,7 @@ export const FloatingActionDock = () => {
         type="button"
         onClick={handleTriggerClick}
         className={cn(
-          "pointer-events-auto h-14 w-14 rounded-full shadow-2xl flex items-center justify-center transition-all",
+          "pointer-events-auto h-14 w-14 rounded-full overflow-hidden shadow-2xl flex items-center justify-center transition-all",
           "bg-white/95 backdrop-blur-sm ring-1 ring-border/40 hover:shadow-xl hover:scale-105"
         )}
         aria-expanded={expanded}
@@ -161,9 +161,9 @@ export const FloatingActionDock = () => {
           <X className="h-5 w-5 text-foreground" />
         ) : (
           <img
-            src={IMAGES.logos.omniPrimary}
+            src={IMAGES.logos.omniCircularBadge}
             alt="Omni — open quick actions"
-            className={cn("h-10 w-10 object-contain magic-logo", spinning && "is-spinning")}
+            className={cn("h-full w-full rounded-full object-cover magic-logo", spinning && "is-spinning")}
             draggable={false}
           />
         )}

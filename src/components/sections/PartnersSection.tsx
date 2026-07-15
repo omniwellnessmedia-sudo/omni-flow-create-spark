@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { IMAGES } from "@/lib/images";
+import SmartImage from "@/components/ui/smart-image";
 
 const PartnersSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -50,11 +51,11 @@ const PartnersSection = () => {
                   index % partners.length === currentIndex ? 'ring-4 ring-primary ring-opacity-50' : ''
                 }`}
               >
-              <img 
-                  src={partner.logo} 
+                <SmartImage
+                  src={partner.logo}
+                  fallback={IMAGES.omni.logo}
                   alt={partner.name}
                   className="max-w-full max-h-16 object-contain mb-2"
-                  onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
                 />
                 <h3 className="font-semibold text-xs text-center px-2">{partner.name}</h3>
               </div>
@@ -66,11 +67,11 @@ const PartnersSection = () => {
         <div className="mt-16 text-center">
           <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md mx-auto">
             <div className="h-24 flex items-center justify-center mb-4">
-              <img 
-                src={partners[currentIndex].logo} 
+              <SmartImage
+                src={partners[currentIndex].logo}
+                fallback={IMAGES.omni.logo}
                 alt={partners[currentIndex].name}
                 className="max-w-full max-h-full object-contain"
-                onError={(e) => { e.currentTarget.src = IMAGES.omni.logo; }}
               />
             </div>
             <h3 className="font-heading font-bold text-2xl mb-2">{partners[currentIndex].name}</h3>
@@ -80,7 +81,9 @@ const PartnersSection = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  aria-label={`Show ${partners[index].name}`}
+                  aria-pressed={index === currentIndex}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                     index === currentIndex ? 'bg-primary' : 'bg-gray-300'
                   }`}
                 />

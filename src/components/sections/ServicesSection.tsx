@@ -1,15 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, Video, Share2, Globe } from "lucide-react";
+import { IMAGES } from "@/lib/images";
+import SmartImage, { type SmartImageFallbackCategory } from "@/components/ui/smart-image";
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
-const services = [
+const services: {
+  title: string;
+  description: string;
+  icon: typeof Briefcase;
+  image: string;
+  fallback: string;
+  fallbackCategory: SmartImageFallbackCategory;
+  link: string;
+}[] = [
   {
     title: "Business Consulting",
     description: "Strategic guidance for conscious businesses creating positive impact.",
     icon: Briefcase,
     image: `${STORAGE_BASE}/Business%20Consulting/DSC00124.jpg`,
+    fallback: IMAGES.business.consulting,
+    fallbackCategory: "general",
     link: "/business-consulting",
   },
   {
@@ -17,6 +29,8 @@ const services = [
     description: "Authentic storytelling through video, photography, and multimedia.",
     icon: Video,
     image: `${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`,
+    fallback: IMAGES.media.production,
+    fallbackCategory: "community",
     link: "/media-production",
   },
   {
@@ -24,6 +38,8 @@ const services = [
     description: "Community-building strategies that drive meaningful engagement.",
     icon: Share2,
     image: `${STORAGE_BASE}/General%20Images/community%20outing%202.jpg`,
+    fallback: IMAGES.business.community,
+    fallbackCategory: "community",
     link: "/social-media-strategy",
   },
   {
@@ -31,6 +47,8 @@ const services = [
     description: "Modern, responsive platforms that reflect your brand and convert.",
     icon: Globe,
     image: `${STORAGE_BASE}/Business%20Consulting/DSC00124.jpg`,
+    fallback: IMAGES.business.strategy,
+    fallbackCategory: "general",
     link: "/web-development",
   },
 ];
@@ -59,11 +77,12 @@ const ServicesSection = () => {
                 className="group relative overflow-hidden rounded-2xl aspect-[16/10] animate-fade-in"
                 style={{ animationDelay: `${index * 0.08}s` }}
               >
-                <img
+                <SmartImage
                   src={service.image}
+                  fallback={service.fallback}
+                  category={service.fallbackCategory}
                   alt={service.title}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="relative h-full flex flex-col justify-end p-6 md:p-8">

@@ -2,15 +2,10 @@ import HeroSection from "@/components/sections/HeroSection";
 import ServicesSection from "@/components/sections/ServicesSection";
 import FeaturedProjectsSection from "@/components/sections/FeaturedProjectsSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
-import VideoShowcaseSection from "@/components/sections/VideoShowcaseSection";
-import MissionSection from "@/components/sections/MissionSection";
 import ToursRetreatsPreview from "@/components/sections/ToursRetreatsPreview";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
-import WellnessHumansSection from "@/components/sections/WellnessHumansSection";
 import PartnersSection from "@/components/sections/PartnersSection";
-import FacebookFeedSection from "@/components/sections/FacebookFeedSection";
-import WhatIsOmniSection from "@/components/sections/WhatIsOmniSection";
 import FoundationSection from "@/components/sections/FoundationSection";
 const Index = () => {
   return (

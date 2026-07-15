@@ -3,27 +3,105 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import {
-  Plus,
   FileText,
   Users,
   TrendingUp,
-  ArrowRight,
   Mail,
   Eye,
-  Megaphone,
   Zap,
+  Activity,
+  AlertTriangle,
+  Info,
+  CheckCircle2,
 } from "lucide-react";
+
+interface AdminAlert {
+  type: "warning" | "info";
+  message: string;
+}
 
 interface AdminHomeProps {
   stats: Record<string, any>;
   recentActivity: any[];
-  alerts: any[];
+  alerts: AdminAlert[];
   onNavigate: (section: string) => void;
+  /** When true, renders skeleton placeholders matching the final layout. */
+  loading?: boolean;
 }
 
-const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate }: AdminHomeProps) => {
+const Sk = ({ className }: { className?: string }) => (
+  <Skeleton className={cn("motion-reduce:animate-none", className)} />
+);
+
+const AdminHomeSkeleton = () => (
+  <div className="space-y-6" role="status" aria-busy="true" aria-label="Loading dashboard overview">
+    {/* Quick actions */}
+    <div>
+      <Sk className="h-4 w-28 mb-3" />
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i} className="border-border/50">
+            <CardContent className="p-4 flex items-center gap-3">
+              <Sk className="h-4 w-4 rounded-full shrink-0" />
+              <Sk className="h-4 w-24" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+    {/* Stat tiles */}
+    <div>
+      <Sk className="h-4 w-24 mb-3" />
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="p-3 rounded-lg bg-muted/30 flex flex-col items-center gap-2">
+            <Sk className="h-5 w-14" />
+            <Sk className="h-3 w-10" />
+          </div>
+        ))}
+      </div>
+    </div>
+    {/* Needs attention */}
+    <Card className="rounded-2xl border-border/60">
+      <CardHeader className="pb-3 space-y-2">
+        <Sk className="h-4 w-32" />
+        <Sk className="h-3 w-40" />
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <Sk className="h-9 w-full rounded-lg" />
+        <Sk className="h-9 w-full rounded-lg" />
+      </CardContent>
+    </Card>
+    {/* Activity + health */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {Array.from({ length: 2 }).map((_, i) => (
+        <Card key={i} className="border-border/50">
+          <CardHeader className="pb-3 space-y-2">
+            <Sk className="h-4 w-32" />
+            <Sk className="h-3 w-48" />
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {Array.from({ length: 5 }).map((_, j) => (
+              <div key={j} className="flex items-center justify-between">
+                <Sk className="h-4 w-40 max-w-[60%]" />
+                <Sk className="h-4 w-12" />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+    <span className="sr-only">Loading dashboard overview…</span>
+  </div>
+);
+
+const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate, loading = false }: AdminHomeProps) => {
   const navigate = useNavigate();
+
+  if (loading) return <AdminHomeSkeleton />;
 
   const shortcuts = [
     { label: "New Blog Post", icon: FileText, onClick: () => navigate("/blog/editor/new"), accent: true },
@@ -84,6 +162,39 @@ const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate }: AdminHome
         </div>
       </div>
 
+      {/* Needs Attention */}
+      <Card className="rounded-2xl border-border/60">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Needs Attention</CardTitle>
+          <CardDescription className="text-xs">Pending items waiting on you</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {alerts.length === 0 ? (
+            <div className="flex flex-col items-center text-center py-6 gap-2">
+              <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                <CheckCircle2 className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+              </div>
+              <p className="text-sm text-muted-foreground max-w-sm">
+                All clear — no pending bookings, leads, orders, or provider verifications right now.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {alerts.map((alert, index) => (
+                <div key={index} className="flex items-center gap-2.5 p-2.5 rounded-lg bg-muted/40">
+                  {alert.type === "warning" ? (
+                    <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" aria-hidden="true" />
+                  ) : (
+                    <Info className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                  )}
+                  <span className="text-sm min-w-0 flex-1">{alert.message}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Recent Activity */}
         <Card className="border-border/50">
@@ -97,7 +208,18 @@ const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate }: AdminHome
           </CardHeader>
           <CardContent>
             {recentActivity.length === 0 ? (
-              <p className="text-center text-muted-foreground py-6 text-sm">No recent activity</p>
+              <div className="flex flex-col items-center text-center py-6 gap-2">
+                <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                  <Activity className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+                </div>
+                <p className="text-sm text-muted-foreground max-w-sm">
+                  No recent activity yet — new orders, bookings, and leads will show up here as they come in.
+                </p>
+                <Button variant="ghost" size="sm" className="text-xs" onClick={() => onNavigate("leads")}>
+                  <Users className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />
+                  Go to Leads
+                </Button>
+              </div>
             ) : (
               <div className="space-y-2">
                 {recentActivity.slice(0, 6).map((activity, index) => (

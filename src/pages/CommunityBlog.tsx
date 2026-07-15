@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { textFromHtml } from "@/lib/textFromHtml";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -241,7 +242,7 @@ const CommunityBlog = () => {
         )}
         
         <CardDescription className="text-gray-600 line-clamp-3">
-          {post.excerpt}
+          {textFromHtml(post.excerpt)}
         </CardDescription>
       </CardHeader>
       

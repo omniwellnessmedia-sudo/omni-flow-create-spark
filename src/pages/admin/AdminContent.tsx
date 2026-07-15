@@ -2,15 +2,18 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { textFromHtml } from '@/lib/textFromHtml';
+import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Plus, 
-  FileText, 
-  Edit, 
-  Trash2, 
-  Eye, 
+import MediaUploadDialog, { type MediaTab } from '@/components/media/MediaUploadDialog';
+import {
+  Plus,
+  FileText,
+  Edit,
+  Trash2,
+  Eye,
   ExternalLink,
   Mic,
   Image,
@@ -42,6 +45,7 @@ interface BlogPost {
 const AdminContent = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mediaTab, setMediaTab] = useState<MediaTab | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -82,34 +86,46 @@ const AdminContent = () => {
     }
   };
 
-  const quickActions = [
+  const quickActions: Array<{
+    icon: JSX.Element;
+    title: string;
+    description: string;
+    color: string;
+    onClick?: () => void;
+    disabled?: boolean;
+    badge?: string;
+  }> = [
     {
       icon: <FileText className="h-5 w-5" />,
       title: 'New Blog Post',
       description: 'Create a new blog article',
-      onClick: () => navigate('/blog-editor'),
+      onClick: () => navigate('/blog/editor/new'),
       color: 'bg-purple-50 hover:bg-purple-100 border-purple-200'
-    },
-    {
-      icon: <Mic className="h-5 w-5" />,
-      title: 'New Podcast Episode',
-      description: 'Add a podcast episode',
-      onClick: () => toast({ title: 'Coming Soon', description: 'Podcast management will be available soon' }),
-      color: 'bg-blue-50 hover:bg-blue-100 border-blue-200'
     },
     {
       icon: <Video className="h-5 w-5" />,
       title: 'Upload Video',
       description: 'Add video content',
-      onClick: () => toast({ title: 'Coming Soon', description: 'Video uploads will be available soon' }),
+      onClick: () => setMediaTab('videos'),
       color: 'bg-red-50 hover:bg-red-100 border-red-200'
     },
     {
       icon: <Image className="h-5 w-5" />,
       title: 'Manage Gallery',
-      description: 'Organize images',
-      onClick: () => toast({ title: 'Coming Soon', description: 'Gallery management will be available soon' }),
+      description: 'Upload and organize images',
+      onClick: () => setMediaTab('images'),
       color: 'bg-green-50 hover:bg-green-100 border-green-200'
+    },
+    {
+      // Honest roadmap state — podcast management isn't built yet, so this
+      // card is visibly disabled rather than a live-looking button that
+      // only fires a "Coming Soon" toast.
+      icon: <Mic className="h-5 w-5" />,
+      title: 'New Podcast Episode',
+      description: 'On the roadmap — not available yet',
+      disabled: true,
+      badge: 'Planned',
+      color: 'bg-muted/40 border-border/60'
     }
   ];
 
@@ -124,15 +140,29 @@ const AdminContent = () => {
     <div className="space-y-6">
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {quickActions.map((action, index) => (
+        {quickActions.map((action) => (
           <button
-            key={index}
+            key={action.title}
+            type="button"
             onClick={action.onClick}
-            className={`p-4 rounded-lg border text-left transition-all ${action.color}`}
+            disabled={action.disabled}
+            className={cn(
+              'p-4 rounded-lg border text-left transition-all',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+              action.disabled && 'cursor-not-allowed opacity-70',
+              action.color
+            )}
           >
             <div className="flex items-center gap-3 mb-2">
-              {action.icon}
-              <span className="font-medium text-sm">{action.title}</span>
+              <span className={action.disabled ? 'text-muted-foreground' : undefined}>{action.icon}</span>
+              <span className={cn('font-medium text-sm', action.disabled && 'text-muted-foreground')}>
+                {action.title}
+              </span>
+              {action.badge && (
+                <Badge variant="outline" className="text-[10px] ml-auto shrink-0 text-muted-foreground">
+                  {action.badge}
+                </Badge>
+              )}
             </div>
             <p className="text-xs text-muted-foreground">{action.description}</p>
           </button>
@@ -167,7 +197,7 @@ const AdminContent = () => {
               <CardTitle className="text-lg">Blog Posts</CardTitle>
               <CardDescription>Manage your blog content</CardDescription>
             </div>
-            <Button size="sm" onClick={() => navigate('/blog-editor')} className="w-full sm:w-auto">
+            <Button size="sm" onClick={() => navigate('/blog/editor/new')} className="w-full sm:w-auto">
               <Plus className="h-4 w-4 mr-2" />
               Create Post
             </Button>
@@ -182,7 +212,7 @@ const AdminContent = () => {
             <div className="text-center py-8">
               <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-muted-foreground mb-4">No blog posts yet</p>
-              <Button onClick={() => navigate('/blog-editor')}>
+              <Button onClick={() => navigate('/blog/editor/new')}>
                 <Plus className="h-4 w-4 mr-2" />
                 Create Your First Post
               </Button>
@@ -204,7 +234,8 @@ const AdminContent = () => {
                         {post.status}
                       </Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground truncate">{post.excerpt}</p>
+                    {/* Legacy excerpts may contain raw WYSIWYG HTML (e.g. "<ul><li><br></li></ul>") — strip at render */}
+                    <p className="text-xs text-muted-foreground truncate">{textFromHtml(post.excerpt)}</p>
                     <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Eye className="h-3 w-3" /> {post.views_count || 0}
@@ -217,6 +248,7 @@ const AdminContent = () => {
                       size="sm" 
                       variant="outline" 
                       className="h-8"
+                      aria-label={`View "${post.title}"`}
                       onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
                     >
                       <ExternalLink className="h-3 w-3" />
@@ -225,13 +257,19 @@ const AdminContent = () => {
                       size="sm" 
                       variant="outline" 
                       className="h-8"
-                      onClick={() => navigate(`/blog-editor?edit=${post.id}`)}
+                      aria-label={`Edit "${post.title}"`}
+                      onClick={() => navigate(`/blog/editor/${post.id}`)}
                     >
                       <Edit className="h-3 w-3" />
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="outline" className="h-8 text-red-600 hover:text-red-700">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 text-red-600 hover:text-red-700"
+                          aria-label={`Delete "${post.title}"`}
+                        >
                           <Trash2 className="h-3 w-3" />
                         </Button>
                       </AlertDialogTrigger>
@@ -260,6 +298,13 @@ const AdminContent = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Video / image uploads — opened by the "Upload Video" and "Manage Gallery" cards */}
+      <MediaUploadDialog
+        open={mediaTab !== null}
+        onOpenChange={(open) => { if (!open) setMediaTab(null); }}
+        initialTab={mediaTab ?? 'videos'}
+      />
     </div>
   );
 };

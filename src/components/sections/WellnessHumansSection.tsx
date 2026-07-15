@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { IMAGES } from "@/lib/images";
+import SmartImage from "@/components/ui/smart-image";
 
 const WellnessHumansSection = () => {
   return (
@@ -66,8 +67,10 @@ const WellnessHumansSection = () => {
           {/* Image */}
           <div className="relative">
             <div className="relative z-10">
-              <img 
+              <SmartImage
                 src={IMAGES.sandy.profile}
+                fallback={IMAGES.sandy.wellness}
+                category="yoga"
                 alt="Person practicing wellness yoga on beach"
                 className="w-full h-auto rounded-3xl shadow-2xl"
               />

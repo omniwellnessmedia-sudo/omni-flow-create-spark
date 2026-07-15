@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { IMAGES } from '@/lib/images';
+import SmartImage from '@/components/ui/smart-image';
 
 const roamPlans = [
   {
@@ -156,12 +157,12 @@ const ToursRetreatsPreview = () => {
             {featuredExperiences.map((experience) => (
               <Card key={experience.href} className="group overflow-hidden hover:shadow-xl transition-all duration-300">
                 <div className="aspect-[4/3] overflow-hidden bg-muted">
-                  <img
+                  <SmartImage
                     src={experience.image}
+                    fallback={IMAGES.wellness.retreat}
+                    category="retreats"
                     alt={experience.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                    onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
                   />
                 </div>
                 <CardContent className="p-5 flex flex-col gap-3">

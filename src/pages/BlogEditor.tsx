@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { renderPostContent } from "@/lib/renderPost";
+import { textFromHtml, countWordsFromHtml, excerptFromHtml } from "@/lib/textFromHtml";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,7 +25,38 @@ import {
   Linkedin,
   Link,
   Loader2,
+  History,
+  X,
 } from "lucide-react";
+
+type PostState = {
+  title: string;
+  subtitle: string;
+  content: string;
+  excerpt: string;
+  tags: string[];
+  featured_image_url: string;
+  status: "draft" | "published";
+};
+
+type LocalDraft = { post: PostState; savedAt: string };
+
+// localStorage key for the autosaved (unsaved-to-server) draft of a post.
+const draftStorageKey = (id: string) => `omni-blog-draft:${id}`;
+
+const readLocalDraft = (key: string): LocalDraft | null => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || !parsed.post || typeof parsed.post.content !== "string") {
+      return null;
+    }
+    return parsed as LocalDraft;
+  } catch {
+    return null;
+  }
+};
 
 const BlogEditor = () => {
   const { user } = useAuth();
@@ -40,15 +72,7 @@ const BlogEditor = () => {
   const [postLoading, setPostLoading] = useState(!isNewPost);
   const [isLoading, setIsLoading] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
-  const [post, setPost] = useState<{
-    title: string;
-    subtitle: string;
-    content: string;
-    excerpt: string;
-    tags: string[];
-    featured_image_url: string;
-    status: "draft" | "published";
-  }>({
+  const [post, setPost] = useState<PostState>({
     title: "",
     subtitle: "",
     content: "",
@@ -62,6 +86,16 @@ const BlogEditor = () => {
   const [estimatedReadTime, setEstimatedReadTime] = useState(1);
   const [featuredImageFailed, setFeaturedImageFailed] = useState(false);
   const [uploadingFeatured, setUploadingFeatured] = useState(false);
+
+  // ---- Autosave (localStorage) -------------------------------------------
+  const draftKey = draftStorageKey(isNewPost ? "new" : postId!);
+  // A recovered local draft the user hasn't accepted or dismissed yet.
+  const [restorableDraft, setRestorableDraft] = useState<LocalDraft | null>(null);
+  // Serialized snapshot autosave compares against — seeded from the loaded
+  // (or empty) post so we never autosave state the user hasn't touched.
+  const autosaveSeed = useRef<string | null>(null);
+  // Server-side updated_at of the loaded post, used to discard stale local drafts.
+  const serverUpdatedAt = useRef<string | null>(null);
 
   // Featured cover upload → Supabase storage → public URL (mirrors RichTextEditor inline images)
   const uploadFeatured = async (file: File) => {
@@ -88,9 +122,13 @@ const BlogEditor = () => {
     }
   };
 
+  // Excerpt is always plain text: an explicit excerpt is used as-is, otherwise
+  // one is derived from the content HTML with tags stripped (the WYSIWYG stores
+  // HTML — without stripping, drafts showed literal "<ul><li><br></li></ul>").
   const getExcerpt = () => {
-    const source = post.excerpt.trim() || post.content.trim();
-    return source.length > 200 ? `${source.substring(0, 200)}...` : source;
+    const explicit = post.excerpt.trim();
+    if (explicit) return explicit.length > 200 ? `${explicit.substring(0, 200)}...` : explicit;
+    return excerptFromHtml(post.content, 200);
   };
 
   useEffect(() => {
@@ -105,10 +143,76 @@ const BlogEditor = () => {
   }, [user, postId, isNewPost]);
 
   useEffect(() => {
-    const words = post.content.split(/\s+/).filter(word => word.length > 0).length;
+    // Count words in the rendered text, not the raw HTML string — "<p></p>"
+    // used to count as "1 words".
+    const words = countWordsFromHtml(post.content);
     setWordCount(words);
     setEstimatedReadTime(Math.max(1, Math.ceil(words / 200))); // 200 words per minute
   }, [post.content]);
+
+  // Offer to restore an unsaved local draft once the (possibly loaded) post is ready.
+  useEffect(() => {
+    if (postLoading) return;
+    const saved = readLocalDraft(draftKey);
+    if (!saved) return;
+    // Stale local draft — the server copy was saved after it. Drop it quietly.
+    if (serverUpdatedAt.current && saved.savedAt <= serverUpdatedAt.current) {
+      localStorage.removeItem(draftKey);
+      return;
+    }
+    const hasContent = Boolean(saved.post.title.trim() || textFromHtml(saved.post.content));
+    const differs =
+      saved.post.content !== post.content ||
+      saved.post.title !== post.title ||
+      saved.post.subtitle !== post.subtitle ||
+      saved.post.excerpt !== post.excerpt;
+    if (hasContent && differs) setRestorableDraft(saved);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postLoading, draftKey]);
+
+  // Debounced autosave: any edit is written to localStorage after ~2s of quiet,
+  // so a closed tab or crash never loses work.
+  useEffect(() => {
+    if (postLoading) return;
+    const serialized = JSON.stringify(post);
+    if (autosaveSeed.current === null) {
+      autosaveSeed.current = serialized; // first render with settled state — nothing edited yet
+      return;
+    }
+    if (serialized === autosaveSeed.current) return;
+    const timer = window.setTimeout(() => {
+      try {
+        localStorage.setItem(draftKey, JSON.stringify({ post, savedAt: new Date().toISOString() }));
+      } catch {
+        // localStorage full or unavailable — autosave is best-effort only.
+      }
+    }, 2000);
+    return () => window.clearTimeout(timer);
+  }, [post, postLoading, draftKey]);
+
+  const restoreLocalDraft = () => {
+    if (!restorableDraft) return;
+    setPost(prev => ({
+      ...prev,
+      ...restorableDraft.post,
+      tags: Array.isArray(restorableDraft.post.tags) ? restorableDraft.post.tags : prev.tags,
+    }));
+    setRestorableDraft(null);
+    toast.success("Unsaved draft restored");
+  };
+
+  const discardLocalDraft = () => {
+    localStorage.removeItem(draftKey);
+    setRestorableDraft(null);
+  };
+
+  // Called after a successful server save/publish: the local safety copy is no
+  // longer needed, and the autosave baseline moves to the just-saved state.
+  const clearLocalDraft = (savedPost: PostState) => {
+    localStorage.removeItem(draftKey);
+    localStorage.removeItem(draftStorageKey("new")); // a new post gets an id on save
+    autosaveSeed.current = JSON.stringify(savedPost);
+  };
 
   const loadPost = async () => {
     if (isNewPost) return;
@@ -123,6 +227,7 @@ const BlogEditor = () => {
 
       if (error) throw error;
 
+      serverUpdatedAt.current = data.updated_at || data.created_at || null;
       setPost({
         title: data.title,
         subtitle: data.subtitle || "",
@@ -212,7 +317,10 @@ const BlogEditor = () => {
       if (result.error) throw result.error;
 
       toast.success("Draft saved successfully");
-      setPost(prev => ({ ...prev, status: "draft" }));
+      const savedPost: PostState = { ...post, status: "draft" };
+      setPost(savedPost);
+      clearLocalDraft(savedPost);
+      serverUpdatedAt.current = result.data?.updated_at || new Date().toISOString();
       setLastSavedAt(new Date().toLocaleTimeString("en-ZA", { hour: "2-digit", minute: "2-digit" }));
       if (isNewPost && result.data?.id) {
         navigate(`/blog/editor/${result.data.id}`, { replace: true });
@@ -285,6 +393,7 @@ const BlogEditor = () => {
       if (result.error) throw result.error;
 
       toast.success("Post published successfully!");
+      clearLocalDraft({ ...post, status: "published" });
       navigate(`/blog/post/${result.data.slug}`);
     } catch (error: any) {
       toast.error("Failed to publish post: " + error.message);
@@ -344,7 +453,7 @@ const BlogEditor = () => {
                 Back to Community
               </Button>
               <div className="text-sm text-muted-foreground">
-                {wordCount} words • {estimatedReadTime} min read
+                {wordCount} {wordCount === 1 ? "word" : "words"} • {estimatedReadTime} min read
                 {lastSavedAt && <span className="ml-2 text-primary">Saved {lastSavedAt}</span>}
               </div>
             </div>
@@ -376,6 +485,43 @@ const BlogEditor = () => {
 
       {/* Editor */}
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Unsaved-draft recovery banner */}
+        {restorableDraft && (
+          <div
+            role="status"
+            className="mb-8 flex flex-col sm:flex-row sm:items-center gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4"
+          >
+            <History className="h-5 w-5 text-primary shrink-0" aria-hidden="true" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium">Restore unsaved draft?</p>
+              <p className="text-xs text-muted-foreground">
+                You have unsaved changes from{" "}
+                {new Date(restorableDraft.savedAt).toLocaleString("en-ZA", {
+                  day: "numeric",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+                {" "}that weren't saved to the server.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Button size="sm" onClick={restoreLocalDraft}>
+                Restore
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={discardLocalDraft}
+                aria-label="Discard unsaved draft"
+              >
+                <X className="h-4 w-4 mr-1.5" aria-hidden="true" />
+                Discard
+              </Button>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-8">
           {/* Title */}
           <div className="space-y-4">

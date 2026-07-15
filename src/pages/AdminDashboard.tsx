@@ -458,11 +458,12 @@ const AdminDashboard = () => {
                 <DropdownMenuItem onClick={() => navigate("/blog/editor/new")}>
                   <FileText className="h-3.5 w-3.5 mr-2" /> Blog Post
                 </DropdownMenuItem>
-                <DropdownMenuItem disabled>
-                  <Mic className="h-3.5 w-3.5 mr-2" /> Podcast <Badge variant="outline" className="ml-2 text-[9px]">Soon</Badge>
+                {/* Video upload lives in the Content section's media dialog */}
+                <DropdownMenuItem onClick={() => handleSectionChange("content")}>
+                  <Video className="h-3.5 w-3.5 mr-2" /> Upload Video
                 </DropdownMenuItem>
                 <DropdownMenuItem disabled>
-                  <Video className="h-3.5 w-3.5 mr-2" /> Video <Badge variant="outline" className="ml-2 text-[9px]">Soon</Badge>
+                  <Mic className="h-3.5 w-3.5 mr-2" /> Podcast <Badge variant="outline" className="ml-2 text-[9px]">Planned</Badge>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

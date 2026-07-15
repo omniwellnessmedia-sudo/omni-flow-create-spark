@@ -3,13 +3,24 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/lib/images";
+import SmartImage, { type SmartImageFallbackCategory } from "@/components/ui/smart-image";
 
 const FeaturedProjectsSection = () => {
-  const projects = [
+  const projects: {
+    title: string;
+    description: string;
+    image: string;
+    fallback: string;
+    fallbackCategory: SmartImageFallbackCategory;
+    category: string;
+    href: string;
+  }[] = [
     {
       title: "Community Outreach & Support",
       description: "Providing essential resources and support to families and children in our community.",
       image: IMAGES.wellness.communityProject1,
+      fallback: IMAGES.wellness.communityProject2,
+      fallbackCategory: "community",
       category: "Community Development",
       href: "/about"
     },
@@ -17,6 +28,8 @@ const FeaturedProjectsSection = () => {
       title: "Indigenous Wisdom & Healing",
       description: "Learning from traditional healers and documenting ancient wisdom for future generations.",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg",
+      fallback: IMAGES.services.chief,
+      fallbackCategory: "locations",
       category: "Cultural Heritage",
       href: "/tours/great-mother-cave-tour"
     },
@@ -24,6 +37,8 @@ const FeaturedProjectsSection = () => {
       title: "Wellness Education & Growth",
       description: "Sharing knowledge and fostering growth through educational programs and community workshops.",
       image: IMAGES.community.empowerment,
+      fallback: IMAGES.community.empowerment2,
+      fallbackCategory: "workshops",
       category: "Education & Development",
       href: "/services"
     }
@@ -51,8 +66,10 @@ const FeaturedProjectsSection = () => {
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <div className="aspect-square overflow-hidden">
-                <img 
+                <SmartImage
                   src={project.image}
+                  fallback={project.fallback}
+                  category={project.fallbackCategory}
                   alt={project.title}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
