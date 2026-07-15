@@ -118,6 +118,10 @@ const CORE = {
     omniHorizontal: `${SUPABASE_URL}/${FOLDERS.partnerLogos}/Omni%20Horizontal%20Logo-07.png`,
     omniIcon: `${SUPABASE_URL}/${FOLDERS.partnerLogos}/OMNI%20WELLNESS%20MEDIA%20ICON.png`,
     omniWhite: `${SUPABASE_URL}/${FOLDERS.partnerLogos}/omni%20brand%20white%20logo%20for%20black%20transparent.png`,
+    // Purpose-built circular badge (rainbow lotus mark + wordmark, transparent
+    // surround) for header/footer use where a round frame is needed. Tracked
+    // locally, not Supabase storage — see .gitignore's public/branding exception.
+    omniCircularBadge: '/branding/omni-badge-512.png',
     
     // Partner logos - in partner-logos** (Brand Assets) subfolder
     twoBeWell: `${SUPABASE_URL}/${FOLDERS.productImages}/2%20be%20well%20NEW%20LOGO_OMNI.png`,

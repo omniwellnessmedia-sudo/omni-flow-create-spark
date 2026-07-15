@@ -24,6 +24,7 @@ const AddService = React.lazy(() => import('@/pages/AddService'));
 const EditService = React.lazy(() => import('@/pages/EditService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
 const CommunityEvents = React.lazy(() => import('@/pages/CommunityEvents'));
+const StunningPigs = React.lazy(() => import('@/pages/events/StunningPigs'));
 const ProviderDashboard = React.lazy(() => import('@/pages/ProviderDashboard'));
 const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPortal'));
 const TransactionPage = React.lazy(() => import('@/pages/TransactionPage'));
@@ -199,6 +200,10 @@ function App() {
                   <Route path="/impact" element={<Navigate to="/csr-impact" replace />} />
                   <Route path="/wellness-account" element={<Navigate to="/wellness-exchange/account" replace />} />
                   <Route path="/community/events" element={<CommunityEvents />} />
+                  {/* UNLISTED: STUNNING PIGS screening — deliberately absent from all nav/
+                      sitemap surfaces; DB row is draft until go-live. Do not add to nav
+                      without explicit approval. */}
+                  <Route path="/events/stunning-pigs" element={<StunningPigs />} />
                   <Route path="/ai-tools" element={<Navigate to="/services" replace />} />
                   <Route path="/wellness-exchange/provider-signup" element={<Navigate to="/auth?tab=signup&role=provider" replace />} />
                   <Route path="/provider-signup" element={<Navigate to="/auth?tab=signup&role=provider" replace />} />

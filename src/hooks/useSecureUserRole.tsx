@@ -47,7 +47,10 @@ export const useSecureUserRole = () => {
 
       setRoleData({
         isAdmin: roleList.includes('admin') || roleList.includes('super_admin'),
-        isAccountant: roleList.includes('accountant'),
+        // Cast to string[]: the generated Supabase types predate the 'accountant'
+        // role (added by migration), so .includes('accountant') is a type error even
+        // though it matches correctly at runtime.
+        isAccountant: (roleList as string[]).includes('accountant'),
         roles: roleList,
         userId: user.id,
         loading: false,

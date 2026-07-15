@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, ExternalLink } from "lucide-react";
+import SmartImage from "@/components/ui/smart-image";
 
 const VideoShowcaseSection = () => {
   const [selectedVideo, setSelectedVideo] = useState(0);
@@ -97,13 +98,11 @@ const VideoShowcaseSection = () => {
                 <CardContent className="p-4">
                   <div className="flex items-start space-x-3">
                     <div className="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
-                      <img 
-                        src={video.thumbnail} 
+                      <SmartImage
+                        src={video.thumbnail}
+                        fallback="/placeholder.svg"
                         alt={video.title}
                         className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = '/placeholder.svg';
-                        }}
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
                         <Play className="w-6 h-6 text-white" />

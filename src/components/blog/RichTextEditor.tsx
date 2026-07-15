@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import DOMPurify from "dompurify";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { textFromHtml } from "@/lib/textFromHtml";
 import {
   Bold, Italic, Heading2, Heading3, List, ListOrdered,
   Quote, Link as LinkIcon, ImagePlus, Undo2, Redo2, Loader2,
@@ -126,6 +127,30 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
     if (file) handleUpload(file);
   };
 
+  // Keyboard shortcuts: Ctrl/Cmd+B → bold, Ctrl/Cmd+I → italic. Browsers
+  // often handle these natively in contentEditable, but going through exec()
+  // guarantees onChange fires with the sanitized result.
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
+    const key = e.key.toLowerCase();
+    if (key === "b") {
+      e.preventDefault();
+      exec("bold");
+    } else if (key === "i") {
+      e.preventDefault();
+      exec("italic");
+    }
+  };
+
+  // Live word/character counts from the rendered text (not the raw HTML).
+  const { words, chars } = useMemo(() => {
+    const plain = textFromHtml(value);
+    return {
+      words: plain ? plain.split(/\s+/).length : 0,
+      chars: plain.length,
+    };
+  }, [value]);
+
   const ToolbarButton = ({ onClick, title, children }: { onClick: () => void; title: string; children: React.ReactNode }) => (
     <button
       type="button"
@@ -142,8 +167,8 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
     <div className="rounded-2xl border border-border/60 overflow-hidden bg-card">
       {/* Sticky toolbar */}
       <div className="flex flex-wrap items-center gap-1 p-2 border-b border-border/60 bg-muted sticky top-16 z-20">
-        <ToolbarButton onClick={() => exec("bold")} title="Bold"><Bold className="h-4 w-4" /></ToolbarButton>
-        <ToolbarButton onClick={() => exec("italic")} title="Italic"><Italic className="h-4 w-4" /></ToolbarButton>
+        <ToolbarButton onClick={() => exec("bold")} title="Bold (Ctrl+B)"><Bold className="h-4 w-4" /></ToolbarButton>
+        <ToolbarButton onClick={() => exec("italic")} title="Italic (Ctrl+I)"><Italic className="h-4 w-4" /></ToolbarButton>
         <span className="w-px h-6 bg-border mx-1" />
         <ToolbarButton onClick={() => formatBlock("H2")} title="Heading"><Heading2 className="h-4 w-4" /></ToolbarButton>
         <ToolbarButton onClick={() => formatBlock("H3")} title="Subheading"><Heading3 className="h-4 w-4" /></ToolbarButton>
@@ -184,6 +209,7 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
           aria-label="Post content"
           onInput={emit}
           onBlur={emit}
+          onKeyDown={onKeyDown}
           onDrop={onDrop}
           onDragOver={(e) => e.preventDefault()}
           className={cn(
@@ -195,9 +221,14 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
         />
       </div>
 
-      <p className="px-4 py-2 text-xs text-muted-foreground border-t border-border/40 bg-muted/20">
-        Tip: select text then click <strong>B</strong> / <strong>I</strong>, or drag an image straight in. Formatting is live — what you see is what readers get.
-      </p>
+      <div className="flex items-center justify-between gap-4 px-4 py-2 text-xs text-muted-foreground border-t border-border/40 bg-muted/20">
+        <p className="min-w-0 truncate">
+          Tip: <kbd className="px-1 rounded border border-border/60 bg-background font-mono text-[10px]">Ctrl</kbd>+<kbd className="px-1 rounded border border-border/60 bg-background font-mono text-[10px]">B</kbd> bold, <kbd className="px-1 rounded border border-border/60 bg-background font-mono text-[10px]">Ctrl</kbd>+<kbd className="px-1 rounded border border-border/60 bg-background font-mono text-[10px]">I</kbd> italic — or drag an image straight in.
+        </p>
+        <p className="shrink-0 tabular-nums">
+          {words} {words === 1 ? "word" : "words"} · {chars} {chars === 1 ? "character" : "characters"}
+        </p>
+      </div>
     </div>
   );
 }

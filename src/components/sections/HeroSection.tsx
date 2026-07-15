@@ -5,7 +5,8 @@ import { useAppTour } from "@/hooks/useAppTour";
 import AppTour from "@/components/ui/app-tour";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { IMAGES, getOmniLogo, getImageWithFallback } from "@/lib/images";
+import { IMAGES } from "@/lib/images";
+import SmartImage, { type SmartImageFallbackCategory } from "@/components/ui/smart-image";
 import { CommunityCard } from "@/components/community/CommunityCard";
 import { FloatingDecorations } from "@/components/ui/gaia-elements";
 import { CuratorTip } from "@/components/curator/CuratorTip";
@@ -27,8 +28,19 @@ import {
 
 // Supabase storage helper for community images
 const SUPABASE_URL = "https://dtjmhieeywdvhjxqyxad.supabase.co";
-const getStorageUrl = (filename: string) => 
+const getStorageUrl = (filename: string) =>
   `${SUPABASE_URL}/storage/v1/object/public/provider-images/General%20Images/${encodeURIComponent(filename)}`;
+
+// Hero background — preloaded at runtime (see useEffect below) so the
+// largest-contentful-paint image starts downloading as early as possible.
+const HERO_IMAGE_URL = getStorageUrl("muizenberg cave view 2.jpg");
+
+// Map a content category onto the closest IMAGES.fallbacks bucket.
+const fallbackCategoryFor = (category: string): SmartImageFallbackCategory => {
+  if (category === "community") return "community";
+  if (category === "wellness") return "retreats";
+  return "locations";
+};
 
 const HeroSection = () => {
   const { isOpen, hasSeenTour, steps, startTour, completeTour, skipTour } = useAppTour();
@@ -39,6 +51,20 @@ const HeroSection = () => {
     window.addEventListener("omni:start-tour", handler);
     return () => window.removeEventListener("omni:start-tour", handler);
   }, [startTour]);
+
+  // Preload the hero background at high priority (index.html is generic, so
+  // the hint is injected at runtime for this route only).
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = HERO_IMAGE_URL;
+    link.setAttribute("fetchpriority", "high");
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
 
   // Helper function to get unique images based on category using centralized system
   const getImageForCategory = (category: string) => {
@@ -222,13 +248,15 @@ const HeroSection = () => {
       >
         {/* Background Image with Enhanced Contrast Overlay */}
         <div className="absolute inset-0">
-          <img 
-            src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/muizenberg%20cave%20view%202.jpg"
+          <SmartImage
+            src={HERO_IMAGE_URL}
+            fallback={IMAGES.locations.view1}
+            category="locations"
             alt=""
             aria-hidden="true"
             className="w-full h-full object-cover"
-            loading="eager"
-            onError={(e) => { e.currentTarget.src = IMAGES.locations.view1; }}
+            eager
+            fetchPriority="high"
           />
           {/* Cinematic overlay — warm dark with depth */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" aria-hidden="true"></div>
@@ -244,11 +272,12 @@ const HeroSection = () => {
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Brand Logo — Clean, confident */}
           <div className="flex justify-center mb-8 sm:mb-10 animate-fade-in">
-            <img
-              src="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/OMNI%20LOGO%20FA-06(1)%20(1).png"
+            <SmartImage
+              src={IMAGES.logos.omniPrimary}
+              fallback={IMAGES.logos.omniCircularBadge}
               alt="Omni Wellness Media logo"
               className="h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28 object-contain rounded-full bg-white/95 p-2.5 shadow-lg"
-              loading="eager"
+              eager
             />
           </div>
           
@@ -327,12 +356,12 @@ const HeroSection = () => {
               {workspaceItems.map((item, index) => (
                 <Link key={index} to={item.href} className="group" data-cursor="hover">
                   <div className="magic-card relative overflow-hidden rounded-3xl aspect-[16/9] bg-gray-100 border border-transparent">
-                    <img
+                    <SmartImage
                       src={item.image}
+                      fallback={IMAGES.wellness.retreat}
+                      category="retreats"
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                      loading="lazy"
-                      onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
@@ -395,11 +424,12 @@ const HeroSection = () => {
                 .map((item, index) => (
                   <Link key={index} to={item.href} className="group" data-cursor="hover">
                     <div className="magic-card relative overflow-hidden rounded-3xl aspect-[3/4] bg-gray-100 border border-transparent">
-                      <img
+                      <SmartImage
                         src={item.image}
+                        fallback={getImageForCategory(item.category)}
+                        category={fallbackCategoryFor(item.category)}
                         alt={item.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-5">

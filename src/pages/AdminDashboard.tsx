@@ -226,8 +226,13 @@ const AdminDashboard = () => {
   // hopping to the Leads section. Refetch so the stats + alert counts update too.
   const updateServiceBookingStatus = async (id: string, status: string) => {
     try {
-      const { error } = await supabase.from("contact_submissions").update({ status }).eq("id", id);
+      // .select() so an RLS policy silently matching zero rows shows up as an
+      // empty result instead of a false-positive success toast (this is exactly
+      // how a missing UPDATE policy stayed invisible before — the request
+      // "succeeded" while updating nothing).
+      const { data, error } = await supabase.from("contact_submissions").update({ status }).eq("id", id).select();
       if (error) throw error;
+      if (!data || data.length === 0) throw new Error("No permission to update this booking.");
       toast({ title: "Lead updated", description: `Status set to ${status}` });
       await fetchDashboardData();
     } catch (err) {
@@ -453,11 +458,12 @@ const AdminDashboard = () => {
                 <DropdownMenuItem onClick={() => navigate("/blog/editor/new")}>
                   <FileText className="h-3.5 w-3.5 mr-2" /> Blog Post
                 </DropdownMenuItem>
-                <DropdownMenuItem disabled>
-                  <Mic className="h-3.5 w-3.5 mr-2" /> Podcast <Badge variant="outline" className="ml-2 text-[9px]">Soon</Badge>
+                {/* Video upload lives in the Content section's media dialog */}
+                <DropdownMenuItem onClick={() => handleSectionChange("content")}>
+                  <Video className="h-3.5 w-3.5 mr-2" /> Upload Video
                 </DropdownMenuItem>
                 <DropdownMenuItem disabled>
-                  <Video className="h-3.5 w-3.5 mr-2" /> Video <Badge variant="outline" className="ml-2 text-[9px]">Soon</Badge>
+                  <Mic className="h-3.5 w-3.5 mr-2" /> Podcast <Badge variant="outline" className="ml-2 text-[9px]">Planned</Badge>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

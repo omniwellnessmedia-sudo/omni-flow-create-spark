@@ -1,4 +1,5 @@
 import { IMAGES } from '@/lib/images';
+import SmartImage from '@/components/ui/smart-image';
 import { Heart, Users, Sprout, Sparkles } from 'lucide-react';
 
 const MissionSection = () => {
@@ -19,8 +20,10 @@ const MissionSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
           {/* Large Image Card - Left */}
           <div className="lg:col-span-2 relative overflow-hidden rounded-3xl shadow-xl group">
-            <img 
+            <SmartImage
               src={IMAGES.services.community1}
+              fallback={IMAGES.services.community2}
+              category="community"
               alt="Community wellness and empowerment"
               className="w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
             />

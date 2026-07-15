@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { textFromHtml, excerptFromHtml } from "@/lib/textFromHtml";
 import { renderPostContent } from "@/lib/renderPost";
 import { useAuth } from "@/components/AuthProvider";
 import { supabase } from "@/integrations/supabase/client";
@@ -282,7 +283,7 @@ const BlogPost = () => {
 
     const url = window.location.href;
     const title = post.title;
-    const text = post.excerpt || post.content.substring(0, 200) + "...";
+    const text = textFromHtml(post.excerpt) || excerptFromHtml(post.content, 200);
 
     let shareUrl = "";
     switch (platform) {

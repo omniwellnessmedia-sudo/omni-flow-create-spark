@@ -13,10 +13,14 @@ export interface CartItem {
   duration_minutes?: number;
   location?: string;
   image?: string;
-  item_type?: 'product' | 'service' | 'affiliate';
+  item_type?: 'product' | 'service' | 'affiliate' | 'event_ticket' | 'event_donation';
   affiliate_url?: string;
   affiliate_program_id?: string;
   commission_rate?: number;
+  // Event tickets: which screening session this ticket is for, and how many
+  // physical seats one unit consumes (Single=1, Couple=2, donation=0).
+  event_session_id?: string;
+  seats_per_unit?: number;
 }
 
 interface CartContextType {

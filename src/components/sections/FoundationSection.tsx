@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { IMAGES } from "@/lib/images";
+import SmartImage from "@/components/ui/smart-image";
 import { Button } from "@/components/ui/button";
 import { Heart, ArrowRight, Sparkles } from "lucide-react";
 
@@ -18,12 +19,12 @@ const FoundationSection = () => {
         <div className="grid lg:grid-cols-2 gap-10 items-center rounded-3xl overflow-hidden border border-border/50 bg-card shadow-xl">
           {/* Image */}
           <div className="relative h-64 lg:h-full min-h-[340px] order-2 lg:order-1">
-            <img
+            <SmartImage
               src={IMAGES.community.empowerment}
+              fallback={IMAGES.services.community1}
+              category="community"
               alt="Omni Wellness community empowerment programme in Cape Town"
               className="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
-              onError={(e) => { e.currentTarget.src = IMAGES.services.community1; }}
             />
             <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-black/50 via-transparent to-transparent" />
           </div>

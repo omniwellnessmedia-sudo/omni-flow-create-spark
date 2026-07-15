@@ -1,12 +1,18 @@
 // Phase 7: PayPal Checkout Component
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { useCart } from "@/components/CartProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { PAYPAL_OPTIONS_ZAR } from "@/config/paypal";
 import { Loader2 } from "lucide-react";
 
-export const PayPalCheckout = () => {
+// The app root loads the PayPal SDK in USD (for the RoamBuddy/eSIM store), but the
+// main store bills in ZAR. Loading the SDK in one currency and creating an order in
+// another makes PayPal reject the order, so the store checkout gets its own ZAR
+// script context (with a distinct data-namespace so the two SDK instances don't
+// collide on the same page).
+const PayPalCheckoutInner = () => {
   const { items, totalZAR, totalWellCoins, clearCart } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -48,6 +54,36 @@ export const PayPalCheckout = () => {
 
   const onApprove = async (data: any, actions: any) => {
     try {
+      // Event tickets: reserve seats BEFORE capturing payment, so a buyer is never
+      // charged for a session that just sold out. reserve_screening_seats is atomic
+      // and refuses while the event is still draft. If any reservation fails we
+      // simply don't capture — the PayPal authorization lapses, no charge.
+      const seatsBySession = new Map<string, number>();
+      for (const item of items) {
+        if (item.item_type === "event_ticket" && item.event_session_id) {
+          const seats = (item.seats_per_unit ?? 1) * item.quantity;
+          seatsBySession.set(
+            item.event_session_id,
+            (seatsBySession.get(item.event_session_id) ?? 0) + seats
+          );
+        }
+      }
+      for (const [sessionId, seats] of seatsBySession) {
+        const { data: reserved, error: reserveError } = await (supabase as any).rpc(
+          "reserve_screening_seats",
+          { p_session_id: sessionId, p_seats: seats }
+        );
+        if (reserveError || !reserved) {
+          toast({
+            title: "Session sold out",
+            description:
+              "Those seats were taken while you were checking out. You have not been charged — please pick another session.",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
       const order = await actions.order.capture();
       
       console.log("PayPal Order Captured:", order);
@@ -59,6 +95,11 @@ export const PayPalCheckout = () => {
       const { data: orderData, error } = await supabase
         .from("orders")
         .insert({
+          // orders RLS requires auth.uid() = user_id OR auth.uid() IS NULL.
+          // Without this, a logged-in buyer's insert is rejected AFTER PayPal has
+          // captured payment — charged, but no order saved. user?.id for members,
+          // null for guests (both satisfy the policy).
+          user_id: user?.id ?? null,
           customer_email: order.payer.email_address,
           customer_name: `${order.payer.name.given_name} ${order.payer.name.surname}`,
           amount: totalZAR,
@@ -120,6 +161,19 @@ export const PayPalCheckout = () => {
 
       await supabase.from("order_items").insert(orderItems);
 
+      // Campaign analytics: ticket purchases are the stunningpigs conversion event
+      if (seatsBySession.size > 0) {
+        const w = window as any;
+        const ticketItems = items.filter((i) => i.item_type === "event_ticket");
+        w.gtag?.("event", "purchase_ticket", {
+          campaign: "stunningpigs",
+          value: ticketItems.reduce((s, i) => s + i.price_zar * i.quantity, 0),
+          currency: "ZAR",
+          ticket_types: ticketItems.map((i) => i.id).join(","),
+        });
+        w.tagClarityEvent?.("purchase_ticket", "stunningpigs");
+      }
+
       // Success!
       toast({
         title: "Payment Successful! 🎉",
@@ -176,3 +230,11 @@ export const PayPalCheckout = () => {
     </div>
   );
 };
+
+// Public component: provides the ZAR PayPal SDK context around the checkout so the
+// SDK currency matches the ZAR orders created above.
+export const PayPalCheckout = () => (
+  <PayPalScriptProvider options={{ ...PAYPAL_OPTIONS_ZAR, dataNamespace: "paypal_zar" }}>
+    <PayPalCheckoutInner />
+  </PayPalScriptProvider>
+);

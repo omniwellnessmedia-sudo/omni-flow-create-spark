@@ -18,7 +18,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Mail, Phone, Building, Clock, MessageSquare, FileText, RefreshCw, CheckCircle, XCircle, Plus, Send, Users, ChevronRight } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Mail, Phone, Building, Clock, MessageSquare, FileText, RefreshCw, CheckCircle, XCircle, Plus, Send, Users, ChevronRight, Inbox, FilterX } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import OutreachPipeline from "@/components/admin/OutreachPipeline";
@@ -58,6 +60,43 @@ const SERVICES = [
   "Tours & Travel",
   "General Inquiry",
 ];
+
+interface PipelineFilterDef {
+  k: string;
+  label: string;
+  match: (s: string | null) => boolean;
+}
+
+const PIPELINE_FILTERS: PipelineFilterDef[] = [
+  { k: "active", label: "Active", match: (s) => !s || ["pending", "in_progress"].includes(s) },
+  { k: "quoted", label: "Quoted/Responded", match: (s) => s === "responded" || s === "quoted" },
+  { k: "closed", label: "Closed", match: (s) => s === "closed" },
+  { k: "archived", label: "Archived", match: (s) => s === "archived" },
+  { k: "all", label: "All", match: () => true },
+];
+
+const EMPTY_FILTER_COPY: Record<string, { contacts: string; quotes: string }> = {
+  active: {
+    contacts: "No contacts are currently active — every submission has been responded to, closed, or archived.",
+    quotes: "No quote requests are currently active — every request has been quoted, closed, or archived.",
+  },
+  quoted: {
+    contacts: "No contacts have been marked Responded yet — update a lead's status from the Active tab.",
+    quotes: "No quote requests have been marked Quoted yet — update a request's status from the Active tab.",
+  },
+  closed: {
+    contacts: "No contacts have been closed yet — close a lead once the conversation wraps up.",
+    quotes: "No quote requests have been closed yet — close a request once it's resolved.",
+  },
+  archived: {
+    contacts: "No contacts have been archived yet — archived leads are kept here for reference.",
+    quotes: "No quote requests have been archived yet — archived requests are kept here for reference.",
+  },
+};
+
+const Sk = ({ className }: { className?: string }) => (
+  <Skeleton className={cn("motion-reduce:animate-none", className)} />
+);
 
 const AdminLeads = () => {
   const { toast } = useToast();
@@ -100,17 +139,69 @@ const AdminLeads = () => {
   const [pipelineFilter, setPipelineFilter] = useState<string>("active");
   const [drawerLead, setDrawerLead] = useState<{ type: LeadType; data: any } | null>(null);
 
-  const matchPipeline = (s: string | null | undefined) => {
-    switch (pipelineFilter) {
-      case "active": return !s || ["pending", "in_progress"].includes(s);
-      case "quoted": return s === "responded" || s === "quoted";
-      case "closed": return s === "closed";
-      case "archived": return s === "archived";
-      default: return true;
-    }
+  const activeFilter =
+    PIPELINE_FILTERS.find((p) => p.k === pipelineFilter) ?? PIPELINE_FILTERS[PIPELINE_FILTERS.length - 1];
+  const filteredContacts = contacts.filter((c) => activeFilter.match(c.status));
+  const filteredQuotes = quotes.filter((q) => activeFilter.match(q.status));
+
+  // Best alternative pipeline tab to suggest when the current one is empty:
+  // the non-"all" filter with the most matching records, falling back to "All".
+  const bestAlternativeFilter = (records: { status: string | null }[]) => {
+    const candidates = PIPELINE_FILTERS.filter((p) => p.k !== pipelineFilter && p.k !== "all")
+      .map((p) => ({ k: p.k, label: p.label, count: records.filter((r) => p.match(r.status)).length }))
+      .filter((p) => p.count > 0)
+      .sort((a, b) => b.count - a.count);
+    return candidates[0] ?? { k: "all", label: "All", count: records.length };
   };
-  const filteredContacts = contacts.filter((c) => matchPipeline(c.status));
-  const filteredQuotes = quotes.filter((q) => matchPipeline(q.status));
+
+  // Empty state when there is data, but nothing matches the current pipeline filter.
+  const renderFilteredEmpty = (kind: "contacts" | "quotes") => {
+    const records = kind === "contacts" ? contacts : quotes;
+    const copy =
+      EMPTY_FILTER_COPY[pipelineFilter]?.[kind] ??
+      `No ${kind === "contacts" ? "contacts" : "quote requests"} match this filter.`;
+    const target = bestAlternativeFilter(records);
+    return (
+      <Card className="rounded-2xl border-border/60">
+        <CardContent className="py-12 flex flex-col items-center text-center gap-3">
+          <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+            <FilterX className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+          </div>
+          <p className="text-sm text-muted-foreground max-w-sm">{copy}</p>
+          <Button size="sm" variant="outline" onClick={() => setPipelineFilter(target.k)}>
+            View {target.label} ({target.count})
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  // Empty state when there is no data at all for this tab.
+  const renderNoDataEmpty = (kind: "contacts" | "quotes") => (
+    <Card className="rounded-2xl border-border/60">
+      <CardContent className="py-12 flex flex-col items-center text-center gap-3">
+        <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center">
+          <Inbox className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+        </div>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          {kind === "contacts"
+            ? "No contact submissions yet — messages from the site's contact form will appear here."
+            : "No service quote requests yet — quote requests from the services pages will appear here."}
+        </p>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => {
+            setAddType(kind === "contacts" ? "contact" : "quote");
+            setShowAddDialog(true);
+          }}
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          {kind === "contacts" ? "Add a contact manually" : "Add a quote request manually"}
+        </Button>
+      </CardContent>
+    </Card>
+  );
 
   useEffect(() => {
     fetchLeadsData();
@@ -326,10 +417,14 @@ const AdminLeads = () => {
     switch (status) {
       case "responded":
         return <Badge className="bg-green-500">Responded</Badge>;
+      case "quoted":
+        return <Badge className="bg-green-500">Quoted</Badge>;
       case "in_progress":
         return <Badge className="bg-blue-500">In Progress</Badge>;
       case "closed":
         return <Badge variant="secondary">Closed</Badge>;
+      case "archived":
+        return <Badge variant="outline">Archived</Badge>;
       default:
         return <Badge className="bg-yellow-500">Pending</Badge>;
     }
@@ -337,9 +432,61 @@ const AdminLeads = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <RefreshCw className="w-6 h-6 animate-spin mr-2" />
-        <span>Loading leads...</span>
+      <div className="space-y-6" role="status" aria-busy="true" aria-label="Loading leads">
+        {/* Stat cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Card key={i} className="border-border/60">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Sk className="h-4 w-20" />
+                <Sk className="h-4 w-4 rounded-full" />
+              </CardHeader>
+              <CardContent className="space-y-1.5">
+                <Sk className="h-7 w-12" />
+                <Sk className="h-3 w-16" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        {/* Action bar */}
+        <div className="flex flex-wrap gap-2">
+          <Sk className="h-8 w-24 rounded-md" />
+          <Sk className="h-8 w-28 rounded-md" />
+          <Sk className="h-8 w-16 rounded-md" />
+        </div>
+        {/* Pipeline chips */}
+        <div className="flex flex-wrap gap-1.5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Sk key={i} className="h-7 w-20 rounded-md" />
+          ))}
+        </div>
+        {/* Tabs */}
+        <Sk className="h-9 w-72 max-w-full rounded-md" />
+        {/* Lead cards */}
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i} className="border-border/60">
+              <CardHeader className="pb-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="space-y-2 min-w-0">
+                    <Sk className="h-4 w-40" />
+                    <Sk className="h-3 w-56 max-w-full" />
+                  </div>
+                  <Sk className="h-5 w-16 rounded-full shrink-0" />
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Sk className="h-4 w-full max-w-md" />
+                <div className="flex flex-wrap gap-1.5">
+                  <Sk className="h-7 w-20 rounded-md" />
+                  <Sk className="h-7 w-24 rounded-md" />
+                  <Sk className="h-7 w-16 rounded-md" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <span className="sr-only">Loading leads…</span>
       </div>
     );
   }
@@ -594,18 +741,26 @@ const AdminLeads = () => {
       </div>
 
       {/* Pipeline filter */}
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {[
-          { k: "active", label: "Active", match: (s: string | null) => !s || ["pending","in_progress"].includes(s) },
-          { k: "quoted", label: "Quoted/Responded", match: (s: string | null) => s === "responded" || s === "quoted" },
-          { k: "closed", label: "Closed", match: (s: string | null) => s === "closed" },
-          { k: "archived", label: "Archived", match: (s: string | null) => s === "archived" },
-          { k: "all", label: "All", match: () => true },
-        ].map((p) => (
-          <Button key={p.k} size="sm" variant={pipelineFilter === p.k ? "default" : "outline"} className="h-7 text-xs" onClick={() => setPipelineFilter(p.k)}>
-            {p.label}
-          </Button>
-        ))}
+      <div className="space-y-2">
+        <div className="flex flex-wrap gap-1.5" role="group" aria-label="Pipeline stage filter">
+          {PIPELINE_FILTERS.map((p) => (
+            <Button
+              key={p.k}
+              size="sm"
+              variant={pipelineFilter === p.k ? "default" : "outline"}
+              className="h-7 text-xs"
+              aria-pressed={pipelineFilter === p.k}
+              onClick={() => setPipelineFilter(p.k)}
+            >
+              {p.label}
+            </Button>
+          ))}
+        </div>
+        {pipelineFilter !== "all" && (
+          <p className="text-xs text-muted-foreground" aria-live="polite">
+            Showing {filteredContacts.length} of {contacts.length} contacts · {filteredQuotes.length} of {quotes.length} quotes · filter: {activeFilter.label}
+          </p>
+        )}
       </div>
 
       {/* Leads Tabs */}
@@ -620,9 +775,9 @@ const AdminLeads = () => {
 
         <TabsContent value="contacts" className="space-y-3">
           {contacts.length === 0 ? (
-            <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">No contact submissions yet</CardContent>
-            </Card>
+            renderNoDataEmpty("contacts")
+          ) : filteredContacts.length === 0 ? (
+            renderFilteredEmpty("contacts")
           ) : (
             filteredContacts.map((contact) => (
               <Card key={contact.id}>
@@ -693,9 +848,9 @@ const AdminLeads = () => {
 
         <TabsContent value="quotes" className="space-y-3">
           {quotes.length === 0 ? (
-            <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">No service quote requests yet</CardContent>
-            </Card>
+            renderNoDataEmpty("quotes")
+          ) : filteredQuotes.length === 0 ? (
+            renderFilteredEmpty("quotes")
           ) : (
             filteredQuotes.map((quote) => (
               <Card key={quote.id}>
