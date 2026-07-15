@@ -41,7 +41,7 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "text-2xl font-bold leading-none tracking-tight",
+      "font-sans text-2xl font-bold leading-none tracking-tight",
       variant === 'clamp' && "card-title-clamp",
       className
     )}

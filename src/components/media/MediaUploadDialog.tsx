@@ -35,8 +35,8 @@ import {
 
 const BUCKET = "provider-profiles";
 const MAX_BYTES = 50 * 1024 * 1024; // provider-profiles bucket limit
-const IMAGE_EXTS = ["jpg", "jpeg", "png", "gif", "webp", "avif", "svg"];
-const VIDEO_EXTS = ["mp4", "mov", "webm", "m4v", "mpeg", "mpg", "avi", "mkv"];
+const IMAGE_EXTS = ["jpg", "jpeg", "png", "gif", "webp", "avif", "svg", "heic", "heif", "bmp"];
+const VIDEO_EXTS = ["mp4", "mov", "webm", "m4v", "mpeg", "mpg", "avi", "mkv", "ogg", "ogv", "3gp", "3gpp"];
 
 export type MediaTab = "videos" | "images";
 
@@ -183,7 +183,9 @@ export function MediaUploadDialog({ open, onOpenChange, initialTab = "videos" }:
   };
 
   const renderList = (kind: "image" | "video") => {
-    const items = files.filter((f) => f.kind === kind);
+    // Fail open: files whose extension we don't recognise ("other") still show
+    // under Images rather than disappearing from both tabs after a successful upload.
+    const items = files.filter((f) => (kind === "video" ? f.kind === "video" : f.kind !== "video"));
     if (listLoading) {
       return (
         <div className="flex items-center justify-center py-10 text-muted-foreground">
@@ -238,7 +240,7 @@ export function MediaUploadDialog({ open, onOpenChange, initialTab = "videos" }:
                 size="sm"
                 variant="ghost"
                 className="h-8 w-8 p-0"
-                aria-label={`Copy link for ${f.name}`}
+                aria-label={`Copy link for ${f.name.replace(/^\d+-/, "")}`}
                 onClick={() => copyUrl(f.url)}
               >
                 {copiedUrl === f.url ? (
@@ -252,7 +254,7 @@ export function MediaUploadDialog({ open, onOpenChange, initialTab = "videos" }:
                 size="sm"
                 variant="ghost"
                 className="h-8 w-8 p-0"
-                aria-label={`Open ${f.name} in a new tab`}
+                aria-label={`Open ${f.name.replace(/^\d+-/, "")} in a new tab`}
                 onClick={() => window.open(f.url, "_blank", "noopener,noreferrer")}
               >
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -266,7 +268,7 @@ export function MediaUploadDialog({ open, onOpenChange, initialTab = "videos" }:
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg rounded-2xl">
+      <DialogContent className="sm:max-w-lg rounded-2xl sm:rounded-2xl">
         <DialogHeader>
           <DialogTitle className="font-heading">Media library</DialogTitle>
           <DialogDescription>
@@ -292,7 +294,7 @@ export function MediaUploadDialog({ open, onOpenChange, initialTab = "videos" }:
           {uploading ? (
             <>
               <Loader2 className="h-7 w-7 text-primary animate-spin motion-reduce:animate-none" aria-hidden="true" />
-              <p className="text-sm font-medium" role="status">
+              <p className="text-sm font-medium">
                 Uploading {uploadingName}…
               </p>
               <p className="text-xs text-muted-foreground">This can take a moment for larger videos.</p>
@@ -302,17 +304,18 @@ export function MediaUploadDialog({ open, onOpenChange, initialTab = "videos" }:
               <UploadCloud className="h-7 w-7 text-muted-foreground" aria-hidden="true" />
               <p className="text-sm font-medium">Drag & drop a video or image here</p>
               <p className="text-xs text-muted-foreground">MP4, MOV, WebM, JPG, PNG · up to 50MB</p>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="mt-1"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                Browse files
-              </Button>
             </>
           )}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-1"
+            disabled={uploading}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Browse files
+          </Button>
           <input
             ref={fileInputRef}
             type="file"
@@ -328,9 +331,16 @@ export function MediaUploadDialog({ open, onOpenChange, initialTab = "videos" }:
           />
         </div>
 
+        {/* Persistent live region: mounted before content exists so state
+            changes actually announce (a region mounted WITH content is skipped
+            by screen readers). */}
+        <p role="status" aria-live="polite" className="sr-only">
+          {uploading ? `Uploading ${uploadingName}` : lastUploadedUrl ? "Upload complete. File link is ready to copy." : ""}
+        </p>
+
         {/* Last upload success panel */}
         {lastUploadedUrl && (
-          <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 space-y-2" role="status">
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 space-y-2">
             <p className="text-xs font-medium text-primary">Uploaded — your file is live at:</p>
             <div className="flex items-center gap-2">
               <Input

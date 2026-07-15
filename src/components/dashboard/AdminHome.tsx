@@ -197,7 +197,7 @@ const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate, loading = f
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Recent Activity */}
-        <Card className="border-border/50">
+        <Card className="rounded-2xl border-border/60">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div>
@@ -241,7 +241,7 @@ const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate, loading = f
         </Card>
 
         {/* Platform Health */}
-        <Card className="border-border/50">
+        <Card className="rounded-2xl border-border/60">
           <CardHeader className="pb-3">
             <CardTitle className="text-base">Platform Health</CardTitle>
             <CardDescription className="text-xs">Key metrics and status</CardDescription>

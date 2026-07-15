@@ -230,6 +230,10 @@ html.magic-cursor-active [contenteditable=""] {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 32;
+    /* Decorative blur orbs and edge-bleeding marquees are intended to overflow
+       their sections; clip (not hidden — keeps position:sticky working) stops
+       them from ever creating a horizontal scrollbar. */
+    overflow-x: clip;
   }
 
   /* ===== TYPOGRAPHY CONSISTENCY — base scale =====

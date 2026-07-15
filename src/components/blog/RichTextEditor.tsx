@@ -225,7 +225,7 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
         <p className="min-w-0 truncate">
           Tip: <kbd className="px-1 rounded border border-border/60 bg-background font-mono text-[10px]">Ctrl</kbd>+<kbd className="px-1 rounded border border-border/60 bg-background font-mono text-[10px]">B</kbd> bold, <kbd className="px-1 rounded border border-border/60 bg-background font-mono text-[10px]">Ctrl</kbd>+<kbd className="px-1 rounded border border-border/60 bg-background font-mono text-[10px]">I</kbd> italic — or drag an image straight in.
         </p>
-        <p className="shrink-0 tabular-nums" aria-live="polite">
+        <p className="shrink-0 tabular-nums">
           {words} {words === 1 ? "word" : "words"} · {chars} {chars === 1 ? "character" : "characters"}
         </p>
       </div>

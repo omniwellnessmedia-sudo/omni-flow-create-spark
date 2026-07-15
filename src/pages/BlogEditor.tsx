@@ -58,7 +58,7 @@ const readLocalDraft = (key: string): LocalDraft | null => {
   }
 };
 
-const BlogEditor = () => {
+const BlogEditorInner = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { postId } = useParams();
@@ -91,6 +91,9 @@ const BlogEditor = () => {
   const draftKey = draftStorageKey(isNewPost ? "new" : postId!);
   // A recovered local draft the user hasn't accepted or dismissed yet.
   const [restorableDraft, setRestorableDraft] = useState<LocalDraft | null>(null);
+  // Discard is destructive (deletes the only copy of unsaved work) — require a
+  // second click to confirm instead of acting on the first.
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
   // Serialized snapshot autosave compares against — seeded from the loaded
   // (or empty) post so we never autosave state the user hasn't touched.
   const autosaveSeed = useRef<string | null>(null);
@@ -156,7 +159,12 @@ const BlogEditor = () => {
     const saved = readLocalDraft(draftKey);
     if (!saved) return;
     // Stale local draft — the server copy was saved after it. Drop it quietly.
-    if (serverUpdatedAt.current && saved.savedAt <= serverUpdatedAt.current) {
+    // Auto-discard only when the server copy is CLEARLY newer (>60s) — parsed
+    // dates, not string compare (formats differ), biased so a drifted client
+    // clock can't silently destroy a genuinely newer draft.
+    const savedAtMs = Date.parse(saved.savedAt);
+    const serverMs = serverUpdatedAt.current ? Date.parse(serverUpdatedAt.current) : NaN;
+    if (Number.isFinite(savedAtMs) && Number.isFinite(serverMs) && serverMs - savedAtMs > 60_000) {
       localStorage.removeItem(draftKey);
       return;
     }
@@ -209,8 +217,11 @@ const BlogEditor = () => {
   // Called after a successful server save/publish: the local safety copy is no
   // longer needed, and the autosave baseline moves to the just-saved state.
   const clearLocalDraft = (savedPost: PostState) => {
+    // Only this post's key: removing draftStorageKey("new") here as well used
+    // to delete the autosaved backup of an UNRELATED unsaved new post whenever
+    // any existing post was saved. draftKey is already "new" when this save
+    // just created the post (closure captured before navigation).
     localStorage.removeItem(draftKey);
-    localStorage.removeItem(draftStorageKey("new")); // a new post gets an id on save
     autosaveSeed.current = JSON.stringify(savedPost);
   };
 
@@ -511,12 +522,19 @@ const BlogEditor = () => {
               </Button>
               <Button
                 size="sm"
-                variant="ghost"
-                onClick={discardLocalDraft}
-                aria-label="Discard unsaved draft"
+                variant={confirmDiscard ? "destructive" : "ghost"}
+                onClick={() => {
+                  if (confirmDiscard) {
+                    discardLocalDraft();
+                    setConfirmDiscard(false);
+                  } else {
+                    setConfirmDiscard(true);
+                  }
+                }}
+                aria-label={confirmDiscard ? "Confirm: permanently discard unsaved draft" : "Discard unsaved draft"}
               >
                 <X className="h-4 w-4 mr-1.5" aria-hidden="true" />
-                Discard
+                {confirmDiscard ? "Confirm discard?" : "Discard"}
               </Button>
             </div>
           </div>
@@ -693,6 +711,15 @@ const BlogEditor = () => {
       </div>
     </div>
   );
+};
+
+// Remount per post identity: the autosave refs (autosaveSeed/serverUpdatedAt)
+// and postLoading are per-post machinery. Navigating /blog/editor/new -> /:id
+// (or between two posts) reuses the component instance otherwise, leaking one
+// post's autosave baseline and staleness timestamps into the next.
+const BlogEditor = () => {
+  const { postId } = useParams();
+  return <BlogEditorInner key={postId ?? "new"} />;
 };
 
 export default BlogEditor;

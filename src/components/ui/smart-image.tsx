@@ -112,6 +112,9 @@ const SmartImage = React.forwardRef<HTMLImageElement, SmartImageProps>(
           }}
           className={cn(
             "flex items-center justify-center bg-muted bg-rainbow-subtle",
+            // Intrinsically-sized slots (logos, w-full h-auto) would collapse to
+            // the icon's height without a floor.
+            !aspectRatio && width == null && height == null && "min-h-32 min-w-16",
             className
           )}
           data-smart-image="placeholder"
@@ -133,7 +136,7 @@ const SmartImage = React.forwardRef<HTMLImageElement, SmartImageProps>(
     return (
       <img
         ref={ref}
-        src={candidates[attempt]}
+        src={candidates[Math.min(attempt, candidates.length - 1)]}
         alt={alt}
         width={width}
         height={height}
