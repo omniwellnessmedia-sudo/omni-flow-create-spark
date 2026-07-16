@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 /**
  * MagicCursor — a sparkle-trail custom cursor in Omni's brand colors.
@@ -22,7 +23,13 @@ const SPARKLE_COLORS = [
 
 const TRAIL_LENGTH = 8;
 
+// Admin, editors and dashboards are work surfaces: a decorative cursor there
+// costs typing/scroll performance where it matters most and adds nothing.
+const WORK_SURFACES = ["/admin", "/blog/editor", "/blog-editor", "/accountant", "/provider-dashboard", "/provider-portal"];
+
 export const MagicCursor = () => {
+  const { pathname } = useLocation();
+  const onWorkSurface = WORK_SURFACES.some((p) => pathname.startsWith(p));
   const [enabled, setEnabled] = useState(false);
   const [hovering, setHovering] = useState(false);
   const dotRef = useRef<HTMLDivElement>(null);
@@ -35,11 +42,21 @@ export const MagicCursor = () => {
   useEffect(() => {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isTouch || reduced) return;
+    // A permanent rAF loop is a real cost on low-end hardware ("the site makes
+    // my cursor lag") — skip the effect entirely on constrained devices.
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    const lowEnd =
+      (nav.deviceMemory !== undefined && nav.deviceMemory < 4) ||
+      (navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency <= 4);
+    if (isTouch || reduced || lowEnd || onWorkSurface) {
+      setEnabled(false);
+      document.documentElement.classList.remove("magic-cursor-active", "magic-cursor-hide-native");
+      return;
+    }
     setEnabled(true);
     document.documentElement.classList.add("magic-cursor-active");
-    return () => document.documentElement.classList.remove("magic-cursor-active");
-  }, []);
+    return () => document.documentElement.classList.remove("magic-cursor-active", "magic-cursor-hide-native");
+  }, [onWorkSurface]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -77,10 +94,18 @@ export const MagicCursor = () => {
       raf = requestAnimationFrame(tick);
     };
 
+    // Pause the animation loop entirely while the tab is hidden.
+    const onVisibility = () => {
+      cancelAnimationFrame(raf);
+      if (!document.hidden) raf = requestAnimationFrame(tick);
+    };
+
     window.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("visibilitychange", onVisibility);
     raf = requestAnimationFrame(tick);
     return () => {
       window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("visibilitychange", onVisibility);
       cancelAnimationFrame(raf);
     };
   }, [enabled]);

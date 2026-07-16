@@ -193,8 +193,24 @@ export function RichTextEditor({ value, onChange, placeholder, userId }: RichTex
         />
       </div>
 
-      {/* Editable area */}
-      <div className="relative">
+      {/* Editable area. The wrapper forwards clicks on its padding/placeholder
+          into the editable div so "I clicked in the white box but can't type"
+          is impossible — the caret always lands. */}
+      <div
+        className="relative cursor-text"
+        onMouseDown={(e) => {
+          if (editorRef.current && e.target === e.currentTarget) {
+            e.preventDefault();
+            editorRef.current.focus();
+            const range = document.createRange();
+            range.selectNodeContents(editorRef.current);
+            range.collapse(false);
+            const sel = window.getSelection();
+            sel?.removeAllRanges();
+            sel?.addRange(range);
+          }
+        }}
+      >
         {isEmpty && (
           <div className="absolute top-6 left-6 text-muted-foreground/50 pointer-events-none text-lg">
             {placeholder || "Tell your story…"}

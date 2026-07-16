@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, MapPin, Users, Mountain, Sparkles, Building2, TreePine } from "lucide-react";
+import { SmartImage } from "@/components/ui/smart-image";
+import { IMAGES } from "@/lib/images";
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -96,10 +98,13 @@ const ToursRetreats = () => {
 
       {/* Hero */}
       <section className="relative h-[60vh] overflow-hidden">
-        <img
+        <SmartImage
           src={`${STORAGE_BASE}/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`}
+          fallback={IMAGES.tours.cultural}
+          category="locations"
           alt="Indigenous walks and wellness experiences in Cape Town"
           className="absolute inset-0 w-full h-full object-cover"
+          eager
           fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
@@ -134,11 +139,11 @@ const ToursRetreats = () => {
                 <Link key={tour.href} to={tour.href} className="block group">
                   <Card className="h-full overflow-hidden hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
                     <div className="aspect-[4/3] overflow-hidden relative">
-                      <img
+                      <SmartImage
                         src={tour.image}
+                        category="locations"
                         alt={tour.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
                       />
                       <Badge className="absolute top-3 left-3 bg-green-600/90 text-white text-xs">
                         {tour.badge}
