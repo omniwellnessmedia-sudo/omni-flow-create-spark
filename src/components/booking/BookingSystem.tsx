@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { trackAdsConversion } from '@/lib/googleAds';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -179,6 +180,7 @@ const BookingSystem: React.FC<BookingSystemProps> = ({
         window.tagClarityEvent('booking', serviceName);
         window.tagClarityEvent('booking_value', String(servicePrice));
       }
+      trackAdsConversion('booking_inquiry', { value: servicePrice, currency: 'ZAR' });
     } catch (error) {
       console.error('Booking error:', error);
       toast.error('Failed to save your request. Please try emailing us directly.');
