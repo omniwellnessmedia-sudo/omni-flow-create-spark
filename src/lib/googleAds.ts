@@ -27,13 +27,16 @@ export const ADS_CONVERSION_LABELS: Record<AdsConversionAction, string> = {
   provider_signup_start: "", // [TODO: confirm conversion label from Ads UI]
   // Marketplace listing view → click-through (tour tile → Viator outbound)
   marketplace_clickthrough: "", // [TODO: confirm conversion label from Ads UI]
+  // STUNNING PIGS ticket purchase completed (PayPal capture + order saved)
+  ticket_purchase: "", // [TODO: confirm conversion label from Ads UI]
 };
 
 export type AdsConversionAction =
   | "booking_inquiry"
   | "contact_submit"
   | "provider_signup_start"
-  | "marketplace_clickthrough";
+  | "marketplace_clickthrough"
+  | "ticket_purchase";
 
 interface ConversionParams {
   value?: number;

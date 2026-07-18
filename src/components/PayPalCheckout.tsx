@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { PAYPAL_OPTIONS_ZAR } from "@/config/paypal";
+import { trackAdsConversion } from "@/lib/googleAds";
 import { Loader2 } from "lucide-react";
 
 // The app root loads the PayPal SDK in USD (for the RoamBuddy/eSIM store), but the
@@ -172,6 +173,11 @@ const PayPalCheckoutInner = () => {
           ticket_types: ticketItems.map((i) => i.id).join(","),
         });
         w.tagClarityEvent?.("purchase_ticket", "stunningpigs");
+        trackAdsConversion("ticket_purchase", {
+          value: ticketItems.reduce((s, i) => s + i.price_zar * i.quantity, 0),
+          currency: "ZAR",
+          transaction_id: orderData?.id,
+        });
       }
 
       // Success!
