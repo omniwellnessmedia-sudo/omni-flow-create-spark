@@ -19,6 +19,14 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Canonical host: www resolves 301 to the apex the site (and all Ads final
+# URLs) use — ad clicks must not land on a redirect chain or split hostname.
+[[redirects]]
+  from = "https://www.omniwellnessmedia.co.za/*"
+  to = "https://omniwellnessmedia.co.za/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

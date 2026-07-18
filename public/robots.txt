@@ -23,4 +23,4 @@ Disallow: /payment-cancelled
 Disallow: /test
 Disallow: /test-simple
 
-Sitemap: https://www.omniwellnessmedia.co.za/sitemap.xml
+Sitemap: https://omniwellnessmedia.co.za/sitemap.xml

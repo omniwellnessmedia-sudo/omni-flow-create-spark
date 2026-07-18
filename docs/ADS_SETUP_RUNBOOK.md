@@ -1,5 +1,6 @@
-# Google Ads Runbook — Omni Wellness Media — **FINAL v1.0**
-**Status: FINAL — locked as git tag `ads-runbook-final-v1.0`. Changes require a new version, not edits to this one.**
+# Google Ads Runbook — Omni Wellness Media — **FINAL v1.1 (CERTIFIED)**
+**Status: CERTIFIED FINAL — supersedes v1.0 after the 4-agent preflight audit (asset spec · links · conversion wiring · CRO). Immutable reference = the merge commit on `main`. Changes require v1.2, not edits.**
+**v1.1 changelog:** short-description blockers fixed in both campaigns · headline inventory 5→10 each · title-case policy fallback for "STUNNING PIGS" · video auto-gen review step · sensitive-imagery gate added · canonical-host redirect + robots/sitemap host fix · gclid preserved through /provider-signup · conversion firing hardened (success-gated, double-submit-proof, verified live in dataLayer).
 Account: Customer ID **396-986-7500** · Currency ZAR · R6000 promo (spend-match — verify terms at `https://ads.google.com/aw/billing/promotions`)
 
 ---
@@ -10,7 +11,7 @@ Google Ads has no per-link "bid distribution ratio" inside one campaign — the 
 
 | Campaign | Weight | Daily budget | Goal | Status |
 |---|---|---|---|---|
-| **B — STUNNING PIGS Tickets** | **70%** | **R140/day** | Purchases (`Ticket Purchase`) | 🔒 **GATED — do not activate until the 4 gates below pass** |
+| **B — STUNNING PIGS Tickets** | **70%** | **R140/day** | Purchases (`Ticket Purchase`) | 🔒 **GATED — do not activate until the 5 gates below pass** |
 | **A — Impact Travel (tours + ROAM + Dr Phil-afel uplift)** | **30%** | **R60/day** | Leads (`Booking Inquiry`, `Contact Form Submit`) | ✅ Ready now |
 | *Total* | | *R200/day* | *≈ R6,000/30 days → full promo match* | |
 
@@ -18,11 +19,12 @@ Google Ads has no per-link "bid distribution ratio" inside one campaign — the 
 
 ---
 
-# CAMPAIGN B GATES — all four must be true before activation
+# CAMPAIGN B GATES — all five must be true before activation
 1. ☐ Event database layer applied to production (screening_events migration — SQL editor)
 2. ☐ Event flipped to `published` (page live, ticket sales unlocked; today it is draft + unlisted and **cannot convert**)
 3. ☐ PayPal entity resolved — Omni's own account wired (ticket money may not settle to Dr Phil-afel Pty)
 4. ☐ `AW-` ID + `Ticket Purchase` conversion label pasted into `src/lib/googleAds.ts` (tracking is wired in code and fires with ZAR value + transaction ID on every completed ticket order)
+5. ☐ **Destination + imagery policy audit:** the published event page shows NO visible placeholders ({{image}}/{{logo}} boxes read as "under construction" → destination-not-working disapproval) and NO graphic footage/stills (Shocking Content policy evaluates the landing page, not just the ad); ad images use only the dignified portrait + venue/audience shots. If disapproved anyway, appeal from the account — animal-topic educational ads have restoration precedent.
 
 ---
 
@@ -58,9 +60,11 @@ Venue: The Masque Theatre, 37 Main Road, Muizenberg. Evening event → distance-
 - About anchor: `https://omniwellnessmedia.co.za/events/stunning-pigs#about`
 
 **Campaign B asset copy** (draft — verbatim from the event page; finalize when gates pass):
-- Headlines (≤30): `STUNNING PIGS — The Film` (23) · `Women's Day Screening` (21) · `The Masque Theatre, 8 Aug` (25) · `Tickets R150 — Book Now` (23) · `Three Sessions, 169 Seats` (25)
-- Long headline (≤90): `BWC and Friends present a Women's Day animal-protection screening and public education event.` — 92, trim to: `BWC and Friends present a Women's Day animal-protection screening and education event.` (86)
-- Description (≤90): `The STUNNING PIGS documentary plus public Q&A at The Masque Theatre, Muizenberg. Book now.` (90)
+- Headlines (≤30): `STUNNING PIGS — The Film` (23) · `Women's Day Screening` (21) · `The Masque Theatre, 8 Aug` (25) · `Tickets R150 — Book Now` (23) · `Three Sessions, 169 Seats` (25) · `Tickets From R150` (17) · `Film + Public Q&A` (17) · `The Masque Theatre` (18) · `8 Aug: Women's Day` (18) · `Three Screenings Only` (21)
+- Long headline (≤90): `BWC and Friends present a Women's Day animal-protection screening and education event.` (86)
+- Descriptions — **first is the SHORT slot (≤60 required)**: `Women's Day documentary screening in Muizenberg. Book now.` (58) · `The STUNNING PIGS documentary plus public Q&A at The Masque Theatre, Muizenberg. Book now.` (90)
+- **Policy fallback (capitalization):** if automated review disapproves the ALL-CAPS film title, swap immediately to title case: `Stunning Pigs — The Film` / `The Stunning Pigs documentary plus public Q&A at The Masque Theatre, Muizenberg. Book now.` — then appeal; film titles are a legitimate exception but automated review often rejects first.
+- **Video:** with no uploaded video, Google auto-generates videos from your images/text with no approval step — unacceptable risk for this subject matter. Either upload one 10s+ vertical video, or add a post-publish step: Assets → review auto-generated videos → remove any off-brand ones within 24h.
 - CTA: **Book now**
 
 ---

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as SonnerToaster } from 'sonner';
 import MagicCursor from '@/components/MagicCursor';
@@ -25,6 +25,17 @@ const EditService = React.lazy(() => import('@/pages/EditService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
 const CommunityEvents = React.lazy(() => import('@/pages/CommunityEvents'));
 const StunningPigs = React.lazy(() => import('@/pages/events/StunningPigs'));
+
+// Provider-signup redirect that KEEPS incoming query params (gclid, utm_*) —
+// a fixed-string <Navigate> discarded them, breaking Google Ads attribution
+// for the provider_signup_start conversion.
+const ProviderSignupRedirect = () => {
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  params.set('tab', 'signup');
+  params.set('role', 'provider');
+  return <Navigate to={`/auth?${params.toString()}`} replace />;
+};
 const ProviderDashboard = React.lazy(() => import('@/pages/ProviderDashboard'));
 const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPortal'));
 const TransactionPage = React.lazy(() => import('@/pages/TransactionPage'));
@@ -205,8 +216,8 @@ function App() {
                       without explicit approval. */}
                   <Route path="/events/stunning-pigs" element={<StunningPigs />} />
                   <Route path="/ai-tools" element={<Navigate to="/services" replace />} />
-                  <Route path="/wellness-exchange/provider-signup" element={<Navigate to="/auth?tab=signup&role=provider" replace />} />
-                  <Route path="/provider-signup" element={<Navigate to="/auth?tab=signup&role=provider" replace />} />
+                  <Route path="/wellness-exchange/provider-signup" element={<ProviderSignupRedirect />} />
+                  <Route path="/provider-signup" element={<ProviderSignupRedirect />} />
 
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
                   <Route path="/awin-affiliate-products" element={<AwinAffiliateProducts />} />

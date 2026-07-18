@@ -144,13 +144,16 @@ const BookingSystem: React.FC<BookingSystemProps> = ({
         data.customerPhone ? `Phone: ${data.customerPhone}` : '',
       ].filter(Boolean).join('\n');
 
-      await supabase.from('contact_submissions').insert({
+      const { error: insertError } = await supabase.from('contact_submissions').insert({
         name: data.customerName,
         email: data.customerEmail,
         message: fullMessage,
         service: serviceName,
         status: 'pending',
       });
+      // supabase-js returns errors instead of throwing — without this check the
+      // confirmation (and the Ads conversion below) fired even when the insert failed.
+      if (insertError) throw insertError;
 
       // Notify the client
       supabase.functions.invoke('submit-contact', {
