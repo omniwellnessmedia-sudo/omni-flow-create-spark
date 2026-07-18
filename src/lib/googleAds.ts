@@ -28,7 +28,12 @@ export const ADS_CONVERSION_LABELS: Record<AdsConversionAction, string> = {
   // Marketplace listing view → click-through (tour tile → Viator outbound)
   marketplace_clickthrough: "", // [TODO: confirm conversion label from Ads UI]
   // STUNNING PIGS ticket purchase completed (PayPal capture + order saved)
+  // NOTE: dormant for the Masque event — tickets sell on Quicket, not our cart.
   ticket_purchase: "", // [TODO: confirm conversion label from Ads UI]
+  // Click-through to the Quicket booking page (Campaign B's trackable
+  // conversion — Quicket's checkout is cross-domain, so purchases are
+  // reconciled from Quicket Sales Reports, not a pixel)
+  quicket_ticket_click: "", // [TODO: confirm conversion label from Ads UI]
 };
 
 export type AdsConversionAction =
@@ -36,7 +41,8 @@ export type AdsConversionAction =
   | "contact_submit"
   | "provider_signup_start"
   | "marketplace_clickthrough"
-  | "ticket_purchase";
+  | "ticket_purchase"
+  | "quicket_ticket_click";
 
 interface ConversionParams {
   value?: number;
