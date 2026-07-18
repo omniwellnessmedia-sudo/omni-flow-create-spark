@@ -339,8 +339,11 @@ const StunningPigs = () => {
                   onError={(e) => { e.currentTarget.style.display = "none"; }}
                 />
               ) : (
-                <div className="h-14 flex items-center justify-center px-4 rounded-lg border border-dashed border-border text-xs font-medium text-muted-foreground">
-                  {"{{logo}}"}
+                /* No stored artwork for this partner: a finished-looking name chip,
+                   never a dashed "awaiting logo" box (ads policy reads those as
+                   under-construction). */
+                <div className="h-14 flex items-center justify-center px-4 rounded-full bg-rose-500/10 border border-rose-500/20 text-sm font-heading text-rose-700 dark:text-rose-300">
+                  {p.name.replace(/ \(.*\)$/, "")}
                 </div>
               )}
               <span className="text-xs font-medium leading-tight">{p.name}</span>
