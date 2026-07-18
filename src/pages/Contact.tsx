@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { trackAdsConversion } from '@/lib/googleAds';
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,6 +38,7 @@ const Contact = () => {
         title: "Message Sent! ✨",
         description: omniVoice.contactResponses.success
       });
+      trackAdsConversion('contact_submit');
       setFormData({
         name: "",
         email: "",

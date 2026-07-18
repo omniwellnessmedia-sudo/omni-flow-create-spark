@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { trackAdsConversion } from '@/lib/googleAds';
 import { useNavigate } from 'react-router-dom';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
@@ -175,6 +176,8 @@ export default function Tours() {
       tour.category,
       'viator'
     );
+
+    trackAdsConversion('marketplace_clickthrough', { value: tour.price_from || 0, currency: tour.currency || 'USD' });
 
     // Open Viator in new tab
     window.open(tour.booking_url, '_blank', 'noopener,noreferrer');

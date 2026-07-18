@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { trackAdsConversion } from "@/lib/googleAds";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -73,6 +74,12 @@ const Auth = () => {
       } else {
         setEmailSent(true);
         toast.success("Account created! Check your email to verify and sign in.");
+        // /provider-signup and /wellness-exchange/provider-signup redirect here
+        // with ?role=provider — that arrival + successful signup is the
+        // "wellness provider signup started" conversion.
+        if (new URLSearchParams(window.location.search).get("role") === "provider") {
+          trackAdsConversion("provider_signup_start");
+        }
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Sign up failed";
