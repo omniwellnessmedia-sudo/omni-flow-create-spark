@@ -36,7 +36,7 @@ import { cn } from "@/lib/utils";
  * slaughter imagery anywhere; no false scarcity.
  */
 
-const QUICKET_URL = "https://qkt.io/Eu8CpR";
+const QUICKET_URL = "https://www.quicket.co.za/events/386047-celebrating-women-who-protect-life-featuring-the-cape-town-premiere-of-stunning/";
 const EVENT_DATE_DISPLAY = "Monday 10 August 2026 · Women's Day public holiday";
 
 const SESSIONS = [
@@ -200,6 +200,32 @@ const StunningPigs = () => {
             Women</em> showcase and awards ceremony.
           </p>
         </div>
+      </section>
+
+      {/* Official trailer — Stunning Pigs Intro Trailer (Google Drive embed) */}
+      <section id="trailer" className="scroll-mt-24 container mx-auto px-4 pb-16 max-w-4xl">
+        <h2 className="font-heading text-3xl mb-6 text-center">Watch the trailer</h2>
+        <div className="relative w-full overflow-hidden rounded-2xl border border-border/60 bg-black" style={{ aspectRatio: "16 / 9" }}>
+          <iframe
+            src="https://drive.google.com/file/d/1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV/preview"
+            title="Stunning Pigs — official intro trailer"
+            className="absolute inset-0 h-full w-full"
+            loading="lazy"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+          />
+        </div>
+        <p className="text-center text-xs text-muted-foreground mt-3">
+          Trouble playing?{" "}
+          <a
+            href="https://drive.google.com/file/d/1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV/view"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2"
+          >
+            Watch on Google Drive
+          </a>
+        </p>
       </section>
 
       {/* Sessions */}
