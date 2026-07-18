@@ -27,8 +27,12 @@ const Contact = () => {
   });
   const { toast } = useToast();
 
+  const [submitting, setSubmitting] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return; // double-click fires two submissions AND two Ads conversions
+    setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke('submit-contact', {
         body: formData
@@ -53,6 +57,8 @@ const Contact = () => {
         description: omniVoice.contactResponses.error,
         variant: "destructive"
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -186,7 +192,7 @@ const Contact = () => {
                       />
                     </div>
 
-                    <Button type="submit" className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 text-lg rounded-full shadow-lg">
+                    <Button type="submit" disabled={submitting} className="w-full bg-gradient-rainbow hover:opacity-90 text-white font-semibold py-3 text-lg rounded-full shadow-lg">
                       {omniVoice.ctas.contact}
                     </Button>
                   </form>

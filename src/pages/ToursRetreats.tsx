@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, MapPin, Users, Mountain, Sparkles, Building2, TreePine } from "lucide-react";
 import { SmartImage } from "@/components/ui/smart-image";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import PartnerLogos from "@/components/PartnerLogos";
 import { IMAGES } from "@/lib/images";
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
@@ -118,12 +120,20 @@ const ToursRetreats = () => {
               Immersive cultural journeys, equine-assisted wellness, and transformative corporate retreats.
               Every experience creates lasting impact for communities, animals, and the land.
             </p>
+            <div className="flex flex-wrap gap-3 mt-8">
+              <Button size="lg" asChild className="bg-green-600 hover:bg-green-700 text-white">
+                <a href="#experiences">Explore experiences</a>
+              </Button>
+              <Button size="lg" variant="outline" asChild className="bg-white/10 border-white/40 text-white hover:bg-white/20">
+                <a href="#enquire">Plan my experience</a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Tours Grid */}
-      <section className="py-16">
+      <section id="experiences" className="scroll-mt-24 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -175,7 +185,13 @@ const ToursRetreats = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50">
+      {/* Social proof + trust — reused from the homepage (verbatim tour reviews) */}
+      <TestimonialsSection />
+      <div className="container mx-auto px-4 pb-4">
+        <PartnerLogos variant="compact" />
+      </div>
+
+      <section id="enquire" className="scroll-mt-24 py-16 bg-gradient-to-br from-green-50 via-white to-blue-50">
         <div className="container mx-auto px-4 text-center">
           <h2 className="font-heading text-3xl mb-4">Can't Decide?</h2>
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto">

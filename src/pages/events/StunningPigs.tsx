@@ -213,6 +213,13 @@ const StunningPigs = () => {
                 <span className="flex items-center gap-2"><GlassWater className="h-4 w-4 text-rose-500 shrink-0" />Licensed bar</span>
               </p>
             </div>
+            {/* Real scarcity, surfaced above the fold — only when sales are live,
+                honoring the no-false-scarcity content rule. */}
+            {!isDraft && !usingFallback && sessions.length > 0 && (
+              <p className="text-sm font-medium text-rose-600 dark:text-rose-400 mb-4">
+                Only {Math.min(...sessions.map((s) => s.remaining))} seats left in the most-booked session — from R150
+              </p>
+            )}
             <div className="flex flex-wrap gap-3">
               <Button size="lg" asChild className="bg-rose-600 hover:bg-rose-700 text-white">
                 <a href="#tickets"><Ticket className="h-4 w-4 mr-2" />Get tickets</a>
@@ -240,7 +247,7 @@ const StunningPigs = () => {
       </section>
 
       {/* What it is — factual framing */}
-      <section id="about" className="container mx-auto px-4 py-16 max-w-3xl">
+      <section id="about" className="scroll-mt-24 container mx-auto px-4 py-16 max-w-3xl">
         <h2 className="font-heading text-3xl mb-6">Why this screening matters</h2>
         <div className="space-y-4 text-muted-foreground leading-relaxed">
           <p>
@@ -265,7 +272,7 @@ const StunningPigs = () => {
       </section>
 
       {/* Sessions */}
-      <section className="bg-muted/30 border-y border-border/50">
+      <section id="sessions" className="scroll-mt-24 bg-muted/30 border-y border-border/50">
         <div className="container mx-auto px-4 py-16">
           <div className="flex items-baseline justify-between flex-wrap gap-2 mb-8">
             <h2 className="font-heading text-3xl">The three sessions</h2>
@@ -313,7 +320,7 @@ const StunningPigs = () => {
       </section>
 
       {/* Tickets + donations */}
-      <section id="tickets" className="container mx-auto px-4 py-16">
+      <section id="tickets" className="scroll-mt-24 container mx-auto px-4 py-16">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-heading text-3xl mb-2">Tickets</h2>
           <p className="text-sm text-muted-foreground mb-8">
@@ -419,6 +426,21 @@ const StunningPigs = () => {
           ))}
         </div>
       </section>
+
+      {/* Sticky mobile ticket bar — the shortest path back to conversion on
+          long mobile scrolls (pattern from tours/StickyBookingBar). */}
+      <div className="fixed bottom-0 inset-x-0 z-40 sm:hidden border-t border-border bg-background/95 backdrop-blur px-4 py-3 flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold truncate">Tickets from R150</p>
+          {!isDraft && !usingFallback && sessions.length > 0 && (
+            <p className="text-[11px] text-muted-foreground">{Math.min(...sessions.map((s) => s.remaining))} seats left in the main feature</p>
+          )}
+        </div>
+        <Button size="sm" asChild className="bg-rose-600 hover:bg-rose-700 text-white shrink-0">
+          <a href="#tickets"><Ticket className="h-4 w-4 mr-1.5" />Get tickets</a>
+        </Button>
+      </div>
+      <div className="h-16 sm:hidden" aria-hidden="true" />
 
       <Footer />
     </div>

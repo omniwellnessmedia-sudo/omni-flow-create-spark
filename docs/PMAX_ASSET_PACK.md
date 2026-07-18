@@ -47,6 +47,8 @@ Homepage `/` is the secondary URL if PMax wants breadth. **Avoid `/tours`** as t
 
 ## 3. Asset group content (paste-ready, all within limits)
 
+> **v1.1 (certified):** short-description slot fixed, headline inventory expanded to 10, image URLs made paste-ready. Verified against Google's current PMax spec (support.google.com/google-ads/answer/14528373, 17091269).
+
 ### Headlines (≤30 chars)
 | # | Text | Chars | Source |
 |---|---|---|---|
@@ -55,6 +57,11 @@ Homepage `/` is the secondary URL if PMax wants breadth. **Avoid `/tours`** as t
 | 3 | Indigenous-Led Experiences | 26 | verbatim, hero stat label |
 | 4 | Wellness Tours & Retreats | 25 | from nav/page naming |
 | 5 | Book a Tour That Gives Back | 27 | verbatim, homepage Foundation CTA |
+| 6 | Wellness Tours | 14 | short-slot coverage |
+| 7 | Sacred Cave Walks | 17 | from tour pages |
+| 8 | Equine Wellness Days | 20 | Hoofbeats & Healing |
+| 9 | Corporate Team Retreats | 23 | Rewild Your Team |
+| 10 | Community Impact Travel | 23 | site positioning |
 
 ### Long headlines (≤90 chars)
 | # | Text | Chars |
@@ -67,10 +74,11 @@ Homepage `/` is the secondary URL if PMax wants breadth. **Avoid `/tours`** as t
 
 (1, 3, 4 verbatim /tours-retreats; 2 verbatim footer; 5 adapted from hero subheadline `[TODO: confirm]`)
 
-### Descriptions (≤90 chars)
+### Descriptions — **#1 is the SHORT description (Ads UI requires one ≤60 chars)**
 | # | Text | Chars |
 |---|---|---|
-| 1 | Indigenous-led tours, wellness retreats and conscious experiences in Cape Town. Book now. | 89 |
+| 1 | **SHORT:** Indigenous-led tours & retreats in Cape Town. Book now. | 55 |
+| 1b | Indigenous-led tours, wellness retreats and conscious experiences in Cape Town. Book now. | 89 |
 | 2 | Strategic guidance for conscious businesses creating positive impact. | 69 |
 | 3 | Authentic storytelling through video, photography, and multimedia. | 66 |
 | 4 | Community-building strategies that drive meaningful engagement. | 63 |
@@ -86,9 +94,17 @@ Homepage `/` is the secondary URL if PMax wants breadth. **Avoid `/tours`** as t
 |---|---|---|---|---|
 | Logo square | 1:1 | 1200×1200 | 128×128 | `/branding/omni-badge-512.png` (512×512, in repo — meets min) |
 | Logo landscape | 4:1 | 1200×300 | 512×128 | `[TODO: confirm]` — horizontal wordmark exists in storage (`Omni Horizontal Logo-07.png`), needs export at 4:1 |
-| Image landscape | 1.91:1 | 1200×628 | 600×314 | Cave/tour heroes from `provider-images/General Images/` (e.g. group tour cave view) |
-| Image square | 1:1 | 1200×1200 | 300×300 | Community/tour photos, same folder |
-| Image portrait (optional) | 4:5 | 960×1200 | 480×600 | Khoe meisie / community series |
+| Image landscape | 1.91:1 | 1200×628 | 600×314 | Crop in Ads UI from the URLs below |
+| Image square | 1:1 | 1200×1200 | 300×300 | Crop in Ads UI from the URLs below |
+| Image portrait (optional) | 4:5 | 960×1200 | 480×600 | Crop in Ads UI from the URLs below |
+
+**Paste-ready image source URLs** (download, then crop per ratio in the Ads UI):
+- `https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/group%20tour%20amazing%20cave%20view%20muizenberg.jpg`
+- `https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg`
+- `https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%201.jpg`
+- `https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg`
+- `https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/muizenberg%20cave%20view%202.jpg`
+- Horizontal wordmark (for the optional 4:1 logo export): `https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/Omni%20Horizontal%20Logo-07.png`
 
 Min 3 landscape + 3 square images for full asset serving; export at recommended sizes, <5120KB each.
 
