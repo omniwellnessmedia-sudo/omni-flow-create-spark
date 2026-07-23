@@ -4,28 +4,35 @@
  *
  * The base gtag.js loader already ships in index.html for GA4 (G-X9DQ4DEHNB) —
  * this module only adds Ads conversion firing on top of that shared dataLayer.
- * Nothing fires until the real IDs from the Ads UI are pasted below, so this is
- * safe to deploy ahead of the conversion actions being created.
+ * Nothing fires until every ADS_CONVERSION_LABELS entry is filled in below, so
+ * this stays safe to deploy ahead of an action's label being confirmed.
  *
- * SETUP (after creating the conversion actions in Google Ads → Goals):
- *   1. Set GOOGLE_ADS_ID to the account tag, e.g. "AW-1234567890".
- *      [TODO: confirm AW-XXXXXXX conversion ID]
- *   2. Paste each conversion action's label into ADS_CONVERSION_LABELS.
- *      (Ads UI shows it as the part after the slash in send_to:
- *       "AW-1234567890/AbCdEfGhIj".)
+ * SETUP (after creating each conversion action in Google Ads → Goals):
+ *   1. GOOGLE_ADS_ID is set (below) — confirmed from the live Ads UI.
+ *   2. Paste each conversion action's LABEL into ADS_CONVERSION_LABELS. This
+ *      is NOT the same as GOOGLE_ADS_ID or the site's other tag IDs
+ *      (G-XXXXXXXXXX, GT-XXXXXXXX) — it's a per-action string the Ads UI
+ *      shows only on that action's own setup/tag page, as the part after the
+ *      slash in its event snippet: send_to: "AW-11266714886/AbCdEfGhIj".
+ *      Google Ads → Goals → Summary → click the action → "Tag setup".
  *   3. Uncomment the matching gtag('config', ...) line in index.html.
  */
 
-export const GOOGLE_ADS_ID = ""; // [TODO: confirm AW-XXXXXXX conversion ID]
+// Confirmed 21 Jul from the live Google Ads "Omni website" tag details page.
+export const GOOGLE_ADS_ID = "AW-11266714886";
 
 export const ADS_CONVERSION_LABELS: Record<AdsConversionAction, string> = {
   // Service booking inquiry submitted (BookingSystem → contact_submissions)
   booking_inquiry: "", // [TODO: confirm conversion label from Ads UI]
   // Contact form submitted (Contact page → submit-contact edge function)
   contact_submit: "", // [TODO: confirm conversion label from Ads UI]
-  // Wellness provider signup started (Auth signup with role=provider)
+  // Wellness provider signup STARTED (Auth signup with role=provider — the
+  // account-creation moment, not the profile-completion step below)
   provider_signup_start: "", // [TODO: confirm conversion label from Ads UI]
-  // Marketplace listing view → click-through (tour tile → Viator outbound)
+  // Marketplace listing view → click-through. Fires from BOTH live listing
+  // surfaces: Tours.tsx (outbound to Viator) and UnifiedMarketplace.tsx
+  // (on-site navigation to a listing's detail page) — same conversion goal,
+  // two entry points.
   marketplace_clickthrough: "", // [TODO: confirm conversion label from Ads UI]
   // STUNNING PIGS ticket purchase completed (PayPal capture + order saved)
   // NOTE: dormant for the Masque event — tickets sell on Quicket, not our cart.
@@ -34,6 +41,12 @@ export const ADS_CONVERSION_LABELS: Record<AdsConversionAction, string> = {
   // conversion — Quicket's checkout is cross-domain, so purchases are
   // reconciled from Quicket Sales Reports, not a pixel)
   quicket_ticket_click: "", // [TODO: confirm conversion label from Ads UI]
+  // Provider onboarding profile COMPLETED (WellnessExchangeSignup.tsx —
+  // deeper funnel stage than provider_signup_start above; deliberately a
+  // separate action so the two funnel stages aren't conflated under one
+  // label). Optional: only create this conversion action in Ads if you want
+  // to track profile completion distinctly from signup start.
+  provider_profile_completed: "", // [TODO: confirm conversion label from Ads UI, optional]
 };
 
 export type AdsConversionAction =
@@ -42,6 +55,7 @@ export type AdsConversionAction =
   | "provider_signup_start"
   | "marketplace_clickthrough"
   | "ticket_purchase"
+  | "provider_profile_completed"
   | "quicket_ticket_click";
 
 interface ConversionParams {
