@@ -11,6 +11,7 @@ import { trackAdsConversion } from "@/lib/googleAds";
 import {
   MapPin, CalendarDays, Ticket, Users, Heart, Accessibility,
   GlassWater, ArrowDown, Loader2, Film, MessageCircle, Mic2, Utensils, ExternalLink,
+  CalendarPlus, Share2, Copy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +39,60 @@ import { cn } from "@/lib/utils";
 
 const QUICKET_URL = "https://www.quicket.co.za/events/386047-celebrating-women-who-protect-life-featuring-the-cape-town-premiere-of-stunning/";
 const EVENT_DATE_DISPLAY = "Monday 10 August 2026 · Women's Day public holiday";
+const PAGE_URL = "https://omniwellnessmedia.co.za/events/stunning-pigs";
+
+// 10 Aug 2026, 10:00–16:00 SAST (UTC+2) — expressed in UTC for calendar links.
+const CAL = {
+  title: "Celebrating Women Who Protect Life — Cape Town Premiere of Stunning Pigs",
+  startUTC: "20260810T080000Z",
+  endUTC: "20260810T140000Z",
+  location: "The Masque Theatre, 37 Main Road, Muizenberg, Cape Town",
+  details: `Three sessions: What Feeds Us 10:00 · Stunning Pigs premiere + Q&A 12:00 · Voices for Women Showcase & Awards 14:00. Tickets R150/session on Quicket: ${QUICKET_URL}`,
+};
+
+const googleCalendarUrl = () =>
+  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+  `&text=${encodeURIComponent(CAL.title)}` +
+  `&dates=${CAL.startUTC}/${CAL.endUTC}` +
+  `&details=${encodeURIComponent(CAL.details)}` +
+  `&location=${encodeURIComponent(CAL.location)}`;
+
+// Apple/Outlook path: a standards-compliant .ics generated client-side.
+const downloadIcs = () => {
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Omni Wellness Media//Event//EN",
+    "BEGIN:VEVENT",
+    `UID:stunning-pigs-2026@omniwellnessmedia.co.za`,
+    `DTSTART:${CAL.startUTC}`,
+    `DTEND:${CAL.endUTC}`,
+    `SUMMARY:${CAL.title}`,
+    `DESCRIPTION:${CAL.details.replace(/,/g, "\\,")}`,
+    `LOCATION:${CAL.location.replace(/,/g, "\\,")}`,
+    `URL:${PAGE_URL}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "celebrating-women-who-protect-life.ics";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+// Live countdown to doors (10:00 SAST = 08:00 UTC).
+const EVENT_START_MS = Date.UTC(2026, 7, 10, 8, 0, 0);
+const countdownParts = (now: number) => {
+  const diff = EVENT_START_MS - now;
+  if (diff <= 0) return null;
+  return {
+    days: Math.floor(diff / 86_400_000),
+    hours: Math.floor((diff % 86_400_000) / 3_600_000),
+    mins: Math.floor((diff % 3_600_000) / 60_000),
+  };
+};
 
 const SESSIONS = [
   {
@@ -84,6 +139,14 @@ const track = (event: string, params: Record<string, unknown> = {}) => {
 const StunningPigs = () => {
   const [optinEmail, setOptinEmail] = useState("");
   const [optinBusy, setOptinBusy] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
+
+  // Minute-resolution countdown — real date, real urgency, no false scarcity.
+  useEffect(() => {
+    const t = window.setInterval(() => setNow(Date.now()), 60_000);
+    return () => window.clearInterval(t);
+  }, []);
+  const countdown = countdownParts(now);
 
   useEffect(() => {
     document.title = "Celebrating Women Who Protect Life — 10 Aug at The Masque | Omni Wellness Media";
@@ -97,6 +160,23 @@ const StunningPigs = () => {
     track("quicket_click", { from });
     trackAdsConversion("quicket_ticket_click", { value: 150, currency: "ZAR" });
     window.open(QUICKET_URL, "_blank", "noopener,noreferrer");
+  };
+
+  const shareEvent = async (channel: "whatsapp" | "facebook" | "copy") => {
+    track("share_event", { channel });
+    const text = `${CAL.title} — ${EVENT_DATE_DISPLAY}. Tickets R150 on Quicket: ${QUICKET_URL}`;
+    if (channel === "whatsapp") {
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+    } else if (channel === "facebook") {
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(PAGE_URL)}`, "_blank", "noopener,noreferrer");
+    } else {
+      try {
+        await navigator.clipboard.writeText(PAGE_URL);
+        toast.success("Link copied");
+      } catch {
+        toast.error("Couldn't copy — long-press the address bar instead.");
+      }
+    }
   };
 
   const submitOptin = async () => {
@@ -160,6 +240,22 @@ const StunningPigs = () => {
             <p className="mt-3 text-xs text-muted-foreground">
               Tickets are sold securely through Quicket with assigned seating.
             </p>
+            {countdown && (
+              <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-500/10 border border-rose-500/20 px-4 py-1.5 text-sm font-medium text-rose-700 dark:text-rose-300" aria-live="off">
+                <CalendarDays className="h-4 w-4" aria-hidden="true" />
+                {countdown.days}d {countdown.hours}h {countdown.mins}m until doors open
+              </p>
+            )}
+            <div className="mt-4 flex flex-wrap gap-2 text-sm">
+              <Button variant="ghost" size="sm" asChild className="text-muted-foreground">
+                <a href={googleCalendarUrl()} target="_blank" rel="noopener noreferrer">
+                  <CalendarPlus className="h-4 w-4 mr-1.5" />Google Calendar
+                </a>
+              </Button>
+              <Button variant="ghost" size="sm" onClick={downloadIcs} className="text-muted-foreground">
+                <CalendarPlus className="h-4 w-4 mr-1.5" />Apple / Outlook (.ics)
+              </Button>
+            </div>
           </div>
 
           {/* {{image}} slot — replace with the approved dignified single pig portrait.
@@ -290,6 +386,18 @@ const StunningPigs = () => {
           <p className="mt-4 text-xs text-muted-foreground">
             Opens Quicket in a new tab · card &amp; instant EFT accepted
           </p>
+          <div className="mt-8 flex items-center justify-center gap-2">
+            <span className="text-xs text-muted-foreground mr-1">Spread the word:</span>
+            <Button variant="outline" size="sm" onClick={() => shareEvent("whatsapp")}>
+              <Share2 className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />WhatsApp
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => shareEvent("facebook")}>
+              <Share2 className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />Facebook
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => shareEvent("copy")} aria-label="Copy event link">
+              <Copy className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />Copy link
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -317,6 +425,26 @@ const StunningPigs = () => {
             >
               {optinBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Keep me posted"}
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Getting there */}
+      <section id="venue" className="scroll-mt-24 bg-muted/30 border-y border-border/50">
+        <div className="container mx-auto px-4 py-16 max-w-4xl">
+          <h2 className="font-heading text-2xl mb-2 text-center">Getting there</h2>
+          <p className="text-sm text-muted-foreground text-center mb-8">
+            The Masque Theatre, 37 Main Road, Muizenberg — wheelchair accessible, licensed bar,
+            Vegan Streetfood truck on the day.
+          </p>
+          <div className="overflow-hidden rounded-2xl border border-border/60" style={{ aspectRatio: "16 / 9" }}>
+            <iframe
+              src="https://www.google.com/maps?q=The+Masque+Theatre,+37+Main+Road,+Muizenberg,+Cape+Town&output=embed"
+              title="Map to The Masque Theatre, Muizenberg"
+              className="h-full w-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </section>
