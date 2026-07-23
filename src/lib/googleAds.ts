@@ -23,17 +23,17 @@ export const GOOGLE_ADS_ID = "AW-11266714886";
 
 export const ADS_CONVERSION_LABELS: Record<AdsConversionAction, string> = {
   // Service booking inquiry submitted (BookingSystem → contact_submissions)
-  booking_inquiry: "", // [TODO: confirm conversion label from Ads UI]
+  booking_inquiry: "Pmm4CKOhxdIcEIbasfwp",
   // Contact form submitted (Contact page → submit-contact edge function)
-  contact_submit: "", // [TODO: confirm conversion label from Ads UI]
+  contact_submit: "24IhCKahxdIcEIbasfwp",
   // Wellness provider signup STARTED (Auth signup with role=provider — the
   // account-creation moment, not the profile-completion step below)
-  provider_signup_start: "", // [TODO: confirm conversion label from Ads UI]
+  provider_signup_start: "oA88CKmhxdIcEIbasfwp",
   // Marketplace listing view → click-through. Fires from BOTH live listing
   // surfaces: Tours.tsx (outbound to Viator) and UnifiedMarketplace.tsx
   // (on-site navigation to a listing's detail page) — same conversion goal,
   // two entry points.
-  marketplace_clickthrough: "", // [TODO: confirm conversion label from Ads UI]
+  marketplace_clickthrough: "s61qCKyhxdIcEIbasfwp", // verified verbatim from Google's share-tag email
   // STUNNING PIGS ticket purchase completed (PayPal capture + order saved)
   // NOTE: dormant for the Masque event — tickets sell on Quicket, not our cart.
   ticket_purchase: "", // [TODO: confirm conversion label from Ads UI]
