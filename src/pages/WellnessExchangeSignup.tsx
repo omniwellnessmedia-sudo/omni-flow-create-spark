@@ -13,6 +13,7 @@ import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { User, Heart, ArrowRight, Sparkles, Loader2, Search } from "lucide-react";
 import { wellnessSpecialties, wellnessCategories, getCategoryForSpecialty } from "@/data/wellnessGlossary";
+import { trackAdsConversion } from "@/lib/googleAds";
 
 const WellnessExchangeSignup = () => {
   const [userType, setUserType] = useState<'provider' | 'consumer'>('consumer');
@@ -157,6 +158,12 @@ const WellnessExchangeSignup = () => {
       }
 
       toast.success("Profile created successfully! Welcome to the Wellness Exchange!");
+      // Deliberately a distinct action from provider_signup_start (Auth.tsx) —
+      // this is the deeper "onboarding completed" funnel stage, only fired
+      // for the provider path to match the conversion's intent.
+      if (userType === "provider") {
+        trackAdsConversion("provider_profile_completed");
+      }
       navigate("/wellness-exchange/marketplace");
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Profile creation failed";

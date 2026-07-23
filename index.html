@@ -124,11 +124,10 @@
       });
 
       // Google Ads — Performance Max (Customer ID 396-986-7500).
-      // Shares the gtag.js loader above; uncomment once the account tag exists.
-      // Conversion events fire from src/lib/googleAds.ts and no-op until its
-      // GOOGLE_ADS_ID + labels are filled in.
-      // [TODO: confirm AW-XXXXXXX conversion ID, then uncomment]
-      // gtag('config', 'AW-XXXXXXXXXX');
+      // Shares the gtag.js loader above, per Google's official conversion-tag
+      // instructions ("add the config command to every instance of the Google
+      // tag"). Conversion events fire from src/lib/googleAds.ts.
+      gtag('config', 'AW-11266714886');
       
       // ROAM Campaign Ecommerce Events Helper
       window.trackRoamEvent = function(eventName, params) {

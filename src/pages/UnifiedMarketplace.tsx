@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Footer from "@/components/Footer";
+import { trackAdsConversion } from "@/lib/googleAds";
 import { 
   Search, Filter, MapPin, Clock, Coins, Star, Globe, Calendar, 
   ShoppingBag, Sparkles, Mountain, Gift, Users, ArrowRight,
@@ -160,6 +161,14 @@ const UnifiedMarketplace = () => {
   }, [items, activeTab, selectedCategory, searchTerm]);
 
   const handleItemClick = (item: WellnessMarketplaceItem) => {
+    // Same conversion goal as Tours.tsx's outbound-click tracking — this is
+    // the marketplace's own listing view -> click-through moment. price_zar
+    // only exists on some variants of the WellnessMarketplaceItem union.
+    trackAdsConversion("marketplace_clickthrough", {
+      value: "price_zar" in item ? item.price_zar : 0,
+      currency: "ZAR",
+    });
+
     // Navigate based on content type
     switch (item.content_type) {
       case 'service':
