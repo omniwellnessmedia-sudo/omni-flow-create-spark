@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { IMAGES } from "@/lib/images";
+import { SmartImage } from "@/components/ui/smart-image";
 import { trackAdsConversion } from "@/lib/googleAds";
 import {
   MapPin, CalendarDays, Ticket, Users, Heart, Accessibility,
@@ -258,18 +259,19 @@ const StunningPigs = () => {
             </div>
           </div>
 
-          {/* {{image}} slot — replace with the approved dignified single pig portrait.
-              Content rule: one dignified portrait only — no campaign or graphic imagery. */}
-          <div className="relative rounded-3xl border-2 border-dashed border-rose-500/30 bg-rose-500/[0.04] min-h-[320px] lg:min-h-[440px] flex items-center justify-center p-8">
-            <div className="text-center max-w-xs">
-              <Heart className="h-10 w-10 text-rose-500/50 mx-auto mb-4" />
-              <p className="font-medium text-sm mb-1">{"{{image}}"} — dignified single pig portrait</p>
-              <p className="text-xs text-muted-foreground">
-                Awaiting the approved photograph. Per event guidelines: one dignified
-                portrait only — no graphic or campaign imagery.
-              </p>
-            </div>
-          </div>
+          {/* Official event artwork. The square poster is expected at
+              public/events/wwpl-square.png — commit the file at exactly that
+              path (GitHub web upload works) and it renders here immediately.
+              Until then SmartImage's designed gradient placeholder shows, so
+              the page never looks under construction. */}
+          <SmartImage
+            src="/events/wwpl-square.png"
+            category="community"
+            alt="Celebrating Women Who Protect Life — official event poster: Monday 10 August 2026 at The Masque Theatre, Muizenberg. Tickets from R150 on Quicket."
+            eager
+            aspectRatio="1 / 1"
+            className="rounded-3xl border border-border/60 shadow-lg w-full object-cover"
+          />
         </div>
       </section>
 
