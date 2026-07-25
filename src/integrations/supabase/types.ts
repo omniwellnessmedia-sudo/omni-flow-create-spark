@@ -122,6 +122,7 @@ export type Database = {
           commission_currency: string
           commission_rate: number | null
           created_at: string | null
+          entity_id: string | null
           id: string
           notes: string | null
           order_amount: number
@@ -142,6 +143,7 @@ export type Database = {
           commission_currency: string
           commission_rate?: number | null
           created_at?: string | null
+          entity_id?: string | null
           id?: string
           notes?: string | null
           order_amount: number
@@ -162,6 +164,7 @@ export type Database = {
           commission_currency?: string
           commission_rate?: number | null
           created_at?: string | null
+          entity_id?: string | null
           id?: string
           notes?: string | null
           order_amount?: number
@@ -181,6 +184,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "affiliate_clicks"
             referencedColumns: ["click_id"]
+          },
+          {
+            foreignKeyName: "affiliate_commissions_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_commissions_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entity_revenue_summary"
+            referencedColumns: ["entity_id"]
           },
           {
             foreignKeyName: "affiliate_commissions_order_id_fkey"
@@ -714,6 +731,7 @@ export type Database = {
           booking_date: string
           consumer_id: string
           created_at: string
+          entity_id: string | null
           id: string
           notes: string | null
           payment_method: string
@@ -728,6 +746,7 @@ export type Database = {
           booking_date: string
           consumer_id: string
           created_at?: string
+          entity_id?: string | null
           id?: string
           notes?: string | null
           payment_method: string
@@ -742,6 +761,7 @@ export type Database = {
           booking_date?: string
           consumer_id?: string
           created_at?: string
+          entity_id?: string | null
           id?: string
           notes?: string | null
           payment_method?: string
@@ -757,6 +777,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "consumer_profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entity_revenue_summary"
+            referencedColumns: ["entity_id"]
           },
           {
             foreignKeyName: "bookings_provider_id_fkey"
@@ -1166,6 +1200,42 @@ export type Database = {
         }
         Relationships: []
       }
+      entities: {
+        Row: {
+          brand_color: string
+          created_at: string
+          display_order: number
+          entity_type: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          xero_org_code: string | null
+        }
+        Insert: {
+          brand_color: string
+          created_at?: string
+          display_order?: number
+          entity_type: string
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          xero_org_code?: string | null
+        }
+        Update: {
+          brand_color?: string
+          created_at?: string
+          display_order?: number
+          entity_type?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          xero_org_code?: string | null
+        }
+        Relationships: []
+      }
       feature_flags: {
         Row: {
           category: string | null
@@ -1482,6 +1552,7 @@ export type Database = {
           customer_name: string
           data_amount: string | null
           destination: string | null
+          entity_id: string | null
           esim_activation_code: string | null
           esim_qr_code: string | null
           id: string
@@ -1516,6 +1587,7 @@ export type Database = {
           customer_name: string
           data_amount?: string | null
           destination?: string | null
+          entity_id?: string | null
           esim_activation_code?: string | null
           esim_qr_code?: string | null
           id?: string
@@ -1550,6 +1622,7 @@ export type Database = {
           customer_name?: string
           data_amount?: string | null
           destination?: string | null
+          entity_id?: string | null
           esim_activation_code?: string | null
           esim_qr_code?: string | null
           id?: string
@@ -1579,6 +1652,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "affiliate_commissions"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entity_revenue_summary"
+            referencedColumns: ["entity_id"]
           },
         ]
       }
@@ -3000,6 +3087,7 @@ export type Database = {
           contact_name: string
           contact_phone: string | null
           created_at: string
+          entity_id: string | null
           id: string
           participants: number
           payment_status: string | null
@@ -3018,6 +3106,7 @@ export type Database = {
           contact_name: string
           contact_phone?: string | null
           created_at?: string
+          entity_id?: string | null
           id?: string
           participants?: number
           payment_status?: string | null
@@ -3036,6 +3125,7 @@ export type Database = {
           contact_name?: string
           contact_phone?: string | null
           created_at?: string
+          entity_id?: string | null
           id?: string
           participants?: number
           payment_status?: string | null
@@ -3049,6 +3139,20 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "tour_bookings_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tour_bookings_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "entity_revenue_summary"
+            referencedColumns: ["entity_id"]
+          },
           {
             foreignKeyName: "tour_bookings_tour_id_fkey"
             columns: ["tour_id"]
@@ -3802,6 +3906,23 @@ export type Database = {
       }
     }
     Views: {
+      entity_revenue_summary: {
+        Row: {
+          affiliate_mtd: number | null
+          bookings_mtd: number | null
+          brand_color: string | null
+          display_order: number | null
+          entity_id: string | null
+          entity_type: string | null
+          name: string | null
+          orders_mtd: number | null
+          slug: string | null
+          total_mtd: number | null
+          total_ytd: number | null
+          tours_mtd: number | null
+        }
+        Relationships: []
+      }
       public_profiles: {
         Row: {
           avatar_url: string | null
@@ -3864,10 +3985,11 @@ export type Database = {
         Args: { resource_id: string }
         Returns: undefined
       }
+      is_accountant_or_admin: { Args: { user_id: string }; Returns: boolean }
       is_admin: { Args: { user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "super_admin" | "user"
+      app_role: "admin" | "super_admin" | "user" | "accountant"
       content_pillar: "inspiration" | "education" | "empowerment" | "wellness"
       newsletter_status: "draft" | "scheduled" | "sending" | "sent" | "failed"
       post_status: "draft" | "scheduled" | "posted" | "failed"
@@ -4004,7 +4126,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "super_admin", "user"],
+      app_role: ["admin", "super_admin", "user", "accountant"],
       content_pillar: ["inspiration", "education", "empowerment", "wellness"],
       newsletter_status: ["draft", "scheduled", "sending", "sent", "failed"],
       post_status: ["draft", "scheduled", "posted", "failed"],
