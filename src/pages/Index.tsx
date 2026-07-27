@@ -1,4 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection";
+import FeaturedEventSection from "@/components/sections/FeaturedEventSection";
 import ServicesSection from "@/components/sections/ServicesSection";
 import FeaturedProjectsSection from "@/components/sections/FeaturedProjectsSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
@@ -16,6 +17,7 @@ const Index = () => {
       {/* Main Content Area - WCAG Landmark */}
       <main id="main-content" role="main" aria-label="Main content">
         <HeroSection />
+        <FeaturedEventSection />
         <ServicesSection />
         <ToursRetreatsPreview />
         <TestimonialsSection />

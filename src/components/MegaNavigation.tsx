@@ -25,7 +25,6 @@ const MegaNavigation = () => {
         { name: 'Home', href: '/', icon: '🏠' },
         { name: 'About Us', href: '/about', icon: 'ℹ️' },
         { name: 'Contact', href: '/contact', icon: '📞' },
-        { name: 'Blog & Insights', href: '/blog', icon: '📝' },
         { name: 'Podcast', href: '/podcast', icon: '🎙️' },
         { name: 'Portfolio', href: '/portfolio', icon: '📂' }
       ]

@@ -66,9 +66,9 @@ const OrderConfirmation = React.lazy(() => import('@/pages/OrderConfirmation'));
 const GuestOrderLookup = React.lazy(() => import('@/pages/GuestOrderLookup'));
 const PaymentSuccess = React.lazy(() => import('@/pages/PaymentSuccess'));
 const PaymentCancelled = React.lazy(() => import('@/pages/PaymentCancelled'));
-const Blog = React.lazy(() => import('@/pages/Blog'));
+// Blog is unpublished for launch: public viewing routes redirect home below.
+// The editor stays reachable so content can be prepared before re-launch.
 const BlogEditor = React.lazy(() => import('@/pages/BlogEditor'));
-const BlogPost = React.lazy(() => import('@/pages/BlogPost'));
 const Podcast = React.lazy(() => import('@/pages/Podcast'));
 const Portfolio = React.lazy(() => import('@/pages/Portfolio'));
 const Resources = React.lazy(() => import('@/pages/Resources'));
@@ -183,7 +183,7 @@ function App() {
                   <Route path="/wellness-exchange/add-want" element={<AddWant />} />
                   <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
                   <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
-                  <Route path="/wellness-community" element={<Navigate to="/blog" replace />} />
+                  <Route path="/wellness-community" element={<Navigate to="/community" replace />} />
 
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
@@ -256,13 +256,14 @@ function App() {
                   {/* Community & Content */}
                   <Route path="/community" element={<CommunityBlog />} />
                   <Route path="/community-blog" element={<CommunityBlog />} />
-                  <Route path="/blog" element={<Blog />} />
+                  {/* Blog unpublished: public viewing routes redirect home; editor kept for content prep */}
+                  <Route path="/blog" element={<Navigate to="/" replace />} />
                   <Route path="/blog-editor" element={<BlogEditor />} />
                   <Route path="/blog/editor/new" element={<BlogEditor />} />
                   <Route path="/blog/editor/:postId" element={<BlogEditor />} />
-                  <Route path="/blog/post/:slug" element={<BlogPost />} />
-                  <Route path="/blog/community" element={<CommunityBlog />} />
-                  <Route path="/blog-post/:slug" element={<BlogPost />} />
+                  <Route path="/blog/post/:slug" element={<Navigate to="/" replace />} />
+                  <Route path="/blog/community" element={<Navigate to="/community" replace />} />
+                  <Route path="/blog-post/:slug" element={<Navigate to="/" replace />} />
                   <Route path="/podcast" element={<Podcast />} />
                   <Route path="/portfolio" element={<Portfolio />} />
                   <Route path="/resources" element={<Resources />} />
@@ -380,8 +381,8 @@ function App() {
                       <RoamMarketingHub />
                     </ProtectedRoute>
                   } />
-                  {/* Blog routing fix */}
-                  <Route path="/blog/:slug" element={<BlogPost />} />
+                  {/* Blog unpublished: legacy slug URLs also redirect home */}
+                  <Route path="/blog/:slug" element={<Navigate to="/" replace />} />
 
                   {/* Error Handling */}
                   <Route path="/404" element={<NotFound />} />
