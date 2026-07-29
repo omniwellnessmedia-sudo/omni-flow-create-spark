@@ -64,6 +64,26 @@ const VENUE_MAPS_URL = `https://maps.google.com/?q=${encodeURIComponent(VENUE_QU
 const TRAILER_FILE_ID = "1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV";
 const CONTACT_EMAIL = "omniwellnessmedia@gmail.com";
 
+/**
+ * Feroza's cuts from the documentary, in upload order (Drive "Clips" folder,
+ * 29 Jul). Labels are deliberately plain — they are numbered rather than
+ * described because the cuts were not reviewed shot-by-shot before publishing.
+ *
+ * REQUIRES: each file must be shared "Anyone with the link — Viewer" in Drive.
+ * A restricted file renders a Google sign-in wall inside the embed rather than
+ * failing visibly, so it looks like a broken player to the visitor.
+ *
+ * These cost nothing on load: VideoFacade fetches only after a tap.
+ */
+const CLIPS = [
+  { id: "1j2W-PPxhpZDPzwP1TVshlbIablN3Uc4p", label: "Clip 1" },
+  { id: "1DjdwMvCOVegw7fFYGSCoWTYOqDSuHkTD", label: "Clip 2" },
+  { id: "14y7dapbwvotxDf4IsPkTwqsJ2V4Hg8Zy", label: "Clip 3" },
+  { id: "1zvXrHuG0QMCk6Lyn39aQcZfzK9BBOEWQ", label: "Clip 4" },
+  { id: "1dpJyyA79Mcp-Z3yEN08HNVZ4dA_goROu", label: "Clip 5" },
+  { id: "1qjnunjL-Ul1JUonAVuUuJFzeam7dXqNV", label: "Clip 6" },
+];
+
 // Shared by the Event node and every subEvent. Google requires location.address
 // on each offline event and does NOT inherit it from the parent.
 const EVENT_PLACE = {
@@ -233,19 +253,31 @@ const CountdownPill = () => {
 };
 
 /**
- * Click-to-load trailer. Renders the poster + a real <button> until the user
- * asks for it, then mounts the Drive iframe. Before this, the section was a
- * bare black rectangle under a "Watch the trailer" heading — the single
- * largest tappable-but-inert surface on the page.
+ * Click-to-load video. Renders the poster + a real <button> until the user asks
+ * for it, then mounts the Drive iframe. The trailer used to be a bare black
+ * rectangle under a "Watch the trailer" heading — the single largest
+ * tappable-but-inert surface on the page — and it pulled ~0.5-1MB of Drive
+ * player JS on scroll. Nothing is fetched now until someone taps.
+ *
+ * Every clip on this page reuses this, so adding clips costs zero bytes on
+ * load no matter how many there are.
  */
-const TrailerFacade = () => {
+const VideoFacade = ({
+  fileId,
+  label,
+  event,
+}: {
+  fileId: string;
+  label: string;
+  event: string;
+}) => {
   const [playing, setPlaying] = useState(false);
 
   if (playing) {
     return (
       <iframe
-        src={`https://drive.google.com/file/d/${TRAILER_FILE_ID}/preview`}
-        title="Stunning Pigs — official intro trailer"
+        src={`https://drive.google.com/file/d/${fileId}/preview`}
+        title={label}
         className="absolute inset-0 h-full w-full"
         allow="autoplay; fullscreen"
         allowFullScreen
@@ -257,11 +289,11 @@ const TrailerFacade = () => {
     <button
       type="button"
       onClick={() => {
-        track("trailer_play");
+        track(event, { fileId });
         setPlaying(true);
       }}
       className="group absolute inset-0 h-full w-full cursor-pointer overflow-hidden"
-      aria-label="Play the trailer — Stunning Pigs"
+      aria-label={`Play ${label}`}
     >
       <SmartImage
         src="/events/wwpl-square.webp"
@@ -276,7 +308,7 @@ const TrailerFacade = () => {
           <Play className="h-7 w-7 translate-x-0.5" aria-hidden="true" fill="currentColor" />
         </span>
         <span className="rounded-full bg-black/60 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
-          Play the trailer
+          {label}
         </span>
       </span>
     </button>
@@ -506,7 +538,7 @@ const StunningPigs = () => {
       <section id="trailer" className="scroll-mt-24 container mx-auto px-4 py-16 max-w-4xl">
         <h2 className="font-heading text-3xl mb-6 text-center">Watch the trailer</h2>
         <div className="relative w-full overflow-hidden rounded-2xl border border-border/60 bg-black" style={{ aspectRatio: "16 / 9" }}>
-          <TrailerFacade />
+          <VideoFacade fileId={TRAILER_FILE_ID} label="Play the trailer" event="trailer_play" />
         </div>
         <p className="text-center text-xs text-muted-foreground mt-3">
           Trouble playing?{" "}
@@ -520,6 +552,27 @@ const StunningPigs = () => {
             Watch on Google Drive
           </a>
         </p>
+      </section>
+
+      {/* Clips. Sits under the trailer so the strongest single asset still
+          leads. Each tile is click-to-load, so six clips add zero bytes to the
+          initial page — which matters on a page whose LCP problem was payload. */}
+      <section id="clips" className="scroll-mt-24 container mx-auto px-4 pb-16 max-w-5xl">
+        <h2 className="font-heading text-2xl mb-2 text-center">More from the film</h2>
+        <p className="text-sm text-muted-foreground text-center mb-8">
+          Short cuts from <em>Stunning Pigs</em>. Tap any one to play.
+        </p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {CLIPS.map((c) => (
+            <div
+              key={c.id}
+              className="relative overflow-hidden rounded-2xl border border-border/60 bg-black"
+              style={{ aspectRatio: "16 / 9" }}
+            >
+              <VideoFacade fileId={c.id} label={c.label} event="clip_play" />
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Sessions */}
