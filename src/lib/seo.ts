@@ -81,15 +81,19 @@ export const updateMetaTags = (metadata: SEOMetadata) => {
   // Canonical is a <link>, not a <meta>, so it needs its own branch. index.html
   // ships a default pointing at the homepage; without this every route would
   // keep declaring itself to be "/".
-  if (metadata.canonical) {
-    let link = document.querySelector('link[rel="canonical"]');
-    if (!link) {
-      link = document.createElement('link');
-      link.setAttribute('rel', 'canonical');
-      document.head.appendChild(link);
-    }
-    link.setAttribute('href', metadata.canonical);
+  //
+  // Written UNCONDITIONALLY. Setting it only when `canonical` was supplied
+  // meant the value leaked across client-side navigation: leaving a page that
+  // sets one for a page that does not left the second page declaring the
+  // first page's URL as its canonical — the same bug, inverted.
+  const canonicalHref = metadata.canonical || metadata.url || window.location.href;
+  let link = document.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    document.head.appendChild(link);
   }
+  link.setAttribute('href', canonicalHref);
 };
 
 export const generateTourJSONLD = (data: TourSEOData) => {

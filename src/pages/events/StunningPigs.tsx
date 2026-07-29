@@ -64,6 +64,21 @@ const VENUE_MAPS_URL = `https://maps.google.com/?q=${encodeURIComponent(VENUE_QU
 const TRAILER_FILE_ID = "1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV";
 const CONTACT_EMAIL = "omniwellnessmedia@gmail.com";
 
+// Shared by the Event node and every subEvent. Google requires location.address
+// on each offline event and does NOT inherit it from the parent.
+const EVENT_PLACE = {
+  "@type": "Place",
+  name: "The Masque Theatre",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "37 Main Road",
+    addressLocality: "Muizenberg",
+    addressRegion: "Western Cape",
+    postalCode: "7945",
+    addressCountry: "ZA",
+  },
+} as const;
+
 // 10 Aug 2026, 10:00–16:00 SAST (UTC+2) — expressed in UTC for calendar links.
 const CAL = {
   title: "Celebrating Women Who Protect Life — Cape Town Premiere of Stunning Pigs",
@@ -183,7 +198,7 @@ const trackQuicket = (from: string) => {
 const quicketLinkProps = (from: string) => ({
   href: QUICKET_URL,
   target: "_blank",
-  rel: "noopener noreferrer",
+  rel: "noopener",
   onClick: () => trackQuicket(from),
 });
 
@@ -246,7 +261,7 @@ const TrailerFacade = () => {
         setPlaying(true);
       }}
       className="group absolute inset-0 h-full w-full cursor-pointer overflow-hidden"
-      aria-label="Play the Stunning Pigs trailer"
+      aria-label="Play the trailer — Stunning Pigs"
     >
       <SmartImage
         src="/events/wwpl-square.webp"
@@ -305,20 +320,10 @@ const StunningPigs = () => {
         eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
         image: [POSTER_URL],
         url: PAGE_URL,
-        location: {
-          "@type": "Place",
-          name: "The Masque Theatre",
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: "37 Main Road",
-            addressLocality: "Muizenberg",
-            addressRegion: "Western Cape",
-            postalCode: "7945",
-            addressCountry: "ZA",
-          },
-        },
+        location: EVENT_PLACE,
         organizer: {
           "@type": "Organization",
+          "@id": "https://omniwellnessmedia.co.za/#organization",
           name: "Omni Wellness Media",
           url: "https://omniwellnessmedia.co.za",
         },
@@ -338,7 +343,9 @@ const StunningPigs = () => {
           endDate: s.endUTC,
           eventStatus: "https://schema.org/EventScheduled",
           eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-          location: { "@type": "Place", name: "The Masque Theatre" },
+          location: EVENT_PLACE,
+          url: PAGE_URL,
+          image: [POSTER_URL],
           offers: {
             "@type": "Offer",
             price: "150",
@@ -445,7 +452,7 @@ const StunningPigs = () => {
                 countdown and calendar buttons used to live above it and pushed
                 it below the fold on every common Android viewport. */}
             <div className="flex flex-wrap gap-3">
-              <Button size="lg" asChild className="bg-rose-600 hover:bg-rose-700 text-white">
+              <Button size="lg" asChild className="!bg-none !bg-rose-600 hover:!bg-rose-700 text-white whitespace-normal">
                 <a {...quicketLinkProps("hero")}>
                   <Ticket className="h-4 w-4 mr-2" aria-hidden="true" />Get tickets — R150 a session
                 </a>
@@ -572,7 +579,7 @@ const StunningPigs = () => {
               full-day rate for people coming for the full programme — email us and
               we'll send your code before you book.
             </p>
-            <Button variant="outline" size="lg" asChild className="w-full sm:w-auto">
+            <Button variant="outline" size="lg" asChild className="w-full sm:w-auto whitespace-normal">
               <a
                 href={`mailto:${CONTACT_EMAIL}?subject=Full-day%20access%20—%20Celebrating%20Women%20Who%20Protect%20Life`}
                 onClick={() => track("fullday_code_request")}
@@ -666,7 +673,7 @@ const StunningPigs = () => {
             R150 per session with assigned seating, sold securely through Quicket —
             The Masque Theatre's official ticketing partner.
           </p>
-          <Button size="lg" asChild className="bg-rose-600 hover:bg-rose-700 text-white text-base px-8">
+          <Button size="lg" asChild className="!bg-none !bg-rose-600 hover:!bg-rose-700 text-white text-base px-8 whitespace-normal">
             <a {...quicketLinkProps("tickets-section")}>
               <Ticket className="h-5 w-5 mr-2" aria-hidden="true" />Choose your seats
               <ExternalLink className="h-4 w-4 ml-2" aria-hidden="true" />
@@ -823,7 +830,7 @@ const StunningPigs = () => {
         )}
       >
         <span className="min-w-0">
-          <span className="block text-sm font-semibold truncate">From R150 a session · 10 August</span>
+          <span className="block text-sm font-semibold truncate">From R150 · 10 August</span>
           <span className="block text-xs leading-4 text-muted-foreground">Assigned seating on Quicket</span>
         </span>
         <span className="pointer-events-none flex h-11 shrink-0 items-center rounded-lg bg-rose-600 px-4 text-sm font-medium text-white">

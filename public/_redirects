@@ -1,1 +1,13 @@
+# Netlify reads this file BEFORE netlify.toml and stops at the first match, so
+# anything that must beat the SPA catch-all has to live here, above it.
+# Keep these in sync with the [[redirects]] blocks in netlify.toml.
+
+# Canonical host: www 301s to the apex that the site, every canonical tag and
+# every Ads final URL use. Ad clicks must not land on a redirect chain.
+https://www.omniwellnessmedia.co.za/*  https://omniwellnessmedia.co.za/:splat  301!
+
+# Real 301 for the duplicate event URL. It had no route behind it, so it was
+# served as an indexable soft 404 at HTTP 200.
+/community/events/stunning-pigs  /events/stunning-pigs  301!
+
 /*    /index.html   200
