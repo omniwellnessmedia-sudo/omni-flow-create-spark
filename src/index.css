@@ -442,26 +442,35 @@ html.magic-cursor-active [contenteditable=""] {
   color: hsl(35 15% 97%) !important;
 }
 
-/* ===== BUTTON SYSTEM — 2026 ===== */
-.btn-primary {
-  @apply bg-gradient-primary text-white border-transparent rounded-lg px-6 py-3 font-medium transition-all duration-300;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
-}
+/* ===== BUTTON SYSTEM — 2026 =====
+   These MUST stay inside @layer components. Unlayered, they sit after
+   @tailwind utilities with the same (0,1,0) specificity and silently beat
+   every utility a call site passes: `bg-rose-600` lost to the teal
+   .bg-gradient-primary, and `px-6 py-3` overrode size="sm"'s px-4, which
+   inflated buttons until rows like the event page's share bar overflowed
+   their flex container. Layered, utilities win again — which is the point
+   of passing them. */
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-primary text-white border-transparent rounded-lg px-6 py-3 font-medium transition-all duration-300;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
 
-.btn-primary:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.08);
-  transform: translateY(-1px);
-}
+  .btn-primary:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
 
-.btn-secondary {
-  @apply bg-white text-gray-900 border border-gray-200 rounded-lg px-6 py-3 font-medium transition-all duration-300;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-}
+  .btn-secondary {
+    @apply bg-white text-gray-900 border border-gray-200 rounded-lg px-6 py-3 font-medium transition-all duration-300;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
 
-.btn-secondary:hover {
-  @apply bg-gray-50 border-gray-300;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transform: translateY(-1px);
+  .btn-secondary:hover {
+    @apply bg-gray-50 border-gray-300;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+  }
 }
 
 /* ===== LOGO SYSTEM - CONSOLIDATED ===== */

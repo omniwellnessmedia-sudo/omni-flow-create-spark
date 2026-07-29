@@ -23,7 +23,7 @@
     <meta property="og:title" content="Omni Wellness Media - Conscious Content Creation & Business Development" />
     <meta property="og:description" content="Empowering communities through conscious content creation, business development, and holistic wellness solutions." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.omniwellnessmedia.co.za/" />
+    <meta property="og:url" content="https://omniwellnessmedia.co.za/" />
     <meta property="og:image" content="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/omni-favicons/android-chrome-512x512.png" />
     <meta property="og:image:width" content="512" />
     <meta property="og:image:height" content="512" />
@@ -36,7 +36,12 @@
     <meta name="twitter:description" content="Empowering communities through conscious content creation, business development, and holistic wellness solutions." />
     <meta name="twitter:image" content="https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/omni-favicons/android-chrome-512x512.png" />
 
-    <link rel="canonical" href="https://www.omniwellnessmedia.co.za/" />
+    <!-- Default canonical only. It must be the APEX host: netlify.toml 301s
+         www -> apex, so a www canonical points at a URL that redirects.
+         Per-page routes overwrite this via useSEO() (src/lib/seo.ts); any page
+         that does not call useSEO inherits the homepage canonical, which is
+         wrong for that page — wire useSEO rather than leaving it. -->
+    <link rel="canonical" href="https://omniwellnessmedia.co.za/" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -149,20 +154,24 @@
     
     <!-- Meta Pixel - Omni Wellness Media -->
     <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      // Only initialise the Meta Pixel once a REAL numeric Pixel ID is set below.
-      // The placeholder left here fired fbq('init', …) with an invalid id, which
-      // logged "Invalid PixelID" on every page load and tracked nothing. Replace
-      // XXXXXXXXXXXXXXXX with the real Pixel ID (digits) to enable tracking.
+      // Only load and initialise the Meta Pixel once a REAL numeric Pixel ID is
+      // set below. Replace XXXXXXXXXXXXXXXX with the real Pixel ID (digits).
+      //
+      // The loader is INSIDE the guard deliberately. Previously it ran
+      // unconditionally, so every visit paid a DNS + TLS handshake to
+      // connect.facebook.net and parsed ~110KB of fbevents.js on the main
+      // thread — during the LCP window — while the placeholder id failed the
+      // regex below, so fbq('init') never ran and nothing was ever tracked.
       var OMNI_FB_PIXEL_ID = 'XXXXXXXXXXXXXXXX';
       if (/^[0-9]{6,}$/.test(OMNI_FB_PIXEL_ID)) {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', OMNI_FB_PIXEL_ID);
         fbq('track', 'PageView');
       }
@@ -170,10 +179,9 @@
   </head>
 
   <body>
-    <!-- Meta Pixel noscript fallback -->
-    <noscript>
-      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXXX&ev=PageView&noscript=1"/>
-    </noscript>
+    <!-- Meta Pixel noscript fallback: removed while OMNI_FB_PIXEL_ID is a
+         placeholder. It was requesting facebook.com/tr with an invalid id on
+         every no-JS load. Restore it alongside the real Pixel ID. -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

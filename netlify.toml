@@ -19,11 +19,52 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Static image directories. These are pure asset paths with no SPA route behind
+# them, so they are safe to cache hard.
+[[headers]]
+  for = "/branding/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/lovable-uploads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# /events/* is NOT wildcarded: "/events/stunning-pigs" is a real SPA route that
+# must keep serving fresh index.html. Only the image files are listed, by exact
+# name, so a year-long cache can never strand the page itself.
+# Content-hashed names would let us drop this list — until then, renaming a file
+# is the way to bust its cache.
+[[headers]]
+  for = "/events/wwpl-square.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/events/wwpl-square.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/events/rda_square_1200x1200.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # Canonical host: www resolves 301 to the apex the site (and all Ads final
 # URLs) use — ad clicks must not land on a redirect chain or split hostname.
 [[redirects]]
   from = "https://www.omniwellnessmedia.co.za/*"
   to = "https://omniwellnessmedia.co.za/:splat"
+  status = 301
+  force = true
+
+# Real 301 for the duplicate event URL, so crawlers get a redirect rather than
+# the client-side hop. MUST stay above the SPA fallback below — Netlify takes
+# the first matching rule.
+[[redirects]]
+  from = "/community/events/stunning-pigs"
+  to = "/events/stunning-pigs"
   status = 301
   force = true
 
