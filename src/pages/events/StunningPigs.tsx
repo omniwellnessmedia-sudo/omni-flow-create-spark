@@ -253,14 +253,23 @@ const CountdownPill = () => {
 };
 
 /**
- * Click-to-load video. Renders the poster + a real <button> until the user asks
- * for it, then mounts the Drive iframe. The trailer used to be a bare black
- * rectangle under a "Watch the trailer" heading — the single largest
- * tappable-but-inert surface on the page — and it pulled ~0.5-1MB of Drive
- * player JS on scroll. Nothing is fetched now until someone taps.
- *
- * Every clip on this page reuses this, so adding clips costs zero bytes on
- * load no matter how many there are.
+ * Google's own thumbnail for a Drive file — an actual frame from the video,
+ * so every clip gets a DISTINCT poster instead of all six sharing the event
+ * artwork. Requires the file to be shared "Anyone with the link"; if it isn't
+ * (or Drive hasn't rendered a frame yet) the <img> errors and SmartImage falls
+ * back to the event poster, so the tile still looks intentional rather than
+ * broken. `https:` is already allowed by the img-src CSP.
+ */
+const driveThumb = (fileId: string) =>
+  `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+
+/**
+ * Click-to-load video. Shows the video's own frame + a real <button> until the
+ * user taps, then mounts the Drive iframe. The trailer used to be a bare black
+ * rectangle — the single largest tappable-but-inert surface on the page — and
+ * it pulled ~0.5-1MB of Drive player JS on scroll. Nothing is fetched now until
+ * someone taps, and the thumbnails lazy-load as they scroll into view, so any
+ * number of clips costs nothing on initial load.
  */
 const VideoFacade = ({
   fileId,
@@ -292,24 +301,27 @@ const VideoFacade = ({
         track(event, { fileId });
         setPlaying(true);
       }}
-      className="group absolute inset-0 h-full w-full cursor-pointer overflow-hidden"
+      className="group absolute inset-0 h-full w-full cursor-pointer overflow-hidden bg-neutral-900"
       aria-label={`Play ${label}`}
     >
       <SmartImage
-        src="/events/wwpl-square.webp"
-        fallback="/events/wwpl-square.png"
+        src={driveThumb(fileId)}
+        fallback="/events/wwpl-square.webp"
         category="community"
         alt=""
         aria-hidden="true"
-        className="h-full w-full object-cover opacity-60 transition-opacity group-hover:opacity-75"
+        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
       />
-      <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-rose-600 text-white shadow-lg transition-transform group-hover:scale-105">
-          <Play className="h-7 w-7 translate-x-0.5" aria-hidden="true" fill="currentColor" />
+      {/* Dark wash for play-button contrast — replaces dimming the whole
+          image, which is what made the frames read as murky and identical. */}
+      <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/15" />
+      <span className="absolute inset-0 flex items-center justify-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-rose-600/95 text-white shadow-lg ring-1 ring-white/25 transition-transform group-hover:scale-110">
+          <Play className="h-6 w-6 translate-x-0.5" aria-hidden="true" fill="currentColor" />
         </span>
-        <span className="rounded-full bg-black/60 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
-          {label}
-        </span>
+      </span>
+      <span className="absolute bottom-2 left-2 rounded-md bg-black/65 px-2 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
+        {label}
       </span>
     </button>
   );
