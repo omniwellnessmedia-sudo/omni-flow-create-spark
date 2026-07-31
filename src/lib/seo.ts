@@ -10,6 +10,13 @@ export interface SEOMetadata {
   author?: string;
   publishedTime?: string;
   modifiedTime?: string;
+  /**
+   * Absolute canonical URL for this page, on the APEX host (netlify.toml 301s
+   * www -> apex). Omit only if the page genuinely should inherit the
+   * homepage canonical from index.html — which is almost never what you want,
+   * because inheriting it tells Google to fold this page's signals into "/".
+   */
+  canonical?: string;
 }
 
 export interface TourSEOData extends SEOMetadata {
@@ -70,6 +77,23 @@ export const updateMetaTags = (metadata: SEOMetadata) => {
 
     element.setAttribute('content', content);
   });
+
+  // Canonical is a <link>, not a <meta>, so it needs its own branch. index.html
+  // ships a default pointing at the homepage; without this every route would
+  // keep declaring itself to be "/".
+  //
+  // Written UNCONDITIONALLY. Setting it only when `canonical` was supplied
+  // meant the value leaked across client-side navigation: leaving a page that
+  // sets one for a page that does not left the second page declaring the
+  // first page's URL as its canonical — the same bug, inverted.
+  const canonicalHref = metadata.canonical || metadata.url || window.location.href;
+  let link = document.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', canonicalHref);
 };
 
 export const generateTourJSONLD = (data: TourSEOData) => {
@@ -117,14 +141,17 @@ export const generateTourJSONLD = (data: TourSEOData) => {
   return jsonLD;
 };
 
-export const injectJSONLD = (jsonLD: object) => {
-  const existingScript = document.getElementById('tour-jsonld');
-  if (existingScript) {
-    existingScript.remove();
-  }
+/**
+ * Inject a JSON-LD block. `id` scopes the <script> element so different page
+ * types can each own one without clobbering each other — it used to be
+ * hardcoded to 'tour-jsonld', which meant any second consumer would silently
+ * replace the tour markup.
+ */
+export const injectJSONLD = (jsonLD: object, id = 'tour-jsonld') => {
+  document.getElementById(id)?.remove();
 
   const script = document.createElement('script');
-  script.id = 'tour-jsonld';
+  script.id = id;
   script.type = 'application/ld+json';
   script.text = JSON.stringify(jsonLD);
   document.head.appendChild(script);

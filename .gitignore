@@ -36,9 +36,13 @@ public/images/
 *.pdf
 # Exception: small tracked brand assets (nav/footer logo mark) — not bulk media
 !public/branding/*.png
-# Exception: official event artwork (small web-size files only)
+# Exception: official event artwork (small web-size files only).
+# .webp must be listed explicitly — the blanket *.webp above would otherwise
+# silently drop the optimised posters from the deploy and leave the page
+# serving the much heavier PNG fallback.
 !public/events/*.png
 !public/events/*.jpg
+!public/events/*.webp
 
 # Local Netlify folder
 .netlify

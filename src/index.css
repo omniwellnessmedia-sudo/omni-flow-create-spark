@@ -442,7 +442,24 @@ html.magic-cursor-active [contenteditable=""] {
   color: hsl(35 15% 97%) !important;
 }
 
-/* ===== BUTTON SYSTEM — 2026 ===== */
+/* ===== BUTTON SYSTEM — 2026 =====
+   DELIBERATELY UNLAYERED. These sit after @tailwind utilities at the same
+   (0,1,0) specificity, so they beat plain utilities passed at a call site.
+
+   That is surprising, and it is load-bearing. Roughly 30 call sites across the
+   site pair `variant="outline"` with a `text-*` and no `bg-*`, or pair
+   `bg-white` with a dark `text-*`, and they render correctly ONLY because
+   these rules win. Moving this block into `@layer components` flips the
+   cascade and turns those into white-on-white and dark-on-teal buttons.
+   It was tried on 29 Jul and reverted for exactly that reason.
+
+   Two consequences to know when styling a Button:
+     1. `.bg-gradient-primary` sets the `background` SHORTHAND, i.e. a
+        background-image. A `bg-*` utility only sets background-color, so it
+        can never show through — even if you win the cascade. You need
+        `!bg-none` as well as `!bg-<colour>`.
+     2. `px-6 py-3` here overrides size="sm"'s px-4 unless you use `!`.
+   See the CTAs in src/pages/events/StunningPigs.tsx for the working pattern. */
 .btn-primary {
   @apply bg-gradient-primary text-white border-transparent rounded-lg px-6 py-3 font-medium transition-all duration-300;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);

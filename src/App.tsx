@@ -211,9 +211,15 @@ function App() {
                   <Route path="/impact" element={<Navigate to="/csr-impact" replace />} />
                   <Route path="/wellness-account" element={<Navigate to="/wellness-exchange/account" replace />} />
                   <Route path="/community/events" element={<CommunityEvents />} />
-                  {/* UNLISTED: STUNNING PIGS screening — deliberately absent from all nav/
-                      sitemap surfaces; DB row is draft until go-live. Do not add to nav
-                      without explicit approval. */}
+                  {/* Analytics shows real traffic on this URL, but no route ever
+                      existed for it — so it fell through to NotFound and was served
+                      at HTTP 200, i.e. an indexable soft-404 duplicate of the event
+                      page. netlify.toml also 301s it server-side for crawlers. */}
+                  <Route path="/community/events/stunning-pigs" element={<Navigate to="/events/stunning-pigs" replace />} />
+                  {/* NO LONGER UNLISTED: the Quicket listing has been live since
+                      13 Jul and this page is the destination of a paid campaign, so
+                      it now appears in sitemap.xml. It remains out of the primary
+                      nav by choice — do not add it to nav without approval. */}
                   <Route path="/events/stunning-pigs" element={<StunningPigs />} />
                   <Route path="/ai-tools" element={<Navigate to="/services" replace />} />
                   <Route path="/wellness-exchange/provider-signup" element={<ProviderSignupRedirect />} />
