@@ -46,7 +46,13 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Fonts loaded non-render-blocking: preload as style, then flip to a
+         stylesheet on load. The URL already carries display=swap, so text
+         paints immediately in a fallback face and swaps when the webfont
+         arrives — instead of the whole page waiting on a cross-origin CSS
+         fetch. <noscript> keeps it working with JS disabled. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
     
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
