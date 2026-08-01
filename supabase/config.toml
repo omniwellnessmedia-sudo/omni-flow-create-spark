@@ -74,3 +74,6 @@ verify_jwt = false
 
 [functions.leaddyno-webhook]
 verify_jwt = false
+
+[functions.sign-petition]
+verify_jwt = false

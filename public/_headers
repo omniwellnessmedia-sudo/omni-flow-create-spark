@@ -19,6 +19,9 @@
 /lovable-uploads/*
   Cache-Control: public, max-age=31536000, immutable
 
+/events/wwpl/*
+  Cache-Control: public, max-age=31536000, immutable
+
 # /events/* is NOT wildcarded: "/events/stunning-pigs" is a real SPA route that
 # must keep serving fresh index.html. Only the image files are listed, by exact
 # name, so a year-long cache can never strand the page itself.
