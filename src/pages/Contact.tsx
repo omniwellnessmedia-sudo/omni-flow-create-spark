@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { trackAdsConversion } from '@/lib/googleAds';
+import { trackLead } from '@/lib/socialPixels';
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,6 +44,9 @@ const Contact = () => {
         description: omniVoice.contactResponses.success
       });
       trackAdsConversion('contact_submit');
+      // Meta Lead / TikTok SubmitForm. No-ops until a real pixel ID is
+      // configured — see src/lib/socialPixels.ts.
+      trackLead('contact_form');
       setFormData({
         name: "",
         email: "",

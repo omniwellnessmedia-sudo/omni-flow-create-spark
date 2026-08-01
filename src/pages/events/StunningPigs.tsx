@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSEO, injectJSONLD } from "@/lib/seo";
 import { trackAdsConversion } from "@/lib/googleAds";
+import { trackEventPageView } from "@/lib/socialPixels";
 import { cn } from "@/lib/utils";
 import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
@@ -256,7 +257,12 @@ const StunningPigs = () => {
   );
   useSEO(seo);
 
-  useEffect(() => { track("view_event"); }, []);
+  useEffect(() => {
+    track("view_event");
+    // Meta/TikTok ViewContent. No-ops until a real pixel ID is configured —
+    // see src/lib/socialPixels.ts.
+    trackEventPageView();
+  }, []);
 
   useEffect(() => {
     const PLACE = {
