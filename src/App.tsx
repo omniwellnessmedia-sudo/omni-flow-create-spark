@@ -2,8 +2,6 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as SonnerToaster } from 'sonner';
-import MagicCursor from '@/components/MagicCursor';
-import FloatingActionDock from '@/components/FloatingActionDock';
 import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/components/CartProvider';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -25,6 +23,18 @@ const EditService = React.lazy(() => import('@/pages/EditService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
 const CommunityEvents = React.lazy(() => import('@/pages/CommunityEvents'));
 const StunningPigs = React.lazy(() => import('@/pages/events/StunningPigs'));
+
+// Decorative / non-critical global overlays — lazy so they leave the initial
+// bundle instead of loading on every page before first paint. They render at
+// the end of the tree inside Suspense(fallback=null), so they simply appear a
+// beat after hydration rather than blocking the page. The ROAM chatbot in
+// particular is heavy and is never needed on first render.
+const MagicCursor = React.lazy(() => import('@/components/MagicCursor'));
+const FloatingActionDock = React.lazy(() => import('@/components/FloatingActionDock'));
+const RoamBuddySalesBot = React.lazy(() =>
+  import('@/components/roambuddy/RoamBuddySalesBot').then((m) => ({ default: m.RoamBuddySalesBot }))
+);
+const AccessibilitySettings = React.lazy(() => import('@/components/accessibility/AccessibilitySettings'));
 
 // Provider-signup redirect that KEEPS incoming query params (gclid, utm_*) —
 // a fixed-string <Navigate> discarded them, breaking Google Ads attribution
@@ -143,8 +153,8 @@ const LoadingSpinner = () => (
 
 // Import ScrollToHash component
 import ScrollToHash from '@/components/navigation/ScrollToHash';
-import { RoamBuddySalesBot } from '@/components/roambuddy/RoamBuddySalesBot';
-import AccessibilitySettings from '@/components/accessibility/AccessibilitySettings';
+// MagicCursor, FloatingActionDock, RoamBuddySalesBot and AccessibilitySettings
+// are lazy-loaded (declared with the route chunks near the top of this file).
 
 function App() {
   return (
@@ -402,19 +412,18 @@ function App() {
               <Toaster />
               <SonnerToaster position="top-right" richColors closeButton />
 
-              {/* Sparkle-trail cursor (auto-disables on touch + reduced-motion) */}
-              <MagicCursor />
-              
-              {/* Unified floating dock — single CTA that expands to eSIM chat,
-                  WhatsApp, tour, and accessibility. Dispatches custom events the
-                  hidden ROAM chatbot + accessibility panel listen for. */}
-              <FloatingActionDock />
-
-              {/* ROAM Chatbot window (button removed; opened via dock event) */}
-              <RoamBuddySalesBot />
-
-              {/* Accessibility panel (gear removed; toggled via dock event) */}
-              <AccessibilitySettings />
+              {/* Non-critical global overlays, lazy + deferred so they never
+                  block first paint. fallback=null: they just pop in when ready.
+                  - MagicCursor: sparkle trail (auto-disables on touch/reduced-motion)
+                  - FloatingActionDock: expanding CTA (eSIM chat, WhatsApp, tour, a11y)
+                  - RoamBuddySalesBot: ROAM chatbot window (opened via dock event)
+                  - AccessibilitySettings: a11y panel (toggled via dock event) */}
+              <Suspense fallback={null}>
+                <MagicCursor />
+                <FloatingActionDock />
+                <RoamBuddySalesBot />
+                <AccessibilitySettings />
+              </Suspense>
             </div>
           </Router>
         </CartProvider>

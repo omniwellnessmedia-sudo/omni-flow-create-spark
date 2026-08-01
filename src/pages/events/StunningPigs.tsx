@@ -1,194 +1,46 @@
 import { useEffect, useMemo, useState } from "react";
-import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
-import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { IMAGES } from "@/lib/images";
-import { SmartImage } from "@/components/ui/smart-image";
-import { trackAdsConversion } from "@/lib/googleAds";
 import { useSEO, injectJSONLD } from "@/lib/seo";
-import {
-  MapPin, CalendarDays, Ticket, Users, Accessibility,
-  GlassWater, ArrowDown, Loader2, Film, MessageCircle, Mic2, Utensils, ExternalLink,
-  CalendarPlus, Share2, Copy, Play, ShieldCheck, Mail,
-} from "lucide-react";
+import { trackAdsConversion } from "@/lib/googleAds";
 import { cn } from "@/lib/utils";
+import {
+  QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
+  VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
+  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, PARTNERS, SITE_NAV,
+  drivePreview,
+} from "./wwpl/event";
+import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead, MosaicTile } from "./wwpl/ui";
+import { PetitionForm } from "./wwpl/PetitionForm";
 
 /**
- * Celebrating Women Who Protect Life — Women's Day event at The Masque Theatre,
- * featuring the Cape Town premiere of the Stunning Pigs documentary.
+ * Celebrating Women Who Protect Life — Women's Day event at The Masque
+ * Theatre, featuring the Cape Town premiere of the Stunning Pigs documentary.
  *
- * SOURCE OF TRUTH (verified 18 Jul against the Chad ↔ The Masque email thread):
- *   - Date: Monday 10 August 2026 (Women's Day public holiday)
- *   - Sessions: What Feeds Us 10:00 · Stunning Pigs 12:00 · Voices for Women
- *     Showcase & Awards Ceremony 14:00 — R150 per session
- *   - TICKETS ARE SOLD ON QUICKET (assigned seating, live since 13 Jul):
- *     https://qkt.io/Eu8CpR — this page is a promo pre-lander that routes there.
+ * Facts, URLs and hard content rules live in ./wwpl/event.ts — read the header
+ * comment there before changing anything on this page.
  *
- * NATIVE TICKET SALES ARE PERMANENTLY RETIRED FOR THIS EVENT. Quicket holds the
- * seat plan; selling seats from our own inventory in parallel would double-sell
- * seats Quicket has already allocated. Do not reconnect the cart flow.
+ * This is a deliberate visual island: it carries its OWN header and footer
+ * rather than the site's UnifiedNavigation/Footer, so the whole page can hold
+ * one design language (plum/gold, Cormorant headings, Oswald micro-labels,
+ * Inter body) per the approved handoff.
  *
- * The full-day discount code exists but is distributed PRIVATELY to trusted
- * attendees (per Chad, and re-confirmed by Quicket on 27 Jul as the only
- * mechanism their seated configuration can support safely) — never print it
- * on this page.
+ * It does still carry real site navigation (SITE_NAV, mirrored from
+ * UnifiedNavigation). The handoff specified a bare brand-plus-breadcrumb header
+ * on the argument that a campaign landing page should not leak clicks, but in
+ * review that read as the site simply having no navigation. The compromise: nav
+ * is present but visually quiet, and gold stays reserved for the ticket CTA so
+ * nothing competes with it.
  *
- * Content rules (fixed): factual, dignified framing; NO graphic gassing or
- * slaughter imagery anywhere; no false scarcity.
- *
- * CONVERSION NOTES (29 Jul, from Clarity + the Google Ads console):
- *   - Every CTA is a real <a href>, never window.open(). window.open ran
- *     synchronously inside the click handler, counted in full toward INP
- *     (measured 604ms) on the one interaction this page exists for, and is the
- *     path mobile popup-blockers kill. Tracking now runs in onClick and
- *     navigation is the browser's job.
- *   - Large poster/card/bar surfaces are anchors, not inert divs. Clarity
- *     measured dead clicks on 14.12% of sessions, overwhelmingly on
- *     button-shaped things that did nothing.
- *   - The trailer and the map are click-to-load facades. Both were eager
- *     third-party iframes worth ~1.5-2MB on an 85%-Android audience, and the
- *     Drive player's gapi loader is the source of the apis.google.com
- *     jsloader error Clarity recorded.
+ * WHAT MUST SURVIVE ANY REDESIGN OF THIS PAGE:
+ *   - Every ticket CTA is a real <a href> to Quicket that calls trackQuicket().
+ *     Not window.open — it counted toward INP on the one interaction that
+ *     matters and mobile popup blockers kill it.
+ *   - The Event JSON-LD, the canonical/OG tags, and the prerendered shell
+ *     (scripts/prerender-event.mjs) — social scrapers and the Google Ads
+ *     event-ticket reviewer do not execute JavaScript.
+ *   - The "buying with confidence" copy. It is legally load-bearing: it states
+ *     who organises the event, that R150 is face value, and that we are not a
+ *     reseller. Do not paraphrase without approval.
  */
-
-const QUICKET_URL = "https://www.quicket.co.za/events/386047-celebrating-women-who-protect-life-featuring-the-cape-town-premiere-of-stunning/";
-const EVENT_DATE_DISPLAY = "Monday 10 August 2026 · Women's Day public holiday";
-const PAGE_URL = "https://omniwellnessmedia.co.za/events/stunning-pigs";
-const POSTER_URL = "https://omniwellnessmedia.co.za/events/wwpl-square.png";
-const VENUE_QUERY = "The Masque Theatre, 37 Main Road, Muizenberg, Cape Town";
-const VENUE_MAPS_URL = `https://maps.google.com/?q=${encodeURIComponent(VENUE_QUERY)}`;
-const TRAILER_FILE_ID = "1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV";
-const CONTACT_EMAIL = "omniwellnessmedia@gmail.com";
-
-/**
- * Feroza's cuts from the documentary, in upload order (Drive "Clips" folder,
- * 29 Jul). Labels are deliberately plain — they are numbered rather than
- * described because the cuts were not reviewed shot-by-shot before publishing.
- *
- * REQUIRES: each file must be shared "Anyone with the link — Viewer" in Drive.
- * A restricted file renders a Google sign-in wall inside the embed rather than
- * failing visibly, so it looks like a broken player to the visitor.
- *
- * These cost nothing on load: VideoFacade fetches only after a tap.
- */
-const CLIPS = [
-  { id: "1j2W-PPxhpZDPzwP1TVshlbIablN3Uc4p", label: "Clip 1" },
-  { id: "1DjdwMvCOVegw7fFYGSCoWTYOqDSuHkTD", label: "Clip 2" },
-  { id: "14y7dapbwvotxDf4IsPkTwqsJ2V4Hg8Zy", label: "Clip 3" },
-  { id: "1zvXrHuG0QMCk6Lyn39aQcZfzK9BBOEWQ", label: "Clip 4" },
-  { id: "1dpJyyA79Mcp-Z3yEN08HNVZ4dA_goROu", label: "Clip 5" },
-  { id: "1qjnunjL-Ul1JUonAVuUuJFzeam7dXqNV", label: "Clip 6" },
-];
-
-// Shared by the Event node and every subEvent. Google requires location.address
-// on each offline event and does NOT inherit it from the parent.
-const EVENT_PLACE = {
-  "@type": "Place",
-  name: "The Masque Theatre",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "37 Main Road",
-    addressLocality: "Muizenberg",
-    addressRegion: "Western Cape",
-    postalCode: "7945",
-    addressCountry: "ZA",
-  },
-} as const;
-
-// 10 Aug 2026, 10:00–16:00 SAST (UTC+2) — expressed in UTC for calendar links.
-const CAL = {
-  title: "Celebrating Women Who Protect Life — Cape Town Premiere of Stunning Pigs",
-  startUTC: "20260810T080000Z",
-  endUTC: "20260810T140000Z",
-  location: VENUE_QUERY,
-  details: `Three sessions: What Feeds Us 10:00 · Stunning Pigs premiere + Q&A 12:00 · Voices for Women Showcase & Awards 14:00. Tickets R150/session on Quicket: ${QUICKET_URL}`,
-};
-
-// Every input is a module constant, so build this once rather than on every
-// render (it was previously re-running three encodeURIComponent calls per tick
-// of the countdown).
-const GOOGLE_CAL_URL =
-  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-  `&text=${encodeURIComponent(CAL.title)}` +
-  `&dates=${CAL.startUTC}/${CAL.endUTC}` +
-  `&details=${encodeURIComponent(CAL.details)}` +
-  `&location=${encodeURIComponent(CAL.location)}`;
-
-// Apple/Outlook path: a standards-compliant .ics generated client-side.
-const downloadIcs = () => {
-  const ics = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Omni Wellness Media//Event//EN",
-    "BEGIN:VEVENT",
-    `UID:stunning-pigs-2026@omniwellnessmedia.co.za`,
-    `DTSTART:${CAL.startUTC}`,
-    `DTEND:${CAL.endUTC}`,
-    `SUMMARY:${CAL.title}`,
-    `DESCRIPTION:${CAL.details.replace(/,/g, "\\,")}`,
-    `LOCATION:${CAL.location.replace(/,/g, "\\,")}`,
-    `URL:${PAGE_URL}`,
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ].join("\r\n");
-  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "celebrating-women-who-protect-life.ics";
-  a.click();
-  URL.revokeObjectURL(a.href);
-};
-
-const EVENT_START_MS = Date.UTC(2026, 7, 10, 8, 0, 0);
-
-const SESSIONS = [
-  {
-    no: 1,
-    time: "10:00",
-    startUTC: "2026-08-10T10:00:00+02:00",
-    endUTC: "2026-08-10T12:00:00+02:00",
-    title: "What Feeds Us",
-    description:
-      "The day opens with What Feeds Us — food, ethics and community, setting the table for everything that follows.",
-    icon: Utensils,
-  },
-  {
-    no: 2,
-    time: "12:00",
-    startUTC: "2026-08-10T12:00:00+02:00",
-    endUTC: "2026-08-10T14:00:00+02:00",
-    title: "Stunning Pigs — Cape Town Premiere",
-    description:
-      "The main feature: the Cape Town premiere of the Stunning Pigs documentary, followed by a public Q&A with the Beauty Without Cruelty campaign and G.A.R.D.",
-    icon: Film,
-  },
-  {
-    no: 3,
-    time: "14:00",
-    startUTC: "2026-08-10T14:00:00+02:00",
-    endUTC: "2026-08-10T16:00:00+02:00",
-    title: "Voices for Women Showcase & Awards Ceremony",
-    description:
-      "The day closes with live performances and the Voices for Women awards, honouring women who protect life.",
-    icon: Mic2,
-  },
-];
-
-// Partner list per the live campaign coordination (Chad's tracking structure).
-// Omni's role reads "Organiser & promoter", not "Media & production": Google's
-// event-ticket certification review treats a media co-producer as a secondary
-// reseller, which is the profile the certificate is designed to catch.
-const PARTNERS = [
-  { name: "Beauty Without Cruelty (BWC)", role: "Anchor", logo: IMAGES.partners?.bwc as string | undefined },
-  { name: "G.A.R.D.", role: "Campaign partner", logo: undefined },
-  { name: "Vegan Streetfood", role: "Food truck on the day", logo: undefined },
-  { name: "Omni Wellness Media", role: "Organiser & promoter", logo: IMAGES.logos.omniPrimary },
-  { name: "Travel and Tours Cape Town", role: "Campaign partner", logo: IMAGES.partners?.travelTours as string | undefined },
-];
 
 const track = (event: string, params: Record<string, unknown> = {}) => {
   const w = window as any;
@@ -197,86 +49,88 @@ const track = (event: string, params: Record<string, unknown> = {}) => {
 };
 
 /**
- * The trackable conversion for this event: the click through to Quicket.
- * Purchases complete on Quicket's domain. Quicket confirmed on 27 Jul that GA4
- * (G-X9DQ4DEHNB) can be connected to the event's details/checkout/completed
- * stages, and The Masque approved it in writing on 29 Jul — once that is live,
- * real purchases become visible and this click becomes a mid-funnel signal
- * rather than the terminal one.
- *
- * NOTE: trackAdsConversion currently no-ops into a GA4-only event because
- * ADS_CONVERSION_LABELS.quicket_ticket_click is still "" in src/lib/googleAds.ts.
- * The GA4 event `ads_quicket_ticket_click` DOES fire and can be imported as a
- * conversion in Google Ads today.
+ * NOTE: ADS_CONVERSION_LABELS.quicket_ticket_click is still "" in
+ * src/lib/googleAds.ts, so this reports to GA4 only. The GA4 event
+ * `ads_quicket_ticket_click` fires and can be imported as a Google Ads
+ * conversion today; pasting the label lights up the direct path.
  */
 const trackQuicket = (from: string) => {
   track("quicket_click", { from });
   trackAdsConversion("quicket_ticket_click", { value: 150, currency: "ZAR" });
 };
 
-/** Props shared by every element that navigates to Quicket. */
-const quicketLinkProps = (from: string) => ({
+const quicketProps = (from: string) => ({
   href: QUICKET_URL,
   target: "_blank",
   rel: "noopener",
   onClick: () => trackQuicket(from),
 });
 
-/**
- * Owns its own clock so the minute tick re-renders one <p> instead of the
- * whole 500-line page. Real date, real urgency, no false scarcity.
- */
-const CountdownPill = () => {
+/* ---------------------------------------------------------------- countdown */
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const Countdown = () => {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const t = window.setInterval(() => setNow(Date.now()), 60_000);
-    return () => window.clearInterval(t);
+    // Stop ticking while the tab is hidden — a 1s interval on a backgrounded
+    // marketing page is pure battery cost on the 85%-Android audience.
+    let id: number | undefined;
+    const start = () => { if (id === undefined) id = window.setInterval(() => setNow(Date.now()), 1000); };
+    const stop = () => { if (id !== undefined) { window.clearInterval(id); id = undefined; } };
+    const onVis = () => (document.hidden ? stop() : (setNow(Date.now()), start()));
+    start();
+    document.addEventListener("visibilitychange", onVis);
+    return () => { stop(); document.removeEventListener("visibilitychange", onVis); };
   }, []);
 
-  const diff = EVENT_START_MS - now;
-  if (diff <= 0) return null;
-
-  const days = Math.floor(diff / 86_400_000);
-  const hours = Math.floor((diff % 86_400_000) / 3_600_000);
-  const mins = Math.floor((diff % 3_600_000) / 60_000);
+  const d = Math.max(0, EVENT_START_MS - now);
+  const units = [
+    { v: Math.floor(d / 864e5), l: "Days" },
+    { v: Math.floor(d / 36e5) % 24, l: "Hours" },
+    { v: Math.floor(d / 6e4) % 60, l: "Minutes" },
+    { v: Math.floor(d / 1e3) % 60, l: "Seconds" },
+  ];
 
   return (
-    <p
-      className="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-500/10 border border-rose-500/20 px-4 py-1.5 text-sm font-medium text-rose-700 dark:text-rose-300 pointer-events-none"
-      aria-live="off"
-    >
-      <CalendarDays className="h-4 w-4" aria-hidden="true" />
-      {days}d {hours}h {mins}m until doors open
-    </p>
+    <div className="mt-9 flex flex-wrap gap-3" aria-label="Countdown to the premiere">
+      {units.map((u) => (
+        <div key={u.l} className="w-[78px] rounded-xl border border-[rgba(240,217,168,.22)] bg-[rgba(249,245,240,.05)] px-0 pt-3 pb-2.5 text-center">
+          <b className="block font-wwpl-display font-semibold text-[30px] leading-none text-wwpl-goldLight tabular-nums">
+            {pad(u.v)}
+          </b>
+          <span className="mt-1 block font-wwpl-cond font-light text-[10.5px] tracking-[.22em] uppercase text-[rgba(249,245,240,.55)]">
+            {u.l}
+          </span>
+        </div>
+      ))}
+    </div>
   );
 };
 
+/* ------------------------------------------------------------------- video */
+
 /**
- * Click-to-load video. Renders the poster + a real <button> until the user asks
- * for it, then mounts the Drive iframe. The trailer used to be a bare black
- * rectangle under a "Watch the trailer" heading — the single largest
- * tappable-but-inert surface on the page — and it pulled ~0.5-1MB of Drive
- * player JS on scroll. Nothing is fetched now until someone taps.
+ * Click-to-load: nothing is fetched from Drive until someone asks for it.
  *
- * Every clip on this page reuses this, so adding clips costs zero bytes on
- * load no matter how many there are.
+ * The poster is the BUNDLED still, not a Drive thumbnail. Drive was tried and
+ * one tile rendered black: for a file it cannot thumbnail (not link-shared yet,
+ * or still processing) Drive answers 200 with an empty image rather than an
+ * error, so the <img> onError fallback never fires and there is nothing to
+ * catch. The bundled crops are guaranteed to exist, are already distinct per
+ * clip, are sharp, and are on-brand — so the tile is always right regardless of
+ * Drive's sharing state. Drive is used for playback only.
  */
-const VideoFacade = ({
-  fileId,
-  label,
-  event,
-}: {
-  fileId: string;
-  label: string;
-  event: string;
-}) => {
+const VideoTile = ({
+  fileId, still, label, kicker, main = false,
+}: { fileId: string; still: string; label: string; kicker?: string; main?: boolean }) => {
   const [playing, setPlaying] = useState(false);
 
   if (playing) {
     return (
       <iframe
-        src={`https://drive.google.com/file/d/${fileId}/preview`}
+        src={drivePreview(fileId)}
         title={label}
         className="absolute inset-0 h-full w-full"
         allow="autoplay; fullscreen"
@@ -288,37 +142,105 @@ const VideoFacade = ({
   return (
     <button
       type="button"
-      onClick={() => {
-        track(event, { fileId });
-        setPlaying(true);
-      }}
-      className="group absolute inset-0 h-full w-full cursor-pointer overflow-hidden"
+      onClick={() => { track(main ? "trailer_play" : "clip_play", { fileId }); setPlaying(true); }}
+      className="group absolute inset-0 h-full w-full overflow-hidden bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wwpl-gold"
       aria-label={`Play ${label}`}
     >
-      <SmartImage
-        src="/events/wwpl-square.webp"
-        fallback="/events/wwpl-square.png"
-        category="community"
+      <img
+        src={still}
         alt=""
         aria-hidden="true"
-        className="h-full w-full object-cover opacity-60 transition-opacity group-hover:opacity-75"
+        loading="lazy"
+        decoding="async"
+        className={cn(
+          "h-full w-full object-cover transition-opacity duration-300",
+          main ? "opacity-[.85] group-hover:opacity-100" : "opacity-80 group-hover:opacity-100"
+        )}
       />
-      <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-rose-600 text-white shadow-lg transition-transform group-hover:scale-105">
-          <Play className="h-7 w-7 translate-x-0.5" aria-hidden="true" fill="currentColor" />
-        </span>
-        <span className="rounded-full bg-black/60 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
-          {label}
-        </span>
+      <span
+        className={cn(
+          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full text-wwpl-plum",
+          "motion-safe:transition-transform group-hover:scale-[1.06]",
+          main
+            ? "h-[84px] w-[84px] bg-[rgba(217,179,108,.95)] text-[26px] shadow-[0_8px_32px_rgba(0,0,0,.4)] motion-safe:animate-wwpl-pulse"
+            : "h-[34px] w-[34px] bg-[rgba(0,0,0,.55)] border border-[rgba(240,217,168,.5)] text-wwpl-goldLight text-[13px]"
+        )}
+        aria-hidden="true"
+      >
+        <span className="pl-1.5">▶</span>
       </span>
+      {kicker && (
+        <span className="absolute bottom-2.5 left-3 font-wwpl-cond text-[12px] tracking-[.18em] uppercase text-wwpl-goldLight [text-shadow:0_1px_8px_rgba(0,0,0,.6)]">
+          {kicker}
+        </span>
+      )}
     </button>
   );
 };
 
+/* ------------------------------------------------------------------- sticky */
+
+const StickyBar = () => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    // Shown once the hero has scrolled past, hidden whenever the real ticket
+    // CTA or the footer is on screen — never compete with the actual CTA.
+    const hero = document.getElementById("hero");
+    const tickets = document.getElementById("tickets");
+    const footer = document.getElementById("site-footer");
+    let heroPast = false;
+    let ctaVisible = false;
+
+    const sync = () => setShow(heroPast && !ctaVisible);
+
+    const heroIo = new IntersectionObserver(
+      ([e]) => { heroPast = e.boundingClientRect.top < 0 && !e.isIntersecting; sync(); },
+      { rootMargin: "-80px 0px 0px 0px" }
+    );
+    const ctaIo = new IntersectionObserver(
+      (entries) => {
+        ctaVisible = entries.some((e) => e.isIntersecting);
+        sync();
+      },
+      { threshold: 0.01 }
+    );
+
+    if (hero) heroIo.observe(hero);
+    if (tickets) ctaIo.observe(tickets);
+    if (footer) ctaIo.observe(footer);
+    return () => { heroIo.disconnect(); ctaIo.disconnect(); };
+  }, []);
+
+  return (
+    <div
+      className={cn(
+        "fixed inset-x-0 bottom-0 z-[60] bg-[rgba(42,10,30,.96)] backdrop-blur-[10px] shadow-[0_-10px_34px_rgba(21,32,31,.3)]",
+        "transition-transform duration-[350ms] ease-out pb-[env(safe-area-inset-bottom)]",
+        show ? "translate-y-0" : "translate-y-[110%]"
+      )}
+    >
+      <div className="mx-auto flex max-w-[1120px] items-center justify-between gap-4 px-5 py-3 sm:px-8">
+        <div className="min-w-0">
+          <b className="block font-wwpl-display text-[17px] leading-tight text-white">
+            Celebrating Women Who Protect Life
+          </b>
+          <span className="hidden text-[14px] text-[rgba(249,245,240,.85)] lg:block">
+            Mon 10 Aug 2026 · The Masque Theatre · from R150
+          </span>
+        </div>
+        <BtnLink {...quicketProps("sticky-bar")} variant="gold" className="shrink-0 whitespace-nowrap px-[22px] py-2.5">
+          Get tickets
+        </BtnLink>
+      </div>
+    </div>
+  );
+};
+
+/* --------------------------------------------------------------------- page */
+
 const StunningPigs = () => {
-  const [optinEmail, setOptinEmail] = useState("");
-  const [optinBusy, setOptinBusy] = useState(false);
-  const [emailFocused, setEmailFocused] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const seo = useMemo(
     () => ({
@@ -327,19 +249,35 @@ const StunningPigs = () => {
         "The Cape Town premiere of the Stunning Pigs documentary, on Women's Day at The Masque Theatre, Muizenberg. Three sessions — film, food, voices and awards. R150 per session, assigned seating.",
       url: PAGE_URL,
       canonical: PAGE_URL,
-      image: POSTER_URL,
+      image: OG_IMAGE,
       type: "article",
     }),
     []
   );
   useSEO(seo);
 
-  // schema.org/Event — the cheapest machine-readable proof that R150 ZAR is the
-  // face value and that Omni Wellness Media is the organiser, which is exactly
-  // what the Google Ads event-ticket certification review looks for. Also the
-  // entry ticket to event rich results, where every auction competitor
-  // (viagogo, stubhub, ticketmaster) already appears.
+  useEffect(() => { track("view_event"); }, []);
+
   useEffect(() => {
+    const PLACE = {
+      "@type": "Place",
+      name: VENUE_NAME,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "37 Main Road",
+        addressLocality: "Muizenberg",
+        addressRegion: "Western Cape",
+        postalCode: "7945",
+        addressCountry: "ZA",
+      },
+    };
+    const offer = {
+      "@type": "Offer",
+      price: "150",
+      priceCurrency: "ZAR",
+      availability: "https://schema.org/InStock",
+      url: QUICKET_URL,
+    };
     injectJSONLD(
       {
         "@context": "https://schema.org",
@@ -350,41 +288,27 @@ const StunningPigs = () => {
         endDate: "2026-08-10T16:00:00+02:00",
         eventStatus: "https://schema.org/EventScheduled",
         eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-        image: [POSTER_URL],
+        image: [OG_IMAGE, `${ORIGIN}${POSTER}`],
         url: PAGE_URL,
-        location: EVENT_PLACE,
+        location: PLACE,
         organizer: {
           "@type": "Organization",
-          "@id": "https://omniwellnessmedia.co.za/#organization",
+          "@id": `${ORIGIN}/#organization`,
           name: "Omni Wellness Media",
-          url: "https://omniwellnessmedia.co.za",
+          url: ORIGIN,
         },
-        offers: {
-          "@type": "Offer",
-          price: "150",
-          priceCurrency: "ZAR",
-          availability: "https://schema.org/InStock",
-          url: QUICKET_URL,
-          validFrom: "2026-07-13T00:00:00+02:00",
-          category: "primary",
-        },
+        offers: { ...offer, validFrom: "2026-07-13T00:00:00+02:00", category: "primary" },
         subEvent: SESSIONS.map((s) => ({
           "@type": "Event",
           name: s.title,
-          startDate: s.startUTC,
-          endDate: s.endUTC,
+          startDate: s.startISO,
+          endDate: s.endISO,
           eventStatus: "https://schema.org/EventScheduled",
           eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-          location: EVENT_PLACE,
+          location: PLACE,
           url: PAGE_URL,
-          image: [POSTER_URL],
-          offers: {
-            "@type": "Offer",
-            price: "150",
-            priceCurrency: "ZAR",
-            availability: "https://schema.org/InStock",
-            url: QUICKET_URL,
-          },
+          image: [OG_IMAGE],
+          offers: offer,
         })),
       },
       "event-jsonld"
@@ -392,509 +316,474 @@ const StunningPigs = () => {
     return () => document.getElementById("event-jsonld")?.remove();
   }, [seo.description]);
 
-  useEffect(() => {
-    track("view_event");
-  }, []);
-
-  const shareEvent = async (channel: "whatsapp" | "facebook" | "copy") => {
-    track("share_event", { channel });
-    const text = `${CAL.title} — ${EVENT_DATE_DISPLAY}. Tickets R150 on Quicket: ${QUICKET_URL}`;
-    if (channel === "whatsapp") {
-      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
-    } else if (channel === "facebook") {
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(PAGE_URL)}`, "_blank", "noopener,noreferrer");
-    } else {
-      try {
-        await navigator.clipboard.writeText(PAGE_URL);
-        toast.success("Link copied");
-      } catch {
-        toast.error("Couldn't copy — long-press the address bar instead.");
-      }
-    }
-  };
-
-  const submitOptin = async () => {
-    const email = optinEmail.trim();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-    setOptinBusy(true);
-    try {
-      const { error } = await supabase.functions.invoke("subscribe-newsletter", {
-        body: { email, source: "stunningpigs", interests: ["stunning-pigs"] },
-      });
-      if (error) throw error;
-      toast.success("You're on the list — we'll keep you posted.");
-      setOptinEmail("");
-    } catch {
-      toast.error("Couldn't sign you up just now — please try again.");
-    } finally {
-      setOptinBusy(false);
-    }
-  };
+  const wrap = "mx-auto w-full max-w-[1120px] px-5 sm:px-8";
 
   return (
-    <div className="min-h-screen bg-background">
-      <UnifiedNavigation />
+    <div className="min-h-screen bg-wwpl-creamSoft font-sans text-wwpl-ink [scroll-behavior:smooth]">
+      {/* 1 — Header. The handoff specified brand lockup + breadcrumb only, on
+          the reasoning that a campaign landing page should not leak clicks.
+          In review that read as the site having no navigation at all, so real
+          nav is back — but rendered in this page's own visual language rather
+          than pulling in the site chrome, and the ticket CTA stays the only
+          gold element so nothing competes with it. */}
+      <header className="border-b border-wwpl-line bg-white">
+        <div className={cn(wrap, "flex h-[68px] items-center justify-between gap-4")}>
+          <a href={ORIGIN} className="flex items-center gap-2.5 shrink-0" onClick={() => track("nav_home")}>
+            <img src="/events/wwpl/omni-icon.webp" alt="" aria-hidden="true"
+              width={36} height={36} className="h-9 w-9 rounded-full" />
+            <span className="whitespace-nowrap font-wwpl-display font-semibold text-[20px] tracking-[.01em] text-wwpl-ink">
+              Omni Wellness Media
+            </span>
+          </a>
 
-      {/* Hero — dignified, factual. No graphic imagery. */}
-      <section className="relative border-b border-border/50 bg-gradient-to-b from-rose-500/[0.06] via-background to-background">
-        <div className="container mx-auto px-4 py-16 sm:py-24 grid lg:grid-cols-2 gap-10 items-center">
+          <nav aria-label="Main" className="hidden items-center gap-6 lg:flex">
+            {SITE_NAV.map((n) => (
+              <a
+                key={n.label}
+                href={`${ORIGIN}${n.href}`}
+                onClick={() => track("nav_click", { to: n.href })}
+                className="text-[14px] text-wwpl-slate transition-colors hover:text-wwpl-goldDeep"
+              >
+                {n.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <p className="hidden text-[13px] text-wwpl-slate xl:block">
+              Events / <span className="font-medium text-wwpl-ink">Celebrating Women Who Protect Life</span>
+            </p>
+            <BtnButton
+              type="button"
+              variant="ghost"
+              aria-expanded={menuOpen}
+              aria-controls="wwpl-mobile-nav"
+              onClick={() => setMenuOpen((o) => !o)}
+              className="lg:hidden !px-3 !py-2 text-[14px]"
+            >
+              {menuOpen ? "Close" : "Menu"}
+            </BtnButton>
+          </div>
+        </div>
+
+        {menuOpen && (
+          <nav id="wwpl-mobile-nav" aria-label="Main" className="border-t border-wwpl-line bg-white lg:hidden">
+            <div className={cn(wrap, "flex flex-col py-2")}>
+              {SITE_NAV.map((n) => (
+                <a
+                  key={n.label}
+                  href={`${ORIGIN}${n.href}`}
+                  onClick={() => track("nav_click", { to: n.href })}
+                  className="border-b border-wwpl-line/60 py-3 text-[15px] text-wwpl-ink last:border-0"
+                >
+                  {n.label}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
+      </header>
+
+      {/* 2 — Hero */}
+      <section
+        id="hero"
+        className="relative overflow-hidden bg-[radial-gradient(120%_90%_at_78%_0%,#5A1A3E_0%,#43122E_38%,#2A0A1E_78%)]"
+      >
+        <span aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_72%_42%,rgba(217,179,108,.14),transparent_70%)]" />
+        <div className={cn(wrap, "relative grid items-center gap-12 py-16 lg:grid-cols-[1.1fr_.9fr] lg:gap-[72px] lg:py-[88px]")}>
           <div>
-            <Badge variant="outline" className="mb-5 border-rose-500/40 text-rose-700 dark:text-rose-400 pointer-events-none">
-              Cape Town Premiere · Women's Day, 10 August
-            </Badge>
-            <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl leading-[1.05] tracking-tight mb-4">
-              Celebrating Women<br />Who Protect Life
+            <Eyebrow rule className="text-[13px] tracking-[.28em] text-wwpl-rose">
+              Cape Town Premiere · Women's Day
+            </Eyebrow>
+            <h1 className="mt-5 font-wwpl-display font-semibold text-[clamp(40px,8vw,64px)] leading-[1.08] text-white">
+              Celebrating{" "}
+              <em className="italic bg-[linear-gradient(178deg,#F7E9C6,#EBCE93_45%,#C99A52_75%)] bg-clip-text text-transparent motion-safe:bg-[length:250%_auto] motion-safe:animate-wwpl-shimmer">
+                Women
+              </em>{" "}
+              Who Protect Life
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed max-w-xl mb-6">
+            <p className="mt-5 max-w-[46ch] text-[18px] leading-[1.7] text-[rgba(249,245,240,.82)]">
               One day at The Masque Theatre, Muizenberg — the Cape Town premiere of the{" "}
-              <em>Stunning Pigs</em> documentary, plus a live Q&amp;A, and the{" "}
-              <em>Voices for Women</em> awards.
+              <i className="text-wwpl-goldLight">Stunning Pigs</i> documentary, plus a live Q&amp;A and the{" "}
+              <i className="text-wwpl-goldLight">Voices for Women</i> showcase and awards.
             </p>
-            <div className="space-y-2 text-sm text-muted-foreground mb-6">
-              <a
-                href={GOOGLE_CAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => track("add_to_calendar_google", { from: "hero-date" })}
-                className="flex items-center gap-2 hover:text-foreground transition-colors"
-              >
-                <CalendarDays className="h-4 w-4 text-rose-500 shrink-0" aria-hidden="true" />
-                {EVENT_DATE_DISPLAY}
-              </a>
-              <a
-                href={VENUE_MAPS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => track("venue_map_open", { from: "hero-address" })}
-                className="flex items-center gap-2 hover:text-foreground transition-colors"
-              >
-                <MapPin className="h-4 w-4 text-rose-500 shrink-0" aria-hidden="true" />
-                The Masque Theatre, 37 Main Road, Muizenberg
-              </a>
-              <p className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-rose-500 shrink-0" aria-hidden="true" />
-                Three sessions · 10:00, 12:00 &amp; 14:00 · assigned seating
-              </p>
+
+            <div className="mt-8 grid gap-3.5">
+              {[
+                { k: "Date", v: EVENT_DATE_DISPLAY },
+                { k: "Venue", v: `${VENUE_NAME}, ${VENUE_ADDRESS}` },
+                { k: "Sessions", v: "10:00 · 12:00 · 14:00 — assigned seating" },
+              ].map((f) => (
+                <div key={f.k} className="flex items-baseline gap-3.5">
+                  <span className="w-[76px] shrink-0 font-wwpl-cond text-[12px] tracking-[.22em] uppercase text-wwpl-gold">
+                    {f.k}
+                  </span>
+                  <span className="text-[15.5px] text-[rgba(249,245,240,.9)]">{f.v}</span>
+                </div>
+              ))}
             </div>
 
-            {/* Primary CTA sits directly under the facts — the amenities row,
-                countdown and calendar buttons used to live above it and pushed
-                it below the fold on every common Android viewport. */}
-            <div className="flex flex-wrap gap-3">
-              <Button size="lg" asChild className="!bg-none !bg-rose-600 hover:!bg-rose-700 text-white whitespace-normal">
-                <a {...quicketLinkProps("hero")}>
-                  <Ticket className="h-4 w-4 mr-2" aria-hidden="true" />Get tickets — R150 a session
-                </a>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <a href="#trailer" onClick={() => track("nav_trailer")}>
-                  Watch the trailer <ArrowDown className="h-4 w-4 ml-2" aria-hidden="true" />
-                </a>
-              </Button>
+            <div className="mt-10 flex flex-wrap gap-3.5">
+              <BtnLink {...quicketProps("hero")} variant="gold">Get tickets — from R150</BtnLink>
+              <BtnLink href="#trailer" variant="ghostLight" onClick={() => track("nav_trailer")}>
+                Watch the trailer
+              </BtnLink>
             </div>
-            <p className="mt-3 text-sm">
-              <span className="font-medium text-foreground">R150 per session. Book one, two or all three.</span>{" "}
-              <span className="text-muted-foreground">
-                Assigned seating, sold by Quicket — The Masque Theatre's official ticketing partner.
-              </span>
+
+            <p className="mt-4 max-w-[52ch] text-[13px] leading-relaxed text-[rgba(249,245,240,.55)]">
+              R150 per session. Book one, two or all three. Sold securely by Quicket — The Masque
+              Theatre's official ticketing partner.
             </p>
+
+            <Countdown />
           </div>
 
-          {/* Official event artwork. WebP first (212KB) with the original PNG
-              (673KB) as SmartImage's next fallback link, so ancient browsers
-              still get a poster. Both are cached immutably — see netlify.toml,
-              where they are listed by exact filename because /events/* also
-              matches the SPA route for this very page.
-
-              Deliberately NOT eager: below `lg` the grid stacks and the poster
-              sits several hundred pixels below the fold, so eager-loading it
-              only stole bandwidth from the text paint that actually is the LCP
-              element for the 93% of sessions on a phone.
-
-              It is also a link. A full-bleed event flyer is the most natural
-              thing on the page to tap, and until now tapping it did nothing. */}
-          <a
-            {...quicketLinkProps("hero-poster")}
-            className="group block rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
-          >
-            <SmartImage
-              src="/events/wwpl-square.webp"
-              fallback="/events/wwpl-square.png"
-              category="community"
-              alt="Celebrating Women Who Protect Life — official event poster: Monday 10 August 2026 at The Masque Theatre, Muizenberg. Tickets from R150 on Quicket."
-              aspectRatio="1 / 1"
-              className="rounded-3xl border border-border/60 shadow-lg w-full object-cover transition-transform group-hover:scale-[1.01]"
+          {/* Poster is the LCP element on desktop; eager + high priority, and
+              preloaded from the prerendered shell. */}
+          <div className="mx-auto w-full max-w-[420px] lg:max-w-none">
+            <img
+              src={POSTER}
+              alt="Celebrating Women Who Protect Life — official event artwork: Monday 10 August 2026 at The Masque Theatre, Muizenberg. Tickets from R150."
+              width={800}
+              height={800}
+              fetchPriority="high"
+              decoding="async"
+              className="w-full rounded-2xl shadow-wwpl-lg [box-shadow:0_12px_40px_rgba(42,10,30,.18),0_30px_80px_rgba(42,10,30,.12),0_0_90px_rgba(217,179,108,.22)] motion-safe:animate-wwpl-float"
             />
-          </a>
+          </div>
         </div>
       </section>
 
-      {/* Trailer — moved directly under the hero. It is the most persuasive
-          asset on the page and previously sat below a wall of text, past where
-          the average reader stops scrolling (73%). */}
-      <section id="trailer" className="scroll-mt-24 container mx-auto px-4 py-16 max-w-4xl">
-        <h2 className="font-heading text-3xl mb-6 text-center">Watch the trailer</h2>
-        <div className="relative w-full overflow-hidden rounded-2xl border border-border/60 bg-black" style={{ aspectRatio: "16 / 9" }}>
-          <VideoFacade fileId={TRAILER_FILE_ID} label="Play the trailer" event="trailer_play" />
-        </div>
-        <p className="text-center text-xs text-muted-foreground mt-3">
-          Trouble playing?{" "}
-          <a
-            href={`https://drive.google.com/file/d/${TRAILER_FILE_ID}/view`}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("trailer_fallback_link")}
-            className="underline underline-offset-2"
-          >
-            Watch on Google Drive
-          </a>
-        </p>
-      </section>
-
-      {/* Clips. Sits under the trailer so the strongest single asset still
-          leads. Each tile is click-to-load, so six clips add zero bytes to the
-          initial page — which matters on a page whose LCP problem was payload. */}
-      <section id="clips" className="scroll-mt-24 container mx-auto px-4 pb-16 max-w-5xl">
-        <h2 className="font-heading text-2xl mb-2 text-center">More from the film</h2>
-        <p className="text-sm text-muted-foreground text-center mb-8">
-          Short cuts from <em>Stunning Pigs</em>. Tap any one to play.
-        </p>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {CLIPS.map((c) => (
-            <div
-              key={c.id}
-              className="relative overflow-hidden rounded-2xl border border-border/60 bg-black"
-              style={{ aspectRatio: "16 / 9" }}
-            >
-              <VideoFacade fileId={c.id} label={c.label} event="clip_play" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Sessions */}
-      <section id="sessions" className="scroll-mt-24 bg-muted/30 border-y border-border/50">
-        <div className="container mx-auto px-4 py-16">
-          <h2 className="font-heading text-3xl mb-2">Three sessions, one day</h2>
-          <p className="text-base text-muted-foreground mb-8">
-            Each session is R150. Come for one, come for all three.
-          </p>
-          <div className="grid md:grid-cols-3 gap-5">
-            {SESSIONS.map((s) => {
-              const Icon = s.icon;
-              return (
-                /* The whole card is the target. It was a div with a small
-                   button inside, styled exactly like a selectable plan card —
-                   nine inert tap targets across the three cards. */
-                <a
-                  key={s.no}
-                  {...quicketLinkProps(`session-${s.no}`)}
+      {/* 3 — Sessions */}
+      <section id="sessions" className="scroll-mt-8 py-24">
+        <div className={wrap}>
+          <SecHead
+            eyebrow="The programme"
+            title="Three experiences, one day"
+            sub="Each session is R150. Come for one, come for all three."
+          />
+          <div className="grid items-stretch gap-6 md:grid-cols-3">
+            {SESSIONS.map((s, i) => (
+              <Reveal key={s.no} delayMs={(i % 3) * 90} className="h-full">
+                <article
                   className={cn(
-                    "group block rounded-2xl border bg-card p-6 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500",
-                    s.no === 2 ? "border-rose-500/60 ring-2 ring-rose-500/20 shadow-lg" : "border-border/60",
+                    "flex h-full flex-col rounded-[20px] p-8 sm:p-9 motion-safe:transition-all motion-safe:duration-[250ms] hover:-translate-y-1.5",
+                    s.feature
+                      ? "border border-wwpl-plum bg-[linear-gradient(165deg,#43122E,#2A0A1E)] text-wwpl-cream shadow-wwpl-lg"
+                      : "border border-wwpl-line bg-white shadow-[0_1px_2px_rgba(21,32,31,.05)] hover:shadow-wwpl-md"
                   )}
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center", s.no === 2 ? "bg-rose-500/15 text-rose-600 dark:text-rose-400" : "bg-muted text-muted-foreground")}>
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </div>
-                    <Badge variant={s.no === 2 ? "default" : "secondary"} className={cn("text-[10px]", s.no === 2 && "bg-rose-600 text-white")}>
-                      {s.no === 2 ? "Main feature" : `Session ${s.no}`}
-                    </Badge>
-                  </div>
-                  <p className="text-sm font-semibold text-rose-600 dark:text-rose-400 mb-1">{s.time}</p>
-                  <h3 className="font-heading text-lg leading-snug mb-2">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{s.description}</p>
-                  {/* Visual only — the anchor above is the hit target, so this
-                      must not create a nested interactive element. */}
-                  <span className="pointer-events-none flex h-11 w-full items-center justify-center rounded-lg bg-rose-600 text-sm font-medium text-white">
-                    <Ticket className="h-4 w-4 mr-2" aria-hidden="true" />Book this session — R150
+                  {s.feature && (
+                    <span className="mb-[18px] self-start rounded-full bg-wwpl-gold px-3 py-[5px] font-wwpl-cond text-[11px] tracking-[.22em] uppercase text-wwpl-plum">
+                      Main feature
+                    </span>
+                  )}
+                  <span className="mb-5 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-[rgba(217,179,108,.45)] bg-wwpl-plum">
+                    <img src={s.icon} alt="" aria-hidden="true" loading="lazy" decoding="async"
+                      className="h-full w-full scale-[1.12] object-cover" />
                   </span>
-                </a>
-              );
-            })}
+                  <span className={cn("font-wwpl-cond font-medium text-[15px] tracking-[.14em]",
+                    s.feature ? "text-wwpl-gold" : "text-wwpl-goldDeep")}>
+                    {s.time}
+                  </span>
+                  <h3 className={cn("mt-3 font-wwpl-display font-semibold text-[26px] leading-tight",
+                    s.feature ? "text-white" : "text-wwpl-ink")}>
+                    {s.title}
+                  </h3>
+                  <p className={cn("mb-7 mt-3 flex-1 text-[15px] leading-relaxed",
+                    s.feature ? "text-[rgba(249,245,240,.75)]" : "text-wwpl-slate")}>
+                    {s.description}
+                  </p>
+                  <BtnLink {...quicketProps(`session-${s.no}`)} variant={s.feature ? "gold" : "ghost"}
+                    className="self-start text-[14px]">
+                    {s.cta}
+                  </BtnLink>
+                </article>
+              </Reveal>
+            ))}
           </div>
 
-          {/* Full-day access. The email-for-a-code mechanism is the only one
-              Quicket's seated configuration can support safely (confirmed
-              27 Jul), so it stays — but it was a two-word inline mailto in
-              grey footnote type. Now a real 44px+ control, tracked, and it
-              names the R450 it is beating so the three R150 buttons above
-              stop reading as an unexplained triple charge.
-              The code itself is never rendered. */}
-          <div className="mt-8 mx-auto max-w-2xl rounded-2xl border border-border/60 bg-card p-6 text-center">
-            <h3 className="font-heading text-lg mb-2">Doing the whole day?</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Booking all three sessions separately comes to R450. We hold a lower
-              full-day rate for people coming for the full programme — email us and
-              we'll send your code before you book.
+          {/* Full-day: the code is issued by email and never printed here. */}
+          <Reveal className="mx-auto mt-12 max-w-[680px] rounded-[20px] border border-wwpl-line bg-wwpl-cream p-8 text-center sm:px-10">
+            <h3 className="font-wwpl-display font-semibold text-[22px] text-wwpl-ink">Doing the whole day?</h3>
+            <p className="mx-auto mt-3 max-w-[56ch] text-[14.5px] leading-relaxed text-wwpl-slate">
+              Booking all three sessions separately comes to R450. We hold a lower full-day rate for
+              people coming for the full programme — email us and we'll send your code before you book.
             </p>
-            <Button variant="outline" size="lg" asChild className="w-full sm:w-auto whitespace-normal">
-              <a
-                href={`mailto:${CONTACT_EMAIL}?subject=Full-day%20access%20—%20Celebrating%20Women%20Who%20Protect%20Life`}
-                onClick={() => track("fullday_code_request")}
-              >
-                <Mail className="h-4 w-4 mr-2" aria-hidden="true" />Email us for full-day access
-              </a>
-            </Button>
-            <p className="mt-3 text-xs text-muted-foreground">
-              Or write to <span className="font-medium">{CONTACT_EMAIL}</span> — we reply within one working day.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* About — factual framing */}
-      <section id="about" className="scroll-mt-24 container mx-auto px-4 py-16 max-w-3xl">
-        <h2 className="font-heading text-3xl mb-6">Why this day matters</h2>
-        <div className="space-y-4 text-muted-foreground leading-relaxed">
-          <p>
-            <em>Stunning Pigs</em> is a documentary examining the use of high-concentration
-            CO2 gas stunning of pigs. The film presents what happens inside gas-stunning
-            systems factually and without sensationalism, and asks a simple public
-            question: do current practices meet the standard of humane treatment South
-            Africans expect?
-          </p>
-          <p>
-            The premiere is followed by a public Q&amp;A with the Beauty Without Cruelty
-            campaign and G.A.R.D. — an open, respectful conversation about achievable,
-            more humane standards. This is a public education event: no graphic footage
-            is used in any of our promotion, and the day is designed to inform, not to shock.
-          </p>
-          <p>
-            Held on Women's Day, the programme celebrates the women leading this work —
-            opening with <em>What Feeds Us</em> and closing with the <em>Voices for
-            Women</em> showcase and awards ceremony.
-          </p>
-        </div>
-      </section>
-
-      {/* Buying with confidence. Two jobs: answer the cold visitor's "who are
-          you and why am I being sent to a domain I don't know", and give the
-          Google Ads event-ticket certification reviewer the explicit
-          organiser / face-value / no-markup statements they look for. The page
-          previously carried none of this. */}
-      <section className="bg-muted/30 border-y border-border/50">
-        <div className="container mx-auto px-4 py-16 max-w-3xl">
-          <h2 className="font-heading text-2xl mb-6 text-center">Buying with confidence</h2>
-          <div className="grid sm:grid-cols-3 gap-6 text-sm">
-            <div>
-              <ShieldCheck className="h-5 w-5 text-rose-500 mb-2" aria-hidden="true" />
-              <h3 className="font-medium mb-1 text-foreground">This is the official event page</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                The day is organised and promoted by Omni Wellness Media, a Cape Town
-                production company, in partnership with Beauty Without Cruelty and
-                G.A.R.D., and hosted at The Masque Theatre in Muizenberg.
-              </p>
-            </div>
-            <div>
-              <Ticket className="h-5 w-5 text-rose-500 mb-2" aria-hidden="true" />
-              <h3 className="font-medium mb-1 text-foreground">Face value, no markup</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                R150 per session is the face value set for this event. Omni Wellness
-                Media is not a ticket reseller and adds no booking fee or markup.
-              </p>
-            </div>
-            <div>
-              <ExternalLink className="h-5 w-5 text-rose-500 mb-2" aria-hidden="true" />
-              <h3 className="font-medium mb-1 text-foreground">Why you finish on Quicket</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                The Masque sells its seats through Quicket, its official ticketing
-                partner. You choose your exact seat there and your ticket arrives by
-                email. Entry, refund and exchange conditions are governed by Quicket's
-                terms for this event.
-              </p>
-            </div>
-          </div>
-          <p className="mt-8 text-center text-xs text-muted-foreground">
-            Omni Wellness Media · Cape Town, South Africa · +27 74 831 5961 ·{" "}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="underline underline-offset-2">{CONTACT_EMAIL}</a>
-          </p>
-        </div>
-      </section>
-
-      {/* Book — the single conversion surface. Nothing else interactive lives
-          in this section; the share row and newsletter moved below so they
-          stop competing at the decision moment. */}
-      <section id="tickets" className="scroll-mt-24 container mx-auto px-4 py-16">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="font-heading text-3xl mb-3">Get your seat</h2>
-          <p className="text-muted-foreground mb-8">
-            R150 per session with assigned seating, sold securely through Quicket —
-            The Masque Theatre's official ticketing partner.
-          </p>
-          <Button size="lg" asChild className="!bg-none !bg-rose-600 hover:!bg-rose-700 text-white text-base px-8 whitespace-normal">
-            <a {...quicketLinkProps("tickets-section")}>
-              <Ticket className="h-5 w-5 mr-2" aria-hidden="true" />Choose your seats
-              <ExternalLink className="h-4 w-4 ml-2" aria-hidden="true" />
-            </a>
-          </Button>
-          <p className="mt-4 text-xs text-muted-foreground">
-            Opens Quicket in a new tab · card &amp; instant EFT · tickets emailed instantly
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-2 text-sm">
-            <Button variant="ghost" size="sm" asChild className="text-muted-foreground">
-              <a
-                href={GOOGLE_CAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => track("add_to_calendar_google", { from: "tickets" })}
-              >
-                <CalendarPlus className="h-4 w-4 mr-1.5" aria-hidden="true" />Google Calendar
-              </a>
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => { track("add_to_calendar_ics"); downloadIcs(); }}
-              className="text-muted-foreground"
+            <BtnLink
+              variant="ink"
+              className="mt-6"
+              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Full-day access — Celebrating Women Who Protect Life")}`}
+              onClick={() => track("fullday_code_request")}
             >
-              <CalendarPlus className="h-4 w-4 mr-1.5" aria-hidden="true" />Apple / Outlook (.ics)
-            </Button>
-          </div>
-          <div className="mt-4 flex justify-center">
-            <CountdownPill />
-          </div>
+              Email us for full-day access
+            </BtnLink>
+          </Reveal>
         </div>
       </section>
 
-      {/* Getting there. The Maps iframe is gone: it was ~0.6-0.9MB of
-          third-party payload and tiles for a pre-lander that only needs a
-          link, and on Android this deep-links straight into the Maps app. */}
-      <section id="venue" className="scroll-mt-24 bg-muted/30 border-y border-border/50">
-        <div className="container mx-auto px-4 py-16 max-w-3xl text-center">
-          <h2 className="font-heading text-2xl mb-2">Getting there</h2>
-          <p className="text-sm text-muted-foreground mb-6">
-            The Masque Theatre, 37 Main Road, Muizenberg
-          </p>
-          <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground mb-6">
-            <span className="flex items-center gap-2"><Accessibility className="h-4 w-4 text-rose-500 shrink-0" aria-hidden="true" />Wheelchair access</span>
-            <span className="flex items-center gap-2"><GlassWater className="h-4 w-4 text-rose-500 shrink-0" aria-hidden="true" />Licensed bar</span>
-            <span className="flex items-center gap-2"><Utensils className="h-4 w-4 text-rose-500 shrink-0" aria-hidden="true" />Vegan Streetfood truck</span>
-          </p>
-          <Button variant="outline" size="lg" asChild>
-            <a
-              href={VENUE_MAPS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => track("venue_map_open", { from: "venue-section" })}
-            >
-              <MapPin className="h-4 w-4 mr-2" aria-hidden="true" />Open in Google Maps
-            </a>
-          </Button>
-        </div>
-      </section>
-
-      {/* Partners */}
-      <section className="container mx-auto px-4 py-16">
-        <h2 className="font-heading text-2xl text-center mb-2">Presented with</h2>
-        <p className="text-xs text-muted-foreground text-center mb-10">
-          Hosted at The Masque Theatre — @masquetheatresa
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 max-w-4xl mx-auto">
-          {PARTNERS.map((p) => (
-            <div key={p.name} className="flex flex-col items-center gap-2 w-36 text-center">
-              {p.logo ? (
-                <img
-                  src={p.logo}
-                  alt={`${p.name} logo`}
-                  className="h-14 w-auto max-w-[120px] object-contain"
-                  loading="lazy"
-                  onError={(e) => { e.currentTarget.style.display = "none"; }}
-                />
-              ) : (
-                /* Plain heading type, not a rose pill. The pill version was
-                   the same colour family and shape as the live CTA buttons,
-                   so it read as a control and collected dead clicks. */
-                <div className="h-14 flex items-center justify-center px-2 font-heading text-base text-foreground">
-                  {p.name.replace(/ \(.*\)$/, "")}
+      {/* 4 — Trailer */}
+      <section id="trailer" className="scroll-mt-8 bg-wwpl-ink py-24">
+        <div className={wrap}>
+          <SecHead
+            tone="dark"
+            eyebrow="Watch"
+            title="The trailer"
+            sub="Two minutes from Stunning Pigs — no graphic footage is used in any of our promotion."
+          />
+          <Reveal className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg" >
+            <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
+              <VideoTile fileId={TRAILER_FILE_ID} still="/events/wwpl/motif-crowd.webp"
+                label="Stunning Pigs — official trailer" main />
+            </div>
+          </Reveal>
+          <div className="mt-6 grid gap-5 md:grid-cols-3">
+            {CLIPS.map((c, i) => (
+              <Reveal key={c.id} delayMs={(i % 3) * 90}>
+                <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: "16 / 9" }}>
+                  <VideoTile fileId={c.id} still={c.still} label={c.tag} kicker={c.tag} />
                 </div>
-              )}
-              <span className="text-xs font-medium leading-tight">{p.name}</span>
-              <span className="text-xs text-muted-foreground -mt-1">{p.role}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Share + updates opt-in — below the primary CTA by design. The opt-in
-          button is deliberately not rose: no non-Quicket action on this page
-          should wear the CTA colour. */}
-      <section className="bg-muted/30 border-y border-border/50">
-        <div className="container mx-auto px-4 py-14 max-w-xl text-center">
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-            <span className="w-full text-xs text-muted-foreground mb-1">Spread the word</span>
-            <Button variant="outline" size="sm" onClick={() => shareEvent("whatsapp")}>
-              <Share2 className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />WhatsApp
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => shareEvent("facebook")}>
-              <Share2 className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />Facebook
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => shareEvent("copy")} aria-label="Copy event link">
-              <Copy className="h-3.5 w-3.5 mr-1.5" aria-hidden="true" />Copy link
-            </Button>
+              </Reveal>
+            ))}
           </div>
-
-          <MessageCircle className="h-8 w-8 text-rose-500 mx-auto mb-4" aria-hidden="true" />
-          <h2 className="font-heading text-2xl mb-2">Stay close to the campaign</h2>
-          <p className="text-sm text-muted-foreground mb-6">
-            Programme updates, honouree announcements, and how to add your voice for
-            more humane standards.
-          </p>
-          {/* A real <form>, so the Android keyboard's Go key submits. It was a
-              div, which left that key doing nothing. */}
-          <form
-            onSubmit={(e) => { e.preventDefault(); submitOptin(); }}
-            className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto"
-          >
-            <Input
-              type="email"
-              placeholder="you@example.com"
-              aria-label="Email address for event updates"
-              autoComplete="email"
-              enterKeyHint="go"
-              className="h-12"
-              value={optinEmail}
-              onChange={(e) => setOptinEmail(e.target.value)}
-              onFocus={() => setEmailFocused(true)}
-              onBlur={() => setEmailFocused(false)}
-            />
-            <Button type="submit" variant="outline" disabled={optinBusy} className="h-12 shrink-0">
-              {optinBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Notify me"}
-            </Button>
-          </form>
         </div>
       </section>
 
-      {/* Sticky mobile CTA — the whole bar is one anchor. Previously ~70% of it
-          was inert text and only the small right-hand button converted, on the
-          surface that is on screen for almost the entire session.
-          It hides while the newsletter input has focus: on Android the
-          keyboard either pushes this bar on top of the field or drops it
-          behind the keyboard, and neither is useful mid-form. */}
-      <a
-        {...quicketLinkProps("sticky-bar")}
-        className={cn(
-          "fixed bottom-0 inset-x-0 z-40 sm:hidden border-t border-border bg-background/95 backdrop-blur px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] flex items-center justify-between gap-3",
-          emailFocused && "hidden"
-        )}
-      >
-        <span className="min-w-0">
-          <span className="block text-sm font-semibold truncate">From R150 · 10 August</span>
-          <span className="block text-xs leading-4 text-muted-foreground">Assigned seating on Quicket</span>
-        </span>
-        <span className="pointer-events-none flex h-11 shrink-0 items-center rounded-lg bg-rose-600 px-4 text-sm font-medium text-white">
-          <Ticket className="h-4 w-4 mr-1.5" aria-hidden="true" />Get tickets
-        </span>
-      </a>
-      {/* Clears the sticky bar (≈73px + safe area); the old h-16 left it
-          covering the last few pixels of the footer. */}
-      <div className="h-[calc(5rem+env(safe-area-inset-bottom))] sm:hidden" aria-hidden="true" />
+      {/* 5 — Why this day matters */}
+      <section className="py-24">
+        <div className={cn(wrap, "grid gap-9 lg:grid-cols-[.85fr_1.15fr] lg:gap-20 lg:items-start")}>
+          <Reveal>
+            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldDeep">About the day</Eyebrow>
+            <h2 className="mt-3 font-wwpl-display font-semibold text-[clamp(30px,5vw,42px)] leading-[1.12] text-wwpl-ink">
+              Why this day matters
+            </h2>
+          </Reveal>
+          <Reveal delayMs={90}>
+            <p className="font-wwpl-display text-[23px] font-medium leading-[1.5] text-wwpl-ink">
+              Stunning Pigs examines the use of high-concentration CO₂ gas stunning of pigs — and asks
+              a simple public question: do current practices meet the standard of humane treatment
+              South Africans expect?
+            </p>
+            <p className="mt-6 text-[16.5px] leading-[1.75] text-wwpl-inkSoft">
+              The premiere is followed by a public Q&amp;A with the Beauty Without Cruelty campaign and
+              G.A.R.D. — an open, respectful conversation about achievable, more humane standards. This
+              is a public education event: no graphic footage is used in any of our promotion, and the
+              day is designed to inform, not to shock.
+            </p>
+            <p className="mt-5 text-[16.5px] leading-[1.75] text-wwpl-inkSoft">
+              Held on Women's Day, the programme celebrates the women leading this work — opening with{" "}
+              <em>What Feeds Us</em> and closing with the <em>Voices for Women</em> showcase and awards
+              ceremony.
+            </p>
+            <div className="mt-6 border-l-2 border-wwpl-gold pl-5 text-[14.5px] leading-relaxed text-wwpl-slate">
+              Delicious vegan food is available for purchase on the day, from official vegan food
+              partner Vegan Streetfood.
+            </div>
+            <div className="mt-9 grid gap-5 sm:grid-cols-2">
+              <MosaicTile className="h-[236px]" src="/events/wwpl/motif-wheat.webp"
+                alt="Wheat and gold botanicals from the official artwork"
+                kicker="What Feeds Us"
+                caption="The day opens with the land, the food and the women who grow it." />
+              <MosaicTile className="h-[236px]" src="/events/wwpl/motif-food.webp"
+                alt="Plant-based menu from Vegan Streetfood" objectPosition="center 42%"
+                kicker="Vegan Streetfood"
+                caption="100% plant-powered, served all day at the theatre." />
+            </div>
+          </Reveal>
+        </div>
 
-      <Footer />
+        {/* Editorial mosaic */}
+        <div className={cn(wrap, "mt-16")}>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-6 md:gap-4 [grid-auto-rows:164px] md:[grid-auto-rows:208px]">
+            <MosaicTile className="col-span-2 row-span-2" src="/events/wwpl/motif-woman.webp"
+              alt="Woman in profile from the official artwork" objectPosition="center 30%"
+              kicker="Who protect life"
+              caption="One day at the theatre — a film, a conversation, and a stand for the animals we never see." />
+            <MosaicTile className="col-span-2" src="/events/wwpl/motif-singer.webp"
+              alt="Singer from the official artwork" objectPosition="center 22%"
+              kicker="Voices for Women" caption="Live voices, carrying the message beyond the screen." />
+            <MosaicTile className="row-span-2" src="/events/wwpl/motif-film.webp"
+              alt="Filmstrip from the official artwork"
+              kicker="The film" caption="Shot on farms and in the field." />
+            <MosaicTile className="row-span-2" src="/events/wwpl/motif-trophy.webp"
+              alt="Voices for Women award from the official artwork"
+              kicker="The awards" caption="Honouring the women who protect life." />
+            <MosaicTile className="col-span-2" src="/events/wwpl/motif-protea.webp"
+              alt="Proteas from the official artwork"
+              kicker="Cape Town premiere" caption="Informed, not shocked — that's how change begins." />
+          </div>
+        </div>
+      </section>
+
+      {/* 6 — Buying with confidence. Legally load-bearing; see file header. */}
+      <section className="border-y border-wwpl-line bg-wwpl-cream py-[88px]">
+        <div className={wrap}>
+          <SecHead eyebrow="Buying with confidence" title="The official event page" className="mb-16" />
+          <div className="grid gap-12 md:grid-cols-3 lg:gap-14">
+            {[
+              { n: "01", h: "Organised by Omni", p: "This day is organised and promoted by Omni Wellness Media, in partnership with Beauty Without Cruelty and G.A.R.D., and hosted at The Masque Theatre in Muizenberg." },
+              { n: "02", h: "Face value, no markup", p: "R150 per session is the face value set for this event. Omni Wellness Media is not a ticket reseller and adds no booking fee or markup." },
+              { n: "03", h: "You finish on Quicket", p: "The Masque sells its seats through Quicket, its official ticketing partner. You choose your exact seat there and your ticket arrives by email — all sales governed by Quicket's terms." },
+            ].map((c, i) => (
+              <Reveal key={c.n} delayMs={(i % 3) * 90}>
+                <span className="block font-wwpl-cond text-[13px] tracking-[.22em] text-wwpl-goldDeep">{c.n}</span>
+                <h3 className="mb-3 mt-4 font-wwpl-display font-semibold text-[23px] text-wwpl-ink">{c.h}</h3>
+                <p className="text-[15px] leading-relaxed text-wwpl-slate">{c.p}</p>
+              </Reveal>
+            ))}
+          </div>
+          <p className="mt-14 text-center text-[13.5px] text-wwpl-slate">
+            Omni Wellness Media · Cape Town, South Africa · {CONTACT_PHONE} ·{" "}
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-wwpl-goldDeep underline underline-offset-2">
+              {CONTACT_EMAIL}
+            </a>
+          </p>
+        </div>
+      </section>
+
+      {/* 7 — Tickets: the conversion band */}
+      <section id="tickets" className="scroll-mt-8 bg-[radial-gradient(110%_130%_at_50%_-20%,#5A1A3E,#2A0A1E_70%)] py-[104px] text-center text-wwpl-cream">
+        <div className={wrap}>
+          <Reveal>
+            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-rose">Tickets</Eyebrow>
+            <h2 className="mt-3 font-wwpl-display font-semibold text-[clamp(34px,6vw,46px)] leading-tight text-white">
+              Get your seat
+            </h2>
+            <p className="mx-auto mt-[18px] max-w-[52ch] text-[16px] leading-relaxed text-[rgba(249,245,240,.75)]">
+              Assigned seating, sold securely through Quicket — The Masque Theatre's official
+              ticketing partner. Card and instant EFT; tickets emailed instantly.
+            </p>
+            <p className="mt-5 font-wwpl-display italic text-[22px] text-wwpl-goldLight">
+              R150 per session · Monday 10 August 2026
+            </p>
+            <div className="mt-8 flex justify-center">
+              <BtnLink {...quicketProps("tickets-section")} variant="gold" className="whitespace-nowrap px-8 py-3.5 text-[16px]">
+                Choose your seats on Quicket
+              </BtnLink>
+            </div>
+            <div className="mt-7 flex flex-wrap justify-center gap-3">
+              <a href={GOOGLE_CAL_URL} target="_blank" rel="noopener noreferrer"
+                onClick={() => track("add_to_calendar_google")}
+                className="rounded-full border border-[rgba(249,245,240,.25)] px-[18px] py-2.5 text-[13.5px] text-[rgba(249,245,240,.7)] transition-colors hover:border-wwpl-gold hover:text-white">
+                ＋ Google Calendar
+              </a>
+              <button type="button" onClick={() => { track("add_to_calendar_ics"); downloadIcs(); }}
+                className="rounded-full border border-[rgba(249,245,240,.25)] px-[18px] py-2.5 text-[13.5px] text-[rgba(249,245,240,.7)] transition-colors hover:border-wwpl-gold hover:text-white">
+                ＋ Apple / Outlook (.ics)
+              </button>
+            </div>
+            <p className="mx-auto mt-7 max-w-[60ch] text-[13px] leading-relaxed text-[rgba(249,245,240,.5)]">
+              Opens Quicket in a new tab. Booking for a group? Assigned seating means you can sit
+              together — book in one order.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 8 — Petition: the page's second conversion goal */}
+      <section id="petition" className="scroll-mt-8 overflow-hidden border-y border-wwpl-line bg-wwpl-cream py-[100px]">
+        <div className={cn(wrap, "grid items-center gap-11 lg:grid-cols-[.95fr_1.05fr] lg:gap-[72px]")}>
+          <Reveal>
+            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldDeep">Take a stand</Eyebrow>
+            <h2 className="mt-3 font-wwpl-display font-semibold text-[clamp(30px,5vw,42px)] leading-[1.12] text-wwpl-ink">
+              Sign for humane standards
+            </h2>
+            <p className="mt-5 max-w-[52ch] text-[16.5px] leading-[1.75] text-wwpl-inkSoft">
+              You don't need a ticket to add your voice. Our petition asks South African regulators and
+              industry to review high-concentration CO₂ gas stunning and commit to achievable, more
+              humane alternatives. Every signature is presented with the campaign after the premiere.
+            </p>
+            <div className="mt-8 flex items-center gap-5 rounded-2xl bg-wwpl-plum p-5 sm:px-6">
+              <img src="/events/wwpl/motif-pig-heart.webp" alt="" aria-hidden="true" loading="lazy"
+                decoding="async" className="w-[150px] shrink-0 rounded-lg object-cover" />
+              <p className="font-wwpl-display italic text-[19px] leading-snug text-wwpl-goldLight">
+                "Informed, not shocked — that's how change begins."
+              </p>
+            </div>
+          </Reveal>
+          <Reveal delayMs={90}>
+            <PetitionForm onSigned={() => track("petition_signed")} />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 9 — Getting there */}
+      <section className="py-24 text-center">
+        <div className={wrap}>
+          <Reveal>
+            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldDeep">Getting there</Eyebrow>
+            <h2 className="mt-3 font-wwpl-display font-semibold text-[clamp(28px,4.5vw,36px)] text-wwpl-ink">
+              {VENUE_NAME}
+            </h2>
+            <p className="mx-auto mt-4 max-w-[48ch] text-[16px] leading-relaxed text-wwpl-slate">
+              {VENUE_ADDRESS} — on the Cape Town southern line, minutes from Muizenberg beach.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-x-7 gap-y-2 text-[14px] text-wwpl-slate">
+              {["Wheelchair access", "Licensed bar", "Vegan Streetfood truck on site"].map((a) => (
+                <span key={a} className="flex items-center gap-2 before:block before:h-[5px] before:w-[5px] before:rounded-full before:bg-wwpl-gold">
+                  {a}
+                </span>
+              ))}
+            </div>
+            <BtnLink variant="ink" className="mt-8" href={VENUE_MAPS_URL} target="_blank"
+              rel="noopener noreferrer" onClick={() => track("venue_map_open")}>
+              Open in Google Maps
+            </BtnLink>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* 10 — Presented with */}
+      <section className="border-t border-wwpl-line pb-[88px] pt-[72px] text-center">
+        <div className={wrap}>
+          <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-slate">Presented with</Eyebrow>
+          <div className="mt-11 flex flex-wrap items-start justify-center gap-x-14 gap-y-10">
+            {PARTNERS.map((p, i) => (
+              <Reveal key={p.name} delayMs={(i % 3) * 90} className="flex min-w-[120px] flex-col items-center gap-3">
+                <span className="flex min-h-[56px] items-center justify-center">
+                  {p.logo ? (
+                    <img src={p.logo} alt={p.name} loading="lazy" decoding="async"
+                      className={cn("max-h-14 max-w-[110px] object-contain", p.round && "rounded-full")} />
+                  ) : (
+                    <span className="whitespace-nowrap font-wwpl-display font-semibold text-[22px] text-wwpl-ink">
+                      {p.name}
+                    </span>
+                  )}
+                </span>
+                <small className="font-wwpl-cond text-[11.5px] tracking-[.1em] uppercase text-wwpl-slate">
+                  {p.role}
+                </small>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 11 — Footer */}
+      <footer id="site-footer" className="bg-wwpl-ink py-14 text-[rgba(246,241,232,.65)]">
+        <div className={cn(wrap, "flex flex-wrap items-center justify-between gap-6")}>
+          <span className="flex items-center gap-2.5">
+            <img src="/events/wwpl/omni-icon.webp" alt="" aria-hidden="true" width={32} height={32}
+              className="h-8 w-8 rounded-full bg-white" />
+            <b className="font-wwpl-display text-[18px] font-semibold text-wwpl-cream">Omni Wellness Media</b>
+          </span>
+          <nav className="flex flex-wrap gap-6 text-[13.5px]">
+            <a href={ORIGIN} className="transition-colors hover:text-wwpl-goldLight">Home</a>
+            <a href="#sessions" className="transition-colors hover:text-wwpl-goldLight">Programme</a>
+            <a href="#tickets" className="transition-colors hover:text-wwpl-goldLight">Tickets</a>
+            <a href="#petition" className="transition-colors hover:text-wwpl-goldLight">Petition</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="transition-colors hover:text-wwpl-goldLight">Contact</a>
+          </nav>
+          <p className="w-full text-[12.5px] text-[rgba(246,241,232,.4)]">
+            © 2026 Omni Wellness Media. Bridging wellness, culture and community as media from Cape
+            Town to the world.
+          </p>
+        </div>
+      </footer>
+
+      {/* 12 — Sticky ticket bar */}
+      <StickyBar />
     </div>
   );
 };

@@ -42,7 +42,8 @@ const dist = join(root, 'dist');
 const ORIGIN = 'https://omniwellnessmedia.co.za';
 const ROUTE = '/events/stunning-pigs';
 const PAGE_URL = `${ORIGIN}${ROUTE}`;
-const POSTER_URL = `${ORIGIN}/events/wwpl-square.png`;
+const POSTER_URL = `${ORIGIN}/events/wwpl/og-landscape.jpg`;
+const SQUARE_URL = `${ORIGIN}/events/wwpl/final-square.webp`;
 const QUICKET_URL =
   'https://www.quicket.co.za/events/386047-celebrating-women-who-protect-life-featuring-the-cape-town-premiere-of-stunning/';
 
@@ -87,7 +88,7 @@ const EVENT_JSONLD = {
   endDate: '2026-08-10T16:00:00+02:00',
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-  image: [POSTER_URL],
+  image: [POSTER_URL, SQUARE_URL],
   url: PAGE_URL,
   location: PLACE,
   organizer: {
@@ -117,28 +118,30 @@ const EVENT_JSONLD = {
  * reflow when React swaps in the real hero.
  */
 const SHELL = `
-      <div style="max-width:1180px;margin:0 auto;padding:96px 16px 64px;font-family:Inter,system-ui,sans-serif;color:#1c1917">
-        <p style="margin:0 0 20px;font-size:13px;letter-spacing:.02em;color:#be123c">Cape Town Premiere · Women's Day, 10 August</p>
-        <h1 style="margin:0 0 16px;font-size:40px;line-height:1.05;letter-spacing:-.02em">Celebrating Women<br />Who Protect Life</h1>
-        <p style="margin:0 0 24px;font-size:18px;line-height:1.6;max-width:36rem;color:#57534e">
-          One day at The Masque Theatre, Muizenberg — the Cape Town premiere of the
-          <em>Stunning Pigs</em> documentary, plus a live Q&amp;A, and the <em>Voices for Women</em> awards.
-        </p>
-        <p style="margin:0 0 8px;font-size:14px;color:#57534e">Monday 10 August 2026 · Women's Day public holiday</p>
-        <p style="margin:0 0 8px;font-size:14px;color:#57534e">The Masque Theatre, 37 Main Road, Muizenberg</p>
-        <p style="margin:0 0 24px;font-size:14px;color:#57534e">Three sessions · 10:00, 12:00 &amp; 14:00 · assigned seating</p>
-        <p style="margin:0 0 12px">
-          <a href="${QUICKET_URL}" rel="noopener" target="_blank"
-             style="display:inline-block;background:#e11d48;color:#fff;text-decoration:none;padding:16px 32px;border-radius:8px;font-weight:700;font-size:18px">
-            Get tickets — R150 a session
-          </a>
-        </p>
-        <p style="margin:0;font-size:14px;color:#57534e">
-          R150 per session. Book one, two or all three. Assigned seating, sold by Quicket —
-          The Masque Theatre's official ticketing partner. Omni Wellness Media organises and
-          promotes this event and is not a ticket reseller; it adds no booking fee or markup.
-        </p>
-      </div>`;
+      <div style="background:radial-gradient(120% 90% at 78% 0%,#5A1A3E 0%,#43122E 38%,#2A0A1E 78%)">
+        <div style="max-width:1120px;margin:0 auto;padding:72px 20px;font-family:Inter,system-ui,sans-serif;color:#F9F5F0">
+          <p style="margin:0 0 18px;font-family:Oswald,sans-serif;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:#C98A9E">Cape Town Premiere &middot; Women's Day</p>
+          <h1 style="margin:0 0 20px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:48px;line-height:1.08;color:#fff">Celebrating <em style="color:#EBCE93">Women</em> Who Protect Life</h1>
+          <p style="margin:0 0 28px;font-size:18px;line-height:1.7;max-width:46ch;color:rgba(249,245,240,.82)">
+            One day at The Masque Theatre, Muizenberg &mdash; the Cape Town premiere of the
+            <i>Stunning Pigs</i> documentary, plus a live Q&amp;A and the <i>Voices for Women</i> showcase and awards.
+          </p>
+          <p style="margin:0 0 8px;font-size:15.5px;color:rgba(249,245,240,.9)">Monday 10 August 2026 &mdash; Women's Day public holiday</p>
+          <p style="margin:0 0 8px;font-size:15.5px;color:rgba(249,245,240,.9)">The Masque Theatre, 37 Main Road, Muizenberg</p>
+          <p style="margin:0 0 28px;font-size:15.5px;color:rgba(249,245,240,.9)">10:00 &middot; 12:00 &middot; 14:00 &mdash; assigned seating</p>
+          <p style="margin:0 0 16px">
+            <a href="${QUICKET_URL}" rel="noopener" target="_blank"
+               style="display:inline-block;background:#D9B36C;color:#2A0A1E;text-decoration:none;padding:14px 26px;border-radius:10px;font-weight:600;font-size:16px">
+              Get tickets &mdash; from R150
+            </a>
+          </p>
+          <p style="margin:0;font-size:13px;line-height:1.6;max-width:60ch;color:rgba(249,245,240,.55)">
+            R150 per session. Book one, two or all three. Sold securely by Quicket &mdash; The Masque
+            Theatre's official ticketing partner. Omni Wellness Media organises and promotes this
+            event and is not a ticket reseller; it adds no booking fee or markup.
+          </p>
+        </div>
+      </div>`
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
@@ -172,6 +175,7 @@ html = html.replace(
 // --- structured data ------------------------------------------------------
 html = html.replace(
   '</head>',
+  `    <link rel="preload" as="image" href="/events/wwpl/final-square.webp" fetchpriority="high">\n` +
   `    <script type="application/ld+json">${JSON.stringify(EVENT_JSONLD)}</script>\n  </head>`
 );
 
@@ -183,7 +187,7 @@ const checks = [
   [html !== before, 'no substitutions were made'],
   [html.includes(PAGE_URL), 'canonical/og:url missing'],
   [html.includes('"@type":"Event"'), 'Event JSON-LD missing'],
-  [html.includes('Celebrating Women<br />Who Protect Life'), 'hero shell missing'],
+  [html.includes('Who Protect Life'), 'hero shell missing'],
   [html.includes('id="root">'), 'root container missing'],
 ];
 for (const [ok, why] of checks) {

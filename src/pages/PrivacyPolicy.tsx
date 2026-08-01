@@ -103,6 +103,36 @@ const PrivacyPolicy = () => {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
+                <h2 className="text-2xl font-bold mb-4">Campaign Petitions</h2>
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  Where we host a petition — currently the petition on our{" "}
+                  <a href="/events/stunning-pigs" className="text-primary underline underline-offset-2">
+                    Celebrating Women Who Protect Life
+                  </a>{" "}
+                  event page, asking South African regulators and industry to review
+                  high-concentration CO<sub>2</sub> gas stunning of pigs — the following applies in
+                  addition to the terms above.
+                </p>
+                <ul className="list-disc list-inside text-gray-700 space-y-2 mb-4">
+                  <li><strong>What we collect:</strong> your first name, surname and email address, and optionally your city or town.</li>
+                  <li><strong>Why:</strong> to record your signature, to allow the petition to be verified, and to contact you about your signature.</li>
+                  <li><strong>Who collects it:</strong> Omni Wellness Media collects and hosts the signatures.</li>
+                  <li><strong>Who receives it:</strong> signatures are shared with the campaign partners Beauty Without Cruelty and G.A.R.D., who are responsible for presenting the petition to regulators, retailers and industry bodies.</li>
+                  <li><strong>What may be published:</strong> your first name, surname and city may appear on the petition as presented. <strong>Your email address is never published.</strong></li>
+                  <li><strong>Marketing is separate:</strong> signing does not subscribe you to anything. The "keep me posted" checkbox is optional, unticked by default, and governs campaign updates only. You can unsubscribe at any time.</li>
+                  <li><strong>Never sold.</strong> Petition data is not sold, rented or used for any purpose other than the petition.</li>
+                </ul>
+                <p className="text-gray-700 leading-relaxed">
+                  We record which version of the consent wording you agreed to, and when. To see,
+                  correct or remove your signature, email{" "}
+                  <a href="mailto:omniwellnessmedia@gmail.com" className="text-primary underline underline-offset-2">
+                    omniwellnessmedia@gmail.com
+                  </a>{" "}
+                  and we will action it.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border p-8 mb-8">
                 <h2 className="text-2xl font-bold mb-4">Third-Party Data Sharing</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   We share data with the following third-party services to operate and improve our platform:

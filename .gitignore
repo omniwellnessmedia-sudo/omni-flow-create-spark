@@ -43,6 +43,9 @@ public/images/
 !public/events/*.png
 !public/events/*.jpg
 !public/events/*.webp
+# Makeover asset set (optimised WebP crops of the official commissioned artwork)
+!public/events/wwpl/*.webp
+!public/events/wwpl/*.jpg
 
 # Local Netlify folder
 .netlify
