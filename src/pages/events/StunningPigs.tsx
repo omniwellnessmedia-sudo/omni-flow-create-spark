@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
-  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, PARTNERS,
-  driveThumb, drivePreview,
+  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, PARTNERS, SITE_NAV,
+  drivePreview,
 } from "./wwpl/event";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead, MosaicTile } from "./wwpl/ui";
 import { PetitionForm } from "./wwpl/PetitionForm";
@@ -18,11 +18,17 @@ import { PetitionForm } from "./wwpl/PetitionForm";
  * Facts, URLs and hard content rules live in ./wwpl/event.ts — read the header
  * comment there before changing anything on this page.
  *
- * This is a deliberate visual island: it carries its own header and footer
- * rather than the site's UnifiedNavigation/Footer, because it is the
- * destination of a paid campaign and site nav only leaks clicks away from the
- * one conversion. Design per the approved handoff (plum/gold, Cormorant for
- * headings, Oswald for uppercase micro-labels, Inter for body).
+ * This is a deliberate visual island: it carries its OWN header and footer
+ * rather than the site's UnifiedNavigation/Footer, so the whole page can hold
+ * one design language (plum/gold, Cormorant headings, Oswald micro-labels,
+ * Inter body) per the approved handoff.
+ *
+ * It does still carry real site navigation (SITE_NAV, mirrored from
+ * UnifiedNavigation). The handoff specified a bare brand-plus-breadcrumb header
+ * on the argument that a campaign landing page should not leak clicks, but in
+ * review that read as the site simply having no navigation. The compromise: nav
+ * is present but visually quiet, and gold stays reserved for the ticket CTA so
+ * nothing competes with it.
  *
  * WHAT MUST SURVIVE ANY REDESIGN OF THIS PAGE:
  *   - Every ticket CTA is a real <a href> to Quicket that calls trackQuicket().
@@ -105,12 +111,21 @@ const Countdown = () => {
 
 /* ------------------------------------------------------------------- video */
 
-/** Click-to-load: nothing is fetched from Drive until someone asks for it. */
+/**
+ * Click-to-load: nothing is fetched from Drive until someone asks for it.
+ *
+ * The poster is the BUNDLED still, not a Drive thumbnail. Drive was tried and
+ * one tile rendered black: for a file it cannot thumbnail (not link-shared yet,
+ * or still processing) Drive answers 200 with an empty image rather than an
+ * error, so the <img> onError fallback never fires and there is nothing to
+ * catch. The bundled crops are guaranteed to exist, are already distinct per
+ * clip, are sharp, and are on-brand — so the tile is always right regardless of
+ * Drive's sharing state. Drive is used for playback only.
+ */
 const VideoTile = ({
   fileId, still, label, kicker, main = false,
 }: { fileId: string; still: string; label: string; kicker?: string; main?: boolean }) => {
   const [playing, setPlaying] = useState(false);
-  const [thumbFailed, setThumbFailed] = useState(false);
 
   if (playing) {
     return (
@@ -131,11 +146,8 @@ const VideoTile = ({
       className="group absolute inset-0 h-full w-full overflow-hidden bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wwpl-gold"
       aria-label={`Play ${label}`}
     >
-      {/* Drive's own frame gives each clip a distinct still; the bundled crop
-          is the fallback when a file is not link-shared. */}
       <img
-        src={thumbFailed ? still : driveThumb(fileId)}
-        onError={() => setThumbFailed(true)}
+        src={still}
         alt=""
         aria-hidden="true"
         loading="lazy"
@@ -228,6 +240,8 @@ const StickyBar = () => {
 /* --------------------------------------------------------------------- page */
 
 const StunningPigs = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const seo = useMemo(
     () => ({
       title: "Celebrating Women Who Protect Life — 10 Aug at The Masque | Omni Wellness Media",
@@ -306,21 +320,68 @@ const StunningPigs = () => {
 
   return (
     <div className="min-h-screen bg-wwpl-creamSoft font-sans text-wwpl-ink [scroll-behavior:smooth]">
-      {/* 1 — Header. Slim and non-sticky by design: this is a campaign landing
-          page, so there is no site nav to leak clicks. */}
+      {/* 1 — Header. The handoff specified brand lockup + breadcrumb only, on
+          the reasoning that a campaign landing page should not leak clicks.
+          In review that read as the site having no navigation at all, so real
+          nav is back — but rendered in this page's own visual language rather
+          than pulling in the site chrome, and the ticket CTA stays the only
+          gold element so nothing competes with it. */}
       <header className="border-b border-wwpl-line bg-white">
         <div className={cn(wrap, "flex h-[68px] items-center justify-between gap-4")}>
-          <a href={ORIGIN} className="flex items-center gap-2.5" onClick={() => track("nav_home")}>
+          <a href={ORIGIN} className="flex items-center gap-2.5 shrink-0" onClick={() => track("nav_home")}>
             <img src="/events/wwpl/omni-icon.webp" alt="" aria-hidden="true"
               width={36} height={36} className="h-9 w-9 rounded-full" />
             <span className="whitespace-nowrap font-wwpl-display font-semibold text-[20px] tracking-[.01em] text-wwpl-ink">
               Omni Wellness Media
             </span>
           </a>
-          <p className="hidden text-[13px] text-wwpl-slate sm:block">
-            Events / <span className="font-medium text-wwpl-ink">Celebrating Women Who Protect Life</span>
-          </p>
+
+          <nav aria-label="Main" className="hidden items-center gap-6 lg:flex">
+            {SITE_NAV.map((n) => (
+              <a
+                key={n.label}
+                href={`${ORIGIN}${n.href}`}
+                onClick={() => track("nav_click", { to: n.href })}
+                className="text-[14px] text-wwpl-slate transition-colors hover:text-wwpl-goldDeep"
+              >
+                {n.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <p className="hidden text-[13px] text-wwpl-slate xl:block">
+              Events / <span className="font-medium text-wwpl-ink">Celebrating Women Who Protect Life</span>
+            </p>
+            <BtnButton
+              type="button"
+              variant="ghost"
+              aria-expanded={menuOpen}
+              aria-controls="wwpl-mobile-nav"
+              onClick={() => setMenuOpen((o) => !o)}
+              className="lg:hidden !px-3 !py-2 text-[14px]"
+            >
+              {menuOpen ? "Close" : "Menu"}
+            </BtnButton>
+          </div>
         </div>
+
+        {menuOpen && (
+          <nav id="wwpl-mobile-nav" aria-label="Main" className="border-t border-wwpl-line bg-white lg:hidden">
+            <div className={cn(wrap, "flex flex-col py-2")}>
+              {SITE_NAV.map((n) => (
+                <a
+                  key={n.label}
+                  href={`${ORIGIN}${n.href}`}
+                  onClick={() => track("nav_click", { to: n.href })}
+                  className="border-b border-wwpl-line/60 py-3 text-[15px] text-wwpl-ink last:border-0"
+                >
+                  {n.label}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )}
       </header>
 
       {/* 2 — Hero */}

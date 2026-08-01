@@ -168,6 +168,20 @@ export const PARTNERS = [
   { name: "The Masque Theatre", role: "Host venue", logo: null },
 ];
 
+/** Top-level site navigation, mirrored from UnifiedNavigation. This page is a
+ *  standalone landing page on the same origin, so these are absolute links
+ *  back into the main site rather than router routes. Keep in step with
+ *  src/components/navigation/UnifiedNavigation.tsx. */
+export const SITE_NAV = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Tours & Retreats", href: "/tours-retreats" },
+  { label: "ROAM Store", href: "/roambuddy-store" },
+  { label: "Services", href: "/services" },
+  { label: "Community", href: "/community" },
+  { label: "Contact", href: "/contact" },
+];
+
 export const PETITION_GOAL = 5000;
 
 /** Must match ALLOWED_SLUGS in supabase/functions/sign-petition/index.ts and
