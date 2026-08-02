@@ -11,6 +11,7 @@ import {
 } from "./wwpl/event";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead, MosaicTile } from "./wwpl/ui";
 import { PetitionForm } from "./wwpl/PetitionForm";
+import { SeatingMap } from "./wwpl/SeatingMap";
 
 /**
  * Celebrating Women Who Protect Life — Women's Day event at The Masque
@@ -647,6 +648,12 @@ const StunningPigs = () => {
           </p>
         </div>
       </section>
+
+      {/* 6b — The room. Sits directly before the conversion band: it answers
+          "where will I sit / is there wheelchair access" at the moment someone
+          is deciding, then hands straight off to Quicket. READ-ONLY by design —
+          see the header comment in wwpl/SeatingMap.tsx. */}
+      <SeatingMap />
 
       {/* 7 — Tickets: the conversion band */}
       <section id="tickets" className="scroll-mt-8 bg-[radial-gradient(110%_130%_at_50%_-20%,#5A1A3E,#2A0A1E_70%)] py-[104px] text-center text-wwpl-cream">
