@@ -23,6 +23,11 @@ const EditService = React.lazy(() => import('@/pages/EditService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
 const CommunityEvents = React.lazy(() => import('@/pages/CommunityEvents'));
 const StunningPigs = React.lazy(() => import('@/pages/events/StunningPigs'));
+// UNLISTED, NOINDEX: BWC Meet the Team controlled staging page. Holds real
+// people's photographs and biographies that are NOT cleared for publication —
+// see the header comment in src/pages/team/bwcTeamData.ts. Deliberately absent
+// from nav and sitemap; reachable only by direct link, for Chad's review.
+const BwcTeamStaging = React.lazy(() => import('@/pages/team/BwcTeamStaging'));
 
 // Decorative / non-critical global overlays — lazy so they leave the initial
 // bundle instead of loading on every page before first paint. They render at
@@ -39,6 +44,30 @@ const AccessibilitySettings = React.lazy(() => import('@/components/accessibilit
 // Provider-signup redirect that KEEPS incoming query params (gclid, utm_*) —
 // a fixed-string <Navigate> discarded them, breaking Google Ads attribution
 // for the provider_signup_start conversion.
+/**
+ * Global overlays, suppressed on routes that must not show Omni branding.
+ *
+ * The floating dock renders the Omni badge. Chad's 2 Aug instruction for the
+ * BWC staging page is explicit: "do not display the Omni Wellness Media or
+ * Dr Phil Afel Foundation logos until organisation level logo permission has
+ * been confirmed." A global widget is still a display, so the whole overlay
+ * set is withheld there rather than trying to restyle one button.
+ */
+const NO_OVERLAY_ROUTES = ['/bwc-team-staging'];
+
+const GlobalOverlays = () => {
+  const { pathname } = useLocation();
+  if (NO_OVERLAY_ROUTES.includes(pathname)) return null;
+  return (
+    <Suspense fallback={null}>
+      <MagicCursor />
+      <FloatingActionDock />
+      <RoamBuddySalesBot />
+      <AccessibilitySettings />
+    </Suspense>
+  );
+};
+
 const ProviderSignupRedirect = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
@@ -231,6 +260,7 @@ function App() {
                       it now appears in sitemap.xml. It remains out of the primary
                       nav by choice — do not add it to nav without approval. */}
                   <Route path="/events/stunning-pigs" element={<StunningPigs />} />
+                  <Route path="/bwc-team-staging" element={<BwcTeamStaging />} />
                   <Route path="/ai-tools" element={<Navigate to="/services" replace />} />
                   <Route path="/wellness-exchange/provider-signup" element={<ProviderSignupRedirect />} />
                   <Route path="/provider-signup" element={<ProviderSignupRedirect />} />
@@ -418,12 +448,7 @@ function App() {
                   - FloatingActionDock: expanding CTA (eSIM chat, WhatsApp, tour, a11y)
                   - RoamBuddySalesBot: ROAM chatbot window (opened via dock event)
                   - AccessibilitySettings: a11y panel (toggled via dock event) */}
-              <Suspense fallback={null}>
-                <MagicCursor />
-                <FloatingActionDock />
-                <RoamBuddySalesBot />
-                <AccessibilitySettings />
-              </Suspense>
+              <GlobalOverlays />
             </div>
           </Router>
         </CartProvider>

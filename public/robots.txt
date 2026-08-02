@@ -23,4 +23,7 @@ Disallow: /payment-cancelled
 Disallow: /test
 Disallow: /test-simple
 
+Disallow: /bwc-team-staging
+Disallow: /team/bwc/
+
 Sitemap: https://omniwellnessmedia.co.za/sitemap.xml
