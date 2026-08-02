@@ -9,9 +9,10 @@ import {
   GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, PARTNERS, SITE_NAV,
   drivePreview,
 } from "./wwpl/event";
-import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead, MosaicTile } from "./wwpl/ui";
+import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
 import { PetitionForm } from "./wwpl/PetitionForm";
 import { SeatingMap } from "./wwpl/SeatingMap";
+import { CtaBand } from "./wwpl/CtaBand";
 
 /**
  * Celebrating Women Who Protect Life — Women's Day event at The Masque
@@ -114,19 +115,24 @@ const Countdown = () => {
 /* ------------------------------------------------------------------- video */
 
 /**
- * Click-to-load: nothing is fetched from Drive until someone asks for it.
+ * Click-to-load video. Nothing is fetched from Drive until someone taps.
  *
- * The poster is the BUNDLED still, not a Drive thumbnail. Drive was tried and
- * one tile rendered black: for a file it cannot thumbnail (not link-shared yet,
- * or still processing) Drive answers 200 with an empty image rather than an
- * error, so the <img> onError fallback never fires and there is nothing to
- * catch. The bundled crops are guaranteed to exist, are already distinct per
- * clip, are sharp, and are on-brand — so the tile is always right regardless of
- * Drive's sharing state. Drive is used for playback only.
+ * NO POSTER IMAGE, DELIBERATELY. Two earlier attempts both failed honestly:
+ * Drive's own thumbnail returns 200 with a blank image for files it cannot
+ * thumbnail (so the onError fallback never fires and the tile paints black),
+ * and the bundled "stills" that shipped with the design handoff were not frames
+ * from the documentary at all — they were separate synthetic images. Dressing a
+ * film about factory farming with invented stills is not something this page
+ * should do.
+ *
+ * So the tile is an honest designed panel: brand gradient, play control, and a
+ * label. It reads as a deliberate player rather than a broken image, and it
+ * cannot misrepresent the film. If real frames are supplied later, add them as
+ * a `poster` prop.
  */
 const VideoTile = ({
-  fileId, still, label, kicker, main = false,
-}: { fileId: string; still: string; label: string; kicker?: string; main?: boolean }) => {
+  fileId, label, kicker, main = false,
+}: { fileId: string; label: string; kicker?: string; main?: boolean }) => {
   const [playing, setPlaying] = useState(false);
 
   if (playing) {
@@ -145,37 +151,38 @@ const VideoTile = ({
     <button
       type="button"
       onClick={() => { track(main ? "trailer_play" : "clip_play", { fileId }); setPlaying(true); }}
-      className="group absolute inset-0 h-full w-full overflow-hidden bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wwpl-gold"
+      className={cn(
+        "group absolute inset-0 h-full w-full overflow-hidden",
+        "bg-[radial-gradient(120%_120%_at_50%_0%,#43122E_0%,#2A0A1E_70%)]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wwpl-gold"
+      )}
       aria-label={`Play ${label}`}
     >
-      <img
-        src={still}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-        className={cn(
-          "h-full w-full object-cover transition-opacity duration-300",
-          main ? "opacity-[.85] group-hover:opacity-100" : "opacity-80 group-hover:opacity-100"
-        )}
-      />
       <span
-        className={cn(
-          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full text-wwpl-plum",
-          "motion-safe:transition-transform group-hover:scale-[1.06]",
-          main
-            ? "h-[84px] w-[84px] bg-[rgba(217,179,108,.95)] text-[26px] shadow-[0_8px_32px_rgba(0,0,0,.4)] motion-safe:animate-wwpl-pulse"
-            : "h-[34px] w-[34px] bg-[rgba(0,0,0,.55)] border border-[rgba(240,217,168,.5)] text-wwpl-goldLight text-[13px]"
-        )}
         aria-hidden="true"
-      >
-        <span className="pl-1.5">▶</span>
-      </span>
-      {kicker && (
-        <span className="absolute bottom-2.5 left-3 font-wwpl-cond text-[12px] tracking-[.18em] uppercase text-wwpl-goldLight [text-shadow:0_1px_8px_rgba(0,0,0,.6)]">
-          {kicker}
+        className="absolute inset-0 opacity-40 [background-image:repeating-linear-gradient(115deg,transparent_0_22px,rgba(240,217,168,.06)_22px_23px)]"
+      />
+      <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+        <span
+          className={cn(
+            "flex items-center justify-center rounded-full text-wwpl-plum",
+            "motion-safe:transition-transform group-hover:scale-[1.06]",
+            main
+              ? "h-[84px] w-[84px] bg-[rgba(217,179,108,.95)] text-[26px] shadow-[0_8px_32px_rgba(0,0,0,.4)] motion-safe:animate-wwpl-pulse"
+              : "h-[46px] w-[46px] bg-[rgba(217,179,108,.9)] text-[16px]"
+          )}
+        >
+          <span className="pl-1.5">▶</span>
         </span>
-      )}
+        <span
+          className={cn(
+            "font-wwpl-cond uppercase tracking-[.22em] text-wwpl-goldLight",
+            main ? "text-[12px]" : "text-[10.5px]"
+          )}
+        >
+          {kicker ?? "Play the trailer"}
+        </span>
+      </span>
     </button>
   );
 };
@@ -398,7 +405,7 @@ const StunningPigs = () => {
       >
         <span aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_72%_42%,rgba(217,179,108,.14),transparent_70%)]" />
-        <div className={cn(wrap, "relative grid items-center gap-12 py-16 lg:grid-cols-[1.1fr_.9fr] lg:gap-[72px] lg:py-[88px]")}>
+        <div className={cn(wrap, "relative grid items-center gap-12 py-16 lg:grid-cols-2 lg:gap-16 lg:py-[88px]")}>
           <div>
             <Eyebrow rule className="text-[13px] tracking-[.28em] text-wwpl-rose">
               Cape Town Premiere · Women's Day
@@ -448,7 +455,7 @@ const StunningPigs = () => {
 
           {/* Poster is the LCP element on desktop; eager + high priority, and
               preloaded from the prerendered shell. */}
-          <div className="mx-auto w-full max-w-[420px] lg:max-w-none">
+          <div className="mx-auto w-full max-w-[560px] lg:max-w-none">
             <img
               src={POSTER}
               alt="Celebrating Women Who Protect Life — official event artwork: Monday 10 August 2026 at The Masque Theatre, Muizenberg. Tickets from R150."
@@ -541,21 +548,28 @@ const StunningPigs = () => {
           />
           <Reveal className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg" >
             <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
-              <VideoTile fileId={TRAILER_FILE_ID} still="/events/wwpl/motif-crowd.webp"
-                label="Stunning Pigs — official trailer" main />
+              <VideoTile fileId={TRAILER_FILE_ID} label="Stunning Pigs — official trailer" main />
             </div>
           </Reveal>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {CLIPS.map((c, i) => (
               <Reveal key={c.id} delayMs={(i % 3) * 90}>
                 <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: "16 / 9" }}>
-                  <VideoTile fileId={c.id} still={c.still} label={c.tag} kicker={c.tag} />
+                  <VideoTile fileId={c.id} label={c.tag} kicker={c.tag} />
                 </div>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
+
+      {/* CTA band — official banner artwork. Repeats the booking action between
+          sections so it is never more than a screen away on a long page. */}
+      <CtaBand
+        from="band-after-sessions"
+        headline="Three sessions, one day"
+        sub="R150 each. Come for one, come for all three — assigned seating on Quicket."
+      />
 
       {/* 5 — Why this day matters */}
       <section className="py-24">
@@ -587,40 +601,10 @@ const StunningPigs = () => {
               Delicious vegan food is available for purchase on the day, from official vegan food
               partner Vegan Streetfood.
             </div>
-            <div className="mt-9 grid gap-5 sm:grid-cols-2">
-              <MosaicTile className="h-[236px]" src="/events/wwpl/motif-wheat.webp"
-                alt="Wheat and gold botanicals from the official artwork"
-                kicker="What Feeds Us"
-                caption="The day opens with the land, the food and the women who grow it." />
-              <MosaicTile className="h-[236px]" src="/events/wwpl/motif-food.webp"
-                alt="Plant-based menu from Vegan Streetfood" objectPosition="center 42%"
-                kicker="Vegan Streetfood"
-                caption="100% plant-powered, served all day at the theatre." />
-            </div>
+
           </Reveal>
         </div>
 
-        {/* Editorial mosaic */}
-        <div className={cn(wrap, "mt-16")}>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-6 md:gap-4 [grid-auto-rows:164px] md:[grid-auto-rows:208px]">
-            <MosaicTile className="col-span-2 row-span-2" src="/events/wwpl/motif-woman.webp"
-              alt="Woman in profile from the official artwork" objectPosition="center 30%"
-              kicker="Who protect life"
-              caption="One day at the theatre — a film, a conversation, and a stand for the animals we never see." />
-            <MosaicTile className="col-span-2" src="/events/wwpl/motif-singer.webp"
-              alt="Singer from the official artwork" objectPosition="center 22%"
-              kicker="Voices for Women" caption="Live voices, carrying the message beyond the screen." />
-            <MosaicTile className="row-span-2" src="/events/wwpl/motif-film.webp"
-              alt="Filmstrip from the official artwork"
-              kicker="The film" caption="Shot on farms and in the field." />
-            <MosaicTile className="row-span-2" src="/events/wwpl/motif-trophy.webp"
-              alt="Voices for Women award from the official artwork"
-              kicker="The awards" caption="Honouring the women who protect life." />
-            <MosaicTile className="col-span-2" src="/events/wwpl/motif-protea.webp"
-              alt="Proteas from the official artwork"
-              kicker="Cape Town premiere" caption="Informed, not shocked — that's how change begins." />
-          </div>
-        </div>
       </section>
 
       {/* 6 — Buying with confidence. Legally load-bearing; see file header. */}
@@ -648,6 +632,12 @@ const StunningPigs = () => {
           </p>
         </div>
       </section>
+
+      <CtaBand
+        from="band-after-about"
+        headline="Women's Day at The Masque"
+        sub="Monday 10 August 2026, Muizenberg. Wheelchair access, licensed bar and the Vegan Streetfood truck on site."
+      />
 
       {/* 6b — The room. Sits directly before the conversion band: it answers
           "where will I sit / is there wheelchair access" at the moment someone
@@ -707,13 +697,11 @@ const StunningPigs = () => {
               industry to review high-concentration CO₂ gas stunning and commit to achievable, more
               humane alternatives. Every signature is presented with the campaign after the premiere.
             </p>
-            <div className="mt-8 flex items-center gap-5 rounded-2xl bg-wwpl-plum p-5 sm:px-6">
-              <img src="/events/wwpl/motif-pig-heart.webp" alt="" aria-hidden="true" loading="lazy"
-                decoding="async" className="w-[150px] shrink-0 rounded-lg object-cover" />
+            <blockquote className="mt-8 rounded-2xl border-l-2 border-wwpl-gold bg-wwpl-plum p-6">
               <p className="font-wwpl-display italic text-[19px] leading-snug text-wwpl-goldLight">
                 "Informed, not shocked — that's how change begins."
               </p>
-            </div>
+            </blockquote>
           </Reveal>
           <Reveal delayMs={90}>
             <PetitionForm onSigned={() => track("petition_signed")} />
