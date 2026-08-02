@@ -146,16 +146,10 @@ export const SESSIONS: SessionDef[] = [
 export const TRAILER_FILE_ID = "1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV";
 
 export const CLIPS = [
-  { id: "1j2W-PPxhpZDPzwP1TVshlbIablN3Uc4p", tag: "Clip 01", still: "/events/wwpl/still-01.webp" },
-  { id: "1DjdwMvCOVegw7fFYGSCoWTYOqDSuHkTD", tag: "Clip 02", still: "/events/wwpl/still-02.webp" },
-  { id: "14y7dapbwvotxDf4IsPkTwqsJ2V4Hg8Zy", tag: "Clip 03", still: "/events/wwpl/still-03.webp" },
+  { id: "1j2W-PPxhpZDPzwP1TVshlbIablN3Uc4p", tag: "Clip 01" },
+  { id: "1DjdwMvCOVegw7fFYGSCoWTYOqDSuHkTD", tag: "Clip 02" },
+  { id: "14y7dapbwvotxDf4IsPkTwqsJ2V4Hg8Zy", tag: "Clip 03" },
 ];
-
-/** Drive's own frame for a file — a real still from that specific video, so
- *  tiles are distinct rather than all showing the poster. Falls back to the
- *  bundled still if the file is not link-shared. */
-export const driveThumb = (fileId: string) =>
-  `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
 
 export const drivePreview = (fileId: string) =>
   `https://drive.google.com/file/d/${fileId}/preview`;
