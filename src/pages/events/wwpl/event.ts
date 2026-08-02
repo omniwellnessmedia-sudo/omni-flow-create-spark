@@ -17,6 +17,19 @@
  *   - The full-day discount CODE is never printed on the page. Quicket
  *     confirmed (27 Jul) that email-issuing the code is the only mechanism
  *     their seated configuration supports safely.
+ *   - ONLY OFFICIAL COMMISSIONED ARTWORK. The poster, the banner and the three
+ *     glyphs from the poster's own icon row are the complete picture set. The
+ *     "motif" and "still" files that shipped with the design handoff were not
+ *     crops of that artwork — they were separate synthetic images, and the
+ *     stills were being presented as frames from the documentary. All were
+ *     removed on 2 Aug. Do not reintroduce generated imagery here.
+ *   - NO PEOPLE PHOTOGRAPHS until Chad gives written approval. The BWC
+ *     "Meet the Team" pack (2 Aug) states on its first page: "Review pack
+ *     only. This document is not permission to publish." Of its 12 images only
+ *     two are APPROVED (Heather Howe, Zaahira Mahomed); the rest are
+ *     review-only fallbacks and Laureen Bertin is on hold with permission
+ *     outstanding. Those photographs belong to a separate, unlisted BWC team
+ *     page — never this public, ad-funded one.
  */
 
 export const QUICKET_URL =
