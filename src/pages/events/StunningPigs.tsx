@@ -191,27 +191,44 @@ const VideoTile = ({
           className="absolute inset-0 opacity-40 [background-image:repeating-linear-gradient(115deg,transparent_0_22px,rgba(240,217,168,.06)_22px_23px)]"
         />
       )}
-      <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-        <span
-          className={cn(
-            "flex items-center justify-center rounded-full text-wwpl-plum",
-            "motion-safe:transition-transform group-hover:scale-[1.06]",
-            main
-              ? "h-[84px] w-[84px] bg-[rgba(217,179,108,.95)] text-[26px] shadow-[0_8px_32px_rgba(0,0,0,.4)] motion-safe:animate-wwpl-pulse"
-              : "h-[46px] w-[46px] bg-[rgba(217,179,108,.9)] text-[16px]"
-          )}
-        >
-          <span className="pl-1.5">▶</span>
+      {main && poster ? (
+        /* Poster-backed feature tile: the artwork carries its own composition
+           (and, for What Feeds Us, its own gold typography), so a centred
+           overlay would sit on top of it. The play control tucks into the
+           bottom-left as a compact pill instead, leaving the artwork legible. */
+        <span className="absolute inset-0 flex items-end justify-start p-5 sm:p-6">
+          <span className="flex items-center gap-3 rounded-full bg-[rgba(20,5,12,.55)] py-2 pl-2 pr-5 backdrop-blur-[3px] motion-safe:transition-transform group-hover:scale-[1.04]">
+            <span className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[rgba(217,179,108,.95)] text-[15px] text-wwpl-plum shadow-[0_4px_18px_rgba(0,0,0,.45)]">
+              <span className="pl-1">▶</span>
+            </span>
+            <span className="font-wwpl-cond text-[12px] uppercase tracking-[.2em] text-wwpl-goldLight">
+              {kicker ?? "Play the trailer"}
+            </span>
+          </span>
         </span>
-        <span
-          className={cn(
-            "font-wwpl-cond uppercase tracking-[.22em] text-wwpl-goldLight",
-            main ? "text-[12px]" : "text-[10.5px]"
-          )}
-        >
-          {kicker ?? "Play the trailer"}
+      ) : (
+        <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+          <span
+            className={cn(
+              "flex items-center justify-center rounded-full text-wwpl-plum",
+              "motion-safe:transition-transform group-hover:scale-[1.06]",
+              main
+                ? "h-[84px] w-[84px] bg-[rgba(217,179,108,.95)] text-[26px] shadow-[0_8px_32px_rgba(0,0,0,.4)] motion-safe:animate-wwpl-pulse"
+                : "h-[46px] w-[46px] bg-[rgba(217,179,108,.9)] text-[16px]"
+            )}
+          >
+            <span className="pl-1.5">▶</span>
+          </span>
+          <span
+            className={cn(
+              "font-wwpl-cond uppercase tracking-[.22em] text-wwpl-goldLight",
+              main ? "text-[12px]" : "text-[10.5px]"
+            )}
+          >
+            {kicker ?? "Play the trailer"}
+          </span>
         </span>
-      </span>
+      )}
     </button>
   );
 };

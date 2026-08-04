@@ -214,9 +214,11 @@ export const drivePreview = (fileId: string) =>
  * `anchor` gives each tile its own id so the session cards can deep-link to
  * the right trailer instead of dumping the visitor at the top of the section.
  *
- * What Feeds Us has no poster frame yet — VideoTile falls back to the designed
- * panel, which is the intended behaviour. Add one here when a real screenshot
- * is supplied; do not reuse a Stunning Pigs frame for it.
+ * The What Feeds Us poster is the film's official screening artwork, supplied
+ * by the team on 4 Aug (WhatsApp). Its printed facts — Mon 10 Aug 2026,
+ * 10:00–12:00, The Masque Theatre, R150, Quicket — were checked against this
+ * file before use and match. If any of those facts ever change, this artwork
+ * goes stale with them: replace it, don't crop the text out.
  */
 export const TRAILERS = [
   {
@@ -233,6 +235,7 @@ export const TRAILERS = [
     title: "What Feeds Us",
     label: "What Feeds Us — official trailer",
     session: "Session 1 · 10:00 — opens the day",
+    poster: "/events/wwpl/wfu-poster.webp",
     credit: WHAT_FEEDS_US_CREDIT,
   },
 ] as {
