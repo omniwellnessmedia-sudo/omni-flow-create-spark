@@ -17,6 +17,22 @@
  *   - The full-day discount CODE is never printed on the page. Quicket
  *     confirmed (27 Jul) that email-issuing the code is the only mechanism
  *     their seated configuration supports safely.
+ *   - ONLY OFFICIAL COMMISSIONED ARTWORK, plus real frames from the film. The
+ *     poster, the banner and the three glyphs from the poster's own icon row
+ *     are the artwork set; TRAILER_POSTER and the CLIPS posters are genuine
+ *     screenshots supplied by the team on 3 Aug. The "motif" and "still" files
+ *     that shipped with the design handoff were neither — they were separate
+ *     synthetic images being presented as frames from the documentary, and were
+ *     removed on 2 Aug. Do not reintroduce generated imagery here.
+ *   - NO PEOPLE PHOTOGRAPHS until Chad gives written approval, with one narrow
+ *     exception documented at TRAILER_POSTER: a poster frame taken from the
+ *     very clip that tile plays. The BWC
+ *     "Meet the Team" pack (2 Aug) states on its first page: "Review pack
+ *     only. This document is not permission to publish." Of its 12 images only
+ *     two are APPROVED (Heather Howe, Zaahira Mahomed); the rest are
+ *     review-only fallbacks and Laureen Bertin is on hold with permission
+ *     outstanding. Those photographs belong to a separate, unlisted BWC team
+ *     page — never this public, ad-funded one.
  */
 
 export const QUICKET_URL =
@@ -145,17 +161,29 @@ export const SESSIONS: SessionDef[] = [
  *  "Anyone with the link — Viewer" or the embed shows a Google sign-in wall. */
 export const TRAILER_FILE_ID = "1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV";
 
-export const CLIPS = [
-  { id: "1j2W-PPxhpZDPzwP1TVshlbIablN3Uc4p", tag: "Clip 01", still: "/events/wwpl/still-01.webp" },
-  { id: "1DjdwMvCOVegw7fFYGSCoWTYOqDSuHkTD", tag: "Clip 02", still: "/events/wwpl/still-02.webp" },
-  { id: "14y7dapbwvotxDf4IsPkTwqsJ2V4Hg8Zy", tag: "Clip 03", still: "/events/wwpl/still-03.webp" },
-];
+/**
+ * POSTER FRAMES. These are real frames from Stunning Pigs, screenshotted by the
+ * team on 3 Aug and supplied specifically for use as video thumbnails (Drive
+ * folder 1yVg6GFAkiar-o7uZu_8Lc4lLCBOQBO4O). They are NOT generated images and
+ * NOT the "still" files that shipped with the design handoff — those were
+ * synthetic and were deleted on 2 Aug.
+ *
+ * They are the only photographs of a person on this page, and they are frames
+ * from the film the tile itself plays: tapping the tile streams the same face.
+ * A poster from the clip is therefore not a new disclosure, which is why they
+ * sit outside the "no people photographs" rule above.
+ *
+ * Only three frames were supplied, all of the same interviewee, so Clip 03 has
+ * no poster and keeps the designed panel. Do not duplicate a frame across tiles
+ * to fill the gap — identical thumbnails were the original complaint.
+ */
+export const TRAILER_POSTER = "/events/wwpl/frame-trailer.webp";
 
-/** Drive's own frame for a file — a real still from that specific video, so
- *  tiles are distinct rather than all showing the poster. Falls back to the
- *  bundled still if the file is not link-shared. */
-export const driveThumb = (fileId: string) =>
-  `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+export const CLIPS = [
+  { id: "1j2W-PPxhpZDPzwP1TVshlbIablN3Uc4p", tag: "Clip 01", poster: "/events/wwpl/frame-clip-01.webp" },
+  { id: "1DjdwMvCOVegw7fFYGSCoWTYOqDSuHkTD", tag: "Clip 02", poster: "/events/wwpl/frame-clip-02.webp" },
+  { id: "14y7dapbwvotxDf4IsPkTwqsJ2V4Hg8Zy", tag: "Clip 03" },
+] as { id: string; tag: string; poster?: string }[];
 
 export const drivePreview = (fileId: string) =>
   `https://drive.google.com/file/d/${fileId}/preview`;

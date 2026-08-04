@@ -82,18 +82,22 @@ export const Reveal = ({
   children,
   delayMs = 0,
   className,
+  style,
   as: Tag = "div",
 }: {
   children: React.ReactNode;
   delayMs?: number;
   className?: string;
+  /** Merged with the reveal's own transition-delay. Lets callers set CSS
+   *  custom properties on the same element (e.g. the seating map's --seat). */
+  style?: React.CSSProperties;
   as?: React.ElementType;
 }) => {
   const { ref, shown } = useReveal<HTMLDivElement>();
   return (
     <Tag
       ref={ref}
-      style={{ transitionDelay: `${delayMs}ms` }}
+      style={{ ...style, transitionDelay: `${delayMs}ms` }}
       className={cn(
         "motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-wwpl",
         !shown && "motion-safe:opacity-0 motion-safe:translate-y-[26px]",
