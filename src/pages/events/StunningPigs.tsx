@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
-  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, TRAILER_POSTER,
-  PARTNERS, SITE_NAV,
+  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILERS,
+  PARTNERS, SITE_NAV, WHAT_FEEDS_US_CREDIT,
   drivePreview,
 } from "./wwpl/event";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
@@ -191,27 +191,44 @@ const VideoTile = ({
           className="absolute inset-0 opacity-40 [background-image:repeating-linear-gradient(115deg,transparent_0_22px,rgba(240,217,168,.06)_22px_23px)]"
         />
       )}
-      <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-        <span
-          className={cn(
-            "flex items-center justify-center rounded-full text-wwpl-plum",
-            "motion-safe:transition-transform group-hover:scale-[1.06]",
-            main
-              ? "h-[84px] w-[84px] bg-[rgba(217,179,108,.95)] text-[26px] shadow-[0_8px_32px_rgba(0,0,0,.4)] motion-safe:animate-wwpl-pulse"
-              : "h-[46px] w-[46px] bg-[rgba(217,179,108,.9)] text-[16px]"
-          )}
-        >
-          <span className="pl-1.5">▶</span>
+      {main && poster ? (
+        /* Poster-backed feature tile: the artwork carries its own composition
+           (and, for What Feeds Us, its own gold typography), so a centred
+           overlay would sit on top of it. The play control tucks into the
+           bottom-left as a compact pill instead, leaving the artwork legible. */
+        <span className="absolute inset-0 flex items-end justify-start p-5 sm:p-6">
+          <span className="flex items-center gap-3 rounded-full bg-[rgba(20,5,12,.55)] py-2 pl-2 pr-5 backdrop-blur-[3px] motion-safe:transition-transform group-hover:scale-[1.04]">
+            <span className="flex h-[46px] w-[46px] items-center justify-center rounded-full bg-[rgba(217,179,108,.95)] text-[15px] text-wwpl-plum shadow-[0_4px_18px_rgba(0,0,0,.45)]">
+              <span className="pl-1">▶</span>
+            </span>
+            <span className="font-wwpl-cond text-[12px] uppercase tracking-[.2em] text-wwpl-goldLight">
+              {kicker ?? "Play the trailer"}
+            </span>
+          </span>
         </span>
-        <span
-          className={cn(
-            "font-wwpl-cond uppercase tracking-[.22em] text-wwpl-goldLight",
-            main ? "text-[12px]" : "text-[10.5px]"
-          )}
-        >
-          {kicker ?? "Play the trailer"}
+      ) : (
+        <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+          <span
+            className={cn(
+              "flex items-center justify-center rounded-full text-wwpl-plum",
+              "motion-safe:transition-transform group-hover:scale-[1.06]",
+              main
+                ? "h-[84px] w-[84px] bg-[rgba(217,179,108,.95)] text-[26px] shadow-[0_8px_32px_rgba(0,0,0,.4)] motion-safe:animate-wwpl-pulse"
+                : "h-[46px] w-[46px] bg-[rgba(217,179,108,.9)] text-[16px]"
+            )}
+          >
+            <span className="pl-1.5">▶</span>
+          </span>
+          <span
+            className={cn(
+              "font-wwpl-cond uppercase tracking-[.22em] text-wwpl-goldLight",
+              main ? "text-[12px]" : "text-[10.5px]"
+            )}
+          >
+            {kicker ?? "Play the trailer"}
+          </span>
         </span>
-      </span>
+      )}
     </button>
   );
 };
@@ -469,8 +486,8 @@ const StunningPigs = () => {
 
             <div className="mt-10 flex flex-wrap gap-3.5">
               <BtnLink {...quicketProps("hero")} variant="gold">Get tickets — from R150</BtnLink>
-              <BtnLink href="#trailer" variant="ghostLight" onClick={() => track("nav_trailer")}>
-                Watch the trailer
+              <BtnLink href="#trailer" variant="ghostLight" onClick={() => track("nav_trailer", { from: "hero" })}>
+                Watch the trailers
               </BtnLink>
             </div>
 
@@ -534,12 +551,35 @@ const StunningPigs = () => {
                     s.feature ? "text-white" : "text-wwpl-ink")}>
                     {s.title}
                   </h3>
-                  <p className={cn("mb-7 mt-3 flex-1 text-[15px] leading-relaxed",
+                  <p className={cn("mt-3 flex-1 text-[15px] leading-relaxed",
                     s.feature ? "text-[rgba(249,245,240,.75)]" : "text-wwpl-slate")}>
                     {s.description}
                   </p>
+                  {/* Required production credit. `flex-1` stays on the paragraph
+                      above so the CTAs still line up across the three cards. */}
+                  {s.credit && (
+                    <p className={cn("mt-4 text-[12.5px] leading-snug",
+                      s.feature ? "text-[rgba(249,245,240,.55)]" : "text-wwpl-slate/70")}>
+                      {s.credit}
+                    </p>
+                  )}
+                  {/* Secondary, deliberately a text link rather than a second
+                      button — the booking CTA must stay the only thing on this
+                      card that reads as the action. It sits ABOVE the button so
+                      the button stays the last element in every card and the
+                      three CTAs keep a common baseline. */}
+                  {s.trailerHref && (
+                    <a href={s.trailerHref}
+                      onClick={() => track("nav_trailer", { from: `session-${s.no}` })}
+                      className={cn("mt-5 self-start text-[13.5px] underline underline-offset-[3px] transition-colors",
+                        s.feature
+                          ? "text-[rgba(240,217,168,.8)] hover:text-wwpl-gold"
+                          : "text-wwpl-slate hover:text-wwpl-goldDeep")}>
+                      Watch the trailer
+                    </a>
+                  )}
                   <BtnLink {...quicketProps(`session-${s.no}`)} variant={s.feature ? "gold" : "ghost"}
-                    className="self-start text-[14px]">
+                    className="mt-6 self-start text-[14px]">
                     {s.cta}
                   </BtnLink>
                 </article>
@@ -572,20 +612,34 @@ const StunningPigs = () => {
           <SecHead
             tone="dark"
             eyebrow="Watch"
-            title="The trailer"
-            sub="Two minutes from Stunning Pigs — no graphic footage is used in any of our promotion."
+            title="The trailers"
+            sub="Both films screening on the day — no graphic footage is used in any of our promotion."
           />
-          <Reveal className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg" >
-            <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
-              <VideoTile
-                fileId={TRAILER_FILE_ID}
-                label="Stunning Pigs — official trailer"
-                poster={TRAILER_POSTER}
-                main
-              />
-            </div>
-          </Reveal>
-          <div className="mt-6 grid gap-5 md:grid-cols-3">
+          {/* Two films, two co-equal tiles. Each carries its own anchor so the
+              session cards can deep-link straight to the right trailer. */}
+          <div className="grid gap-7 lg:grid-cols-2">
+            {TRAILERS.map((t, i) => (
+              <Reveal key={t.id} delayMs={i * 90} id={t.anchor} className="scroll-mt-24">
+                <div className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg"
+                  style={{ aspectRatio: "16 / 9" }}>
+                  <VideoTile fileId={t.id} label={t.label} poster={t.poster} main />
+                </div>
+                <h3 className="mt-4 font-wwpl-display text-[21px] font-semibold text-wwpl-cream">
+                  {t.title}
+                </h3>
+                <p className="mt-1 font-wwpl-cond text-[12.5px] uppercase tracking-[.14em] text-wwpl-goldLight">
+                  {t.session}
+                </p>
+                {/* Required production credit, repeated wherever the film appears. */}
+                {t.credit && (
+                  <p className="mt-2.5 text-[12.5px] leading-snug text-[rgba(246,241,232,.5)]">
+                    {t.credit}
+                  </p>
+                )}
+              </Reveal>
+            ))}
+          </div>
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
             {CLIPS.map((c, i) => (
               <Reveal key={c.id} delayMs={(i % 3) * 90}>
                 <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: "16 / 9" }}>
@@ -630,6 +684,11 @@ const StunningPigs = () => {
               Held on Women's Day, the programme celebrates the women leading this work — opening with{" "}
               <em>What Feeds Us</em> and closing with the <em>Voices for Women</em> showcase and awards
               ceremony.
+            </p>
+            {/* Required production credit, attached to the reference to the film
+                rather than floated on its own. */}
+            <p className="mt-3 text-[13px] leading-snug text-wwpl-slate/70">
+              <em>What Feeds Us</em>: {WHAT_FEEDS_US_CREDIT}
             </p>
             <div className="mt-6 border-l-2 border-wwpl-gold pl-5 text-[14.5px] leading-relaxed text-wwpl-slate">
               Delicious vegan food is available for purchase on the day, from official vegan food
@@ -792,6 +851,10 @@ const StunningPigs = () => {
               </Reveal>
             ))}
           </div>
+          {/* Required production credit, as the page's credits footnote. */}
+          <p className="mx-auto mt-12 max-w-[62ch] text-[12.5px] leading-relaxed text-wwpl-slate/75">
+            <em>What Feeds Us</em> — {WHAT_FEEDS_US_CREDIT}
+          </p>
         </div>
       </section>
 

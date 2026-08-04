@@ -107,6 +107,15 @@ export const downloadIcs = () => {
   URL.revokeObjectURL(a.href);
 };
 
+/**
+ * Required production credit for What Feeds Us. Contractual, not decorative —
+ * it must appear verbatim wherever the film is referenced, so it lives here as
+ * one constant rather than being retyped at each of its three placements.
+ * Do not reword, abbreviate, or split it.
+ */
+export const WHAT_FEEDS_US_CREDIT =
+  "Commissioned by Humane World for Animals and produced by 1000 THINGS Productions.";
+
 export interface SessionDef {
   no: number;
   time: string;
@@ -117,6 +126,10 @@ export interface SessionDef {
   icon: string;
   feature?: boolean;
   cta: string;
+  /** Production credit rendered as fine print under the card's description. */
+  credit?: string;
+  /** Anchor of this session's trailer tile, when the film has one. */
+  trailerHref?: string;
 }
 
 export const SESSIONS: SessionDef[] = [
@@ -129,6 +142,8 @@ export const SESSIONS: SessionDef[] = [
     description:
       "The day opens with What Feeds Us — food, ethics and community, setting the table for everything that follows.",
     icon: "/events/wwpl/icon-wheat.webp",
+    credit: WHAT_FEEDS_US_CREDIT,
+    trailerHref: "#trailer-what-feeds-us",
     cta: "Book this session",
   },
   {
@@ -141,6 +156,7 @@ export const SESSIONS: SessionDef[] = [
       "The Cape Town premiere of the Stunning Pigs documentary, followed by a public Q&A with the Beauty Without Cruelty campaign and G.A.R.D.",
     icon: "/events/wwpl/icon-pig.webp",
     feature: true,
+    trailerHref: "#trailer-stunning-pigs",
     cta: "Book the premiere",
   },
   {
@@ -160,6 +176,9 @@ export const SESSIONS: SessionDef[] = [
  *  CLIP_*_URL placeholders resolve to these. Each file must be shared
  *  "Anyone with the link — Viewer" or the embed shows a Google sign-in wall. */
 export const TRAILER_FILE_ID = "1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV";
+
+/** What Feeds Us — the Session 1 film. Supplied by Candice on 4 Aug. */
+export const WHAT_FEEDS_US_TRAILER_FILE_ID = "1xsZuZETVhTO3Sl_mF5wBrNYSglksePnH";
 
 /**
  * POSTER FRAMES. These are real frames from Stunning Pigs, screenshotted by the
@@ -187,6 +206,42 @@ export const CLIPS = [
 
 export const drivePreview = (fileId: string) =>
   `https://drive.google.com/file/d/${fileId}/preview`;
+
+/**
+ * Both films screening on the day, as co-equal trailers. Stunning Pigs is the
+ * main feature and leads; What Feeds Us opens the day and follows.
+ *
+ * `anchor` gives each tile its own id so the session cards can deep-link to
+ * the right trailer instead of dumping the visitor at the top of the section.
+ *
+ * The What Feeds Us poster is the film's official screening artwork, supplied
+ * by the team on 4 Aug (WhatsApp). Its printed facts — Mon 10 Aug 2026,
+ * 10:00–12:00, The Masque Theatre, R150, Quicket — were checked against this
+ * file before use and match. If any of those facts ever change, this artwork
+ * goes stale with them: replace it, don't crop the text out.
+ */
+export const TRAILERS = [
+  {
+    id: TRAILER_FILE_ID,
+    anchor: "trailer-stunning-pigs",
+    title: "Stunning Pigs",
+    label: "Stunning Pigs — official trailer",
+    session: "Session 2 · 12:00 — the Cape Town premiere",
+    poster: TRAILER_POSTER,
+  },
+  {
+    id: WHAT_FEEDS_US_TRAILER_FILE_ID,
+    anchor: "trailer-what-feeds-us",
+    title: "What Feeds Us",
+    label: "What Feeds Us — official trailer",
+    session: "Session 1 · 10:00 — opens the day",
+    poster: "/events/wwpl/wfu-poster.webp",
+    credit: WHAT_FEEDS_US_CREDIT,
+  },
+] as {
+  id: string; anchor: string; title: string; label: string;
+  session: string; poster?: string; credit?: string;
+}[];
 
 export const PARTNERS = [
   { name: "Beauty Without Cruelty", role: "Campaign partner", logo: "/events/wwpl/bwc-rabbit.webp" },
