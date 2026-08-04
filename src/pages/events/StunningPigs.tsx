@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
-  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, PARTNERS, SITE_NAV,
+  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, TRAILER_POSTER,
+  PARTNERS, SITE_NAV,
   drivePreview,
 } from "./wwpl/event";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
@@ -127,12 +128,18 @@ const Countdown = () => {
  *
  * So the tile is an honest designed panel: brand gradient, play control, and a
  * label. It reads as a deliberate player rather than a broken image, and it
- * cannot misrepresent the film. If real frames are supplied later, add them as
- * a `poster` prop.
+ * cannot misrepresent the film.
+ *
+ * `poster` is that promised escape hatch, now filled: the team supplied real
+ * screenshots from the film on 3 Aug. A tile with a poster draws the frame; a
+ * tile without one keeps the designed panel. The gradient stays underneath as
+ * the background either way, so a poster that fails to load degrades to the
+ * panel rather than to a black rectangle — the exact failure the Drive
+ * thumbnail endpoint used to cause.
  */
 const VideoTile = ({
-  fileId, label, kicker, main = false,
-}: { fileId: string; label: string; kicker?: string; main?: boolean }) => {
+  fileId, label, kicker, poster, main = false,
+}: { fileId: string; label: string; kicker?: string; poster?: string; main?: boolean }) => {
   const [playing, setPlaying] = useState(false);
 
   if (playing) {
@@ -158,10 +165,32 @@ const VideoTile = ({
       )}
       aria-label={`Play ${label}`}
     >
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 opacity-40 [background-image:repeating-linear-gradient(115deg,transparent_0_22px,rgba(240,217,168,.06)_22px_23px)]"
-      />
+      {poster ? (
+        <>
+          <img
+            src={poster}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            width={main ? 1280 : 640}
+            height={main ? 720 : 360}
+            className="absolute inset-0 h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 group-hover:scale-[1.03]"
+          />
+          {/* Scrim. One frame is a dusk interior and is already near-black, so
+              this stays light: the gold play control carries the contrast, and
+              a heavier wash would crush that shot to a flat rectangle. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 bg-[linear-gradient(180deg,rgba(42,10,30,.30)_0%,rgba(42,10,30,.16)_45%,rgba(42,10,30,.62)_100%)]"
+          />
+        </>
+      ) : (
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 opacity-40 [background-image:repeating-linear-gradient(115deg,transparent_0_22px,rgba(240,217,168,.06)_22px_23px)]"
+        />
+      )}
       <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
         <span
           className={cn(
@@ -548,14 +577,19 @@ const StunningPigs = () => {
           />
           <Reveal className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg" >
             <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
-              <VideoTile fileId={TRAILER_FILE_ID} label="Stunning Pigs — official trailer" main />
+              <VideoTile
+                fileId={TRAILER_FILE_ID}
+                label="Stunning Pigs — official trailer"
+                poster={TRAILER_POSTER}
+                main
+              />
             </div>
           </Reveal>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {CLIPS.map((c, i) => (
               <Reveal key={c.id} delayMs={(i % 3) * 90}>
                 <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: "16 / 9" }}>
-                  <VideoTile fileId={c.id} label={c.tag} kicker={c.tag} />
+                  <VideoTile fileId={c.id} label={c.tag} kicker={c.tag} poster={c.poster} />
                 </div>
               </Reveal>
             ))}
