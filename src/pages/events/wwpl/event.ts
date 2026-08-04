@@ -128,6 +128,8 @@ export interface SessionDef {
   cta: string;
   /** Production credit rendered as fine print under the card's description. */
   credit?: string;
+  /** Anchor of this session's trailer tile, when the film has one. */
+  trailerHref?: string;
 }
 
 export const SESSIONS: SessionDef[] = [
@@ -141,6 +143,7 @@ export const SESSIONS: SessionDef[] = [
       "The day opens with What Feeds Us — food, ethics and community, setting the table for everything that follows.",
     icon: "/events/wwpl/icon-wheat.webp",
     credit: WHAT_FEEDS_US_CREDIT,
+    trailerHref: "#trailer-what-feeds-us",
     cta: "Book this session",
   },
   {
@@ -153,6 +156,7 @@ export const SESSIONS: SessionDef[] = [
       "The Cape Town premiere of the Stunning Pigs documentary, followed by a public Q&A with the Beauty Without Cruelty campaign and G.A.R.D.",
     icon: "/events/wwpl/icon-pig.webp",
     feature: true,
+    trailerHref: "#trailer-stunning-pigs",
     cta: "Book the premiere",
   },
   {
@@ -172,6 +176,9 @@ export const SESSIONS: SessionDef[] = [
  *  CLIP_*_URL placeholders resolve to these. Each file must be shared
  *  "Anyone with the link — Viewer" or the embed shows a Google sign-in wall. */
 export const TRAILER_FILE_ID = "1wfhWxDeOtED8vn-bKNm2UpbmCNXtzLDV";
+
+/** What Feeds Us — the Session 1 film. Supplied by Candice on 4 Aug. */
+export const WHAT_FEEDS_US_TRAILER_FILE_ID = "1xsZuZETVhTO3Sl_mF5wBrNYSglksePnH";
 
 /**
  * POSTER FRAMES. These are real frames from Stunning Pigs, screenshotted by the
@@ -199,6 +206,39 @@ export const CLIPS = [
 
 export const drivePreview = (fileId: string) =>
   `https://drive.google.com/file/d/${fileId}/preview`;
+
+/**
+ * Both films screening on the day, as co-equal trailers. Stunning Pigs is the
+ * main feature and leads; What Feeds Us opens the day and follows.
+ *
+ * `anchor` gives each tile its own id so the session cards can deep-link to
+ * the right trailer instead of dumping the visitor at the top of the section.
+ *
+ * What Feeds Us has no poster frame yet — VideoTile falls back to the designed
+ * panel, which is the intended behaviour. Add one here when a real screenshot
+ * is supplied; do not reuse a Stunning Pigs frame for it.
+ */
+export const TRAILERS = [
+  {
+    id: TRAILER_FILE_ID,
+    anchor: "trailer-stunning-pigs",
+    title: "Stunning Pigs",
+    label: "Stunning Pigs — official trailer",
+    session: "Session 2 · 12:00 — the Cape Town premiere",
+    poster: TRAILER_POSTER,
+  },
+  {
+    id: WHAT_FEEDS_US_TRAILER_FILE_ID,
+    anchor: "trailer-what-feeds-us",
+    title: "What Feeds Us",
+    label: "What Feeds Us — official trailer",
+    session: "Session 1 · 10:00 — opens the day",
+    credit: WHAT_FEEDS_US_CREDIT,
+  },
+] as {
+  id: string; anchor: string; title: string; label: string;
+  session: string; poster?: string; credit?: string;
+}[];
 
 export const PARTNERS = [
   { name: "Beauty Without Cruelty", role: "Campaign partner", logo: "/events/wwpl/bwc-rabbit.webp" },

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
-  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, TRAILER_POSTER,
+  GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILERS,
   PARTNERS, SITE_NAV, WHAT_FEEDS_US_CREDIT,
   drivePreview,
 } from "./wwpl/event";
@@ -469,8 +469,8 @@ const StunningPigs = () => {
 
             <div className="mt-10 flex flex-wrap gap-3.5">
               <BtnLink {...quicketProps("hero")} variant="gold">Get tickets — from R150</BtnLink>
-              <BtnLink href="#trailer" variant="ghostLight" onClick={() => track("nav_trailer")}>
-                Watch the trailer
+              <BtnLink href="#trailer" variant="ghostLight" onClick={() => track("nav_trailer", { from: "hero" })}>
+                Watch the trailers
               </BtnLink>
             </div>
 
@@ -546,8 +546,23 @@ const StunningPigs = () => {
                       {s.credit}
                     </p>
                   )}
+                  {/* Secondary, deliberately a text link rather than a second
+                      button — the booking CTA must stay the only thing on this
+                      card that reads as the action. It sits ABOVE the button so
+                      the button stays the last element in every card and the
+                      three CTAs keep a common baseline. */}
+                  {s.trailerHref && (
+                    <a href={s.trailerHref}
+                      onClick={() => track("nav_trailer", { from: `session-${s.no}` })}
+                      className={cn("mt-5 self-start text-[13.5px] underline underline-offset-[3px] transition-colors",
+                        s.feature
+                          ? "text-[rgba(240,217,168,.8)] hover:text-wwpl-gold"
+                          : "text-wwpl-slate hover:text-wwpl-goldDeep")}>
+                      Watch the trailer
+                    </a>
+                  )}
                   <BtnLink {...quicketProps(`session-${s.no}`)} variant={s.feature ? "gold" : "ghost"}
-                    className="mt-7 self-start text-[14px]">
+                    className="mt-6 self-start text-[14px]">
                     {s.cta}
                   </BtnLink>
                 </article>
@@ -580,20 +595,34 @@ const StunningPigs = () => {
           <SecHead
             tone="dark"
             eyebrow="Watch"
-            title="The trailer"
-            sub="Two minutes from Stunning Pigs — no graphic footage is used in any of our promotion."
+            title="The trailers"
+            sub="Both films screening on the day — no graphic footage is used in any of our promotion."
           />
-          <Reveal className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg" >
-            <div className="relative w-full" style={{ aspectRatio: "16 / 9" }}>
-              <VideoTile
-                fileId={TRAILER_FILE_ID}
-                label="Stunning Pigs — official trailer"
-                poster={TRAILER_POSTER}
-                main
-              />
-            </div>
-          </Reveal>
-          <div className="mt-6 grid gap-5 md:grid-cols-3">
+          {/* Two films, two co-equal tiles. Each carries its own anchor so the
+              session cards can deep-link straight to the right trailer. */}
+          <div className="grid gap-7 lg:grid-cols-2">
+            {TRAILERS.map((t, i) => (
+              <Reveal key={t.id} delayMs={i * 90} id={t.anchor} className="scroll-mt-24">
+                <div className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg"
+                  style={{ aspectRatio: "16 / 9" }}>
+                  <VideoTile fileId={t.id} label={t.label} poster={t.poster} main />
+                </div>
+                <h3 className="mt-4 font-wwpl-display text-[21px] font-semibold text-wwpl-cream">
+                  {t.title}
+                </h3>
+                <p className="mt-1 font-wwpl-cond text-[12.5px] uppercase tracking-[.14em] text-wwpl-goldLight">
+                  {t.session}
+                </p>
+                {/* Required production credit, repeated wherever the film appears. */}
+                {t.credit && (
+                  <p className="mt-2.5 text-[12.5px] leading-snug text-[rgba(246,241,232,.5)]">
+                    {t.credit}
+                  </p>
+                )}
+              </Reveal>
+            ))}
+          </div>
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
             {CLIPS.map((c, i) => (
               <Reveal key={c.id} delayMs={(i % 3) * 90}>
                 <div className="relative w-full overflow-hidden rounded-xl bg-black" style={{ aspectRatio: "16 / 9" }}>
