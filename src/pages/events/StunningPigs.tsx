@@ -7,7 +7,7 @@ import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
   GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILER_FILE_ID, TRAILER_POSTER,
-  PARTNERS, SITE_NAV,
+  PARTNERS, SITE_NAV, WHAT_FEEDS_US_CREDIT,
   drivePreview,
 } from "./wwpl/event";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
@@ -534,12 +534,20 @@ const StunningPigs = () => {
                     s.feature ? "text-white" : "text-wwpl-ink")}>
                     {s.title}
                   </h3>
-                  <p className={cn("mb-7 mt-3 flex-1 text-[15px] leading-relaxed",
+                  <p className={cn("mt-3 flex-1 text-[15px] leading-relaxed",
                     s.feature ? "text-[rgba(249,245,240,.75)]" : "text-wwpl-slate")}>
                     {s.description}
                   </p>
+                  {/* Required production credit. `flex-1` stays on the paragraph
+                      above so the CTAs still line up across the three cards. */}
+                  {s.credit && (
+                    <p className={cn("mt-4 text-[12.5px] leading-snug",
+                      s.feature ? "text-[rgba(249,245,240,.55)]" : "text-wwpl-slate/70")}>
+                      {s.credit}
+                    </p>
+                  )}
                   <BtnLink {...quicketProps(`session-${s.no}`)} variant={s.feature ? "gold" : "ghost"}
-                    className="self-start text-[14px]">
+                    className="mt-7 self-start text-[14px]">
                     {s.cta}
                   </BtnLink>
                 </article>
@@ -630,6 +638,11 @@ const StunningPigs = () => {
               Held on Women's Day, the programme celebrates the women leading this work — opening with{" "}
               <em>What Feeds Us</em> and closing with the <em>Voices for Women</em> showcase and awards
               ceremony.
+            </p>
+            {/* Required production credit, attached to the reference to the film
+                rather than floated on its own. */}
+            <p className="mt-3 text-[13px] leading-snug text-wwpl-slate/70">
+              <em>What Feeds Us</em>: {WHAT_FEEDS_US_CREDIT}
             </p>
             <div className="mt-6 border-l-2 border-wwpl-gold pl-5 text-[14.5px] leading-relaxed text-wwpl-slate">
               Delicious vegan food is available for purchase on the day, from official vegan food
@@ -792,6 +805,10 @@ const StunningPigs = () => {
               </Reveal>
             ))}
           </div>
+          {/* Required production credit, as the page's credits footnote. */}
+          <p className="mx-auto mt-12 max-w-[62ch] text-[12.5px] leading-relaxed text-wwpl-slate/75">
+            <em>What Feeds Us</em> — {WHAT_FEEDS_US_CREDIT}
+          </p>
         </div>
       </section>
 

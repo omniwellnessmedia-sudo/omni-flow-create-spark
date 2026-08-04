@@ -107,6 +107,15 @@ export const downloadIcs = () => {
   URL.revokeObjectURL(a.href);
 };
 
+/**
+ * Required production credit for What Feeds Us. Contractual, not decorative —
+ * it must appear verbatim wherever the film is referenced, so it lives here as
+ * one constant rather than being retyped at each of its three placements.
+ * Do not reword, abbreviate, or split it.
+ */
+export const WHAT_FEEDS_US_CREDIT =
+  "Commissioned by Humane World for Animals and produced by 1000 THINGS Productions.";
+
 export interface SessionDef {
   no: number;
   time: string;
@@ -117,6 +126,8 @@ export interface SessionDef {
   icon: string;
   feature?: boolean;
   cta: string;
+  /** Production credit rendered as fine print under the card's description. */
+  credit?: string;
 }
 
 export const SESSIONS: SessionDef[] = [
@@ -129,6 +140,7 @@ export const SESSIONS: SessionDef[] = [
     description:
       "The day opens with What Feeds Us — food, ethics and community, setting the table for everything that follows.",
     icon: "/events/wwpl/icon-wheat.webp",
+    credit: WHAT_FEEDS_US_CREDIT,
     cta: "Book this session",
   },
   {
