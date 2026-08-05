@@ -243,10 +243,14 @@ export const TRAILERS = [
   session: string; poster?: string; credit?: string;
 }[];
 
+/** G.A.R.D. and Vegan Streetfood logos supplied by Feroza on 5 Aug (Drive
+ *  links in the "Women's Day Event Page Changes" email thread). The Masque
+ *  Theatre logo lives in a Drive folder that could not be listed from this
+ *  session — it stays a text mark until the file itself is supplied. */
 export const PARTNERS = [
   { name: "Beauty Without Cruelty", role: "Campaign partner", logo: "/events/wwpl/bwc-rabbit.webp" },
-  { name: "G.A.R.D.", role: "Campaign partner", logo: null },
-  { name: "Vegan Streetfood", role: "Official vegan food partner", logo: null },
+  { name: "G.A.R.D.", role: "Campaign partner", logo: "/events/wwpl/gard-logo.webp" },
+  { name: "Vegan Streetfood", role: "Official vegan food partner", logo: "/events/wwpl/vegan-streetfood.webp" },
   { name: "Omni Wellness Media", role: "Organiser & presenter", logo: "/events/wwpl/omni-icon.webp", round: true },
   { name: "The Masque Theatre", role: "Host venue", logo: null },
 ];
