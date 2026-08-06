@@ -203,6 +203,15 @@ export const AWARDEES: AwardeeDef[] = Array.from({ length: 6 }, () => ({
 }));
 
 /**
+ * Awardee video, supplied by Tumelo on 6 Aug ("place it for now, details
+ * later"). Context — who is in it, its title, where it belongs long-term —
+ * is coming separately, so the tile carries a deliberately generic label
+ * until then. Sharing verified 6 Aug: "Anyone with the link — Viewer", so
+ * the Drive embed plays without a sign-in wall.
+ */
+export const AWARDS_VIDEO_FILE_ID = "14EtVqr_bZ412r_PFcpV7h7imuMMVlHO9";
+
+/**
  * Every honouree card carries its own anchor so an awardee can share a link
  * that lands directly on her entry: /events/stunning-pigs#awardee-jane-doe.
  * Placeholder entries fall back to a stable numeric slug so the anchors exist
@@ -369,6 +378,7 @@ export const PARTNERS: PartnerDef[] = [
     blurb:
       "A community-driven theatre on Muizenberg's Main Road, staging professional and community productions since 1959.",
     href: "https://www.themasque.co.za/",
+    logo: "/events/wwpl/masque-logo.webp",
   },
 ];
 

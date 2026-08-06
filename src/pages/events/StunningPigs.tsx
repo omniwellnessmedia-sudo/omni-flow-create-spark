@@ -7,7 +7,8 @@ import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
   GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILERS,
-  PARTNERS, AWARDEES, awardeeAnchor, SITE_NAV, WHAT_FEEDS_US_CREDIT,
+  PARTNERS, AWARDEES, awardeeAnchor, AWARDS_VIDEO_FILE_ID, SITE_NAV,
+  WHAT_FEEDS_US_CREDIT,
   drivePreview,
 } from "./wwpl/event";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
@@ -764,6 +765,21 @@ const StunningPigs = () => {
             }
             sub="The day closes with live performances and an awards ceremony honouring the women who protect life — campaigners, carers and community leaders whose daily work defends animals and uplifts the communities around them."
           />
+
+          {/* Awardee video — placed 6 Aug at Tumelo's request; label stays
+              generic until the team supplies its details. Click-to-load like
+              every player on this page: nothing streams until tapped. */}
+          <Reveal className="mx-auto mb-14 w-full max-w-[720px]">
+            <div
+              className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg"
+              style={{ aspectRatio: "16 / 9" }}
+            >
+              <VideoTile fileId={AWARDS_VIDEO_FILE_ID} label="From the awardees" kicker="Awardee video" />
+            </div>
+            <p className="mt-3 text-center font-wwpl-cond text-[12px] uppercase tracking-[.16em] text-[rgba(240,217,168,.55)]">
+              From the awardees — more to come
+            </p>
+          </Reveal>
 
           <div className="flex flex-wrap justify-center gap-7">
             {AWARDEES.map((a, i) => {
