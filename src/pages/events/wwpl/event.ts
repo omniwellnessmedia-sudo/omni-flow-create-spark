@@ -130,6 +130,8 @@ export interface SessionDef {
   credit?: string;
   /** Anchor of this session's trailer tile, when the film has one. */
   trailerHref?: string;
+  /** Anchor of the awards section, for the session that hosts the ceremony. */
+  awardsHref?: string;
 }
 
 export const SESSIONS: SessionDef[] = [
@@ -168,9 +170,57 @@ export const SESSIONS: SessionDef[] = [
     description:
       "The day closes with live performances and the Voices for Women awards, honouring the women who protect life.",
     icon: "/events/wwpl/icon-mic.webp",
+    awardsHref: "#awards",
     cta: "Book this session",
   },
 ];
+
+/* ------------------------------------------------------------------ awards */
+
+/**
+ * The Voices for Women honourees. PLACEHOLDERS ONLY until the campaign team
+ * supplies names, citations and approved portraits — the page's no-people rule
+ * (see header) applies to portraits here exactly as everywhere else: nothing
+ * ships without written approval, which is why `portrait` stays unset for now.
+ *
+ * The grid is designed for four to eight entries and centres partial rows, so
+ * adding or removing honourees needs no layout work. Keep citations to two or
+ * three sentences.
+ */
+export interface AwardeeDef {
+  /** "[AWARDEE NAME]" until real; drives the anchor slug once real. */
+  name: string;
+  /** Two-to-three-sentence citation; "[CITATION]" placeholder until real. */
+  citation: string;
+  /** Approved portrait path under /events/wwpl/. Absent → decorative rosette. */
+  portrait?: string;
+}
+
+export const AWARDEES: AwardeeDef[] = Array.from({ length: 6 }, () => ({
+  name: "[AWARDEE NAME]",
+  citation:
+    "[CITATION — two or three sentences on her work and why it is being honoured. Content coming from the campaign team.]",
+}));
+
+/**
+ * Every honouree card carries its own anchor so an awardee can share a link
+ * that lands directly on her entry: /events/stunning-pigs#awardee-jane-doe.
+ * Placeholder entries fall back to a stable numeric slug so the anchors exist
+ * (and can be tested) before the names arrive; once a real name is set the
+ * slug becomes awardee-firstname-lastname automatically.
+ */
+export const awardeeAnchor = (a: AwardeeDef, index: number): string => {
+  if (a.name.startsWith("[")) return `awardee-${index + 1}`;
+  return (
+    "awardee-" +
+    a.name
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+  );
+};
 
 /** Feroza's cuts, in upload order (Drive "Clips" folder, 29 Jul). The design's
  *  CLIP_*_URL placeholders resolve to these. Each file must be shared
@@ -243,16 +293,83 @@ export const TRAILERS = [
   session: string; poster?: string; credit?: string;
 }[];
 
-/** G.A.R.D. and Vegan Streetfood logos supplied by Feroza on 5 Aug (Drive
- *  links in the "Women's Day Event Page Changes" email thread). The Masque
- *  Theatre logo lives in a Drive folder that could not be listed from this
- *  session — it stays a text mark until the file itself is supplied. */
-export const PARTNERS = [
-  { name: "Beauty Without Cruelty", role: "Campaign partner", logo: "/events/wwpl/bwc-rabbit.webp" },
-  { name: "G.A.R.D.", role: "Campaign partner", logo: "/events/wwpl/gard-logo.webp" },
-  { name: "Vegan Streetfood", role: "Official vegan food partner", logo: "/events/wwpl/vegan-streetfood.webp" },
-  { name: "Omni Wellness Media", role: "Organiser & presenter", logo: "/events/wwpl/omni-icon.webp", round: true },
-  { name: "The Masque Theatre", role: "Host venue", logo: null },
+/* ---------------------------------------------------------------- partners */
+
+/**
+ * Each partner carries who they are in their own right (`blurb` — what the
+ * organisation does, not what they do for this event) plus a link to their own
+ * site or page. Blurb facts were checked against each organisation's public
+ * site on 5 Aug; if one is wrong, fix it here, not in the section markup.
+ *
+ * Logos: G.A.R.D. and Vegan Streetfood supplied by Feroza on 5 Aug (Drive
+ * links in the "Women's Day Event Page Changes" thread). Travel & Tours Cape
+ * Town reuses the logo the main site already serves from its Supabase CDN
+ * (src/lib/images.ts CORE.logos.ttct). The Masque Theatre logo lives in a
+ * Drive folder that could not be listed from the build session — it renders
+ * as a monogram + wordmark until the file itself is supplied.
+ *
+ * G.A.R.D. has no link because no official site or page could be verified at
+ * build time — never guess a URL for a partner; an anchor to someone else's
+ * page is worse than none.
+ */
+export interface PartnerDef {
+  name: string;
+  role: string;
+  blurb: string;
+  href?: string;
+  logo?: string;
+  /** Circular crop, for square icon-style marks. */
+  round?: boolean;
+}
+
+export const PARTNERS: PartnerDef[] = [
+  {
+    name: "Beauty Without Cruelty South Africa",
+    role: "Campaign anchor",
+    blurb:
+      "South Africa's oldest animal rights organisation, educating the public about the suffering of animals and kinder choices since 1975.",
+    href: "https://bwcsa.co.za/",
+    logo: "/events/wwpl/bwc-rabbit.webp",
+  },
+  {
+    name: "G.A.R.D.",
+    role: "Campaign partner",
+    blurb:
+      "Gauteng Animal Rights Defenders — grassroots campaigners standing up for the humane treatment of animals across Gauteng.",
+    logo: "/events/wwpl/gard-logo.webp",
+  },
+  {
+    name: "Omni Wellness Media",
+    role: "Organiser & producer",
+    blurb:
+      "A Cape Town wellness media house producing campaigns, events and community programmes around conscious living.",
+    href: ORIGIN,
+    logo: "/events/wwpl/omni-icon.webp",
+    round: true,
+  },
+  {
+    name: "Travel and Tours Cape Town",
+    role: "Campaign partner",
+    blurb:
+      "Cape Town tour operator running heritage and wellness journeys, from indigenous-heritage walks in Kalk Bay to coastal retreats.",
+    href: `${ORIGIN}/tours-retreats`,
+    logo: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/logo%20tt%20ct%20(1).png",
+  },
+  {
+    name: "Vegan Streetfood",
+    role: "Food partner on the day",
+    blurb:
+      "Cape Town's 100% plant-powered kitchen and food truck, serving vegan street food across the city.",
+    href: "https://veganstreetfood.co.za/",
+    logo: "/events/wwpl/vegan-streetfood.webp",
+  },
+  {
+    name: "The Masque Theatre",
+    role: "Venue & ticketing partner",
+    blurb:
+      "A community-driven theatre on Muizenberg's Main Road, staging professional and community productions since 1959.",
+    href: "https://www.themasque.co.za/",
+  },
 ];
 
 /** Top-level site navigation, mirrored from UnifiedNavigation. This page is a

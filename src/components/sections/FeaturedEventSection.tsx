@@ -3,6 +3,7 @@ import { ArrowRight, CalendarDays, Clock, MapPin, Ticket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import SmartImage from '@/components/ui/smart-image';
+import { WHAT_FEEDS_US_CREDIT } from '@/pages/events/wwpl/event';
 
 /**
  * Homepage feature spot for the current flagship event.
@@ -62,6 +63,11 @@ const FeaturedEventSection = () => {
               <p className="flex items-center gap-2">
                 <Ticket className="h-4 w-4 text-rose-500 shrink-0" />
                 R150 per session · tickets on Quicket
+              </p>
+              {/* Required production credit — must appear wherever the film is
+                  named. Imported so the wording can never drift. */}
+              <p className="text-xs text-muted-foreground/80 pt-1">
+                <em>What Feeds Us</em> — {WHAT_FEEDS_US_CREDIT}
               </p>
             </div>
 
