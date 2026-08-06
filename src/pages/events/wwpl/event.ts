@@ -178,29 +178,80 @@ export const SESSIONS: SessionDef[] = [
 /* ------------------------------------------------------------------ awards */
 
 /**
- * The Voices for Women honourees. PLACEHOLDERS ONLY until the campaign team
- * supplies names, citations and approved portraits — the page's no-people rule
- * (see header) applies to portraits here exactly as everywhere else: nothing
- * ships without written approval, which is why `portrait` stays unset for now.
+ * The Voices for Women honourees.
  *
- * The grid is designed for four to eight entries and centres partial rows, so
- * adding or removing honourees needs no layout work. Keep citations to two or
- * three sentences.
+ * These seven entries are transcribed VERBATIM from the designed profile
+ * cards Feroza produced for public promotion (Drive folder "Awardees Womens
+ * day event profile", supplied directly by Tumelo on 6 Aug). The `portrait`
+ * files ARE those cards — square artwork carrying the portrait, name, role
+ * and award citation in the event's own visual language. Their use here is
+ * the narrow, documented exception to the page's no-people rule: promotional
+ * cards produced by the campaign for the awardees, supplied by the team for
+ * this purpose. Do not add anyone from the tracker spreadsheet who does not
+ * yet have a produced card.
+ *
+ * The tracker ("Awardess Tracker Info", 5 Aug) lists 27 honourees in total;
+ * cards for the rest are still in production. The grid centres partial rows,
+ * so appending new entries needs no layout work.
+ *
+ * NOTE: the cards print the session as 14:00–16:30; the Quicket-verified
+ * SESSIONS data says 14:00–16:00. Flagged to the team 6 Aug — per this
+ * file's header, design files do not override verified facts, so SESSIONS
+ * stands until the team confirms.
  */
 export interface AwardeeDef {
   /** "[AWARDEE NAME]" until real; drives the anchor slug once real. */
   name: string;
-  /** Two-to-three-sentence citation; "[CITATION]" placeholder until real. */
+  /** Role + award, verbatim from the produced card. */
   citation: string;
-  /** Approved portrait path under /events/wwpl/. Absent → decorative rosette. */
+  /** The produced profile card under /events/wwpl/. Absent → rosette. */
   portrait?: string;
 }
 
-export const AWARDEES: AwardeeDef[] = Array.from({ length: 6 }, () => ({
-  name: "[AWARDEE NAME]",
-  citation:
-    "[CITATION — two or three sentences on her work and why it is being honoured. Content coming from the campaign team.]",
-}));
+export const AWARDEES: AwardeeDef[] = [
+  {
+    name: "Louise Van Der Merwe",
+    citation:
+      "Founder & Managing Trustee, NatureBased Education. Award for Outstanding Contribution to Humane Education & Environmental Awareness.",
+    portrait: "/events/wwpl/awardee-louise-van-der-merwe.webp",
+  },
+  {
+    name: "Valerie Roscoe",
+    citation:
+      "Development Volunteer, Hazardous Poisons Committee, UnPoison South Africa. In recognition of her creative, cultural & community advocacy.",
+    portrait: "/events/wwpl/awardee-valerie-roscoe.webp",
+  },
+  {
+    name: "Nicola Van Wyk",
+    citation:
+      "Policy Advisor, FOUR PAWS South Africa. In recognition of her work in animal law & policy.",
+    portrait: "/events/wwpl/awardee-nicola-van-wyk.webp",
+  },
+  {
+    name: "Michelle Taberer",
+    citation:
+      "Founder and Chairperson, Stop Live Export South Africa. Award for Campaigning Against Live Animal Export by Sea.",
+    portrait: "/events/wwpl/awardee-michelle-taberer.webp",
+  },
+  {
+    name: "Karen de Klerk",
+    citation:
+      "Chairperson, Cape Animal Welfare Forum. Lifetime Achievement Award for Animal-Welfare Leadership and Sector Collaboration.",
+    portrait: "/events/wwpl/awardee-karen-de-klerk.webp",
+  },
+  {
+    name: "Megan Choritz",
+    citation:
+      "Writer, theatre director, actor, improviser, facilitator and activist. Award for Creative Courage, Theatre and Transformative Storytelling.",
+    portrait: "/events/wwpl/awardee-megan-choritz.webp",
+  },
+  {
+    name: "Dr Stephanie-Emmy Klarmann",
+    citation:
+      "Campaign Manager, Blood Lions. Award for Captive-Wildlife Campaigning and Youth Education.",
+    portrait: "/events/wwpl/awardee-stephanie-emmy-klarmann.webp",
+  },
+];
 
 /**
  * Awardee video, supplied by Tumelo on 6 Aug ("place it for now, details
@@ -216,7 +267,9 @@ export const AWARDS_VIDEO_FILE_ID = "14EtVqr_bZ412r_PFcpV7h7imuMMVlHO9";
  * that lands directly on her entry: /events/stunning-pigs#awardee-jane-doe.
  * Placeholder entries fall back to a stable numeric slug so the anchors exist
  * (and can be tested) before the names arrive; once a real name is set the
- * slug becomes awardee-firstname-lastname automatically.
+ * slug becomes awardee-firstname-lastname automatically. Honorifics are
+ * stripped so the link stays personal ("awardee-stephanie-emmy-klarmann",
+ * not "awardee-dr-stephanie-emmy-klarmann").
  */
 export const awardeeAnchor = (a: AwardeeDef, index: number): string => {
   if (a.name.startsWith("[")) return `awardee-${index + 1}`;
@@ -224,6 +277,7 @@ export const awardeeAnchor = (a: AwardeeDef, index: number): string => {
     "awardee-" +
     a.name
       .toLowerCase()
+      .replace(/^(dr|prof|adv|rev)\.?\s+/i, "")
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-z0-9]+/g, "-")

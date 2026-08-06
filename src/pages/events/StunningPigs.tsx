@@ -745,10 +745,10 @@ const StunningPigs = () => {
           section rather than a line inside the Session 3 card. Dark like the
           trailer section — ceremony territory, gold on plum. Honourees will
           share this page with their own networks: every card carries a
-          personal anchor (#awardee-firstname-lastname once names land) and a
-          copy-link control, so a shared link feels like hers, not ours.
-          Placeholder content is clearly marked; portraits stay empty until
-          Chad's written approval per the no-people rule in wwpl/event.ts. */}
+          personal anchor (#awardee-firstname-lastname) and a copy-link
+          control, so a shared link feels like hers, not ours. Card imagery is
+          the produced promotional artwork supplied by the team — see the
+          provenance note on AWARDEES in wwpl/event.ts. */}
       <section
         id="awards"
         className="scroll-mt-8 bg-[radial-gradient(110%_130%_at_50%_-20%,#43122E,#2A0A1E_72%)] py-24 text-wwpl-cream"
@@ -792,14 +792,18 @@ const StunningPigs = () => {
                   className="w-full scroll-mt-24 sm:w-[calc(50%-14px)] lg:w-[calc(33.333%-19px)]"
                 >
                   <article className="flex h-full flex-col rounded-[20px] border border-[rgba(217,179,108,.26)] bg-[linear-gradient(165deg,rgba(90,26,62,.55),rgba(42,10,30,.6))] p-6 sm:p-7">
+                    {/* The produced profile cards are square and self-contained
+                        (portrait, name, role and award in the artwork), so the
+                        media slot is 1:1 and the text below restates the same
+                        facts for screen readers, search and link previews. */}
                     <div
                       className="relative overflow-hidden rounded-xl bg-wwpl-plum"
-                      style={{ aspectRatio: "4 / 5" }}
+                      style={{ aspectRatio: "1 / 1" }}
                     >
                       {a.portrait ? (
                         <img
                           src={a.portrait}
-                          alt={a.name}
+                          alt={`${a.name} — ${a.citation}`}
                           loading="lazy"
                           decoding="async"
                           className="h-full w-full object-cover"
@@ -824,10 +828,7 @@ const StunningPigs = () => {
                         </span>
                       )}
                     </div>
-                    <span className="mt-6 font-wwpl-cond text-[11.5px] tracking-[.22em] uppercase text-[rgba(240,217,168,.6)]">
-                      Honouree {pad(i + 1)}
-                    </span>
-                    <h3 className="mt-2 font-wwpl-display font-semibold text-[22px] leading-tight text-white">
+                    <h3 className="mt-6 font-wwpl-display font-semibold text-[22px] leading-tight text-white">
                       {a.name}
                     </h3>
                     <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-[rgba(249,245,240,.68)]">
@@ -842,8 +843,8 @@ const StunningPigs = () => {
 
           <Reveal className="mt-14 text-center">
             <p className="mx-auto max-w-[54ch] text-[13.5px] leading-relaxed text-[rgba(249,245,240,.55)]">
-              Honouree names, citations and portraits are being finalised with the campaign team and
-              will appear here ahead of the day.
+              More honourees are being announced — the full list of women being celebrated appears
+              here as their profiles are finalised.
             </p>
             <BtnLink {...quicketProps("awards-section")} variant="gold" className="mt-7">
               Book the awards session — R150
