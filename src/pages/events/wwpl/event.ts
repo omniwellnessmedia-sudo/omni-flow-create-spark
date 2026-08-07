@@ -71,9 +71,9 @@ export const EVENT_START_MS = Date.UTC(2026, 7, 10, 8, 0, 0);
 export const CAL = {
   title: "Celebrating Women Who Protect Life — Cape Town Premiere of Stunning Pigs",
   startUTC: "20260810T080000Z",
-  endUTC: "20260810T140000Z",
+  endUTC: "20260810T143000Z",
   location: VENUE_QUERY,
-  details: `Three sessions: What Feeds Us 10:00 · Stunning Pigs premiere + Q&A 12:00 · Voices for Women Showcase & Awards 14:00. Tickets R150/session on Quicket: ${QUICKET_URL}`,
+  details: `Three sessions: What Feeds Us 10:00–11:45 · Stunning Pigs premiere + Q&A 12:00–13:15 · Voices for Women Showcase & Awards 14:00–16:30. Tickets R150/session on Quicket: ${QUICKET_URL}`,
 };
 
 export const GOOGLE_CAL_URL =
@@ -148,12 +148,16 @@ export interface SessionDef {
   awardsHref?: string;
 }
 
+/** Session times confirmed by Tumelo on 7 Aug (supersedes the Quicket-page
+ *  times and the 13:30/16:30 variants in Chad's brief and the awardee cards):
+ *  10:00–11:45 · 12:00–13:15 · 14:00–16:30. Mirrored in
+ *  scripts/prerender-event.mjs — change both together. */
 export const SESSIONS: SessionDef[] = [
   {
     no: 1,
-    time: "10:00 — Session 1",
+    time: "10:00 – 11:45 · Session 1",
     startISO: "2026-08-10T10:00:00+02:00",
-    endISO: "2026-08-10T12:00:00+02:00",
+    endISO: "2026-08-10T11:45:00+02:00",
     title: "What Feeds Us",
     description:
       "The day opens with What Feeds Us — food, ethics and community, setting the table for everything that follows.",
@@ -164,9 +168,9 @@ export const SESSIONS: SessionDef[] = [
   },
   {
     no: 2,
-    time: "12:00 — Session 2",
+    time: "12:00 – 13:15 · Session 2",
     startISO: "2026-08-10T12:00:00+02:00",
-    endISO: "2026-08-10T14:00:00+02:00",
+    endISO: "2026-08-10T13:15:00+02:00",
     title: "Stunning Pigs — Cape Town Premiere",
     description:
       "The Cape Town premiere of the Stunning Pigs documentary, followed by a public Q&A with the Beauty Without Cruelty campaign and G.A.R.D.",
@@ -177,9 +181,9 @@ export const SESSIONS: SessionDef[] = [
   },
   {
     no: 3,
-    time: "14:00 — Session 3",
+    time: "14:00 – 16:30 · Session 3",
     startISO: "2026-08-10T14:00:00+02:00",
-    endISO: "2026-08-10T16:00:00+02:00",
+    endISO: "2026-08-10T16:30:00+02:00",
     title: "Voices for Women — Showcase & Awards",
     description:
       "The day closes with live performances and the Voices for Women awards, honouring the women who protect life.",
@@ -191,81 +195,8 @@ export const SESSIONS: SessionDef[] = [
 
 /* ------------------------------------------------------------------ awards */
 
-/**
- * The Voices for Women honourees.
- *
- * These seven entries are transcribed VERBATIM from the designed profile
- * cards Feroza produced for public promotion (Drive folder "Awardees Womens
- * day event profile", supplied directly by Tumelo on 6 Aug). The `portrait`
- * files ARE those cards — square artwork carrying the portrait, name, role
- * and award citation in the event's own visual language. Their use here is
- * the narrow, documented exception to the page's no-people rule: promotional
- * cards produced by the campaign for the awardees, supplied by the team for
- * this purpose. Do not add anyone from the tracker spreadsheet who does not
- * yet have a produced card.
- *
- * The tracker ("Awardess Tracker Info", 5 Aug) lists 27 honourees in total;
- * cards for the rest are still in production. The grid centres partial rows,
- * so appending new entries needs no layout work.
- *
- * NOTE: the cards print the session as 14:00–16:30; the Quicket-verified
- * SESSIONS data says 14:00–16:00. Flagged to the team 6 Aug — per this
- * file's header, design files do not override verified facts, so SESSIONS
- * stands until the team confirms.
- */
-export interface AwardeeDef {
-  /** "[AWARDEE NAME]" until real; drives the anchor slug once real. */
-  name: string;
-  /** Role + award, verbatim from the produced card. */
-  citation: string;
-  /** The produced profile card under /events/wwpl/. Absent → rosette. */
-  portrait?: string;
-}
-
-export const AWARDEES: AwardeeDef[] = [
-  {
-    name: "Louise Van Der Merwe",
-    citation:
-      "Founder & Managing Trustee, NatureBased Education. Award for Outstanding Contribution to Humane Education & Environmental Awareness.",
-    portrait: "/events/wwpl/awardee-louise-van-der-merwe.webp",
-  },
-  {
-    name: "Valerie Roscoe",
-    citation:
-      "Development Volunteer, Hazardous Poisons Committee, UnPoison South Africa. In recognition of her creative, cultural & community advocacy.",
-    portrait: "/events/wwpl/awardee-valerie-roscoe.webp",
-  },
-  {
-    name: "Nicola Van Wyk",
-    citation:
-      "Policy Advisor, FOUR PAWS South Africa. In recognition of her work in animal law & policy.",
-    portrait: "/events/wwpl/awardee-nicola-van-wyk.webp",
-  },
-  {
-    name: "Michelle Taberer",
-    citation:
-      "Founder and Chairperson, Stop Live Export South Africa. Award for Campaigning Against Live Animal Export by Sea.",
-    portrait: "/events/wwpl/awardee-michelle-taberer.webp",
-  },
-  {
-    name: "Karen de Klerk",
-    citation:
-      "Chairperson, Cape Animal Welfare Forum. Lifetime Achievement Award for Animal-Welfare Leadership and Sector Collaboration.",
-    portrait: "/events/wwpl/awardee-karen-de-klerk.webp",
-  },
-  {
-    name: "Megan Choritz",
-    citation:
-      "Writer, theatre director, actor, improviser, facilitator and activist. Award for Creative Courage, Theatre and Transformative Storytelling.",
-    portrait: "/events/wwpl/awardee-megan-choritz.webp",
-  },
-  {
-    name: "Dr Stephanie-Emmy Klarmann",
-    citation:
-      "Campaign Manager, Blood Lions. Award for Captive-Wildlife Campaigning and Youth Education.",
-    portrait: "/events/wwpl/awardee-stephanie-emmy-klarmann.webp",
-  },
-];
+/* Honouree data lives in ./awardees.ts behind an explicit publication gate —
+   see the header comment there before touching anything awards-related. */
 
 /**
  * Awardee video, supplied by Tumelo on 6 Aug ("place it for now, details
@@ -275,29 +206,6 @@ export const AWARDEES: AwardeeDef[] = [
  * the Drive embed plays without a sign-in wall.
  */
 export const AWARDS_VIDEO_FILE_ID = "14EtVqr_bZ412r_PFcpV7h7imuMMVlHO9";
-
-/**
- * Every honouree card carries its own anchor so an awardee can share a link
- * that lands directly on her entry: /events/stunning-pigs#awardee-jane-doe.
- * Placeholder entries fall back to a stable numeric slug so the anchors exist
- * (and can be tested) before the names arrive; once a real name is set the
- * slug becomes awardee-firstname-lastname automatically. Honorifics are
- * stripped so the link stays personal ("awardee-stephanie-emmy-klarmann",
- * not "awardee-dr-stephanie-emmy-klarmann").
- */
-export const awardeeAnchor = (a: AwardeeDef, index: number): string => {
-  if (a.name.startsWith("[")) return `awardee-${index + 1}`;
-  return (
-    "awardee-" +
-    a.name
-      .toLowerCase()
-      .replace(/^(dr|prof|adv|rev)\.?\s+/i, "")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-  );
-};
 
 /** Feroza's cuts, in upload order (Drive "Clips" folder, 29 Jul). The design's
  *  CLIP_*_URL placeholders resolve to these. Each file must be shared
@@ -376,14 +284,15 @@ export const TRAILERS = [
  * Each partner carries who they are in their own right (`blurb` — what the
  * organisation does, not what they do for this event) plus a link to their own
  * site or page. Blurb facts were checked against each organisation's public
- * site on 5 Aug; if one is wrong, fix it here, not in the section markup.
+ * site (5–7 Aug); if one is wrong, fix it here, not in the section markup.
  *
- * Logos: G.A.R.D. and Vegan Streetfood supplied by Feroza on 5 Aug (Drive
- * links in the "Women's Day Event Page Changes" thread). Travel & Tours Cape
- * Town reuses the logo the main site already serves from its Supabase CDN
- * (src/lib/images.ts CORE.logos.ttct). The Masque Theatre logo lives in a
- * Drive folder that could not be listed from the build session — it renders
- * as a monogram + wordmark until the file itself is supplied.
+ * Logos live under public/partners/, optimised from the poster logo pack the
+ * team supplied on 6 Aug ("celebratingwomenposter.zip"). Several marks sit on
+ * white rectangular backgrounds (BWC, Masque, Uthando, Four Paws) — the
+ * partner cards are white by design, so those logos read as intended; do not
+ * move this section onto a dark ground without re-cutting the logos.
+ * Travel & Tours Cape Town still loads from the site's Supabase CDN (its
+ * source file was not in the pack).
  *
  * G.A.R.D. has no link because no official site or page could be verified at
  * build time — never guess a URL for a partner; an anchor to someone else's
@@ -406,14 +315,14 @@ export const PARTNERS: PartnerDef[] = [
     blurb:
       "South Africa's oldest animal rights organisation, educating the public about the suffering of animals and kinder choices since 1975.",
     href: "https://bwcsa.co.za/",
-    logo: "/events/wwpl/bwc-rabbit.webp",
+    logo: "/partners/bwc.webp",
   },
   {
     name: "G.A.R.D.",
     role: "Campaign partner",
     blurb:
       "Gauteng Animal Rights Defenders — grassroots campaigners standing up for the humane treatment of animals across Gauteng.",
-    logo: "/events/wwpl/gard-logo.webp",
+    logo: "/partners/gard.webp",
   },
   {
     name: "Omni Wellness Media",
@@ -421,7 +330,7 @@ export const PARTNERS: PartnerDef[] = [
     blurb:
       "A Cape Town wellness media house producing campaigns, events and community programmes around conscious living.",
     href: ORIGIN,
-    logo: "/events/wwpl/omni-icon.webp",
+    logo: "/partners/omni.webp",
     round: true,
   },
   {
@@ -438,7 +347,7 @@ export const PARTNERS: PartnerDef[] = [
     blurb:
       "Cape Town's 100% plant-powered kitchen and food truck, serving vegan street food across the city.",
     href: "https://veganstreetfood.co.za/",
-    logo: "/events/wwpl/vegan-streetfood.webp",
+    logo: "/partners/vegan-streetfood.webp",
   },
   {
     name: "The Masque Theatre",
@@ -446,7 +355,31 @@ export const PARTNERS: PartnerDef[] = [
     blurb:
       "A community-driven theatre on Muizenberg's Main Road, staging professional and community productions since 1959.",
     href: "https://www.themasque.co.za/",
-    logo: "/events/wwpl/masque-logo.webp",
+    logo: "/partners/masque-theatre.webp",
+  },
+  {
+    name: "FOUR PAWS South Africa",
+    role: "Supporting partner",
+    blurb:
+      "The South African office of the global animal welfare organisation working for animals under direct human influence.",
+    href: "https://www.four-paws.org.za/",
+    logo: "/partners/four-paws.webp",
+  },
+  {
+    name: "Uthando South Africa",
+    role: "Supporting partner",
+    blurb:
+      "An award-winning Cape Town non-profit whose philanthropic tourism funds community development projects across the city's townships.",
+    href: "https://www.uthandosa.org/",
+    logo: "/partners/uthando.webp",
+  },
+  {
+    name: "Dr. Phil-Afel Foundation",
+    role: "Community partner",
+    blurb:
+      "A non-profit foundation for community upliftment and social justice in South Africa's most vulnerable communities.",
+    href: `${ORIGIN}/csr-impact`,
+    logo: "/partners/dr-phil-afel.webp",
   },
 ];
 

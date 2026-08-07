@@ -7,10 +7,11 @@ import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
   GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILERS,
-  PARTNERS, AWARDEES, awardeeAnchor, AWARDS_VIDEO_FILE_ID, SITE_NAV,
+  PARTNERS, AWARDS_VIDEO_FILE_ID, SITE_NAV,
   WHAT_FEEDS_US_CREDIT, CONTENT_ADVISORY,
   drivePreview,
 } from "./wwpl/event";
+import { VISIBLE_AWARDEES, awardeeAnchor } from "./wwpl/awardees";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
 import { PetitionForm } from "./wwpl/PetitionForm";
 import { SeatingMap } from "./wwpl/SeatingMap";
@@ -379,7 +380,7 @@ const StunningPigs = () => {
         name: "Celebrating Women Who Protect Life — Cape Town Premiere of Stunning Pigs",
         description: seo.description,
         startDate: "2026-08-10T10:00:00+02:00",
-        endDate: "2026-08-10T16:00:00+02:00",
+        endDate: "2026-08-10T16:30:00+02:00",
         eventStatus: "https://schema.org/EventScheduled",
         eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
         image: [OG_IMAGE, `${ORIGIN}${POSTER}`],
@@ -760,7 +761,7 @@ const StunningPigs = () => {
         <div className={wrap}>
           <SecHead
             tone="dark"
-            eyebrow="Session 3 · 14:00 · R150"
+            eyebrow="Session 3 · 14:00–16:30 · R150"
             title={
               <>
                 Voices for Women —{" "}
@@ -785,9 +786,12 @@ const StunningPigs = () => {
             </p>
           </Reveal>
 
+          {/* Only VISIBLE_AWARDEES may be mapped here — it applies the
+              publication gate (explicit flag + citation + portrait). Never
+              render from AWARDEE_RECORDS directly. */}
           <div className="flex flex-wrap justify-center gap-7">
-            {AWARDEES.map((a, i) => {
-              const anchor = awardeeAnchor(a, i);
+            {VISIBLE_AWARDEES.map((a, i) => {
+              const anchor = awardeeAnchor(a);
               return (
                 <Reveal
                   key={anchor}
@@ -807,7 +811,7 @@ const StunningPigs = () => {
                       {a.portrait ? (
                         <img
                           src={a.portrait}
-                          alt={`${a.name} — ${a.citation}`}
+                          alt={`${a.name} — ${a.citation ?? ""}`}
                           loading="lazy"
                           decoding="async"
                           className="h-full w-full object-cover"

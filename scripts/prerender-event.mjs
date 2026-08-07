@@ -66,9 +66,9 @@ const PLACE = {
 };
 
 const SESSIONS = [
-  { name: 'What Feeds Us', start: '2026-08-10T10:00:00+02:00', end: '2026-08-10T12:00:00+02:00' },
-  { name: 'Stunning Pigs — Cape Town Premiere', start: '2026-08-10T12:00:00+02:00', end: '2026-08-10T14:00:00+02:00' },
-  { name: 'Voices for Women Showcase & Awards Ceremony', start: '2026-08-10T14:00:00+02:00', end: '2026-08-10T16:00:00+02:00' },
+  { name: 'What Feeds Us', start: '2026-08-10T10:00:00+02:00', end: '2026-08-10T11:45:00+02:00' },
+  { name: 'Stunning Pigs — Cape Town Premiere', start: '2026-08-10T12:00:00+02:00', end: '2026-08-10T13:15:00+02:00' },
+  { name: 'Voices for Women Showcase & Awards Ceremony', start: '2026-08-10T14:00:00+02:00', end: '2026-08-10T16:30:00+02:00' },
 ];
 
 const offer = (url) => ({
@@ -85,7 +85,7 @@ const EVENT_JSONLD = {
   name: 'Celebrating Women Who Protect Life — Cape Town Premiere of Stunning Pigs',
   description: DESCRIPTION,
   startDate: '2026-08-10T10:00:00+02:00',
-  endDate: '2026-08-10T16:00:00+02:00',
+  endDate: '2026-08-10T16:30:00+02:00',
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   image: [POSTER_URL, SQUARE_URL],
