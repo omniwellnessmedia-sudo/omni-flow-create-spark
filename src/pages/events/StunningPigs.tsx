@@ -8,7 +8,7 @@ import {
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
   GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILERS,
   PARTNERS, AWARDEES, awardeeAnchor, AWARDS_VIDEO_FILE_ID, SITE_NAV,
-  WHAT_FEEDS_US_CREDIT,
+  WHAT_FEEDS_US_CREDIT, CONTENT_ADVISORY,
   drivePreview,
 } from "./wwpl/event";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
@@ -735,6 +735,10 @@ const StunningPigs = () => {
               Delicious vegan food is available for purchase on the day, from official vegan food
               partner Vegan Streetfood.
             </div>
+            {/* Viewer advisory — see the provenance note on CONTENT_ADVISORY. */}
+            <p className="mt-5 text-[13px] leading-relaxed text-wwpl-slate/75">
+              {CONTENT_ADVISORY}
+            </p>
 
           </Reveal>
         </div>

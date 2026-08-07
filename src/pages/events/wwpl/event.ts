@@ -116,6 +116,20 @@ export const downloadIcs = () => {
 export const WHAT_FEEDS_US_CREDIT =
   "Commissioned by Humane World for Animals and produced by 1000 THINGS Productions.";
 
+/**
+ * Viewer advisory for Stunning Pigs, worded by Chad after his first-hand
+ * full viewing of the completed film (internal brief, 5 Aug): no visible
+ * slaughter, blood or gore, but emotionally difficult subject matter. He has
+ * flagged that the wording may be adjusted once the classification position
+ * is confirmed — if it changes, change it here only.
+ *
+ * Note this credit/advisory distinction: WHAT_FEEDS_US_CREDIT belongs to
+ * What Feeds Us ONLY. Per the same brief, do not describe Humane World for
+ * Animals as commissioner or rights holder of STUNNING PIGS anywhere.
+ */
+export const CONTENT_ADVISORY =
+  "Stunning Pigs contains non-graphic footage and distressing discussion relating to pig farming, transport and carbon dioxide stunning. Some viewers may find the subject matter upsetting. Viewer discretion is advised.";
+
 export interface SessionDef {
   no: number;
   time: string;
