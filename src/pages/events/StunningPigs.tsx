@@ -7,9 +7,11 @@ import {
   QUICKET_URL, PAGE_URL, ORIGIN, OG_IMAGE, POSTER, CONTACT_EMAIL, CONTACT_PHONE,
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
   GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILERS,
-  PARTNERS, SITE_NAV, WHAT_FEEDS_US_CREDIT,
+  PARTNERS, AWARDS_VIDEO_FILE_ID, SITE_NAV,
+  WHAT_FEEDS_US_CREDIT, CONTENT_ADVISORY,
   drivePreview,
 } from "./wwpl/event";
+import { VISIBLE_AWARDEES, awardeeAnchor } from "./wwpl/awardees";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
 import { PetitionForm } from "./wwpl/PetitionForm";
 import { SeatingMap } from "./wwpl/SeatingMap";
@@ -110,6 +112,39 @@ const Countdown = () => {
         </div>
       ))}
     </div>
+  );
+};
+
+/* ------------------------------------------------------ awardee copy link */
+
+/**
+ * Quiet per-card control that copies the awardee's personal anchor URL —
+ * honourees share these links with their families and communities, so the
+ * affordance has to exist on the card itself. Clipboard API with a prompt()
+ * fallback; feedback swaps the label in place — nothing on this page pops
+ * over content.
+ */
+const CopyAnchorButton = ({ anchor, name }: { anchor: string; name: string }) => {
+  const [copied, setCopied] = useState(false);
+  const url = `${PAGE_URL}#${anchor}`;
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(url);
+          setCopied(true);
+          track("awardee_link_copied", { anchor });
+          window.setTimeout(() => setCopied(false), 2000);
+        } catch {
+          window.prompt("Copy this link", url);
+        }
+      }}
+      aria-label={`Copy a direct link to ${name}'s entry`}
+      className="mt-5 self-start font-wwpl-cond text-[11.5px] tracking-[.16em] uppercase text-[rgba(240,217,168,.65)] underline underline-offset-[3px] transition-colors hover:text-wwpl-gold"
+    >
+      {copied ? "Link copied" : "Copy link to this entry"}
+    </button>
   );
 };
 
@@ -345,7 +380,7 @@ const StunningPigs = () => {
         name: "Celebrating Women Who Protect Life — Cape Town Premiere of Stunning Pigs",
         description: seo.description,
         startDate: "2026-08-10T10:00:00+02:00",
-        endDate: "2026-08-10T16:00:00+02:00",
+        endDate: "2026-08-10T16:30:00+02:00",
         eventStatus: "https://schema.org/EventScheduled",
         eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
         image: [OG_IMAGE, `${ORIGIN}${POSTER}`],
@@ -578,6 +613,13 @@ const StunningPigs = () => {
                       Watch the trailer
                     </a>
                   )}
+                  {s.awardsHref && (
+                    <a href={s.awardsHref}
+                      onClick={() => track("nav_awards", { from: `session-${s.no}` })}
+                      className="mt-5 self-start text-[13.5px] text-wwpl-slate underline underline-offset-[3px] transition-colors hover:text-wwpl-goldDeep">
+                      About the awards
+                    </a>
+                  )}
                   <BtnLink {...quicketProps(`session-${s.no}`)} variant={s.feature ? "gold" : "ghost"}
                     className="mt-6 self-start text-[14px]">
                     {s.cta}
@@ -694,10 +736,129 @@ const StunningPigs = () => {
               Delicious vegan food is available for purchase on the day, from official vegan food
               partner Vegan Streetfood.
             </div>
+            {/* Viewer advisory — see the provenance note on CONTENT_ADVISORY. */}
+            <p className="mt-5 text-[13px] leading-relaxed text-wwpl-slate/75">
+              {CONTENT_ADVISORY}
+            </p>
 
           </Reveal>
         </div>
 
+      </section>
+
+      {/* 5b — The awards. The emotional centre of the day, so it gets its own
+          section rather than a line inside the Session 3 card. Dark like the
+          trailer section — ceremony territory, gold on plum. Honourees will
+          share this page with their own networks: every card carries a
+          personal anchor (#awardee-firstname-lastname) and a copy-link
+          control, so a shared link feels like hers, not ours. Card imagery is
+          the produced promotional artwork supplied by the team — see the
+          provenance note on AWARDEES in wwpl/event.ts. */}
+      <section
+        id="awards"
+        className="scroll-mt-8 bg-[radial-gradient(110%_130%_at_50%_-20%,#43122E,#2A0A1E_72%)] py-24 text-wwpl-cream"
+      >
+        <div className={wrap}>
+          <SecHead
+            tone="dark"
+            eyebrow="Session 3 · 14:00–16:30 · R150"
+            title={
+              <>
+                Voices for Women —{" "}
+                <em className="italic text-wwpl-goldLight">Showcase &amp; Awards</em>
+              </>
+            }
+            sub="The day closes with live performances and an awards ceremony honouring the women who protect life — campaigners, carers and community leaders whose daily work defends animals and uplifts the communities around them."
+          />
+
+          {/* Awardee video — placed 6 Aug at Tumelo's request; label stays
+              generic until the team supplies its details. Click-to-load like
+              every player on this page: nothing streams until tapped. */}
+          <Reveal className="mx-auto mb-14 w-full max-w-[720px]">
+            <div
+              className="relative w-full overflow-hidden rounded-2xl bg-black shadow-wwpl-lg"
+              style={{ aspectRatio: "16 / 9" }}
+            >
+              <VideoTile fileId={AWARDS_VIDEO_FILE_ID} label="From the awardees" kicker="Awardee video" />
+            </div>
+            <p className="mt-3 text-center font-wwpl-cond text-[12px] uppercase tracking-[.16em] text-[rgba(240,217,168,.55)]">
+              From the awardees — more to come
+            </p>
+          </Reveal>
+
+          {/* Only VISIBLE_AWARDEES may be mapped here — it applies the
+              publication gate (explicit flag + citation + portrait). Never
+              render from AWARDEE_RECORDS directly. */}
+          <div className="flex flex-wrap justify-center gap-7">
+            {VISIBLE_AWARDEES.map((a, i) => {
+              const anchor = awardeeAnchor(a);
+              return (
+                <Reveal
+                  key={anchor}
+                  id={anchor}
+                  delayMs={(i % 3) * 90}
+                  className="w-full scroll-mt-24 sm:w-[calc(50%-14px)] lg:w-[calc(33.333%-19px)]"
+                >
+                  <article className="flex h-full flex-col rounded-[20px] border border-[rgba(217,179,108,.26)] bg-[linear-gradient(165deg,rgba(90,26,62,.55),rgba(42,10,30,.6))] p-6 sm:p-7">
+                    {/* The produced profile cards are square and self-contained
+                        (portrait, name, role and award in the artwork), so the
+                        media slot is 1:1 and the text below restates the same
+                        facts for screen readers, search and link previews. */}
+                    <div
+                      className="relative overflow-hidden rounded-xl bg-wwpl-plum"
+                      style={{ aspectRatio: "1 / 1" }}
+                    >
+                      {a.portrait ? (
+                        <img
+                          src={a.portrait}
+                          alt={`${a.name} — ${a.citation ?? ""}`}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                          <svg
+                            aria-hidden="true"
+                            viewBox="0 0 64 64"
+                            className="h-16 w-16 opacity-40"
+                            fill="none"
+                            stroke="#D9B36C"
+                            strokeWidth="2"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="32" cy="25" r="13" />
+                            <path d="M24.5 35.5 18 56l14-8 14 8-6.5-20.5" />
+                          </svg>
+                          <span className="font-wwpl-cond text-[10.5px] tracking-[.22em] uppercase text-[rgba(240,217,168,.45)]">
+                            Portrait to follow
+                          </span>
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="mt-6 font-wwpl-display font-semibold text-[22px] leading-tight text-white">
+                      {a.name}
+                    </h3>
+                    <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-[rgba(249,245,240,.68)]">
+                      {a.citation}
+                    </p>
+                    <CopyAnchorButton anchor={anchor} name={a.name} />
+                  </article>
+                </Reveal>
+              );
+            })}
+          </div>
+
+          <Reveal className="mt-14 text-center">
+            <p className="mx-auto max-w-[54ch] text-[13.5px] leading-relaxed text-[rgba(249,245,240,.55)]">
+              More honourees are being announced — the full list of women being celebrated appears
+              here as their profiles are finalised.
+            </p>
+            <BtnLink {...quicketProps("awards-section")} variant="gold" className="mt-7">
+              Book the awards session — R150
+            </BtnLink>
+          </Reveal>
+        </div>
       </section>
 
       {/* 6 — Buying with confidence. Legally load-bearing; see file header. */}
@@ -828,31 +989,76 @@ const StunningPigs = () => {
         </div>
       </section>
 
-      {/* 10 — Presented with */}
-      <section className="border-t border-wwpl-line pb-[88px] pt-[72px] text-center">
+      {/* 10 — Partners. Not a logo strip: each partner is a named collaborator
+          with who-they-are copy and a link to their own site. This section is
+          doing credibility work for a first-time event — six organisations
+          with real track records vouching for the day. Data (blurbs, links,
+          logos and their provenance) lives in PARTNERS in wwpl/event.ts. */}
+      <section id="partners" className="scroll-mt-8 border-t border-wwpl-line pb-[96px] pt-[80px]">
         <div className={wrap}>
-          <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-slate">Presented with</Eyebrow>
-          <div className="mt-11 flex flex-wrap items-start justify-center gap-x-14 gap-y-10">
-            {PARTNERS.map((p, i) => (
-              <Reveal key={p.name} delayMs={(i % 3) * 90} className="flex min-w-[120px] flex-col items-center gap-3">
-                <span className="flex min-h-[56px] items-center justify-center">
-                  {p.logo ? (
-                    <img src={p.logo} alt={p.name} loading="lazy" decoding="async"
-                      className={cn("max-h-14 max-w-[110px] object-contain", p.round && "rounded-full")} />
-                  ) : (
-                    <span className="whitespace-nowrap font-wwpl-display font-semibold text-[22px] text-wwpl-ink">
-                      {p.name}
+          <SecHead
+            eyebrow="Presented with"
+            title="The people behind the day"
+            sub="A first-time event, carried by organisations that have been doing this work for years."
+          />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {PARTNERS.map((p, i) => {
+              const external = !!p.href && !p.href.startsWith(ORIGIN);
+              return (
+                <Reveal key={p.name} delayMs={(i % 3) * 90} className="h-full">
+                  <article className="flex h-full flex-col rounded-[20px] border border-wwpl-line bg-white p-7 shadow-[0_1px_2px_rgba(21,32,31,.05)] motion-safe:transition-all motion-safe:duration-[250ms] hover:-translate-y-1 hover:shadow-wwpl-md">
+                    <span className="mb-5 flex h-14 items-center">
+                      {p.logo ? (
+                        <img
+                          src={p.logo}
+                          alt={`${p.name} logo`}
+                          loading="lazy"
+                          decoding="async"
+                          /* T&T CT's mark loads from the site CDN; if any logo
+                             404s, an empty slot beats a broken-image glyph. */
+                          onError={(e) => { e.currentTarget.style.display = "none"; }}
+                          className={cn(
+                            "max-h-14 max-w-[150px] object-contain",
+                            p.round && "h-14 w-14 rounded-full"
+                          )}
+                        />
+                      ) : (
+                        /* Monogram stand-in until the organisation's own mark
+                           is supplied — see the provenance note in PARTNERS. */
+                        <span
+                          aria-hidden="true"
+                          className="flex h-14 w-14 items-center justify-center rounded-full bg-wwpl-plum font-wwpl-display font-semibold text-[24px] text-wwpl-goldLight"
+                        >
+                          {p.name.replace(/^The /, "").charAt(0)}
+                        </span>
+                      )}
                     </span>
-                  )}
-                </span>
-                <small className="font-wwpl-cond text-[11.5px] tracking-[.1em] uppercase text-wwpl-slate">
-                  {p.role}
-                </small>
-              </Reveal>
-            ))}
+                    <span className="font-wwpl-cond text-[11.5px] tracking-[.2em] uppercase text-wwpl-goldDeep">
+                      {p.role}
+                    </span>
+                    <h3 className="mt-2 font-wwpl-display font-semibold text-[21px] leading-snug text-wwpl-ink">
+                      {p.name}
+                    </h3>
+                    <p className="mt-2.5 flex-1 text-[14.5px] leading-relaxed text-wwpl-slate">
+                      {p.blurb}
+                    </p>
+                    {p.href && (
+                      <a
+                        href={p.href}
+                        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        onClick={() => track("partner_click", { partner: p.name })}
+                        className="mt-5 self-start text-[13.5px] text-wwpl-goldDeep underline underline-offset-[3px] transition-colors hover:text-wwpl-ink"
+                      >
+                        {external ? "Visit their site ↗" : "Visit their page"}
+                      </a>
+                    )}
+                  </article>
+                </Reveal>
+              );
+            })}
           </div>
           {/* Required production credit, as the page's credits footnote. */}
-          <p className="mx-auto mt-12 max-w-[62ch] text-[12.5px] leading-relaxed text-wwpl-slate/75">
+          <p className="mx-auto mt-12 max-w-[62ch] text-center text-[12.5px] leading-relaxed text-wwpl-slate/75">
             <em>What Feeds Us</em> — {WHAT_FEEDS_US_CREDIT}
           </p>
         </div>

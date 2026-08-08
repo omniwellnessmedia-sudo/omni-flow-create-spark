@@ -71,9 +71,9 @@ export const EVENT_START_MS = Date.UTC(2026, 7, 10, 8, 0, 0);
 export const CAL = {
   title: "Celebrating Women Who Protect Life — Cape Town Premiere of Stunning Pigs",
   startUTC: "20260810T080000Z",
-  endUTC: "20260810T140000Z",
+  endUTC: "20260810T143000Z",
   location: VENUE_QUERY,
-  details: `Three sessions: What Feeds Us 10:00 · Stunning Pigs premiere + Q&A 12:00 · Voices for Women Showcase & Awards 14:00. Tickets R150/session on Quicket: ${QUICKET_URL}`,
+  details: `Three sessions: What Feeds Us 10:00–11:45 · Stunning Pigs premiere + Q&A 12:00–13:15 · Voices for Women Showcase & Awards 14:00–16:30. Tickets R150/session on Quicket: ${QUICKET_URL}`,
 };
 
 export const GOOGLE_CAL_URL =
@@ -116,6 +116,20 @@ export const downloadIcs = () => {
 export const WHAT_FEEDS_US_CREDIT =
   "Commissioned by Humane World for Animals and produced by 1000 THINGS Productions.";
 
+/**
+ * Viewer advisory for Stunning Pigs, worded by Chad after his first-hand
+ * full viewing of the completed film (internal brief, 5 Aug): no visible
+ * slaughter, blood or gore, but emotionally difficult subject matter. He has
+ * flagged that the wording may be adjusted once the classification position
+ * is confirmed — if it changes, change it here only.
+ *
+ * Note this credit/advisory distinction: WHAT_FEEDS_US_CREDIT belongs to
+ * What Feeds Us ONLY. Per the same brief, do not describe Humane World for
+ * Animals as commissioner or rights holder of STUNNING PIGS anywhere.
+ */
+export const CONTENT_ADVISORY =
+  "Stunning Pigs contains non-graphic footage and distressing discussion relating to pig farming, transport and carbon dioxide stunning. Some viewers may find the subject matter upsetting. Viewer discretion is advised.";
+
 export interface SessionDef {
   no: number;
   time: string;
@@ -130,14 +144,20 @@ export interface SessionDef {
   credit?: string;
   /** Anchor of this session's trailer tile, when the film has one. */
   trailerHref?: string;
+  /** Anchor of the awards section, for the session that hosts the ceremony. */
+  awardsHref?: string;
 }
 
+/** Session times confirmed by Tumelo on 7 Aug (supersedes the Quicket-page
+ *  times and the 13:30/16:30 variants in Chad's brief and the awardee cards):
+ *  10:00–11:45 · 12:00–13:15 · 14:00–16:30. Mirrored in
+ *  scripts/prerender-event.mjs — change both together. */
 export const SESSIONS: SessionDef[] = [
   {
     no: 1,
-    time: "10:00 — Session 1",
+    time: "10:00 – 11:45 · Session 1",
     startISO: "2026-08-10T10:00:00+02:00",
-    endISO: "2026-08-10T12:00:00+02:00",
+    endISO: "2026-08-10T11:45:00+02:00",
     title: "What Feeds Us",
     description:
       "The day opens with What Feeds Us — food, ethics and community, setting the table for everything that follows.",
@@ -148,9 +168,9 @@ export const SESSIONS: SessionDef[] = [
   },
   {
     no: 2,
-    time: "12:00 — Session 2",
+    time: "12:00 – 13:15 · Session 2",
     startISO: "2026-08-10T12:00:00+02:00",
-    endISO: "2026-08-10T14:00:00+02:00",
+    endISO: "2026-08-10T13:15:00+02:00",
     title: "Stunning Pigs — Cape Town Premiere",
     description:
       "The Cape Town premiere of the Stunning Pigs documentary, followed by a public Q&A with the Beauty Without Cruelty campaign and G.A.R.D.",
@@ -161,16 +181,31 @@ export const SESSIONS: SessionDef[] = [
   },
   {
     no: 3,
-    time: "14:00 — Session 3",
+    time: "14:00 – 16:30 · Session 3",
     startISO: "2026-08-10T14:00:00+02:00",
-    endISO: "2026-08-10T16:00:00+02:00",
+    endISO: "2026-08-10T16:30:00+02:00",
     title: "Voices for Women — Showcase & Awards",
     description:
       "The day closes with live performances and the Voices for Women awards, honouring the women who protect life.",
     icon: "/events/wwpl/icon-mic.webp",
+    awardsHref: "#awards",
     cta: "Book this session",
   },
 ];
+
+/* ------------------------------------------------------------------ awards */
+
+/* Honouree data lives in ./awardees.ts behind an explicit publication gate —
+   see the header comment there before touching anything awards-related. */
+
+/**
+ * Awardee video, supplied by Tumelo on 6 Aug ("place it for now, details
+ * later"). Context — who is in it, its title, where it belongs long-term —
+ * is coming separately, so the tile carries a deliberately generic label
+ * until then. Sharing verified 6 Aug: "Anyone with the link — Viewer", so
+ * the Drive embed plays without a sign-in wall.
+ */
+export const AWARDS_VIDEO_FILE_ID = "14EtVqr_bZ412r_PFcpV7h7imuMMVlHO9";
 
 /** Feroza's cuts, in upload order (Drive "Clips" folder, 29 Jul). The design's
  *  CLIP_*_URL placeholders resolve to these. Each file must be shared
@@ -243,12 +278,109 @@ export const TRAILERS = [
   session: string; poster?: string; credit?: string;
 }[];
 
-export const PARTNERS = [
-  { name: "Beauty Without Cruelty", role: "Campaign partner", logo: "/events/wwpl/bwc-rabbit.webp" },
-  { name: "G.A.R.D.", role: "Campaign partner", logo: null },
-  { name: "Vegan Streetfood", role: "Official vegan food partner", logo: null },
-  { name: "Omni Wellness Media", role: "Organiser & presenter", logo: "/events/wwpl/omni-icon.webp", round: true },
-  { name: "The Masque Theatre", role: "Host venue", logo: null },
+/* ---------------------------------------------------------------- partners */
+
+/**
+ * Each partner carries who they are in their own right (`blurb` — what the
+ * organisation does, not what they do for this event) plus a link to their own
+ * site or page. Blurb facts were checked against each organisation's public
+ * site (5–7 Aug); if one is wrong, fix it here, not in the section markup.
+ *
+ * Logos live under public/partners/, optimised from the poster logo pack the
+ * team supplied on 6 Aug ("celebratingwomenposter.zip"). Several marks sit on
+ * white rectangular backgrounds (BWC, Masque, Uthando, Four Paws) — the
+ * partner cards are white by design, so those logos read as intended; do not
+ * move this section onto a dark ground without re-cutting the logos.
+ * Travel & Tours Cape Town still loads from the site's Supabase CDN (its
+ * source file was not in the pack).
+ *
+ * G.A.R.D. has no link because no official site or page could be verified at
+ * build time — never guess a URL for a partner; an anchor to someone else's
+ * page is worse than none.
+ */
+export interface PartnerDef {
+  name: string;
+  role: string;
+  blurb: string;
+  href?: string;
+  logo?: string;
+  /** Circular crop, for square icon-style marks. */
+  round?: boolean;
+}
+
+export const PARTNERS: PartnerDef[] = [
+  {
+    name: "Beauty Without Cruelty South Africa",
+    role: "Campaign anchor",
+    blurb:
+      "South Africa's oldest animal rights organisation, educating the public about the suffering of animals and kinder choices since 1975.",
+    href: "https://bwcsa.co.za/",
+    logo: "/partners/bwc.webp",
+  },
+  {
+    name: "G.A.R.D.",
+    role: "Campaign partner",
+    blurb:
+      "Gauteng Animal Rights Defenders — grassroots campaigners standing up for the humane treatment of animals across Gauteng.",
+    logo: "/partners/gard.webp",
+  },
+  {
+    name: "Omni Wellness Media",
+    role: "Organiser & producer",
+    blurb:
+      "A Cape Town wellness media house producing campaigns, events and community programmes around conscious living.",
+    href: ORIGIN,
+    logo: "/partners/omni.webp",
+    round: true,
+  },
+  {
+    name: "Travel and Tours Cape Town",
+    role: "Campaign partner",
+    blurb:
+      "Cape Town tour operator running heritage and wellness journeys, from indigenous-heritage walks in Kalk Bay to coastal retreats.",
+    href: `${ORIGIN}/tours-retreats`,
+    logo: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/partner-logos%2A%2A%20(Brand%20Assets)/logo%20tt%20ct%20(1).png",
+  },
+  {
+    name: "Vegan Streetfood",
+    role: "Food partner on the day",
+    blurb:
+      "Cape Town's 100% plant-powered kitchen and food truck, serving vegan street food across the city.",
+    href: "https://veganstreetfood.co.za/",
+    logo: "/partners/vegan-streetfood.webp",
+  },
+  {
+    name: "The Masque Theatre",
+    role: "Venue & ticketing partner",
+    blurb:
+      "A community-driven theatre on Muizenberg's Main Road, staging professional and community productions since 1959.",
+    href: "https://www.themasque.co.za/",
+    logo: "/partners/masque-theatre.webp",
+  },
+  {
+    name: "FOUR PAWS South Africa",
+    role: "Supporting partner",
+    blurb:
+      "The South African office of the global animal welfare organisation working for animals under direct human influence.",
+    href: "https://www.four-paws.org.za/",
+    logo: "/partners/four-paws.webp",
+  },
+  {
+    name: "Uthando South Africa",
+    role: "Supporting partner",
+    blurb:
+      "An award-winning Cape Town non-profit whose philanthropic tourism funds community development projects across the city's townships.",
+    href: "https://www.uthandosa.org/",
+    logo: "/partners/uthando.webp",
+  },
+  {
+    name: "Dr. Phil-Afel Foundation",
+    role: "Community partner",
+    blurb:
+      "A non-profit foundation for community upliftment and social justice in South Africa's most vulnerable communities.",
+    href: `${ORIGIN}/csr-impact`,
+    logo: "/partners/dr-phil-afel.webp",
+  },
 ];
 
 /** Top-level site navigation, mirrored from UnifiedNavigation. This page is a
