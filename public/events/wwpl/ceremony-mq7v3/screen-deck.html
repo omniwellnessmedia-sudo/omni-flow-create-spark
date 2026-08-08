@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voices for Women — Ceremony Screen Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+deck-stage:not(:defined){visibility:hidden}
+:root{--ink:#0E1513;--ink2:#1F2F27;--gold:#C9B68E;--gold-d:#8E7B52;--cream:#F7F3EA;--mute:#8A9A96;--plum:#4A1F35}
+body{margin:0;background:#0a0f0e}
+deck-stage section{background:var(--ink);color:var(--cream);font-family:Jost,Helvetica,Arial,sans-serif;overflow:hidden}
+.mono{font-family:Jost,sans-serif;font-weight:500;letter-spacing:.34em;text-transform:uppercase}
+.serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:300}
+.pad{position:absolute;inset:0;padding:96px 120px;display:flex;flex-direction:column}
+.rule{height:3px;width:120px;background:var(--gold);border:0}
+.spectrum{position:absolute;left:0;right:0;bottom:0;height:8px;display:flex}
+.spectrum i{flex:1}
+/* ---- title / section ---- */
+.center{align-items:center;justify-content:center;text-align:center}
+.t-kick{font-size:26px;color:var(--gold);margin:0}
+.t-h1{font-size:132px;line-height:.94;margin:34px 0 0;letter-spacing:-2px}
+.t-h1 em{font-style:italic;color:var(--gold)}
+.t-sub{font-size:30px;color:var(--mute);margin:38px 0 0;letter-spacing:.02em}
+.t-meta{font-size:22px;color:var(--mute);margin:0;letter-spacing:.18em}
+/* ---- honouree reveal ---- */
+.hon{display:grid;grid-template-columns:1fr 820px;gap:96px;align-items:center;height:100%}
+.hon-txt{min-width:0}
+.hon-num{font-size:20px;color:var(--gold-d);margin:0 0 26px}
+.hon-name{font-size:96px;line-height:1;margin:0;letter-spacing:-1.5px}
+.hon-role{font-size:30px;color:var(--mute);margin:22px 0 0;font-weight:300}
+.hon-award{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:42px;line-height:1.26;color:var(--gold);margin:34px 0 0}
+.hon-field{font-size:19px;color:var(--gold-d);margin:34px 0 0}
+.hon-mode{display:inline-block;white-space:nowrap;margin-top:26px;padding:11px 24px;border:1px solid #33443d;border-radius:999px;font-size:19px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.card{width:820px;height:820px;border-radius:14px;overflow:hidden;background:#16211d;border:1px solid #2A3B34;display:flex;align-items:center;justify-content:center}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.card .ph{text-align:center;color:#5d6f69;font-size:20px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;line-height:2}
+.lifetime .hon-award{color:#F0E2C2}
+.lifetime{background:linear-gradient(105deg,#180F16 0%,#0E1513 62%)}
+.lifetime .card{border-color:#5a4a63}
+/* ---- lists ---- */
+.roll{display:grid;grid-template-columns:1fr 1fr;gap:14px 80px;margin-top:56px}
+.roll div{font-size:30px;color:var(--cream);border-bottom:1px solid #22302b;padding-bottom:12px}
+.roll span{color:var(--gold-d);font-size:20px;display:block;margin-top:6px}
+/* ---- entrance ---- */
+@media (prefers-reduced-motion:no-preference){
+[data-deck-active] .an1{animation:rise .62s cubic-bezier(.2,.7,.2,1) both}
+[data-deck-active] .an2{animation:rise .62s cubic-bezier(.2,.7,.2,1) .1s both}
+[data-deck-active] .an3{animation:rise .62s cubic-bezier(.2,.7,.2,1) .2s both}
+[data-deck-active] .an4{animation:rise .62s cubic-bezier(.2,.7,.2,1) .3s both}
+[data-deck-active] .anc{animation:card 1s cubic-bezier(.2,.7,.2,1) .06s both}
+[data-deck-active] .anw{animation:wipe .9s cubic-bezier(.5,0,.1,1) both}
+}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes card{from{opacity:0;transform:translateX(46px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080"></deck-stage>
+<script type="application/json" id="roster">
+{
+  "session": "Voices for Women Showcase and Awards Ceremony",
+  "date": "Monday 10 August 2026",
+  "venue": "The Masque Theatre, Muizenberg",
+  "time": "14:00 – 16:30",
+  "honourees": [
+    {"name":"Karen de Klerk","role":"Chairperson, Cape Animal Welfare Forum","award":"Lifetime Achievement Award for Animal-Welfare Leadership and Sector Collaboration","field":"Animal welfare","mode":"In person","image":"assets/honourees/karen-de-klerk.png","lifetime":true},
+    {"name":"Toni Brockhoven","role":"Chairperson, Beauty Without Cruelty South Africa","award":"Lifetime Achievement Award for Service to Beauty Without Cruelty and Animal Protection","field":"Animal protection","mode":"In person","image":"assets/honourees/toni-brockhoven.png","lifetime":true},
+    {"name":"Dr Jennifer Olbers","role":"Senior Marine Conservation Scientist, WILDTRUST","award":"Award for Marine Conservation Science and Ocean Protection","field":"Marine science","mode":"To confirm","image":"assets/honourees/jennifer-olbers.png","drive":"1yfPl9rgOzSWB_GJbKUC-qVRJN33YRy-t"},
+    {"name":"Dr Lucy Kemp","role":"CEO, Mabula Ground Hornbill Project","award":"Award for Science-Based Species Conservation and Community-Led Conservation","field":"Species conservation","mode":"To confirm","image":"assets/honourees/lucy-kemp.png","drive":"1l1aFCxZYockw7uYi4jwxskemM9IJe1e-"},
+    {"name":"Dr Marion E. Garaï","role":"Trustee, Elephant Reintegration Trust","award":"Award for Lifelong Dedication to Elephant Wellbeing, Behavioural Research and Ethical Coexistence","field":"Animal welfare","mode":"To confirm","image":"assets/honourees/marion-garai.png","drive":"1UVddVyo6ADcBiiEad8bEqL2ILJSx-JWO"},
+    {"name":"Dr Stephanie-Emmy Klarmann","role":"Campaign Manager, Blood Lions","award":"Award for Captive-Wildlife Campaigning and Youth Education","field":"Wildlife campaigning","mode":"To confirm","image":"assets/honourees/stephanie-klarmann.png","drive":"1gkIYdvMmuuDe32QBfolZJQTXHoQw9BIi"},
+    {"name":"Alexandra Dodd","role":"Writer, Editor and Futurist","award":"Award for Intersectional Animal Justice Writing and Advocacy","field":"The arts","mode":"To confirm","image":"assets/honourees/alexandra-dodd.png","drive":"1VqWz1hUC9xX0RkunDvJD2cUC_oCycMFX"},
+    {"name":"Andi Rive","role":"Founder and Director, Love Lions Alive Sanctuary","award":"Award for Ethical Big-Cat Sanctuary Leadership and Lifelong Care","field":"Sanctuary leadership","mode":"To confirm","image":"assets/honourees/andi-rive.png","drive":"1lQP7MHFkXIoZS25Z6gNGx55O1jD-HFwn"},
+    {"name":"Fiona Miles","role":"Director, FOUR PAWS in South Africa","award":"Award for Animal-Welfare Leadership and Public Advocacy","field":"Animal welfare","mode":"To confirm","image":"assets/honourees/fiona-miles.png","drive":"1uuNjCFbYdxocT3zfJOr_H9aqIKMLy5Im"},
+    {"name":"Cathrine “Lionheart” Nyquist","role":"Co-Founder and Director, Panthera Africa Big Cat Sanctuary","award":"Award for True Big-Cat Sanctuary and Conscious Tourism","field":"Sanctuary leadership","mode":"To confirm","image":"assets/honourees/cathrine-nyquist.png","drive":"1tw9FP5LdQO7AvlneIZR5ZseC5Z3QShzm"},
+    {"name":"Delia O’Connor","role":"Director and Sanctuary Manager, Asher’s Farm Sanctuary","award":"Award for Farmed-Animal Sanctuary and Public Education","field":"Sanctuary leadership","mode":"To confirm","image":"assets/honourees/delia-oconnor.png","drive":"1c4K25i0APvqiIlrGhjrPE3yiLZqE8c5K"},
+    {"name":"Kirsten Youens","role":"","award":"[AWARD TITLE — pending Chad]","field":"Wild law","mode":"To confirm","image":"assets/honourees/kirsten-youens.png"},
+    {"name":"Makoma Lekalakala","role":"","award":"[AWARD TITLE — pending Chad]","field":"Environmental justice","mode":"To confirm","image":"assets/honourees/makoma-lekalakala.png"},
+    {"name":"Mphatheleni Makaulule","role":"","award":"[AWARD TITLE — pending Chad]","field":"Indigenous ecological leadership","mode":"To confirm","image":"assets/honourees/mphatheleni-makaulule.png","note":"Spelling to be confirmed — signed “Makulule”"},
+    {"name":"Saray N’kusi Khumalo","role":"","award":"[AWARD TITLE — pending Chad]","field":"Environmental leadership","mode":"To confirm","image":"assets/honourees/saray-nkusi-khumalo.png","note":"Permission limited to Honour Roll and event material"},
+    {"name":"Reneé Bish","role":"","award":"[AWARD TITLE — pending Chad]","field":"The arts","mode":"To confirm","image":"assets/honourees/renee-bish.png"},
+    {"name":"Sera Farista","role":"","award":"[AWARD TITLE — pending Chad]","field":"Animal welfare","mode":"To confirm","image":"assets/honourees/sera-farista.png"},
+    {"name":"Hayley Stoffberg","role":"","award":"[AWARD TITLE — pending Chad]","field":"Animal welfare","mode":"To confirm","image":"assets/honourees/hayley-stoffberg.png","note":"Not for social media"},
+    {"name":"Lesley Lunn","role":"","award":"[AWARD TITLE — pending Chad]","field":"Animal welfare","mode":"To confirm","image":"assets/honourees/lesley-lunn.png","note":"No honorific — per explicit instruction"},
+    {"name":"[HONOUREE 20]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 21]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 22]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 23]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 24]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 25]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 26]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 27]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 28]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 29]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 30]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 31]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 32]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""},
+    {"name":"[HONOUREE 33]","award":"[AWARD TITLE]","field":"","mode":"To confirm","image":""}
+  ]
+}
+</script>
+<script>
+(function(){
+var R=JSON.parse(document.getElementById('roster').textContent);
+var stage=document.querySelector('deck-stage');
+var SPEC='<div class="spectrum"><i style="background:#E63946"></i><i style="background:#F38020"></i><i style="background:#F5C518"></i><i style="background:#4FAE3F"></i><i style="background:#2BB9B9"></i><i style="background:#2C6FB5"></i><i style="background:#5C2A8A"></i></div>';
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function slide(label,html,cls){
+  var s=document.createElement('section');
+  s.setAttribute('data-label',label);
+  if(cls)s.className=cls;
+  s.innerHTML=html;
+  stage.appendChild(s);
+  return s;
+}
+/* 1 — holding */
+slide('Holding',
+'<div class="pad center anw" style="justify-content:center">'
++'<p class="mono t-kick an1">National Women\u2019s Day \u00b7 '+esc(R.date)+'</p>'
++'<h1 class="serif t-h1 an2">Celebrating Women<br>Who <em>Protect Life</em></h1>'
++'<p class="serif t-sub an3">'+esc(R.session)+'</p>'
++'<p class="mono t-meta an4" style="margin-top:70px">'+esc(R.time)+' \u00b7 '+esc(R.venue)+'</p>'
++'</div>'+SPEC);
+/* 2 — session opener */
+slide('Ceremony opens',
+'<div class="pad" style="justify-content:flex-end">'
++'<hr class="rule an1">'
++'<h1 class="serif t-h1 an2" style="font-size:104px;margin-top:40px">Voices for Women</h1>'
++'<p class="serif t-sub an3" style="margin-top:24px;max-width:1180px">Thirty-three women honoured across animal welfare, environmental justice, wild law, marine science, indigenous ecological leadership and the arts.</p>'
++'</div>'+SPEC);
+/* 3 — welcome / address holder */
+slide('Welcome address',
+'<div class="pad center" style="justify-content:center">'
++'<p class="mono t-kick an1">Welcome</p>'
++'<h1 class="serif t-h1 an2" style="font-size:96px">[SPEAKER NAME]</h1>'
++'<p class="t-sub an3" style="font-size:26px">[TITLE / ORGANISATION]</p>'
++'</div>');
+/* 4 — honour roll intro */
+slide('The Honour Roll',
+'<div class="pad" style="justify-content:center">'
++'<hr class="rule an1">'
++'<h1 class="serif an2" style="font-size:88px;margin:36px 0 0">The Honour Roll</h1>'
++'<p class="t-sub an3" style="font-size:26px;margin-top:20px;max-width:1100px;color:var(--mute)">Awards are received in person, by representative, remotely, or in absentia. Individual photographs follow the ceremony.</p>'
++'</div>');
+/* honouree reveals */
+R.honourees.forEach(function(h,i){
+  var ph = '<div class="ph">[ Honouree card ]<br>'+esc(h.name)+'</div>';
+  var drive = h.drive ? 'https://lh3.googleusercontent.com/d/'+h.drive : '';
+  var img = (h.image||drive)
+    ? '<img src="'+esc(h.image||drive)+'" alt="'+esc(h.name)+'" data-alt="'+esc(drive)+'" data-ph="'+ph.replace(/"/g,'&quot;')+'" onerror="var a=this.getAttribute(\'data-alt\');if(a&&this.src.indexOf(a)===-1){this.src=a}else{this.parentNode.innerHTML=this.getAttribute(\'data-ph\')}">'
+    : ph;
+  var role = h.role ? '<p class="hon-role an2">'+esc(h.role)+'</p>' : '';
+  var field = h.field ? '<p class="mono hon-field an4">'+esc(h.field)+'</p>' : '';
+  var mode = h.mode ? '<div><span class="hon-mode an4">'+esc(h.mode)+'</span></div>' : '';
+  slide(String(i+1).padStart(2,'0')+' '+h.name,
+    '<div class="pad" style="padding:80px 110px">'
+   +'<div class="hon">'
+   +'<div class="hon-txt">'
+   +'<p class="mono hon-num an1">Honouree '+(i+1)+' of '+R.honourees.length+'</p>'
+   +'<h1 class="serif hon-name an1">'+esc(h.name)+'</h1>'
+   + role
+   +'<p class="hon-award an3">'+esc(h.award)+'</p>'
+   + field + mode
+   +'</div>'
+   +'<div class="card anc">'+img+'</div>'
+   +'</div>'
+   +'</div>'+SPEC,
+    h.lifetime?'lifetime':'');
+});
+/* closing recognition */
+slide('Closing recognition',
+'<div class="pad center" style="justify-content:center">'
++'<p class="mono t-kick an1">The closing recognition</p>'
++'<h1 class="serif t-h1 an2" style="font-size:92px">Presented by<br><em>Karen de Klerk</em></h1>'
++'</div>');
+/* reflection */
+slide('Reflection',
+'<div class="pad center" style="justify-content:center">'
++'<p class="mono t-kick an1">A reflection</p>'
++'<h1 class="serif t-h1 an2" style="font-size:92px">Toni Brockhoven</h1>'
++'<p class="t-sub an3" style="font-size:26px">Stepping down as Chairperson,<br>Beauty Without Cruelty South Africa</p>'
++'</div>');
+/* performance */
+slide('Phoenix — Simply the Best',
+'<div class="pad center" style="justify-content:center">'
++'<p class="mono t-kick an1">To close the ceremony</p>'
++'<h1 class="serif t-h1 an2" style="font-size:100px">Phoenix<br><span style="color:var(--mute);font-size:52px">(Bernadette Adams)</span></h1>'
++'<p class="serif an3" style="font-size:46px;font-style:italic;color:var(--gold);margin-top:34px">Simply the Best</p>'
++'</div>'+SPEC);
+/* thanks + partner lockup */
+slide('Thank you',
+'<div class="pad center" style="justify-content:center">'
++'<h1 class="serif t-h1 an1" style="font-size:104px">Thank you</h1>'
++'<p class="t-sub an2" style="font-size:26px;max-width:1000px">Presented by Omni Wellness Media with Beauty Without Cruelty South Africa and G.A.R.D.</p>'
++'<div class="an3" style="margin-top:64px;width:1100px;height:150px;border:1px dashed #3a4a44;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5d6f69;font-size:19px;letter-spacing:.24em;text-transform:uppercase;font-weight:500">[ Partner logo lockup ]</div>'
++'</div>'+SPEC);
+})();
+</script>
+<script src="deck-stage.js"></script>
+</body>
+</html>
