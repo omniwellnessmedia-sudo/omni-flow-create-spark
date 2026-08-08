@@ -20,9 +20,8 @@
  *
  * CLEARED FOR PUBLIC ANNOUNCEMENT (confirmed by Tumelo, 7 Aug):
  *   - Karen de Klerk  — renders (flag + citation + portrait all present)
- *   - Toni Brockhoven — flag set, but no portrait has been supplied yet, so
- *     the gate keeps her off the page until her card arrives. That is the
- *     system working as designed, not an oversight.
+ *   - Toni Brockhoven — renders; her produced card arrived 8 Aug in the
+ *     ceremony pack and her citation is transcribed from it verbatim.
  */
 
 export interface AwardeeRecord {
@@ -46,8 +45,8 @@ export const AWARDEE_RECORDS: AwardeeRecord[] = [
   {
     name: "Toni Brockhoven",
     citation:
-      "Lifetime Achievement Award for Service to Beauty Without Cruelty South Africa.",
-    // portrait: pending — her produced card has not been supplied yet.
+      "Chairperson, Beauty Without Cruelty South Africa. Lifetime Achievement Award for Service to Beauty Without Cruelty and Animal Protection.",
+    portrait: "/awardees/toni-brockhoven.webp",
     publishToWeb: true,
   },
 
@@ -105,6 +104,16 @@ export const AWARDEE_RECORDS: AwardeeRecord[] = [
   { name: "Sera Farista" },
   { name: "Sue Gajathar" },
   { name: "Leslie Lunn" },
+
+  /* Named on produced assets found 8 Aug (cards in the Drive folder and the
+     ceremony deck), not on the original tracker. Not cleared. */
+  {
+    name: "Mrs Mymoena Scholtz",
+    citation:
+      "Founder/Director, Where Rainbows Meet Training and Development Foundation. Award for Lifelong Community Leadership and Social Upliftment.",
+  },
+  { name: "Dr Lucy Kemp" },
+  { name: "Hayley Stoffberg" },
 ];
 
 /**
