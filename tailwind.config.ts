@@ -42,7 +42,8 @@ export default {
 					plum3: '#5A1A3E',      // lightest plum — gradient highlight, link hover
 					gold: '#D9B36C',       // primary accent — buttons, rules, dots
 					goldLight: '#F0D9A8',  // gold on dark — captions, numerals, quotes
-					goldDeep: '#9C7434',   // gold on light — eyebrows, links, labels
+					goldDeep: '#9C7434',   // gold on light — borders, hovers, large text
+					goldText: '#7A5A28',   // AA-safe gold for SMALL text on cream/white (13-15px eyebrows, labels, links)
 					rose: '#C98A9E',       // secondary accent — eyebrows on plum only
 					ink: '#15201F',        // body text, dark sections, footer
 					inkSoft: '#33403E',    // long-form prose (between ink and slate)

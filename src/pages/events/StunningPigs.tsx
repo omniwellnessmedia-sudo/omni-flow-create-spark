@@ -176,7 +176,7 @@ const FullDayCode = () => {
       className="mx-auto mt-5 flex items-center gap-3 rounded-xl border-2 border-dashed border-wwpl-goldDeep/60 bg-white px-6 py-3 font-wwpl-cond text-[20px] font-medium tracking-[.18em] text-wwpl-ink transition-colors hover:border-wwpl-goldDeep"
     >
       {FULL_DAY.code}
-      <span className="font-sans text-[12px] tracking-normal text-wwpl-goldDeep">
+      <span className="font-sans text-[12px] tracking-normal text-wwpl-goldText">
         {copied ? "Copied ✓" : "Tap to copy"}
       </span>
     </button>
@@ -478,7 +478,7 @@ const StunningPigs = () => {
                 key={n.label}
                 href={`${ORIGIN}${n.href}`}
                 onClick={() => track("nav_click", { to: n.href })}
-                className="text-[14px] text-wwpl-slate transition-colors hover:text-wwpl-goldDeep"
+                className="text-[14px] text-wwpl-slate transition-colors hover:text-wwpl-goldText"
               >
                 {n.label}
               </a>
@@ -631,7 +631,7 @@ const StunningPigs = () => {
                       className="h-full w-full scale-[1.12] object-cover" />
                   </span>
                   <span className={cn("font-wwpl-cond font-medium text-[15px] tracking-[.14em]",
-                    s.feature ? "text-wwpl-gold" : "text-wwpl-goldDeep")}>
+                    s.feature ? "text-wwpl-gold" : "text-wwpl-goldText")}>
                     {s.time}
                   </span>
                   <h3 className={cn("mt-3 font-wwpl-display font-semibold text-[26px] leading-tight",
@@ -661,14 +661,14 @@ const StunningPigs = () => {
                       className={cn("mt-5 self-start text-[13.5px] underline underline-offset-[3px] transition-colors",
                         s.feature
                           ? "text-[rgba(240,217,168,.8)] hover:text-wwpl-gold"
-                          : "text-wwpl-slate hover:text-wwpl-goldDeep")}>
+                          : "text-wwpl-slate hover:text-wwpl-goldText")}>
                       Watch the trailer
                     </a>
                   )}
                   {s.awardsHref && (
                     <a href={s.awardsHref}
                       onClick={() => track("nav_awards", { from: `session-${s.no}` })}
-                      className="mt-5 self-start text-[13.5px] text-wwpl-slate underline underline-offset-[3px] transition-colors hover:text-wwpl-goldDeep">
+                      className="mt-5 self-start text-[13.5px] text-wwpl-slate underline underline-offset-[3px] transition-colors hover:text-wwpl-goldText">
                       About the awards
                     </a>
                   )}
@@ -757,7 +757,7 @@ const StunningPigs = () => {
       <section className="py-24">
         <div className={cn(wrap, "grid gap-9 lg:grid-cols-[.85fr_1.15fr] lg:gap-20 lg:items-start")}>
           <Reveal>
-            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldDeep">About the day</Eyebrow>
+            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldText">About the day</Eyebrow>
             <h2 className="mt-3 font-wwpl-display font-semibold text-[clamp(30px,5vw,42px)] leading-[1.12] text-wwpl-ink">
               Why this day matters
             </h2>
@@ -924,7 +924,7 @@ const StunningPigs = () => {
               { n: "03", h: "You finish on Quicket", p: "The Masque sells its seats through Quicket, its official ticketing partner. You choose your exact seat there and your ticket arrives by email — all sales governed by Quicket's terms." },
             ].map((c, i) => (
               <Reveal key={c.n} delayMs={(i % 3) * 90}>
-                <span className="block font-wwpl-cond text-[13px] tracking-[.22em] text-wwpl-goldDeep">{c.n}</span>
+                <span className="block font-wwpl-cond text-[13px] tracking-[.22em] text-wwpl-goldText">{c.n}</span>
                 <h3 className="mb-3 mt-4 font-wwpl-display font-semibold text-[23px] text-wwpl-ink">{c.h}</h3>
                 <p className="text-[15px] leading-relaxed text-wwpl-slate">{c.p}</p>
               </Reveal>
@@ -932,7 +932,7 @@ const StunningPigs = () => {
           </div>
           <p className="mt-14 text-center text-[13.5px] text-wwpl-slate">
             Omni Wellness Media · Cape Town, South Africa · {CONTACT_PHONE} ·{" "}
-            <a href={`mailto:${CONTACT_EMAIL}`} className="text-wwpl-goldDeep underline underline-offset-2">
+            <a href={`mailto:${CONTACT_EMAIL}`} className="text-wwpl-goldText underline underline-offset-2">
               {CONTACT_EMAIL}
             </a>
           </p>
@@ -1017,7 +1017,7 @@ const StunningPigs = () => {
       <section id="petition" className="scroll-mt-8 overflow-hidden border-y border-wwpl-line bg-wwpl-cream py-[100px]">
         <div className={cn(wrap, "grid items-center gap-11 lg:grid-cols-[.95fr_1.05fr] lg:gap-[72px]")}>
           <Reveal>
-            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldDeep">Take a stand</Eyebrow>
+            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldText">Take a stand</Eyebrow>
             <h2 className="mt-3 font-wwpl-display font-semibold text-[clamp(30px,5vw,42px)] leading-[1.12] text-wwpl-ink">
               Sign for humane standards
             </h2>
@@ -1042,7 +1042,7 @@ const StunningPigs = () => {
       <section className="py-24 text-center">
         <div className={wrap}>
           <Reveal>
-            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldDeep">Getting there</Eyebrow>
+            <Eyebrow className="text-[13px] tracking-[.22em] text-wwpl-goldText">Getting there</Eyebrow>
             <h2 className="mt-3 font-wwpl-display font-semibold text-[clamp(28px,4.5vw,36px)] text-wwpl-ink">
               {VENUE_NAME}
             </h2>
@@ -1111,7 +1111,7 @@ const StunningPigs = () => {
                         </span>
                       )}
                     </span>
-                    <span className="font-wwpl-cond text-[11px] tracking-[.2em] uppercase text-wwpl-goldDeep">
+                    <span className="font-wwpl-cond text-[11px] tracking-[.2em] uppercase text-wwpl-goldText">
                       {p.role}
                     </span>
                     <h3 className="mt-1.5 font-wwpl-display font-semibold text-[19px] leading-snug text-wwpl-ink">
@@ -1125,7 +1125,7 @@ const StunningPigs = () => {
                         href={p.href}
                         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                         onClick={() => track("partner_click", { partner: p.name })}
-                        className="mt-4 self-start text-[13px] text-wwpl-goldDeep underline underline-offset-[3px] transition-colors hover:text-wwpl-ink"
+                        className="mt-4 self-start text-[13px] text-wwpl-goldText underline underline-offset-[3px] transition-colors hover:text-wwpl-ink"
                       >
                         {external ? "Visit their site ↗" : "Visit their page"}
                       </a>
