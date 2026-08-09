@@ -5,7 +5,12 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
+    # public + revalidate (NOT no-store): no-store forbade Netlify's edge from
+    # caching even the prerendered HTML, so every request originated —
+    # measured 1.6-1.9s TTFB on a static deploy. With must-revalidate the
+    # browser still checks freshness every time (deploys invalidate etags),
+    # but the edge can answer conditional requests without an origin trip.
+    Cache-Control = "public, max-age=0, must-revalidate"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"

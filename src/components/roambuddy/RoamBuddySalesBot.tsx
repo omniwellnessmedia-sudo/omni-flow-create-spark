@@ -291,6 +291,9 @@ export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotPro
 
       {/* Chat Window */}
       <div
+        /* Closed state is opacity-0 only — without aria-hidden the whole chat
+           is exposed to screen readers while invisible to everyone else. */
+        aria-hidden={!isOpen}
         className={cn(
           "fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-50 w-[380px] max-w-[calc(100vw-16px)] bg-background rounded-2xl shadow-2xl border border-border overflow-hidden transition-all duration-300",
           isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"

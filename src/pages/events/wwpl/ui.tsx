@@ -23,7 +23,7 @@ export type BtnVariant = "gold" | "ink" | "ghost" | "ghostLight";
 const BTN_VARIANT: Record<BtnVariant, string> = {
   gold: "bg-wwpl-gold text-wwpl-plum hover:bg-wwpl-goldLight border border-transparent",
   ink: "bg-wwpl-ink text-wwpl-cream hover:bg-wwpl-plum2 border border-transparent",
-  ghost: "bg-transparent text-wwpl-ink border border-wwpl-line hover:border-wwpl-goldDeep hover:text-wwpl-goldDeep",
+  ghost: "bg-transparent text-wwpl-ink border border-wwpl-line hover:border-wwpl-goldDeep hover:text-wwpl-goldText",
   ghostLight:
     "bg-transparent text-wwpl-cream border border-[rgba(249,245,240,.35)] hover:border-wwpl-gold hover:text-white",
 };
@@ -131,7 +131,7 @@ export const SecHead = ({
     <Eyebrow
       className={cn(
         "text-[13px] tracking-[.22em]",
-        tone === "dark" ? "text-wwpl-gold" : "text-wwpl-goldDeep"
+        tone === "dark" ? "text-wwpl-gold" : "text-wwpl-goldText"
       )}
     >
       {eyebrow}

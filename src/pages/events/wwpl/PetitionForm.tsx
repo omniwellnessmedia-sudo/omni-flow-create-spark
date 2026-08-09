@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+/**
+ * Supabase is loaded on demand, not statically: the client chunk is ~121KB
+ * and this form is the only thing on the event page that needs it. The
+ * import fires when the form first scrolls into view (or on submit as a
+ * fallback), so ticket-buyers who never reach the petition never pay for it.
+ */
+const loadSupabase = () => import("@/integrations/supabase/client").then((m) => m.supabase);
 import { cn } from "@/lib/utils";
 import { BtnButton, BtnLink } from "./ui";
 import { PAGE_URL, PETITION_GOAL, PETITION_SLUG } from "./event";
@@ -60,12 +66,28 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
     }
   }, []);
 
+  // Deferred-load trigger: flips true once the form is near the viewport.
+  const [nearViewport, setNearViewport] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") { setNearViewport(true); return; }
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setNearViewport(true); io.disconnect(); } },
+      { rootMargin: "600px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   // Public total. Failure here must not break the form, so the meter simply
   // stays hidden rather than showing a wrong or invented number.
   useEffect(() => {
+    if (!nearViewport) return;
     let cancelled = false;
     (async () => {
       try {
+        const supabase = await loadSupabase();
         // Cast: src/integrations/supabase/types.ts is generated from the live
         // schema, and this function only exists once the petition migration has
         // been applied. Regenerate the types after deploying it and this cast
@@ -84,7 +106,7 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [nearViewport]);
 
   // Count up 0 → total once, on first arrival of a real number.
   useEffect(() => {
@@ -109,6 +131,7 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
     setStatus("submitting");
 
     try {
+      const supabase = await loadSupabase();
       const { data, error: err } = await supabase.functions.invoke("sign-petition", {
         body: {
           first_name: first.trim(),
@@ -184,7 +207,7 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
   }
 
   return (
-    <div className="rounded-[20px] border border-wwpl-line bg-white p-10 shadow-wwpl-md">
+    <div ref={rootRef} className="rounded-[20px] border border-wwpl-line bg-white p-10 shadow-wwpl-md">
       <h3 className="font-wwpl-display font-semibold text-[24px] text-wwpl-ink">Add your name</h3>
       <p className="mt-1.5 text-[14px] text-wwpl-slate">
         Joined by ticket-holders, advocates and first-time supporters across the Cape.
