@@ -14,9 +14,10 @@
  *   - No graphic gassing or slaughter imagery anywhere. All artwork is derived
  *     from the official commissioned event artwork.
  *   - No false scarcity. The countdown is a real date delta and nothing else.
- *   - The full-day discount CODE is never printed on the page. Quicket
- *     confirmed (27 Jul) that email-issuing the code is the only mechanism
- *     their seated configuration supports safely.
+ *   - The full-day discount CODE is now PUBLISHED on the page (Tumelo,
+ *     9 Aug: "the code can now be published directly with no deadline"),
+ *     superseding the earlier email-only rule from 27 Jul. Details live in
+ *     FULL_DAY below.
  *   - ONLY OFFICIAL COMMISSIONED ARTWORK, plus real frames from the film. The
  *     poster, the banner and the three glyphs from the poster's own icon row
  *     are the artwork set; TRAILER_POSTER and the CLIPS posters are genuine
@@ -73,7 +74,20 @@ export const CAL = {
   startUTC: "20260810T080000Z",
   endUTC: "20260810T143000Z",
   location: VENUE_QUERY,
-  details: `Three sessions: What Feeds Us 10:00–11:45 · Stunning Pigs premiere + Q&A 12:00–13:15 · Voices for Women Showcase & Awards 14:00–16:30. Tickets R150/session on Quicket: ${QUICKET_URL}`,
+  details: `Three sessions: What Feeds Us 10:00–12:00 · Stunning Pigs premiere + Q&A 12:00–13:30 · Voices for Women Showcase & Awards 14:00–16:30. Tickets R150/session on Quicket: ${QUICKET_URL}`,
+};
+
+/**
+ * Full-day discount, verbatim from the BWC invitation email (24 Jul) with
+ * the publish-and-no-deadline decision from Tumelo (9 Aug). The venue's
+ * seating plan means there is no single full-day ticket: the code is applied
+ * at checkout on EACH of the three separate session bookings.
+ */
+export const FULL_DAY = {
+  code: "OMNIDAYPASS",
+  totalWithCode: "R300",
+  totalWithout: "R450",
+  saving: "33%",
 };
 
 export const GOOGLE_CAL_URL =
@@ -148,16 +162,17 @@ export interface SessionDef {
   awardsHref?: string;
 }
 
-/** Session times confirmed by Tumelo on 7 Aug (supersedes the Quicket-page
- *  times and the 13:30/16:30 variants in Chad's brief and the awardee cards):
- *  10:00–11:45 · 12:00–13:15 · 14:00–16:30. Mirrored in
+/** Session times: QUICKET'S LISTING IS CANONICAL (10:00–12:00 · 12:00–13:30
+ *  · 14:00–16:30) — it is what ticket-holders actually bought, per Tumelo's
+ *  9 Aug correction, and it matches the BWC invitation email (24 Jul). The
+ *  earlier 11:45/13:15 variant is superseded. Mirrored in
  *  scripts/prerender-event.mjs — change both together. */
 export const SESSIONS: SessionDef[] = [
   {
     no: 1,
-    time: "10:00 – 11:45 · Session 1",
+    time: "10:00 – 12:00 · Session 1",
     startISO: "2026-08-10T10:00:00+02:00",
-    endISO: "2026-08-10T11:45:00+02:00",
+    endISO: "2026-08-10T12:00:00+02:00",
     title: "What Feeds Us",
     description:
       "The day opens with What Feeds Us — food, ethics and community, setting the table for everything that follows.",
@@ -168,9 +183,9 @@ export const SESSIONS: SessionDef[] = [
   },
   {
     no: 2,
-    time: "12:00 – 13:15 · Session 2",
+    time: "12:00 – 13:30 · Session 2",
     startISO: "2026-08-10T12:00:00+02:00",
-    endISO: "2026-08-10T13:15:00+02:00",
+    endISO: "2026-08-10T13:30:00+02:00",
     title: "Stunning Pigs — Cape Town Premiere",
     description:
       "The Cape Town premiere of the Stunning Pigs documentary, followed by a public Q&A with the Beauty Without Cruelty campaign and G.A.R.D.",
@@ -365,14 +380,9 @@ export const PARTNERS: PartnerDef[] = [
     href: "https://www.four-paws.org.za/",
     logo: "/partners/four-paws.webp",
   },
-  {
-    name: "Uthando South Africa",
-    role: "Supporting partner",
-    blurb:
-      "An award-winning Cape Town non-profit whose philanthropic tourism funds community development projects across the city's townships.",
-    href: "https://www.uthandosa.org/",
-    logo: "/partners/uthando.webp",
-  },
+  /* Uthando removed 9 Aug at Tumelo's request — the blurb (drawn from
+     uthandosa.org) did not describe the right organisation. Re-add only
+     with team-supplied wording. */
   {
     name: "Dr. Phil-Afel Foundation",
     role: "Community partner",

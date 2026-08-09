@@ -1,4 +1,4 @@
-import { QUICKET_URL } from "./event";
+import { quicketHref } from "./attribution";
 import { BtnLink, Reveal } from "./ui";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +42,7 @@ export const CtaBand = ({
       <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8">
         <Reveal className="text-center">
           <a
-            href={QUICKET_URL}
+            href={quicketHref()}
             target="_blank"
             rel="noopener"
             onClick={track}
@@ -72,7 +72,7 @@ export const CtaBand = ({
 
           <div className="mt-6 flex justify-center">
             <BtnLink
-              href={QUICKET_URL}
+              href={quicketHref()}
               target="_blank"
               rel="noopener"
               onClick={track}
