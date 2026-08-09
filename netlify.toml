@@ -2,6 +2,12 @@
   command = "npm run build"
   publish = "dist"
 
+# Belt and braces for the certificate register: the static JSON import in
+# netlify/functions/awards.mjs is traced by the bundler, and this guarantees
+# the data file lands in the artifact even if tracing ever regresses.
+[functions]
+  included_files = ["src/data/awards-2026.json"]
+
 [[headers]]
   for = "/*"
   [headers.values]
