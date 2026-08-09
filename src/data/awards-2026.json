@@ -1,0 +1,299 @@
+[
+  {
+    "serial": "vfw-2026-001",
+    "token": "g37gw8pk",
+    "name": "Mrs Mymoena Scholtz",
+    "awardTitle": null,
+    "position": 1,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-002",
+    "token": "v0oujnr3",
+    "name": "Joline Oliver",
+    "awardTitle": null,
+    "position": 2,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-003",
+    "token": "y5n7ijx9",
+    "name": "Kai Bi'a /am Jeanette Abrahams",
+    "awardTitle": null,
+    "position": 3,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-004",
+    "token": "oglov9u8",
+    "name": "Palesa Mokubung",
+    "awardTitle": null,
+    "position": 4,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-005",
+    "token": "6o9ks6u0",
+    "name": "Promise Mabilo",
+    "awardTitle": null,
+    "position": 5,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-006",
+    "token": "oe40l85f",
+    "name": "Aisha Elliott",
+    "awardTitle": null,
+    "position": 6,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-007",
+    "token": "lbq47khq",
+    "name": "Megan Choritz",
+    "awardTitle": null,
+    "position": 7,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-008",
+    "token": "clwk5wl5",
+    "name": "Valerie Roscoe",
+    "awardTitle": null,
+    "position": 8,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-009",
+    "token": "qos55794",
+    "name": "Dr Alexandra Dodd",
+    "awardTitle": null,
+    "position": 9,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-010",
+    "token": "69rp7hp3",
+    "name": "Professor Elisa Galgut",
+    "awardTitle": null,
+    "position": 10,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-011",
+    "token": "sci28rvu",
+    "name": "Fiona Miles",
+    "awardTitle": null,
+    "position": 11,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-012",
+    "token": "beed6xv9",
+    "name": "Nikki Botha",
+    "awardTitle": null,
+    "position": 12,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-013",
+    "token": "vh9ncte3",
+    "name": "Nicola van Wyk",
+    "awardTitle": null,
+    "position": 13,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-014",
+    "token": "sxksc2gs",
+    "name": "Louise van der Merwe",
+    "awardTitle": null,
+    "position": 14,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-015",
+    "token": "zkxc6ou9",
+    "name": "Michelle Taberer",
+    "awardTitle": null,
+    "position": 15,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-016",
+    "token": "hf60njfw",
+    "name": "Karen de Klerk",
+    "awardTitle": null,
+    "position": 16,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-017",
+    "token": "ery2onrk",
+    "name": "Kirsten Youens",
+    "awardTitle": null,
+    "position": 17,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-018",
+    "token": "ketkswhe",
+    "name": "Dr Jennifer Olbers",
+    "awardTitle": null,
+    "position": 18,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-019",
+    "token": "zc0nvswr",
+    "name": "Andi Rive",
+    "awardTitle": null,
+    "position": 19,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-020",
+    "token": "73s7hkeb",
+    "name": "Dr Lucy Kemp",
+    "awardTitle": null,
+    "position": 20,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-021",
+    "token": "kep40eos",
+    "name": "Makoma Lekalakala",
+    "awardTitle": null,
+    "position": 21,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-022",
+    "token": "4lrnm5pp",
+    "name": "Leitah Mkhabela",
+    "awardTitle": null,
+    "position": 22,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-023",
+    "token": "noer9lwn",
+    "name": "Dr Stephanie-Emmy Klarmann",
+    "awardTitle": null,
+    "position": 23,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-024",
+    "token": "485nrd05",
+    "name": "Sera Farista",
+    "awardTitle": null,
+    "position": 24,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-025",
+    "token": "ari1uvrn",
+    "name": "Stefania Seveso Falcon",
+    "awardTitle": null,
+    "position": 25,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-026",
+    "token": "7mc3mq2c",
+    "name": "Kerri Wolter",
+    "awardTitle": null,
+    "position": 26,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-027",
+    "token": "hokbcqb3",
+    "name": "Cathrine 'Lionheart' Nyquist",
+    "awardTitle": null,
+    "position": 27,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-028",
+    "token": "6zgsyn85",
+    "name": "Dulcie September",
+    "awardTitle": null,
+    "position": 28,
+    "attendance": "posthumous",
+    "acceptedBy": "Nicola Arendse"
+  },
+  {
+    "serial": "vfw-2026-029",
+    "token": "5xva9xrd",
+    "name": "Leslie Giles",
+    "awardTitle": null,
+    "position": 29,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-030",
+    "token": "vt9ubzvk",
+    "name": "Heather Silove Howe",
+    "awardTitle": null,
+    "position": 30,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-031",
+    "token": "eecq2b7y",
+    "name": "Sue Gajathar",
+    "awardTitle": null,
+    "position": 31,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-032",
+    "token": "dpqkqni2",
+    "name": "Shelley Drynan",
+    "awardTitle": null,
+    "position": 32,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-033",
+    "token": "tppl9vke",
+    "name": "Lesley Lunn",
+    "awardTitle": null,
+    "position": 33,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-034",
+    "token": "4nhyveny",
+    "name": "Dr Marion E. Garaï",
+    "awardTitle": null,
+    "position": 34,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-035",
+    "token": "a8vosnwe",
+    "name": "Delia O'Connor",
+    "awardTitle": null,
+    "position": 35,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-036",
+    "token": "so830hcz",
+    "name": "Merle Grace O'Brien",
+    "awardTitle": null,
+    "position": 36,
+    "attendance": "in-person"
+  },
+  {
+    "serial": "vfw-2026-037",
+    "token": "9yti4rax",
+    "name": "Toni Brockhoven",
+    "awardTitle": "Lifetime Achievement Award",
+    "position": 37,
+    "attendance": "in-person"
+  }
+]
