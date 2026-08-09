@@ -12,7 +12,7 @@ import {
   drivePreview,
 } from "./wwpl/event";
 import { VISIBLE_AWARDEES, awardeeAnchor } from "./wwpl/awardees";
-import { quicketHref } from "./wwpl/attribution";
+import { quicketHref, isPaidTraffic } from "./wwpl/attribution";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
 import { PetitionForm } from "./wwpl/PetitionForm";
 import { SeatingMap } from "./wwpl/SeatingMap";
@@ -96,9 +96,10 @@ const Countdown = () => {
   }, []);
 
   const d = Math.max(0, EVENT_START_MS - now);
+  // No days unit: within the final day "00 Days" reads as a bug, so hours
+  // run uncapped (e.g. 26 Hours) until doors.
   const units = [
-    { v: Math.floor(d / 864e5), l: "Days" },
-    { v: Math.floor(d / 36e5) % 24, l: "Hours" },
+    { v: Math.floor(d / 36e5), l: "Hours" },
     { v: Math.floor(d / 6e4) % 60, l: "Minutes" },
     { v: Math.floor(d / 1e3) % 60, l: "Seconds" },
   ];
@@ -344,8 +345,11 @@ const StickyBar = () => {
         show ? "translate-y-0" : "translate-y-[110%]"
       )}
     >
+      {/* Below sm the text block is dropped entirely: a full-width gold
+          button is the whole bar — this is the most-tapped element on mobile
+          and it was sharing 390px with a 345px text block. */}
       <div className="mx-auto flex max-w-[1120px] items-center justify-between gap-4 px-5 py-3 sm:px-8">
-        <div className="min-w-0">
+        <div className="hidden min-w-0 sm:block">
           <b className="block font-wwpl-display text-[17px] leading-tight text-white">
             Celebrating Women Who Protect Life
           </b>
@@ -353,8 +357,9 @@ const StickyBar = () => {
             Mon 10 Aug 2026 · The Masque Theatre · from R150
           </span>
         </div>
-        <BtnLink {...quicketProps("sticky-bar")} variant="gold" className="shrink-0 whitespace-nowrap px-[22px] py-2.5">
-          Get tickets
+        <BtnLink {...quicketProps("sticky-bar")} variant="gold"
+          className="w-full whitespace-nowrap px-[22px] py-3 sm:w-auto sm:shrink-0 sm:py-2.5">
+          Get tickets — from R150
         </BtnLink>
       </div>
     </div>
@@ -465,7 +470,9 @@ const StunningPigs = () => {
             </span>
           </a>
 
-          <nav aria-label="Main" className="hidden items-center gap-6 lg:flex">
+          {/* Paid clicks paid to reach the ticket CTA — the full site nav is
+              an exit ramp, so it collapses to logo + Get tickets for them. */}
+          <nav aria-label="Main" className={cn("hidden items-center gap-6", !isPaidTraffic() && "lg:flex")}>
             {SITE_NAV.map((n) => (
               <a
                 key={n.label}
@@ -479,19 +486,27 @@ const StunningPigs = () => {
           </nav>
 
           <div className="flex items-center gap-3">
-            <p className="hidden text-[13px] text-wwpl-slate xl:block">
-              Events / <span className="font-medium text-wwpl-ink">Celebrating Women Who Protect Life</span>
-            </p>
-            <BtnButton
-              type="button"
-              variant="ghost"
-              aria-expanded={menuOpen}
-              aria-controls="wwpl-mobile-nav"
-              onClick={() => setMenuOpen((o) => !o)}
-              className="lg:hidden !px-3 !py-2 text-[14px]"
-            >
-              {menuOpen ? "Close" : "Menu"}
-            </BtnButton>
+            {isPaidTraffic() ? (
+              <BtnLink {...quicketProps("header")} variant="gold" className="!px-4 !py-2 text-[14px]">
+                Get tickets
+              </BtnLink>
+            ) : (
+              <>
+                <p className="hidden text-[13px] text-wwpl-slate xl:block">
+                  Events / <span className="font-medium text-wwpl-ink">Celebrating Women Who Protect Life</span>
+                </p>
+                <BtnButton
+                  type="button"
+                  variant="ghost"
+                  aria-expanded={menuOpen}
+                  aria-controls="wwpl-mobile-nav"
+                  onClick={() => setMenuOpen((o) => !o)}
+                  className="lg:hidden !px-3 !py-2 text-[14px]"
+                >
+                  {menuOpen ? "Close" : "Menu"}
+                </BtnButton>
+              </>
+            )}
           </div>
         </div>
 
@@ -525,7 +540,10 @@ const StunningPigs = () => {
             <Eyebrow rule className="text-[13px] tracking-[.28em] text-wwpl-rose">
               Cape Town Premiere · Women's Day
             </Eyebrow>
-            <h1 className="mt-5 font-wwpl-display font-semibold text-[clamp(40px,8vw,64px)] leading-[1.08] text-white">
+            {/* 32px floor: at 390px the 40px floor wrapped the headline to
+                four lines and pushed the CTA below the fold — the button must
+                be visible without scrolling on a 740px viewport. */}
+            <h1 className="mt-5 font-wwpl-display font-semibold text-[clamp(32px,8vw,64px)] leading-[1.08] text-white">
               Celebrating{" "}
               <em className="italic bg-[linear-gradient(178deg,#F7E9C6,#EBCE93_45%,#C99A52_75%)] bg-clip-text text-transparent motion-safe:bg-[length:250%_auto] motion-safe:animate-wwpl-shimmer">
                 Women
@@ -538,7 +556,7 @@ const StunningPigs = () => {
               <i className="text-wwpl-goldLight">Voices for Women</i> showcase and awards.
             </p>
 
-            <div className="mt-8 grid gap-3.5">
+            <div className="mt-6 grid gap-2.5 sm:mt-8 sm:gap-3.5">
               {[
                 { k: "Date", v: EVENT_DATE_DISPLAY },
                 { k: "Venue", v: `${VENUE_NAME}, ${VENUE_ADDRESS}` },
@@ -548,12 +566,12 @@ const StunningPigs = () => {
                   <span className="w-[76px] shrink-0 font-wwpl-cond text-[12px] tracking-[.22em] uppercase text-wwpl-gold">
                     {f.k}
                   </span>
-                  <span className="text-[15.5px] text-[rgba(249,245,240,.9)]">{f.v}</span>
+                  <span className="text-[14.5px] text-[rgba(249,245,240,.9)] sm:text-[15.5px]">{f.v}</span>
                 </div>
               ))}
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-3.5">
+            <div className="mt-7 flex flex-wrap gap-3.5 sm:mt-10">
               <BtnLink {...quicketProps("hero")} variant="gold">Get tickets — from R150</BtnLink>
               <BtnLink href="#trailer" variant="ghostLight" onClick={() => track("nav_trailer", { from: "hero" })}>
                 Watch the trailers
@@ -968,6 +986,29 @@ const StunningPigs = () => {
               Opens Quicket in a new tab. Booking for a group? Assigned seating means you can sit
               together — book in one order.
             </p>
+
+            {/* Material facts from the Quicket listing, surfaced beside the
+                CTA: the parking line wins bookings, the rest prevents refund
+                arguments the non-refundable policy cannot honour. */}
+            <div className="mx-auto mt-9 max-w-[520px] rounded-2xl border border-[rgba(249,245,240,.16)] bg-[rgba(249,245,240,.05)] p-6 text-left">
+              <p className="font-wwpl-cond text-[12px] uppercase tracking-[.22em] text-wwpl-goldLight">
+                Before you book
+              </p>
+              <ul className="mt-3.5 grid gap-2.5 text-[13.5px] leading-relaxed text-[rgba(249,245,240,.8)]">
+                {[
+                  "Free secure parking 50 metres past the theatre",
+                  "Tickets are non-refundable and non-transferable",
+                  "No under 13s. Under 18s must be accompanied by an adult.",
+                  "No entry after the show starts — latecomers admitted at interval",
+                  "No outside food",
+                ].map((f) => (
+                  <li key={f} className="flex gap-2.5">
+                    <span aria-hidden="true" className="mt-[9px] block h-[4px] w-[4px] shrink-0 rounded-full bg-wwpl-gold" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -1035,13 +1076,16 @@ const StunningPigs = () => {
             title="The people behind the day"
             sub="A first-time event, carried by organisations that have been doing this work for years."
           />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {PARTNERS.map((p, i) => {
               const external = !!p.href && !p.href.startsWith(ORIGIN);
               return (
-                <Reveal key={p.name} delayMs={(i % 3) * 90} className="h-full">
-                  <article className="flex h-full flex-col rounded-[20px] border border-wwpl-line bg-white p-7 shadow-[0_1px_2px_rgba(21,32,31,.05)] motion-safe:transition-all motion-safe:duration-[250ms] hover:-translate-y-1 hover:shadow-wwpl-md">
-                    <span className="mb-5 flex h-14 items-center">
+                <Reveal key={p.name} delayMs={(i % 4) * 70} className="h-full">
+                  <article className="flex h-full flex-col rounded-[20px] border border-wwpl-line bg-white p-6 shadow-[0_1px_2px_rgba(21,32,31,.05)] motion-safe:transition-all motion-safe:duration-[250ms] hover:-translate-y-1 hover:shadow-wwpl-md">
+                    {/* Every mark sits on the same cream plinth so mixed logo
+                        treatments (black tiles, white JPEGs, round icons)
+                        read as one considered row rather than a scrapbook. */}
+                    <span className="mb-5 flex h-20 w-full items-center justify-center rounded-xl border border-wwpl-line/60 bg-wwpl-cream px-4">
                       {p.logo ? (
                         <img
                           src={p.logo}
@@ -1049,11 +1093,11 @@ const StunningPigs = () => {
                           loading="lazy"
                           decoding="async"
                           /* T&T CT's mark loads from the site CDN; if any logo
-                             404s, an empty slot beats a broken-image glyph. */
+                             404s, an empty plinth beats a broken-image glyph. */
                           onError={(e) => { e.currentTarget.style.display = "none"; }}
                           className={cn(
-                            "max-h-14 max-w-[150px] object-contain",
-                            p.round && "h-14 w-14 rounded-full"
+                            "max-h-12 max-w-[140px] object-contain",
+                            p.round && "h-12 w-12 rounded-full"
                           )}
                         />
                       ) : (
@@ -1061,19 +1105,19 @@ const StunningPigs = () => {
                            is supplied — see the provenance note in PARTNERS. */
                         <span
                           aria-hidden="true"
-                          className="flex h-14 w-14 items-center justify-center rounded-full bg-wwpl-plum font-wwpl-display font-semibold text-[24px] text-wwpl-goldLight"
+                          className="flex h-12 w-12 items-center justify-center rounded-full bg-wwpl-plum font-wwpl-display font-semibold text-[22px] text-wwpl-goldLight"
                         >
                           {p.name.replace(/^The /, "").charAt(0)}
                         </span>
                       )}
                     </span>
-                    <span className="font-wwpl-cond text-[11.5px] tracking-[.2em] uppercase text-wwpl-goldDeep">
+                    <span className="font-wwpl-cond text-[11px] tracking-[.2em] uppercase text-wwpl-goldDeep">
                       {p.role}
                     </span>
-                    <h3 className="mt-2 font-wwpl-display font-semibold text-[21px] leading-snug text-wwpl-ink">
+                    <h3 className="mt-1.5 font-wwpl-display font-semibold text-[19px] leading-snug text-wwpl-ink">
                       {p.name}
                     </h3>
-                    <p className="mt-2.5 flex-1 text-[14.5px] leading-relaxed text-wwpl-slate">
+                    <p className="mt-2 flex-1 text-[13.5px] leading-relaxed text-wwpl-slate">
                       {p.blurb}
                     </p>
                     {p.href && (
@@ -1081,7 +1125,7 @@ const StunningPigs = () => {
                         href={p.href}
                         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                         onClick={() => track("partner_click", { partner: p.name })}
-                        className="mt-5 self-start text-[13.5px] text-wwpl-goldDeep underline underline-offset-[3px] transition-colors hover:text-wwpl-ink"
+                        className="mt-4 self-start text-[13px] text-wwpl-goldDeep underline underline-offset-[3px] transition-colors hover:text-wwpl-ink"
                       >
                         {external ? "Visit their site ↗" : "Visit their page"}
                       </a>
