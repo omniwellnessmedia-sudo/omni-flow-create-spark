@@ -1,5 +1,6 @@
 import { quicketHref } from "./attribution";
-import { BtnLink, Eyebrow, Reveal } from "./ui";
+import { useState } from "react";
+import { BtnButton, BtnLink, Eyebrow, Reveal } from "./ui";
 import { cn } from "@/lib/utils";
 
 /**
@@ -137,7 +138,12 @@ const LegendItem = ({ swatch, label }: { swatch: React.ReactNode; label: string 
   </span>
 );
 
-export const SeatingMap = () => (
+export const SeatingMap = () => {
+  /* Below lg the plan collapses behind a toggle: it is ~1,100px of
+     decorative, no-availability content compressed to unreadability on a
+     phone, standing between the visitor and the conversion band below. */
+  const [roomOpen, setRoomOpen] = useState(false);
+  return (
   <section id="seating" className="scroll-mt-8 bg-wwpl-plum py-24">
     <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8">
       <Reveal className="mx-auto max-w-[60ch] text-center mb-12">
@@ -151,8 +157,23 @@ export const SeatingMap = () => (
         </p>
       </Reveal>
 
+      <div className="mb-4 text-center lg:hidden">
+        <BtnButton
+          variant="ghostLight"
+          aria-expanded={roomOpen}
+          aria-controls="seating-plan"
+          onClick={() => setRoomOpen((o) => !o)}
+        >
+          {roomOpen ? "Hide the room" : "See the room"}
+        </BtnButton>
+      </div>
+
       <Reveal
-        className="rounded-2xl border border-[rgba(240,217,168,.18)] bg-[rgba(249,245,240,.03)] p-5 sm:p-8"
+        id="seating-plan"
+        className={cn(
+          roomOpen ? "block" : "hidden",
+          "lg:block rounded-2xl border border-[rgba(240,217,168,.18)] bg-[rgba(249,245,240,.03)] p-5 sm:p-8"
+        )}
         /* Seat sizing scales with the viewport so the widest row (19 seats)
            always fits without a horizontal scrollbar, down to 320px. */
         style={
@@ -247,4 +268,5 @@ export const SeatingMap = () => (
       </Reveal>
     </div>
   </section>
-);
+  );
+};

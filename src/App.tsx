@@ -53,16 +53,23 @@ const AccessibilitySettings = React.lazy(() => import('@/components/accessibilit
  * been confirmed." A global widget is still a display, so the whole overlay
  * set is withheld there rather than trying to restyle one button.
  */
+import { isPaidTraffic } from '@/pages/events/wwpl/attribution';
+
 const NO_OVERLAY_ROUTES = ['/bwc-team-staging'];
 
 const GlobalOverlays = () => {
   const { pathname } = useLocation();
   if (NO_OVERLAY_ROUTES.includes(pathname)) return null;
+  // Paid ad clicks landing on an event page paid for that visit — nothing may
+  // compete with the ticket CTA. The quick-actions dock and the eSIM chat
+  // trigger sit in the same mobile thumb zone as the primary CTA, so both are
+  // withheld for the session (attribution persists in sessionStorage).
+  const suppressForPaid = pathname.startsWith('/events/') && isPaidTraffic();
   return (
     <Suspense fallback={null}>
       <MagicCursor />
-      <FloatingActionDock />
-      <RoamBuddySalesBot />
+      {!suppressForPaid && <FloatingActionDock />}
+      {!suppressForPaid && <RoamBuddySalesBot />}
       <AccessibilitySettings />
     </Suspense>
   );
