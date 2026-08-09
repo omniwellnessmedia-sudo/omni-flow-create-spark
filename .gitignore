@@ -54,6 +54,8 @@ public/images/
 !public/awardees/*.webp
 # Ceremony pack portraits (the deck references png paths)
 !public/events/wwpl/ceremony-mq7v3/assets/honourees/*.png
+# Certificate register share image (referenced by netlify/functions/awards.mjs)
+!public/awards-register-og.jpg
 # BWC staging photographs. ONLY the two files the pack's register marks
 # APPROVED are tracked; the review-only fallbacks are not in this repo at all.
 !public/team/bwc/*.webp

@@ -10,4 +10,11 @@ https://www.omniwellnessmedia.co.za/*  https://omniwellnessmedia.co.za/:splat  3
 # served as an indexable soft 404 at HTTP 200.
 /community/events/stunning-pigs  /events/stunning-pigs  301!
 
+# Certificate register — permanent URLs printed on physical certificates.
+# Served by netlify/functions/awards.mjs (which also declares these paths in
+# its own config); these rules exist so the SPA catch-all below can never
+# shadow them. Do not remove or reorder.
+/awards            /.netlify/functions/awards   200
+/awards/*          /.netlify/functions/awards   200
+
 /*    /index.html   200
