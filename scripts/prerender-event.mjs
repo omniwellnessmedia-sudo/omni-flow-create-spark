@@ -66,8 +66,8 @@ const PLACE = {
 };
 
 const SESSIONS = [
-  { name: 'What Feeds Us', start: '2026-08-10T10:00:00+02:00', end: '2026-08-10T11:45:00+02:00' },
-  { name: 'Stunning Pigs — Cape Town Premiere', start: '2026-08-10T12:00:00+02:00', end: '2026-08-10T13:15:00+02:00' },
+  { name: 'What Feeds Us', start: '2026-08-10T10:00:00+02:00', end: '2026-08-10T12:00:00+02:00' },
+  { name: 'Stunning Pigs — Cape Town Premiere', start: '2026-08-10T12:00:00+02:00', end: '2026-08-10T13:30:00+02:00' },
   { name: 'Voices for Women Showcase & Awards Ceremony', start: '2026-08-10T14:00:00+02:00', end: '2026-08-10T16:30:00+02:00' },
 ];
 
@@ -130,7 +130,7 @@ const SHELL = `
           <p style="margin:0 0 8px;font-size:15.5px;color:rgba(249,245,240,.9)">The Masque Theatre, 37 Main Road, Muizenberg</p>
           <p style="margin:0 0 28px;font-size:15.5px;color:rgba(249,245,240,.9)">10:00 &middot; 12:00 &middot; 14:00 &mdash; assigned seating</p>
           <p style="margin:0 0 16px">
-            <a href="${QUICKET_URL}" rel="noopener" target="_blank"
+            <a href="${QUICKET_URL}#/schedules" rel="noopener" target="_blank"
                style="display:inline-block;background:#D9B36C;color:#2A0A1E;text-decoration:none;padding:14px 26px;border-radius:10px;font-weight:600;font-size:16px">
               Get tickets &mdash; from R150
             </a>

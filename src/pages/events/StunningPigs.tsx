@@ -8,10 +8,11 @@ import {
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
   GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILERS,
   PARTNERS, AWARDS_VIDEO_FILE_ID, SITE_NAV,
-  WHAT_FEEDS_US_CREDIT, CONTENT_ADVISORY,
+  WHAT_FEEDS_US_CREDIT, CONTENT_ADVISORY, FULL_DAY,
   drivePreview,
 } from "./wwpl/event";
 import { VISIBLE_AWARDEES, awardeeAnchor } from "./wwpl/awardees";
+import { quicketHref } from "./wwpl/attribution";
 import { BtnLink, BtnButton, Eyebrow, Reveal, SecHead } from "./wwpl/ui";
 import { PetitionForm } from "./wwpl/PetitionForm";
 import { SeatingMap } from "./wwpl/SeatingMap";
@@ -65,8 +66,11 @@ const trackQuicket = (from: string) => {
   trackAdsConversion("quicket_ticket_click", { value: 150, currency: "ZAR" });
 };
 
+/** Every Quicket CTA: attribution params + #/schedules deep link via
+ *  quicketHref(), so the visitor lands at session selection and the order
+ *  can be reconciled to its campaign. */
 const quicketProps = (from: string) => ({
-  href: QUICKET_URL,
+  href: quicketHref(),
   target: "_blank",
   rel: "noopener",
   onClick: () => trackQuicket(from),
@@ -144,6 +148,36 @@ const CopyAnchorButton = ({ anchor, name }: { anchor: string; name: string }) =>
       className="mt-5 self-start font-wwpl-cond text-[11.5px] tracking-[.16em] uppercase text-[rgba(240,217,168,.65)] underline underline-offset-[3px] transition-colors hover:text-wwpl-gold"
     >
       {copied ? "Link copied" : "Copy link to this entry"}
+    </button>
+  );
+};
+
+/* --------------------------------------------------------- full-day code */
+
+/** The published full-day code as a tap-to-copy pill — on a phone the next
+ *  step is pasting it into Quicket's checkout, so copying is the whole job. */
+const FullDayCode = () => {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(FULL_DAY.code);
+          setCopied(true);
+          track("fullday_code_copied");
+          window.setTimeout(() => setCopied(false), 2000);
+        } catch {
+          window.prompt("Copy this code", FULL_DAY.code);
+        }
+      }}
+      aria-label={`Copy the full-day discount code ${FULL_DAY.code}`}
+      className="mx-auto mt-5 flex items-center gap-3 rounded-xl border-2 border-dashed border-wwpl-goldDeep/60 bg-white px-6 py-3 font-wwpl-cond text-[20px] font-medium tracking-[.18em] text-wwpl-ink transition-colors hover:border-wwpl-goldDeep"
+    >
+      {FULL_DAY.code}
+      <span className="font-sans text-[12px] tracking-normal text-wwpl-goldDeep">
+        {copied ? "Copied ✓" : "Tap to copy"}
+      </span>
     </button>
   );
 };
@@ -629,20 +663,20 @@ const StunningPigs = () => {
             ))}
           </div>
 
-          {/* Full-day: the code is issued by email and never printed here. */}
-          <Reveal className="mx-auto mt-12 max-w-[680px] rounded-[20px] border border-wwpl-line bg-wwpl-cream p-8 text-center sm:px-10">
-            <h3 className="font-wwpl-display font-semibold text-[22px] text-wwpl-ink">Doing the whole day?</h3>
+          {/* Full-day: the code is now published directly (see FULL_DAY). */}
+          <Reveal className="mx-auto mt-12 max-w-[680px] rounded-[20px] border border-wwpl-goldDeep/40 bg-wwpl-cream p-8 text-center sm:px-10">
+            <h3 className="font-wwpl-display font-semibold text-[22px] text-wwpl-ink">
+              Doing the whole day? Save {FULL_DAY.saving}
+            </h3>
             <p className="mx-auto mt-3 max-w-[56ch] text-[14.5px] leading-relaxed text-wwpl-slate">
-              Booking all three sessions separately comes to R450. We hold a lower full-day rate for
-              people coming for the full programme — email us and we'll send your code before you book.
+              All three sessions come to <b className="text-wwpl-ink">{FULL_DAY.totalWithCode} total</b>{" "}
+              (normally {FULL_DAY.totalWithout}) with the code below. The venue's seat plan means
+              there's no single full-day ticket — book each of the three sessions on Quicket and
+              apply the code at checkout on <b>each booking</b>.
             </p>
-            <BtnLink
-              variant="ink"
-              className="mt-6"
-              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Full-day access — Celebrating Women Who Protect Life")}`}
-              onClick={() => track("fullday_code_request")}
-            >
-              Email us for full-day access
+            <FullDayCode />
+            <BtnLink {...quicketProps("fullday-card")} variant="gold" className="mt-5">
+              Book all three on Quicket — {FULL_DAY.totalWithCode}
             </BtnLink>
           </Reveal>
         </div>

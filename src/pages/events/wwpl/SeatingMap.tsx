@@ -1,4 +1,4 @@
-import { QUICKET_URL } from "./event";
+import { quicketHref } from "./attribution";
 import { BtnLink, Eyebrow, Reveal } from "./ui";
 import { cn } from "@/lib/utils";
 
@@ -227,7 +227,7 @@ export const SeatingMap = () => (
         </p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <BtnLink
-            href={QUICKET_URL}
+            href={quicketHref()}
             target="_blank"
             rel="noopener"
             variant="gold"
