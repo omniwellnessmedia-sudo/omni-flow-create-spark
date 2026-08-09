@@ -21,12 +21,14 @@
  *     so responses never reveal whether a serial exists.
  */
 
-import { createRequire } from "node:module";
 import { timingSafeEqual } from "node:crypto";
-
-const require = createRequire(import.meta.url);
-// Bundled at build time by esbuild; loadable by plain node in tests.
-const RECORDS = require("../../src/data/awards-2026.json");
+// STATIC import, deliberately: Netlify bundles functions with NFT (Node File
+// Trace), which only includes files it can trace from static import/require
+// statements. The earlier createRequire() load was invisible to the tracer,
+// so the JSON never shipped and production crashed at runtime. The `with`
+// attribute is required for ESM JSON imports on the Node 18.20+/20.10+
+// runtimes Netlify deploys.
+import RECORDS from "../../src/data/awards-2026.json" with { type: "json" };
 
 const BY_SERIAL = new Map(RECORDS.map((r) => [r.serial, r]));
 
