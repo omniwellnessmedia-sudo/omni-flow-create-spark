@@ -141,51 +141,66 @@ async function sendConfirmationEmail(
 ): Promise<void> {
   if (!RESEND_API_KEY) return;
   try {
+    // On-brand confirmation in the campaign's own register (plum/gold,
+    // serif headings) rather than a generic gradient template — this email
+    // is many signers' only other touchpoint with the campaign.
+    const year = new Date().getFullYear();
     const html = `
       <!DOCTYPE html>
       <html>
-      <head>
-        <style>
-          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; }
-          .header { background: linear-gradient(135deg, #8B5CF6, #06B6D4); color: white; padding: 32px 30px; text-align: center; }
-          .content { padding: 32px 30px; background: #ffffff; }
-          .note { background: #f5f3ff; padding: 18px; border-radius: 10px; margin: 22px 0; font-size: 14px; }
-          .footer { background: #1F2937; color: #9CA3AF; padding: 24px; text-align: center; font-size: 12px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1 style="margin: 0; font-size: 24px;">Thank you for signing</h1>
-          </div>
-          <div class="content">
-            <p>Hi ${firstName},</p>
-            <p>Your name has been added to the petition asking South African regulators,
-            retailers and industry bodies to review the use of high-concentration CO<sub>2</sub>
-            gas stunning of pigs.</p>
-            <p>Omni Wellness Media collected your signature. It is shared with the campaign
-            partners <strong>Beauty Without Cruelty South Africa</strong> and <strong>G.A.R.D.</strong>,
-            who are the responsible parties for this petition and who will present it.</p>
-            <div class="note">
-              <p style="margin: 0 0 10px;"><strong>Your first name, surname and city may appear on the
-              petition as presented. Your email address is never published.</strong></p>
-              <p style="margin: 0;">We process this information under the Protection of Personal
-              Information Act 4 of 2013. If you did not sign this, or you want your details seen,
-              corrected or removed, email
-              <a href="mailto:${PRIVACY_EMAIL}">${PRIVACY_EMAIL}</a> and we will action it.</p>
+      <head><meta charset="utf-8"></head>
+      <body style="margin:0;padding:0;background:#F7F3EA;font-family:Helvetica,Arial,sans-serif;color:#1F2F27;line-height:1.6;">
+        <div style="max-width:600px;margin:0 auto;padding:24px 16px;">
+          <div style="background:#FDFBF6;border:1px solid #E4DCC9;">
+            <div style="background:#2A0A1E;padding:28px 30px;text-align:center;">
+              <p style="margin:0 0 6px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#D9B36C;">Voices for Women</p>
+              <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:26px;color:#F9F5F0;">Thank you for signing</h1>
             </div>
-            <p>With thanks,<br><strong>Omni Wellness Media</strong></p>
-          </div>
-          <div class="footer">
-            <p>You received this because your email address was used to sign a petition at
-            omniwellnessmedia.co.za</p>
-            <p>© ${new Date().getFullYear()} Omni Wellness Media</p>
+            <div style="padding:30px;">
+              <p>Hi ${firstName},</p>
+              <p>Your name has been added to the petition asking South African regulators,
+              retailers and industry bodies to review the use of high-concentration CO<sub>2</sub>
+              gas stunning of pigs.</p>
+              <p>Omni Wellness Media collected your signature. It is shared with the campaign
+              partners <strong>Beauty Without Cruelty South Africa</strong> and <strong>G.A.R.D.</strong>,
+              who are the responsible parties for this petition and who will present it.</p>
+              <div style="background:#F7F3EA;border-left:3px solid #D9B36C;padding:16px 18px;margin:22px 0;font-size:14px;">
+                <p style="margin:0 0 10px;"><strong>Your first name, surname and city may appear on the
+                petition as presented. Your email address is never published.</strong></p>
+                <p style="margin:0;">We process this information under the Protection of Personal
+                Information Act 4 of 2013. If you did not sign this, or you want your details seen,
+                corrected or removed, email
+                <a href="mailto:${PRIVACY_EMAIL}" style="color:#8E7B52;">${PRIVACY_EMAIL}</a> and we will action it.</p>
+              </div>
+              <p style="margin:24px 0 0;">One more thing that genuinely helps: pass the petition on.
+              <a href="https://omniwellnessmedia.co.za/events/stunning-pigs#petition" style="color:#8E7B52;">Share this link</a>
+              with one person who should see it.</p>
+              <p style="margin:24px 0 0;">With thanks,<br><strong>Omni Wellness Media</strong></p>
+            </div>
+            <div style="background:#0E1513;color:#8A9A96;padding:20px 30px;text-align:center;font-size:12px;">
+              <p style="margin:0 0 6px;">You received this because your email address was used to sign a petition at omniwellnessmedia.co.za</p>
+              <p style="margin:0;">&copy; ${year} Omni Wellness Media</p>
+            </div>
           </div>
         </div>
       </body>
       </html>
     `;
+
+    const text = [
+      `Hi ${firstName},`,
+      "",
+      "Your name has been added to the petition asking South African regulators, retailers and industry bodies to review the use of high-concentration CO2 gas stunning of pigs.",
+      "",
+      "Omni Wellness Media collected your signature. It is shared with the campaign partners Beauty Without Cruelty South Africa and G.A.R.D., who are the responsible parties for this petition and who will present it.",
+      "",
+      "Your first name, surname and city may appear on the petition as presented. Your email address is never published. We process this information under the Protection of Personal Information Act 4 of 2013. If you did not sign this, or want your details seen, corrected or removed, email " + PRIVACY_EMAIL + ".",
+      "",
+      "Pass it on: https://omniwellnessmedia.co.za/events/stunning-pigs#petition",
+      "",
+      "With thanks,",
+      "Omni Wellness Media",
+    ].join("\n");
 
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -194,10 +209,18 @@ async function sendConfirmationEmail(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Omni Wellness Media <onboarding@resend.dev>",
+        // REQUIRES the omniwellnessmedia.co.za domain to be VERIFIED in
+        // Resend (Domains -> Add domain -> add the DNS records it shows).
+        // The previous onboarding@resend.dev sender only delivers to the
+        // Resend account owner's own address — every real signer's
+        // confirmation was silently rejected. Do not deploy this change
+        // before the domain shows "Verified" in Resend.
+        from: "Omni Wellness Media <petition@omniwellnessmedia.co.za>",
+        reply_to: PRIVACY_EMAIL,
         to: [email],
-        subject: "Thank you for signing the petition",
+        subject: "Your name is on the petition — thank you",
         html,
+        text,
       }),
     });
 
