@@ -48,9 +48,9 @@ const QUICKET_URL =
   'https://www.quicket.co.za/events/386047-celebrating-women-who-protect-life-featuring-the-cape-town-premiere-of-stunning/';
 
 const TITLE =
-  'Celebrating Women Who Protect Life — 10 Aug at The Masque | Omni Wellness Media';
+  'Celebrating Women Who Protect Life \u2014 the campaign continues | Omni Wellness Media';
 const DESCRIPTION =
-  'The Cape Town premiere of the Stunning Pigs documentary, on Women\u2019s Day at The Masque Theatre, Muizenberg. Three sessions — film, food, voices and awards. R150 per session, assigned seating.';
+  'On Women\u2019s Day 2026, Cape Town premiered the Stunning Pigs documentary and honoured the Voices for Women awardees at The Masque Theatre. The petition for humane standards is open \u2014 add your name.';
 
 const PLACE = {
   '@type': 'Place',

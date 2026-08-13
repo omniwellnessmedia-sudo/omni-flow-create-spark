@@ -164,10 +164,16 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
       onSigned?.();
     } catch (err) {
       setStatus("error");
+      // Server-written messages (thrown from data.error above) are meant for
+      // people and pass through. Transport/SDK failures surface as jargon
+      // ("Failed to send a request to the Edge Function"), so anything that
+      // reads like machinery gets the honest human fallback instead.
+      const msg = err instanceof Error ? err.message : "";
+      const techy = !msg || /edge function|failed to fetch|network|non-2xx|typeerror/i.test(msg);
       setError(
-        err instanceof Error && err.message
-          ? err.message
-          : "We couldn't record your signature just now. Please try again."
+        techy
+          ? "We couldn't record your signature just now — something went wrong on our side. Please try again a little later; your details stay filled in."
+          : msg
       );
     }
   };
