@@ -120,25 +120,25 @@ const EVENT_JSONLD = {
 const SHELL = `
       <div style="background:radial-gradient(120% 90% at 78% 0%,#5A1A3E 0%,#43122E 38%,#2A0A1E 78%)">
         <div style="max-width:1120px;margin:0 auto;padding:72px 20px;font-family:Inter,system-ui,sans-serif;color:#F9F5F0">
-          <p style="margin:0 0 18px;font-family:Oswald,sans-serif;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:#C98A9E">Cape Town Premiere &middot; Women's Day</p>
+          <p style="margin:0 0 18px;font-family:Oswald,sans-serif;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:#C98A9E">Women's Day 2026 &middot; The campaign continues</p>
           <h1 style="margin:0 0 20px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:48px;line-height:1.08;color:#fff">Celebrating <em style="color:#EBCE93">Women</em> Who Protect Life</h1>
           <p style="margin:0 0 28px;font-size:18px;line-height:1.7;max-width:46ch;color:rgba(249,245,240,.82)">
-            One day at The Masque Theatre, Muizenberg &mdash; the Cape Town premiere of the
-            <i>Stunning Pigs</i> documentary, plus a live Q&amp;A and the <i>Voices for Women</i> showcase and awards.
+            On Women's Day, Cape Town gathered at The Masque Theatre for the premiere of the
+            <i>Stunning Pigs</i> documentary and the <i>Voices for Women</i> awards. The film asked
+            its question. Now the campaign needs your name.
           </p>
           <p style="margin:0 0 8px;font-size:15.5px;color:rgba(249,245,240,.9)">Monday 10 August 2026 &mdash; Women's Day public holiday</p>
           <p style="margin:0 0 8px;font-size:15.5px;color:rgba(249,245,240,.9)">The Masque Theatre, 37 Main Road, Muizenberg</p>
           <p style="margin:0 0 28px;font-size:15.5px;color:rgba(249,245,240,.9)">10:00 &middot; 12:00 &middot; 14:00 &mdash; assigned seating</p>
           <p style="margin:0 0 16px">
-            <a href="${QUICKET_URL}#/schedules" rel="noopener" target="_blank"
+            <a href="#petition"
                style="display:inline-block;background:#D9B36C;color:#2A0A1E;text-decoration:none;padding:14px 26px;border-radius:10px;font-weight:600;font-size:16px">
-              Get tickets &mdash; from R150
+              Add your name to the petition
             </a>
           </p>
           <p style="margin:0;font-size:13px;line-height:1.6;max-width:60ch;color:rgba(249,245,240,.55)">
-            R150 per session. Book one, two or all three. Sold securely by Quicket &mdash; The Masque
-            Theatre's official ticketing partner. Omni Wellness Media organises and promotes this
-            event and is not a ticket reseller; it adds no booking fee or markup.
+            The petition for humane standards is presented to regulators and industry by
+            Beauty Without Cruelty and G.A.R.D. Every real signature counts &mdash; no ticket needed.
           </p>
         </div>
       </div>`
