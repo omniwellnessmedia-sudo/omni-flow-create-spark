@@ -50,6 +50,16 @@ export const POSTER = "/events/wwpl/final-square.webp";
 export const CONTACT_EMAIL = "omniwellnessmedia@gmail.com";
 
 /**
+ * The event happened (10 Aug 2026) and went well. With this flag true the
+ * page runs in CAMPAIGN mode: every ticket CTA becomes a petition CTA, the
+ * countdown and booking apparatus (seat map, buying-with-confidence,
+ * before-you-book, full-day card, getting-there) are withheld, and copy
+ * shifts to past tense. Nothing is deleted — flip this back to false and the
+ * page is a ready template for the next event.
+ */
+export const EVENT_CONCLUDED = true;
+
+/**
  * NOTE: the design handoff carried +27 74 524 5411, which conflicts with
  * +27 74 831 5961 in src/pages/Contact.tsx. The repo's Contact page is treated
  * as the verified source until someone confirms which is current — a wrong

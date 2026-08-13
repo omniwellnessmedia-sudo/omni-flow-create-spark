@@ -1,4 +1,5 @@
 import { quicketHref } from "./attribution";
+import { EVENT_CONCLUDED } from "./event";
 import { BtnLink, Reveal } from "./ui";
 import { cn } from "@/lib/utils";
 
@@ -33,9 +34,37 @@ export const CtaBand = ({
 }) => {
   const track = () => {
     const w = window as any;
-    w.gtag?.("event", "quicket_click", { campaign: "stunningpigs", from });
-    w.tagClarityEvent?.("quicket_click", "stunningpigs");
+    const ev = EVENT_CONCLUDED ? "petition_cta" : "quicket_click";
+    w.gtag?.("event", ev, { campaign: "stunningpigs", from });
+    w.tagClarityEvent?.(ev, "stunningpigs");
   };
+
+  /* Campaign mode: the banner artwork carries "Tickets from R150" baked into
+     the image, so post-event the band drops the artwork and becomes a plain
+     petition band in the same visual register. */
+  if (EVENT_CONCLUDED) {
+    return (
+      <section className={cn("bg-wwpl-plum py-14", className)}>
+        <div className="mx-auto w-full max-w-[1120px] px-5 sm:px-8">
+          <Reveal className="text-center">
+            {headline && (
+              <h2 className="font-wwpl-display font-semibold text-[clamp(24px,4.5vw,34px)] leading-tight text-white">
+                {headline}
+              </h2>
+            )}
+            {sub && (
+              <p className="mx-auto mt-3 max-w-[56ch] text-[15px] leading-relaxed text-[rgba(249,245,240,.7)]">
+                {sub}
+              </p>
+            )}
+            <BtnLink href="#petition" variant="gold" onClick={track} className="mt-7">
+              Add your name to the petition
+            </BtnLink>
+          </Reveal>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={cn("bg-wwpl-plum py-14", className)}>

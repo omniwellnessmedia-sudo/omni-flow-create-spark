@@ -8,7 +8,7 @@ import {
   VENUE_NAME, VENUE_ADDRESS, VENUE_MAPS_URL, EVENT_DATE_DISPLAY, EVENT_START_MS,
   GOOGLE_CAL_URL, downloadIcs, SESSIONS, CLIPS, TRAILERS,
   PARTNERS, AWARDS_VIDEO_FILE_ID, SITE_NAV,
-  WHAT_FEEDS_US_CREDIT, CONTENT_ADVISORY, FULL_DAY,
+  WHAT_FEEDS_US_CREDIT, CONTENT_ADVISORY, FULL_DAY, EVENT_CONCLUDED,
   drivePreview,
 } from "./wwpl/event";
 import { VISIBLE_AWARDEES, awardeeAnchor } from "./wwpl/awardees";
@@ -312,7 +312,8 @@ const StickyBar = () => {
     // Shown once the hero has scrolled past, hidden whenever the real ticket
     // CTA or the footer is on screen — never compete with the actual CTA.
     const hero = document.getElementById("hero");
-    const tickets = document.getElementById("tickets");
+    // In campaign mode the conversion target is the petition, not tickets.
+    const tickets = document.getElementById(EVENT_CONCLUDED ? "petition" : "tickets");
     const footer = document.getElementById("site-footer");
     let heroPast = false;
     let ctaVisible = false;
@@ -354,13 +355,23 @@ const StickyBar = () => {
             Celebrating Women Who Protect Life
           </b>
           <span className="hidden text-[14px] text-[rgba(249,245,240,.85)] lg:block">
-            Mon 10 Aug 2026 · The Masque Theatre · from R150
+            {EVENT_CONCLUDED
+              ? "The petition for humane standards is open"
+              : "Mon 10 Aug 2026 · The Masque Theatre · from R150"}
           </span>
         </div>
-        <BtnLink {...quicketProps("sticky-bar")} variant="gold"
-          className="w-full whitespace-nowrap px-[22px] py-3 sm:w-auto sm:shrink-0 sm:py-2.5">
-          Get tickets — from R150
-        </BtnLink>
+        {EVENT_CONCLUDED ? (
+          <BtnLink href="#petition" variant="gold"
+            onClick={() => track("petition_cta", { from: "sticky-bar" })}
+            className="w-full whitespace-nowrap px-[22px] py-3 sm:w-auto sm:shrink-0 sm:py-2.5">
+            Sign the petition
+          </BtnLink>
+        ) : (
+          <BtnLink {...quicketProps("sticky-bar")} variant="gold"
+            className="w-full whitespace-nowrap px-[22px] py-3 sm:w-auto sm:shrink-0 sm:py-2.5">
+            Get tickets — from R150
+          </BtnLink>
+        )}
       </div>
     </div>
   );
@@ -373,9 +384,12 @@ const StunningPigs = () => {
 
   const seo = useMemo(
     () => ({
-      title: "Celebrating Women Who Protect Life — 10 Aug at The Masque | Omni Wellness Media",
-      description:
-        "The Cape Town premiere of the Stunning Pigs documentary, on Women's Day at The Masque Theatre, Muizenberg. Three sessions — film, food, voices and awards. R150 per session, assigned seating.",
+      title: EVENT_CONCLUDED
+        ? "Celebrating Women Who Protect Life — the campaign continues | Omni Wellness Media"
+        : "Celebrating Women Who Protect Life — 10 Aug at The Masque | Omni Wellness Media",
+      description: EVENT_CONCLUDED
+        ? "On Women's Day 2026, Cape Town premiered the Stunning Pigs documentary and honoured the Voices for Women awardees at The Masque Theatre. The petition for humane standards is open — add your name."
+        : "The Cape Town premiere of the Stunning Pigs documentary, on Women's Day at The Masque Theatre, Muizenberg. Three sessions — film, food, voices and awards. R150 per session, assigned seating.",
       url: PAGE_URL,
       canonical: PAGE_URL,
       image: OG_IMAGE,
@@ -486,9 +500,14 @@ const StunningPigs = () => {
           </nav>
 
           <div className="flex items-center gap-3">
-            {isPaidTraffic() ? (
+            {isPaidTraffic() && !EVENT_CONCLUDED ? (
               <BtnLink {...quicketProps("header")} variant="gold" className="!px-4 !py-2 text-[14px]">
                 Get tickets
+              </BtnLink>
+            ) : EVENT_CONCLUDED ? (
+              <BtnLink href="#petition" variant="gold" className="!px-4 !py-2 text-[14px]"
+                onClick={() => track("petition_cta", { from: "header" })}>
+                Sign the petition
               </BtnLink>
             ) : (
               <>
@@ -538,7 +557,7 @@ const StunningPigs = () => {
         <div className={cn(wrap, "relative grid items-center gap-12 py-16 lg:grid-cols-2 lg:gap-16 lg:py-[88px]")}>
           <div>
             <Eyebrow rule className="text-[13px] tracking-[.28em] text-wwpl-rose">
-              Cape Town Premiere · Women's Day
+              {EVENT_CONCLUDED ? "Women's Day 2026 · The campaign continues" : "Cape Town Premiere · Women's Day"}
             </Eyebrow>
             {/* 32px floor: at 390px the 40px floor wrapped the headline to
                 four lines and pushed the CTA below the fold — the button must
@@ -551,16 +570,23 @@ const StunningPigs = () => {
               Who Protect Life
             </h1>
             <p className="mt-5 max-w-[46ch] text-[18px] leading-[1.7] text-[rgba(249,245,240,.82)]">
-              One day at The Masque Theatre, Muizenberg — the Cape Town premiere of the{" "}
-              <i className="text-wwpl-goldLight">Stunning Pigs</i> documentary, plus a live Q&amp;A and the{" "}
-              <i className="text-wwpl-goldLight">Voices for Women</i> showcase and awards.
+              {EVENT_CONCLUDED ? (
+                <>On Women's Day, Cape Town gathered at The Masque Theatre for the premiere of{" "}
+                <i className="text-wwpl-goldLight">Stunning Pigs</i> and the{" "}
+                <i className="text-wwpl-goldLight">Voices for Women</i> awards. The film asked its
+                question. Now the campaign needs your name.</>
+              ) : (
+                <>One day at The Masque Theatre, Muizenberg — the Cape Town premiere of the{" "}
+                <i className="text-wwpl-goldLight">Stunning Pigs</i> documentary, plus a live Q&amp;A and the{" "}
+                <i className="text-wwpl-goldLight">Voices for Women</i> showcase and awards.</>
+              )}
             </p>
 
             <div className="mt-6 grid gap-2.5 sm:mt-8 sm:gap-3.5">
               {[
                 { k: "Date", v: EVENT_DATE_DISPLAY },
                 { k: "Venue", v: `${VENUE_NAME}, ${VENUE_ADDRESS}` },
-                { k: "Sessions", v: "10:00 · 12:00 · 14:00 — assigned seating" },
+                { k: "Sessions", v: EVENT_CONCLUDED ? "10:00 · 12:00 · 14:00" : "10:00 · 12:00 · 14:00 — assigned seating" },
               ].map((f) => (
                 <div key={f.k} className="flex items-baseline gap-3.5">
                   <span className="w-[76px] shrink-0 font-wwpl-cond text-[12px] tracking-[.22em] uppercase text-wwpl-gold">
@@ -572,18 +598,33 @@ const StunningPigs = () => {
             </div>
 
             <div className="mt-7 flex flex-wrap gap-3.5 sm:mt-10">
-              <BtnLink {...quicketProps("hero")} variant="gold">Get tickets — from R150</BtnLink>
-              <BtnLink href="#trailer" variant="ghostLight" onClick={() => track("nav_trailer", { from: "hero" })}>
-                Watch the trailers
-              </BtnLink>
+              {EVENT_CONCLUDED ? (
+                <>
+                  <BtnLink href="#petition" variant="gold"
+                    onClick={() => track("petition_cta", { from: "hero" })}>
+                    Add your name to the petition
+                  </BtnLink>
+                  <BtnLink href="#awards" variant="ghostLight" onClick={() => track("nav_awards", { from: "hero" })}>
+                    Meet the honourees
+                  </BtnLink>
+                </>
+              ) : (
+                <>
+                  <BtnLink {...quicketProps("hero")} variant="gold">Get tickets — from R150</BtnLink>
+                  <BtnLink href="#trailer" variant="ghostLight" onClick={() => track("nav_trailer", { from: "hero" })}>
+                    Watch the trailers
+                  </BtnLink>
+                </>
+              )}
             </div>
 
             <p className="mt-4 max-w-[52ch] text-[13px] leading-relaxed text-[rgba(249,245,240,.55)]">
-              R150 per session. Book one, two or all three. Sold securely by Quicket — The Masque
-              Theatre's official ticketing partner.
+              {EVENT_CONCLUDED
+                ? "The petition for humane standards is presented to regulators and industry by Beauty Without Cruelty and G.A.R.D. Every real signature counts — no ticket needed."
+                : "R150 per session. Book one, two or all three. Sold securely by Quicket — The Masque Theatre's official ticketing partner."}
             </p>
 
-            <Countdown />
+            {!EVENT_CONCLUDED && <Countdown />}
           </div>
 
           {/* Poster is the LCP element on desktop; eager + high priority, and
@@ -608,7 +649,9 @@ const StunningPigs = () => {
           <SecHead
             eyebrow="The programme"
             title="Three experiences, one day"
-            sub="Each session is R150. Come for one, come for all three."
+            sub={EVENT_CONCLUDED
+              ? "What the day held, on Monday 10 August 2026."
+              : "Each session is R150. Come for one, come for all three."}
           />
           <div className="grid items-stretch gap-6 md:grid-cols-3">
             {SESSIONS.map((s, i) => (
@@ -672,16 +715,19 @@ const StunningPigs = () => {
                       About the awards
                     </a>
                   )}
-                  <BtnLink {...quicketProps(`session-${s.no}`)} variant={s.feature ? "gold" : "ghost"}
-                    className="mt-6 self-start text-[14px]">
-                    {s.cta}
-                  </BtnLink>
+                  {!EVENT_CONCLUDED && (
+                    <BtnLink {...quicketProps(`session-${s.no}`)} variant={s.feature ? "gold" : "ghost"}
+                      className="mt-6 self-start text-[14px]">
+                      {s.cta}
+                    </BtnLink>
+                  )}
                 </article>
               </Reveal>
             ))}
           </div>
 
           {/* Full-day: the code is now published directly (see FULL_DAY). */}
+          {!EVENT_CONCLUDED && (
           <Reveal className="mx-auto mt-12 max-w-[680px] rounded-[20px] border border-wwpl-goldDeep/40 bg-wwpl-cream p-8 text-center sm:px-10">
             <h3 className="font-wwpl-display font-semibold text-[22px] text-wwpl-ink">
               Doing the whole day? Save {FULL_DAY.saving}
@@ -697,6 +743,7 @@ const StunningPigs = () => {
               Book all three on Quicket — {FULL_DAY.totalWithCode}
             </BtnLink>
           </Reveal>
+          )}
         </div>
       </section>
 
@@ -769,13 +816,13 @@ const StunningPigs = () => {
               South Africans expect?
             </p>
             <p className="mt-6 text-[16.5px] leading-[1.75] text-wwpl-inkSoft">
-              The premiere is followed by a public Q&amp;A with the Beauty Without Cruelty campaign and
+              The premiere {EVENT_CONCLUDED ? "was" : "is"} followed by a public Q&amp;A with the Beauty Without Cruelty campaign and
               G.A.R.D. — an open, respectful conversation about achievable, more humane standards. This
-              is a public education event: no graphic footage is used in any of our promotion, and the
-              day is designed to inform, not to shock.
+              {EVENT_CONCLUDED ? " was" : " is"} a public education event: no graphic footage is used in any of our promotion, and the
+              day {EVENT_CONCLUDED ? "was" : "is"} designed to inform, not to shock.
             </p>
             <p className="mt-5 text-[16.5px] leading-[1.75] text-wwpl-inkSoft">
-              Held on Women's Day, the programme celebrates the women leading this work — opening with{" "}
+              Held on Women's Day, the programme {EVENT_CONCLUDED ? "celebrated" : "celebrates"} the women leading this work — opening with{" "}
               <em>What Feeds Us</em> and closing with the <em>Voices for Women</em> showcase and awards
               ceremony.
             </p>
@@ -784,10 +831,12 @@ const StunningPigs = () => {
             <p className="mt-3 text-[13px] leading-snug text-wwpl-slate/70">
               <em>What Feeds Us</em>: {WHAT_FEEDS_US_CREDIT}
             </p>
+            {!EVENT_CONCLUDED && (
             <div className="mt-6 border-l-2 border-wwpl-gold pl-5 text-[14.5px] leading-relaxed text-wwpl-slate">
               Delicious vegan food is available for purchase on the day, from official vegan food
               partner Vegan Streetfood.
             </div>
+            )}
             {/* Viewer advisory — see the provenance note on CONTENT_ADVISORY. */}
             <p className="mt-5 text-[13px] leading-relaxed text-wwpl-slate/75">
               {CONTENT_ADVISORY}
@@ -903,17 +952,27 @@ const StunningPigs = () => {
 
           <Reveal className="mt-14 text-center">
             <p className="mx-auto max-w-[54ch] text-[13.5px] leading-relaxed text-[rgba(249,245,240,.55)]">
-              More honourees are being announced — the full list of women being celebrated appears
-              here as their profiles are finalised.
+              {EVENT_CONCLUDED
+                ? "Thirty-seven women were honoured on the day. Profiles appear here as each honouree approves publication."
+                : "More honourees are being announced — the full list of women being celebrated appears here as their profiles are finalised."}
             </p>
-            <BtnLink {...quicketProps("awards-section")} variant="gold" className="mt-7">
-              Book the awards session — R150
-            </BtnLink>
+            {EVENT_CONCLUDED ? (
+              <BtnLink href="/awards" variant="gold" className="mt-7"
+                onClick={() => track("register_visit", { from: "awards-section" })}>
+                Visit the certificate register
+              </BtnLink>
+            ) : (
+              <BtnLink {...quicketProps("awards-section")} variant="gold" className="mt-7">
+                Book the awards session — R150
+              </BtnLink>
+            )}
           </Reveal>
         </div>
       </section>
 
-      {/* 6 — Buying with confidence. Legally load-bearing; see file header. */}
+      {/* 6 — Buying with confidence. Legally load-bearing; see file header.
+          Withheld in campaign mode — there is nothing on sale. */}
+      {!EVENT_CONCLUDED && (
       <section className="border-y border-wwpl-line bg-wwpl-cream py-[88px]">
         <div className={wrap}>
           <SecHead eyebrow="Buying with confidence" title="The official event page" className="mb-16" />
@@ -938,6 +997,7 @@ const StunningPigs = () => {
           </p>
         </div>
       </section>
+      )}
 
       <CtaBand
         from="band-after-about"
@@ -949,9 +1009,10 @@ const StunningPigs = () => {
           "where will I sit / is there wheelchair access" at the moment someone
           is deciding, then hands straight off to Quicket. READ-ONLY by design —
           see the header comment in wwpl/SeatingMap.tsx. */}
-      <SeatingMap />
+      {!EVENT_CONCLUDED && <SeatingMap />}
 
-      {/* 7 — Tickets: the conversion band */}
+      {/* 7 — Tickets: the conversion band. Withheld in campaign mode. */}
+      {!EVENT_CONCLUDED && (
       <section id="tickets" className="scroll-mt-8 bg-[radial-gradient(110%_130%_at_50%_-20%,#5A1A3E,#2A0A1E_70%)] py-[104px] text-center text-wwpl-cream">
         <div className={wrap}>
           <Reveal>
@@ -1012,8 +1073,9 @@ const StunningPigs = () => {
           </Reveal>
         </div>
       </section>
+      )}
 
-      {/* 8 — Petition: the page's second conversion goal */}
+      {/* 8 — Petition: in campaign mode this IS the page's conversion goal */}
       <section id="petition" className="scroll-mt-8 overflow-hidden border-y border-wwpl-line bg-wwpl-cream py-[100px]">
         <div className={cn(wrap, "grid items-center gap-11 lg:grid-cols-[.95fr_1.05fr] lg:gap-[72px]")}>
           <Reveal>
@@ -1038,7 +1100,8 @@ const StunningPigs = () => {
         </div>
       </section>
 
-      {/* 9 — Getting there */}
+      {/* 9 — Getting there. Withheld in campaign mode — the day has passed. */}
+      {!EVENT_CONCLUDED && (
       <section className="py-24 text-center">
         <div className={wrap}>
           <Reveal>
@@ -1063,6 +1126,7 @@ const StunningPigs = () => {
           </Reveal>
         </div>
       </section>
+      )}
 
       {/* 10 — Partners. Not a logo strip: each partner is a named collaborator
           with who-they-are copy and a link to their own site. This section is
