@@ -313,7 +313,7 @@ export const TRAILERS = [
  *
  * Logos live under public/partners/, optimised from the poster logo pack the
  * team supplied on 6 Aug ("celebratingwomenposter.zip"). Several marks sit on
- * white rectangular backgrounds (BWC, Masque, Uthando, Four Paws) — the
+ * white rectangular backgrounds (BWC, Masque) — the
  * partner cards are white by design, so those logos read as intended; do not
  * move this section onto a dark ground without re-cutting the logos.
  * Travel & Tours Cape Town still loads from the site's Supabase CDN (its
@@ -382,14 +382,8 @@ export const PARTNERS: PartnerDef[] = [
     href: "https://www.themasque.co.za/",
     logo: "/partners/masque-theatre.webp",
   },
-  {
-    name: "FOUR PAWS South Africa",
-    role: "Supporting partner",
-    blurb:
-      "The South African office of the global animal welfare organisation working for animals under direct human influence.",
-    href: "https://www.four-paws.org.za/",
-    logo: "/partners/four-paws.webp",
-  },
+  /* FOUR PAWS South Africa removed 14 Aug at Tumelo's request. Re-add only
+     if the team confirms the partnership. */
   /* Uthando removed 9 Aug at Tumelo's request — the blurb (drawn from
      uthandosa.org) did not describe the right organisation. Re-add only
      with team-supplied wording. */
