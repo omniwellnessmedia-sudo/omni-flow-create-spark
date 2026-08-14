@@ -1130,7 +1130,7 @@ const StunningPigs = () => {
 
       {/* 10 — Partners. Not a logo strip: each partner is a named collaborator
           with who-they-are copy and a link to their own site. This section is
-          doing credibility work for a first-time event — six organisations
+          doing credibility work for a first-time event — seven organisations
           with real track records vouching for the day. Data (blurbs, links,
           logos and their provenance) lives in PARTNERS in wwpl/event.ts. */}
       <section id="partners" className="scroll-mt-8 border-t border-wwpl-line pb-[96px] pt-[80px]">
@@ -1140,16 +1140,24 @@ const StunningPigs = () => {
             title="The people behind the day"
             sub="A first-time event, carried by organisations that have been doing this work for years."
           />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Centered flex-wrap, not a grid: with seven partners a fixed grid
+              strands the last card at the left edge; here every partial row
+              self-centres at any breakpoint. Widths mirror gap-5 (1.25rem). */}
+          <div className="flex flex-wrap justify-center gap-5">
             {PARTNERS.map((p, i) => {
               const external = !!p.href && !p.href.startsWith(ORIGIN);
               return (
-                <Reveal key={p.name} delayMs={(i % 4) * 70} className="h-full">
-                  <article className="flex h-full flex-col rounded-[20px] border border-wwpl-line bg-white p-6 shadow-[0_1px_2px_rgba(21,32,31,.05)] motion-safe:transition-all motion-safe:duration-[250ms] hover:-translate-y-1 hover:shadow-wwpl-md">
-                    {/* Every mark sits on the same cream plinth so mixed logo
-                        treatments (black tiles, white JPEGs, round icons)
-                        read as one considered row rather than a scrapbook. */}
-                    <span className="mb-5 flex h-20 w-full items-center justify-center rounded-xl border border-wwpl-line/60 bg-wwpl-cream px-4">
+                <Reveal
+                  key={p.name}
+                  delayMs={(i % 3) * 70}
+                  className="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.834rem)]"
+                >
+                  <article className="group flex h-full flex-col rounded-[20px] border border-wwpl-line bg-white p-6 shadow-[0_1px_2px_rgba(21,32,31,.05)] motion-safe:transition-all motion-safe:duration-[250ms] hover:-translate-y-1 hover:shadow-wwpl-md">
+                    {/* Every mark sits on the same white plinth: source files
+                        with baked-in white backgrounds (BWC, Masque) blend
+                        seamlessly, and transparent marks read as one
+                        considered row rather than a scrapbook. */}
+                    <span className="mb-6 flex h-28 w-full items-center justify-center rounded-2xl border border-wwpl-line/70 bg-white px-6">
                       {p.logo ? (
                         <img
                           src={p.logo}
@@ -1160,8 +1168,8 @@ const StunningPigs = () => {
                              404s, an empty plinth beats a broken-image glyph. */
                           onError={(e) => { e.currentTarget.style.display = "none"; }}
                           className={cn(
-                            "max-h-12 max-w-[140px] object-contain",
-                            p.round && "h-12 w-12 rounded-full"
+                            "max-h-20 max-w-[220px] object-contain motion-safe:transition-transform motion-safe:duration-[250ms] group-hover:scale-[1.04]",
+                            p.round && "h-20 w-20 rounded-full"
                           )}
                         />
                       ) : (
@@ -1169,7 +1177,7 @@ const StunningPigs = () => {
                            is supplied — see the provenance note in PARTNERS. */
                         <span
                           aria-hidden="true"
-                          className="flex h-12 w-12 items-center justify-center rounded-full bg-wwpl-plum font-wwpl-display font-semibold text-[22px] text-wwpl-goldLight"
+                          className="flex h-16 w-16 items-center justify-center rounded-full bg-wwpl-plum font-wwpl-display font-semibold text-[26px] text-wwpl-goldLight"
                         >
                           {p.name.replace(/^The /, "").charAt(0)}
                         </span>
