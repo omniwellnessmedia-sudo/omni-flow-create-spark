@@ -104,7 +104,11 @@ const Footer = () => {
               <li><Link to="/tours/muizenberg-cave-tours" className="text-white/60 hover:text-white transition-colors">Muizenberg Heritage</Link></li>
               <li><Link to="/tours/kalk-bay-tour" className="text-white/60 hover:text-white transition-colors">Kalk Bay Tapestry</Link></li>
               <li><Link to="/tours-retreats" className="text-white/60 hover:text-white transition-colors">All Tours & Retreats</Link></li>
-              <li><Link to="/roambuddy-store" className="text-white/60 hover:text-white transition-colors">ROAM eSIM Store</Link></li>
+              {/* ROAM eSIM link removed 15 Aug 2026 per the correction pass:
+                  the end-to-end purchase and eSIM delivery path has not been
+                  verified by a real completed transaction. API endpoints
+                  returning success is not fulfilment. Restore this link only
+                  once one real order has been placed and delivered. */}
             </ul>
           </div>
 

@@ -3,7 +3,7 @@ import { ArrowRight, CalendarDays, Clock, MapPin, Ticket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import SmartImage from '@/components/ui/smart-image';
-import { WHAT_FEEDS_US_CREDIT } from '@/pages/events/wwpl/event';
+import { EVENT_CONCLUDED, WHAT_FEEDS_US_CREDIT } from '@/pages/events/wwpl/event';
 
 /**
  * Homepage feature spot for the current flagship event.
@@ -23,7 +23,7 @@ const FeaturedEventSection = () => {
         <div className="grid gap-10 md:grid-cols-2 items-center max-w-5xl mx-auto">
           <Link
             to="/events/stunning-pigs"
-            aria-label="Celebrating Women Who Protect Life — event details and tickets"
+            aria-label="Celebrating Women Who Protect Life, event details"
             className="block rounded-2xl overflow-hidden shadow-lg ring-1 ring-border/60 hover:shadow-xl transition-shadow"
           >
             <SmartImage
@@ -60,9 +60,15 @@ const FeaturedEventSection = () => {
                   {s.time} — {s.title}
                 </p>
               ))}
+              {/* The event concluded on 10 Aug 2026. Advertising a price and
+                  "tickets on Quicket" after that date is a false commercial
+                  claim on the site's highest-traffic page, so the sales line
+                  is replaced rather than left to age. */}
               <p className="flex items-center gap-2">
                 <Ticket className="h-4 w-4 text-rose-500 shrink-0" />
-                R150 per session · tickets on Quicket
+                {EVENT_CONCLUDED
+                  ? 'This event has concluded'
+                  : 'R150 per session · tickets on Quicket'}
               </p>
               {/* Required production credit — must appear wherever the film is
                   named. Imported so the wording can never drift. */}
@@ -73,7 +79,7 @@ const FeaturedEventSection = () => {
 
             <Button asChild size="lg">
               <Link to="/events/stunning-pigs">
-                Event details &amp; tickets
+                {EVENT_CONCLUDED ? 'See what happened' : 'Event details & tickets'}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
