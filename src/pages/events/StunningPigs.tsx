@@ -1227,6 +1227,7 @@ const StunningPigs = () => {
             <a href="#sessions" className="transition-colors hover:text-wwpl-goldLight">Programme</a>
             <a href="#tickets" className="transition-colors hover:text-wwpl-goldLight">Tickets</a>
             <a href="#petition" className="transition-colors hover:text-wwpl-goldLight">Petition</a>
+            <a href={`${ORIGIN}/screenings`} className="transition-colors hover:text-wwpl-goldLight">Host a screening</a>
             <a href={`mailto:${CONTACT_EMAIL}`} className="transition-colors hover:text-wwpl-goldLight">Contact</a>
           </nav>
           <p className="w-full text-[12.5px] text-[rgba(246,241,232,.4)]">

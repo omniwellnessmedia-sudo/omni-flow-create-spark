@@ -57,6 +57,13 @@ import { isPaidTraffic } from '@/pages/events/wwpl/attribution';
 
 const NO_OVERLAY_ROUTES = ['/bwc-team-staging'];
 
+// A plain <Navigate to="/screenings"> would drop ?gclid/utm params — the exact
+// attribution this codebase works to preserve. Carry search + hash through.
+const ScreeningsRedirect = () => {
+  const { search, hash } = useLocation();
+  return <Navigate to={`/screenings${search}${hash}`} replace />;
+};
+
 const GlobalOverlays = () => {
   const { pathname } = useLocation();
   if (NO_OVERLAY_ROUTES.includes(pathname)) return null;
@@ -121,6 +128,7 @@ const Resources = React.lazy(() => import('@/pages/Resources'));
 const WellnessExchangeSignup = React.lazy(() => import('@/pages/WellnessExchangeSignup'));
 const BusinessConsulting = React.lazy(() => import('@/pages/BusinessConsulting'));
 const MediaProduction = React.lazy(() => import('@/pages/MediaProduction'));
+const Screenings = React.lazy(() => import('@/pages/Screenings'));
 const WebDevelopment = React.lazy(() => import('@/pages/WebDevelopment'));
 const SocialMediaStrategy = React.lazy(() => import('@/pages/SocialMediaStrategy'));
 const ConsciousMediaPartnershipPage = React.lazy(() => import('@/pages/ConsciousMediaPartnershipPage'));
@@ -348,6 +356,8 @@ function App() {
                   {/* Business Services */}
                   <Route path="/business-consulting" element={<BusinessConsulting />} />
                   <Route path="/media-production" element={<MediaProduction />} />
+                  <Route path="/screenings" element={<Screenings />} />
+                  <Route path="/impact-screenings" element={<ScreeningsRedirect />} />
                   <Route path="/web-development" element={<WebDevelopment />} />
                   <Route path="/social-media-strategy" element={<SocialMediaStrategy />} />
                   <Route path="/conscious-media-partnership" element={<ConsciousMediaPartnershipPage />} />
