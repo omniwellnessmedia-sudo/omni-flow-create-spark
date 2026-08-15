@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Check, Film, HandCoins, Megaphone, Store, ArrowRight, Loader2 } from 'lucide-react';
+import { Check, Film, HandCoins, Megaphone, Store, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -15,16 +15,29 @@ import { trackAdsConversion } from '@/lib/googleAds';
 import { trackLead } from '@/lib/socialPixels';
 
 /**
- * Impact Screenings — the screening-as-a-service offering.
+ * Impact Screenings: the screening-as-a-service offering.
  *
- * This page sells what the 10 Aug 2026 Masque Theatre event PROVED: Omni can
- * fill a theatre with the Southern Peninsula's conscious audience and wrap a
- * film in a campaign (petition, awards, panel, press). Four SKUs, priced per
- * the Screening Engine plan (Aug 2026). Every claim of proof on this page
- * must stay true to that event — no invented numbers.
+ * COPY RULES (set by the production copy correction of 15 Aug 2026, which
+ * followed the team minutes of 14 Aug 2026). These are commercial claims on a
+ * sales page quoting engagements up to R25,000, so they are governed:
+ *
+ *   1. ONLY these figures may appear as proof of the 10 Aug 2026 event:
+ *        46 paid tickets, 127 complimentary, 173 issued in total,
+ *        37 honourees, 3 sessions in one day, 2 documentary screenings.
+ *      Venue capacity is NOT evidence of attendance. The 81 recorded
+ *      check-ins must NOT be presented as attendance: the venue did not
+ *      scan consistently. Never infer or reconstruct a figure.
+ *   2. Claims removed and NOT to be reinstated: "100+ paying attendees"
+ *      (false); "a documentary premiere" (the premiered title has an
+ *      unresolved rights position and cannot be used as a commercial
+ *      credential); the petition described as live or anchoring the
+ *      campaign (it has not launched, six governance gates are open, and
+ *      the standing rule forbids presenting planned work as operational).
+ *   3. No em dashes or en dashes anywhere in this file.
+ *   4. No photographs of award recipients: consent has not been obtained.
  *
  * Enquiries submit through the LIVE submit-contact edge function (writes to
- * contact_submissions + emails the team). Deliberately not a new backend:
+ * contact_submissions and emails the team). Deliberately not a new backend:
  * that function is deployed and verified in production.
  */
 
@@ -41,7 +54,7 @@ const OFFERINGS = [
   {
     icon: Film,
     name: 'Hosted Screening Package',
-    price: 'R15,000 – R25,000',
+    price: 'R15,000 to R25,000',
     priceNote: 'flat fee · 50% deposit confirms the date',
     audience: 'For filmmakers, impact producers, NGOs and brands with a film that needs this audience.',
     includes: [
@@ -58,7 +71,7 @@ const OFFERINGS = [
     name: 'Sponsored Screening',
     price: 'Sponsor-funded',
     priceNote: 'title sponsor R7,500 · partner slots R3,500',
-    audience: 'For strong films whose makers have no budget — local businesses fund the night instead.',
+    audience: 'For strong films whose makers have no budget. Local businesses fund the night instead.',
     includes: [
       'We curate the film and secure the community screening licence',
       'Title sponsor: naming, screen ad, stall and 10 tickets',
@@ -70,8 +83,8 @@ const OFFERINGS = [
   {
     icon: HandCoins,
     name: 'Sponsorship-as-a-Service',
-    price: 'R2,500 + 20–25%',
-    priceNote: 'packaging fee + commission on sponsorship closed',
+    price: 'R2,500 + 20 to 25%',
+    priceNote: 'packaging fee plus commission on sponsorship closed',
     audience: 'For organisers of other events and campaigns who need their sponsorship built and sold.',
     includes: [
       'Sponsor deck and tier design for your event',
@@ -83,7 +96,7 @@ const OFFERINGS = [
   {
     icon: Store,
     name: 'Product Activation',
-    price: 'R500 – R2,500',
+    price: 'R500 to R2,500',
     priceNote: 'per night, or per 4-screening season',
     audience: 'For local products and food vendors who want a stall in front of a values-aligned crowd.',
     includes: [
@@ -99,19 +112,29 @@ const STEPS = [
   { n: '1', h: 'Scoping call', p: 'Twenty minutes: your film or brand, your goal, the right format and date window.' },
   { n: '2', h: 'Date secured', p: 'A 50% deposit (or a signed title sponsor) locks the theatre. We never announce before the night is funded.' },
   { n: '3', h: 'We mobilise', p: 'Ticketing live, audience invited, partners and press briefed, programme produced.' },
-  { n: '4', h: 'The night — and the proof', p: 'You get the audience, the moment, and a recap pack to show funders it worked.' },
+  { n: '4', h: 'The night, and the proof', p: 'You get the audience, the moment, and a recap pack to show funders it worked.' },
+];
+
+/** Stated as process, not as accreditation. Do not upgrade this wording. */
+const RIGHTS_POINTS = [
+  'Exhibition rights confirmed in writing with the rights holder',
+  'Classification position established before the night is announced',
+  'A documented record your funders can audit',
 ];
 
 const Screenings = () => {
   useSEO({
     title: 'Impact Screenings | Film Screening as a Service | Omni Wellness Media',
     description:
-      'Turnkey documentary screenings for the Southern Peninsula, Cape Town. We deliver the audience, the theatre, the campaign moment and the recap — for filmmakers, NGOs and brands.',
+      'Turnkey documentary screenings for the Southern Peninsula, Cape Town. We deliver the audience, the theatre, the campaign moment and the recap, for filmmakers, NGOs and brands.',
     canonical: 'https://omniwellnessmedia.co.za/screenings',
   });
 
   const { toast } = useToast();
   const [form, setForm] = useState({ name: '', email: '', organisation: '', type: '', message: '' });
+  // POPIA: separate from the act of enquiring, and DEFAULT UNCHECKED. Never
+  // pre-tick this. An enquiry is not consent; only the ticked box is.
+  const [keepPosted, setKeepPosted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -123,10 +146,10 @@ const Screenings = () => {
       toast({ title: 'Missing information', description: 'Name, email and a few words about your enquiry are required.', variant: 'destructive' });
       return;
     }
-    // Same regex the edge function enforces — a mistyped email must be a
-    // clear client-side message, never a misleading "our side" server error.
+    // Same regex the edge function enforces, so a mistyped email gets a clear
+    // client-side message rather than a misleading "our side" server error.
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-      toast({ title: 'Check your email address', description: 'That email address doesn\'t look complete — please correct it and send again.', variant: 'destructive' });
+      toast({ title: 'Check your email address', description: 'That email address does not look complete. Please correct it and send again.', variant: 'destructive' });
       return;
     }
     setSubmitting(true);
@@ -137,8 +160,10 @@ const Screenings = () => {
           name: form.name,
           email: form.email,
           organization: form.organisation || null,
-          service: `Impact Screenings — ${typeLabel}`,
+          service: `Impact Screenings: ${typeLabel}`,
           message: form.message,
+          // Recorded against the submission with a timestamp, server side.
+          marketing_consent: keepPosted,
         },
       });
       if (error) throw error;
@@ -146,11 +171,11 @@ const Screenings = () => {
       trackLead('screening_enquiry');
       setDone(true);
     } catch {
-      // Inputs are preserved on failure — never swap to a success state
-      // unless the server confirmed (same rule as the petition form).
+      // Inputs are preserved on failure. Never swap to a success state unless
+      // the server confirmed (same rule as the petition form).
       toast({
         title: "We couldn't send that just now",
-        description: 'Something went wrong on our side. Please try again in a minute, or email omniwellnessmedia@gmail.com — your details are still filled in.',
+        description: 'Something went wrong on our side. Please try again in a minute, or email omniwellnessmedia@gmail.com. Your details are still filled in.',
         variant: 'destructive',
       });
     } finally {
@@ -176,21 +201,21 @@ const Screenings = () => {
         <section className="border-b border-wwpl-line">
           <div className="mx-auto max-w-5xl px-5 pb-16 pt-20 text-center sm:pt-24">
             <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
-              Impact screenings · Muizenberg – Kalk Bay – Fish Hoek
+              Impact screenings · Muizenberg, Kalk Bay, Fish Hoek
             </p>
             <h1 className="mx-auto mt-4 max-w-[22ch] font-wwpl-display text-[clamp(34px,6vw,54px)] font-semibold leading-[1.08]">
               Your film deserves this audience.
             </h1>
             <p className="mx-auto mt-5 max-w-[58ch] text-[17px] leading-relaxed text-wwpl-slate">
               We stage documentary nights at The Masque Theatre for the Southern Peninsula's conscious
-              community — and wrap them in a campaign: panel, petition, awards, press. You bring the film.
+              community, and wrap them in a campaign: panel, awards, press. You bring the film.
               We deliver the audience, the occasion, and the proof it mattered.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               {/* btn-primary applies a teal gradient via background-image, so the
                   brand override needs !bg-none as well as the plum colour. */}
               <Button size="lg" className="!bg-none !bg-wwpl-plum !text-wwpl-cream hover:!bg-wwpl-ink" onClick={() => scrollToEnquire('hosted-screening')}>
-                Book a scoping call <ArrowRight className="ml-1.5 h-4 w-4" />
+                Start a scoping call <ArrowRight className="ml-1.5 h-4 w-4" />
               </Button>
               <Button size="lg" variant="outline" className="border-wwpl-line" asChild>
                 <a href="#offerings">See the offerings</a>
@@ -199,12 +224,12 @@ const Screenings = () => {
           </div>
         </section>
 
-        {/* Proof stats — all real numbers from the 10 Aug 2026 event. */}
+        {/* Proof stats. Governed figures only: see the COPY RULES header. */}
         <section className="border-b border-wwpl-line bg-white">
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-5 py-10 text-center sm:grid-cols-4">
             {[
-              ['100+', 'paid attendees, first-time event'],
-              ['3', 'sessions sold via Quicket'],
+              ['173', 'tickets issued, first-time event'],
+              ['3', 'sessions in one day'],
               ['7', 'partner organisations'],
               ['37', 'honourees on our awards register'],
             ].map(([n, l]) => (
@@ -216,21 +241,21 @@ const Screenings = () => {
           </div>
         </section>
 
-        {/* Case study — the dark treatment carried over from the event page. */}
+        {/* Case study. The dark treatment carried over from the event page. */}
         <section className="bg-wwpl-ink py-16 text-wwpl-cream">
           <div className="mx-auto max-w-3xl px-5 text-center">
             <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldLight">
               Proof · 10 August 2026
             </p>
             <p className="mt-5 font-wwpl-display text-[clamp(22px,3.6vw,30px)] font-medium leading-snug">
-              “Celebrating Women Who Protect Life” brought 100+ paying attendees to The Masque
-              Theatre — a documentary premiere, an awards ceremony honouring 37 women, and the
-              national petition that now anchors the campaign.
+              “Celebrating Women Who Protect Life” brought 173 ticketed attendees to The Masque
+              Theatre for two documentary screenings and an awards ceremony honouring 37 women,
+              each holding a permanently verifiable certificate.
             </p>
             <p className="mx-auto mt-5 max-w-[60ch] text-[15px] leading-relaxed text-[rgba(246,241,232,.72)]">
-              One evening produced a paying audience, a permanent certificate register, seven active
-              partnerships and a live campaign. That is what a screening looks like when it's built
-              as a moment, not a booking.
+              One day produced a live audience, a permanent certificate register, seven active
+              partnerships and a campaign that continues. That is what a screening looks like when
+              it is built as a moment, not a booking.
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-x-8 gap-y-2 text-[14px]">
               <Link to="/events/stunning-pigs" className="text-wwpl-goldLight underline underline-offset-4 hover:text-wwpl-cream">
@@ -250,8 +275,8 @@ const Screenings = () => {
               <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">Four ways to work with us</p>
               <h2 className="mt-3 font-wwpl-display text-[clamp(26px,4.5vw,36px)] font-semibold">The offerings</h2>
               <p className="mt-3 text-[15px] text-wwpl-slate">
-                Every engagement follows one rule: the night is funded — by your deposit or a signed
-                title sponsor — before it is announced. No surprises for anyone.
+                Every engagement follows one rule: the night is funded, by your deposit or a signed
+                title sponsor, before it is announced. No surprises for anyone.
               </p>
             </div>
             <div className="mt-10 grid gap-5 md:grid-cols-2">
@@ -291,7 +316,7 @@ const Screenings = () => {
         <section className="border-b border-wwpl-line bg-white py-16">
           <div className="mx-auto max-w-5xl px-5">
             <div className="text-center">
-              <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">From enquiry to full house</p>
+              <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">From enquiry to opening night</p>
               <h2 className="mt-3 font-wwpl-display text-[clamp(26px,4.5vw,36px)] font-semibold">How it works</h2>
             </div>
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -302,6 +327,32 @@ const Screenings = () => {
                   <p className="mt-2 text-[13.5px] leading-relaxed text-wwpl-slate">{s.p}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Rights and licensing. Process, not accreditation: do not upgrade
+            this into a claim of certification or legal service. */}
+        <section className="border-b border-wwpl-line py-16">
+          <div className="mx-auto max-w-3xl px-5">
+            <div className="rounded-[20px] border border-wwpl-line bg-white p-8 shadow-[0_1px_2px_rgba(21,32,31,.05)] sm:p-10">
+              <ShieldCheck className="h-8 w-8 text-wwpl-goldText" aria-hidden="true" />
+              <h2 className="mt-4 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold">
+                Rights handled properly
+              </h2>
+              <p className="mt-3 max-w-[62ch] text-[15.5px] leading-relaxed text-wwpl-slate">
+                Every title we screen goes through a documented rights and classification check
+                before a date is confirmed. Filmmakers and funders get a clean chain of permission,
+                not a handshake.
+              </p>
+              <ul className="mt-6 space-y-3">
+                {RIGHTS_POINTS.map((point) => (
+                  <li key={point} className="flex gap-3 text-[15px] leading-snug">
+                    <Check className="mt-0.5 h-4 w-4 flex-none text-wwpl-goldText" aria-hidden="true" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
@@ -317,14 +368,14 @@ const Screenings = () => {
                 <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-wwpl-gold text-[24px] text-wwpl-plum">✓</div>
                 <h2 className="font-wwpl-display text-[26px] font-semibold">Enquiry received</h2>
                 <p className="mx-auto mt-3 max-w-[46ch] text-[15px] leading-relaxed text-wwpl-slate">
-                  Thank you — we'll come back to you within one working day to set up a scoping call.
-                  If it's urgent, email{' '}
+                  Thank you. We will come back to you within one working day to set up a scoping
+                  call. If it is urgent, email{' '}
                   <a href="mailto:omniwellnessmedia@gmail.com" className="text-wwpl-goldText underline underline-offset-2">
                     omniwellnessmedia@gmail.com
                   </a>.
                 </p>
-                {/* The offering-card CTAs still point here after success — give
-                    them somewhere to land instead of a dead end. */}
+                {/* The offering-card CTAs still point here after success, so
+                    give them somewhere to land instead of a dead end. */}
                 <Button variant="outline" className="mt-6 border-wwpl-line"
                   onClick={() => { setForm((f) => ({ ...f, message: '' })); setDone(false); }}>
                   Send another enquiry
@@ -367,16 +418,36 @@ const Screenings = () => {
                   </div>
                   <div>
                     <Label htmlFor="sc-msg">Your enquiry *</Label>
-                    {/* The edge function truncates at 1000 chars — cap here so
-                        nothing a prospect writes is silently discarded. */}
+                    {/* The edge function truncates at 1000 chars, so cap here
+                        and nothing a prospect writes is silently discarded. */}
                     <Textarea id="sc-msg" rows={5} maxLength={900} className="mt-1.5" value={form.message}
                       placeholder="The film or event, your goal, and any dates you have in mind."
                       onChange={(e) => set('message')(e.target.value)} required />
                   </div>
+
+                  {/* POPIA: optional, separate from the enquiry itself, and
+                      unchecked by default. Do not pre-tick. */}
+                  <label className="flex items-start gap-2.5 text-[14px] text-wwpl-slate">
+                    <input
+                      type="checkbox"
+                      className="mt-0.5 h-4 w-4 accent-[#9C7434]"
+                      checked={keepPosted}
+                      onChange={(e) => setKeepPosted(e.target.checked)}
+                    />
+                    <span>Keep me posted about upcoming screenings</span>
+                  </label>
+
                   <Button type="submit" disabled={submitting}
                     className="w-full !bg-none !bg-wwpl-plum !text-wwpl-cream hover:!bg-wwpl-ink">
                     {submitting ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending…</>) : 'Send enquiry'}
                   </Button>
+
+                  <p className="text-center text-[12.5px] leading-relaxed text-wwpl-slate">
+                    We use your details only to respond to this enquiry. We do not share them. See our{' '}
+                    <a href="/privacy-policy" className="text-wwpl-goldText underline underline-offset-2">
+                      Privacy Policy
+                    </a>.
+                  </p>
                 </form>
               </div>
             )}

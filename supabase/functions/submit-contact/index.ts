@@ -20,7 +20,7 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const { name, email, organization, service, message } = await req.json();
+    const { name, email, organization, service, message, marketing_consent } = await req.json();
 
     // Input sanitization function to prevent XSS
     const sanitizeInput = (input: string): string => {
@@ -62,17 +62,48 @@ serve(async (req) => {
     const sanitizedService = service ? sanitizeInput(service) : null;
     const sanitizedMessage = sanitizeInput(message);
 
-    const { data, error } = await supabase
+    // POPIA: consent is recorded ONLY when the sender explicitly ticked the
+    // optional opt-in. Anything other than a literal true is no consent, so a
+    // missing or truthy-ish value can never be promoted into one. The
+    // timestamp is set server side, next to the boolean it belongs to.
+    const consentGiven = marketing_consent === true;
+
+    const baseRow = {
+      name: sanitizedName,
+      email: sanitizedEmail,
+      organization: sanitizedOrganization,
+      service: sanitizedService,
+      message: sanitizedMessage,
+    };
+
+    let { data, error } = await supabase
       .from("contact_submissions")
       .insert({
-        name: sanitizedName,
-        email: sanitizedEmail,
-        organization: sanitizedOrganization,
-        service: sanitizedService,
-        message: sanitizedMessage,
+        ...baseRow,
+        marketing_consent: consentGiven,
+        marketing_consent_at: consentGiven ? new Date().toISOString() : null,
       })
       .select()
       .single();
+
+    // If the consent migration has not been applied yet, the insert above
+    // fails on the unknown columns. A lead must never be lost to a schema
+    // lag, so retry with the columns this table is guaranteed to have.
+    // PGRST204 is PostgREST's "column not found in schema cache"; 42703 is
+    // Postgres' undefined_column.
+    if (error && (error.code === "PGRST204" || error.code === "42703")) {
+      console.warn("consent columns missing, retrying insert without them", error.code);
+      ({ data, error } = await supabase
+        .from("contact_submissions")
+        .insert(baseRow)
+        .select()
+        .single());
+      if (!error && consentGiven) {
+        // The lead is safe, but the consent it carried was not stored. Say so
+        // loudly: an unrecorded opt-in must not look like a silent success.
+        console.error("MARKETING CONSENT NOT PERSISTED for", sanitizedEmail, "apply migration 20260815120000");
+      }
+    }
 
     if (error) {
       console.error("Database error:", error);
@@ -134,6 +165,10 @@ serve(async (req) => {
                 <div class="field">
                   <div class="label">Message</div>
                   <div class="value">${sanitizedMessage}</div>
+                </div>
+                <div class="field">
+                  <div class="label">Marketing consent</div>
+                  <div class="value">${consentGiven ? 'YES, opted in to updates' : 'No, respond to this enquiry only'}</div>
                 </div>
                 <a href="mailto:${sanitizedEmail}?subject=Re: Your Message to Omni Wellness Media" class="cta">
                   Reply to ${sanitizedName}
