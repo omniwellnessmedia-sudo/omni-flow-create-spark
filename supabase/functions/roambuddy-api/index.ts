@@ -504,12 +504,24 @@ async function handleGetAllProducts() {
     const products = Array.isArray(data) ? data : (data.data || data.products || []);
     console.log(`Successfully fetched ${products.length} products`);
     
-    // Enhance products with wellness features
+    // Enhance products with wellness features.
+    // Each upstream product embeds full country records (timestamps etc.),
+    // bloating the response to ~2.6MB. Keep only the coverage fields the UI reads.
     const enhancedProducts = products.map(product => ({
       ...product,
+      countries: Array.isArray(product.countries)
+        ? product.countries.map((c: any) => ({
+            id: c.id,
+            country_name: c.country_name,
+            country_code: c.country_code,
+            iso2: c.iso2,
+            iso3: c.iso3,
+          }))
+        : product.countries,
       wellness_features: getWellnessFeatures(product),
       peace_of_mind_score: calculatePeaceOfMindScore(product)
     }));
+
 
     return new Response(
       JSON.stringify({ 
