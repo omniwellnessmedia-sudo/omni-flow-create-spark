@@ -41,7 +41,7 @@ const Footer = () => {
           <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-6 md:gap-10">
             <div className="flex-1 text-center md:text-left">
               <h3 className="font-heading text-2xl mb-1">Stay Connected</h3>
-              <p className="text-white/50 text-sm">Stories, tours, and community updates — no spam.</p>
+              <p className="text-white/50 text-sm">Stories, tours, and community updates, no spam.</p>
             </div>
             <form onSubmit={handleSubscribe} className="flex gap-2 w-full md:w-auto">
               <label htmlFor="newsletter-email" className="sr-only">Email address for newsletter</label>
