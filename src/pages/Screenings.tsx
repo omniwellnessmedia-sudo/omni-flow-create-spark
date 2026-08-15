@@ -123,6 +123,12 @@ const Screenings = () => {
       toast({ title: 'Missing information', description: 'Name, email and a few words about your enquiry are required.', variant: 'destructive' });
       return;
     }
+    // Same regex the edge function enforces — a mistyped email must be a
+    // clear client-side message, never a misleading "our side" server error.
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      toast({ title: 'Check your email address', description: 'That email address doesn\'t look complete — please correct it and send again.', variant: 'destructive' });
+      return;
+    }
     setSubmitting(true);
     try {
       const typeLabel = ENQUIRY_TYPES.find((t) => t.value === form.type)?.label ?? 'General';
@@ -154,7 +160,11 @@ const Screenings = () => {
 
   const scrollToEnquire = (type: string) => {
     setForm((f) => ({ ...f, type }));
-    document.getElementById('enquire')?.scrollIntoView({ behavior: 'smooth' });
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.getElementById('enquire')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+    // Move keyboard focus with the scroll so the CTA actually lands users in
+    // the form, not stranded back at the card they clicked.
+    document.getElementById('sc-name')?.focus({ preventScroll: true });
   };
 
   return (
@@ -214,8 +224,8 @@ const Screenings = () => {
             </p>
             <p className="mt-5 font-wwpl-display text-[clamp(22px,3.6vw,30px)] font-medium leading-snug">
               “Celebrating Women Who Protect Life” brought 100+ paying attendees to The Masque
-              Theatre — a documentary premiere, an awards ceremony honouring 37 women, and a
-              national petition launched the same day.
+              Theatre — a documentary premiere, an awards ceremony honouring 37 women, and the
+              national petition that now anchors the campaign.
             </p>
             <p className="mx-auto mt-5 max-w-[60ch] text-[15px] leading-relaxed text-[rgba(246,241,232,.72)]">
               One evening produced a paying audience, a permanent certificate register, seven active
@@ -300,7 +310,10 @@ const Screenings = () => {
         <section id="enquire" className="scroll-mt-8 py-16">
           <div className="mx-auto max-w-2xl px-5">
             {done ? (
-              <div className="rounded-[20px] border border-wwpl-line bg-white p-10 text-center shadow-wwpl-md">
+              /* role=status announces the swap to screen readers; the form it
+                 replaces contained the focused submit button, so focus must
+                 not silently evaporate. */
+              <div role="status" className="rounded-[20px] border border-wwpl-line bg-white p-10 text-center shadow-wwpl-md">
                 <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-wwpl-gold text-[24px] text-wwpl-plum">✓</div>
                 <h2 className="font-wwpl-display text-[26px] font-semibold">Enquiry received</h2>
                 <p className="mx-auto mt-3 max-w-[46ch] text-[15px] leading-relaxed text-wwpl-slate">
@@ -310,6 +323,12 @@ const Screenings = () => {
                     omniwellnessmedia@gmail.com
                   </a>.
                 </p>
+                {/* The offering-card CTAs still point here after success — give
+                    them somewhere to land instead of a dead end. */}
+                <Button variant="outline" className="mt-6 border-wwpl-line"
+                  onClick={() => { setForm((f) => ({ ...f, message: '' })); setDone(false); }}>
+                  Send another enquiry
+                </Button>
               </div>
             ) : (
               <div className="rounded-[20px] border border-wwpl-line bg-white p-8 shadow-wwpl-md sm:p-10">
@@ -336,9 +355,9 @@ const Screenings = () => {
                       onChange={(e) => set('organisation')(e.target.value)} />
                   </div>
                   <div>
-                    <Label>What are you enquiring about?</Label>
+                    <Label htmlFor="sc-type">What are you enquiring about?</Label>
                     <Select value={form.type} onValueChange={set('type')}>
-                      <SelectTrigger className="mt-1.5"><SelectValue placeholder="Choose the closest fit" /></SelectTrigger>
+                      <SelectTrigger id="sc-type" className="mt-1.5"><SelectValue placeholder="Choose the closest fit" /></SelectTrigger>
                       <SelectContent>
                         {ENQUIRY_TYPES.map((t) => (
                           <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>

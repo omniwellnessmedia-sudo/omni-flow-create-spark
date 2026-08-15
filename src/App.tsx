@@ -57,6 +57,13 @@ import { isPaidTraffic } from '@/pages/events/wwpl/attribution';
 
 const NO_OVERLAY_ROUTES = ['/bwc-team-staging'];
 
+// A plain <Navigate to="/screenings"> would drop ?gclid/utm params — the exact
+// attribution this codebase works to preserve. Carry search + hash through.
+const ScreeningsRedirect = () => {
+  const { search, hash } = useLocation();
+  return <Navigate to={`/screenings${search}${hash}`} replace />;
+};
+
 const GlobalOverlays = () => {
   const { pathname } = useLocation();
   if (NO_OVERLAY_ROUTES.includes(pathname)) return null;
@@ -350,7 +357,7 @@ function App() {
                   <Route path="/business-consulting" element={<BusinessConsulting />} />
                   <Route path="/media-production" element={<MediaProduction />} />
                   <Route path="/screenings" element={<Screenings />} />
-                  <Route path="/impact-screenings" element={<Navigate to="/screenings" replace />} />
+                  <Route path="/impact-screenings" element={<ScreeningsRedirect />} />
                   <Route path="/web-development" element={<WebDevelopment />} />
                   <Route path="/social-media-strategy" element={<SocialMediaStrategy />} />
                   <Route path="/conscious-media-partnership" element={<ConsciousMediaPartnershipPage />} />

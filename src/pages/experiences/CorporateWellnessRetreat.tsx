@@ -126,6 +126,16 @@ export default function CorporateWellnessRetreat() {
       });
       return;
     }
+    // Mirrors the edge function's check — a typo'd email must get a clear
+    // message here, not a misleading "our side" error after a server 400.
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      toast({
+        title: "Check your email address",
+        description: "That email address doesn't look complete — please correct it and submit again.",
+        variant: "destructive",
+      });
+      return;
+    }
     setSubmittingEnquiry(true);
     try {
       const { error } = await supabase.functions.invoke('submit-contact', {
