@@ -109,6 +109,7 @@ const UnifiedNavigation = () => {
       icon: Briefcase,
       children: [
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic business development', icon: '💼' },
+        { title: 'Impact Screenings', href: '/screenings', description: 'Film screening as a service — we deliver the audience', icon: '🎟️' },
         { title: 'Media Production', href: '/media-production', description: 'Content creation & storytelling', icon: '🎬' },
         { title: 'Web Development', href: '/web-development', description: 'Digital platforms & systems', icon: '💻' },
       ]

@@ -15,6 +15,7 @@ import Footer from '@/components/Footer';
 import { Check, Heart, Users, Clock, MapPin, Award, Shield, Leaf, Sun, Star, Mountain, TreePine, Sparkles, Building2, Target, BarChart3, GraduationCap, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -111,7 +112,12 @@ export default function CorporateWellnessRetreat() {
     { title: 'CSI & ESG Officers', desc: 'Organisations seeking impact-aligned corporate experiences that contribute to social investment goals with verifiable, reportable outcomes.', icon: Target },
   ];
 
-  const handleSubmitEnquiry = () => {
+  // The lead is actually persisted (contact_submissions + admin email) via the
+  // deployed submit-contact function. The previous version of this handler
+  // showed a success toast and threw the enquiry away — for a R80k–R200k
+  // product, every lost lead was potentially the whole month's revenue.
+  const [submittingEnquiry, setSubmittingEnquiry] = useState(false);
+  const handleSubmitEnquiry = async () => {
     if (!formData.contactName || !formData.email || !formData.company) {
       toast({
         title: "Missing Information",
@@ -120,12 +126,44 @@ export default function CorporateWellnessRetreat() {
       });
       return;
     }
-    toast({
-      title: "Enquiry Received",
-      description: "Thank you! Our corporate experiences team will be in touch within 48 hours to discuss your bespoke retreat.",
-    });
-    setEnquiryOpen(false);
-    setFormData({ contactName: '', email: '', phone: '', company: '', role: '', companySize: '', retreatFormat: '', groupSize: '', preferredWindow: '', primaryGoal: '', source: '', context: '' });
+    setSubmittingEnquiry(true);
+    try {
+      const { error } = await supabase.functions.invoke('submit-contact', {
+        body: {
+          name: formData.contactName,
+          email: formData.email,
+          organization: formData.company,
+          service: 'Corporate Wellness Retreat enquiry',
+          message: [
+            `Phone: ${formData.phone || '-'}`,
+            `Role: ${formData.role || '-'}`,
+            `Company size: ${formData.companySize || '-'}`,
+            `Retreat format: ${formData.retreatFormat || '-'}`,
+            `Group size: ${formData.groupSize || '-'}`,
+            `Preferred window: ${formData.preferredWindow || '-'}`,
+            `Primary goal: ${formData.primaryGoal || '-'}`,
+            `Heard about us: ${formData.source || '-'}`,
+            `Context: ${formData.context || '-'}`,
+          ].join('\n'),
+        },
+      });
+      if (error) throw error;
+      toast({
+        title: "Enquiry Received",
+        description: "Thank you! Our corporate experiences team will be in touch within 48 hours to discuss your bespoke retreat.",
+      });
+      setEnquiryOpen(false);
+      setFormData({ contactName: '', email: '', phone: '', company: '', role: '', companySize: '', retreatFormat: '', groupSize: '', preferredWindow: '', primaryGoal: '', source: '', context: '' });
+    } catch {
+      // On failure the dialog stays open with everything still filled in.
+      toast({
+        title: "We couldn't send that just now",
+        description: "Something went wrong on our side. Please try again, or email omniwellnessmedia@gmail.com — your answers are still filled in.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmittingEnquiry(false);
+    }
   };
 
   // Minimum date: 30 days for corporate planning
@@ -695,8 +733,8 @@ export default function CorporateWellnessRetreat() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={handleSubmitEnquiry} className="w-full bg-emerald-600 hover:bg-emerald-700">
-              Submit Retreat Enquiry
+            <Button onClick={handleSubmitEnquiry} disabled={submittingEnquiry} className="w-full bg-emerald-600 hover:bg-emerald-700">
+              {submittingEnquiry ? 'Sending…' : 'Submit Retreat Enquiry'}
             </Button>
             <p className="text-xs text-center text-muted-foreground">
               Our corporate experiences team will respond within 48 hours with a tailored proposal.

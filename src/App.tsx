@@ -121,6 +121,7 @@ const Resources = React.lazy(() => import('@/pages/Resources'));
 const WellnessExchangeSignup = React.lazy(() => import('@/pages/WellnessExchangeSignup'));
 const BusinessConsulting = React.lazy(() => import('@/pages/BusinessConsulting'));
 const MediaProduction = React.lazy(() => import('@/pages/MediaProduction'));
+const Screenings = React.lazy(() => import('@/pages/Screenings'));
 const WebDevelopment = React.lazy(() => import('@/pages/WebDevelopment'));
 const SocialMediaStrategy = React.lazy(() => import('@/pages/SocialMediaStrategy'));
 const ConsciousMediaPartnershipPage = React.lazy(() => import('@/pages/ConsciousMediaPartnershipPage'));
@@ -348,6 +349,8 @@ function App() {
                   {/* Business Services */}
                   <Route path="/business-consulting" element={<BusinessConsulting />} />
                   <Route path="/media-production" element={<MediaProduction />} />
+                  <Route path="/screenings" element={<Screenings />} />
+                  <Route path="/impact-screenings" element={<Navigate to="/screenings" replace />} />
                   <Route path="/web-development" element={<WebDevelopment />} />
                   <Route path="/social-media-strategy" element={<SocialMediaStrategy />} />
                   <Route path="/conscious-media-partnership" element={<ConsciousMediaPartnershipPage />} />

@@ -15,6 +15,7 @@ import Footer from '@/components/Footer';
 import { Check, X, Heart, Users, Clock, MapPin, Award, Shield, Leaf, Sun, Star, Sparkles, GraduationCap, HandHeart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -84,7 +85,11 @@ export default function CartHorseUrbanWellness() {
     { title: 'Conscious Travellers', desc: 'For impact travellers seeking meaningful experiences that give back. Connect with rescued horses, support animal welfare, and engage with grassroots community programmes in Cape Town.', badge: 'Impact Travel' },
   ];
 
-  const handleSubmitBooking = () => {
+  // Persists the booking enquiry for real (contact_submissions + admin email)
+  // via the deployed submit-contact function — the previous handler toasted
+  // success and silently discarded every enquiry.
+  const [submittingBooking, setSubmittingBooking] = useState(false);
+  const handleSubmitBooking = async () => {
     if (!formData.name || !formData.email || !formData.preferredDate) {
       toast({
         title: "Missing Information",
@@ -93,12 +98,41 @@ export default function CartHorseUrbanWellness() {
       });
       return;
     }
-    toast({
-      title: "Enquiry Received",
-      description: "Thank you! Our team will contact you within 24 hours to craft your personalised experience.",
-    });
-    setBookingOpen(false);
-    setFormData({ name: '', email: '', phone: '', organisation: '', preferredDate: '', ticketType: 'individual', attendees: '1', dietary: '', discipline: '' });
+    setSubmittingBooking(true);
+    try {
+      const { error } = await supabase.functions.invoke('submit-contact', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          organization: formData.organisation || null,
+          service: 'Cart Horse Urban Wellness booking enquiry',
+          message: [
+            `Phone: ${formData.phone || '-'}`,
+            `Preferred date: ${formData.preferredDate}`,
+            `Ticket type: ${formData.ticketType}`,
+            `Attendees: ${formData.attendees}`,
+            `Professional discipline: ${formData.discipline || '-'}`,
+            `Dietary / access needs: ${formData.dietary || '-'}`,
+          ].join('\n'),
+        },
+      });
+      if (error) throw error;
+      toast({
+        title: "Enquiry Received",
+        description: "Thank you! Our team will contact you within 24 hours to craft your personalised experience.",
+      });
+      setBookingOpen(false);
+      setFormData({ name: '', email: '', phone: '', organisation: '', preferredDate: '', ticketType: 'individual', attendees: '1', dietary: '', discipline: '' });
+    } catch {
+      // Dialog stays open, inputs preserved — failure must be visible.
+      toast({
+        title: "We couldn't send that just now",
+        description: "Something went wrong on our side. Please try again, or email omniwellnessmedia@gmail.com — your answers are still filled in.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmittingBooking(false);
+    }
   };
 
   // Minimum date: 14 days from now for bespoke scheduling
@@ -533,8 +567,8 @@ export default function CartHorseUrbanWellness() {
               <Label htmlFor="modal-dietary">Dietary Requirements / Special Needs</Label>
               <Textarea id="modal-dietary" value={formData.dietary} onChange={(e) => setFormData({ ...formData, dietary: e.target.value })} placeholder="Allergies, accessibility needs, etc." rows={2} />
             </div>
-            <Button onClick={handleSubmitBooking} className="w-full bg-amber-600 hover:bg-amber-700">
-              Submit Enquiry
+            <Button onClick={handleSubmitBooking} disabled={submittingBooking} className="w-full bg-amber-600 hover:bg-amber-700">
+              {submittingBooking ? 'Sending…' : 'Submit Enquiry'}
             </Button>
             <p className="text-xs text-center text-muted-foreground">
               Our team will confirm availability and finalise your booking within 24 hours.
