@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+// user_saved_tours is not present in the generated Database types yet.
+const db = supabase as any;
+
 /**
  * useSavedTours — wishlist API for tours.
  *
@@ -20,7 +23,7 @@ export const useSavedTours = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setLoading(false); return; }
 
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from("user_saved_tours")
         .select("tour_id")
         .eq("user_id", user.id);
@@ -51,7 +54,7 @@ export const useSavedTours = () => {
       const isSaved = savedTourIds.has(tourId);
 
       if (isSaved) {
-        const { error } = await supabase
+        const { error } = await db
           .from("user_saved_tours")
           .delete()
           .eq("user_id", user.id)
@@ -65,7 +68,7 @@ export const useSavedTours = () => {
         });
         toast({ title: "Removed from favorites" });
       } else {
-        const { error } = await supabase
+        const { error } = await db
           .from("user_saved_tours")
           .insert({ user_id: user.id, tour_id: tourId });
         if (error) throw error;
