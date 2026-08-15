@@ -309,6 +309,13 @@ const Screenings = () => {
                 </article>
               ))}
             </div>
+            {/* The published figures are indicative, not a quote to a named
+                client. This qualifier is what makes that distinction explicit
+                while the venue invoice is still open. */}
+            <p className="mx-auto mt-8 max-w-[60ch] text-center text-[15px] text-wwpl-slate">
+              Final pricing is confirmed at scoping and depends on date, venue configuration and
+              licensing scope.
+            </p>
           </div>
         </section>
 
