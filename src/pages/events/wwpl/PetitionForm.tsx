@@ -172,7 +172,7 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
       const techy = !msg || /edge function|failed to fetch|network|non-2xx|typeerror/i.test(msg);
       setError(
         techy
-          ? "We couldn't record your signature just now — something went wrong on our side. Please try again a little later; your details stay filled in."
+          ? "We couldn't record your signature just now. Something went wrong on our side. Please try again a little later; your details stay filled in."
           : msg
       );
     }
@@ -192,7 +192,7 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
           ✓
         </div>
         <h3 className="font-wwpl-display font-semibold text-[26px] text-wwpl-ink">
-          Thank you — your voice is counted
+          Thank you, your voice is counted
         </h3>
         <p className="mt-3 text-[15px] leading-relaxed text-wwpl-slate">
           We'll present every signature with the campaign. Share the petition so it travels further.
@@ -201,7 +201,7 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
           variant="ink"
           className="mt-6"
           href={`https://wa.me/?text=${encodeURIComponent(
-            `Sign for humane standards — the Stunning Pigs petition: ${PAGE_URL}#petition`
+            `Sign for humane standards, the Stunning Pigs petition: ${PAGE_URL}#petition`
           )}`}
           target="_blank"
           rel="noopener"
@@ -239,6 +239,21 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
           </div>
         </div>
       )}
+
+      {/* POPIA purpose and responsible party, stated BEFORE any input field.
+          Collecting personal data without naming the purpose, the recipient
+          and the responsible party is the real weakness, not the form itself.
+          Body size deliberately, not fine print. Do not move this below the
+          form, do not shrink it, and do not name a recipient or a signature
+          target: neither has been decided. */}
+      <div className="mt-6 rounded-[14px] border border-wwpl-line bg-wwpl-creamSoft p-5">
+        <p className="text-[14.5px] leading-relaxed text-wwpl-inkSoft">
+          This petition is being prepared for submission. The final recipient and submission date
+          will be confirmed and communicated to signatories. Your details are held by Omni Wellness
+          Media and used only for this campaign and, where you have opted in, for future updates.
+          We do not share them.
+        </p>
+      </div>
 
       <form onSubmit={submit} className="mt-6 space-y-4" noValidate={false}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">

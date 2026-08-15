@@ -1090,7 +1090,7 @@ const StunningPigs = () => {
             </p>
             <blockquote className="mt-8 rounded-2xl border-l-2 border-wwpl-gold bg-wwpl-plum p-6">
               <p className="font-wwpl-display italic text-[19px] leading-snug text-wwpl-goldLight">
-                "Informed, not shocked — that's how change begins."
+                "Informed, not shocked. That's how change begins."
               </p>
             </blockquote>
           </Reveal>
