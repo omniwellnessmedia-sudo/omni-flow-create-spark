@@ -134,7 +134,10 @@ export default function CorporateWellnessRetreat() {
           email: formData.email,
           organization: formData.company,
           service: 'Corporate Wellness Retreat enquiry',
+          // Free text first: the edge function truncates message at 1000
+          // chars, and the prospect's own words are the part that must survive.
           message: [
+            `Context: ${formData.context || '-'}`,
             `Phone: ${formData.phone || '-'}`,
             `Role: ${formData.role || '-'}`,
             `Company size: ${formData.companySize || '-'}`,
@@ -143,7 +146,6 @@ export default function CorporateWellnessRetreat() {
             `Preferred window: ${formData.preferredWindow || '-'}`,
             `Primary goal: ${formData.primaryGoal || '-'}`,
             `Heard about us: ${formData.source || '-'}`,
-            `Context: ${formData.context || '-'}`,
           ].join('\n'),
         },
       });

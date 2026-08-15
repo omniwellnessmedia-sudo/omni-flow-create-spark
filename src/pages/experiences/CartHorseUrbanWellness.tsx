@@ -106,13 +106,14 @@ export default function CartHorseUrbanWellness() {
           email: formData.email,
           organization: formData.organisation || null,
           service: 'Cart Horse Urban Wellness booking enquiry',
+          // Free text first — the edge function truncates message at 1000 chars.
           message: [
+            `Dietary / access needs: ${formData.dietary || '-'}`,
             `Phone: ${formData.phone || '-'}`,
             `Preferred date: ${formData.preferredDate}`,
             `Ticket type: ${formData.ticketType}`,
             `Attendees: ${formData.attendees}`,
             `Professional discipline: ${formData.discipline || '-'}`,
-            `Dietary / access needs: ${formData.dietary || '-'}`,
           ].join('\n'),
         },
       });

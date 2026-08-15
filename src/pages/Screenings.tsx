@@ -174,7 +174,7 @@ const Screenings = () => {
             <p className="mx-auto mt-5 max-w-[58ch] text-[17px] leading-relaxed text-wwpl-slate">
               We stage documentary nights at The Masque Theatre for the Southern Peninsula's conscious
               community — and wrap them in a campaign: panel, petition, awards, press. You bring the film.
-              We deliver the full theatre and the proof it mattered.
+              We deliver the audience, the occasion, and the proof it mattered.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               {/* btn-primary applies a teal gradient via background-image, so the
@@ -213,8 +213,9 @@ const Screenings = () => {
               Proof · 10 August 2026
             </p>
             <p className="mt-5 font-wwpl-display text-[clamp(22px,3.6vw,30px)] font-medium leading-snug">
-              “Celebrating Women Who Protect Life” filled The Masque Theatre — a documentary premiere,
-              an awards ceremony honouring 37 women, and a national petition launched the same night.
+              “Celebrating Women Who Protect Life” brought 100+ paying attendees to The Masque
+              Theatre — a documentary premiere, an awards ceremony honouring 37 women, and a
+              national petition launched the same day.
             </p>
             <p className="mx-auto mt-5 max-w-[60ch] text-[15px] leading-relaxed text-[rgba(246,241,232,.72)]">
               One evening produced a paying audience, a permanent certificate register, seven active
@@ -347,7 +348,9 @@ const Screenings = () => {
                   </div>
                   <div>
                     <Label htmlFor="sc-msg">Your enquiry *</Label>
-                    <Textarea id="sc-msg" rows={5} className="mt-1.5" value={form.message}
+                    {/* The edge function truncates at 1000 chars — cap here so
+                        nothing a prospect writes is silently discarded. */}
+                    <Textarea id="sc-msg" rows={5} maxLength={900} className="mt-1.5" value={form.message}
                       placeholder="The film or event, your goal, and any dates you have in mind."
                       onChange={(e) => set('message')(e.target.value)} required />
                   </div>
