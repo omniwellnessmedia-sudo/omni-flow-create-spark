@@ -504,12 +504,24 @@ async function handleGetAllProducts() {
     const products = Array.isArray(data) ? data : (data.data || data.products || []);
     console.log(`Successfully fetched ${products.length} products`);
     
-    // Enhance products with wellness features
+    // Enhance products with wellness features.
+    // Each upstream product embeds full country records (timestamps etc.),
+    // bloating the response to ~2.6MB. Keep only the coverage fields the UI reads.
     const enhancedProducts = products.map(product => ({
       ...product,
+      countries: Array.isArray(product.countries)
+        ? product.countries.map((c: any) => ({
+            id: c.id,
+            country_name: c.country_name,
+            country_code: c.country_code,
+            iso2: c.iso2,
+            iso3: c.iso3,
+          }))
+        : product.countries,
       wellness_features: getWellnessFeatures(product),
       peace_of_mind_score: calculatePeaceOfMindScore(product)
     }));
+
 
     return new Response(
       JSON.stringify({ 
@@ -585,13 +597,18 @@ async function handleGetCountries() {
     const countries = Array.isArray(data) ? data : (data.data || data.countries || []);
     console.log(`Successfully fetched ${countries.length} countries`);
 
-    // Enhance countries with wellness travel information and flags
+    // Enhance countries with wellness travel information and flags.
+    // NOTE: the upstream payload embeds every state + city per country (~21MB),
+    // which hangs the browser. Only forward the fields the UI actually uses.
     const enhancedCountries = countries.map(country => {
       const countryCode = country.country_code || country.iso2 || country.code;
       return {
-        ...country,
+        id: country.id,
         name: country.country_name || country.name,
         code: countryCode,
+        iso2: country.iso2,
+        iso3: country.iso3,
+        phone_code: country.phone_code,
         flag: getCountryFlag(countryCode),
         wellness_rating: getWellnessRating(country),
         popular_wellness_activities: getWellnessActivities(country),
@@ -599,6 +616,7 @@ async function handleGetCountries() {
         emergency_contacts: getEmergencyContacts(country)
       };
     });
+
 
     return new Response(
       JSON.stringify({ 

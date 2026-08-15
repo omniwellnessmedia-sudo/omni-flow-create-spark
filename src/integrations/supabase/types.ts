@@ -1908,6 +1908,72 @@ export type Database = {
           },
         ]
       }
+      petition_counters: {
+        Row: {
+          slug: string
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          slug: string
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          slug?: string
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      petition_signatures: {
+        Row: {
+          city: string | null
+          consent_version: string
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          ip_hash: string | null
+          petition_slug: string
+          source: string
+          surname: string
+          updates_consent: boolean
+          updates_consent_at: string | null
+          withdrawn_at: string | null
+        }
+        Insert: {
+          city?: string | null
+          consent_version: string
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          ip_hash?: string | null
+          petition_slug?: string
+          source?: string
+          surname: string
+          updates_consent?: boolean
+          updates_consent_at?: string | null
+          withdrawn_at?: string | null
+        }
+        Update: {
+          city?: string | null
+          consent_version?: string
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          ip_hash?: string | null
+          petition_slug?: string
+          source?: string
+          surname?: string
+          updates_consent?: boolean
+          updates_consent_at?: string | null
+          withdrawn_at?: string | null
+        }
+        Relationships: []
+      }
       product_comparisons: {
         Row: {
           comparison_name: string | null
@@ -3955,6 +4021,7 @@ export type Database = {
         Args: { submitter_email: string }
         Returns: boolean
       }
+      check_petition_ip_rate: { Args: { p_ip_hash: string }; Returns: boolean }
       check_quote_rate_limit: {
         Args: { submitter_email: string }
         Returns: boolean
@@ -3963,6 +4030,7 @@ export type Database = {
       ensure_provider_profile: { Args: { user_id: string }; Returns: undefined }
       generate_confirmation_code: { Args: never; Returns: string }
       generate_order_number: { Args: never; Returns: string }
+      get_petition_count: { Args: { p_slug?: string }; Returns: number }
       get_tour_availability: {
         Args: { p_date: string; p_tour_id: string }
         Returns: {
@@ -3987,6 +4055,7 @@ export type Database = {
       }
       is_accountant_or_admin: { Args: { user_id: string }; Returns: boolean }
       is_admin: { Args: { user_id: string }; Returns: boolean }
+      recount_petition: { Args: { p_slug: string }; Returns: number }
     }
     Enums: {
       app_role: "admin" | "super_admin" | "user" | "accountant"

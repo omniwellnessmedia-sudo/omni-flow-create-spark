@@ -352,6 +352,8 @@ function App() {
             <Route path="/esim-store" element={<ESIMStore />} />
             {/* Travel Well Connected retired — redirect to ROAM store */}
             <Route path="/travel-well-connected" element={<Navigate to="/roambuddy-store" replace />} />
+            <Route path="/travel-well-connected-esim" element={<Navigate to="/roambuddy-store" replace />} />
+
 
                   {/* Business Services */}
                   <Route path="/business-consulting" element={<BusinessConsulting />} />
