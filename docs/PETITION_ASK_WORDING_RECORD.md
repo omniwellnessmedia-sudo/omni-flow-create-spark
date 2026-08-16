@@ -141,3 +141,102 @@ once the target is reached.
 
 **Until these close, the petition page runs passively. No campaign, paid
 promotion or email drives traffic to it.**
+
+---
+
+## 6. PR #46 completion, 16 August 2026
+
+### The class of error, not a one-off
+
+**PR #46 changed the React component and nothing else. The same claim lived on
+three further surfaces that render the same page or describe the same data, and
+none of them were reached.** A change to user-facing copy in a component is not
+finished until every surface that carries a copy of that copy has been checked.
+
+For this codebase that means, at minimum:
+
+| Surface | Why it holds a duplicate |
+| --- | --- |
+| `scripts/prerender-event.mjs` | Emits the static shell for the event page. Holds its own copy of hero and sticky-bar text. This is what crawlers, share cards and a Google Ads policy reviewer see, and what a user sees on first paint before React boots. |
+| `src/pages/PrivacyPolicy.tsx` | The page the on-form disclosure links to. If it disagrees, the disclosure is cited to a document that contradicts it. |
+| `supabase/functions/sign-petition/index.ts` | Sends a per-signer confirmation email. An active disclosure to a named individual, so wrong wording here is more serious than page copy, not less. |
+| `supabase/migrations/consent-texts/` | Archived record of what signers were told at the time. **Correctly holds the old wording. Never edit it.** Editing it destroys evidence. |
+
+Check all of these on any future copy change to the petition surface. A sweep of
+the component alone will report a false clean.
+
+### What was fixed
+
+**1. Confirmation email, `supabase/functions/sign-petition/index.ts`, HTML part and plain-text part.**
+
+Before:
+
+> Omni Wellness Media collected your signature. It is shared with the campaign
+> partners Beauty Without Cruelty South Africa and G.A.R.D., who are the
+> responsible parties for this petition and who will present it.
+
+After, both parts, matching the approved disclosure:
+
+> Your signature is held by Omni Wellness Media. It has not been shared with
+> any third party. This petition is being prepared for submission and your
+> signature may be shared with campaign partner organisations for that purpose.
+> We will confirm the recipient and submission date to signatories. We do not
+> sell or trade your details and we do not use them for anything else unless
+> you have opted in to updates.
+
+**2. Prerender script, `scripts/prerender-event.mjs`.**
+
+Before:
+
+> The petition for humane standards is presented to regulators and industry by
+> Beauty Without Cruelty and G.A.R.D. Every real signature counts &mdash; no
+> ticket needed.
+
+After, matching the live sticky bar exactly:
+
+> The petition for humane standards is being prepared for submission. Every
+> real signature counts, no ticket needed.
+
+Three further rendered em dashes were removed from the same file: the page
+title, the date line and the session-times line. Two em dashes remain inside
+JSON-LD event names, left alone deliberately because they are proper names of
+an event that may already be indexed. Flagged for decision.
+
+**3. Privacy policy, `src/pages/PrivacyPolicy.tsx`.**
+
+Before:
+
+> Who receives it: signatures are shared with the campaign partners Beauty
+> Without Cruelty and G.A.R.D., who are responsible for presenting the petition
+> to regulators, retailers and industry bodies.
+
+After:
+
+> Who receives it: petition signatures are held by Omni Wellness Media as the
+> responsible party. This petition is being prepared for submission and
+> signatures may be shared with campaign partner organisations for that
+> purpose. We will confirm the recipient and submission date to signatories.
+
+`CO<sub>2</sub>` was left as it is. It renders correctly as a subscript in that
+context.
+
+**4. The achievable assertion, `src/pages/events/StunningPigs.tsx`.**
+
+Before: "an open, respectful conversation about achievable, more humane
+standards". After: "an open, respectful conversation about more humane
+standards". One word, the same assertion removed from the ask wording earlier
+the same day.
+
+**5. `src/pages/events/wwpl/PetitionForm.tsx` file header.** It described
+Beauty Without Cruelty and G.A.R.D. as receiving the petition and being the
+responsible parties, contradicting the governance comment directly below it.
+Corrected to the current position. Not user-facing, but a future pass would
+have read it as authoritative.
+
+### Deployment status of the confirmation email
+
+The code change is committed. **Deploying the edge function and reading back
+the deployed version could not be done from the working session: the Supabase
+tooling is approval-gated there.** Until `sign-petition` is redeployed, every
+new signer still receives the old wording naming both organisations. Deploy and
+then confirm by reading the deployed source, not by trusting the commit.

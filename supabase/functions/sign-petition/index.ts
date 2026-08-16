@@ -161,9 +161,16 @@ async function sendConfirmationEmail(
               <p>Your name has been added to the petition asking South African regulators,
               retailers and industry bodies to review the use of high-concentration CO<sub>2</sub>
               gas stunning of pigs.</p>
-              <p>Omni Wellness Media collected your signature. It is shared with the campaign
-              partners <strong>Beauty Without Cruelty South Africa</strong> and <strong>G.A.R.D.</strong>,
-              who are the responsible parties for this petition and who will present it.</p>
+              <!-- GOVERNED WORDING. This is a per-signer disclosure, so it must
+                   match the approved wording on the form exactly in substance.
+                   It named Beauty Without Cruelty and G.A.R.D. as recipients
+                   and responsible parties until 16 August 2026. Neither has
+                   agreed in writing to be named. Name no organisation here. -->
+              <p>Your signature is held by Omni Wellness Media. It has not been shared with any
+              third party. This petition is being prepared for submission and your signature may
+              be shared with campaign partner organisations for that purpose. We will confirm the
+              recipient and submission date to signatories. We do not sell or trade your details
+              and we do not use them for anything else unless you have opted in to updates.</p>
               <div style="background:#F7F3EA;border-left:3px solid #D9B36C;padding:16px 18px;margin:22px 0;font-size:14px;">
                 <p style="margin:0 0 10px;"><strong>Your first name, surname and city may appear on the
                 petition as presented. Your email address is never published.</strong></p>
@@ -192,7 +199,9 @@ async function sendConfirmationEmail(
       "",
       "Your name has been added to the petition asking South African regulators, retailers and industry bodies to review the use of high-concentration CO2 gas stunning of pigs.",
       "",
-      "Omni Wellness Media collected your signature. It is shared with the campaign partners Beauty Without Cruelty South Africa and G.A.R.D., who are the responsible parties for this petition and who will present it.",
+      // Plain-text part. Keep in step with the HTML part above: same governed
+      // wording, no organisation named.
+      "Your signature is held by Omni Wellness Media. It has not been shared with any third party. This petition is being prepared for submission and your signature may be shared with campaign partner organisations for that purpose. We will confirm the recipient and submission date to signatories. We do not sell or trade your details and we do not use them for anything else unless you have opted in to updates.",
       "",
       "Your first name, surname and city may appear on the petition as presented. Your email address is never published. We process this information under the Protection of Personal Information Act 4 of 2013. If you did not sign this, or want your details seen, corrected or removed, email " + PRIVACY_EMAIL + ".",
       "",

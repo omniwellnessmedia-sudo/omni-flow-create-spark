@@ -19,11 +19,15 @@ import { PAGE_URL, PETITION_GOAL, PETITION_SLUG } from "./event";
  * page making that claim is indefensible. The number rendered here is only ever
  * what the database returns, starting at zero. Never add an offset.
  *
- * POPIA — this collects personal data of South Africans. Omni Wellness Media
- * collects it; the named campaign partners (Beauty Without Cruelty and
- * G.A.R.D.) receive the petition and are the responsible parties. The consent
- * copy below states that, and the marketing checkbox is separate from the act
- * of signing and defaults to unchecked.
+ * POPIA. This collects personal data of South Africans. Omni Wellness Media
+ * collects it and is the responsible party. Nothing has been shared with any
+ * third party. Sharing with campaign partner organisations is the intended
+ * purpose, so that intent is disclosed at the point of collection, which is
+ * what POPIA requires. NO ORGANISATION IS NAMED as a recipient or responsible
+ * party on any surface until that party agrees in writing. As at 16 August
+ * 2026 neither Beauty Without Cruelty nor G.A.R.D. has agreed. This header
+ * previously stated the opposite; it was corrected, not softened. The marketing
+ * checkbox is separate from the act of signing and defaults to unchecked.
  *
  * FAILURE IS VISIBLE — the prototype optimistically swapped to a thank-you
  * state, which would silently drop a signature whenever the request failed.

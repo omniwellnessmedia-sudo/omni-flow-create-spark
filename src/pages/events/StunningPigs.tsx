@@ -822,7 +822,7 @@ const StunningPigs = () => {
             </p>
             <p className="mt-6 text-[16.5px] leading-[1.75] text-wwpl-inkSoft">
               The premiere {EVENT_CONCLUDED ? "was" : "is"} followed by a public Q&amp;A with the Beauty Without Cruelty campaign and
-              G.A.R.D. — an open, respectful conversation about achievable, more humane standards. This
+              G.A.R.D., an open, respectful conversation about more humane standards. This
               {EVENT_CONCLUDED ? " was" : " is"} a public education event: no graphic footage is used in any of our promotion, and the
               day {EVENT_CONCLUDED ? "was" : "is"} designed to inform, not to shock.
             </p>

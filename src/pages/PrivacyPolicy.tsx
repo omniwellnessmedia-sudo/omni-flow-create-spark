@@ -117,7 +117,12 @@ const PrivacyPolicy = () => {
                   <li><strong>What we collect:</strong> your first name, surname and email address, and optionally your city or town.</li>
                   <li><strong>Why:</strong> to record your signature, to allow the petition to be verified, and to contact you about your signature.</li>
                   <li><strong>Who collects it:</strong> Omni Wellness Media collects and hosts the signatures.</li>
-                  <li><strong>Who receives it:</strong> signatures are shared with the campaign partners Beauty Without Cruelty and G.A.R.D., who are responsible for presenting the petition to regulators, retailers and industry bodies.</li>
+                  {/* GOVERNED WORDING. This page is cited by the disclosure on the
+                      signature form, so it must not contradict it. It named Beauty
+                      Without Cruelty and G.A.R.D. as recipients and responsible
+                      parties until 16 August 2026. Neither has agreed in writing to
+                      be named. Name no organisation here. */}
+                  <li><strong>Who receives it:</strong> petition signatures are held by Omni Wellness Media as the responsible party. This petition is being prepared for submission and signatures may be shared with campaign partner organisations for that purpose. We will confirm the recipient and submission date to signatories.</li>
                   <li><strong>What may be published:</strong> your first name, surname and city may appear on the petition as presented. <strong>Your email address is never published.</strong></li>
                   <li><strong>Marketing is separate:</strong> signing does not subscribe you to anything. The "keep me posted" checkbox is optional, unticked by default, and governs campaign updates only. You can unsubscribe at any time.</li>
                   <li><strong>Never sold.</strong> Petition data is not sold, rented or used for any purpose other than the petition.</li>

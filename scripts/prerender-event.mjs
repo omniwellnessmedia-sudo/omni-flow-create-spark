@@ -48,9 +48,9 @@ const QUICKET_URL =
   'https://www.quicket.co.za/events/386047-celebrating-women-who-protect-life-featuring-the-cape-town-premiere-of-stunning/';
 
 const TITLE =
-  'Celebrating Women Who Protect Life \u2014 the campaign continues | Omni Wellness Media';
+  'Celebrating Women Who Protect Life, the campaign continues | Omni Wellness Media';
 const DESCRIPTION =
-  'On Women\u2019s Day 2026, Cape Town premiered the Stunning Pigs documentary and honoured the Voices for Women awardees at The Masque Theatre. The petition for humane standards is open \u2014 add your name.';
+  'On Women\u2019s Day 2026, Cape Town premiered the Stunning Pigs documentary and honoured the Voices for Women awardees at The Masque Theatre. The petition for humane standards is open. Add your name.';
 
 const PLACE = {
   '@type': 'Place',
@@ -127,9 +127,9 @@ const SHELL = `
             <i>Stunning Pigs</i> documentary and the <i>Voices for Women</i> awards. The film asked
             its question. Now the campaign needs your name.
           </p>
-          <p style="margin:0 0 8px;font-size:15.5px;color:rgba(249,245,240,.9)">Monday 10 August 2026 &mdash; Women's Day public holiday</p>
+          <p style="margin:0 0 8px;font-size:15.5px;color:rgba(249,245,240,.9)">Monday 10 August 2026, Women's Day public holiday</p>
           <p style="margin:0 0 8px;font-size:15.5px;color:rgba(249,245,240,.9)">The Masque Theatre, 37 Main Road, Muizenberg</p>
-          <p style="margin:0 0 28px;font-size:15.5px;color:rgba(249,245,240,.9)">10:00 &middot; 12:00 &middot; 14:00 &mdash; assigned seating</p>
+          <p style="margin:0 0 28px;font-size:15.5px;color:rgba(249,245,240,.9)">10:00 &middot; 12:00 &middot; 14:00 &middot; assigned seating</p>
           <p style="margin:0 0 16px">
             <a href="#petition"
                style="display:inline-block;background:#D9B36C;color:#2A0A1E;text-decoration:none;padding:14px 26px;border-radius:10px;font-weight:600;font-size:16px">
@@ -137,8 +137,8 @@ const SHELL = `
             </a>
           </p>
           <p style="margin:0;font-size:13px;line-height:1.6;max-width:60ch;color:rgba(249,245,240,.55)">
-            The petition for humane standards is presented to regulators and industry by
-            Beauty Without Cruelty and G.A.R.D. Every real signature counts &mdash; no ticket needed.
+            The petition for humane standards is being prepared for submission.
+            Every real signature counts, no ticket needed.
           </p>
         </div>
       </div>`
