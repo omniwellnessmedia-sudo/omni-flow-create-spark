@@ -87,3 +87,57 @@ BWC-sourced signature until two things are settled in writing:
 Omni Wellness Media, Beauty Without Cruelty and any foundation entity are
 never commingled. Each output states which entity is speaking and in what
 capacity.
+
+---
+
+## 4. Search strings for future sweeps
+
+Our verification method is full-text sweeping. A sweep only works if it uses
+the character form the source actually stores. Recorded 16 August 2026 after a
+codepoint inspection of the repo.
+
+**The rendered page shows a subscript and that is correct typographically. It
+stays. This section exists so a sweep does not report a false clean.**
+
+Three different forms of carbon dioxide are stored in this repo:
+
+| Where | Stored as | Codepoint |
+| --- | --- | --- |
+| `src/pages/events/StunningPigs.tsx` (the petition page, 2 occurrences) | `CO₂` Unicode subscript two | U+2082 |
+| `src/pages/PrivacyPolicy.tsx` | `CO<sub>2</sub>` HTML markup | n/a, markup |
+| This record and all source documents | `CO2` plain digit two | U+0032 |
+
+**A sweep for the plain string `CO2` will not match the petition page.** It is
+stored as `CO₂`.
+
+Use this regular expression, which catches all three forms plus the common
+HTML entities:
+
+```
+CO(2|₂|<sub>\s*2\s*</sub>|&#8322;|&#x2082;|&sub2;)
+```
+
+Case insensitive. If a future sweep for carbon dioxide claims returns no hits
+on the petition page, the sweep string is wrong, not the page.
+
+The same trap applies to any character that has a typographic variant. Before
+concluding a sweep is clean, check the source form, not the rendered form.
+
+---
+
+## 5. Open gates as at 16 August 2026
+
+1. Whether Beauty Without Cruelty adopts the same ask wording or runs its own
+   ask. Owner: Chad Cupido.
+2. Whether Beauty Without Cruelty agrees in writing to be named as a recipient
+   of Omni-collected petition signatures. Owner: Chad Cupido.
+3. The responsible party for signatures collected on the BWC page. Owner: Chad
+   Cupido and BWC.
+4. Whether G.A.R.D. agrees to be named as a data recipient. Nobody has asked
+   them yet. Owner: unassigned.
+
+Also unresolved: the petition recipient, the signature target, and what happens
+once the target is reached.
+
+**Until these close, the petition page runs passively. No campaign, paid
+promotion or email drives traffic to it.**
