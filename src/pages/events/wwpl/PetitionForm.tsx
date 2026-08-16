@@ -241,17 +241,32 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
       )}
 
       {/* POPIA purpose and responsible party, stated BEFORE any input field.
-          Collecting personal data without naming the purpose, the recipient
-          and the responsible party is the real weakness, not the form itself.
-          Body size deliberately, not fine print. Do not move this below the
-          form, do not shrink it, and do not name a recipient or a signature
-          target: neither has been decided. */}
+          Body size deliberately, not fine print. Do not move it below the
+          form and do not shrink it.
+
+          WORDING IS GOVERNED. Confirmed 16 August 2026 by Tumelo Ncube with
+          Chad Cupido present. Two things it must keep doing:
+
+          1. Disclose the INTENDED recipients at the point of collection.
+             POPIA requires that, not disclosure at the point of sharing. An
+             earlier draft said "we do not share them", which was true on the
+             day and would have created a breach the moment a signature went
+             to a partner: every signature collected under it would have
+             needed re-consenting first.
+          2. Name no partner organisation. Not Beauty Without Cruelty, not
+             G.A.R.D. Neither has agreed in writing to being named as a data
+             recipient, and naming them commits them to something they have
+             not accepted.
+
+          Do not name a recipient and do not state a signature target until
+          both are decided and agreed in writing. */}
       <div className="mt-6 rounded-[14px] border border-wwpl-line bg-wwpl-creamSoft p-5">
         <p className="text-[14.5px] leading-relaxed text-wwpl-inkSoft">
-          This petition is being prepared for submission. The final recipient and submission date
-          will be confirmed and communicated to signatories. Your details are held by Omni Wellness
-          Media and used only for this campaign and, where you have opted in, for future updates.
-          We do not share them.
+          Your signature is held by Omni Wellness Media. It has not been shared with any third
+          party. This petition is being prepared for submission and your signature may be shared
+          with campaign partner organisations for that purpose. We will confirm the recipient and
+          submission date to signatories. We do not sell or trade your details and we do not use
+          them for anything else unless you have opted in to updates.
         </p>
       </div>
 
@@ -304,13 +319,13 @@ export const PetitionForm = ({ onSigned }: { onSigned?: () => void }) => {
         </BtnButton>
       </form>
 
-      {/* POPIA disclosure. Names the parties the signature is shared with —
-          signing is the petition act; marketing contact is the separate,
-          opt-in checkbox above. */}
+      {/* The full POPIA disclosure now sits ABOVE the form, where it is read
+          before any detail is typed. This is only the policy pointer.
+          The sentence that used to sit here named Beauty Without Cruelty and
+          G.A.R.D. as data recipients. Removed 16 August 2026: neither has
+          agreed in writing to be named as one. Do not restore it. */}
       <p className="mt-4 text-center text-[12px] leading-relaxed text-wwpl-slate">
-        Your details are used for this petition only. Signatures are collected by Omni Wellness
-        Media and shared with campaign partners Beauty Without Cruelty and G.A.R.D., who present
-        them to regulators and industry. Never sold. See our{" "}
+        See our{" "}
         <a href="/privacy-policy" className="text-wwpl-goldDeep underline underline-offset-2">
           privacy policy
         </a>

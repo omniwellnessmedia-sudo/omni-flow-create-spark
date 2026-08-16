@@ -620,7 +620,12 @@ const StunningPigs = () => {
 
             <p className="mt-4 max-w-[52ch] text-[13px] leading-relaxed text-[rgba(249,245,240,.55)]">
               {EVENT_CONCLUDED
-                ? "The petition for humane standards is presented to regulators and industry by Beauty Without Cruelty and G.A.R.D. Every real signature counts — no ticket needed."
+                /* Named Beauty Without Cruelty and G.A.R.D. as the parties who
+                   present signatures. Removed 16 August 2026 under the same
+                   decision that removed the naming from the form: neither has
+                   agreed in writing to be named, and the recipient has not
+                   been decided. Do not restore it. */
+                ? "The petition for humane standards is being prepared for submission. Every real signature counts, no ticket needed."
                 : "R150 per session. Book one, two or all three. Sold securely by Quicket — The Masque Theatre's official ticketing partner."}
             </p>
 
@@ -1084,9 +1089,18 @@ const StunningPigs = () => {
               Sign for humane standards
             </h2>
             <p className="mt-5 max-w-[52ch] text-[16.5px] leading-[1.75] text-wwpl-inkSoft">
+              {/* REFERENCE VERSION OF THE OMNI ASK. Confirmed 16 August 2026 by
+                  Tumelo Ncube with Chad Cupido, Executive Officer, Beauty
+                  Without Cruelty South Africa, present. See
+                  docs/PETITION_ASK_WORDING_RECORD.md. The earlier wording,
+                  "commit to achievable, more humane alternatives", asserted
+                  that alternatives exist, are more humane and are achievable.
+                  That is the same claim flagged for sourcing. This version
+                  asks without asserting and needs no external source. Do not
+                  soften it further and do not restore the earlier wording. */}
               You don't need a ticket to add your voice. Our petition asks South African regulators and
-              industry to review high-concentration CO₂ gas stunning and commit to achievable, more
-              humane alternatives. Every signature is presented with the campaign after the premiere.
+              industry to review high-concentration CO₂ gas stunning and commit to identifying and
+              adopting more humane alternatives. Every signature is presented with the campaign after the premiere.
             </p>
             <blockquote className="mt-8 rounded-2xl border-l-2 border-wwpl-gold bg-wwpl-plum p-6">
               <p className="font-wwpl-display italic text-[19px] leading-snug text-wwpl-goldLight">
