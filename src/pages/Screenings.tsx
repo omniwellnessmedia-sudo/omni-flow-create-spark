@@ -73,11 +73,19 @@ const OFFERINGS = [
     priceNote: 'title sponsor R7,500 · partner slots R3,500',
     audience: 'For strong films whose makers have no budget. Local businesses fund the night instead.',
     includes: [
-      'We curate the film and secure the community screening licence',
+      // GOVERNED. The BWC governance report of 17 August 2026 bars announcing
+      // or selling another public screening until the rights holder and FPB
+      // pathway are documented for that specific film. The earlier wording,
+      // "We curate the film and secure the community screening licence",
+      // described Omni sourcing and licensing a film, which that control
+      // prohibits until a pathway exists. Do not restore it.
+      'We identify candidate films and confirm exhibition rights in writing with the rights holder before any date is announced',
       'Title sponsor: naming, screen ad, stall and 10 tickets',
       'Partner sponsors: logo, screen mention and 4 tickets',
       'The screening is confirmed only once the title sponsor signs',
     ],
+    /** Rendered beneath this card's bullets only. Governed, 17 August 2026. */
+    gate: 'Sponsored screenings are confirmed only once written exhibition rights and the classification position are documented for that specific film.',
     enquiry: 'sponsored-screening',
   },
   {
@@ -121,6 +129,14 @@ const RIGHTS_POINTS = [
   'Classification position established before the night is announced',
   'A documented record your funders can audit',
 ];
+
+/**
+ * The gate itself, stated plainly. Added 17 August 2026 under the BWC
+ * governance control. It binds both directions, films Omni sources and films
+ * a client brings, so it cannot be read as applying only to the other party.
+ */
+const RIGHTS_GATE =
+  'No screening date is announced or sold until written exhibition rights and the classification position are documented for that title. This applies to films we source and to films clients bring to us.';
 
 const Screenings = () => {
   useSEO({
@@ -291,7 +307,7 @@ const Screenings = () => {
                   </div>
                   <h3 className="mt-4 font-wwpl-display text-[22px] font-semibold">{o.name}</h3>
                   <p className="mt-1.5 text-[14px] text-wwpl-slate">{o.audience}</p>
-                  <ul className="mt-4 flex-1 space-y-2">
+                  <ul className="mt-4 space-y-2">
                     {o.includes.map((line) => (
                       <li key={line} className="flex gap-2.5 text-[14px] leading-snug">
                         <Check className="mt-0.5 h-4 w-4 flex-none text-wwpl-goldText" aria-hidden="true" />
@@ -299,6 +315,15 @@ const Screenings = () => {
                       </li>
                     ))}
                   </ul>
+                  {/* Only the Sponsored Screening card carries a gate today.
+                      flex-1 moves here so the card still bottoms out its CTA. */}
+                  <div className="flex-1">
+                    {o.gate && (
+                      <p className="mt-4 border-t border-wwpl-line pt-3 text-[13px] leading-relaxed text-wwpl-slate">
+                        {o.gate}
+                      </p>
+                    )}
+                  </div>
                   <Button
                     variant="outline"
                     className="mt-6 self-start border-wwpl-line text-wwpl-ink hover:bg-wwpl-cream"
@@ -360,6 +385,9 @@ const Screenings = () => {
                   </li>
                 ))}
               </ul>
+              <p className="mt-6 max-w-[62ch] border-t border-wwpl-line pt-5 text-[15px] font-medium leading-relaxed text-wwpl-ink">
+                {RIGHTS_GATE}
+              </p>
             </div>
           </div>
         </section>
