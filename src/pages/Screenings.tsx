@@ -61,6 +61,25 @@ import { trackLead } from '@/lib/socialPixels';
  *   3. No em dashes or en dashes anywhere in this file.
  *   4. No photographs of award recipients: consent has not been obtained.
  *
+ *   5. TWO STANDING RULINGS, confirmed 19 Aug 2026. Both exist because a
+ *      mechanical sweep would otherwise read them as defects and "fix"
+ *      them. Do not action either without checking back.
+ *
+ *      "A LIVE AUDIENCE" STAYS, in the proof band sub-paragraph. The rule
+ *      prohibits quantifying attendance, not acknowledging that people
+ *      were present. The phrase carries no number and no number
+ *      substitute word, so it is inside the rule. Leave it.
+ *
+ *      "PREMIERE" ELSEWHERE IN THE REPO STAYS. The prohibition is on
+ *      using premiere as a COMMERCIAL CREDENTIAL on this page, not on the
+ *      word itself. As at 19 Aug 2026 there are roughly 37 occurrences
+ *      across the event page, the prerender script, FeaturedEventSection,
+ *      the ads runbook and partner links. Those are factual historical
+ *      description of what happened on 10 Aug, and the Quicket URL slug
+ *      literally contains the word and cannot change without breaking a
+ *      live link. A future sweep must not read those hits as unfixed and
+ *      start deleting event history. None of them is on this page.
+ *
  * Enquiries submit through the LIVE submit-contact edge function (writes to
  * contact_submissions and emails the team). Deliberately not a new backend:
  * that function is deployed and verified in production.
