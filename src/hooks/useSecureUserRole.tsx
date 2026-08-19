@@ -4,6 +4,10 @@ import { supabase } from '@/integrations/supabase/client';
 interface UserRoleData {
   isAdmin: boolean;
   isAccountant: boolean;
+  /** Catalogue managers onboard local businesses and products. Deliberately
+   *  narrower than admin: no accounting, leads, team management or role
+   *  assignment. Admins and super admins satisfy it too. */
+  isCatalogueManager: boolean;
   roles: string[];
   userId: string | null;
   loading: boolean;
@@ -14,6 +18,7 @@ export const useSecureUserRole = () => {
   const [roleData, setRoleData] = useState<UserRoleData>({
     isAdmin: false,
     isAccountant: false,
+    isCatalogueManager: false,
     roles: [],
     userId: null,
     loading: true,
@@ -28,6 +33,7 @@ export const useSecureUserRole = () => {
         setRoleData({
           isAdmin: false,
           isAccountant: false,
+          isCatalogueManager: false,
           roles: [],
           userId: null,
           loading: false,
@@ -51,6 +57,13 @@ export const useSecureUserRole = () => {
         // role (added by migration), so .includes('accountant') is a type error even
         // though it matches correctly at runtime.
         isAccountant: (roleList as string[]).includes('accountant'),
+        // Same cast reason as accountant above: the generated Supabase types
+        // predate this role. Admins inherit it so they are never locked out of
+        // a screen they are responsible for approving.
+        isCatalogueManager:
+          (roleList as string[]).includes('catalogue_manager') ||
+          roleList.includes('admin') ||
+          roleList.includes('super_admin'),
         roles: roleList,
         userId: user.id,
         loading: false,
@@ -61,6 +74,7 @@ export const useSecureUserRole = () => {
       setRoleData({
         isAdmin: false,
         isAccountant: false,
+        isCatalogueManager: false,
         roles: [],
         userId: null,
         loading: false,

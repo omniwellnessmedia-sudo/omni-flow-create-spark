@@ -162,6 +162,7 @@ const NotFound = React.lazy(() => import('@/pages/NotFound'));
 const AdminDashboard = React.lazy(() => import('@/pages/AdminDashboard'));
 const AccountantDashboard = React.lazy(() => import('@/pages/AccountantDashboard'));
 const ProductManagement = React.lazy(() => import('@/pages/admin/ProductManagement'));
+const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
@@ -391,6 +392,14 @@ function App() {
                   <Route path="/accountant" element={
                     <ProtectedRoute requireAccountant={true}>
                       <AccountantDashboard />
+                    </ProtectedRoute>
+                  } />
+                  {/* Catalogue managers onboard local businesses and products.
+                      Narrower than admin on purpose: this route does not reach
+                      accounting, leads, team management or role assignment. */}
+                  <Route path="/admin/catalogue" element={
+                    <ProtectedRoute requireCatalogueManager={true}>
+                      <LocalCatalogue />
                     </ProtectedRoute>
                   } />
                   <Route path="/admin-dashboard" element={
