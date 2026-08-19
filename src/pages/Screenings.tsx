@@ -7,7 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Check, Film, HandCoins, Megaphone, Store, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
+import {
+  Check, Film, HandCoins, Megaphone, Store, ArrowRight, Loader2, ShieldCheck,
+  Clapperboard, Ticket, Award, Globe, Users,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -21,12 +24,34 @@ import { trackLead } from '@/lib/socialPixels';
  * followed the team minutes of 14 Aug 2026). These are commercial claims on a
  * sales page quoting engagements up to R25,000, so they are governed:
  *
- *   1. ONLY these figures may appear as proof of the 10 Aug 2026 event:
- *        46 paid tickets, 127 complimentary, 173 issued in total,
- *        37 honourees, 3 sessions in one day, 2 documentary screenings.
- *      Venue capacity is NOT evidence of attendance. The 81 recorded
- *      check-ins must NOT be presented as attendance: the venue did not
- *      scan consistently. Never infer or reconstruct a figure.
+ *   1. ONLY these figures may appear as proof of the 10 Aug 2026 event.
+ *      Source: official Quicket Event Statements and tax invoices,
+ *      event 386047, issued 12 Aug 2026.
+ *
+ *        306        issued session admissions
+ *        58         paid session admissions (53 online, 5 box office)
+ *        248        complimentary session admissions
+ *        R7,900.16  gross ticket sales
+ *        37         women honoured
+ *        37         unique verifiable certificates
+ *        3          separately ticketed sessions, one day
+ *        2          documentary screenings
+ *        3          conferring bodies per certificate
+ *
+ *      SUPERSEDED, must not reappear: 173, 46 paid, 127 complimentary,
+ *      R6,200.14, and "100+" in any form.
+ *
+ *      306 IS SESSION ADMISSIONS, NOT PEOPLE AND NOT ATTENDANCE. Three
+ *      sessions ran, so one person attending all three counts three
+ *      times. It never appears bare: always "306 session admissions
+ *      across three sessions" or "306 issued session admissions", and
+ *      never "306 attendees", "306 people", "306 guests" or
+ *      "306 tickets".
+ *
+ *      Venue capacity is NOT evidence of attendance. Recorded check-ins
+ *      must NOT be presented as attendance: the venue did not scan
+ *      consistently. Attendance itself remains unpublished while
+ *      reconciliation is open. Never infer or reconstruct a figure.
  *   2. Claims removed and NOT to be reinstated: "100+ paying attendees"
  *      (false); "a documentary premiere" (the premiered title has an
  *      unresolved rights position and cannot be used as a commercial
@@ -128,6 +153,79 @@ const RIGHTS_POINTS = [
   'Exhibition rights confirmed in writing with the rights holder',
   'Classification position established before the night is announced',
   'A documented record your funders can audit',
+];
+
+/**
+ * Capability, not packages. The page sells four screening SKUs, but most of
+ * what Omni actually delivers does not depend on film rights at all, and none
+ * of it was visible. Added 19 August 2026.
+ *
+ * DELIBERATELY EXCLUDED, do not add back:
+ *   - Paid advertising and media buying. Conversion tracking on the ads
+ *     account is unwired, so attribution is blind. Not sellable as a line
+ *     item until that is fixed.
+ *   - Photography and videography. Not delivered in house.
+ *   - Media and press guarantees. Outreach happened; no confirmed published
+ *     coverage exists.
+ *
+ * No prices here. This section shows what we can do, not what it costs.
+ */
+const CAPABILITIES = [
+  {
+    icon: Clapperboard,
+    title: 'Production',
+    items: [
+      'Venue sourcing, contracting and settlement',
+      'Run of show, cue sheets and show calling',
+      'Sound, lighting and media pack coordination',
+      'MC and stage management',
+      'Live performance and vendor coordination',
+    ],
+  },
+  {
+    icon: Ticket,
+    title: 'Ticketing and audience',
+    items: [
+      'Ticketing platform build, multi-session and multi-tier',
+      'Complimentary and partner allocation management',
+      'Door, check-in and box office process',
+      'Audience mobilisation across community and partner networks',
+      'Session-level reconciliation and financial closeout',
+    ],
+  },
+  {
+    icon: Award,
+    title: 'Recognition and verification',
+    items: [
+      'Awards programme and citation design',
+      'Certificate production to print standard',
+      'Permanent verification register, unique serial and token per record',
+      'Records that can later carry photographs, citations and video without any link changing',
+      'Consent and permissions register',
+    ],
+  },
+  {
+    icon: Globe,
+    title: 'Digital and campaign',
+    items: [
+      'Event landing page, built and deployed',
+      'Enquiry and lead capture that persists and notifies',
+      'Petition and signature platform with compliant consent capture',
+      'Email campaign design and delivery',
+      'Social campaign, scheduling and engagement management',
+    ],
+  },
+  {
+    icon: Users,
+    title: 'Partnerships and reporting',
+    items: [
+      'Partner and sponsor coordination',
+      'In-kind contribution management and evidence recording',
+      'Impact reporting with stated claim boundaries',
+      'SDG and ESG alignment mapping',
+      'Rights and classification clearance before any date is announced',
+    ],
+  },
 ];
 
 /**
@@ -244,7 +342,7 @@ const Screenings = () => {
         <section className="border-b border-wwpl-line bg-white">
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-5 py-10 text-center sm:grid-cols-4">
             {[
-              ['173', 'tickets issued, first-time event'],
+              ['306', 'session admissions, three sessions'],
               ['3', 'sessions in one day'],
               ['7', 'partner organisations'],
               ['37', 'honourees on our awards register'],
@@ -264,9 +362,10 @@ const Screenings = () => {
               Proof · 10 August 2026
             </p>
             <p className="mt-5 font-wwpl-display text-[clamp(22px,3.6vw,30px)] font-medium leading-snug">
-              “Celebrating Women Who Protect Life” brought 173 ticketed attendees to The Masque
-              Theatre for two documentary screenings and an awards ceremony honouring 37 women,
-              each holding a permanently verifiable certificate.
+              “Celebrating Women Who Protect Life” delivered 306 session admissions across three
+              separately ticketed sessions at The Masque Theatre, with two documentary screenings
+              and an awards ceremony honouring 37 women, each holding a permanently verifiable
+              certificate.
             </p>
             <p className="mx-auto mt-5 max-w-[60ch] text-[15px] leading-relaxed text-[rgba(246,241,232,.72)]">
               One day produced a live audience, a permanent certificate register, seven active
@@ -358,6 +457,43 @@ const Screenings = () => {
                   <h3 className="mt-2 font-wwpl-display text-[18px] font-semibold">{s.h}</h3>
                   <p className="mt-2 text-[13.5px] leading-relaxed text-wwpl-slate">{s.p}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Everything a night needs. Capability, not packages, and no prices.
+            See the CAPABILITIES note for what is deliberately excluded. */}
+        <section className="border-b border-wwpl-line py-16">
+          <div className="mx-auto max-w-5xl px-5">
+            <div className="mx-auto max-w-[60ch] text-center">
+              <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+                Behind the night
+              </p>
+              <h2 className="mt-3 font-wwpl-display text-[clamp(26px,4.5vw,36px)] font-semibold">
+                Everything a night needs
+              </h2>
+              <p className="mt-3 text-[15px] text-wwpl-slate">
+                A screening is the visible part. This is what sits behind it.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {CAPABILITIES.map((group) => (
+                <article
+                  key={group.title}
+                  className="rounded-[18px] border border-wwpl-line bg-white p-6 shadow-[0_1px_2px_rgba(21,32,31,.05)]"
+                >
+                  <group.icon className="h-6 w-6 text-wwpl-goldText" aria-hidden="true" />
+                  <h3 className="mt-3 font-wwpl-display text-[19px] font-semibold">{group.title}</h3>
+                  <ul className="mt-3 space-y-2">
+                    {group.items.map((item) => (
+                      <li key={item} className="flex gap-2.5 text-[13.5px] leading-snug text-wwpl-slate">
+                        <Check className="mt-0.5 h-3.5 w-3.5 flex-none text-wwpl-goldText" aria-hidden="true" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
               ))}
             </div>
           </div>
