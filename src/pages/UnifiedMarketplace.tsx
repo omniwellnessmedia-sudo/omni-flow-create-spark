@@ -19,6 +19,7 @@ import sandyMitchellData from "@/data/sandyMitchellProfile";
 import { IMAGES, getImageWithFallback, getSandyImage } from "@/lib/images";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import type { WellnessMarketplaceItem } from "@/types/marketplace";
+import { supabase } from "@/integrations/supabase/client";
 
 const UnifiedMarketplace = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -126,13 +127,66 @@ const UnifiedMarketplace = () => {
     return [...unifiedItems, ...sampleProducts, ...sampleExperiences];
   };
 
+  /**
+   * Published local-business products, merged in alongside the curated items.
+   *
+   * Only published rows can be read: the RLS policy on products requires
+   * status = 'published' AND a parent business that is itself published with
+   * recorded consent, so a draft cannot reach this page even if this query
+   * forgot to filter. The filter below is belt and braces, not the control.
+   *
+   * Failure is silent by design. If the catalogue cannot be read, the curated
+   * marketplace still renders rather than the page breaking.
+   */
+  const loadLocalProducts = async (): Promise<WellnessMarketplaceItem[]> => {
+    try {
+      const db = supabase as unknown as { from: (t: string) => any };
+      const { data, error } = await db
+        .from('products')
+        .select('id, name, description, category, provider, type, price_zar, image_url, status')
+        .eq('status', 'published')
+        .not('business_id', 'is', null);
+      if (error || !data) return [];
+      return (data as Array<Record<string, any>>).map((p) => ({
+        id: `local-${p.id}`,
+        title: p.name,
+        description: p.description ?? '',
+        provider_id: `local-${p.id}`,
+        provider_name: p.provider,
+        category: p.category ?? 'Other',
+        images: p.image_url ? [p.image_url] : [],
+        location: 'Cape Town',
+        is_online: false,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        rating: 0,
+        review_count: 0,
+        tags: [p.category, p.provider].filter(Boolean).map((t: string) => String(t).toLowerCase()),
+        content_type: 'product' as const,
+        price_zar: Number(p.price_zar),
+        price_wellcoins: 0,
+      })) as unknown as WellnessMarketplaceItem[];
+    } catch {
+      return [];
+    }
+  };
+
   useEffect(() => {
+    let cancelled = false;
     setLoading(true);
-    const unified = convertToUnifiedFormat();
-    setItems(unified);
-    setFilteredItems(unified);
+    const curated = convertToUnifiedFormat();
+    // Curated items paint immediately; local listings join when they arrive.
+    setItems(curated);
+    setFilteredItems(curated);
     setLoading(false);
-    toast.success(`Loaded ${unified.length} wellness offerings`);
+    toast.success(`Loaded ${curated.length} wellness offerings`);
+
+    loadLocalProducts().then((local) => {
+      if (cancelled || local.length === 0) return;
+      setItems([...curated, ...local]);
+    });
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {
