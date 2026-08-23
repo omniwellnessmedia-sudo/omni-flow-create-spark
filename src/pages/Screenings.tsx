@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSEO } from '@/lib/seo';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
@@ -255,6 +255,212 @@ const CAPABILITIES = [
 const RIGHTS_GATE =
   'No screening date is announced or sold until written exhibition rights and the classification position are documented for that title. This applies to films we source and to films clients bring to us.';
 
+/**
+ * Event-night gallery, added 23 August 2026 from the post-event media pack.
+ *
+ * CONSENT GATE ON THIS LIST. Only media cleared against COPY RULE 4 may be
+ * added here: no photograph or video in which an award recipient is
+ * identifiable, and no frame in which a ceremony slide's honouree name or
+ * portrait is legible. Of the 29 images in the pack, 5 cleared; the other 24
+ * stay in Drive until written consent exists. Anything placed in
+ * /public/screenings/night/ is publicly reachable by URL whether rendered or
+ * not, so an uncleared file must never be committed "for later".
+ *
+ * Captions and alt text name no individual and quantify no attendance.
+ *
+ * type: 'video' is already supported by the strip below (muted, looping,
+ * autoplay only while on screen) so phone clips from the pack can be added
+ * by extending this array once they are received and cleared.
+ */
+type NightMedia = {
+  type: 'image' | 'video';
+  src: string;
+  poster?: string;
+  orientation: 'portrait' | 'landscape';
+  alt: string;
+  caption: string;
+};
+
+const NIGHT_MEDIA: NightMedia[] = [
+  {
+    type: 'image',
+    src: '/screenings/night/stage-banner-wide.webp',
+    orientation: 'landscape',
+    alt: 'The Masque Theatre stage dressed with the campaign banner before the evening began',
+    caption: 'The stage, dressed and ready',
+  },
+  {
+    type: 'image',
+    src: '/screenings/night/stage-screen-wide.webp',
+    orientation: 'landscape',
+    alt: 'The full cinema screen and stage set at The Masque Theatre',
+    caption: 'A real theatre screen, not a boardroom projector',
+  },
+  {
+    type: 'image',
+    src: '/screenings/night/qa-panel-wide.webp',
+    orientation: 'landscape',
+    alt: 'A panel conversation in progress on stage after a screening',
+    caption: 'The conversation that turns a screening into a room',
+  },
+  {
+    type: 'image',
+    src: '/screenings/night/mc-poster-portrait.webp',
+    orientation: 'portrait',
+    alt: 'The host on stage beside the event poster',
+    caption: 'Hosted from first welcome to last thank you',
+  },
+  {
+    type: 'image',
+    src: '/screenings/night/performance-wide.webp',
+    orientation: 'landscape',
+    alt: 'A live performance moment on the stage during the evening',
+    caption: 'Live performance woven between sessions',
+  },
+];
+
+/** One card in the strip. Videos autoplay muted only while visible. */
+const NightMediaCard = ({ item, ariaHidden }: { item: NightMedia; ariaHidden?: boolean }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) el.play().catch(() => undefined);
+        else el.pause();
+      },
+      { threshold: 0.35 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const widthClass =
+    item.orientation === 'portrait'
+      ? 'w-[220px] sm:w-[236px]'
+      : 'w-[min(560px,84vw)]';
+
+  return (
+    <figure
+      aria-hidden={ariaHidden || undefined}
+      className={`group relative h-[380px] sm:h-[420px] ${widthClass} flex-none overflow-hidden rounded-[18px] border border-wwpl-line bg-wwpl-ink`}
+    >
+      {item.type === 'video' ? (
+        <video
+          ref={videoRef}
+          src={item.src}
+          poster={item.poster}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover"
+          aria-label={item.alt}
+        />
+      ) : (
+        <img
+          src={item.src}
+          alt={ariaHidden ? '' : item.alt}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      )}
+      <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(21,32,31,.85)] to-transparent px-4 pb-3 pt-10 text-[13px] font-medium text-wwpl-cream">
+        {item.caption}
+      </figcaption>
+    </figure>
+  );
+};
+
+/**
+ * Horizontal strip with a slow automatic drift, in the manner of a stories
+ * rail. The list is rendered twice so the loop is seamless; the second copy
+ * is aria-hidden. The drift pauses on hover, touch and keyboard focus, and
+ * never starts at all for prefers-reduced-motion users, who scroll by hand.
+ */
+const NightMediaStrip = () => {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let raf = 0;
+    let resumeTimer = 0;
+    let last = performance.now();
+    // Fractional scrollLeft is lost to rounding on some engines, so the
+    // position accumulates here and is written out whole.
+    let pos = track.scrollLeft;
+
+    const step = (now: number) => {
+      const dt = Math.min(now - last, 64);
+      last = now;
+      if (!pausedRef.current && track.scrollWidth > track.clientWidth) {
+        pos += dt * 0.018;
+        const half = track.scrollWidth / 2;
+        if (pos >= half) pos -= half;
+        track.scrollLeft = pos;
+      } else {
+        pos = track.scrollLeft;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+
+    const pause = () => {
+      window.clearTimeout(resumeTimer);
+      pausedRef.current = true;
+    };
+    const resume = () => {
+      pausedRef.current = false;
+      pos = track.scrollLeft;
+    };
+    const resumeSoon = () => {
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(resume, 2500);
+    };
+
+    track.addEventListener('pointerenter', pause);
+    track.addEventListener('pointerleave', resume);
+    track.addEventListener('touchstart', pause, { passive: true });
+    track.addEventListener('touchend', resumeSoon, { passive: true });
+    track.addEventListener('focusin', pause);
+    track.addEventListener('focusout', resume);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(resumeTimer);
+      track.removeEventListener('pointerenter', pause);
+      track.removeEventListener('pointerleave', resume);
+      track.removeEventListener('touchstart', pause);
+      track.removeEventListener('touchend', resumeSoon);
+      track.removeEventListener('focusin', pause);
+      track.removeEventListener('focusout', resume);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={trackRef}
+      className="flex gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      role="region"
+      aria-label="Photographs from the 10 August 2026 event"
+      tabIndex={0}
+    >
+      {NIGHT_MEDIA.map((item) => (
+        <NightMediaCard key={item.src} item={item} />
+      ))}
+      {NIGHT_MEDIA.map((item) => (
+        <NightMediaCard key={`${item.src}-loop`} item={item} ariaHidden />
+      ))}
+    </div>
+  );
+};
+
 const Screenings = () => {
   useSEO({
     title: 'Impact Screenings | Film Screening as a Service | Omni Wellness Media',
@@ -399,6 +605,25 @@ const Screenings = () => {
                 See the awards register
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* From the night. Consent-gated gallery: see the NIGHT_MEDIA header. */}
+        <section className="border-b border-wwpl-line bg-wwpl-cream/40 py-14">
+          <div className="mx-auto max-w-5xl px-5 text-center">
+            <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+              From the night · 10 August 2026
+            </p>
+            <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold text-wwpl-ink">
+              What the room looked like
+            </h2>
+            <p className="mx-auto mt-3 max-w-[58ch] text-[15px] text-wwpl-slate">
+              Shot on phones in the room as it happened, not a press pack. More from the night is
+              added as permissions are confirmed.
+            </p>
+          </div>
+          <div className="mx-auto mt-8 max-w-6xl">
+            <NightMediaStrip />
           </div>
         </section>
 
