@@ -30,9 +30,40 @@ export interface TourSEOData extends SEOMetadata {
   images: string[];
 }
 
+/**
+ * Site-wide fallback social image. og:image must never be written as an empty
+ * string: an empty tag makes scrapers show no image at all, where absence at
+ * least lets some fall back to a page image. Pages that navigate from a page
+ * WITH an image to one without would otherwise leak the first page's image,
+ * so the fallback is applied unconditionally instead of leaving stale values.
+ */
+export const DEFAULT_SOCIAL_IMAGE =
+  'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/omni-favicons/android-chrome-512x512.png';
+
+/**
+ * Toggle <meta name="robots" content="noindex, nofollow"> for the current
+ * document. Written and removed explicitly because the tag must not survive a
+ * client-side navigation from an admin surface to a public page.
+ */
+export const setRobotsNoindex = (noindex: boolean) => {
+  let tag = document.querySelector('meta[name="robots"]');
+  if (noindex) {
+    if (!tag) {
+      tag = document.createElement('meta');
+      tag.setAttribute('name', 'robots');
+      document.head.appendChild(tag);
+    }
+    tag.setAttribute('content', 'noindex, nofollow');
+  } else if (tag) {
+    tag.remove();
+  }
+};
+
 export const updateMetaTags = (metadata: SEOMetadata) => {
   // Update title
   document.title = metadata.title;
+
+  const socialImage = metadata.image || DEFAULT_SOCIAL_IMAGE;
 
   // Update or create meta tags
   const metaTags = [
@@ -40,12 +71,14 @@ export const updateMetaTags = (metadata: SEOMetadata) => {
     { property: 'og:title', content: metadata.title },
     { property: 'og:description', content: metadata.description },
     { property: 'og:type', content: metadata.type || 'website' },
-    { property: 'og:url', content: metadata.url || window.location.href },
-    { property: 'og:image', content: metadata.image || '' },
+    { property: 'og:url', content: metadata.url || metadata.canonical || window.location.href },
+    { property: 'og:site_name', content: 'Omni Wellness Media' },
+    { property: 'og:locale', content: 'en_ZA' },
+    { property: 'og:image', content: socialImage },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: metadata.title },
     { name: 'twitter:description', content: metadata.description },
-    { name: 'twitter:image', content: metadata.image || '' },
+    { name: 'twitter:image', content: socialImage },
   ];
 
   if (metadata.keywords && metadata.keywords.length > 0) {

@@ -9,7 +9,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { useSavedTours } from '@/hooks/useSavedTours';
+import { updateMetaTags } from '@/lib/seo';
+import { SITE_ORIGIN } from '@/seo/routeMeta.mjs';
 import TourBookingSidebar from '@/components/tours/TourBookingSidebar';
+import DepositButtons from '@/components/payments/DepositButtons';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
 import { PriceDisplay } from '@/components/ui/price-display';
@@ -69,6 +72,22 @@ const TourDetail = () => {
       fetchTourData();
     }
   }, [id, slug]);
+
+  // Head tags from the loaded tour. RouteSEO has already applied a
+  // slug-derived fallback by the time this fires; this replaces it with the
+  // real title, description and image once the data arrives.
+  useEffect(() => {
+    if (!tour) return;
+    const tourSlug = slug || id;
+    updateMetaTags({
+      title: `${tour.title} | Wellness Tours | Omni Wellness Media`,
+      description: (tour.subtitle || tour.overview || '')
+        .replace(/\s+/g, ' ')
+        .slice(0, 158),
+      image: tour.hero_image_url || undefined,
+      canonical: tourSlug ? `${SITE_ORIGIN}/tours/${tourSlug}` : undefined,
+    });
+  }, [tour, slug, id]);
 
   const fetchTourData = async () => {
     try {
@@ -579,7 +598,12 @@ const TourDetail = () => {
 
             {/* Booking Sidebar */}
             <div className="lg:col-span-1">
-              <TourBookingSidebar tour={tour} />
+              <div className="space-y-4">
+                {/* Deposit CTA. Renders nothing until the offer for this slug
+                    is activated in src/config/offers.ts. */}
+                <DepositButtons slug={slug || id || ''} />
+                <TourBookingSidebar tour={tour} />
+              </div>
             </div>
           </div>
         </div>
