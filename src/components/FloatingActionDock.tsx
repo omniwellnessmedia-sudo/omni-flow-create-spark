@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { MessageCircle, X, Compass, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IMAGES } from "@/lib/images";
+import { trackWhatsappClick } from "@/lib/analytics";
 
 /**
  * FloatingActionDock — one floating button that expands to a stack of contextual actions.
@@ -96,7 +97,10 @@ export const FloatingActionDock = () => {
       id: "whatsapp",
       label: "WhatsApp channel",
       icon: MessageCircle,
-      onClick: () => window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer"),
+      onClick: () => {
+        trackWhatsappClick("floating_dock");
+        window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer");
+      },
       tone: "from-emerald-500 to-emerald-600",
     },
     {

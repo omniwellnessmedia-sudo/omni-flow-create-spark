@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { IMAGES } from "@/lib/images";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { trackWhatsappClick } from "@/lib/analytics";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -87,7 +88,7 @@ const Footer = () => {
               <a href="https://www.youtube.com/watch?v=ZOoaiV-IiiU" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label="YouTube">
                 <Youtube className="w-4 h-4" />
               </a>
-              <a href="https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label="WhatsApp">
+              <a href="https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y" target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsappClick("footer")} className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label="WhatsApp">
                 <MessageCircle className="w-4 h-4" />
               </a>
               <a href="https://x.com/Omniwellmedia" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label="X">

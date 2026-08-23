@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { PeaceOfMindScore } from "./PeaceOfMindScore";
 import { useCurrencyConverter } from "@/hooks/useCurrencyConverter";
 import { Globe, Award, Shield, Wifi, Signal, DollarSign, RefreshCw } from "lucide-react";
+import { trackEsimClick } from "@/lib/analytics";
 
 interface RoamBuddyProductCardProps {
   planName: string;
@@ -257,7 +258,10 @@ export const RoamBuddyProductCard = ({
 
             <Button 
               className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground font-bold py-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02]"
-              onClick={onSelect}
+              onClick={() => {
+                trackEsimClick(planName);
+                onSelect?.();
+              }}
             >
               Get This Plan
               <Globe className="ml-2 h-4 w-4" />

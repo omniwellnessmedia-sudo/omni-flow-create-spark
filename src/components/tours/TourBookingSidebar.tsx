@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useCurrencyConverter } from '@/hooks/useCurrencyConverter';
 import { PriceDisplay } from '@/components/ui/price-display';
+import { trackBookingSubmit } from '@/lib/analytics';
 
 interface Tour {
   id: string;
@@ -173,6 +174,8 @@ const TourBookingSidebar: React.FC<TourBookingSidebarProps> = ({ tour }) => {
         }
         bookingSuccess = true;
       }
+
+      trackBookingSubmit(tour.title);
 
       toast({
         title: "Booking Submitted!",
