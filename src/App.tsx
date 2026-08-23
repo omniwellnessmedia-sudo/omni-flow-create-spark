@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useParams } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as SonnerToaster } from 'sonner';
 import { AuthProvider } from '@/components/AuthProvider';
@@ -62,6 +62,28 @@ const NO_OVERLAY_ROUTES = ['/bwc-team-staging'];
 const ScreeningsRedirect = () => {
   const { search, hash } = useLocation();
   return <Navigate to={`/screenings${search}${hash}`} replace />;
+};
+
+// Legacy /tour-detail/:id -> canonical /tours/:id, keeping params and query
+// (gclid, utm_*). Crawlers get a real 301 from public/_redirects; this
+// component covers in-app <Link>s that still point at the old path.
+const LegacyTourRedirect = () => {
+  const { id } = useParams();
+  const { search, hash } = useLocation();
+  return <Navigate to={`/tours/${id}${search}${hash}`} replace />;
+};
+
+// Collapsed commerce routes. Same pattern: server 301 in public/_redirects
+// for crawlers, client Navigate for in-app links. Decision logged in
+// REVENUE_ENGINE_REPORT.md: goods surfaces fold into /marketplace,
+// connectivity surfaces fold into /roambuddy-store.
+const MarketplaceRedirect = () => {
+  const { search, hash } = useLocation();
+  return <Navigate to={`/marketplace${search}${hash}`} replace />;
+};
+const RoamBuddyRedirect = () => {
+  const { search, hash } = useLocation();
+  return <Navigate to={`/roambuddy-store${search}${hash}`} replace />;
 };
 
 const GlobalOverlays = () => {
@@ -198,6 +220,11 @@ const LoadingSpinner = () => (
 
 // Import ScrollToHash component
 import ScrollToHash from '@/components/navigation/ScrollToHash';
+// Central per-route head tags. Must render BEFORE <Routes> so page-level
+// useSEO effects run after it and win over the registry fallback.
+import RouteSEO from '@/components/RouteSEO';
+// SPA page_view + revenue event tracking (no-op unless configured).
+import RouteAnalytics from '@/components/RouteAnalytics';
 // MagicCursor, FloatingActionDock, RoamBuddySalesBot and AccessibilitySettings
 // are lazy-loaded (declared with the route chunks near the top of this file).
 
@@ -208,6 +235,8 @@ function App() {
         <CartProvider>
           <Router>
             <ScrollToHash />
+            <RouteSEO />
+            <RouteAnalytics />
             <div className="min-h-screen">
               <Suspense fallback={<LoadingSpinner />}>
                 <Routes>
@@ -284,17 +313,20 @@ function App() {
                   <Route path="/cj-affiliate-products" element={<CJAffiliateProducts />} />
                   <Route path="/awin-affiliate-products" element={<AwinAffiliateProducts />} />
                   <Route path="/cj-products/:id" element={<CJProductDetail />} />
-                  <Route path="/store" element={<StoreCollections />} />
-                  <Route path="/store/collections/:handle" element={<StoreCollections />} />
+                  {/* Commerce collapse (REVENUE_ENGINE_REPORT.md): listing
+                      surfaces fold into /marketplace; product deep links keep
+                      working so nothing bookmarked or indexed 404s. */}
+                  <Route path="/store" element={<MarketplaceRedirect />} />
+                  <Route path="/store/collections/:handle" element={<MarketplaceRedirect />} />
                   <Route path="/store/product/:id" element={<StoreProductDetail />} />
                   <Route path="/wishlist" element={
                     <ProtectedRoute>
                       <Wishlist />
                     </ProtectedRoute>
                   } />
-                  <Route path="/wellness-deals" element={<WellnessDeals />} />
+                  <Route path="/wellness-deals" element={<MarketplaceRedirect />} />
                   <Route path="/travel-well-connected-store" element={<Navigate to="/roambuddy-store" replace />} />
-                  <Route path="/wellness-roaming-packages" element={<WellnessRoamingPackages />} />
+                  <Route path="/wellness-roaming-packages" element={<RoamBuddyRedirect />} />
                   <Route path="/data-products" element={<DataProducts />} />
                   <Route path="/product-detail/:id" element={<ProductDetail />} />
                   <Route path="/deal/:id" element={<DealDetail />} />
@@ -334,12 +366,18 @@ function App() {
             <Route path="/tours" element={<Tours />} />
             <Route path="/tours-retreats" element={<ToursRetreats />} />
             <Route path="/tour-category/:category" element={<TourCategory />} />
-            <Route path="/tour-detail/winter-wine-country-wellness" element={<OmniWellnessRetreat />} />
-            <Route path="/tour-detail/great-mother-cave-tour" element={<GreatMotherCaveTour />} />
-            <Route path="/tour-detail/:id" element={<TourDetail />} />
+            {/* Canonical tour URLs live under /tours/. The /tour-detail/ fork
+                served the same pages at a second URL, splitting search signals
+                across duplicates; it now 301s (public/_redirects) with these
+                client redirects covering in-app links. */}
+            <Route path="/tour-detail/:id" element={<LegacyTourRedirect />} />
             <Route path="/tours/muizenberg-cave-tours" element={<MuizenbergCaveTours />} />
             <Route path="/tours/great-mother-cave-tour" element={<GreatMotherCaveTour />} />
             <Route path="/tours/kalk-bay-tour" element={<KalkBayTour />} />
+            <Route path="/tours/winter-wine-country-wellness" element={<OmniWellnessRetreat />} />
+            {/* Dynamic tours from the tours table. Static routes above rank
+                higher in React Router, so named pages keep winning. */}
+            <Route path="/tours/:id" element={<TourDetail />} />
             <Route path="/experiences/cart-horse-urban-wellness" element={<CartHorseUrbanWellness />} />
             <Route path="/experiences/corporate-wellness-retreat" element={<CorporateWellnessRetreat />} />
             <Route path="/experience/:id" element={<TourDetail />} />
@@ -350,7 +388,7 @@ function App() {
             <Route path="/csr-impact" element={<CSRImpact />} />
             <Route path="/drphilafel" element={<Navigate to="/csr-impact" replace />} />
             <Route path="/viator-wellness-experiences" element={<ViatorWellnessExperiences />} />
-            <Route path="/esim-store" element={<ESIMStore />} />
+            <Route path="/esim-store" element={<RoamBuddyRedirect />} />
             {/* Travel Well Connected retired — redirect to ROAM store */}
             <Route path="/travel-well-connected" element={<Navigate to="/roambuddy-store" replace />} />
             <Route path="/travel-well-connected-esim" element={<Navigate to="/roambuddy-store" replace />} />

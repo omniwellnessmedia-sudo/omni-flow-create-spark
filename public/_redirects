@@ -17,4 +17,18 @@ https://www.omniwellnessmedia.co.za/*  https://omniwellnessmedia.co.za/:splat  3
 /awards            /.netlify/functions/awards   200
 /awards/*          /.netlify/functions/awards   200
 
+# Canonical tour URLs. The /tour-detail/ fork duplicated every tour page at a
+# second URL; crawlers now get a real 301 to the /tours/ canonical. Order
+# matters: these sit above the SPA catch-all.
+/tour-detail/*  /tours/:splat  301!
+
+# Commerce collapse (see REVENUE_ENGINE_REPORT.md): listing surfaces fold into
+# /marketplace, connectivity surfaces into /roambuddy-store. /store/product/*
+# deliberately has no rule here so product deep links keep resolving.
+/store/collections/*        /marketplace      301!
+/store                      /marketplace      301!
+/wellness-deals             /marketplace      301!
+/esim-store                 /roambuddy-store  301!
+/wellness-roaming-packages  /roambuddy-store  301!
+
 /*    /index.html   200
