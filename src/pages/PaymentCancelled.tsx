@@ -2,10 +2,39 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, XCircle, RotateCcw, HelpCircle } from "lucide-react";
+import { OFFERS } from "@/config/offers";
 
 const PaymentCancelled = () => {
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get('order_id');
+  // Deposit-engine returns carry ?offer=<slug> (src/config/offers.ts).
+  const depositOffer = OFFERS.find((o) => o.slug === searchParams.get('offer'));
+
+  if (depositOffer) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <XCircle className="w-12 h-12 text-orange-600" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Deposit not completed</h1>
+          <p className="text-gray-600 mb-6">
+            No money moved. Your date for {depositOffer.name} is not yet
+            secured. You can try again from the page you came from, or contact
+            us and we will help you complete it.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button asChild>
+              <Link to={depositOffer.surfaces[0] || "/"}>Try again</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/contact">Contact us</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">

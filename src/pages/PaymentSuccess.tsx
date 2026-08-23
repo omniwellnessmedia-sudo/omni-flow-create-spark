@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { OFFERS } from "@/config/offers";
 import { 
   CheckCircle, 
   Download, 
@@ -28,6 +29,12 @@ const PaymentSuccess = () => {
 
   const sessionId = searchParams.get('session_id');
   const orderId = searchParams.get('order_id');
+  // Deposit-engine returns (src/config/offers.ts). Payment links carry
+  // ?offer=<slug> in their return URL; there is no order in our database to
+  // verify because the rail (Quicket/Ozow/PayFast) holds the money and the
+  // record. The page acknowledges and tells the payer what happens next.
+  const offerSlug = searchParams.get('offer');
+  const depositOffer = offerSlug ? OFFERS.find((o) => o.slug === offerSlug) : null;
 
   useEffect(() => {
     const verifyPayment = async () => {
@@ -88,6 +95,29 @@ const PaymentSuccess = () => {
           <h2 className="text-xl font-semibold text-gray-700">
             {verifying ? 'Verifying Payment...' : 'Loading...'}
           </h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (depositOffer && !order) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-12 h-12 text-green-600" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Deposit received</h1>
+          <p className="text-gray-600 mb-2">
+            Thank you. Your deposit for {depositOffer.name} secures your date.
+          </p>
+          <p className="text-gray-600 mb-6">
+            You will receive confirmation by email, and the team will contact
+            you within one working day with the next steps.
+          </p>
+          <Link to="/">
+            <Button>Return Home</Button>
+          </Link>
         </div>
       </div>
     );
