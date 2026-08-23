@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/prerender-event.mjs",
+    "build": "vite build && node scripts/prerender-event.mjs && node scripts/prerender-marketing.mjs && node scripts/generate-sitemap.mjs dist/sitemap.xml",
+    "sitemap": "node scripts/generate-sitemap.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
