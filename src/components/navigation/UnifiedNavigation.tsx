@@ -108,6 +108,9 @@ const UnifiedNavigation = () => {
       title: 'Services',
       icon: Briefcase,
       children: [
+        // The catalogue overview leads the menu: without this entry the new
+        // services page was unreachable by browsing (nothing linked to it).
+        { title: 'All Services & Rates', href: '/services', description: 'The full catalogue with prices, from R1,500', icon: '🗂️' },
         { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic business development', icon: '💼' },
         { title: 'Impact Screenings', href: '/screenings', description: 'Film screening as a service — we deliver the audience', icon: '🎟️' },
         { title: 'Media Production', href: '/media-production', description: 'Content creation & storytelling', icon: '🎬' },
