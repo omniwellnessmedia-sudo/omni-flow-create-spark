@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { RATE_CARD_OFFERS } from "@/data/publicRateCard";
 import { trackAdsConversion } from '@/lib/googleAds';
 import { trackLead } from '@/lib/socialPixels';
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
@@ -19,11 +21,21 @@ import { IMAGES } from "@/lib/images";
 import { Sparkles } from "lucide-react";
 
 const Contact = () => {
+  // ?service=<slug> preselects the service, so rate-card CTAs on /services
+  // land with the right offer already chosen. Unknown values fall back to
+  // an empty selection rather than an invalid one.
+  const [searchParams] = useSearchParams();
+  const requestedService = searchParams.get("service") || "";
+  const validServiceValues = new Set([
+    "business-development", "content-creation", "community-engagement",
+    "web-development", "ai-tools", "multiple", "other", "quotation",
+    ...RATE_CARD_OFFERS.map((o) => o.slug),
+  ]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     organization: "",
-    service: "",
+    service: validServiceValues.has(requestedService) ? requestedService : "",
     message: ""
   });
   const { toast } = useToast();
@@ -173,6 +185,13 @@ const Contact = () => {
                           <SelectValue placeholder="Select a service" />
                         </SelectTrigger>
                         <SelectContent>
+                          {/* Priced engagements from the public rate card */}
+                          {RATE_CARD_OFFERS.map((o) => (
+                            <SelectItem key={o.slug} value={o.slug}>
+                              {o.name} ({o.price})
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="quotation">Request a quotation</SelectItem>
                           <SelectItem value="business-development">Business Development Consulting</SelectItem>
                           <SelectItem value="content-creation">Media & Content Creation</SelectItem>
                           <SelectItem value="community-engagement">Community Engagement</SelectItem>

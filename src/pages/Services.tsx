@@ -9,6 +9,8 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 import { FloatingDecorations } from "@/components/ui/gaia-elements";
 import { CuratorTip } from "@/components/curator/CuratorTip";
 import { omniVoice } from "@/data/omniVoiceGuide";
+import { RATE_CARD_OFFERS, QUOTED_CATEGORIES, RATE_CARD_TERMS } from "@/data/publicRateCard";
+import { Check } from "lucide-react";
 
 const Services = () => {
   const services = [
@@ -271,6 +273,81 @@ const Services = () => {
                 </div>
               </details>
             </div>
+          </div>
+        </section>
+
+        {/* Engagements and rates. Source and rules: src/data/publicRateCard.ts
+            (approved public subset of the Master Services Rate Card, 23 Aug
+            2026). Social media packages and digital resources are deliberately
+            absent; see that file's header before adding anything here. */}
+        <section id="rates" className="scroll-mt-8 py-20 bg-gray-50 relative overflow-hidden">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center mb-12">
+              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
+                Engagements and <span className="text-primary">Rates</span>
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Clear entry points with clear prices. Every engagement starts with a
+                conversation, and every quotation is written down before work begins.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {RATE_CARD_OFFERS.map((offer) => (
+                <Card
+                  key={offer.slug}
+                  className={`flex flex-col bg-white border ${offer.featured ? "border-primary/40 shadow-md" : "border-gray-200"} hover:shadow-lg transition-shadow`}
+                >
+                  <CardHeader className="pb-3">
+                    <CardTitle className="font-heading text-xl text-gray-900">{offer.name}</CardTitle>
+                    <div className="flex items-baseline gap-2 pt-1">
+                      <span className="text-2xl font-bold text-primary">{offer.price}</span>
+                      <span className="text-sm text-gray-500">{offer.priceNote}</span>
+                    </div>
+                    <CardDescription className="text-gray-600 pt-1">{offer.outcome}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-1 flex-col pt-0">
+                    <ul className="space-y-2 mb-6">
+                      {offer.bullets.map((b) => (
+                        <li key={b} className="flex items-start text-sm text-gray-700">
+                          <Check className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                          {b}
+                        </li>
+                      ))}
+                    </ul>
+                    <Button asChild variant="outline" className="mt-auto w-full border-primary/30 text-primary hover:bg-primary/5">
+                      <Link to={`/contact?service=${offer.slug}`}>
+                        Enquire about this <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
+              <h3 className="font-heading text-xl font-semibold text-gray-900 mb-2">Quoted per project</h3>
+              <p className="text-gray-600 mb-4 text-sm">
+                Some work is only priced once we understand the scope. Tell us what you
+                are building and we will return a written quotation.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {QUOTED_CATEGORIES.map((c) => (
+                  <span key={c} className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-700">
+                    {c}
+                  </span>
+                ))}
+              </div>
+              <Button asChild className="mt-6 bg-primary hover:bg-primary/90 text-white">
+                <Link to="/contact?service=quotation">Request a quotation</Link>
+              </Button>
+            </div>
+
+            <ul className="mt-8 space-y-1 text-center text-xs text-gray-500">
+              {RATE_CARD_TERMS.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
           </div>
         </section>
 
