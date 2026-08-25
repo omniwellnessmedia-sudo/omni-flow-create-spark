@@ -80,6 +80,24 @@ import { trackLead } from '@/lib/socialPixels';
  *      live link. A future sweep must not read those hits as unfixed and
  *      start deleting event history. None of them is on this page.
  *
+ *   6. TESTIMONIALS ARE CONSENT GATED (requested by Tumelo, 24 Aug 2026).
+ *      The earlier prohibition on testimonials existed because none existed
+ *      in verified, consented form, and that condition still holds. The
+ *      TESTIMONIALS list below ships EMPTY and its section renders nothing
+ *      until a quote is added that has ALL of: the person's exact words,
+ *      their written permission to publish on this page, and an attribution
+ *      that names no organisation (the ban on presenting any org as a
+ *      sponsor, funder, partner or endorser of this offering still stands,
+ *      and internal team praise is not a testimonial). Never paraphrase,
+ *      never compose a quote on someone's behalf, never source a quote from
+ *      a private email without that person's explicit written consent.
+ *
+ *   7. MISSION SECTION language is drawn from approved brand copy (the
+ *      site-wide tagline and the About page story) and this page's own
+ *      governed voice. It makes no factual claim beyond what the verified
+ *      figures already establish. "Over 200 businesses" from the voice
+ *      guide is unverified and must not appear here.
+ *
  * Enquiries submit through the LIVE submit-contact edge function (writes to
  * contact_submissions and emails the team). Deliberately not a new backend:
  * that function is deployed and verified in production.
@@ -461,6 +479,16 @@ const NightMediaStrip = () => {
   );
 };
 
+/**
+ * CONSENT GATED, see COPY RULE 6. This list ships empty and the section
+ * below it renders nothing while it stays empty. An entry may be added ONLY
+ * with the person's exact words and their written permission to publish
+ * here, and the attribution must name no organisation. Keep `role` to a
+ * neutral description such as "Filmmaker" or "Guest, 10 August 2026".
+ */
+type Testimonial = { quote: string; name: string; role: string };
+const TESTIMONIALS: Testimonial[] = [];
+
 const Screenings = () => {
   useSEO({
     title: 'Impact Screenings | Film Screening as a Service | Omni Wellness Media',
@@ -536,30 +564,43 @@ const Screenings = () => {
       <UnifiedNavigation />
       <main className="bg-wwpl-cream text-wwpl-ink">
 
-        {/* Hero */}
-        <section className="border-b border-wwpl-line">
-          <div className="mx-auto max-w-5xl px-5 pb-16 pt-20 text-center sm:pt-24">
-            <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+        {/* Hero. The background is a real photograph of our stage on the
+            night (consent-cleared, see NIGHT_MEDIA rules); the ink overlay
+            keeps the text legible over it at every width. */}
+        <section className="relative overflow-hidden border-b border-wwpl-line bg-wwpl-ink">
+          <img
+            src="/screenings/night/stage-banner-wide.webp"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover object-center opacity-45"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(21,32,31,.55)] via-[rgba(42,10,30,.55)] to-[rgba(21,32,31,.82)]" />
+          <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-20 text-center sm:pt-24">
+            <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldLight">
               Impact screenings · Muizenberg, Kalk Bay, Fish Hoek
             </p>
-            <h1 className="mx-auto mt-4 max-w-[22ch] font-wwpl-display text-[clamp(34px,6vw,54px)] font-semibold leading-[1.08]">
+            <h1 className="mx-auto mt-4 max-w-[22ch] font-wwpl-display text-[clamp(34px,6vw,54px)] font-semibold leading-[1.08] text-wwpl-cream">
               Your film deserves this audience.
             </h1>
-            <p className="mx-auto mt-5 max-w-[58ch] text-[17px] leading-relaxed text-wwpl-slate">
+            <p className="mx-auto mt-5 max-w-[58ch] text-[17px] leading-relaxed text-[rgba(246,241,232,.85)]">
               We stage documentary nights at The Masque Theatre for the Southern Peninsula's conscious
               community, and wrap them in a campaign: panel, awards, press. You bring the film.
               We deliver the audience, the occasion, and the proof it mattered.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               {/* btn-primary applies a teal gradient via background-image, so the
-                  brand override needs !bg-none as well as the plum colour. */}
-              <Button size="lg" className="!bg-none !bg-wwpl-plum !text-wwpl-cream hover:!bg-wwpl-ink" onClick={() => scrollToEnquire('hosted-screening')}>
+                  brand override needs !bg-none as well as the plum colour. On the
+                  photographic hero the primary flips to gold-on-ink for contrast. */}
+              <Button size="lg" className="!bg-none !bg-wwpl-gold !text-wwpl-ink hover:!bg-wwpl-cream" onClick={() => scrollToEnquire('hosted-screening')}>
                 Start a scoping call <ArrowRight className="ml-1.5 h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline" className="border-wwpl-line" asChild>
+              <Button size="lg" variant="outline" className="border-[rgba(246,241,232,.4)] bg-transparent text-wwpl-cream hover:bg-[rgba(246,241,232,.12)] hover:text-wwpl-cream" asChild>
                 <a href="#offerings">See the offerings</a>
               </Button>
             </div>
+            <p className="mt-6 text-[12px] text-[rgba(246,241,232,.55)]">
+              Photographed at The Masque Theatre on 10 August 2026.
+            </p>
           </div>
         </section>
 
@@ -742,6 +783,77 @@ const Screenings = () => {
             </div>
           </div>
         </section>
+
+        {/* Why we do this. Language rules: COPY RULE 7. */}
+        <section className="border-b border-wwpl-line bg-white py-16">
+          <div className="mx-auto grid max-w-5xl items-center gap-10 px-5 md:grid-cols-2">
+            <div>
+              <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+                Why we do this
+              </p>
+              <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold">
+                A cinema night that leaves something behind
+              </h2>
+              <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-wwpl-slate">
+                <p>
+                  Omni Wellness Media exists to empower communities through conscious content,
+                  business development and wellness. Screenings are where that becomes a room:
+                  a film worth watching, the people it concerns, and a conversation that
+                  continues after the lights come up.
+                </p>
+                <p>
+                  We believe the stories behind a cause deserve the same production care as any
+                  commercial launch. So every night we stage is built to leave something behind:
+                  a certificate register that stays verifiable, partnerships that keep working,
+                  and a campaign that carries on after the credits.
+                </p>
+                <p>
+                  And every engagement follows one rule: the night is funded before it is
+                  announced. That is how a small team keeps its promises.
+                </p>
+              </div>
+            </div>
+            <figure className="overflow-hidden rounded-[18px] border border-wwpl-line">
+              <img
+                src="/screenings/night/performance-wide.webp"
+                alt="A live performance on stage during the 10 August 2026 evening at The Masque Theatre"
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+              <figcaption className="bg-wwpl-cream/60 px-4 py-2 text-[12px] text-wwpl-slate">
+                Live performance, The Masque Theatre, 10 August 2026.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        {/* Testimonials. Renders NOTHING until TESTIMONIALS carries consented
+            quotes: COPY RULE 6. Do not seed this with placeholder or invented
+            quotes under any circumstances. */}
+        {TESTIMONIALS.length > 0 && (
+          <section className="border-b border-wwpl-line py-16">
+            <div className="mx-auto max-w-5xl px-5">
+              <div className="mx-auto max-w-[60ch] text-center">
+                <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+                  In their words
+                </p>
+                <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold">
+                  What people say about our nights
+                </h2>
+              </div>
+              <div className="mt-10 grid gap-5 md:grid-cols-2">
+                {TESTIMONIALS.map((t) => (
+                  <blockquote key={t.name} className="rounded-[18px] border border-wwpl-line bg-white p-7">
+                    <p className="text-[15px] leading-relaxed text-wwpl-ink">"{t.quote}"</p>
+                    <footer className="mt-4 text-[13px] text-wwpl-slate">
+                      <span className="font-semibold text-wwpl-plum">{t.name}</span> · {t.role}
+                    </footer>
+                  </blockquote>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Rights and licensing. Process, not accreditation: do not upgrade
             this into a claim of certification or legal service. */}
