@@ -1,411 +1,311 @@
+import type { CSSProperties } from "react";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
-import Hero from "@/components/ui/hero";
-import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, ArrowLeft } from "lucide-react";
-import { FloatingDecorations } from "@/components/ui/gaia-elements";
-import { CuratorTip } from "@/components/curator/CuratorTip";
-import { omniVoice } from "@/data/omniVoiceGuide";
-import { RATE_CARD_OFFERS, QUOTED_CATEGORIES, RATE_CARD_TERMS } from "@/data/publicRateCard";
-import { Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import {
+  SERVICE_BANDS,
+  QUOTED_CATEGORIES,
+  RATE_CARD_TERMS,
+  PRACTICE_PROJECTS,
+  SPECTRUM,
+  type RateCardOffer,
+} from "@/data/publicRateCard";
+import { trackWhatsappClick } from "@/lib/analytics";
+
+/**
+ * Services: the public catalogue, in the Spectrum System (design handoff
+ * "Omni Asset System", 25 Aug 2026). Dark ink ground, cream text, Cormorant
+ * Garamond display, JetBrains Mono labels, one hue per service category.
+ *
+ * Copy rule from the handoff: offer names, prices, inclusions and the
+ * commercial terms are client supplied and must not be reworded. They all
+ * live in src/data/publicRateCard.ts; this file is layout only.
+ *
+ * CTA rule: "Pay now" style buttons from the design are deliberately not
+ * rendered until real checkout URLs exist. Every offer routes to the
+ * contact form with its service preselected.
+ */
+
+const INK = "#0E1513";
+const CREAM = "#F7F3EA";
+const MIST = "#B9C6C2";
+const SLATE = "#8A9A96";
+const CLAY = "#C9B68E";
+const CARD_BG = "linear-gradient(180deg, rgba(247,243,234,.085), rgba(247,243,234,.035))";
+const CARD_BORDER = "rgba(247,243,234,.16)";
+const HAIRLINE = "rgba(247,243,234,.06)";
+
+const WHATSAPP_URL = "https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y";
+
+const mono: CSSProperties = {
+  fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+};
+
+const SpectrumRule = () => (
+  <div
+    aria-hidden="true"
+    className="h-[3px] rounded-[3px]"
+    style={{
+      background: `linear-gradient(90deg, ${SPECTRUM.red}, ${SPECTRUM.orange}, ${SPECTRUM.yellow}, ${SPECTRUM.green}, ${SPECTRUM.teal}, ${SPECTRUM.blue}, ${SPECTRUM.violet})`,
+    }}
+  />
+);
+
+const OfferCard = ({ offer }: { offer: RateCardOffer }) => (
+  <article
+    className={`relative flex flex-col overflow-hidden rounded-[18px] p-6 transition-colors duration-300 hover:bg-[rgba(247,243,234,.09)] ${offer.wide ? "md:col-span-2 xl:col-span-3" : ""}`}
+    style={{ background: CARD_BG, border: `1px solid ${CARD_BORDER}` }}
+  >
+    <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[2px]" style={{ background: offer.hue }} />
+    <h3 className="font-wwpl-display text-[26px] leading-tight" style={{ color: CREAM }}>
+      {offer.name}
+    </h3>
+    <p className="mt-2 text-[13px] uppercase tracking-[.14em]" style={{ ...mono, color: offer.hue }}>
+      {offer.price}
+    </p>
+    <p className="mt-3 text-[15px] leading-relaxed" style={{ color: MIST }}>
+      {offer.blurb}
+    </p>
+    {offer.bullets.length > 0 && (
+      <ul className="mt-4 space-y-2">
+        {offer.bullets.map((b) => (
+          <li key={b} className="flex items-start gap-3 text-[14px] leading-relaxed" style={{ color: MIST }}>
+            <span aria-hidden="true" className="mt-[8px] h-[5px] w-[5px] flex-none rounded-full" style={{ background: offer.hue }} />
+            {b}
+          </li>
+        ))}
+      </ul>
+    )}
+    <div className="mt-auto flex flex-wrap items-center gap-3 pt-5" style={{ borderTop: `1px solid ${HAIRLINE}`, marginTop: "auto" }}>
+      <Link
+        to={`/contact?service=${offer.slug}`}
+        className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13.5px] font-medium transition-opacity hover:opacity-85"
+        style={{ background: offer.hue, color: INK }}
+      >
+        {offer.cta} <ArrowRight className="h-3.5 w-3.5" />
+      </Link>
+      {offer.whatsapp && (
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackWhatsappClick(`services_${offer.slug}`)}
+          className="inline-flex items-center rounded-full px-5 py-2.5 text-[13.5px] transition-colors hover:bg-[rgba(247,243,234,.12)]"
+          style={{ border: `1px solid ${CARD_BORDER}`, color: CREAM }}
+        >
+          WhatsApp us
+        </a>
+      )}
+    </div>
+    {offer.footnote && (
+      <p className="mt-4 text-[12.5px] leading-relaxed" style={{ color: SLATE }}>
+        {offer.footnote}
+      </p>
+    )}
+  </article>
+);
 
 const Services = () => {
-  const services = [
-    {
-      title: "Business Development Consulting",
-      description: "Strategic guidance for conscious businesses looking to create positive impact while achieving sustainable growth.",
-      features: [
-        "Brand Development & Strategy",
-        "Market Analysis & Research", 
-        "Sustainability Consulting",
-        "Corporate Culture Alignment",
-        "NPO Project Integration",
-        "Impact Measurement"
-      ],
-      icon: "🚀",
-      link: "/business-consulting"
-    },
-    {
-      title: "Media & Content Creation",
-      description: "Authentic storytelling through video, photography, and multimedia content that resonates with diverse audiences.",
-      features: [
-        "Video Production & Editing",
-        "Photography & Visual Content",
-        "Documentary Storytelling",
-        "Social Media Content",
-        "Podcast Production",
-        "Multimedia Campaigns"
-      ],
-      icon: "🎬",
-      link: "/media-production"
-    },
-    {
-      title: "Social Media Strategy",
-      description: "Build authentic connections between brands and communities through meaningful engagement strategies.",
-      features: [
-        "Content Strategy & Planning",
-        "Community Management",
-        "Platform Optimization",
-        "Influencer Partnerships",
-        "Analytics & Reporting",
-        "Paid Social Campaigns"
-      ],
-      icon: "📱",
-      link: "/social-media-strategy"
-    },
-    {
-      title: "Web Development",
-      description: "Modern, responsive digital solutions that reflect your brand's values and drive meaningful engagement.",
-      features: [
-        "Website Design & Development",
-        "SEO Optimization",
-        "User Experience Design",
-        "E-commerce Solutions",
-        "Digital Marketing Strategy",
-        "Analytics & Reporting"
-      ],
-      icon: "💻",
-      link: "/web-development"
-    },
-    {
-      title: "Videography Services",
-      description: "Crafting visual stories that matter through genuine partnerships and conscious media experiences.",
-      features: [
-        "Non-profit Campaign Videos",
-        "Educational Content Creation",
-        "Corporate Responsibility Films",
-        "Event Documentation",
-        "Interview & Testimonial Videos",
-        "Commercial Video Production"
-      ],
-      icon: "🎥",
-      link: "/media-production"
-    },
-    {
-      title: "Documentary Production",
-      description: "Authentic storytelling through documentary films with ethical filmmaking practices and deep research.",
-      features: [
-        "Full-length Documentary Production",
-        "Short-form Documentary Films",
-        "Concept Development & Research",
-        "Ethical Filmmaking Practices",
-        "Post-production & Editing",
-        "Impact Distribution Strategy"
-      ],
-      icon: "🎞️",
-      link: "/media-production"
-    },
-    {
-      title: "Custom Art & Illustration",
-      description: "Commissioned artwork that tells your story through bespoke visual experiences and artistic consultation.",
-      features: [
-        "Custom Illustration Work",
-        "Commissioned Graffiti Art",
-        "Murals & Large-scale Artwork",
-        "Brand Visual Identity Design",
-        "Artistic Consultation",
-        "Concept Development"
-      ],
-      icon: "🎨",
-      link: "/contact"
-    },
-    {
-      title: "Strategic Consultation",
-      description: "Building lasting partnerships through conscious communication and deep understanding of your mission.",
-      features: [
-        "Initial Project Consultation",
-        "Story Development Guidance",
-        "Media Strategy Planning",
-        "Ethical Storytelling Workshops",
-        "Impact Measurement Planning",
-        "Partnership Development"
-      ],
-      icon: "💡",
-      link: "/contact"
-    }
-  ];
-
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ background: INK }}>
       <UnifiedNavigation />
-      <div className="px-4 pt-6">
-        <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
-        </Link>
-      </div>
-      <BreadcrumbNav />
-      
-      <Hero
-        title={
-          <>
-            {omniVoice.pageIntros.services.headline}
-          </>
-        }
-        description={omniVoice.pageIntros.services.subheadline}
-        variant="minimal"
-        height="small"
-        actions={[
-          {
-            label: omniVoice.ctas.contact,
-            href: "/contact",
-            variant: "wellness"
-          },
-          {
-            label: "View Portfolio",
-            href: "/portfolio",
-            variant: "outline"
-          }
-        ]}
-      />
-      
-      <main>
-
-        {/* Core Services Grid */}
-        <section className="py-20 bg-white relative overflow-hidden">
-          <FloatingDecorations variant="subtle" />
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            {/* Curator Welcome */}
-            <div className="mb-8">
-              <CuratorTip 
-                curator="chad" 
-                message={omniVoice.sectionIntros.services}
-                variant="banner"
-              />
-            </div>
-
-            <div className="text-center mb-16">
-              <h2 className="heading-secondary text-gradient-hero no-faded-text">
-                What We <span className="text-primary">Create</span>
-              </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                {omniVoice.transitions.curated}
-              </p>
-            </div>
-
-            {/* Core 4 Services */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mb-16">
-              {services.slice(0, 4).map((service, index) => (
-                <Card 
-                  key={service.title}
-                  className="group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg hover:-translate-y-2 bg-white overflow-hidden"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="text-4xl bg-blue-50 p-3 rounded-2xl group-hover:bg-blue-100 transition-colors">
-                        {service.icon}
-                      </div>
-                      <div className="flex-1">
-                        <CardTitle className="font-heading text-2xl text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
-                          {service.title}
-                        </CardTitle>
-                        <CardDescription className="text-gray-600 text-lg leading-relaxed">
-                          {service.description}
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-3 mb-8">
-                      {service.features.slice(0, 3).map((feature) => (
-                        <div key={feature} className="flex items-center text-gray-700">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full mr-4 flex-shrink-0"></div>
-                          <span className="text-base">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <Button 
-                      asChild 
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group/btn"
-                    >
-                      <Link to={service.link} className="inline-flex items-center justify-center text-lg">
-                        {omniVoice.ctas.getStarted}
-                        <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Additional Services Expandable */}
-            <div className="text-center">
-              <details className="group">
-                <summary className="cursor-pointer inline-flex items-center gap-2 text-lg font-semibold text-blue-600 hover:text-blue-700 transition-colors">
-                  <span>{omniVoice.transitions.explore}</span>
-                  <svg className="w-5 h-5 group-open:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-                  {services.slice(4).map((service, index) => (
-                    <Card 
-                      key={service.title}
-                      className="group hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-blue-200 bg-white"
-                    >
-                      <CardHeader className="text-center pb-4">
-                        <div className="text-3xl mb-3">{service.icon}</div>
-                        <CardTitle className="font-heading text-lg text-gray-900 group-hover:text-blue-600 transition-colors">
-                          {service.title}
-                        </CardTitle>
-                        <CardDescription className="text-gray-600 text-sm">
-                          {service.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <Button 
-                          asChild 
-                          variant="outline"
-                          className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300"
-                        >
-                          <Link to={service.link}>
-                            {omniVoice.ctas.learn}
-                          </Link>
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </details>
-            </div>
+      <main style={{ background: INK, color: CREAM }}>
+        {/* Hero */}
+        <section className="mx-auto max-w-[1180px] px-5 pb-14 pt-20 sm:px-8 sm:pt-24">
+          <p className="text-[11px] uppercase tracking-[.22em]" style={{ ...mono, color: SLATE }}>
+            Services · South Africa · Rates in ZAR
+          </p>
+          <h1
+            className="mt-5 max-w-[20ch] font-wwpl-display font-normal leading-[1.08] tracking-[-.01em]"
+            style={{ fontSize: "clamp(42px, 6.4vw, 82px)" }}
+          >
+            Bridging wellness, outreach and media.{" "}
+            <em style={{ color: CLAY }}>Work that earns its fee.</em>
+          </h1>
+          <p className="mt-6 max-w-[62ch] text-[18px] leading-relaxed" style={{ color: MIST }}>
+            Omni Wellness Media creates conscious content and builds the commercial engine behind
+            it: strategy, websites, campaigns, media production and systems. Start with a single
+            session or a fixed-scope sprint. Everything larger is quoted properly, after we
+            understand the work.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/contact?service=clarity-session"
+              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-medium transition-colors"
+              style={{ background: CREAM, color: INK }}
+            >
+              Start with R1,500 <ArrowRight className="h-4 w-4" />
+            </Link>
+            <a
+              href="#clarity"
+              className="inline-flex items-center rounded-full px-6 py-3 text-[14px] transition-colors hover:bg-[rgba(247,243,234,.12)]"
+              style={{ border: `1px solid ${CARD_BORDER}`, color: CREAM }}
+            >
+              See all packages
+            </a>
           </div>
-        </section>
 
-        {/* Engagements and rates. Source and rules: src/data/publicRateCard.ts
-            (approved public subset of the Master Services Rate Card, 23 Aug
-            2026). Social media packages and digital resources are deliberately
-            absent; see that file's header before adding anything here. */}
-        <section id="rates" className="scroll-mt-8 py-20 bg-gray-50 relative overflow-hidden">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center mb-12">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-4">
-                Engagements and <span className="text-primary">Rates</span>
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Clear entry points with clear prices. Every engagement starts with a
-                conversation, and every quotation is written down before work begins.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {RATE_CARD_OFFERS.map((offer) => (
-                <Card
-                  key={offer.slug}
-                  className={`flex flex-col bg-white border ${offer.featured ? "border-primary/40 shadow-md" : "border-gray-200"} hover:shadow-lg transition-shadow`}
-                >
-                  <CardHeader className="pb-3">
-                    <CardTitle className="font-heading text-xl text-gray-900">{offer.name}</CardTitle>
-                    <div className="flex items-baseline gap-2 pt-1">
-                      <span className="text-2xl font-bold text-primary">{offer.price}</span>
-                      <span className="text-sm text-gray-500">{offer.priceNote}</span>
-                    </div>
-                    <CardDescription className="text-gray-600 pt-1">{offer.outcome}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex flex-1 flex-col pt-0">
-                    <ul className="space-y-2 mb-6">
-                      {offer.bullets.map((b) => (
-                        <li key={b} className="flex items-start text-sm text-gray-700">
-                          <Check className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-                    <Button asChild variant="outline" className="mt-auto w-full border-primary/30 text-primary hover:bg-primary/5">
-                      <Link to={`/contact?service=${offer.slug}`}>
-                        Enquire about this <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
-              <h3 className="font-heading text-xl font-semibold text-gray-900 mb-2">Quoted per project</h3>
-              <p className="text-gray-600 mb-4 text-sm">
-                Some work is only priced once we understand the scope. Tell us what you
-                are building and we will return a written quotation.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {QUOTED_CATEGORIES.map((c) => (
-                  <span key={c} className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-700">
-                    {c}
-                  </span>
-                ))}
-              </div>
-              <Button asChild className="mt-6 bg-primary hover:bg-primary/90 text-white">
-                <Link to="/contact?service=quotation">Request a quotation</Link>
-              </Button>
-            </div>
-
-            <ul className="mt-8 space-y-1 text-center text-xs text-gray-500">
-              {RATE_CARD_TERMS.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* Process Section */}
-        <section className="py-20 bg-gray-50 relative overflow-hidden">
-          <FloatingDecorations variant="section" />
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center mb-16">
-              <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-                Our <span className="text-primary">Process</span>
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                {omniVoice.reassurance.everyStep}
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
-              {[
-                { step: "01", title: "Discovery", desc: "Understanding your vision, values, and goals" },
-                { step: "02", title: "Strategy", desc: "Developing a comprehensive plan for success" },
-                { step: "03", title: "Creation", desc: "Bringing your story to life with authentic content" },
-                { step: "04", title: "Impact", desc: "Measuring results and optimizing for growth" }
-              ].map((phase, index) => (
-                <div 
-                  key={phase.step}
-                  className="text-center animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.2}s` }}
-                >
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 motion-safe:animate-breathing-slow">
-                    <span className="text-white font-bold text-lg">{phase.step}</span>
-                  </div>
-                  <h3 className="font-heading font-semibold text-xl mb-2">{phase.title}</h3>
-                  <p className="text-gray-600">{phase.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="py-20 bg-white relative overflow-hidden">
-          <FloatingDecorations variant="hero" />
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <CuratorTip 
-              curator="chad" 
-              message={omniVoice.curatorVoices.chad.intro}
-              variant="card"
-              className="mb-8"
+          {/* Real photograph: our stage at The Masque Theatre, 10 Aug 2026.
+              The handoff shipped a "photo to come" plate here; this is the
+              consent-cleared image from the event media pack. */}
+          <figure className="mt-12 overflow-hidden rounded-[18px]" style={{ border: `1px solid ${CARD_BORDER}` }}>
+            <img
+              src="/screenings/night/stage-screen-wide.webp"
+              alt="The Omni Wellness Media stage and full cinema screen at The Masque Theatre"
+              className="h-[240px] w-full object-cover sm:h-[300px]"
             />
-            <h2 className="font-heading font-bold text-3xl sm:text-4xl mb-6">
-              Ready to Create <span className="text-primary">Positive Change</span>?
-            </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              {omniVoice.reassurance.noPressure}
-            </p>
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 text-lg rounded-full shadow-lg">
-              <Link to="/contact">{omniVoice.ctas.start}</Link>
-            </Button>
+          </figure>
+
+          {/* Jump nav */}
+          <nav aria-label="Service categories" className="mt-10 flex flex-wrap gap-2">
+            {[
+              ...SERVICE_BANDS.map((b) => ({ href: `#${b.id}`, label: b.heading, hue: b.hue })),
+              { href: "#quote", label: "Quotation-based", hue: SLATE },
+            ].map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] transition-colors hover:bg-[rgba(247,243,234,.12)]"
+                style={{ border: `1px solid ${CARD_BORDER}`, color: MIST }}
+              >
+                <span aria-hidden="true" className="h-[7px] w-[7px] rounded-full" style={{ background: l.hue }} />
+                {l.label}
+              </a>
+            ))}
+          </nav>
+        </section>
+
+        <div className="mx-auto max-w-[1180px] px-5 sm:px-8">
+          <SpectrumRule />
+        </div>
+
+        {/* Offer bands */}
+        {SERVICE_BANDS.map((band) => (
+          <section key={band.id} id={band.id} className="mx-auto max-w-[1180px] scroll-mt-24 px-5 pt-[72px] sm:px-8">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <div>
+                <p className="flex items-center gap-3 text-[11px] uppercase tracking-[.22em]" style={{ ...mono, color: SLATE }}>
+                  <span aria-hidden="true" className="h-[9px] w-[9px] rounded-full" style={{ background: band.hue }} />
+                  {band.eyebrow}
+                </p>
+                <h2 className="mt-3 font-wwpl-display text-[36px] font-normal leading-tight" style={{ color: CREAM }}>
+                  {band.heading}
+                </h2>
+              </div>
+              {band.explore && (
+                <Link to={band.explore.href} className="text-[14px] underline-offset-4 hover:underline" style={{ color: band.hue }}>
+                  {band.explore.label} →
+                </Link>
+              )}
+            </div>
+            <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {band.offers.map((o) => (
+                <OfferCard key={o.slug} offer={o} />
+              ))}
+            </div>
+            {band.footnote && (
+              <p className="mt-6 max-w-[80ch] text-[12.5px] leading-relaxed" style={{ color: SLATE }}>
+                {band.footnote}
+              </p>
+            )}
+          </section>
+        ))}
+
+        {/* Quotation-based */}
+        <section id="quote" className="mx-auto max-w-[1180px] scroll-mt-24 px-5 pt-[72px] sm:px-8">
+          <p className="text-[11px] uppercase tracking-[.22em]" style={{ ...mono, color: SLATE }}>
+            07 · Quotation-based
+          </p>
+          <h2 className="mt-3 max-w-[26ch] font-wwpl-display text-[36px] font-normal leading-tight" style={{ color: CREAM }}>
+            Some work should not carry a price tag until we understand it.
+          </h2>
+          <p className="mt-4 max-w-[62ch] text-[15px] leading-relaxed" style={{ color: MIST }}>
+            These are scoped after a paid discovery or audit, so the number you receive is one we
+            can both stand behind.
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {QUOTED_CATEGORIES.map((q) => (
+              <div key={q.area} className="rounded-[16px] p-5" style={{ background: "rgba(247,243,234,.06)", border: `1px solid ${HAIRLINE}` }}>
+                <p className="text-[11px] uppercase tracking-[.18em]" style={{ ...mono, color: CLAY }}>
+                  {q.area}
+                </p>
+                <p className="mt-2 text-[14px] leading-relaxed" style={{ color: MIST }}>
+                  {q.detail}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/contact?service=quotation"
+              className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-medium"
+              style={{ background: CREAM, color: INK }}
+            >
+              Request a quotation <ArrowRight className="h-4 w-4" />
+            </Link>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackWhatsappClick("services_quotation")}
+              className="inline-flex items-center rounded-full px-6 py-3 text-[14px] hover:bg-[rgba(247,243,234,.12)]"
+              style={{ border: `1px solid ${CARD_BORDER}`, color: CREAM }}
+            >
+              WhatsApp us
+            </a>
+          </div>
+        </section>
+
+        {/* Our work */}
+        <section className="mx-auto max-w-[1180px] px-5 pt-[72px] sm:px-8">
+          <p className="text-[11px] uppercase tracking-[.22em]" style={{ ...mono, color: SLATE }}>
+            Our work
+          </p>
+          <h2 className="mt-3 font-wwpl-display text-[36px] font-normal leading-tight" style={{ color: CREAM }}>
+            Projects behind the practice
+          </h2>
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {PRACTICE_PROJECTS.map((p) => (
+              <Link
+                key={p.name}
+                to={p.href}
+                className="group relative overflow-hidden rounded-[18px] p-6 transition-colors hover:bg-[rgba(247,243,234,.09)]"
+                style={{ background: CARD_BG, border: `1px solid ${CARD_BORDER}` }}
+              >
+                <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[2px]" style={{ background: p.hue }} />
+                <h3 className="font-wwpl-display text-[24px]" style={{ color: CREAM }}>
+                  {p.name}
+                </h3>
+                <p className="mt-3 text-[14px] leading-relaxed" style={{ color: MIST }}>
+                  {p.detail}
+                </p>
+                <span className="mt-4 inline-flex items-center gap-1 text-[13.5px] group-hover:underline" style={{ color: p.hue }}>
+                  Visit the project <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Commercial terms */}
+        <section className="mx-auto max-w-[1180px] px-5 pb-24 pt-[72px] sm:px-8">
+          <p className="text-[11px] uppercase tracking-[.22em]" style={{ ...mono, color: SLATE }}>
+            How we work
+          </p>
+          <h2 className="mt-3 font-wwpl-display text-[36px] font-normal leading-tight" style={{ color: CREAM }}>
+            Standard commercial terms
+          </h2>
+          <ul className="mt-8 grid gap-x-10 gap-y-3 md:grid-cols-2">
+            {RATE_CARD_TERMS.map((t) => (
+              <li key={t} className="flex items-start gap-3 text-[14px] leading-relaxed" style={{ color: MIST }}>
+                <span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] flex-none rounded-full" style={{ background: CLAY }} />
+                {t}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-14">
+            <SpectrumRule />
           </div>
         </section>
       </main>
