@@ -34,15 +34,11 @@ import { Loader2, Plus, Store, Package, Eye, EyeOff, Pencil, ArrowLeft } from 'l
  * Nothing here is visible to the public until an admin publishes it.
  */
 
-const CATEGORIES = [
-  'Food and drink',
-  'Skincare and body',
-  'Wellness services',
-  'Craft and homeware',
-  'Clothing',
-  'Books and media',
-  'Other',
-] as const;
+// Canonical shared taxonomy: the marketplace filters normalise through the
+// same module, so what Feroza picks here is exactly what shoppers filter by.
+import { CATALOGUE_CATEGORIES } from '@/data/catalogueCategories';
+
+const CATEGORIES = CATALOGUE_CATEGORIES;
 
 const PRODUCT_TYPES = ['product', 'service', 'package', 'retreat', 'digital'] as const;
 
@@ -107,6 +103,7 @@ const LocalCatalogue = () => {
   const [bizForm, setBizForm] = useState({ ...emptyBusiness });
 
   const [prodOpen, setProdOpen] = useState(false);
+  const [prodEditing, setProdEditing] = useState<Product | null>(null);
   const [prodForm, setProdForm] = useState({ ...emptyProduct });
 
   const load = useCallback(async () => {
@@ -204,15 +201,33 @@ const LocalCatalogue = () => {
       toast({ title: bizEditing ? 'Business updated' : 'Business saved as a draft' });
       setBizOpen(false);
       await load();
-    } catch {
+    } catch (e) {
       toast({
         title: 'Could not save',
-        description: 'Something went wrong on our side. Your details are still here, please try again.',
+        description: explainSaveError(e),
         variant: 'destructive',
       });
     } finally {
       setSaving(false);
     }
+  };
+
+  /**
+   * Turn a Supabase error into a message a person can act on. The earlier
+   * catch-all toast hid the actual reason, which made every save failure an
+   * unanswerable "it did not work" report. RLS denials get a specific
+   * explanation because they are the one failure a manager can hit by
+   * design (published rows are admin territory).
+   */
+  const explainSaveError = (e: unknown): string => {
+    const err = e as { code?: string; message?: string } | null;
+    if (err?.code === '42501') {
+      return 'This listing is published, and published listings are locked for catalogue managers. Ask an admin to move it back to draft, or to make the change.';
+    }
+    console.error('Catalogue save error:', err);
+    return err?.message
+      ? `The database said: ${err.message}`
+      : 'Something went wrong on our side. Your details are still here, please try again.';
   };
 
   const saveProduct = async () => {
@@ -229,26 +244,45 @@ const LocalCatalogue = () => {
     setSaving(true);
     try {
       const db = supabase as unknown as { from: (t: string) => any };
-      const { error } = await db.from('products').insert({
-        business_id: selected.id,
+      const payload = {
         name: prodForm.name.trim(),
         description: prodForm.description.trim() || null,
         category: prodForm.category || selected.category || 'Other',
-        provider: selected.name,
         type: prodForm.type,
         price_zar: price,
         image_url: prodForm.image_url.trim() || null,
-        status: 'draft',
-      });
+      };
+      let error;
+      if (prodEditing) {
+        ({ error } = await db.from('products').update(payload).eq('id', prodEditing.id));
+      } else {
+        const insertRow = {
+          ...payload,
+          business_id: selected.id,
+          provider: selected.name,
+          status: 'draft',
+        };
+        ({ error } = await db.from('products').insert(insertRow));
+        // Schema lag fallback: on environments where price_wellcoins is
+        // still NOT NULL (the migration dropping it not applied), the
+        // insert fails with 23502. A catalogue product has no WellCoins
+        // price; store 0 rather than losing Feroza's work, and say so
+        // loudly so the migration gets applied.
+        if (error && error.code === '23502' && String(error.message || '').includes('price_wellcoins')) {
+          console.error('products.price_wellcoins is still NOT NULL: apply migration 20260819120000. Falling back to 0.');
+          ({ error } = await db.from('products').insert({ ...insertRow, price_wellcoins: 0 }));
+        }
+      }
       if (error) throw error;
-      toast({ title: 'Product saved as a draft' });
+      toast({ title: prodEditing ? 'Product updated' : 'Product saved as a draft' });
       setProdForm({ ...emptyProduct });
+      setProdEditing(null);
       setProdOpen(false);
       await load();
-    } catch {
+    } catch (e) {
       toast({
         title: 'Could not save the product',
-        description: 'Something went wrong on our side. Please try again.',
+        description: explainSaveError(e),
         variant: 'destructive',
       });
     } finally {
@@ -339,7 +373,14 @@ const LocalCatalogue = () => {
 
         <div className="mt-6 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Products ({list.length})</h2>
-          <Button size="sm" onClick={() => setProdOpen(true)}>
+          <Button
+            size="sm"
+            onClick={() => {
+              setProdEditing(null);
+              setProdForm({ ...emptyProduct });
+              setProdOpen(true);
+            }}
+          >
             <Plus className="mr-2 h-4 w-4" /> Add product
           </Button>
         </div>
@@ -361,6 +402,24 @@ const LocalCatalogue = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   {statusBadge(p.status)}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setProdEditing(p);
+                      setProdForm({
+                        name: p.name,
+                        description: p.description ?? '',
+                        category: p.category ?? '',
+                        type: p.type || 'product',
+                        price_zar: String(p.price_zar ?? ''),
+                        image_url: p.image_url ?? '',
+                      });
+                      setProdOpen(true);
+                    }}
+                  >
+                    <Pencil className="mr-2 h-4 w-4" /> Edit
+                  </Button>
                   {isAdmin && selected.status === 'published' && (
                     p.status !== 'published' ? (
                       <Button size="sm" variant="outline" onClick={() => setStatus('products', p.id, 'published')}>
@@ -381,8 +440,12 @@ const LocalCatalogue = () => {
         <Dialog open={prodOpen} onOpenChange={setProdOpen}>
           <DialogContent className="max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Add a product</DialogTitle>
-              <DialogDescription>Saved as a draft. An admin publishes it.</DialogDescription>
+              <DialogTitle>{prodEditing ? 'Edit product' : 'Add a product'}</DialogTitle>
+              <DialogDescription>
+                {prodEditing
+                  ? 'Changes to a published product need an admin.'
+                  : 'Saved as a draft. An admin publishes it.'}
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div>
@@ -394,6 +457,17 @@ const LocalCatalogue = () => {
                 <Label htmlFor="p-desc">Description</Label>
                 <Textarea id="p-desc" rows={3} className="mt-1.5" value={prodForm.description}
                   onChange={(e) => setProdForm({ ...prodForm, description: e.target.value })} />
+              </div>
+              <div>
+                <Label htmlFor="p-cat">Category</Label>
+                <Select value={prodForm.category} onValueChange={(v) => setProdForm({ ...prodForm, category: v })}>
+                  <SelectTrigger id="p-cat" className="mt-1.5">
+                    <SelectValue placeholder="Same as the business" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
@@ -422,7 +496,7 @@ const LocalCatalogue = () => {
             <DialogFooter>
               <Button variant="outline" onClick={() => setProdOpen(false)}>Cancel</Button>
               <Button onClick={saveProduct} disabled={saving}>
-                {saving ? 'Saving...' : 'Save as draft'}
+                {saving ? 'Saving...' : prodEditing ? 'Save changes' : 'Save as draft'}
               </Button>
             </DialogFooter>
           </DialogContent>
