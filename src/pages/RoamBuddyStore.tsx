@@ -350,7 +350,7 @@ const RoamBuddyStore = () => {
               <div className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 rounded-full p-6 mb-6">
                 <span className="text-5xl">🧭</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="mb-4 font-wwpl-display text-4xl font-medium md:text-5xl">
                 Begin Your Connected Wellness Journey
               </h2>
               <p className="text-xl text-white/90">

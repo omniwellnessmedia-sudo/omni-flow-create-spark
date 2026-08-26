@@ -16,6 +16,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { trackAdsConversion } from '@/lib/googleAds';
 import { trackLead } from '@/lib/socialPixels';
+import { Reveal } from '@/components/services/spectrum';
+import { IMAGES } from '@/lib/images';
 
 /**
  * Impact Screenings: the screening-as-a-service offering.
@@ -480,6 +482,67 @@ const NightMediaStrip = () => {
 };
 
 /**
+ * Film grain: a tiny SVG turbulence tile, inlined so no asset loads. Laid
+ * over the hero at low opacity it takes the digital edge off the phone
+ * photograph and reads as cinema rather than compression.
+ */
+const GRAIN_URI =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E";
+
+/** A sprocket-holed film strip edge, drawn inline. Decorative only. */
+const FilmStripEdge = ({ className = '' }: { className?: string }) => (
+  <div aria-hidden="true" className={`pointer-events-none overflow-hidden ${className}`}>
+    <svg width="100%" height="26" preserveAspectRatio="none">
+      <defs>
+        <pattern id="sprockets" width="34" height="26" patternUnits="userSpaceOnUse">
+          <rect width="34" height="26" fill="rgba(21,32,31,.92)" />
+          <rect x="11" y="8" width="12" height="10" rx="2" fill="rgba(246,241,232,.16)" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="26" fill="url(#sprockets)" />
+    </svg>
+  </div>
+);
+
+/**
+ * The cinema collage: overlapping, gently rotated frames mixing Omni's own
+ * production photography (Artscape, conservation and Human Animal shoots,
+ * owned and licensed) with one frame from the 10 August night. Captions are
+ * factual location and project descriptions: no organisation is presented
+ * as a partner of this offering, no figures, no award recipients.
+ */
+const COLLAGE = [
+  {
+    src: IMAGES.services.artscape,
+    alt: 'On stage at the Artscape Theatre during an Omni production',
+    caption: 'Artscape Theatre, Cape Town',
+    span: 'col-span-2 row-span-2',
+    tilt: 'rotate-[-1.2deg]',
+  },
+  {
+    src: IMAGES.services.chadBwc,
+    alt: 'A quiet moment with a rescued cow during a conservation shoot',
+    caption: 'Conservation stories, on location',
+    span: '',
+    tilt: 'rotate-[1.6deg] translate-y-2',
+  },
+  {
+    src: IMAGES.services.humanAnimal2,
+    alt: 'Filming for the Human Animal Project',
+    caption: 'The Human Animal Project',
+    span: '',
+    tilt: 'rotate-[-2deg]',
+  },
+  {
+    src: '/screenings/night/qa-panel-wide.webp',
+    alt: 'A panel conversation in progress on stage after a screening',
+    caption: 'The Masque Theatre, 10 August 2026',
+    span: '',
+    tilt: 'rotate-[1.2deg] -translate-y-1',
+  },
+];
+
+/**
  * CONSENT GATED, see COPY RULE 6. This list ships empty and the section
  * below it renders nothing while it stays empty. An entry may be added ONLY
  * with the person's exact words and their written permission to publish
@@ -572,10 +635,27 @@ const Screenings = () => {
             src="/screenings/night/stage-banner-wide.webp"
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center opacity-45"
+            className="absolute inset-0 h-full w-full object-cover object-center opacity-35 blur-[2px] scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(21,32,31,.55)] via-[rgba(42,10,30,.55)] to-[rgba(21,32,31,.82)]" />
-          <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-20 text-center sm:pt-24">
+          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(21,32,31,.62)] via-[rgba(42,10,30,.6)] to-[rgba(21,32,31,.9)]" />
+          {/* Two stage spotlights, drawn as radial gradients */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 left-[12%] h-[480px] w-[380px] opacity-[.32]"
+            style={{ background: 'radial-gradient(ellipse at top, rgba(240,217,168,.8), transparent 62%)' }}
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-16 right-[8%] h-[420px] w-[320px] opacity-[.2]"
+            style={{ background: 'radial-gradient(ellipse at top, rgba(217,179,108,.8), transparent 60%)' }}
+          />
+          {/* Film grain */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-[.16] mix-blend-overlay"
+            style={{ backgroundImage: `url("${GRAIN_URI}")` }}
+          />
+          <div className="relative mx-auto max-w-5xl px-5 pb-20 pt-20 text-center sm:pt-24">
             <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldLight">
               Impact screenings · Muizenberg, Kalk Bay, Fish Hoek
             </p>
@@ -602,6 +682,7 @@ const Screenings = () => {
               Photographed at The Masque Theatre on 10 August 2026.
             </p>
           </div>
+          <FilmStripEdge className="absolute inset-x-0 bottom-0" />
         </section>
 
         {/* Proof stats. Governed figures only: see the COPY RULES header. */}
@@ -645,6 +726,40 @@ const Screenings = () => {
               <a href="/awards" className="text-wwpl-goldLight underline underline-offset-4 hover:text-wwpl-cream">
                 See the awards register
               </a>
+            </div>
+          </div>
+        </section>
+
+        {/* The craft collage. Owned production photography (see COLLAGE
+            header) proving the standard of work behind a night. */}
+        <section className="overflow-hidden border-b border-wwpl-line bg-white py-16">
+          <div className="mx-auto max-w-5xl px-5">
+            <Reveal>
+              <div className="text-center">
+                <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+                  The craft behind the night
+                </p>
+                <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold text-wwpl-ink">
+                  Theatres, cameras and causes are our home ground
+                </h2>
+              </div>
+            </Reveal>
+            <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4 md:grid-rows-2">
+              {COLLAGE.map((c, i) => (
+                <Reveal key={c.caption} delay={i * 110} className={c.span}>
+                  <figure className={`group flex h-full flex-col overflow-hidden rounded-[14px] border border-wwpl-line bg-wwpl-ink shadow-[0_10px_28px_rgba(21,32,31,.16)] transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] ${c.tilt}`}>
+                    <img
+                      src={c.src}
+                      alt={c.alt}
+                      loading="lazy"
+                      className="h-[150px] w-full flex-1 object-cover transition-transform duration-700 group-hover:scale-[1.06] sm:h-[190px] md:h-auto md:min-h-[150px]"
+                    />
+                    <figcaption className="bg-wwpl-ink px-3 py-2 text-[11px] uppercase tracking-[.14em] text-wwpl-goldLight">
+                      {c.caption}
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              ))}
             </div>
           </div>
         </section>
