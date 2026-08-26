@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSEO } from '@/lib/seo';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
@@ -16,6 +16,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { trackAdsConversion } from '@/lib/googleAds';
 import { trackLead } from '@/lib/socialPixels';
+import { Reveal } from '@/components/services/spectrum';
+import { IMAGES } from '@/lib/images';
 
 /**
  * Impact Screenings: the screening-as-a-service offering.
@@ -79,6 +81,24 @@ import { trackLead } from '@/lib/socialPixels';
  *      literally contains the word and cannot change without breaking a
  *      live link. A future sweep must not read those hits as unfixed and
  *      start deleting event history. None of them is on this page.
+ *
+ *   6. TESTIMONIALS ARE CONSENT GATED (requested by Tumelo, 24 Aug 2026).
+ *      The earlier prohibition on testimonials existed because none existed
+ *      in verified, consented form, and that condition still holds. The
+ *      TESTIMONIALS list below ships EMPTY and its section renders nothing
+ *      until a quote is added that has ALL of: the person's exact words,
+ *      their written permission to publish on this page, and an attribution
+ *      that names no organisation (the ban on presenting any org as a
+ *      sponsor, funder, partner or endorser of this offering still stands,
+ *      and internal team praise is not a testimonial). Never paraphrase,
+ *      never compose a quote on someone's behalf, never source a quote from
+ *      a private email without that person's explicit written consent.
+ *
+ *   7. MISSION SECTION language is drawn from approved brand copy (the
+ *      site-wide tagline and the About page story) and this page's own
+ *      governed voice. It makes no factual claim beyond what the verified
+ *      figures already establish. "Over 200 businesses" from the voice
+ *      guide is unverified and must not appear here.
  *
  * Enquiries submit through the LIVE submit-contact edge function (writes to
  * contact_submissions and emails the team). Deliberately not a new backend:
@@ -255,6 +275,283 @@ const CAPABILITIES = [
 const RIGHTS_GATE =
   'No screening date is announced or sold until written exhibition rights and the classification position are documented for that title. This applies to films we source and to films clients bring to us.';
 
+/**
+ * Event-night gallery, added 23 August 2026 from the post-event media pack.
+ *
+ * CONSENT GATE ON THIS LIST. Only media cleared against COPY RULE 4 may be
+ * added here: no photograph or video in which an award recipient is
+ * identifiable, and no frame in which a ceremony slide's honouree name or
+ * portrait is legible. Of the 29 images in the pack, 5 cleared; the other 24
+ * stay in Drive until written consent exists. Anything placed in
+ * /public/screenings/night/ is publicly reachable by URL whether rendered or
+ * not, so an uncleared file must never be committed "for later".
+ *
+ * Captions and alt text name no individual and quantify no attendance.
+ *
+ * type: 'video' is already supported by the strip below (muted, looping,
+ * autoplay only while on screen) so phone clips from the pack can be added
+ * by extending this array once they are received and cleared.
+ */
+type NightMedia = {
+  type: 'image' | 'video';
+  src: string;
+  poster?: string;
+  orientation: 'portrait' | 'landscape';
+  alt: string;
+  caption: string;
+};
+
+const NIGHT_MEDIA: NightMedia[] = [
+  {
+    type: 'image',
+    src: '/screenings/night/stage-banner-wide.webp',
+    orientation: 'landscape',
+    alt: 'The Masque Theatre stage dressed with the campaign banner before the evening began',
+    caption: 'The stage, dressed and ready',
+  },
+  {
+    type: 'image',
+    src: '/screenings/night/stage-screen-wide.webp',
+    orientation: 'landscape',
+    alt: 'The full cinema screen and stage set at The Masque Theatre',
+    caption: 'A real theatre screen, not a boardroom projector',
+  },
+  {
+    type: 'image',
+    src: '/screenings/night/qa-panel-wide.webp',
+    orientation: 'landscape',
+    alt: 'A panel conversation in progress on stage after a screening',
+    caption: 'The conversation that turns a screening into a room',
+  },
+  {
+    type: 'image',
+    src: '/screenings/night/mc-poster-portrait.webp',
+    orientation: 'portrait',
+    alt: 'The host on stage beside the event poster',
+    caption: 'Hosted from first welcome to last thank you',
+  },
+  {
+    type: 'image',
+    src: '/screenings/night/performance-wide.webp',
+    orientation: 'landscape',
+    alt: 'A live performance moment on the stage during the evening',
+    caption: 'Live performance woven between sessions',
+  },
+];
+
+/** One card in the strip. Videos autoplay muted only while visible. */
+const NightMediaCard = ({ item, ariaHidden }: { item: NightMedia; ariaHidden?: boolean }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) el.play().catch(() => undefined);
+        else el.pause();
+      },
+      { threshold: 0.35 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const widthClass =
+    item.orientation === 'portrait'
+      ? 'w-[220px] sm:w-[236px]'
+      : 'w-[min(560px,84vw)]';
+
+  return (
+    <figure
+      aria-hidden={ariaHidden || undefined}
+      className={`group relative h-[380px] sm:h-[420px] ${widthClass} flex-none overflow-hidden rounded-[18px] border border-wwpl-line bg-wwpl-ink`}
+    >
+      {item.type === 'video' ? (
+        <video
+          ref={videoRef}
+          src={item.src}
+          poster={item.poster}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover"
+          aria-label={item.alt}
+        />
+      ) : (
+        <img
+          src={item.src}
+          alt={ariaHidden ? '' : item.alt}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      )}
+      <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(21,32,31,.85)] to-transparent px-4 pb-3 pt-10 text-[13px] font-medium text-wwpl-cream">
+        {item.caption}
+      </figcaption>
+    </figure>
+  );
+};
+
+/**
+ * Horizontal strip with a slow automatic drift, in the manner of a stories
+ * rail. The list is rendered twice so the loop is seamless; the second copy
+ * is aria-hidden. The drift pauses on hover, touch and keyboard focus, and
+ * never starts at all for prefers-reduced-motion users, who scroll by hand.
+ */
+const NightMediaStrip = () => {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let raf = 0;
+    let resumeTimer = 0;
+    let last = performance.now();
+    // Fractional scrollLeft is lost to rounding on some engines, so the
+    // position accumulates here and is written out whole.
+    let pos = track.scrollLeft;
+
+    const step = (now: number) => {
+      const dt = Math.min(now - last, 64);
+      last = now;
+      if (!pausedRef.current && track.scrollWidth > track.clientWidth) {
+        pos += dt * 0.018;
+        const half = track.scrollWidth / 2;
+        if (pos >= half) pos -= half;
+        track.scrollLeft = pos;
+      } else {
+        pos = track.scrollLeft;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+
+    const pause = () => {
+      window.clearTimeout(resumeTimer);
+      pausedRef.current = true;
+    };
+    const resume = () => {
+      pausedRef.current = false;
+      pos = track.scrollLeft;
+    };
+    const resumeSoon = () => {
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(resume, 2500);
+    };
+
+    track.addEventListener('pointerenter', pause);
+    track.addEventListener('pointerleave', resume);
+    track.addEventListener('touchstart', pause, { passive: true });
+    track.addEventListener('touchend', resumeSoon, { passive: true });
+    track.addEventListener('focusin', pause);
+    track.addEventListener('focusout', resume);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(resumeTimer);
+      track.removeEventListener('pointerenter', pause);
+      track.removeEventListener('pointerleave', resume);
+      track.removeEventListener('touchstart', pause);
+      track.removeEventListener('touchend', resumeSoon);
+      track.removeEventListener('focusin', pause);
+      track.removeEventListener('focusout', resume);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={trackRef}
+      className="flex gap-4 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      role="region"
+      aria-label="Photographs from the 10 August 2026 event"
+      tabIndex={0}
+    >
+      {NIGHT_MEDIA.map((item) => (
+        <NightMediaCard key={item.src} item={item} />
+      ))}
+      {NIGHT_MEDIA.map((item) => (
+        <NightMediaCard key={`${item.src}-loop`} item={item} ariaHidden />
+      ))}
+    </div>
+  );
+};
+
+/**
+ * Film grain: a tiny SVG turbulence tile, inlined so no asset loads. Laid
+ * over the hero at low opacity it takes the digital edge off the phone
+ * photograph and reads as cinema rather than compression.
+ */
+const GRAIN_URI =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E";
+
+/** A sprocket-holed film strip edge, drawn inline. Decorative only. */
+const FilmStripEdge = ({ className = '' }: { className?: string }) => (
+  <div aria-hidden="true" className={`pointer-events-none overflow-hidden ${className}`}>
+    <svg width="100%" height="26" preserveAspectRatio="none">
+      <defs>
+        <pattern id="sprockets" width="34" height="26" patternUnits="userSpaceOnUse">
+          <rect width="34" height="26" fill="rgba(21,32,31,.92)" />
+          <rect x="11" y="8" width="12" height="10" rx="2" fill="rgba(246,241,232,.16)" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="26" fill="url(#sprockets)" />
+    </svg>
+  </div>
+);
+
+/**
+ * The cinema collage: overlapping, gently rotated frames mixing Omni's own
+ * production photography (Artscape, conservation and Human Animal shoots,
+ * owned and licensed) with one frame from the 10 August night. Captions are
+ * factual location and project descriptions: no organisation is presented
+ * as a partner of this offering, no figures, no award recipients.
+ */
+const COLLAGE = [
+  {
+    src: IMAGES.services.artscape,
+    alt: 'On stage at the Artscape Theatre during an Omni production',
+    caption: 'Artscape Theatre, Cape Town',
+    span: 'col-span-2 row-span-2',
+    tilt: 'rotate-[-1.2deg]',
+  },
+  {
+    src: IMAGES.services.chadBwc,
+    alt: 'A quiet moment with a rescued cow during a conservation shoot',
+    caption: 'Conservation stories, on location',
+    span: '',
+    tilt: 'rotate-[1.6deg] translate-y-2',
+  },
+  {
+    src: IMAGES.services.humanAnimal2,
+    alt: 'Filming for the Human Animal Project',
+    caption: 'The Human Animal Project',
+    span: '',
+    tilt: 'rotate-[-2deg]',
+  },
+  {
+    src: '/screenings/night/qa-panel-wide.webp',
+    alt: 'A panel conversation in progress on stage after a screening',
+    caption: 'The Masque Theatre, 10 August 2026',
+    span: '',
+    tilt: 'rotate-[1.2deg] -translate-y-1',
+  },
+];
+
+/**
+ * CONSENT GATED, see COPY RULE 6. This list ships empty and the section
+ * below it renders nothing while it stays empty. An entry may be added ONLY
+ * with the person's exact words and their written permission to publish
+ * here, and the attribution must name no organisation. Keep `role` to a
+ * neutral description such as "Filmmaker" or "Guest, 10 August 2026".
+ */
+type Testimonial = { quote: string; name: string; role: string };
+const TESTIMONIALS: Testimonial[] = [];
+
 const Screenings = () => {
   useSEO({
     title: 'Impact Screenings | Film Screening as a Service | Omni Wellness Media',
@@ -330,31 +627,62 @@ const Screenings = () => {
       <UnifiedNavigation />
       <main className="bg-wwpl-cream text-wwpl-ink">
 
-        {/* Hero */}
-        <section className="border-b border-wwpl-line">
-          <div className="mx-auto max-w-5xl px-5 pb-16 pt-20 text-center sm:pt-24">
-            <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+        {/* Hero. The background is a real photograph of our stage on the
+            night (consent-cleared, see NIGHT_MEDIA rules); the ink overlay
+            keeps the text legible over it at every width. */}
+        <section className="relative overflow-hidden border-b border-wwpl-line bg-wwpl-ink">
+          <img
+            src="/screenings/night/stage-banner-wide.webp"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover object-center opacity-35 blur-[2px] scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(21,32,31,.62)] via-[rgba(42,10,30,.6)] to-[rgba(21,32,31,.9)]" />
+          {/* Two stage spotlights, drawn as radial gradients */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 left-[12%] h-[480px] w-[380px] opacity-[.32]"
+            style={{ background: 'radial-gradient(ellipse at top, rgba(240,217,168,.8), transparent 62%)' }}
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-16 right-[8%] h-[420px] w-[320px] opacity-[.2]"
+            style={{ background: 'radial-gradient(ellipse at top, rgba(217,179,108,.8), transparent 60%)' }}
+          />
+          {/* Film grain */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-[.16] mix-blend-overlay"
+            style={{ backgroundImage: `url("${GRAIN_URI}")` }}
+          />
+          <div className="relative mx-auto max-w-5xl px-5 pb-20 pt-20 text-center sm:pt-24">
+            <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldLight">
               Impact screenings · Muizenberg, Kalk Bay, Fish Hoek
             </p>
-            <h1 className="mx-auto mt-4 max-w-[22ch] font-wwpl-display text-[clamp(34px,6vw,54px)] font-semibold leading-[1.08]">
+            <h1 className="mx-auto mt-4 max-w-[22ch] font-wwpl-display text-[clamp(34px,6vw,54px)] font-semibold leading-[1.08] text-wwpl-cream">
               Your film deserves this audience.
             </h1>
-            <p className="mx-auto mt-5 max-w-[58ch] text-[17px] leading-relaxed text-wwpl-slate">
+            <p className="mx-auto mt-5 max-w-[58ch] text-[17px] leading-relaxed text-[rgba(246,241,232,.85)]">
               We stage documentary nights at The Masque Theatre for the Southern Peninsula's conscious
               community, and wrap them in a campaign: panel, awards, press. You bring the film.
               We deliver the audience, the occasion, and the proof it mattered.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               {/* btn-primary applies a teal gradient via background-image, so the
-                  brand override needs !bg-none as well as the plum colour. */}
-              <Button size="lg" className="!bg-none !bg-wwpl-plum !text-wwpl-cream hover:!bg-wwpl-ink" onClick={() => scrollToEnquire('hosted-screening')}>
+                  brand override needs !bg-none as well as the plum colour. On the
+                  photographic hero the primary flips to gold-on-ink for contrast. */}
+              <Button size="lg" className="!bg-none !bg-wwpl-gold !text-wwpl-ink hover:!bg-wwpl-cream" onClick={() => scrollToEnquire('hosted-screening')}>
                 Start a scoping call <ArrowRight className="ml-1.5 h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline" className="border-wwpl-line" asChild>
+              <Button size="lg" variant="outline" className="border-[rgba(246,241,232,.4)] bg-transparent text-wwpl-cream hover:bg-[rgba(246,241,232,.12)] hover:text-wwpl-cream" asChild>
                 <a href="#offerings">See the offerings</a>
               </Button>
             </div>
+            <p className="mt-6 text-[12px] text-[rgba(246,241,232,.55)]">
+              Photographed at The Masque Theatre on 10 August 2026.
+            </p>
           </div>
+          <FilmStripEdge className="absolute inset-x-0 bottom-0" />
         </section>
 
         {/* Proof stats. Governed figures only: see the COPY RULES header. */}
@@ -399,6 +727,59 @@ const Screenings = () => {
                 See the awards register
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* The craft collage. Owned production photography (see COLLAGE
+            header) proving the standard of work behind a night. */}
+        <section className="overflow-hidden border-b border-wwpl-line bg-white py-16">
+          <div className="mx-auto max-w-5xl px-5">
+            <Reveal>
+              <div className="text-center">
+                <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+                  The craft behind the night
+                </p>
+                <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold text-wwpl-ink">
+                  Theatres, cameras and causes are our home ground
+                </h2>
+              </div>
+            </Reveal>
+            <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4 md:grid-rows-2">
+              {COLLAGE.map((c, i) => (
+                <Reveal key={c.caption} delay={i * 110} className={c.span}>
+                  <figure className={`group flex h-full flex-col overflow-hidden rounded-[14px] border border-wwpl-line bg-wwpl-ink shadow-[0_10px_28px_rgba(21,32,31,.16)] transition-transform duration-500 hover:rotate-0 hover:scale-[1.02] ${c.tilt}`}>
+                    <img
+                      src={c.src}
+                      alt={c.alt}
+                      loading="lazy"
+                      className="h-[150px] w-full flex-1 object-cover transition-transform duration-700 group-hover:scale-[1.06] sm:h-[190px] md:h-auto md:min-h-[150px]"
+                    />
+                    <figcaption className="bg-wwpl-ink px-3 py-2 text-[11px] uppercase tracking-[.14em] text-wwpl-goldLight">
+                      {c.caption}
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* From the night. Consent-gated gallery: see the NIGHT_MEDIA header. */}
+        <section className="border-b border-wwpl-line bg-wwpl-cream/40 py-14">
+          <div className="mx-auto max-w-5xl px-5 text-center">
+            <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+              From the night · 10 August 2026
+            </p>
+            <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold text-wwpl-ink">
+              What the room looked like
+            </h2>
+            <p className="mx-auto mt-3 max-w-[58ch] text-[15px] text-wwpl-slate">
+              Shot on phones in the room as it happened, not a press pack. More from the night is
+              added as permissions are confirmed.
+            </p>
+          </div>
+          <div className="mx-auto mt-8 max-w-6xl">
+            <NightMediaStrip />
           </div>
         </section>
 
@@ -517,6 +898,77 @@ const Screenings = () => {
             </div>
           </div>
         </section>
+
+        {/* Why we do this. Language rules: COPY RULE 7. */}
+        <section className="border-b border-wwpl-line bg-white py-16">
+          <div className="mx-auto grid max-w-5xl items-center gap-10 px-5 md:grid-cols-2">
+            <div>
+              <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+                Why we do this
+              </p>
+              <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold">
+                A cinema night that leaves something behind
+              </h2>
+              <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-wwpl-slate">
+                <p>
+                  Omni Wellness Media exists to empower communities through conscious content,
+                  business development and wellness. Screenings are where that becomes a room:
+                  a film worth watching, the people it concerns, and a conversation that
+                  continues after the lights come up.
+                </p>
+                <p>
+                  We believe the stories behind a cause deserve the same production care as any
+                  commercial launch. So every night we stage is built to leave something behind:
+                  a certificate register that stays verifiable, partnerships that keep working,
+                  and a campaign that carries on after the credits.
+                </p>
+                <p>
+                  And every engagement follows one rule: the night is funded before it is
+                  announced. That is how a small team keeps its promises.
+                </p>
+              </div>
+            </div>
+            <figure className="overflow-hidden rounded-[18px] border border-wwpl-line">
+              <img
+                src="/screenings/night/performance-wide.webp"
+                alt="A live performance on stage during the 10 August 2026 evening at The Masque Theatre"
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+              <figcaption className="bg-wwpl-cream/60 px-4 py-2 text-[12px] text-wwpl-slate">
+                Live performance, The Masque Theatre, 10 August 2026.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        {/* Testimonials. Renders NOTHING until TESTIMONIALS carries consented
+            quotes: COPY RULE 6. Do not seed this with placeholder or invented
+            quotes under any circumstances. */}
+        {TESTIMONIALS.length > 0 && (
+          <section className="border-b border-wwpl-line py-16">
+            <div className="mx-auto max-w-5xl px-5">
+              <div className="mx-auto max-w-[60ch] text-center">
+                <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
+                  In their words
+                </p>
+                <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold">
+                  What people say about our nights
+                </h2>
+              </div>
+              <div className="mt-10 grid gap-5 md:grid-cols-2">
+                {TESTIMONIALS.map((t) => (
+                  <blockquote key={t.name} className="rounded-[18px] border border-wwpl-line bg-white p-7">
+                    <p className="text-[15px] leading-relaxed text-wwpl-ink">"{t.quote}"</p>
+                    <footer className="mt-4 text-[13px] text-wwpl-slate">
+                      <span className="font-semibold text-wwpl-plum">{t.name}</span> · {t.role}
+                    </footer>
+                  </blockquote>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Rights and licensing. Process, not accreditation: do not upgrade
             this into a claim of certification or legal service. */}

@@ -129,10 +129,13 @@ export default {
 					'Roboto',
 					'sans-serif'
 				],
+				// Unified 2026 type system: every heading face resolves to the
+				// Cormorant display used by the Spectrum pages, so the whole
+				// app reads as one site. DM Serif stays as fallback only.
 				heading: [
+					'"Cormorant Garamond"',
 					'"DM Serif Display"',
 					'Georgia',
-					'"Times New Roman"',
 					'serif'
 				],
 				serif: [

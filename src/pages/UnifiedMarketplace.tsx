@@ -20,6 +20,7 @@ import { IMAGES, getImageWithFallback, getSandyImage } from "@/lib/images";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import type { WellnessMarketplaceItem } from "@/types/marketplace";
 import { supabase } from "@/integrations/supabase/client";
+import { normaliseCategory } from "@/data/catalogueCategories";
 
 const UnifiedMarketplace = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -153,7 +154,7 @@ const UnifiedMarketplace = () => {
         description: p.description ?? '',
         provider_id: `local-${p.id}`,
         provider_name: p.provider,
-        category: p.category ?? 'Other',
+        category: normaliseCategory(p.category),
         images: p.image_url ? [p.image_url] : [],
         location: 'Cape Town',
         is_online: false,
@@ -197,9 +198,10 @@ const UnifiedMarketplace = () => {
       filtered = filtered.filter(item => item.content_type === activeTab);
     }
 
-    // Filter by category
+    // Filter by category, comparing canonical forms so legacy raw values
+    // (seed slugs, old labels) still land in the right bucket.
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(item => item.category.toLowerCase().includes(selectedCategory.toLowerCase()));
+      filtered = filtered.filter(item => normaliseCategory(item.category) === normaliseCategory(selectedCategory));
     }
 
     // Filter by search term
@@ -259,7 +261,9 @@ const UnifiedMarketplace = () => {
     }
   };
 
-  const categories = [...new Set(items.map(item => item.category))];
+  // One canonical label per category, whatever raw value an item carries.
+  // Sorting keeps the dropdown stable as sources come and go.
+  const categories = [...new Set(items.map(item => normaliseCategory(item.category)))].sort();
 
   if (loading) {
     return (
