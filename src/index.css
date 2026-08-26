@@ -242,7 +242,7 @@ html.magic-cursor-active [contenteditable=""] {
      This lives in @layer base, so any explicit text-* / font-* / leading-*
      utility on a component still wins. */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+    font-family: 'Cormorant Garamond', 'Cormorant Garamond', 'DM Serif Display', Georgia, serif;
     font-weight: 400;
     letter-spacing: -0.01em;
     text-wrap: balance;
@@ -414,21 +414,21 @@ html.magic-cursor-active [contenteditable=""] {
    tailwind.config.ts — do not redefine it here (a second unlayered copy used
    to shadow the utility layer). */
 .heading-primary {
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: 'Cormorant Garamond', 'DM Serif Display', Georgia, serif;
   @apply text-3xl sm:text-4xl lg:text-5xl text-center leading-tight;
   font-weight: 400;
   letter-spacing: -0.01em;
 }
 
 .heading-secondary {
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: 'Cormorant Garamond', 'DM Serif Display', Georgia, serif;
   @apply text-2xl sm:text-3xl lg:text-4xl text-center leading-tight;
   font-weight: 400;
   letter-spacing: -0.01em;
 }
 
 .heading-tertiary {
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: 'Cormorant Garamond', 'DM Serif Display', Georgia, serif;
   @apply text-xl sm:text-2xl text-center leading-tight;
   font-weight: 400;
 }
@@ -736,7 +736,7 @@ img {
 
 /* ===== IMPROVED TYPOGRAPHY — 2026 ===== */
 .text-hero {
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: 'Cormorant Garamond', 'DM Serif Display', Georgia, serif;
   @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] tracking-tight;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -749,7 +749,7 @@ img {
 }
 
 .text-section-title {
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: 'Cormorant Garamond', 'DM Serif Display', Georgia, serif;
   @apply text-2xl sm:text-3xl md:text-4xl leading-tight tracking-tight;
   font-weight: 400;
   letter-spacing: -0.01em;

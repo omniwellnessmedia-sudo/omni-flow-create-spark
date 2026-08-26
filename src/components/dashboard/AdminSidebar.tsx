@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Link } from "react-router-dom";
 import {
   LayoutDashboard,
   BarChart3,
@@ -16,8 +17,10 @@ import {
   Globe,
   GraduationCap,
   Wrench,
+  Store,
+  TrendingUp,
+  HandCoins,
 } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 interface AdminSidebarProps {
@@ -29,9 +32,21 @@ interface AdminSidebarProps {
   className?: string;
 }
 
-const NAV_GROUPS = [
+/**
+ * Spectrum-hued admin navigation. Each group carries one hue from the site's
+ * category spectrum so the operator surface reads as part of the same design
+ * system as the public pages. Items with an `href` are standalone admin
+ * routes (the catalogue and marketplace tools live outside the dashboard's
+ * section switcher and were previously unreachable from here at all).
+ */
+const NAV_GROUPS: {
+  label: string;
+  hue: string;
+  items: { id: string; label: string; icon: typeof LayoutDashboard; href?: string }[];
+}[] = [
   {
     label: "Core",
+    hue: "#2BB9B9",
     items: [
       { id: "home", label: "Home", icon: LayoutDashboard },
       { id: "analytics", label: "Analytics", icon: BarChart3 },
@@ -42,6 +57,7 @@ const NAV_GROUPS = [
   },
   {
     label: "Manage",
+    hue: "#5C2A8A",
     items: [
       { id: "providers", label: "Providers", icon: UserCog },
       { id: "products", label: "Products", icon: Package },
@@ -51,7 +67,17 @@ const NAV_GROUPS = [
     ],
   },
   {
+    label: "Marketplace",
+    hue: "#4FAE3F",
+    items: [
+      { id: "catalogue", label: "Local Catalogue", icon: Store, href: "/admin/catalogue" },
+      { id: "affiliate-performance", label: "Affiliate Performance", icon: TrendingUp, href: "/admin/affiliate-performance" },
+      { id: "affiliate-payouts", label: "Affiliate Payouts", icon: HandCoins, href: "/admin/affiliate-payouts" },
+    ],
+  },
+  {
     label: "System",
+    hue: "#8A9A96",
     items: [
       { id: "accounting", label: "Accounting", icon: DollarSign },
       { id: "team", label: "Team", icon: UserPlus },
@@ -63,37 +89,51 @@ const NAV_GROUPS = [
   },
 ];
 
-const AdminSidebar = memo(({ activeSection, onSectionChange, alerts = {}, className = "w-48 shrink-0 hidden lg:block" }: AdminSidebarProps) => {
+const AdminSidebar = memo(({ activeSection, onSectionChange, alerts = {}, className = "w-52 shrink-0 hidden lg:block" }: AdminSidebarProps) => {
   return (
     <nav className={className}>
-      <div className="sticky top-[72px] space-y-1">
-        {NAV_GROUPS.map((group, gi) => (
+      <div className="sticky top-[72px] space-y-4">
+        {NAV_GROUPS.map((group) => (
           <div key={group.label}>
-            {gi > 0 && <Separator className="my-2" />}
-            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-1">
+            <p
+              className="mb-1.5 flex items-center gap-2 px-3 text-[10px] uppercase tracking-[.18em] text-muted-foreground"
+              style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+            >
+              <span aria-hidden="true" className="h-[6px] w-[6px] rounded-full" style={{ background: group.hue }} />
               {group.label}
             </p>
             {group.items.map((item) => {
               const isActive = activeSection === item.id;
               const alertCount = alerts[item.id] || 0;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onSectionChange(item.id)}
-                  className={cn(
-                    "w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm transition-colors",
-                    isActive
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  )}
-                >
-                  <item.icon className="h-3.5 w-3.5 shrink-0" />
+              const inner = (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-y-1 left-0 w-[3px] rounded-full transition-opacity"
+                    style={{ background: group.hue, opacity: isActive ? 1 : 0 }}
+                  />
+                  <item.icon className="h-3.5 w-3.5 shrink-0" style={isActive ? { color: group.hue } : undefined} />
                   <span className="truncate">{item.label}</span>
                   {alertCount > 0 && (
-                    <span className="ml-auto text-[10px] bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 px-1.5 py-0.5 rounded-full font-medium">
+                    <span className="ml-auto rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
                       {alertCount}
                     </span>
                   )}
+                </>
+              );
+              const itemClass = cn(
+                "relative w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-sm transition-colors",
+                isActive
+                  ? "bg-muted font-medium text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              );
+              return item.href ? (
+                <Link key={item.id} to={item.href} className={itemClass}>
+                  {inner}
+                </Link>
+              ) : (
+                <button key={item.id} onClick={() => onSectionChange(item.id)} className={itemClass}>
+                  {inner}
                 </button>
               );
             })}

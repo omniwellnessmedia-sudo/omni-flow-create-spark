@@ -106,6 +106,58 @@ const LocalCatalogue = () => {
   const [prodEditing, setProdEditing] = useState<Product | null>(null);
   const [prodForm, setProdForm] = useState({ ...emptyProduct });
 
+  const [diagRunning, setDiagRunning] = useState(false);
+  const [diagResults, setDiagResults] = useState<string[]>([]);
+
+  /**
+   * Non-destructive system check. Each step reports OK/WARN/FAIL with the
+   * database's own error code and message, so a failed save stops being a
+   * mystery. The only write is a no-op: a draft row's current name written
+   * back to itself, which exercises the exact UPDATE path a real edit uses.
+   */
+  const runDiagnostics = async () => {
+    setDiagRunning(true);
+    const out: string[] = [];
+    const db = supabase as unknown as { from: (t: string) => any };
+    const fmt = (e: { code?: string; message?: string } | null) =>
+      e ? `${e.code || 'no-code'}: ${e.message || 'no message'}` : 'unknown error';
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      out.push(user ? `OK   signed in as ${user.email}` : 'FAIL not signed in: log out and back in, then retry');
+      if (user) {
+        const { data: roles, error: re } = await supabase
+          .from('user_roles').select('role').eq('user_id', user.id);
+        if (re) out.push(`FAIL cannot read own role (${fmt(re)}): the "Users can view their own role" policy may be missing`);
+        else if (!roles?.length) out.push('FAIL no role rows visible for this account: ask an admin to confirm the catalogue_manager role');
+        else out.push(`OK   roles visible: ${roles.map((r: { role: string }) => r.role).join(', ')}`);
+      }
+      const { data: bl, error: ble } = await db.from('local_businesses').select('id, name, status').limit(50);
+      if (ble) out.push(`FAIL cannot read businesses (${fmt(ble)})`);
+      else out.push(`OK   can read businesses (${bl?.length ?? 0} visible)`);
+      const draftBiz = (bl as Array<{ id: string; name: string; status: string }> | null)?.find((b) => b.status === 'draft');
+      if (draftBiz) {
+        const { error: ue } = await db.from('local_businesses').update({ name: draftBiz.name }).eq('id', draftBiz.id);
+        out.push(ue ? `FAIL cannot save a draft business (${fmt(ue)})` : 'OK   can save a draft business (no-op update succeeded)');
+      } else {
+        out.push('WARN no draft business to test saving against; add one and rerun');
+      }
+      const { data: pl, error: ple } = await db.from('products').select('id, name, status').not('business_id', 'is', null).limit(50);
+      if (ple) out.push(`FAIL cannot read products (${fmt(ple)})`);
+      else out.push(`OK   can read products (${pl?.length ?? 0} visible)`);
+      const draftProd = (pl as Array<{ id: string; name: string; status: string }> | null)?.find((p) => p.status === 'draft');
+      if (draftProd) {
+        const { error: pue } = await db.from('products').update({ name: draftProd.name }).eq('id', draftProd.id);
+        out.push(pue ? `FAIL cannot save a draft product (${fmt(pue)})` : 'OK   can save a draft product (no-op update succeeded)');
+      } else {
+        out.push('WARN no draft product to test saving against; add one and rerun');
+      }
+    } catch (e) {
+      out.push(`FAIL unexpected error: ${e instanceof Error ? e.message : String(e)}`);
+    }
+    setDiagResults(out);
+    setDiagRunning(false);
+  };
+
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -515,7 +567,14 @@ const LocalCatalogue = () => {
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Local catalogue</h1>
+          <p
+            className="flex items-center gap-2 text-[10px] uppercase tracking-[.2em] text-muted-foreground"
+            style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+          >
+            <span aria-hidden="true" className="h-[6px] w-[6px] rounded-full bg-[#4FAE3F]" />
+            Marketplace · Catalogue
+          </p>
+          <h1 className="mt-1 font-wwpl-display text-3xl font-medium">Local catalogue</h1>
           <p className="text-sm text-muted-foreground">
             Onboard local businesses and their products. Everything starts as a draft.
           </p>
@@ -559,6 +618,36 @@ const LocalCatalogue = () => {
           </Card>
         ))}
       </div>
+
+      {/* Self-service diagnostics. When a save fails, this turns "it did not
+          work" into an exact, screenshot-able report of which step failed and
+          what the database said. All probes are non-destructive: reads, and a
+          no-op update that writes a draft row's own current name back. */}
+      <Card className="mt-8">
+        <CardContent className="py-5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="font-medium">Something not saving?</p>
+              <p className="text-sm text-muted-foreground">
+                Run the system check and send a screenshot of the result to the team.
+              </p>
+            </div>
+            <Button variant="outline" onClick={runDiagnostics} disabled={diagRunning}>
+              {diagRunning ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Run system check
+            </Button>
+          </div>
+          {diagResults.length > 0 && (
+            <ul className="mt-4 space-y-1.5 rounded-lg border bg-muted/30 p-3 font-mono text-[12.5px] leading-relaxed">
+              {diagResults.map((r, i) => (
+                <li key={i} className={r.startsWith('FAIL') ? 'text-red-600' : r.startsWith('WARN') ? 'text-amber-700' : 'text-emerald-700'}>
+                  {r}
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
 
       <BusinessDialog
         open={bizOpen} onOpenChange={setBizOpen} form={bizForm} setForm={setBizForm}
