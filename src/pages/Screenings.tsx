@@ -18,6 +18,7 @@ import { trackAdsConversion } from '@/lib/googleAds';
 import { trackLead } from '@/lib/socialPixels';
 import { Reveal } from '@/components/services/spectrum';
 import { IMAGES } from '@/lib/images';
+import TestimonialWall from '@/components/screenings/TestimonialWall';
 
 /**
  * Impact Screenings: the screening-as-a-service offering.
@@ -82,17 +83,19 @@ import { IMAGES } from '@/lib/images';
  *      live link. A future sweep must not read those hits as unfixed and
  *      start deleting event history. None of them is on this page.
  *
- *   6. TESTIMONIALS ARE CONSENT GATED (requested by Tumelo, 24 Aug 2026).
- *      The earlier prohibition on testimonials existed because none existed
- *      in verified, consented form, and that condition still holds. The
- *      TESTIMONIALS list below ships EMPTY and its section renders nothing
- *      until a quote is added that has ALL of: the person's exact words,
- *      their written permission to publish on this page, and an attribution
- *      that names no organisation (the ban on presenting any org as a
- *      sponsor, funder, partner or endorser of this offering still stands,
- *      and internal team praise is not a testimonial). Never paraphrase,
- *      never compose a quote on someone's behalf, never source a quote from
- *      a private email without that person's explicit written consent.
+ *   6. TESTIMONIALS ARE CONSENT GATED (requested by Tumelo, 24 Aug 2026;
+ *      consent register system, 26 Aug 2026). Testimonials render through
+ *      src/components/screenings/TestimonialWall.tsx, which filters
+ *      src/data/testimonials.ts through the gate in
+ *      src/lib/testimonialGate.ts. Publication requires either written
+ *      attributed consent scoped to commercial web, or anonymous_permitted
+ *      consent with fully stripped attribution, low re-identification risk
+ *      and a quote free of blocklisted names and places. Quotes are
+ *      verbatim: the only permitted transformations are emoji stripping,
+ *      whitespace normalisation and contiguous trimming. Never paraphrase,
+ *      never compose a quote on someone's behalf, never bypass the gate.
+ *      The ban on presenting any org as a sponsor, funder, partner or
+ *      endorser of this offering still stands.
  *
  *   7. MISSION SECTION language is drawn from approved brand copy (the
  *      site-wide tagline and the About page story) and this page's own
@@ -542,22 +545,19 @@ const COLLAGE = [
   },
 ];
 
-/**
- * CONSENT GATED, see COPY RULE 6. This list ships empty and the section
- * below it renders nothing while it stays empty. An entry may be added ONLY
- * with the person's exact words and their written permission to publish
- * here, and the attribution must name no organisation. Keep `role` to a
- * neutral description such as "Filmmaker" or "Guest, 10 August 2026".
- */
-type Testimonial = { quote: string; name: string; role: string };
-const TESTIMONIALS: Testimonial[] = [];
-
 const Screenings = () => {
+  // Head for this route: distinct title and description, self-referencing
+  // canonical, og and twitter tags via the shared updateMetaTags pipeline.
+  // The image is the stage wide shot, framed so no individual is the
+  // subject, and no person's name appears in any meta tag.
   useSEO({
     title: 'Impact Screenings | Film Screening as a Service | Omni Wellness Media',
     description:
       'Turnkey documentary screenings for the Southern Peninsula, Cape Town. We deliver the audience, the theatre, the campaign moment and the recap, for filmmakers, NGOs and brands.',
     canonical: 'https://omniwellnessmedia.co.za/screenings',
+    url: 'https://omniwellnessmedia.co.za/screenings',
+    image: 'https://omniwellnessmedia.co.za/screenings/night/stage-screen-wide.webp',
+    type: 'website',
   });
 
   const { toast } = useToast();
@@ -942,33 +942,11 @@ const Screenings = () => {
           </div>
         </section>
 
-        {/* Testimonials. Renders NOTHING until TESTIMONIALS carries consented
-            quotes: COPY RULE 6. Do not seed this with placeholder or invented
-            quotes under any circumstances. */}
-        {TESTIMONIALS.length > 0 && (
-          <section className="border-b border-wwpl-line py-16">
-            <div className="mx-auto max-w-5xl px-5">
-              <div className="mx-auto max-w-[60ch] text-center">
-                <p className="font-wwpl-cond text-[12px] uppercase tracking-[.24em] text-wwpl-goldText">
-                  In their words
-                </p>
-                <h2 className="mt-3 font-wwpl-display text-[clamp(24px,4vw,32px)] font-semibold">
-                  What people say about our nights
-                </h2>
-              </div>
-              <div className="mt-10 grid gap-5 md:grid-cols-2">
-                {TESTIMONIALS.map((t) => (
-                  <blockquote key={t.name} className="rounded-[18px] border border-wwpl-line bg-white p-7">
-                    <p className="text-[15px] leading-relaxed text-wwpl-ink">"{t.quote}"</p>
-                    <footer className="mt-4 text-[13px] text-wwpl-slate">
-                      <span className="font-semibold text-wwpl-plum">{t.name}</span> · {t.role}
-                    </footer>
-                  </blockquote>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+        {/* Testimonials: consent gated, COPY RULE 6. The wall filters the
+            consent register through the gate and is absent from the DOM
+            when nothing is publishable. Below the SKU section, above the
+            enquiry call to action, per the 26 Aug 2026 direction. */}
+        <TestimonialWall />
 
         {/* Rights and licensing. Process, not accreditation: do not upgrade
             this into a claim of certification or legal service. */}

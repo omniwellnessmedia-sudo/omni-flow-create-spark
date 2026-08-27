@@ -5,7 +5,6 @@ import { RoamBuddyHero } from '@/components/roambuddy/RoamBuddyHero';
 import { CountrySearch } from '@/components/roambuddy/CountrySearch';
 import { WellnessCuratorCard } from '@/components/roambuddy/WellnessCuratorCard';
 import { RoamBuddyProductCard } from '@/components/roambuddy/RoamBuddyProductCard';
-import { RoamBuddyTestimonials } from '@/components/roambuddy/RoamBuddyTestimonials';
 import { SIMActivation } from '@/components/roambuddy/SIMActivation';
 import { DeviceCompatibility } from '@/components/roambuddy/DeviceCompatibility';
 import { RoamBuddyPartnershipSection } from '@/components/roambuddy/RoamBuddyPartnershipSection';
@@ -329,8 +328,6 @@ const RoamBuddyStore = () => {
       {/* Partnership Section */}
       <RoamBuddyPartnershipSection />
 
-      {/* Testimonials Section */}
-      <RoamBuddyTestimonials />
 
       {/* SIM Activation - Hidden for now */}
       {/* <div ref={activationRef}>

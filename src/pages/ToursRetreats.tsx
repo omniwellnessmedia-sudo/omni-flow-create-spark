@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, MapPin, Users, Mountain, Sparkles, Building2, TreePine } from "lucide-react";
 import { SmartImage } from "@/components/ui/smart-image";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import PartnerLogos from "@/components/PartnerLogos";
 import { IMAGES } from "@/lib/images";
 
@@ -186,7 +185,6 @@ const ToursRetreats = () => {
 
       {/* CTA */}
       {/* Social proof + trust — reused from the homepage (verbatim tour reviews) */}
-      <TestimonialsSection />
       <div className="container mx-auto px-4 pb-4">
         <PartnerLogos variant="compact" />
       </div>
