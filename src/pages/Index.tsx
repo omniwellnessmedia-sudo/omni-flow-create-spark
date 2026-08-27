@@ -2,7 +2,6 @@ import HeroSection from "@/components/sections/HeroSection";
 import FeaturedEventSection from "@/components/sections/FeaturedEventSection";
 import ServicesSection from "@/components/sections/ServicesSection";
 import FeaturedProjectsSection from "@/components/sections/FeaturedProjectsSection";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import ToursRetreatsPreview from "@/components/sections/ToursRetreatsPreview";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
@@ -20,7 +19,6 @@ const Index = () => {
         <FeaturedEventSection />
         <ServicesSection />
         <ToursRetreatsPreview />
-        <TestimonialsSection />
         <FeaturedProjectsSection />
         <FoundationSection />
         <PartnersSection />

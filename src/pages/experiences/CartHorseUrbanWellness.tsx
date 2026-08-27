@@ -435,35 +435,6 @@ export default function CartHorseUrbanWellness() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">What Participants Say</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                { quote: "I came expecting a nice day out. I left with a completely different understanding of what it means to be present. The horses see through everything.", name: "Dr. S. Malan", role: "Clinical Psychologist" },
-                { quote: "Our team was transformed. The conversations that happened after the horse sessions were deeper than anything we've achieved in corporate workshops.", name: "R. Abrahams", role: "HR Director" },
-                { quote: "This is what impact travel should be — real connection, real change, no performance. I'll be bringing my family back.", name: "L. Chen", role: "Conscious Traveller" },
-              ].map((testimonial, i) => (
-                <Card key={i} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <div className="flex gap-1 mb-3">
-                      {[...Array(5)].map((_, j) => (
-                        <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-sm italic text-muted-foreground mb-4">"{testimonial.quote}"</p>
-                    <p className="text-sm font-semibold">{testimonial.name}</p>
-                    <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FAQ */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">

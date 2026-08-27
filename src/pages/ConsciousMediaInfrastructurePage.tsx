@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
 import { ExternalLink, Sparkles, MessageCircle } from "lucide-react";
 import { WhyCameraStuffSection } from "@/components/conscious-media/WhyCameraStuffSection";
-import { TestimonialsSection } from "@/components/conscious-media/TestimonialsSection";
 import { CreativeExamplesSection } from "@/components/conscious-media/CreativeExamplesSection";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import { ProductFilter } from "@/components/conscious-media/ProductFilter";

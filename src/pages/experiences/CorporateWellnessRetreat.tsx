@@ -552,35 +552,6 @@ export default function CorporateWellnessRetreat() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">What Leaders Say</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                { quote: "We've done every team-building concept going. This was the first time my senior team actually opened up. The horses don't let you hide behind your job title.", name: "Corporate Executive", role: "Financial Services" },
-                { quote: "The impact documentation alone justified the investment for our CSI team. But the real value was watching our people reconnect with purpose.", name: "CSI Manager", role: "Technology Company" },
-                { quote: "I was sceptical about 'wellness retreats' but this was different. Evidence-based, professionally facilitated, and genuinely transformative. We're booking annually.", name: "HR Director", role: "Consulting Firm" },
-              ].map((testimonial, i) => (
-                <Card key={i} className="hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <div className="flex gap-1 mb-3">
-                      {[...Array(5)].map((_, j) => (
-                        <Star key={j} className="w-4 h-4 fill-emerald-500 text-emerald-500" />
-                      ))}
-                    </div>
-                    <p className="text-sm italic text-muted-foreground mb-4">"{testimonial.quote}"</p>
-                    <p className="text-sm font-semibold">{testimonial.name}</p>
-                    <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FAQ */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">

@@ -26,13 +26,6 @@ export interface Country {
   flag: string;
 }
 
-export interface Testimonial {
-  name: string;
-  title: string;
-  quote: string;
-  image: string;
-}
-
 export const curatedESIMPicks: CuratedESIMPick[] = [
   {
     id: 'pick-sa-retreat',
@@ -361,24 +354,3 @@ export const countries: Country[] = [
   { code: 'SZ', name: 'Eswatini', flag: '🇸🇿' },
 ];
 
-export const testimonials: Testimonial[] = [
-  {
-    name: "Ewa K.",
-    title: "Flight Attendant, British Airways",
-    quote: "I LOVE RoamBuddy! I never travel without it. As a flight attendant traveling to Mexico, Caribbean, Maldives, Mauritius, and USA, roaming charges were killing my budget. RoamBuddy saves me hundreds while keeping me connected to family and work. It's now as essential as my passport!",
-    // Anonymous reviewer — fall back to initials in the avatar component rather than show a misattributed staff photo
-    image: ""
-  },
-  {
-    name: "Marcus T.",
-    title: "Retreat Facilitator & Wellness Guide",
-    quote: "Leading international wellness retreats means staying connected for emergency contacts and coordinating with local teams. RoamBuddy's instant activation and reliable coverage across 180+ countries gives me complete peace of mind. My retreat guests love it too - they can share their transformation journey without worrying about roaming fees.",
-    image: ""
-  },
-  {
-    name: "Sarah L.",
-    title: "Digital Nomad & Content Creator",
-    quote: "As a location-independent creator documenting wellness destinations globally, connectivity isn't optional - it's my lifeline. RoamBuddy's multi-country coverage means I can hop from Cape Town to Bali to Portugal without missing a beat. Fast speeds, no SIM swaps, just seamless global connectivity.",
-    image: ""
-  }
-];
