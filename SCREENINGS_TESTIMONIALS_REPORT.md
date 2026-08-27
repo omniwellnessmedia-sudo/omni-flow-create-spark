@@ -56,7 +56,7 @@ A five-way parallel audit swept the repository and each finding was then indepen
 - Identity discrepancies render publicly: one honouree is spelled differently between the deck and `awardees.ts`; another's slide notes her spelling is unconfirmed.
 - A performer's stage name is linked to her legal name (screen-deck.html line 190 and booth sheet line 81).
 
-Recommendation (no action taken, out of scope for this branch): move `ceremony-mq7v3/` out of `public/` immediately; it was event-night tooling, not web content.
+REMEDIATED on this branch (approved 26 August): `public/events/wwpl/ceremony-mq7v3/` is removed from the repository and therefore from every future deploy, together with its gitignore exception. Nothing in the application referenced the folder, so no page changes. The files remain in git history; scrubbing history requires a force push, which is not permitted on this repository, so that remains a separate decision.
 
 ### 5.2 Awards register
 
@@ -76,7 +76,9 @@ No testimonial record for Toni exists anywhere; the sweep confirmed zero quote a
 
 ### 5.6 Fabricated testimonials and reviews elsewhere on the site (different problem, same page family)
 
-The sweep confirmed invented quotes attributed to plausible-sounding people rendering as social proof on public routes: `src/components/sections/TestimonialsSection.tsx` (homepage testimonials with names and titles), `src/data/roamBuddyProducts.ts` (three), `src/pages/tours/OmniWellnessRetreat.tsx` and `src/pages/experiences/CartHorseUrbanWellness.tsx` (sample testimonials with names), `src/components/product/ReviewSystem.tsx`, and a seeded database migration (`supabase/migrations/20250710090731...sql`). One invented testimonial attaches a real university's name to a fictitious research fellow. Separately, `src/data/curatorTips.ts` renders scripted first-person quotes in team members' real names and photos. None of these carry consent records because the people are invented, which is the inverse problem: fabricated social proof on a commercial site. Flagged for removal or replacement by the consent-gated system built here; nothing changed on this branch.
+The sweep confirmed invented quotes attributed to plausible-sounding people rendering as social proof on public routes: `src/components/sections/TestimonialsSection.tsx` (homepage testimonials with names and titles), `src/data/roamBuddyProducts.ts` (three), `src/pages/tours/OmniWellnessRetreat.tsx` and `src/pages/experiences/CartHorseUrbanWellness.tsx` (sample testimonials with names), `src/components/product/ReviewSystem.tsx`, and a seeded database migration (`supabase/migrations/20250710090731...sql`). One invented testimonial attaches a real university's name to a fictitious research fellow. Separately, `src/data/curatorTips.ts` renders scripted first-person quotes in team members' real names and photos. None of these carried consent records because the people are invented, which is the inverse problem: fabricated social proof on a commercial site.
+
+REMEDIATED on this branch (approved 26 August): the homepage and tours testimonial section, the conscious media infrastructure testimonials, the RoamBuddy traveller stories (component and data export) and the invented named blocks on the wine country retreat, cart horse and corporate retreat pages are all removed. The one quote credited to a real person is a strong candidate for the consent register: with her written permission it can return, attributed, through the gate. Left in place and flagged only: the curator tips (scripted site voice in real team members' names, a team decision), the seeded database migration (dormant unless that table is populated), and provider supplied profile content, which is traceable to the provider who submitted it.
 
 ### 5.7 This branch's own residual disclosure (flagged by the audit, by design of the brief)
 
