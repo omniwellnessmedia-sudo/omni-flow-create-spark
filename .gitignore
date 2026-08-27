@@ -56,8 +56,6 @@ public/images/
 # (no legible honouree names or portraits) is ever placed in this folder;
 # everything else in the media pack stays in Drive.
 !public/screenings/night/*.webp
-# Ceremony pack portraits (the deck references png paths)
-!public/events/wwpl/ceremony-mq7v3/assets/honourees/*.png
 # Certificate register share image (referenced by netlify/functions/awards.mjs)
 !public/awards-register-og.jpg
 # BWC staging photographs. ONLY the two files the pack's register marks
