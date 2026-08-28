@@ -1,6 +1,15 @@
 /**
  * PUBLIC rate card for the services page: the Spectrum System catalogue.
  *
+ * THIS FILE IS THE ONLY PLACE A CLIENT FACING PRICE MAY BE DEFINED.
+ * Rate card v0.9 states the rule for people: "One rate card. Nobody quotes a
+ * number that is not on it." The website is a standing quote to every
+ * visitor, so the same rule binds the code. Any page, component or document
+ * that shows a price to a client reads it from here; none holds its own.
+ * A new or changed price needs Tumelo's written sign-off before it is
+ * published, and a figure from an unratified draft is not publishable
+ * merely because the draft exists.
+ *
  * SOURCES, in order of authority:
  *   1. Chad Cupido's approved Master Services Rate Card and implementation
  *      direction, email of 23 August 2026.
@@ -257,12 +266,17 @@ export const SERVICE_BANDS: ServiceBand[] = [
       {
         slug: 'executive-support',
         name: 'Executive, AI, Media & Systems Support',
-        price: 'R1,500 per hour · R10,000 per 10 hours',
+        // The prepaid ten-hour block at R10,000 was withdrawn from the public
+        // page on 27 August 2026: it implied R1,000 per hour and undercut the
+        // published hourly rate by a third. Rate card v0.9 proposes R13,500
+        // for the block but is unratified, so no replacement figure is
+        // published. Restore a block price only with written sign-off.
+        price: 'R1,500 per hour',
         hue: SPECTRUM.slate,
         blurb: 'Senior hands on strategy, implementation, campaigns, operations or systems.',
         bullets: [
-          'Buy by the hour, or a prepaid ten-hour block',
-          'Applied across agreed priorities',
+          'Bought by the hour, against agreed priorities',
+          'Longer engagements are quoted on scope',
         ],
         cta: 'Enquire',
       },

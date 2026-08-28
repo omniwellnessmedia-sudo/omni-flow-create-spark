@@ -6,8 +6,22 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { ArrowRight, Users, Target, Lightbulb, TrendingUp, MessageCircle, Calendar } from "lucide-react";
 import { IMAGES } from "@/lib/images";
+import { RATE_CARD_OFFERS } from "@/data/publicRateCard";
 
+/**
+ * Consultation advisory work is scoped per engagement, so this page
+ * publishes no band of its own. Rate card v0.9 states the rule: one rate
+ * card, and nobody quotes a number that is not on it. The website is a
+ * standing quote to every visitor, so the four bands this page used to
+ * carry (R8,000 to R30,000 across four cards) were a second price set for
+ * work the card prices differently, and none of them appeared on the card.
+ * They are withdrawn. The only figure shown here is read from
+ * src/data/publicRateCard.ts, which is the single source of client facing
+ * prices.
+ */
 const Consultation = () => {
+  const entryOffer = RATE_CARD_OFFERS.find((o) => o.slug === "clarity-session");
+
   const consultationTypes = [
     {
       title: "Strategic Media Planning",
@@ -20,7 +34,6 @@ const Consultation = () => {
         "Budget allocation planning",
         "KPI setting & measurement framework"
       ],
-      price: "R12,000 - R25,000",
       icon: Target
     },
     {
@@ -34,7 +47,6 @@ const Consultation = () => {
         "Stakeholder engagement strategies",
         "Impact measurement methodologies"
       ],
-      price: "R8,000 - R15,000",
       icon: MessageCircle
     },
     {
@@ -48,7 +60,6 @@ const Consultation = () => {
         "Stakeholder communication plan",
         "Continuous improvement processes"
       ],
-      price: "R10,000 - R20,000",
       icon: TrendingUp
     },
     {
@@ -62,7 +73,6 @@ const Consultation = () => {
         "Mutual benefit planning",
         "Relationship management systems"
       ],
-      price: "R15,000 - R30,000",
       icon: Users
     }
   ];
@@ -95,7 +105,7 @@ const Consultation = () => {
       quote: "The strategic consultation transformed how we communicate our impact. Our community engagement increased by 300%.",
       author: "Sarah Johnson",
       role: "Director, Valley of Hope Foundation",
-      // Anonymous testimonial — initials fallback rather than misattributed staff portrait
+      // Anonymous testimonial, initials fallback rather than misattributed staff portrait
       image: ""
     },
     {
@@ -174,7 +184,7 @@ const Consultation = () => {
                         <div className="flex gap-4 text-sm text-gray-600">
                           <span>{consultation.duration}</span>
                           <span>•</span>
-                          <span className="font-semibold text-omni-indigo">{consultation.price}</span>
+                          <span className="font-semibold text-omni-indigo">Quoted on scope</span>
                         </div>
                       </div>
                     </div>
@@ -196,6 +206,36 @@ const Consultation = () => {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+
+            {/* The one published figure on this page, read from the rate card
+                (src/data/publicRateCard.ts), which is the single source of
+                client facing prices. Consultation engagements themselves are
+                quoted on scope. */}
+            <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-gray-200 bg-gray-50 p-6 text-center sm:p-8">
+              <h3 className="font-heading text-xl text-gray-900">
+                Consultation engagements are quoted on scope
+              </h3>
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-gray-600">
+                Every engagement differs in depth, stakeholders and timeline, so we scope
+                the work before quoting it. The quickest way in is a single session, after
+                which a written quotation follows.
+              </p>
+              {entryOffer && (
+                <p className="mt-4 text-sm text-gray-700">
+                  <span className="font-semibold">{entryOffer.name}</span>
+                  {": "}
+                  <span className="font-semibold text-omni-indigo">{entryOffer.price}</span>
+                </p>
+              )}
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <Button asChild className="rounded-full bg-primary text-white hover:bg-primary/90">
+                  <Link to="/contact?service=quotation">Request a quotation</Link>
+                </Button>
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/services">See all services and rates</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
