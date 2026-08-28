@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Filter } from "lucide-react";
 import { toast } from "sonner";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface AffiliateProduct {
   id: string;
@@ -177,6 +178,9 @@ const AffiliateMarketplace = () => {
             Showing {filteredProducts.length} of {products.length} products
           </p>
         </div>
+      </div>
+      <div className="container mx-auto px-4 pb-10">
+        <AffiliateDisclosure variant="panel" />
       </div>
     </div>
   );

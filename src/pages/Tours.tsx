@@ -23,6 +23,7 @@ import { CuratorTip } from '@/components/curator/CuratorTip';
 import { omniVoice } from '@/data/omniVoiceGuide';
 import { IMAGES } from '@/lib/images';
 import { classifyTour, TOUR_CATEGORIES, type TourCategory } from '@/lib/tourCategories';
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface ViatorTour {
   id: string;
@@ -526,6 +527,9 @@ export default function Tours() {
         </div>
       </section>
 
+      <div className="container mx-auto px-4 pb-8">
+        <AffiliateDisclosure variant="panel" />
+      </div>
       <Footer />
     </>
   );

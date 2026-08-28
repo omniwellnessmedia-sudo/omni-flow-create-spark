@@ -5,6 +5,7 @@ import { ConsciousnessFrameworkModal } from "@/components/conscious-media/Consci
 import { PartnerValuesSection } from "@/components/conscious-media/PartnerValuesSection";
 import { ArrowRight, Camera } from "lucide-react";
 import { camerastuffLink } from "@/config/programmes";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 const ConsciousMediaPartnershipPage = () => {
   const products = [
@@ -155,6 +156,9 @@ const ConsciousMediaPartnershipPage = () => {
           </div>
         </div>
       </section>
+      <div className="container mx-auto px-4 pb-10">
+        <AffiliateDisclosure variant="panel" />
+      </div>
     </div>
   );
 };

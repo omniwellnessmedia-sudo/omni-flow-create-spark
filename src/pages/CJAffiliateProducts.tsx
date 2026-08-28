@@ -34,6 +34,7 @@ import {
   GitCompare,
   Heart
 } from 'lucide-react';
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface CJProduct {
   id: string;
@@ -685,6 +686,9 @@ const CJAffiliateProducts = () => {
       {/* Back to Top Button */}
       <BackToTopButton />
 
+      <div className="container mx-auto px-4 pb-8">
+        <AffiliateDisclosure variant="panel" />
+      </div>
       <Footer />
     </div>
   );

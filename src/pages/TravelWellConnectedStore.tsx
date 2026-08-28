@@ -29,6 +29,7 @@ import {
   TreePine
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 // Storage base URL
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
@@ -854,6 +855,9 @@ const TravelWellConnectedStore = () => {
         </div>
       </section>
 
+      <div className="container mx-auto px-4 pb-8">
+        <AffiliateDisclosure variant="panel" />
+      </div>
       <Footer />
     </div>
   );

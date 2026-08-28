@@ -15,6 +15,7 @@ import { useRoamBuddyAPI, RoamBuddyProduct } from '@/hooks/useRoamBuddyAPI';
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
 import { Award, Shield, Loader2, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 const RoamBuddyStore = () => {
   const [apiProducts, setApiProducts] = useState<RoamBuddyProduct[]>([]);
@@ -394,6 +395,9 @@ const RoamBuddyStore = () => {
         }}
       />
 
+      <div className="container mx-auto px-4 pb-8">
+        <AffiliateDisclosure variant="panel" />
+      </div>
       <Footer />
     </div>
   );

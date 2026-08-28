@@ -20,6 +20,7 @@ import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useWishlist } from "@/hooks/useWishlist";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import { formatDistanceToNow } from "date-fns";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 const CJProductDetail = () => {
   const { id } = useParams();
@@ -98,7 +99,10 @@ const CJProductDetail = () => {
             <p>Loading product...</p>
           </div>
         </main>
-        <Footer />
+        <div className="container mx-auto px-4 pb-8">
+        <AffiliateDisclosure variant="panel" />
+      </div>
+      <Footer />
       </div>
     );
   }

@@ -1,0 +1,22 @@
+name: Affiliate link check
+
+# The CameraStuff programme died quietly in August 2026 and the site kept
+# advertising it for weeks. This asks the outbound destinations whether they
+# still answer, once a week, so the next one does not go unnoticed.
+on:
+  schedule:
+    # Mondays at 06:00 UTC, which is 08:00 in South Africa.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # No install step: the script uses only Node's built in fetch.
+      - name: Check outbound affiliate destinations
+        run: node scripts/check-affiliate-links.mjs
