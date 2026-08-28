@@ -178,12 +178,8 @@ export const FiltersSidebar = ({
                     Newest First
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="commission_high" id="sort-commission" />
-                  <Label htmlFor="sort-commission" className="text-sm font-normal cursor-pointer">
-                    Best Commission
-                  </Label>
-                </div>
+                {/* "Best Commission" sort removed: it let shoppers order
+                    products by our affiliate margin. See FilterSidebar.tsx. */}
               </RadioGroup>
             </AccordionContent>
           </AccordionItem>

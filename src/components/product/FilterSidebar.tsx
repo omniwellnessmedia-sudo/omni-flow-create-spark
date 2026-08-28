@@ -169,27 +169,12 @@ export const FilterSidebar = ({
         </>
       )}
 
-      {/* Commission Rate */}
-      <div className="space-y-3">
-        <Label className="text-sm font-medium">Minimum Commission</Label>
-        <div className="space-y-2">
-          {[0, 8, 10, 12, 15].map((rate) => (
-            <div key={rate} className="flex items-center space-x-2">
-              <Checkbox
-                id={`commission-${rate}`}
-                checked={filters.minCommission === rate}
-                onCheckedChange={() => updateFilters({ minCommission: rate })}
-              />
-              <Label
-                htmlFor={`commission-${rate}`}
-                className="text-sm font-normal cursor-pointer"
-              >
-                {rate > 0 ? `${rate}%+` : 'Any'}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Commission filter removed: minCommission is our affiliate margin,
+          not a shopper facing attribute. Exposing it, and letting a customer
+          sort or filter by how much we earn, discloses commercial terms and
+          invites the obvious question about whether recommendations follow
+          the money. The field stays on the filter type so internal tooling
+          can still use it; nothing renders it to the public. */}
 
       <Separator />
 
