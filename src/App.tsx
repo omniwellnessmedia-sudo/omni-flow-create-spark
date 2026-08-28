@@ -163,6 +163,9 @@ const AdminDashboard = React.lazy(() => import('@/pages/AdminDashboard'));
 const AccountantDashboard = React.lazy(() => import('@/pages/AccountantDashboard'));
 const ProductManagement = React.lazy(() => import('@/pages/admin/ProductManagement'));
 const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
+// The curation screen decides what shoppers see (src/config/catalogueGate.ts).
+// It existed but was never routed, so the control was unreachable.
+const ProductCuration = React.lazy(() => import('@/pages/admin/ProductCuration'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
@@ -400,6 +403,11 @@ function App() {
                   <Route path="/admin/catalogue" element={
                     <ProtectedRoute requireCatalogueManager={true}>
                       <LocalCatalogue />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/products" element={
+                    <ProtectedRoute requireCatalogueManager={true}>
+                      <ProductCuration />
                     </ProtectedRoute>
                   } />
                   <Route path="/admin-dashboard" element={

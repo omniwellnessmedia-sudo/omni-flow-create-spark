@@ -21,8 +21,11 @@ import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import type { WellnessMarketplaceItem } from "@/types/marketplace";
 import { supabase } from "@/integrations/supabase/client";
 import { normaliseCategory } from "@/data/catalogueCategories";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 const UnifiedMarketplace = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuth();

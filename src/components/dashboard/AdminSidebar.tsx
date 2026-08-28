@@ -70,7 +70,8 @@ const NAV_GROUPS: {
     label: "Marketplace",
     hue: "#4FAE3F",
     items: [
-      { id: "catalogue", label: "Local Catalogue", icon: Store, href: "/admin/catalogue" },
+      { id: "shop-products", label: "Shop products", icon: Package, href: "/admin/products" },
+      { id: "catalogue", label: "Local businesses", icon: Store, href: "/admin/catalogue" },
       { id: "affiliate-performance", label: "Affiliate Performance", icon: TrendingUp, href: "/admin/affiliate-performance" },
       { id: "affiliate-payouts", label: "Affiliate Payouts", icon: HandCoins, href: "/admin/affiliate-payouts" },
     ],

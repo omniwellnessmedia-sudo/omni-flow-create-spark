@@ -67,6 +67,38 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Affiliate storefronts are kept out of search results until a person has
+# approved what appears on them in /admin/products. They are not in the
+# sitemap and each page also sets a robots meta tag (src/hooks/useNoIndex.ts),
+# but a meta tag only works for crawlers that run our JavaScript, so the
+# header is the reliable signal. "follow" is deliberate: links out of these
+# pages still carry value, we simply do not want the pages themselves listed.
+# Remove these blocks when the catalogue is curated and ready to be found.
+[[headers]]
+  for = "/marketplace"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/store"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/store/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/wellness-deals"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/affiliate-marketplace"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
 # Canonical host: www resolves 301 to the apex the site (and all Ads final
 # URLs) use — ad clicks must not land on a redirect chain or split hostname.
 [[redirects]]

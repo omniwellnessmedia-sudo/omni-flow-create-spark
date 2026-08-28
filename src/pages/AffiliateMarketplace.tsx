@@ -9,6 +9,7 @@ import { Search, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 import { curatedOnly } from "@/config/catalogueGate";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 interface AffiliateProduct {
   id: string;
@@ -27,6 +28,8 @@ interface AffiliateProduct {
 }
 
 const AffiliateMarketplace = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const [products, setProducts] = useState<AffiliateProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<AffiliateProduct[]>([]);
   const [loading, setLoading] = useState(true);

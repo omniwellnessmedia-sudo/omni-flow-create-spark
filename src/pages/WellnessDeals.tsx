@@ -26,6 +26,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { filterQualityProducts } from "@/lib/productFilters";
 import { SmartProductImage } from "@/components/product/SmartProductImage";
 import { curatedOnly } from "@/config/catalogueGate";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 // Convert CJ Product to WellnessDeal format
 const convertToWellnessDeal = (product: any): WellnessDeal => {
@@ -313,6 +314,8 @@ const NewsletterSignup = () => {
 };
 
 const WellnessDeals = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();

@@ -19,6 +19,7 @@ import { useProductComparison } from '@/hooks/useProductComparison';
 import { useWishlist } from '@/hooks/useWishlist';
 import { curatedSeed } from '@/config/seedCatalogue';
 import { curatedOnly } from "@/config/catalogueGate";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 interface Product {
   id: string;
@@ -38,6 +39,8 @@ interface Product {
 }
 
 const StoreCollections = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const { handle } = useParams<{ handle: string }>();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);

@@ -20,6 +20,7 @@ import { useViewTracker } from '@/hooks/useViewTracker';
 import { useUserRole } from '@/hooks/useUserRole';
 import { curatedSeed, cjSeed } from '@/config/seedCatalogue';
 import { curatedOnly } from "@/config/catalogueGate";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 interface Product {
   id: string;
@@ -75,6 +76,8 @@ const StarRating = ({ rating, reviewCount }: { rating?: number; reviewCount?: nu
 };
 
 const StoreProductDetail = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);

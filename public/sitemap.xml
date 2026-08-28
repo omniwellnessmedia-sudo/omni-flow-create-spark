@@ -129,12 +129,6 @@
 
   <!-- Marketplace & Store -->
   <url>
-    <loc>https://omniwellnessmedia.co.za/marketplace</loc>
-    <lastmod>2026-05-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://omniwellnessmedia.co.za/wellness-exchange</loc>
     <lastmod>2026-05-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -151,18 +145,6 @@
     <lastmod>2026-05-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://omniwellnessmedia.co.za/store</loc>
-    <lastmod>2026-05-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://omniwellnessmedia.co.za/wellness-deals</loc>
-    <lastmod>2026-05-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://omniwellnessmedia.co.za/esim-store</loc>
