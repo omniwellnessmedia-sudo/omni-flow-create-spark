@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { formatCommission, hasHighCommission, isNewProduct } from '@/lib/productUtils';
+import { curatedOnly } from "@/config/catalogueGate";
 
 interface ProductQuickViewProps {
   productId: string | null;
@@ -49,8 +50,7 @@ export const ProductQuickView = ({ productId, isOpen, onClose }: ProductQuickVie
     
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('affiliate_products')
+      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
         .select('*')
         .eq('id', productId)
         .single();

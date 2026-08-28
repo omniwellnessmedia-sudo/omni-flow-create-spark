@@ -460,24 +460,40 @@ html.magic-cursor-active [contenteditable=""] {
         `!bg-none` as well as `!bg-<colour>`.
      2. `px-6 py-3` here overrides size="sm"'s px-4 unless you use `!`.
    See the CTAs in src/pages/events/StunningPigs.tsx for the working pattern. */
+/* Buttons, Spectrum System.
+   These carried the old theme: a teal to green gradient, bold text, a 2px
+   border and a rounded-xl corner, which is why every call to action on the
+   site read as a different design language from the services and screenings
+   pages. They now match the Spectrum treatment used there: an ink ground,
+   cream text, a full pill, medium weight and a quiet lift on hover. Because
+   the shared Button component maps its default, premium, wellness and solid
+   variants onto btn-primary, changing it here upgrades every button on the
+   site at once. */
 .btn-primary {
-  @apply bg-gradient-primary text-white border-transparent rounded-lg px-6 py-3 font-medium transition-all duration-300;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+  @apply border-transparent rounded-full px-6 py-3 font-medium transition-all duration-200;
+  background: #15201F;
+  color: #FAF8F2;
+  box-shadow: 0 1px 2px rgba(21, 32, 31, 0.10);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.08);
+  background: #22302E;
+  box-shadow: 0 6px 18px rgba(21, 32, 31, 0.16);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  @apply bg-white text-gray-900 border border-gray-200 rounded-lg px-6 py-3 font-medium transition-all duration-300;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  @apply rounded-full px-6 py-3 font-medium transition-all duration-200;
+  background: #FFFFFF;
+  color: #15201F;
+  border: 1px solid rgba(21, 32, 31, 0.14);
+  box-shadow: 0 1px 2px rgba(21, 32, 31, 0.04);
 }
 
 .btn-secondary:hover {
-  @apply bg-gray-50 border-gray-300;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: #F4EFE5;
+  border-color: rgba(21, 32, 31, 0.24);
+  box-shadow: 0 4px 14px rgba(21, 32, 31, 0.08);
   transform: translateY(-1px);
 }
 
@@ -823,14 +839,18 @@ img {
 
 .skip-link {
   @apply absolute bg-primary text-primary-foreground px-4 py-3 font-semibold text-sm rounded-md shadow-lg;
-  transform: translateY(-100%);
-  transition: transform 0.2s ease-in-out;
+  /* Hidden until focused. It used to sit at top:1rem and shift by only its
+     own height, which left a strip of it visible in the top left corner of
+     every page: the stray coloured box above the logo. It now clears the
+     viewport completely and still slides into view on keyboard focus. */
   left: 1rem;
-  top: 1rem;
+  top: 0;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease-in-out;
 }
 
 .skip-link:focus {
-  transform: translateY(0);
+  transform: translateY(1rem);
   outline: 3px solid hsl(var(--ring));
   outline-offset: 2px;
 }

@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
+import { curatedOnly } from "@/config/catalogueGate";
 
 interface AffiliateProduct {
   id: string;
@@ -43,8 +44,7 @@ const AffiliateMarketplace = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('affiliate_products')
+      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
         .select('*')
         .eq('is_active', true)
         .order('created_at', { ascending: false });

@@ -35,6 +35,7 @@ import {
   Heart
 } from 'lucide-react';
 import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
+import { curatedOnly } from "@/config/catalogueGate";
 
 interface CJProduct {
   id: string;
@@ -133,8 +134,7 @@ const CJAffiliateProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('affiliate_products')
+      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
         .select('*')
         .eq('affiliate_program_id', 'cj')
         .eq('is_active', true)

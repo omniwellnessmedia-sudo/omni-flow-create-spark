@@ -21,6 +21,7 @@ import { useWishlist } from "@/hooks/useWishlist";
 import BreadcrumbNav from "@/components/ui/breadcrumb-nav";
 import { formatDistanceToNow } from "date-fns";
 import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
+import { curatedOnly } from "@/config/catalogueGate";
 
 const CJProductDetail = () => {
   const { id } = useParams();
@@ -40,8 +41,7 @@ const CJProductDetail = () => {
 
   const fetchProduct = async () => {
     try {
-      const { data, error } = await supabase
-        .from('affiliate_products')
+      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
         .select('*')
         .eq('id', id)
         .single();

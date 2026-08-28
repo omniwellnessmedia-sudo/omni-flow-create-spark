@@ -25,6 +25,7 @@ import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
 import { supabase } from "@/integrations/supabase/client";
 import { filterQualityProducts } from "@/lib/productFilters";
 import { SmartProductImage } from "@/components/product/SmartProductImage";
+import { curatedOnly } from "@/config/catalogueGate";
 
 // Convert CJ Product to WellnessDeal format
 const convertToWellnessDeal = (product: any): WellnessDeal => {
@@ -329,8 +330,7 @@ const WellnessDeals = () => {
       setLoading(true);
       try {
         // Fetch top 100 products from affiliate_products
-        const { data: products, error } = await supabase
-          .from('affiliate_products')
+        const { data: products, error } = await curatedOnly(supabase.from('affiliate_products'))
           .select('*')
           .eq('is_active', true)
           .order('view_count', { ascending: false, nullsFirst: false })

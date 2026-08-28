@@ -19,6 +19,7 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useViewTracker } from '@/hooks/useViewTracker';
 import { useUserRole } from '@/hooks/useUserRole';
 import { curatedSeed, cjSeed } from '@/config/seedCatalogue';
+import { curatedOnly } from "@/config/catalogueGate";
 
 interface Product {
   id: string;
@@ -93,8 +94,7 @@ const StoreProductDetail = () => {
   const fetchProduct = async () => {
     try {
       // Try database first
-      const { data, error } = await supabase
-        .from('affiliate_products')
+      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
         .select('*')
         .eq('id', id)
         .maybeSingle();
@@ -134,8 +134,7 @@ const StoreProductDetail = () => {
 
       // Fetch related products
       if (productData) {
-        const { data: related } = await supabase
-          .from('affiliate_products')
+        const { data: related } = await curatedOnly(supabase.from('affiliate_products'))
           .select('*')
           .eq('category', productData.category)
           .neq('id', id)
