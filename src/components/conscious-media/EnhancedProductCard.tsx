@@ -15,6 +15,10 @@ export const EnhancedProductCard = ({ product }: EnhancedProductCardProps) => {
 
   const handleClick = async () => {
     const affiliateUrl = generateAffiliateLink({
+      // Programme named explicitly. generateAffiliateLink defaults to viator,
+      // and these are CameraStuff products: without this the full
+      // camerastuff.co.za URL is appended to viator.com and the link breaks.
+      affiliateProgram: 'camerastuff',
       fullProductUrl: product.productUrl,
       channel: product.channel,
       wellnessCategory: "media equipment",

@@ -57,13 +57,19 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     network: 'direct',
     tier: 1,
     commission_type: 'percentage',
-    commission_rate: 10.0,
+    // Published terms (faithful-to-nature.co.za/affiliate-program, read 28 Aug
+    // 2026): "Earn up to 15% commission on validated sales", 30-day cookie,
+    // run through AdMarula, paid in ZAR. Their page offers text links that
+    // "link directly to the product, brand, or category", so deep linking is
+    // supported. We are NOT yet approved: status stays 'testing' until
+    // AdMarula confirms, at which point set commission_rate to the real tier.
+    commission_rate: 15.0,
     cookie_duration_days: 30,
     currency: 'ZAR',
     tracking_domain: 'faithful-to-nature.co.za',
-    deep_linking_enabled: false,
+    deep_linking_enabled: true,
     categories: ['wellness', 'natural-products', 'supplements', 'eco-friendly'],
-    status: 'active',
+    status: 'testing',
     launch_date: '2025-11-03'
   },
   
@@ -174,6 +180,26 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     categories: ['travel', 'safari', 'wellness-retreats', 'adventure'],
     status: 'paused',
     launch_date: '2025-11-17'
+  },
+
+  // Deactivated by the merchant, August 2026, likely dormancy: their terms
+  // name inactivity as a ground for removal. Their terms carry no
+  // re-application bar and the programme is still open to new applicants.
+  // Kept here so the history is visible rather than silently deleted.
+  camerastuff: {
+    id: 'camerastuff',
+    name: 'CameraStuff (deactivated)',
+    network: 'direct',
+    tier: 2,
+    commission_type: 'percentage',
+    commission_rate: 10.0,
+    cookie_duration_days: 60,
+    currency: 'ZAR',
+    tracking_domain: 'camerastuff.co.za',
+    deep_linking_enabled: true,
+    categories: ['media-equipment', 'photography', 'video', 'podcast'],
+    status: 'paused',
+    launch_date: '2025-11-03'
   },
 
   // LeadDyno - Own affiliate program management

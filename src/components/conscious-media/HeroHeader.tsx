@@ -1,3 +1,4 @@
+import { camerastuffLink } from "@/config/programmes";
 export const HeroHeader = () => {
   return (
     <section className="bg-gradient-to-b from-white to-purple-50 py-16 px-10 lg:px-20">
@@ -21,7 +22,7 @@ export const HeroHeader = () => {
               Learn About Our Framework
             </a>
             <a 
-              href="https://www.camerastuff.co.za/?a_aid=omniwellnessmedia" 
+              href={camerastuffLink("/")}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 bg-background border-2 border-primary text-primary hover:bg-primary/5 font-semibold rounded-md transition-colors"

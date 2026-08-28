@@ -13,6 +13,7 @@ import { SimplifiedProductCard } from "@/components/conscious-media/SimplifiedPr
 import { FilmProductionComingSoon } from "@/components/conscious-media/FilmProductionComingSoon";
 import { Separator } from "@/components/ui/separator";
 import { products, curatorProfiles, UseCase, Curator, SkillLevel } from "@/data/consciousMediaProducts";
+import { camerastuffLink } from "@/config/programmes";
 
 const ConsciousMediaInfrastructurePage = () => {
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ const ConsciousMediaInfrastructurePage = () => {
     setDisplayCount(prev => Math.min(prev + 6, filteredProducts.length));
   };
 
-  const mainAffiliateUrl = "https://www.camerastuff.co.za/?a_aid=omniwellnessmedia";
+  const mainAffiliateUrl = camerastuffLink("/");
 
   const handleMainCTAClick = async () => {
     await trackAffiliateClick(

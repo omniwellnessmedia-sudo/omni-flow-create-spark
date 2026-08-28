@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
+import { camerastuffLink } from "@/config/programmes";
 
 export const FooterCTA = () => {
   const { trackAffiliateClick } = useConsciousAffiliate();
 
   const handleMainCTA = async () => {
-    const url = "https://www.camerastuff.co.za/?a_aid=omniwellnessmedia";
+    const url = camerastuffLink("/");
     await trackAffiliateClick(
       "CameraStuff Main Store",
       "conscious_media_infrastructure_footer",

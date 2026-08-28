@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
+import { buildViatorLink } from "@/config/programmes";
 import { 
   MapPin, 
   Clock, 
@@ -455,7 +456,7 @@ const TravelWellConnectedStore = () => {
             onClick={() => handleViatorClick(tour)}
           >
             <a
-              href={tour.booking_url || `https://www.viator.com/partner-shop/omniwellnessmedia/?search=${encodeURIComponent(tour.title || '')}&medium=link&medium_version=shop&campaign=omni-wellness`}
+              href={tour.booking_url || buildViatorLink({ campaign: 'travel-well-connected' })}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -839,7 +840,7 @@ const TravelWellConnectedStore = () => {
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <a 
-                  href="https://www.viator.com/partner-shop/omniwellnessmedia/?medium=link&medium_version=shop&campaign=omni-wellness"
+                  href={buildViatorLink({ campaign: 'travel-well-connected-catalog' })}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
