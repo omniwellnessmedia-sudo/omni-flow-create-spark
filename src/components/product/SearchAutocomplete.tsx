@@ -4,7 +4,7 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@
 import { Search, TrendingUp, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import curatedSeed from '@/data/curated_wellness_seed.json';
+import { curatedSeed } from '@/config/seedCatalogue';
 
 interface SearchResult {
   id: string;

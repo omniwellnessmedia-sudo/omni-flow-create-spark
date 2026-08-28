@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useProductComparison } from '@/hooks/useProductComparison';
 import { useWishlist } from '@/hooks/useWishlist';
-import curatedSeed from '@/data/curated_wellness_seed.json';
+import { curatedSeed } from '@/config/seedCatalogue';
 
 interface Product {
   id: string;

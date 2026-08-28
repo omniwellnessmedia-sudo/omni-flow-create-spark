@@ -18,8 +18,7 @@ import { RecentlyViewedSection } from '@/components/product/RecentlyViewedSectio
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useViewTracker } from '@/hooks/useViewTracker';
 import { useUserRole } from '@/hooks/useUserRole';
-import curatedSeed from '@/data/curated_wellness_seed.json';
-import cjSeed from '@/data/cjSeedProducts.json';
+import { curatedSeed, cjSeed } from '@/config/seedCatalogue';
 
 interface Product {
   id: string;
