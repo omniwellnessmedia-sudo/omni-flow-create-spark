@@ -9,6 +9,7 @@ import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 import { Check, Mountain, Sun, Leaf, Camera, Heart, User, MapPin, Clock, Users, Gift, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { applyImageFallback } from '@/lib/images';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -67,7 +68,7 @@ export default function GreatMotherCaveTour() {
           alt="Great Mother Cave with Chief Kingsley"
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
-          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+          onError={(e) => { applyImageFallback(e, "/placeholder.svg"); }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
         <div className="relative z-10 container mx-auto h-full flex items-center px-4">
@@ -117,7 +118,7 @@ export default function GreatMotherCaveTour() {
                   alt="Chief Kingsley of the Gorachouqua Khoi Nation"
                   className="rounded-2xl shadow-2xl"
                   loading="lazy"
-                  onError={(e) => { (e.target as HTMLImageElement).src = `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`; }}
+                  onError={(e) => { applyImageFallback(e, `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`); }}
                 />
               </div>
               <div>

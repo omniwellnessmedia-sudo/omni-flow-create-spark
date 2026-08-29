@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, X, Expand, ZoomIn } from 'lucide-react';
+import { applyImageFallback } from '@/lib/images';
 
 interface GalleryImage {
   src: string;
@@ -72,7 +73,7 @@ const InteractiveGallery: React.FC<InteractiveGalleryProps> = ({
               alt={image.alt}
               className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Tufcat%20and%20Carthorse/Sans%20titre-24.jpg';
+                applyImageFallback(e, 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Tufcat%20and%20Carthorse/Sans%20titre-24.jpg');
               }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -149,7 +150,7 @@ const InteractiveGallery: React.FC<InteractiveGalleryProps> = ({
                   alt={images[selectedIndex].alt}
                   className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Tufcat%20and%20Carthorse/Sans%20titre-24.jpg';
+                    applyImageFallback(e, 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/Tufcat%20and%20Carthorse/Sans%20titre-24.jpg');
                   }}
                 />
                 

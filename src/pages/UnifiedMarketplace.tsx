@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import sandyMitchellData from "@/data/sandyMitchellProfile";
-import { IMAGES, getImageWithFallback, getSandyImage } from "@/lib/images";
+import { IMAGES, getImageWithFallback, getSandyImage, applyImageFallback } from "@/lib/images";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import type { WellnessMarketplaceItem } from "@/types/marketplace";
 import { supabase } from "@/integrations/supabase/client";
@@ -415,7 +415,7 @@ const UnifiedMarketplace = () => {
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
-                      e.currentTarget.src = IMAGES.wellness.marketplace;
+                      applyImageFallback(e, IMAGES.wellness.marketplace);
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>

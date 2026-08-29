@@ -21,7 +21,7 @@ import { toast } from 'sonner';
 import { FloatingDecorations } from '@/components/ui/gaia-elements';
 import { CuratorTip } from '@/components/curator/CuratorTip';
 import { omniVoice } from '@/data/omniVoiceGuide';
-import { IMAGES } from '@/lib/images';
+import { IMAGES, applyImageFallback } from '@/lib/images';
 import { classifyTour, TOUR_CATEGORIES, type TourCategory } from '@/lib/tourCategories';
 import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
@@ -197,7 +197,7 @@ export default function Tours() {
             alt={tour.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80';
+              applyImageFallback(e, 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80');
             }}
           />
           <div className="absolute top-3 left-3 flex gap-2">
@@ -330,7 +330,7 @@ export default function Tours() {
                         alt={experience.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
-                        onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
+                        onError={(e) => { applyImageFallback(e, IMAGES.wellness.retreat); }}
                       />
                     </div>
                     <CardContent className="p-5 flex flex-col gap-3">

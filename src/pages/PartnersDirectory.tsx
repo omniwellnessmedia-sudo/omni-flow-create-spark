@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Star, Clock, ExternalLink, Users, Heart, Sparkles } from "lucide-react";
+import { applyImageFallback } from '@/lib/images';
 
 interface Partner {
   id: string;
@@ -249,7 +250,7 @@ const PartnersDirectory = () => {
                         alt={getDisplayName(partner)}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         onError={(e) => {
-                          e.currentTarget.src = '/placeholder.svg';
+                          applyImageFallback(e, '/placeholder.svg');
                         }}
                       />
                     </div>

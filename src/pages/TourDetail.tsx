@@ -14,7 +14,7 @@ import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import BreadcrumbNav from '@/components/ui/breadcrumb-nav';
 import { PriceDisplay } from '@/components/ui/price-display';
 import { Link } from 'react-router-dom';
-import { IMAGES } from '@/lib/images';
+import { IMAGES, applyImageFallback } from '@/lib/images';
 
 interface Tour {
   id: string;
@@ -185,7 +185,7 @@ const TourDetail = () => {
           className="w-full h-full object-cover object-center scale-105 transition-transform duration-700 ease-out"
           loading="eager"
           onError={(e) => {
-            e.currentTarget.src = IMAGES.wellness.retreat;
+            applyImageFallback(e, IMAGES.wellness.retreat);
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />

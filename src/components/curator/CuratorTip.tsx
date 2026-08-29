@@ -6,7 +6,7 @@
  */
 
 import { cn } from "@/lib/utils";
-import { IMAGES } from "@/lib/images";
+import { IMAGES, applyImageFallback } from "@/lib/images";
 import { curators, type CuratorProfile } from "@/data/curatorTips";
 
 export interface CuratorTipProps {
@@ -59,7 +59,7 @@ export const CuratorTip = ({
               alt={data.name}
               className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
               onError={(e) => {
-                e.currentTarget.src = IMAGES.logos.omniPrimary;
+                applyImageFallback(e, IMAGES.logos.omniPrimary);
               }}
             />
           )}
@@ -90,7 +90,7 @@ export const CuratorTip = ({
             alt={data.name}
             className="w-6 h-6 rounded-full object-cover"
             onError={(e) => {
-              e.currentTarget.src = IMAGES.logos.omniPrimary;
+              applyImageFallback(e, IMAGES.logos.omniPrimary);
             }}
           />
         )}
@@ -120,7 +120,7 @@ export const CuratorTip = ({
                 alt={data.name}
                 className="w-16 h-16 rounded-full object-cover ring-4 ring-primary/20"
                 onError={(e) => {
-                  e.currentTarget.src = IMAGES.logos.omniPrimary;
+                  applyImageFallback(e, IMAGES.logos.omniPrimary);
                 }}
               />
               <span className="absolute -bottom-1 -right-1 text-lg bg-background rounded-full px-1 shadow-sm">
@@ -160,7 +160,7 @@ export const CuratorTip = ({
             alt={data.name}
             className="w-16 h-16 rounded-full object-cover ring-2 ring-primary/20"
             onError={(e) => {
-              e.currentTarget.src = IMAGES.logos.omniPrimary;
+              applyImageFallback(e, IMAGES.logos.omniPrimary);
             }}
           />
           <span className="absolute -bottom-1 -right-1 text-sm bg-background rounded-full px-1">

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Star, Clock, Users, Wifi, Car, Coffee, ArrowLeft, ExternalLink } from 'lucide-react';
-import { IMAGES } from '@/lib/images';
+import { IMAGES, applyImageFallback } from '@/lib/images';
 import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 import type { WellnessDeal } from '@/types/marketplace';
@@ -95,7 +95,7 @@ const DealDetail = () => {
                 alt={deal.title}
                 className="w-full h-80 object-cover rounded-lg"
                 onError={(e) => {
-                  e.currentTarget.src = IMAGES.wellness.retreat;
+                  applyImageFallback(e, IMAGES.wellness.retreat);
                 }}
               />
             </div>
@@ -112,7 +112,7 @@ const DealDetail = () => {
                   }`}
                   onClick={() => setSelectedImage(index)}
                   onError={(e) => {
-                    e.currentTarget.src = IMAGES.wellness.retreat;
+                    applyImageFallback(e, IMAGES.wellness.retreat);
                   }}
                 />
               ))}

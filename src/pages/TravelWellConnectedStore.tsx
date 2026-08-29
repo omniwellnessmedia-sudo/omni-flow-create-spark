@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
+import { applyImageFallback } from '@/lib/images';
 
 // Storage base URL
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
@@ -397,7 +398,7 @@ const TravelWellConnectedStore = () => {
             alt={tour.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = VIATOR_FALLBACKS[index % VIATOR_FALLBACKS.length];
+              applyImageFallback(e, VIATOR_FALLBACKS[index % VIATOR_FALLBACKS.length]);
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

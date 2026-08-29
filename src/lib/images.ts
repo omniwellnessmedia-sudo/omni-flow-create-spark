@@ -347,14 +347,49 @@ export const IMAGES = {
   },
 };
 
-export const getImageWithFallback = (primaryPath: string, fallbackPath?: string) => ({ 
-  src: primaryPath, 
-  onError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => { 
-    if (fallbackPath && e.currentTarget.src !== fallbackPath) 
-      e.currentTarget.src = fallbackPath; 
-    else 
-      e.currentTarget.src = IMAGES.logos.omniPrimary; 
-  } 
+/**
+ * Swap a broken image for a fallback, at most once per fallback.
+ *
+ * WHY THE GUARD EXISTS. Every onError handler in this app used to assign a
+ * fallback src unconditionally. When the fallback itself failed to load, the
+ * assignment fired onError again, which assigned the same src again, which
+ * fired onError again. Measured on /tours with the image host unreachable:
+ * one logo requested 58 times and one photograph 57 times in ten seconds,
+ * from a single page load, and climbing. Two broken images were enough to
+ * saturate the browser's connection pool and stall everything else on the
+ * page, which is the sort of thing that shows up as a mysteriously slow site
+ * rather than as an error anyone reports.
+ *
+ * Assigning src re-triggers a load even when the value is unchanged, so
+ * comparing src to the fallback is not enough on its own. The applied
+ * fallback is recorded on the element, so a second failure of the same
+ * fallback does nothing. A genuinely different fallback is still allowed
+ * through once, which is what a component that re-renders with new content
+ * needs.
+ *
+ * No em dashes in this file.
+ */
+export const applyImageFallback = (
+  e: { currentTarget?: EventTarget | null; target?: EventTarget | null },
+  fallbackSrc: string
+) => {
+  const img = (e.currentTarget || e.target) as HTMLImageElement | null;
+  if (!img || !fallbackSrc) return;
+  if (img.dataset.imgFallback === fallbackSrc) return;
+  img.dataset.imgFallback = fallbackSrc;
+  if (img.src !== fallbackSrc) img.src = fallbackSrc;
+};
+
+export const getImageWithFallback = (primaryPath: string, fallbackPath?: string) => ({
+  src: primaryPath,
+  onError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const img = e.currentTarget;
+    if (fallbackPath && img.src !== fallbackPath && img.dataset.imgFallback !== fallbackPath) {
+      applyImageFallback(e, fallbackPath);
+      return;
+    }
+    applyImageFallback(e, IMAGES.logos.omniPrimary);
+  },
 });
 
 export const getSandyImage = (variant: keyof typeof IMAGES.sandy = 'profile') => 

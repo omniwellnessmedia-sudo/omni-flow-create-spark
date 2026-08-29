@@ -12,6 +12,7 @@ import {
   MapPin, Shield, Sun, Waves, Check, Gift, User
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { applyImageFallback } from '@/lib/images';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -71,7 +72,7 @@ export default function MuizenbergCaveTours() {
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`;
+            applyImageFallback(e, `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`);
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />

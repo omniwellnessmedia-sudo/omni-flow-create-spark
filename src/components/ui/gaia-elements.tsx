@@ -11,7 +11,7 @@
  */
 
 import { cn } from "@/lib/utils";
-import { IMAGES } from "@/lib/images";
+import { IMAGES, applyImageFallback } from "@/lib/images";
 
 interface GaiaOrbProps {
   position?: string;
@@ -181,7 +181,7 @@ export const GuidePresence = ({
               alt={data.name}
               className="w-14 h-14 rounded-full object-cover ring-2 ring-primary/20"
               onError={(e) => {
-                e.currentTarget.src = IMAGES.logos.omniPrimary;
+                applyImageFallback(e, IMAGES.logos.omniPrimary);
               }}
             />
             <span className="absolute -bottom-1 -right-1 text-xs">
@@ -213,7 +213,7 @@ export const GuidePresence = ({
             alt={data.name}
             className="w-6 h-6 rounded-full object-cover"
             onError={(e) => {
-              e.currentTarget.src = IMAGES.logos.omniPrimary;
+              applyImageFallback(e, IMAGES.logos.omniPrimary);
             }}
           />
           <span className="text-xs text-muted-foreground whitespace-nowrap">
@@ -239,7 +239,7 @@ export const GuidePresence = ({
           alt={data.name}
           className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
           onError={(e) => {
-            e.currentTarget.src = IMAGES.logos.omniPrimary;
+            applyImageFallback(e, IMAGES.logos.omniPrimary);
           }}
         />
         <span className="absolute -bottom-1 -right-1 text-sm bg-background rounded-full px-1">
