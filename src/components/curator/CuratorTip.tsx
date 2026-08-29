@@ -1,8 +1,23 @@
 /**
- * CuratorTip - Reusable component for showing curator guidance
- * 
- * Can be placed anywhere to add a personal, guided touch.
- * Supports multiple display variants: inline, floating, card, minimal.
+ * CuratorTip: guidance from the team, shown beside the work it relates to.
+ *
+ * WHY THERE ARE NO QUOTATION MARKS. Every variant here used to wrap the
+ * message in literal quote marks and pair it with a named colleague's
+ * photograph and job title. The messages are marketing copy written for the
+ * site. Nobody said them. Presenting written copy as speech puts words in a
+ * real, identifiable person's mouth, which is the same thing our testimonial
+ * rules exist to prevent, and it is not made acceptable by the words being
+ * complimentary.
+ *
+ * The copy is unchanged. It is now presented as what it is: guidance from
+ * the person whose area it is, not a quotation from them. If a colleague
+ * does supply a sentence in their own words and wants it attributed as
+ * speech, that belongs in the consented testimonial data layer with a
+ * record behind it, not here.
+ *
+ * Variants: inline, floating, card, minimal, banner.
+ *
+ * No em dashes in this file.
  */
 
 import { cn } from "@/lib/utils";
@@ -36,7 +51,7 @@ export const CuratorTip = ({
   if (variant === "minimal") {
     return (
       <p className={cn("text-sm text-muted-foreground italic", className)}>
-        {data.emoji} {data.name}: "{message}"
+        {data.emoji} {data.name}: {message}
       </p>
     );
   }
@@ -65,7 +80,7 @@ export const CuratorTip = ({
           )}
           <p className="text-sm text-foreground">
             <span className="font-medium text-primary">{data.emoji} {data.name}:</span>{" "}
-            "{message}"
+            {message}
           </p>
         </div>
       </div>
@@ -95,7 +110,7 @@ export const CuratorTip = ({
           />
         )}
         <span className="text-xs text-muted-foreground whitespace-nowrap">
-          {data.emoji} "{message}"
+          {data.emoji} {message}
         </span>
       </div>
     );
@@ -135,7 +150,7 @@ export const CuratorTip = ({
                 {data.title}
               </span>
             </div>
-            <p className="text-foreground leading-relaxed">"{message}"</p>
+            <p className="text-foreground leading-relaxed">{message}</p>
           </div>
         </div>
       </div>
@@ -172,7 +187,7 @@ export const CuratorTip = ({
         <p className="text-xs font-medium text-primary uppercase tracking-wide">
           {data.emoji} {data.name}'s Tip
         </p>
-        <p className="text-sm text-foreground">"{message}"</p>
+        <p className="text-sm text-foreground">{message}</p>
       </div>
     </div>
   );

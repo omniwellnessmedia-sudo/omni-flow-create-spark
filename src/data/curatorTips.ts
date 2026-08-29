@@ -78,7 +78,10 @@ export const pageTips: Record<string, CuratorTipData> = {
   },
   "home-tours": {
     curator: "zenith",
-    message: "I've personally vetted each of these experiences. They're transformative.",
+    // Was: "I've personally vetted each of these experiences." These listings
+    // come from the Viator feed and appear automatically, so a claim that a
+    // named colleague checked each one is one we cannot stand behind.
+    message: "Experiences from our travel partners, chosen for the Cape.",
     context: "tours preview",
   },
   "home-2bewell": {
@@ -202,7 +205,9 @@ export const sectionTips: Record<string, CuratorTipData[]> = {
   tourCard: [
     {
       curator: "zenith",
-      message: "This experience has been personally vetted by our team.",
+      // Same reason as home-tours: this renders on every card in an
+      // automated feed, so it cannot be a statement about that listing.
+      message: "Booked through our travel partner Viator.",
     },
   ],
   esimCard: [
