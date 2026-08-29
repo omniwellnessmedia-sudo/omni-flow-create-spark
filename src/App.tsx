@@ -166,6 +166,7 @@ const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
 // The curation screen decides what shoppers see (src/config/catalogueGate.ts).
 // It existed but was never routed, so the control was unreachable.
 const ProductCuration = React.lazy(() => import('@/pages/admin/ProductCuration'));
+const MarketplaceHub = React.lazy(() => import('@/pages/admin/MarketplaceHub'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
@@ -408,6 +409,14 @@ function App() {
                   <Route path="/admin/products" element={
                     <ProtectedRoute requireCatalogueManager={true}>
                       <ProductCuration />
+                    </ProtectedRoute>
+                  } />
+                  {/* One front door for the marketplace. The screens below it
+                      overlapped and used different words for the same job, so
+                      this page says what needs a person and sends them there. */}
+                  <Route path="/admin/marketplace" element={
+                    <ProtectedRoute requireCatalogueManager={true}>
+                      <MarketplaceHub />
                     </ProtectedRoute>
                   } />
                   <Route path="/admin-dashboard" element={
