@@ -30,13 +30,36 @@ export const PROGRAMME_ACTIVE = {
 export type OutboundProgramme = keyof typeof PROGRAMME_ACTIVE;
 
 /**
- * Viator account identifiers. These are per-account values taken from the
- * Viator partner dashboard. They are NOT secrets, but they are also not
- * guessable, so they come from the environment rather than being hardcoded.
- * Set VITE_VIATOR_PID and VITE_VIATOR_MCID in Netlify.
+ * Viator account identifiers.
+ *
+ * These are not secrets. They are published in the query string of every
+ * outbound link we emit, which is the whole mechanism by which Viator knows a
+ * booking came from us. They are therefore committed as defaults rather than
+ * left to the environment.
+ *
+ * That is a deliberate reversal. Holding them only in Netlify meant that any
+ * build without those variables set, which includes every deploy preview,
+ * emitted untracked links. A missing environment variable then costs real
+ * commission and shows no symptom on the page. Committed defaults make
+ * attribution work everywhere by default, and the environment variables still
+ * override if the account identifiers ever change.
+ *
+ * Verified against the Viator partner dashboard on 30 August 2026: the link
+ * builder under Tools, Links produces exactly this pid and mcid pair, the
+ * generated link resolves without redirect loss, Link Alert reports no broken
+ * links over the preceding 21 days, and the account shows Verified at an 8%
+ * commission rate.
+ *
+ * MCID IS PER MEDIUM. 42383 is the media identifier issued for text links.
+ * Viator issues separate identifiers for widgets and banners, so a different
+ * number appearing inside widget embed code is correct and must not be
+ * "corrected" to this one. Only pass medium: "link" with this pair.
  */
-const VIATOR_PID = import.meta.env.VITE_VIATOR_PID as string | undefined;
-const VIATOR_MCID = import.meta.env.VITE_VIATOR_MCID as string | undefined;
+const DEFAULT_TEXT_LINK_MCID = "42383";
+
+const VIATOR_PID = (import.meta.env.VITE_VIATOR_PID as string | undefined) || "P00273922";
+const VIATOR_MCID =
+  (import.meta.env.VITE_VIATOR_MCID as string | undefined) || DEFAULT_TEXT_LINK_MCID;
 
 export const VIATOR_SHOP_URL =
   "https://www.viator.com/partner-shop/omniwellnessmedia/";
@@ -72,11 +95,22 @@ export const buildViatorLink = (opts?: {
 
   if (!viatorIsAttributable()) {
     console.error(
-      "[affiliate] VITE_VIATOR_PID / VITE_VIATOR_MCID are not set. " +
-        "Viator cannot attribute this booking and it will not be paid out. " +
-        "Set both in the Netlify environment.",
+      "[affiliate] No Viator pid/mcid available. " +
+        "Viator cannot attribute this booking and it will not be paid out.",
     );
     return base;
+  }
+
+  // The committed mcid is the one Viator issued for text links. Widgets and
+  // banners carry their own, so pairing a non-link medium with this mcid
+  // would report the click against the wrong media type.
+  if (medium !== "link" && VIATOR_MCID === DEFAULT_TEXT_LINK_MCID) {
+    console.error(
+      `[affiliate] medium "${medium}" was requested with the text-link mcid ` +
+        `${DEFAULT_TEXT_LINK_MCID}. Widgets and banners are issued their own ` +
+        "mcid in the partner dashboard. Use the embed code Viator generates " +
+        "for that placement rather than building the URL here.",
+    );
   }
 
   const params = new URLSearchParams({
@@ -87,6 +121,47 @@ export const buildViatorLink = (opts?: {
   if (campaign) params.set("campaign", campaign);
 
   return `${base}${base.includes("?") ? "&" : "?"}${params.toString()}`;
+};
+
+/**
+ * Put our attribution onto a Viator URL we did not build.
+ *
+ * WHY THIS IS NEEDED. Tour rows carry a `booking_url` populated by the Viator
+ * product sync, and the tours pages opened that value directly. Those URLs
+ * come from the Viator API, not from our partner link builder, so they carry
+ * no pid or mcid. Committing the account identifiers did nothing for them.
+ * Every click from the main tours listing was therefore still unattributable,
+ * which is the single largest leak on the site because that page is the one
+ * with the most outbound intent.
+ *
+ * Behaviour:
+ *   - Non Viator hosts are returned untouched. An operator's own booking page
+ *     is not ours to tag.
+ *   - Anything unparseable is returned untouched rather than thrown away. A
+ *     working link that earns nothing beats a broken one.
+ *   - Existing pid/mcid/medium are overwritten. A stale or foreign identifier
+ *     on a link we are publishing would pay someone else.
+ *   - Other query parameters Viator put there are preserved.
+ */
+export const withViatorAttribution = (url: string | null | undefined, campaign?: string): string => {
+  if (!url) return buildViatorLink({ campaign });
+
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return url;
+  }
+
+  if (!/(^|\.)viator\.com$/i.test(parsed.hostname)) return url;
+  if (!viatorIsAttributable()) return url;
+
+  parsed.searchParams.set("pid", VIATOR_PID as string);
+  parsed.searchParams.set("mcid", VIATOR_MCID as string);
+  parsed.searchParams.set("medium", "link");
+  if (campaign) parsed.searchParams.set("campaign", campaign);
+
+  return parsed.toString();
 };
 
 /**

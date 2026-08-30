@@ -24,6 +24,7 @@ import { omniVoice } from '@/data/omniVoiceGuide';
 import { IMAGES, applyImageFallback } from '@/lib/images';
 import { classifyTour, TOUR_CATEGORIES, type TourCategory } from '@/lib/tourCategories';
 import { useSEO } from '@/lib/seo';
+import { withViatorAttribution } from '@/config/programmes';
 import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface ViatorTour {
@@ -202,11 +203,16 @@ export default function Tours() {
   });
 
   const handleTourClick = async (tour: ViatorTour) => {
-    // Track affiliate click
+    // booking_url comes from the Viator product sync, not from our partner
+    // link builder, so it carries no pid or mcid of ours. Opening it directly
+    // meant every click from this page was unattributable and unpaid. See
+    // src/config/programmes.ts.
+    const destination = withViatorAttribution(tour.booking_url, 'tours-page');
+
     await trackAffiliateClick(
       tour.title,
       'viator_tours_page',
-      tour.booking_url,
+      destination,
       'tour_booking',
       tour.category,
       'viator'
@@ -214,8 +220,7 @@ export default function Tours() {
 
     trackAdsConversion('marketplace_clickthrough', { value: tour.price_from || 0, currency: tour.currency || 'USD' });
 
-    // Open Viator in new tab
-    window.open(tour.booking_url, '_blank', 'noopener,noreferrer');
+    window.open(destination, '_blank', 'noopener,noreferrer');
   };
 
   const TourCard = ({ tour }: { tour: ViatorTour }) => {

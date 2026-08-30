@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
-import { buildViatorLink } from "@/config/programmes";
+import { buildViatorLink, withViatorAttribution } from "@/config/programmes";
 import { 
   MapPin, 
   Clock, 
@@ -458,7 +458,7 @@ const TravelWellConnectedStore = () => {
             onClick={() => handleViatorClick(tour)}
           >
             <a
-              href={tour.booking_url || buildViatorLink({ campaign: 'travel-well-connected' })}
+              href={withViatorAttribution(tour.booking_url, 'travel-well-connected')}
               target="_blank"
               rel="noopener noreferrer"
             >
