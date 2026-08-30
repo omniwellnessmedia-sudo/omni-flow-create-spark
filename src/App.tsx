@@ -171,6 +171,7 @@ const EventsIndex = React.lazy(() => import('@/pages/EventsIndex'));
 const EventDetailPage = React.lazy(() => import('@/pages/EventDetail'));
 const EventSubmit = React.lazy(() => import('@/pages/EventSubmit'));
 const EventsAdmin = React.lazy(() => import('@/pages/admin/EventsAdmin'));
+const Scorecard = React.lazy(() => import('@/pages/Scorecard'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
@@ -255,6 +256,8 @@ function App() {
                       stable id, which is also the ?service= value the contact
                       form reads, so an enquiry traces back to its page. */}
                   <Route path="/services/:slug" element={<ServiceOfferDetail />} />
+                  {/* Free diagnostic, the top of the funnel for every service page. */}
+                  <Route path="/scorecard" element={<Scorecard />} />
                   <Route path="/service/:id" element={<ServiceDetail />} />
                   <Route path="/service-detail/:id" element={<ServiceDetail />} />
                   <Route path="/service-detail/:serviceId" element={<ServiceDetail />} />
