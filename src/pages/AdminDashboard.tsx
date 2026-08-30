@@ -420,8 +420,16 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border/50 bg-background/95 backdrop-blur-sm sticky top-0 z-50">
+      {/* Header. The 3px seven hue rule beneath it is the site's signature
+          (the public pages carry it as the scroll progress ground); with it,
+          the operator surface reads as the same product rather than a bolted
+          on admin template. */}
+      <div className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-sm">
+        <div aria-hidden="true" className="flex h-[3px] w-full">
+          {['#E63946','#F38020','#F5C518','#4FAE3F','#2BB9B9','#2C6FB5','#5C2A8A'].map((c) => (
+            <span key={c} className="h-full flex-1" style={{ background: c }} />
+          ))}
+        </div>
         <div className="flex h-14 items-center justify-between px-4 md:px-6 max-w-[1400px] mx-auto">
           <div className="flex items-center gap-3 min-w-0">
             {/* Mobile menu */}
@@ -442,7 +450,12 @@ const AdminDashboard = () => {
             </Link>
             <div className="hidden sm:flex items-center gap-2">
               <span className="text-border">/</span>
-              <span className="text-sm font-medium">Admin</span>
+              <span
+                className="text-[10px] font-medium uppercase tracking-[.2em] text-muted-foreground"
+                style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+              >
+                Admin
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
@@ -483,8 +496,10 @@ const AdminDashboard = () => {
           <AdminSidebar activeSection={activeSection} onSectionChange={handleSectionChange} alerts={dashboardData.alertCounts} />
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 p-4 md:p-6 min-w-0">
+        {/* Main Content. The cream ground is the public site's; white cards
+            sit on it with visible edges in every section, including the older
+            screens that have not had their own theme pass yet. */}
+        <div className="min-w-0 flex-1 p-4 md:p-6" style={{ background: '#FAF8F2' }}>
           <SmartGreeting
             userName={user?.user_metadata?.full_name || user?.email?.split("@")[0]}
             role="admin"
