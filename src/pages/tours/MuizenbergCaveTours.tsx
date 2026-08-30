@@ -14,6 +14,7 @@ import {
 import { Link } from 'react-router-dom';
 import { applyImageFallback } from '@/lib/images';
 import { withManifestImages } from '@/data/tourGalleries';
+import { WalkAbout, WalkIncluded, WalkPricing, WalkSeriesNav } from '@/components/tours/IndigenousWalkSections';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -21,7 +22,7 @@ export default function MuizenbergCaveTours() {
   useTourSEO({
     tourName: 'Muizenberg Living Heritage Walk',
     title: 'Muizenberg Living Heritage Walk | Ancient History by the Sea | Cape Town',
-    description: 'An experience of ancient history by the sea. Walk from Surfers Corner through Boyes Drive, explore ancient foraging paths, shell middens, and marine heritage with Chief Kingsley. From R1,850pp.',
+    description: 'An experience of ancient history by the sea. Walk from Surfers Corner through Boyes Drive, explore ancient foraging paths, shell middens, and marine heritage with Chief Kingsley. Three-walk suite from R1,850 pp.',
     price: 1850,
     currency: 'ZAR',
     location: 'Muizenberg, Cape Town',
@@ -43,21 +44,6 @@ export default function MuizenbergCaveTours() {
     end_date: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
     active: true
   };
-
-  const pricingTiers = [
-    { range: '1-4 People', label: 'Intimate Experience', price: 'R2,330', perPerson: true },
-    { range: '5-9 People', label: 'Small Group', price: 'R2,050', perPerson: true, popular: true },
-    { range: '10-12 People', label: 'Group Experience', price: 'R1,850', perPerson: true, bestValue: true },
-  ];
-
-  const inclusions = [
-    { icon: User, title: 'Expert Indigenous Guidance', desc: 'Led by Chief Kingsley & Travel and Tours Cape Town team' },
-    { icon: Mountain, title: 'Deep Cultural Immersion', desc: 'Ancient foraging paths, shell middens & marine heritage' },
-    { icon: Leaf, title: 'Traditional Refreshments', desc: 'Indigenous herbal tea and light refreshments' },
-    { icon: Gift, title: 'Herbal Gift', desc: 'A traditional herbal gift to take home' },
-    { icon: Camera, title: 'Commemorative Gift', desc: 'Certificate of participation' },
-    { icon: Shield, title: 'Safety Support', desc: 'Trained support team and first aid throughout' },
-  ];
 
   return (
     <>
@@ -98,7 +84,7 @@ export default function MuizenbergCaveTours() {
                 className="bg-white text-primary hover:bg-white/90"
                 onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                Book Now — From R1,850 pp
+                Book This Experience
               </Button>
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
                 <Link to="/contact">Enquire</Link>
@@ -131,6 +117,8 @@ export default function MuizenbergCaveTours() {
           </div>
         </div>
       </section>
+
+      <WalkAbout slug="muizenberg-cave-tours" />
 
       {/* Meet Your Guide */}
       <section id="chief-kingsley" className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50 scroll-mt-24">
@@ -166,41 +154,9 @@ export default function MuizenbergCaveTours() {
         </div>
       </section>
 
-      {/* What's Included */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-heading text-3xl mb-8 text-center">What's Included</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {inclusions.map((item, i) => (
-                <Card key={i} className="text-center hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <item.icon className="w-8 h-8 text-primary mx-auto mb-3" />
-                    <h3 className="font-semibold mb-2">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            <div className="mt-6 text-center">
-              <Badge variant="outline" className="text-sm">
-                Optional: Traditional lunch add-on — R200 per person
-              </Badge>
-            </div>
-
-            {/* What's Not Included */}
-            <div className="mt-10 bg-muted/50 rounded-lg p-6">
-              <h3 className="font-semibold mb-3">Please Note — Not Included</h3>
-              <ul className="grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Transport to and from venues</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Lunch (optional add-on available — see above)</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Personal items and hiking gear</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Additional drinks</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Shared inclusions, lunch package and not-included list.
+          One source for all three walks: src/data/indigenousWalks.ts. */}
+      <WalkIncluded />
 
       {/* Journey Timeline */}
       <section className="py-16 bg-muted/30">
@@ -265,7 +221,7 @@ export default function MuizenbergCaveTours() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground space-y-2">
-                  <p>Traditional refreshments and herbal tea ceremony. Reflective sharing circle, Q&A about Khoi-San culture, and closing ceremony. Receive your herbal gift and certificate of participation.</p>
+                  <p>Traditional refreshments and herbal tea ceremony. Reflective sharing circle, Q&A about Khoi-San culture, and closing ceremony. Receive your commemorative indigenous gift.</p>
                 </CardContent>
               </Card>
             </div>
@@ -356,24 +312,7 @@ export default function MuizenbergCaveTours() {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-heading text-3xl mb-8 text-center">Tour Pricing</h2>
-            <div className="grid sm:grid-cols-3 gap-6">
-              {pricingTiers.map((tier, i) => (
-                <Card key={i} className={`text-center hover:shadow-xl transition-shadow ${tier.popular ? 'border-primary ring-2 ring-primary/20' : ''}`}>
-                  <CardHeader>
-                    {tier.popular && <Badge className="mx-auto mb-2">Most Popular</Badge>}
-                    {tier.bestValue && <Badge variant="secondary" className="mx-auto mb-2">Best Value</Badge>}
-                    <Users className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <CardTitle className="text-xl">{tier.range}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{tier.label}</p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-primary mb-1">{tier.price}</div>
-                    <p className="text-sm text-muted-foreground">per person</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <WalkPricing />
 
             {/* Community impact.
                 WHAT THIS REPLACED. Until 30 August 2026 this card carried
@@ -422,6 +361,8 @@ export default function MuizenbergCaveTours() {
         </div>
       </section>
 
+
+      <WalkSeriesNav slug="muizenberg-cave-tours" />
 
       {/* The wellness layer: this walk is one thread of a wider programme.
           Links only to routes that exist. */}

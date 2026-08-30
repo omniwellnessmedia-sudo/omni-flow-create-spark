@@ -56,14 +56,20 @@ describe('commercial entity separation', () => {
 });
 
 describe('the three pages carry the same logic', () => {
+  // Inclusions, pricing and the about section moved into shared components
+  // on 30 August 2026, twinning the operator's own architecture: its
+  // platform keeps this content in shared components precisely so pages
+  // cannot drift apart. Pages are therefore checked for RENDERING the shared
+  // sections; the sections themselves are checked separately below.
   const REQUIRED = [
     ['a quick info strip', 'Start Point'],
     ['the guide section', 'Chief Kingsley'],
-    ['inclusions', "What's Included"],
-    ['a not-included list', 'Not Included'],
+    ['the operator about section', '<WalkAbout slug='],
+    ['the shared inclusions', '<WalkIncluded />'],
     ['a gallery fed by the manifest', 'withManifestImages('],
     ['cultural protocols', 'Cultural Protocols'],
-    ['group pricing tiers', 'pricingTiers'],
+    ['the shared suite pricing', '<WalkPricing />'],
+    ['the series navigation', '<WalkSeriesNav slug='],
     ['the community impact card', 'Your visit gives back'],
     ['the wellness layer', 'Make a wellness day of it'],
     ['a booking section', 'booking-section'],
@@ -115,6 +121,65 @@ describe('the gallery manifest pipeline', () => {
       for (const p of photos) {
         expect(p.src).toMatch(/^\/tours\//);
       }
+    }
+  });
+});
+
+describe('the shared walk content mirrors the operator', () => {
+  const shared = readFileSync(
+    resolve(__dirname, '../../components/tours/IndigenousWalkSections.tsx'),
+    'utf8'
+  );
+  const data = readFileSync(resolve(__dirname, '../../data/indigenousWalks.ts'), 'utf8');
+
+  it('frames the tiers as the price of all three walks', () => {
+    // The operator is explicit that R2,330 / R2,050 / R1,850 price the full
+    // suite of three walks, with individual walk pricing on request. The
+    // pages previously presented them as single walk prices, which
+    // materially misquoted the offer, so the framing is pinned.
+    expect(data).toContain('all-inclusive for all three cultural walks');
+    expect(data).toContain('Individual walk pricing is available on request');
+    expect(shared).toContain('per person, all three walks');
+  });
+
+  it('claims no certificate', () => {
+    // "Certificate of participation" appeared on all three pages and appears
+    // nowhere in the operator inclusions. Nothing we hand out may be
+    // invented here.
+    for (const [f, src] of PAGES) {
+      expect(src, f).not.toMatch(/certificate/i);
+    }
+    expect(data).not.toMatch(/certificate/i);
+  });
+
+  it('carries the operator lunch package in full', () => {
+    for (const marker of ['Chilli Charmer', 'Apple-Mint Revitaliser', 'Ciabatta', 'R200']) {
+      expect(data).toContain(marker);
+    }
+  });
+
+  it('keeps Cape Point enquiry only', () => {
+    // The operator repository itself gives Cape Point no public page and
+    // labels it a private custom booking, so it must not gain a page here.
+    expect(data).toContain('private custom booking');
+    const app = readFileSync(resolve(__dirname, '../../App.tsx'), 'utf8');
+    expect(app).not.toMatch(/cape-point/i);
+  });
+
+  it('names the canonical start point for each walk', () => {
+    for (const start of [
+      'Fish Hoek Athletics Club Parking Lot',
+      'Surfers Corner Circle (Walk of Fame)',
+      'Next to the Brass Bell Restaurant Entrance',
+    ]) {
+      expect(data).toContain(start);
+    }
+  });
+
+  it('publishes no single walk from-price in the page metadata', () => {
+    for (const [f, src] of PAGES) {
+      expect(src, f).not.toContain('From R1,850pp.');
+      expect(src, f).toContain('Three-walk suite from R1,850 pp.');
     }
   });
 });
