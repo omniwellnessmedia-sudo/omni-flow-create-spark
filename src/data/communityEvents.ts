@@ -1,13 +1,27 @@
-import { Leaf, Users, Heart, ArrowRight, Sparkles, type LucideIcon } from "lucide-react";
+import { Leaf, Users, Heart, ArrowRight, Sparkles, Film, Mountain, type LucideIcon } from "lucide-react";
+import { listPublishedEvents, type PublicEvent } from "@/lib/events";
 
 /**
- * Shared community-events source.
+ * Community events, read from the database.
  *
- * Both the dashboard widget (CommunityCalendar) and the full events page
- * (CommunityEvents) read from here so they never drift apart. Events are
- * sample data for now, anchored on the current month so the calendar always
- * looks live — they'll move to a `community_events` Supabase table once the
- * schema lands, at which point only `getCommunityEvents` changes.
+ * WHAT WAS HERE BEFORE. This file used to hold six hardcoded events whose
+ * dates were recomputed against the current month, with a comment explaining
+ * that this was done "so the calendar always looks live". They were a beach
+ * cleanup, a youth workshop, a food drive described as run in partnership with
+ * a real foundation, a sunrise yoga session, a volunteer day and a heritage
+ * walk. None of them existed. Anyone reading that calendar was being told
+ * about events they could not attend, and one of them attributed an activity
+ * to an organisation that had not agreed to it.
+ *
+ * They are gone. This module now reads published, human verified rows from
+ * the events table. The calendar can therefore be empty, and empty is the
+ * correct output when nothing is on. A calendar that is honestly empty is
+ * worth more than one that is dishonestly full.
+ *
+ * The category icons and styles below are kept because the widgets that
+ * consume them are unchanged.
+ *
+ * No em dashes in this file.
  */
 
 export type CommunityEventCategory =
@@ -16,10 +30,15 @@ export type CommunityEventCategory =
   | "tour"
   | "drive"
   | "volunteer"
-  | "wellness";
+  | "wellness"
+  | "screening"
+  | "retreat"
+  | "community"
+  | "other";
 
 export interface CommunityEvent {
   id: string;
+  slug: string;
   title: string;
   location?: string;
   date: Date;
@@ -34,6 +53,10 @@ export const CATEGORY_ICON: Record<CommunityEventCategory, LucideIcon> = {
   drive: Heart,
   volunteer: Users,
   wellness: Sparkles,
+  screening: Film,
+  retreat: Mountain,
+  community: Users,
+  other: Sparkles,
 };
 
 export const CATEGORY_STYLE: Record<CommunityEventCategory, string> = {
@@ -43,74 +66,58 @@ export const CATEGORY_STYLE: Record<CommunityEventCategory, string> = {
   drive: "bg-omni-blue/10 text-omni-blue",
   volunteer: "bg-primary/10 text-primary",
   wellness: "bg-omni-violet/10 text-omni-violet",
+  screening: "bg-omni-violet/10 text-omni-violet",
+  retreat: "bg-omni-teal/10 text-omni-teal",
+  community: "bg-omni-blue/10 text-omni-blue",
+  other: "bg-muted text-muted-foreground",
 };
 
 export const CATEGORY_LABEL: Record<CommunityEventCategory, string> = {
-  cleanup: "Beach & Eco Cleanup",
+  cleanup: "Cleanup",
   workshop: "Workshop",
-  tour: "Community Tour",
-  drive: "Donation Drive",
-  volunteer: "Volunteering",
-  wellness: "Wellness Session",
+  tour: "Tour",
+  drive: "Drive",
+  volunteer: "Volunteer",
+  wellness: "Wellness",
+  screening: "Screening",
+  retreat: "Retreat",
+  community: "Community",
+  other: "Event",
 };
 
+const toCategory = (kind: string): CommunityEventCategory =>
+  (Object.keys(CATEGORY_LABEL) as CommunityEventCategory[]).includes(kind as CommunityEventCategory)
+    ? (kind as CommunityEventCategory)
+    : "other";
+
 /**
- * Returns the community events, anchored to the current month so the calendar
- * is always populated regardless of when it's viewed. Spread across this month
- * and the next so the "next month" view isn't empty either.
+ * Published events as calendar entries.
+ *
+ * Returns a discriminated result rather than an array, so a caller cannot
+ * mistake "the read failed" for "there is nothing on". That distinction is
+ * the entire lesson of the data this file used to hold.
+ *
+ * Events with no date are omitted here and only here: they are real events
+ * and appear in the events list, but a calendar has nowhere to draw them.
  */
-export const getCommunityEvents = (): CommunityEvent[] => {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = now.getMonth();
-  return [
-    {
-      id: "1",
-      title: "Beach Cleanup",
-      location: "Muizenberg Beach",
-      date: new Date(y, m, 7, 9, 0),
-      category: "cleanup",
-      description: "Join the Omni community for a morning of caring for our coastline. Gloves, bags and refreshments provided.",
-    },
-    {
-      id: "2",
-      title: "Youth Empowerment Workshop",
-      location: "Omni Wellness Studio, Cape Town",
-      date: new Date(y, m, 16, 10, 0),
-      category: "workshop",
-      description: "A hands-on session helping young people build confidence, mindfulness and practical life skills.",
-    },
-    {
-      id: "3",
-      title: "Community Food Drive",
-      location: "Hanover Park",
-      date: new Date(y, m, 28, 11, 0),
-      category: "drive",
-      description: "Help pack and distribute nutritious food parcels to families in partnership with the Dr Phil Afel Foundation.",
-    },
-    {
-      id: "4",
-      title: "Sunrise Yoga & Mindfulness",
-      location: "Sea Point Promenade",
-      date: new Date(y, m, 21, 6, 30),
-      category: "wellness",
-      description: "Start your weekend grounded. An all-levels outdoor yoga and breathwork session open to the whole community.",
-    },
-    {
-      id: "5",
-      title: "Conscious Living Volunteer Day",
-      location: "Khayelitsha Community Garden",
-      date: new Date(y, m + 1, 5, 9, 0),
-      category: "volunteer",
-      description: "Spend a morning tending the community food garden and mentoring local growers.",
-    },
-    {
-      id: "6",
-      title: "Heritage Walking Tour",
-      location: "Bo-Kaap, Cape Town",
-      date: new Date(y, m + 1, 14, 10, 0),
-      category: "tour",
-      description: "A guided cultural walk celebrating Cape Town's heritage, with proceeds supporting local artisans.",
-    },
-  ];
+export const loadCommunityEvents = async (): Promise<
+  { ok: true; events: CommunityEvent[] } | { ok: false; reason: string }
+> => {
+  const res = await listPublishedEvents(null, null);
+  if (!res.ok) return { ok: false, reason: res.reason };
+
+  const events = res.data
+    .filter((e: PublicEvent) => Boolean(e.event_date))
+    .map((e: PublicEvent) => ({
+      id: e.id,
+      slug: e.slug,
+      title: e.title,
+      location: [e.venue, e.city].filter(Boolean).join(", ") || undefined,
+      date: new Date(`${e.event_date}T00:00:00`),
+      category: toCategory(e.kind),
+      description: e.summary ?? undefined,
+    }))
+    .filter((e) => !Number.isNaN(e.date.getTime()));
+
+  return { ok: true, events };
 };

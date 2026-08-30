@@ -1,13 +1,26 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { addMonths, endOfMonth, format, isSameDay, isSameMonth, startOfMonth, startOfWeek, endOfWeek, eachDayOfInterval } from "date-fns";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { getCommunityEvents, CATEGORY_ICON, CATEGORY_STYLE } from "@/data/communityEvents";
+import { loadCommunityEvents, CATEGORY_ICON, CATEGORY_STYLE, type CommunityEvent } from "@/data/communityEvents";
 
 const CommunityCalendar = () => {
-  const events = useMemo(getCommunityEvents, []);
+  // Real published events, loaded on mount. This widget used to render a
+  // hardcoded list timed to the current month so it always looked populated.
+  // It can now be empty, and empty is correct when nothing is on.
+  const [events, setEvents] = useState<CommunityEvent[]>([]);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    loadCommunityEvents().then((res) => {
+      if (cancelled) return;
+      if (res.ok) setEvents(res.events);
+      else setFailed(true);
+    });
+    return () => { cancelled = true; };
+  }, []);
   const [monthCursor, setMonthCursor] = useState(() => startOfMonth(new Date()));
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
@@ -41,7 +54,7 @@ const CommunityCalendar = () => {
               <p className="text-xs text-muted-foreground mt-0.5">Upcoming events & opportunities</p>
             </div>
           </div>
-          <Link to="/community/events" className="text-xs font-medium text-primary hover:underline shrink-0 mt-2">
+          <Link to="/events" className="text-xs font-medium text-primary hover:underline shrink-0 mt-2">
             View full calendar
           </Link>
         </div>
@@ -112,9 +125,15 @@ const CommunityCalendar = () => {
 
           {/* Upcoming events list */}
           <div className="lg:col-span-2 space-y-2.5">
-            {upcoming.length === 0 ? (
+            {/* A failed read and an empty calendar are different facts and
+                must not render the same way. */}
+            {failed ? (
+              <p className="text-sm text-amber-800 text-center py-8">
+                We could not load the calendar just now.
+              </p>
+            ) : upcoming.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">
-                No upcoming events yet. Check back soon.
+                Nothing listed yet.
               </p>
             ) : (
               upcoming.map(evt => {
@@ -127,8 +146,11 @@ const CommunityCalendar = () => {
                     <div className="min-w-0 flex-1">
                       <div className="font-medium text-sm leading-tight">{evt.title}</div>
                       {evt.location && <div className="text-xs text-muted-foreground mt-0.5">{evt.location}</div>}
+                      {/* Date only. Events carry a date, and start times live
+                          on individual sessions, so printing a time here would
+                          render midnight for everything. */}
                       <div className="text-xs text-muted-foreground mt-0.5">
-                        {format(evt.date, "d MMM yyyy")} · {format(evt.date, "h:mm a")}
+                        {format(evt.date, "d MMM yyyy")}
                       </div>
                     </div>
                   </div>
@@ -136,7 +158,7 @@ const CommunityCalendar = () => {
               })
             )}
             <Link
-              to="/community/events"
+              to="/events"
               className="flex items-center justify-end gap-1 text-xs font-medium text-primary hover:underline pt-1"
             >
               View all events <ArrowRight className="h-3 w-3" />

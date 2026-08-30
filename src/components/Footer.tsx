@@ -129,7 +129,7 @@ const Footer = () => {
             <h4 className="text-xs font-medium uppercase tracking-wider text-white/30 mb-4">Company</h4>
             <ul className="space-y-2.5 text-sm">
               <li><Link to="/about" className="text-white/60 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/community/events" className="text-white/60 hover:text-white transition-colors">Events Calendar</Link></li>
+              <li><Link to="/events" className="text-white/60 hover:text-white transition-colors">Events Calendar</Link></li>
               <li><Link to="/csr-impact" className="text-white/60 hover:text-white transition-colors">CSR Impact</Link></li>
               <li><Link to="/esg-policy" className="text-white/60 hover:text-white transition-colors">ESG Policy</Link></li>
               <li><Link to="/contact" className="text-white/60 hover:text-white transition-colors">Contact</Link></li>

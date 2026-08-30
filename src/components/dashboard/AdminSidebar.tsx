@@ -82,6 +82,13 @@ const NAV_GROUPS: {
     ],
   },
   {
+    label: "Events",
+    hue: "#2C6FB5",
+    items: [
+      { id: "events-admin", label: "Events calendar", icon: CalendarCheck, href: "/admin/events" },
+    ],
+  },
+  {
     label: "System",
     hue: "#8A9A96",
     items: [

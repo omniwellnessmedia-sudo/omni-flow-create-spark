@@ -21,7 +21,6 @@ const SandyMitchellProfile = React.lazy(() => import('@/pages/SandyMitchellProfi
 const AddService = React.lazy(() => import('@/pages/AddService'));
 const EditService = React.lazy(() => import('@/pages/EditService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
-const CommunityEvents = React.lazy(() => import('@/pages/CommunityEvents'));
 const StunningPigs = React.lazy(() => import('@/pages/events/StunningPigs'));
 // UNLISTED, NOINDEX: BWC Meet the Team controlled staging page. Holds real
 // people's photographs and biographies that are NOT cleared for publication —
@@ -168,6 +167,10 @@ const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
 const ProductCuration = React.lazy(() => import('@/pages/admin/ProductCuration'));
 const MarketplaceHub = React.lazy(() => import('@/pages/admin/MarketplaceHub'));
 const ServiceOfferDetail = React.lazy(() => import('@/pages/ServiceOfferDetail'));
+const EventsIndex = React.lazy(() => import('@/pages/EventsIndex'));
+const EventDetailPage = React.lazy(() => import('@/pages/EventDetail'));
+const EventSubmit = React.lazy(() => import('@/pages/EventSubmit'));
+const EventsAdmin = React.lazy(() => import('@/pages/admin/EventsAdmin'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
@@ -274,7 +277,12 @@ function App() {
                   <Route path="/partners" element={<Navigate to="/partners-directory" replace />} />
                   <Route path="/impact" element={<Navigate to="/csr-impact" replace />} />
                   <Route path="/wellness-account" element={<Navigate to="/wellness-exchange/account" replace />} />
-                  <Route path="/community/events" element={<CommunityEvents />} />
+                  {/* One events calendar, not two. /community/events was a
+                      second calendar over the same content; it now redirects
+                      so existing links and the sitemap keep working. */}
+                  <Route path="/community/events" element={<Navigate to="/events" replace />} />
+                  <Route path="/events" element={<EventsIndex />} />
+                  <Route path="/events/submit" element={<EventSubmit />} />
                   {/* Analytics shows real traffic on this URL, but no route ever
                       existed for it — so it fell through to NotFound and was served
                       at HTTP 200, i.e. an indexable soft-404 duplicate of the event
@@ -285,6 +293,9 @@ function App() {
                       it now appears in sitemap.xml. It remains out of the primary
                       nav by choice — do not add it to nav without approval. */}
                   <Route path="/events/stunning-pigs" element={<StunningPigs />} />
+                  {/* Static segments outrank dynamic ones in the router, so the
+                      bespoke Stunning Pigs page above still wins its own slug. */}
+                  <Route path="/events/:slug" element={<EventDetailPage />} />
                   <Route path="/bwc-team-staging" element={<BwcTeamStaging />} />
                   <Route path="/ai-tools" element={<Navigate to="/services" replace />} />
                   <Route path="/wellness-exchange/provider-signup" element={<ProviderSignupRedirect />} />
@@ -422,6 +433,11 @@ function App() {
                   <Route path="/admin/marketplace" element={
                     <ProtectedRoute requireCatalogueManager={true}>
                       <MarketplaceHub />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/events" element={
+                    <ProtectedRoute requireCatalogueManager={true}>
+                      <EventsAdmin />
                     </ProtectedRoute>
                   } />
                   <Route path="/admin-dashboard" element={
