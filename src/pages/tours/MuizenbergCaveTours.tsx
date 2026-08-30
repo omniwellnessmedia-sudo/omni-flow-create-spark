@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { applyImageFallback } from '@/lib/images';
+import { withManifestImages } from '@/data/tourGalleries';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -25,8 +26,6 @@ export default function MuizenbergCaveTours() {
     currency: 'ZAR',
     location: 'Muizenberg, Cape Town',
     duration: '5-6 hours',
-    rating: 4.9,
-    reviewCount: 127,
     images: [],
     url: window.location.href
   });
@@ -277,14 +276,14 @@ export default function MuizenbergCaveTours() {
       {/* Image Gallery */}
       <TourImageGallery
         title="Muizenberg's Living Heritage"
-        images={[
+        images={withManifestImages('muizenberg-cave-tours', [
           { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view%202.jpg`, alt: 'Muizenberg cave panoramic view', caption: 'Panoramic views of False Bay from the ancient cave vantage points' },
           { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view.jpg`, alt: 'Cave formations at Muizenberg', caption: 'Ancient cave formations along the Muizenberg trail' },
           { src: `${STORAGE_BASE}/General%20Images/wellness%20group%20tour.jpg`, alt: 'Group walking the coastal trail', caption: 'Ascending Boyes Drive — ancient foraging and trade paths' },
           { src: `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`, alt: 'Chief Kingsley on the trail', caption: 'Chief Kingsley sharing Khoi-San coastal heritage' },
           { src: `${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`, alt: 'Community on the walk', caption: 'Small groups foster deeper cultural connection' },
           { src: `${STORAGE_BASE}/General%20Images/tour%20picture%20couple%20with%20chief%20kingsley.jpg`, alt: 'Guests with Chief Kingsley', caption: 'Meaningful encounters along the ancient coastline' },
-        ]}
+        ])}
       />
 
       {/* What to Bring */}
@@ -376,23 +375,31 @@ export default function MuizenbergCaveTours() {
               ))}
             </div>
 
-            {/* Community Impact */}
+            {/* Community impact.
+                WHAT THIS REPLACED. Until 30 August 2026 this card carried
+                our sister foundation's branding, a proceeds percentage with
+                no verifiable source in this repository, and tax deduction
+                language. The standing rule for this site is explicit: it is
+                the commercial entity, and foundation branding, donation
+                links and tax receipt language do not appear on it. What remains below is only what
+                the commercial site can stand behind, and the community work
+                itself is presented on our own CSR page. */}
             <Card className="mt-8 border-2 border-green-600/20 bg-gradient-to-br from-green-50/80 to-blue-50/80">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
                   <Heart className="w-10 h-10 text-green-600 shrink-0" />
                   <div>
-                    <h3 className="font-bold text-lg mb-1">Buy One, Sponsor One</h3>
+                    <h3 className="font-bold text-lg mb-1">Your visit gives back</h3>
                     <p className="text-sm text-muted-foreground">
-                      20% of all tour proceeds support the <strong>Dr. Phil-afel Foundation</strong> community projects — 
-                      youth education, sacred site conservation, and community development. 
-                      <em> Section 18A tax-deductible donations available.</em>
+                      These walks are run with the communities whose heritage they share. A
+                      portion of every booking supports community education and the care of
+                      the sacred sites you will visit.
                     </p>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
                   <Link to="/csr-impact">
-                    <Button variant="outline" size="sm">Learn About Our Foundation →</Button>
+                    <Button variant="outline" size="sm">See our community impact</Button>
                   </Link>
                 </div>
               </CardContent>
@@ -409,8 +416,29 @@ export default function MuizenbergCaveTours() {
             </Card>
 
             <p className="mt-4 text-xs text-center text-muted-foreground">
-              Operated by Travel & Tours Cape Town Pty Ltd · Contact: traveltourscapetown@gmail.com
+              An Ubuntu Journeys experience · Operated by Travel & Tours Cape Town Pty Ltd, presented with Omni Wellness Media · traveltourscapetown@gmail.com
             </p>
+          </div>
+        </div>
+      </section>
+
+
+      {/* The wellness layer: this walk is one thread of a wider programme.
+          Links only to routes that exist. */}
+      <section className="py-12 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-6 rounded-2xl border bg-background p-7">
+            <div className="min-w-[260px] flex-1">
+              <p className="font-heading text-xl">Make a wellness day of it</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Screenings, workshops and community wellness events run alongside our walks.
+                Every listing on the calendar is checked by a person before it appears.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link to="/events"><Button variant="outline">What is on</Button></Link>
+              <Link to="/tours"><Button variant="outline">All tours</Button></Link>
+            </div>
           </div>
         </div>
       </section>
