@@ -431,3 +431,26 @@ export const PRACTICE_PROJECTS = [
     hue: SPECTRUM.teal,
   },
 ];
+
+/**
+ * Lookups for the per offer pages at /services/:slug.
+ *
+ * Every offer already carries a stable slug, because that slug is the
+ * ?service= value the contact form understands. Reusing it as the URL keeps
+ * one identifier for an offer across the catalogue, its own page and the
+ * enquiry that follows, so an enquiry can always be traced to the page that
+ * produced it.
+ *
+ * No em dashes in this block.
+ */
+export const ALL_OFFERS: RateCardOffer[] = SERVICE_BANDS.flatMap((b) => b.offers);
+
+export const getOffer = (slug: string | undefined): RateCardOffer | undefined =>
+  slug ? ALL_OFFERS.find((o) => o.slug === slug) : undefined;
+
+export const getBandForOffer = (slug: string | undefined): ServiceBand | undefined =>
+  slug ? SERVICE_BANDS.find((b) => b.offers.some((o) => o.slug === slug)) : undefined;
+
+/** Other offers in the same band, for onward navigation. */
+export const getSiblingOffers = (slug: string): RateCardOffer[] =>
+  (getBandForOffer(slug)?.offers ?? []).filter((o) => o.slug !== slug);

@@ -167,6 +167,7 @@ const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
 // It existed but was never routed, so the control was unreachable.
 const ProductCuration = React.lazy(() => import('@/pages/admin/ProductCuration'));
 const MarketplaceHub = React.lazy(() => import('@/pages/admin/MarketplaceHub'));
+const ServiceOfferDetail = React.lazy(() => import('@/pages/ServiceOfferDetail'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
@@ -247,6 +248,10 @@ function App() {
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
                   <Route path="/services" element={<Services />} />
+                  {/* One page per rate card offer. The slug is the offer's
+                      stable id, which is also the ?service= value the contact
+                      form reads, so an enquiry traces back to its page. */}
+                  <Route path="/services/:slug" element={<ServiceOfferDetail />} />
                   <Route path="/service/:id" element={<ServiceDetail />} />
                   <Route path="/service-detail/:id" element={<ServiceDetail />} />
                   <Route path="/service-detail/:serviceId" element={<ServiceDetail />} />
