@@ -14,7 +14,7 @@
  * SCREENINGS_TESTIMONIALS_REPORT.md. No em dashes in this file.
  */
 import { build } from "esbuild";
-import { writeFileSync, mkdtempSync, rmSync } from "node:fs";
+import { writeFileSync, readFileSync, mkdtempSync, rmSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { tmpdir } from "node:os";
@@ -83,8 +83,28 @@ try {
     ...rows.map((r) => `| ${r.id} | ${r.status} | ${r.publishable} | ${r.reason} |`),
     "",
   ].join("\n");
-  writeFileSync(join(root, "TESTIMONIAL_CONSENT_AUDIT.md"), md);
-  console.log(`audit-testimonials: wrote TESTIMONIAL_CONSENT_AUDIT.md (${rows.length} records, ${rows.filter((r) => r.publishable === "yes").length} publishable)`);
+  // Only write when the table itself changed. The timestamp alone changes on
+  // every build, so writing unconditionally left the working tree dirty after
+  // any build and put timestamp-only diffs in front of reviewers. Compare the
+  // content with the timestamp line stripped from both sides.
+  const auditPath = join(root, "TESTIMONIAL_CONSENT_AUDIT.md");
+  const withoutTimestamp = (text) =>
+    text.split("\n").filter((l) => !l.startsWith("Generated at build time:")).join("\n");
+
+  let unchanged = false;
+  try {
+    unchanged = withoutTimestamp(readFileSync(auditPath, "utf8")) === withoutTimestamp(md);
+  } catch {
+    unchanged = false; // no file yet, so write it
+  }
+
+  const summary = `${rows.length} records, ${rows.filter((r) => r.publishable === "yes").length} publishable`;
+  if (unchanged) {
+    console.log(`audit-testimonials: TESTIMONIAL_CONSENT_AUDIT.md unchanged (${summary})`);
+  } else {
+    writeFileSync(auditPath, md);
+    console.log(`audit-testimonials: wrote TESTIMONIAL_CONSENT_AUDIT.md (${summary})`);
+  }
   rmSync(tmp, { recursive: true, force: true });
 } catch (err) {
   console.warn(`audit-testimonials: audit skipped (${err && err.message ? err.message : err}). The build continues: this script never fails a build.`);
