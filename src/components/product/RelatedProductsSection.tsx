@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { PremiumProductCard } from './PremiumProductCard';
 import { Sparkles } from 'lucide-react';
+import { curatedOnly } from "@/config/catalogueGate";
 
 interface RelatedProductsSectionProps {
   category: string;
@@ -17,8 +18,7 @@ export const RelatedProductsSection = ({ category, currentProductId, onQuickView
   }, [category, currentProductId]);
 
   const fetchRelatedProducts = async () => {
-    const { data } = await supabase
-      .from('affiliate_products')
+    const { data } = await curatedOnly((supabase.from('affiliate_products')))
       .select('*')
       .eq('category', category)
       .eq('is_active', true)

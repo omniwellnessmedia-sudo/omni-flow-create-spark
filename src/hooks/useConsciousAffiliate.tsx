@@ -1,5 +1,9 @@
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
+import {
+  PROGRAMME_ACTIVE,
+  buildViatorLink,
+} from "@/config/programmes";
 
 interface AffiliateParams {
   productSlug?: string;
@@ -15,62 +19,65 @@ export const useConsciousAffiliate = () => {
   const { user } = useAuth();
 
   const generateAffiliateLink = (params: AffiliateParams): string => {
-    const { productSlug, fullProductUrl, channel, wellnessCategory, retreatId, affiliateProgram = 'camerastuff' } = params;
-    
-    // Generate URLs based on affiliate program
+    const {
+      productSlug,
+      fullProductUrl,
+      channel,
+      wellnessCategory,
+      retreatId,
+      affiliateProgram = 'viator',
+    } = params;
+
     if (affiliateProgram === 'viator') {
-      // Viator Partner Shop URL with proper affiliate parameters
-      const viatorParams = new URLSearchParams({
-        medium: "link",
-        medium_version: "shop",
-        campaign: "omni-wellness",
+      // Attribution is pid + mcid and nothing else. The previous implementation
+      // sent `search`, `medium_version` and `wellness_category`, none of which
+      // Viator documents, and omitted pid/mcid entirely, so nothing it
+      // generated could be paid out. See src/config/programmes.ts.
+      return buildViatorLink({
+        productPath: fullProductUrl ?? (productSlug ? `/tours/${productSlug}` : undefined),
+        campaign: channel,
       });
-      
-      if (wellnessCategory) {
-        viatorParams.set("wellness_category", wellnessCategory);
-      }
-      
-      // If productSlug is provided, link to specific product, otherwise to partner shop home
-      const baseUrl = productSlug 
-        ? `https://www.viator.com/tours/${productSlug}`
-        : "https://www.viator.com/partner-shop/omniwellnessmedia/";
-      
-      return `${baseUrl}?${viatorParams.toString()}`;
     }
-    
+
     if (affiliateProgram === 'roambuddy') {
-      // RoamBuddy affiliate URL
       const roambuddyParams = new URLSearchParams({
         ref: "omniwellness",
         channel: channel,
       });
-      
+
       if (wellnessCategory) {
         roambuddyParams.set("wellness_category", wellnessCategory);
       }
-      
+
       return `https://www.worldroambuddy.com?${roambuddyParams.toString()}`;
     }
-    
-    // Default: CameraStuff
-    // Use full URL if provided, otherwise construct from slug
-    const baseProductUrl = fullProductUrl || `https://camerastuff.co.za/products/${productSlug}`;
-    
-    const urlParams = new URLSearchParams({
-      a_aid: "omniwellnessmedia",
-      channel: channel,
-    });
 
-    if (wellnessCategory) {
-      urlParams.set("wellness_category", wellnessCategory);
-    }
-    if (retreatId) {
-      urlParams.set("retreat_id", retreatId);
+    if (affiliateProgram === 'camerastuff') {
+      // The CameraStuff affiliate account was deactivated by the merchant in
+      // August 2026. Emitting tagged links for a programme we are not in earns
+      // nothing and misrepresents the relationship, so we send visitors to the
+      // plain product page with no affiliate tag until re-application is
+      // approved. Flip PROGRAMME_ACTIVE.camerastuff back to true at that point
+      // and this returns to normal.
+      const baseProductUrl =
+        fullProductUrl || `https://camerastuff.co.za/products/${productSlug}`;
+
+      if (!PROGRAMME_ACTIVE.camerastuff) {
+        return baseProductUrl;
+      }
+
+      const urlParams = new URLSearchParams({
+        a_aid: "omniwellnessmedia",
+        channel: channel,
+      });
+      if (wellnessCategory) urlParams.set("wellness_category", wellnessCategory);
+      if (retreatId) urlParams.set("retreat_id", retreatId);
+
+      const separator = baseProductUrl.includes('?') ? '&' : '?';
+      return `${baseProductUrl}${separator}${urlParams.toString()}`;
     }
 
-    // Append params to existing URL, handling existing query strings
-    const separator = baseProductUrl.includes('?') ? '&' : '?';
-    return `${baseProductUrl}${separator}${urlParams.toString()}`;
+    return fullProductUrl ?? "#";
   };
 
   const trackProductView = async (

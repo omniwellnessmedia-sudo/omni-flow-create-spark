@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 
 // Import service images from centralized IMAGES library
-import { IMAGES } from "@/lib/images";
+import { IMAGES, applyImageFallback } from "@/lib/images";
 
 interface Service {
   id: string;
@@ -440,7 +440,7 @@ const WellnessMarketplace = () => {
                         className="img-card hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                         onError={(e) => {
-                          e.currentTarget.src = getServiceImage(service.title, service.category, service.id, service.provider_profiles?.id);
+                          applyImageFallback(e, getServiceImage(service.title, service.category, service.id, service.provider_profiles?.id));
                         }}
                       />
                     </div>

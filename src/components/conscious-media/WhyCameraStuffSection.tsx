@@ -1,3 +1,4 @@
+import { PROGRAMME_ACTIVE } from "@/config/programmes";
 export const WhyCameraStuffSection = () => {
   return (
     <section className="bg-white py-16 lg:py-20 px-10 lg:px-20 border-b border-border">
@@ -98,29 +99,34 @@ export const WhyCameraStuffSection = () => {
                 </div>
               </div>
               
-              {/* CameraStuff Logo Link */}
-              <div className="mt-8 pt-6 border-t border-border">
-                <a 
-                  href="https://www.camerastuff.co.za/shop/omniwellnessmedia?a_aid=omniwellnessmedia&a_bid=a42a1cc9"
-                  target="_top"
-                  className="block transition-opacity hover:opacity-80"
-                >
-                  <img 
-                    src="https://camerastuff.postaffiliatepro.com/accounts/default1/nbo4em5ndkg/a42a1cc9.jpg"
-                    alt="CameraStuff Shop"
-                    title="CameraStuff Shop"
-                    className="h-20 w-auto object-contain mx-auto rounded-lg"
+              {/* CameraStuff affiliate banner and impression pixel.
+                  Hidden while the account is deactivated (August 2026): we do
+                  not run a partner banner or fire a tracking pixel for a
+                  programme we are not in. Re-enable via PROGRAMME_ACTIVE. */}
+              {PROGRAMME_ACTIVE.camerastuff && (
+                <div className="mt-8 pt-6 border-t border-border">
+                  <a
+                    href="https://www.camerastuff.co.za/shop/omniwellnessmedia?a_aid=omniwellnessmedia&a_bid=a42a1cc9"
+                    target="_top"
+                    className="block transition-opacity hover:opacity-80"
+                  >
+                    <img
+                      src="https://camerastuff.postaffiliatepro.com/accounts/default1/nbo4em5ndkg/a42a1cc9.jpg"
+                      alt="CameraStuff Shop"
+                      title="CameraStuff Shop"
+                      className="h-20 w-auto object-contain mx-auto rounded-lg"
+                    />
+                  </a>
+                  <img
+                    style={{ border: 0 }}
+                    src="https://camerastuff.postaffiliatepro.com/scripts/nio4em5ndkg?a_aid=omniwellnessmedia&a_bid=a42a1cc9"
+                    width="1"
+                    height="1"
+                    alt=""
+                    className="hidden"
                   />
-                </a>
-                <img 
-                  style={{ border: 0 }} 
-                  src="https://camerastuff.postaffiliatepro.com/scripts/nio4em5ndkg?a_aid=omniwellnessmedia&a_bid=a42a1cc9" 
-                  width="1" 
-                  height="1" 
-                  alt="" 
-                  className="hidden"
-                />
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

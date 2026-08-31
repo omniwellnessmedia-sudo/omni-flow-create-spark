@@ -18,8 +18,9 @@ import { RecentlyViewedSection } from '@/components/product/RecentlyViewedSectio
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { useViewTracker } from '@/hooks/useViewTracker';
 import { useUserRole } from '@/hooks/useUserRole';
-import curatedSeed from '@/data/curated_wellness_seed.json';
-import cjSeed from '@/data/cjSeedProducts.json';
+import { curatedSeed, cjSeed } from '@/config/seedCatalogue';
+import { curatedOnly } from "@/config/catalogueGate";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 interface Product {
   id: string;
@@ -75,6 +76,8 @@ const StarRating = ({ rating, reviewCount }: { rating?: number; reviewCount?: nu
 };
 
 const StoreProductDetail = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -94,8 +97,7 @@ const StoreProductDetail = () => {
   const fetchProduct = async () => {
     try {
       // Try database first
-      const { data, error } = await supabase
-        .from('affiliate_products')
+      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
         .select('*')
         .eq('id', id)
         .maybeSingle();
@@ -135,8 +137,7 @@ const StoreProductDetail = () => {
 
       // Fetch related products
       if (productData) {
-        const { data: related } = await supabase
-          .from('affiliate_products')
+        const { data: related } = await curatedOnly(supabase.from('affiliate_products'))
           .select('*')
           .eq('category', productData.category)
           .neq('id', id)

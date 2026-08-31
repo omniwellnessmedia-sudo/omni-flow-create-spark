@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { applyImageFallback } from '@/lib/images';
 
 interface ViatorTour {
   id: string;
@@ -350,7 +351,7 @@ export default function AdminViatorTours() {
                                 alt={tour.title}
                                 className="w-12 h-12 rounded object-cover"
                                 onError={(e) => {
-                                  (e.target as HTMLImageElement).src = '/placeholder.svg';
+                                  applyImageFallback(e, '/placeholder.svg');
                                 }}
                               />
                               <div className="min-w-0">

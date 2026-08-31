@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { X, Share2, ExternalLink, Heart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { SmartProductImage } from './SmartProductImage';
+import { curatedOnly } from "@/config/catalogueGate";
 
 interface WishlistDrawerProps {
   open: boolean;
@@ -41,8 +42,7 @@ export const WishlistDrawer = ({ open, onOpenChange }: WishlistDrawerProps) => {
     setLoadingProducts(true);
     try {
       const productIds = Array.from(wishlistItems);
-      const { data, error } = await supabase
-        .from('affiliate_products')
+      const { data, error } = await curatedOnly(supabase.from('affiliate_products'))
         .select('*')
         .in('id', productIds);
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { applyImageFallback } from '@/lib/images';
 
 interface Image3D {
   src: string;
@@ -62,7 +63,7 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
               loading={isCurrent ? "eager" : "lazy"}
               decoding="async"
               onError={(e) => {
-                e.currentTarget.src = "/placeholder.svg";
+                applyImageFallback(e, "/placeholder.svg");
               }}
             />
             {image.caption && (

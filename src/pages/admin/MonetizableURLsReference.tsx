@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,6 +20,8 @@ import {
 import { toast } from "sonner";
 import UnifiedNavigation from "@/components/navigation/UnifiedNavigation";
 import Footer from "@/components/Footer";
+import { AFFILIATE_PROGRAMS } from "@/config/affiliates";
+import { PROGRAMME_ACTIVE } from "@/config/programmes";
 
 const BASE_URL = "https://www.omniwellnessmedia.co.za";
 
@@ -34,6 +36,38 @@ interface URLEntry {
   status: "active" | "coming-soon";
 }
 
+/**
+ * Live programme status, derived rather than retyped.
+ *
+ * This page previously hardcoded an integrations array claiming CameraStuff
+ * was active with 21 products at 5 to 10 percent, and that CJ carried 712
+ * products. CameraStuff had been deactivated by the merchant and the CJ
+ * figure was never verified. The team treats this page as fact, so it now
+ * reads programme state from src/config/affiliates.ts and
+ * src/config/programmes.ts, which are the same sources the outbound links
+ * use. If a programme is switched off there, it reads as off here.
+ */
+const PROGRAMME_ROWS = Object.values(AFFILIATE_PROGRAMS)
+  .map((p) => ({
+    id: p.id,
+    name: p.name,
+    network: p.network,
+    commission:
+      p.commission_type === 'percentage'
+        ? `${p.commission_rate}%`
+        : `${p.currency} ${p.commission_rate}`,
+    cookieDays: p.cookie_duration_days,
+    status: p.status,
+    // Link construction is gated separately: a programme can be marked
+    // active in the affiliate config and still be switched off for outbound
+    // links, so both are shown.
+    linksEnabled:
+      p.id in PROGRAMME_ACTIVE
+        ? PROGRAMME_ACTIVE[p.id as keyof typeof PROGRAMME_ACTIVE]
+        : null,
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
 const monetizableURLs: URLEntry[] = [
   // Tier 1: Primary Sales Funnels
   {
@@ -42,8 +76,10 @@ const monetizableURLs: URLEntry[] = [
     description: "CameraStuff curated products for content creators",
     category: "Affiliate Store",
     revenueType: "affiliate",
-    productCount: 21,
-    commission: "5-10%",
+    // Product count and commission removed: the CameraStuff account was
+    // deactivated in August 2026, so neither figure describes anything we
+    // currently earn. Live programme status is shown in the panel above,
+    // driven by src/config/affiliates.ts and src/config/programmes.ts.
     status: "active"
   },
   {
@@ -118,7 +154,9 @@ const monetizableURLs: URLEntry[] = [
     description: "Commission Junction product catalog",
     category: "Affiliate Marketplace",
     revenueType: "affiliate",
-    productCount: 712,
+    // productCount removed: the previously published figure of 712 was never
+    // verified against the live CJ feed. Stale numbers on a page the team
+    // trusts are worse than no numbers.
     commission: "5-15%",
     status: "active"
   },
@@ -294,15 +332,23 @@ export default function MonetizableURLsReference() {
                 <p className="text-sm text-muted-foreground">Total URLs</p>
               </CardContent>
             </Card>
+            {/* Derived from src/config/affiliates.ts. The previous tiles read
+                "786+ products" and "6 affiliate networks", both hardcoded and
+                both stale: the product figure came from an unverified CJ count
+                and the network count predates the CameraStuff deactivation. */}
             <Card className="text-center">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-green-500">786+</p>
-                <p className="text-sm text-muted-foreground">Products</p>
+                <p className="text-4xl font-bold text-green-500">
+                  {PROGRAMME_ROWS.filter((r) => r.status === 'active').length}
+                </p>
+                <p className="text-sm text-muted-foreground">Active programmes</p>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="pt-6">
-                <p className="text-4xl font-bold text-blue-500">6</p>
+                <p className="text-4xl font-bold text-blue-500">
+                  {new Set(PROGRAMME_ROWS.map((r) => r.network)).size}
+                </p>
                 <p className="text-sm text-muted-foreground">Affiliate Networks</p>
               </CardContent>
             </Card>
@@ -313,6 +359,65 @@ export default function MonetizableURLsReference() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Live programme status, read from config rather than retyped. */}
+          <Card className="mb-12">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-primary" />
+                Programme status
+              </CardTitle>
+              <CardDescription>
+                Read live from src/config/affiliates.ts and src/config/programmes.ts.
+                These are the same sources the outbound links use, so this table cannot
+                drift from what the site actually emits. Commission and cookie values are
+                the published programme terms, not earnings.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b text-left text-muted-foreground">
+                      <th className="py-2 pr-4 font-medium">Programme</th>
+                      <th className="py-2 pr-4 font-medium">Network</th>
+                      <th className="py-2 pr-4 font-medium">Commission</th>
+                      <th className="py-2 pr-4 font-medium">Cookie</th>
+                      <th className="py-2 pr-4 font-medium">Status</th>
+                      <th className="py-2 font-medium">Outbound links</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {PROGRAMME_ROWS.map((r) => (
+                      <tr key={r.id} className="border-b last:border-0">
+                        <td className="py-2 pr-4 font-medium">{r.name}</td>
+                        <td className="py-2 pr-4 uppercase text-muted-foreground">{r.network}</td>
+                        <td className="py-2 pr-4">{r.commission}</td>
+                        <td className="py-2 pr-4">{r.cookieDays} days</td>
+                        <td className="py-2 pr-4">
+                          <Badge
+                            variant={r.status === 'active' ? 'default' : 'secondary'}
+                            className={r.status === 'paused' ? 'bg-red-100 text-red-800' : ''}
+                          >
+                            {r.status}
+                          </Badge>
+                        </td>
+                        <td className="py-2">
+                          {r.linksEnabled === null ? (
+                            <span className="text-muted-foreground">not gated</span>
+                          ) : r.linksEnabled ? (
+                            <span className="text-green-600">tagged</span>
+                          ) : (
+                            <span className="text-red-600">untagged, programme off</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Affiliate Integrations */}
           <Card className="mb-12">

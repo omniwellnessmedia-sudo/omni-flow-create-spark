@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useConsciousAffiliate } from "@/hooks/useConsciousAffiliate";
+import { buildViatorLink, withViatorAttribution } from "@/config/programmes";
 import { 
   MapPin, 
   Clock, 
@@ -28,6 +29,8 @@ import {
   TreePine
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
+import { applyImageFallback } from '@/lib/images';
 
 // Storage base URL
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
@@ -395,7 +398,7 @@ const TravelWellConnectedStore = () => {
             alt={tour.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = VIATOR_FALLBACKS[index % VIATOR_FALLBACKS.length];
+              applyImageFallback(e, VIATOR_FALLBACKS[index % VIATOR_FALLBACKS.length]);
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -455,7 +458,7 @@ const TravelWellConnectedStore = () => {
             onClick={() => handleViatorClick(tour)}
           >
             <a
-              href={tour.booking_url || `https://www.viator.com/partner-shop/omniwellnessmedia/?search=${encodeURIComponent(tour.title || '')}&medium=link&medium_version=shop&campaign=omni-wellness`}
+              href={withViatorAttribution(tour.booking_url, 'travel-well-connected')}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -839,7 +842,7 @@ const TravelWellConnectedStore = () => {
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <a 
-                  href="https://www.viator.com/partner-shop/omniwellnessmedia/?medium=link&medium_version=shop&campaign=omni-wellness"
+                  href={buildViatorLink({ campaign: 'travel-well-connected-catalog' })}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -853,6 +856,9 @@ const TravelWellConnectedStore = () => {
         </div>
       </section>
 
+      <div className="container mx-auto px-4 pb-8">
+        <AffiliateDisclosure variant="panel" />
+      </div>
       <Footer />
     </div>
   );

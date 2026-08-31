@@ -21,7 +21,6 @@ const SandyMitchellProfile = React.lazy(() => import('@/pages/SandyMitchellProfi
 const AddService = React.lazy(() => import('@/pages/AddService'));
 const EditService = React.lazy(() => import('@/pages/EditService'));
 const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
-const CommunityEvents = React.lazy(() => import('@/pages/CommunityEvents'));
 const StunningPigs = React.lazy(() => import('@/pages/events/StunningPigs'));
 // UNLISTED, NOINDEX: BWC Meet the Team controlled staging page. Holds real
 // people's photographs and biographies that are NOT cleared for publication —
@@ -163,6 +162,16 @@ const AdminDashboard = React.lazy(() => import('@/pages/AdminDashboard'));
 const AccountantDashboard = React.lazy(() => import('@/pages/AccountantDashboard'));
 const ProductManagement = React.lazy(() => import('@/pages/admin/ProductManagement'));
 const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
+// The curation screen decides what shoppers see (src/config/catalogueGate.ts).
+// It existed but was never routed, so the control was unreachable.
+const ProductCuration = React.lazy(() => import('@/pages/admin/ProductCuration'));
+const MarketplaceHub = React.lazy(() => import('@/pages/admin/MarketplaceHub'));
+const ServiceOfferDetail = React.lazy(() => import('@/pages/ServiceOfferDetail'));
+const EventsIndex = React.lazy(() => import('@/pages/EventsIndex'));
+const EventDetailPage = React.lazy(() => import('@/pages/EventDetail'));
+const EventSubmit = React.lazy(() => import('@/pages/EventSubmit'));
+const EventsAdmin = React.lazy(() => import('@/pages/admin/EventsAdmin'));
+const Scorecard = React.lazy(() => import('@/pages/Scorecard'));
 const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
 const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
 const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
@@ -243,6 +252,12 @@ function App() {
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
                   <Route path="/services" element={<Services />} />
+                  {/* One page per rate card offer. The slug is the offer's
+                      stable id, which is also the ?service= value the contact
+                      form reads, so an enquiry traces back to its page. */}
+                  <Route path="/services/:slug" element={<ServiceOfferDetail />} />
+                  {/* Free diagnostic, the top of the funnel for every service page. */}
+                  <Route path="/scorecard" element={<Scorecard />} />
                   <Route path="/service/:id" element={<ServiceDetail />} />
                   <Route path="/service-detail/:id" element={<ServiceDetail />} />
                   <Route path="/service-detail/:serviceId" element={<ServiceDetail />} />
@@ -265,7 +280,12 @@ function App() {
                   <Route path="/partners" element={<Navigate to="/partners-directory" replace />} />
                   <Route path="/impact" element={<Navigate to="/csr-impact" replace />} />
                   <Route path="/wellness-account" element={<Navigate to="/wellness-exchange/account" replace />} />
-                  <Route path="/community/events" element={<CommunityEvents />} />
+                  {/* One events calendar, not two. /community/events was a
+                      second calendar over the same content; it now redirects
+                      so existing links and the sitemap keep working. */}
+                  <Route path="/community/events" element={<Navigate to="/events" replace />} />
+                  <Route path="/events" element={<EventsIndex />} />
+                  <Route path="/events/submit" element={<EventSubmit />} />
                   {/* Analytics shows real traffic on this URL, but no route ever
                       existed for it — so it fell through to NotFound and was served
                       at HTTP 200, i.e. an indexable soft-404 duplicate of the event
@@ -276,6 +296,9 @@ function App() {
                       it now appears in sitemap.xml. It remains out of the primary
                       nav by choice — do not add it to nav without approval. */}
                   <Route path="/events/stunning-pigs" element={<StunningPigs />} />
+                  {/* Static segments outrank dynamic ones in the router, so the
+                      bespoke Stunning Pigs page above still wins its own slug. */}
+                  <Route path="/events/:slug" element={<EventDetailPage />} />
                   <Route path="/bwc-team-staging" element={<BwcTeamStaging />} />
                   <Route path="/ai-tools" element={<Navigate to="/services" replace />} />
                   <Route path="/wellness-exchange/provider-signup" element={<ProviderSignupRedirect />} />
@@ -400,6 +423,24 @@ function App() {
                   <Route path="/admin/catalogue" element={
                     <ProtectedRoute requireCatalogueManager={true}>
                       <LocalCatalogue />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/products" element={
+                    <ProtectedRoute requireCatalogueManager={true}>
+                      <ProductCuration />
+                    </ProtectedRoute>
+                  } />
+                  {/* One front door for the marketplace. The screens below it
+                      overlapped and used different words for the same job, so
+                      this page says what needs a person and sends them there. */}
+                  <Route path="/admin/marketplace" element={
+                    <ProtectedRoute requireCatalogueManager={true}>
+                      <MarketplaceHub />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/events" element={
+                    <ProtectedRoute requireCatalogueManager={true}>
+                      <EventsAdmin />
                     </ProtectedRoute>
                   } />
                   <Route path="/admin-dashboard" element={

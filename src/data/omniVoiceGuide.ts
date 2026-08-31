@@ -122,7 +122,7 @@ export const omniVoice = {
       style: "strategic",
     },
     zenith: {
-      intro: "I've personally vetted each of these experiences",
+      intro: "Experiences from our travel partners, chosen for the Cape",
       tip: "These stories matter to us — hope they inspire you",
       style: "nurturing",
     },

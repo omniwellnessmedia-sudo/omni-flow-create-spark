@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Compass } from "lucide-react";
-import { IMAGES } from "@/lib/images";
+import { IMAGES, applyImageFallback } from "@/lib/images";
 import { omniConnectivityBrands } from "@/data/omniConnectivityBrands";
 
 interface RoamBuddyHeroProps {
@@ -22,7 +22,7 @@ export const RoamBuddyHero = ({ onGetStarted }: RoamBuddyHeroProps) => {
         loading="eager"
         fetchPriority="high"
         onError={(e) => {
-          e.currentTarget.src = IMAGES.locations.capeTown2;
+          applyImageFallback(e, IMAGES.locations.capeTown2);
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30" />

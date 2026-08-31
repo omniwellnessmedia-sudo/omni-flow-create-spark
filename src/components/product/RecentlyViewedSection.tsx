@@ -4,6 +4,7 @@ import { PremiumProductCard } from './PremiumProductCard';
 import { supabase } from '@/integrations/supabase/client';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Eye } from 'lucide-react';
+import { curatedOnly } from "@/config/catalogueGate";
 
 interface RecentlyViewedSectionProps {
   currentProductId?: string;
@@ -23,8 +24,7 @@ export const RecentlyViewedSection = ({ currentProductId, onQuickView }: Recentl
     if (recentIds.length === 0) return;
     
     const ids = recentIds.map(item => item.id);
-    const { data } = await supabase
-      .from('affiliate_products')
+    const { data } = await curatedOnly((supabase.from('affiliate_products')))
       .select('*')
       .in('id', ids);
     

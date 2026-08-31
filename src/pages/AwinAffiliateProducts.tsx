@@ -11,6 +11,7 @@ import { useInView } from "react-intersection-observer";
 import { useSecureUserRole } from "@/hooks/useSecureUserRole";
 import { Badge } from "@/components/ui/badge";
 import { filterQualityProducts } from "@/lib/productFilters";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface AwinProduct {
   id: string;
@@ -433,6 +434,9 @@ export default function AwinAffiliateProducts() {
           </div>
         </div>
       </section>
+      <div className="container mx-auto px-4 pb-10">
+        <AffiliateDisclosure variant="panel" />
+      </div>
     </div>
   );
 }

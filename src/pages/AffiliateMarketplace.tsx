@@ -7,6 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Filter } from "lucide-react";
 import { toast } from "sonner";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
+import { curatedOnly } from "@/config/catalogueGate";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 interface AffiliateProduct {
   id: string;
@@ -25,6 +28,8 @@ interface AffiliateProduct {
 }
 
 const AffiliateMarketplace = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const [products, setProducts] = useState<AffiliateProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<AffiliateProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,8 +47,7 @@ const AffiliateMarketplace = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('affiliate_products')
+      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
         .select('*')
         .eq('is_active', true)
         .order('created_at', { ascending: false });
@@ -177,6 +181,9 @@ const AffiliateMarketplace = () => {
             Showing {filteredProducts.length} of {products.length} products
           </p>
         </div>
+      </div>
+      <div className="container mx-auto px-4 pb-10">
+        <AffiliateDisclosure variant="panel" />
       </div>
     </div>
   );

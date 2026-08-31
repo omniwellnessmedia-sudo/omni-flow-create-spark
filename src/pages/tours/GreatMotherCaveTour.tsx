@@ -9,6 +9,9 @@ import UnifiedNavigation from '@/components/navigation/UnifiedNavigation';
 import Footer from '@/components/Footer';
 import { Check, Mountain, Sun, Leaf, Camera, Heart, User, MapPin, Clock, Users, Gift, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { applyImageFallback } from '@/lib/images';
+import { withManifestImages } from '@/data/tourGalleries';
+import { WalkAbout, WalkIncluded, WalkPricing, WalkSeriesNav } from '@/components/tours/IndigenousWalkSections';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -16,13 +19,11 @@ export default function GreatMotherCaveTour() {
   useTourSEO({
     tourName: 'The Great Mother Cave Tour with Chief Kingsley',
     title: 'Great Mother Cave Tour | 12,000-Year Sacred Indigenous Experience | Fish Hoek, Cape Town',
-    description: 'Journey through 12,000 years of heritage with Chief Kingsley at Peer\'s Cave and Tunnel Cave. Indigenous plant wisdom, ancient rock art, traditional ceremonies, and celestial alignments. From R1,850pp.',
+    description: 'Journey through 12,000 years of heritage with Chief Kingsley at Peer\'s Cave and Tunnel Cave. Indigenous plant wisdom, ancient rock art, traditional ceremonies, and celestial alignments. Three-walk suite from R1,850 pp.',
     price: 1850,
     currency: 'ZAR',
     location: 'Fish Hoek, Cape Town',
     duration: '4-5 hours',
-    rating: 5.0,
-    reviewCount: 47,
     images: [],
     url: window.location.href
   });
@@ -41,21 +42,6 @@ export default function GreatMotherCaveTour() {
     active: true
   };
 
-  const pricingTiers = [
-    { range: '1-4 People', label: 'Intimate Experience', price: 'R2,330', perPerson: true },
-    { range: '5-9 People', label: 'Small Group', price: 'R2,050', perPerson: true, popular: true },
-    { range: '10-12 People', label: 'Group Experience', price: 'R1,850', perPerson: true, bestValue: true },
-  ];
-
-  const inclusions = [
-    { icon: User, title: 'Expert Indigenous Guidance', desc: 'Led by Chief Kingsley of the Gorachouqua Khoi Nation' },
-    { icon: Mountain, title: 'Deep Cultural Immersion', desc: '12,000 years of living heritage at Peer\'s Cave & Ascension Tunnel' },
-    { icon: Leaf, title: 'Traditional Refreshments', desc: 'Indigenous herbal tea and light refreshments' },
-    { icon: Gift, title: 'Herbal Gift', desc: 'A traditional herbal gift to take home' },
-    { icon: Camera, title: 'Commemorative Gift', desc: 'Certificate of participation in this sacred journey' },
-    { icon: Shield, title: 'Safety Support', desc: 'Trained support team and first aid throughout' },
-  ];
-
   return (
     <>
       <UnifiedNavigation />
@@ -67,7 +53,7 @@ export default function GreatMotherCaveTour() {
           alt="Great Mother Cave with Chief Kingsley"
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
-          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+          onError={(e) => { applyImageFallback(e, "/placeholder.svg"); }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
         <div className="relative z-10 container mx-auto h-full flex items-center px-4">
@@ -106,6 +92,36 @@ export default function GreatMotherCaveTour() {
         </div>
       </section>
 
+
+      {/* Quick Info. Added 30 August 2026: the other two tour pages carry
+          this strip and this one did not, so the three pages disagreed about
+          what a visitor sees first after the hero. Same markup as the
+          Muizenberg and Kalk Bay pages. */}
+      <section className="py-8 bg-background border-b">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 justify-center">
+              <Clock className="w-5 h-5 text-primary" />
+              <div><p className="text-xs text-muted-foreground">Duration</p><p className="font-semibold text-sm">4-5 hours</p></div>
+            </div>
+            <div className="flex items-center gap-3 justify-center">
+              <MapPin className="w-5 h-5 text-primary" />
+              <div><p className="text-xs text-muted-foreground">Start Point</p><p className="font-semibold text-sm">Fish Hoek Athletics Club</p></div>
+            </div>
+            <div className="flex items-center gap-3 justify-center">
+              <Users className="w-5 h-5 text-primary" />
+              <div><p className="text-xs text-muted-foreground">Group Size</p><p className="font-semibold text-sm">Max 12</p></div>
+            </div>
+            <div className="flex items-center gap-3 justify-center">
+              <Mountain className="w-5 h-5 text-primary" />
+              <div><p className="text-xs text-muted-foreground">Difficulty</p><p className="font-semibold text-sm">Moderate</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <WalkAbout slug="great-mother-cave-tour" />
+
       {/* Meet Chief Kingsley */}
       <section id="chief-kingsley" className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50 scroll-mt-24">
         <div className="container mx-auto px-4">
@@ -117,7 +133,7 @@ export default function GreatMotherCaveTour() {
                   alt="Chief Kingsley of the Gorachouqua Khoi Nation"
                   className="rounded-2xl shadow-2xl"
                   loading="lazy"
-                  onError={(e) => { (e.target as HTMLImageElement).src = `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`; }}
+                  onError={(e) => { applyImageFallback(e, `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`); }}
                 />
               </div>
               <div>
@@ -142,41 +158,9 @@ export default function GreatMotherCaveTour() {
         </div>
       </section>
 
-      {/* What's Included */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-heading text-3xl mb-8 text-center">What's Included</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {inclusions.map((item, i) => (
-                <Card key={i} className="text-center hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <item.icon className="w-8 h-8 text-primary mx-auto mb-3" />
-                    <h3 className="font-semibold mb-2">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            <div className="mt-6 text-center">
-              <Badge variant="outline" className="text-sm">
-                Optional: Traditional lunch add-on — R200 per person
-              </Badge>
-            </div>
-
-            {/* What's Not Included */}
-            <div className="mt-10 bg-muted/50 rounded-lg p-6">
-              <h3 className="font-semibold mb-3">Please Note — Not Included</h3>
-              <ul className="grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Transport to and from venues</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Lunch (optional add-on available — see above)</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Personal items and hiking gear</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Additional drinks</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Shared inclusions, lunch package and not-included list.
+          One source for all three walks: src/data/indigenousWalks.ts. */}
+      <WalkIncluded />
 
       {/* Detailed Itinerary */}
       <section className="py-16 bg-muted/30">
@@ -233,7 +217,7 @@ export default function GreatMotherCaveTour() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm text-muted-foreground">
-                  <p>Traditional refreshments and herbal tea sharing circle. Reflective discussion about land conservation, indigenous rights, and how to support the Gorachouqua community. Receive your herbal gift and certificate of participation.</p>
+                  <p>Traditional refreshments and herbal tea sharing circle. Reflective discussion about land conservation, indigenous rights, and how to support the Gorachouqua community. Receive your commemorative indigenous gift.</p>
                 </CardContent>
               </Card>
             </div>
@@ -244,14 +228,14 @@ export default function GreatMotherCaveTour() {
       {/* Image Gallery */}
       <TourImageGallery
         title="The Great Mother Cave Experience"
-        images={[
+        images={withManifestImages('great-mother-cave-tour', [
           { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view%202.jpg`, alt: 'Panoramic view from Peer\'s Cave', caption: 'Breathtaking panoramic views of False Bay from the ancient cave vantage point' },
           { src: `${STORAGE_BASE}/General%20Images/Rock%20art%20portrait.jpg`, alt: 'Ancient rock art', caption: 'Ancient San rock art — spiritual storytelling preserved in stone' },
           { src: `${STORAGE_BASE}/General%20Images/muizenberg%20cave%20view.jpg`, alt: 'Cave formations along the trail', caption: 'Sacred cave formations along the Muizenberg mountain trail' },
           { src: `${STORAGE_BASE}/General%20Images/chief%20kingsley%201.jpg`, alt: 'Chief Kingsley sharing indigenous knowledge', caption: 'Chief Kingsley sharing the indigenous Khoi heritage that has shaped this landscape for millennia' },
           { src: `${STORAGE_BASE}/General%20Images/tour%20picture%20couple%20with%20chief%20kingsley.jpg`, alt: 'Heritage trail with Chief Kingsley', caption: 'Walking the ancestral trails through Cape fynbos — a living botanical heritage' },
           { src: `${STORAGE_BASE}/General%20Images/Wellness%20retreat%202.jpg`, alt: 'Wellness in nature', caption: 'Connecting with the healing energy of the mountain landscape' },
-        ]}
+        ])}
       />
 
       {/* What to Bring */}
@@ -330,50 +314,64 @@ export default function GreatMotherCaveTour() {
       <section className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-heading text-3xl mb-8 text-center">Tour Pricing</h2>
-            <div className="grid sm:grid-cols-3 gap-6">
-              {pricingTiers.map((tier, i) => (
-                <Card key={i} className={`text-center hover:shadow-xl transition-shadow ${tier.popular ? 'border-primary ring-2 ring-primary/20' : ''}`}>
-                  <CardHeader>
-                    {tier.popular && <Badge className="mx-auto mb-2">Most Popular</Badge>}
-                    {tier.bestValue && <Badge variant="secondary" className="mx-auto mb-2">Best Value</Badge>}
-                    <Users className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <CardTitle className="text-xl">{tier.range}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{tier.label}</p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-primary mb-1">{tier.price}</div>
-                    <p className="text-sm text-muted-foreground">per person</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <WalkPricing />
 
-            {/* Community Impact */}
+            {/* Community impact.
+                WHAT THIS REPLACED. Until 30 August 2026 this card carried
+                our sister foundation's branding, a proceeds percentage with
+                no verifiable source in this repository, and tax deduction
+                language. The standing rule for this site is explicit: it is
+                the commercial entity, and foundation branding, donation
+                links and tax receipt language do not appear on it. What remains below is only what
+                the commercial site can stand behind, and the community work
+                itself is presented on our own CSR page. */}
             <Card className="mt-8 border-2 border-green-600/20 bg-gradient-to-br from-green-50/80 to-blue-50/80">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
                   <Heart className="w-10 h-10 text-green-600 shrink-0" />
                   <div>
-                    <h3 className="font-bold text-lg mb-1">Buy One, Sponsor One</h3>
+                    <h3 className="font-bold text-lg mb-1">Your visit gives back</h3>
                     <p className="text-sm text-muted-foreground">
-                      20% of all tour proceeds support the <strong>Dr. Phil-afel Foundation</strong> community projects — 
-                      including youth education, sacred site conservation, and community development. 
-                      Your journey creates lasting impact. <em>Section 18A tax-deductible donations available.</em>
+                      These walks are run with the communities whose heritage they share. A
+                      portion of every booking supports community education and the care of
+                      the sacred sites you will visit.
                     </p>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
                   <Link to="/csr-impact">
-                    <Button variant="outline" size="sm">Learn About Our Foundation →</Button>
+                    <Button variant="outline" size="sm">See our community impact</Button>
                   </Link>
                 </div>
               </CardContent>
             </Card>
 
             <p className="mt-4 text-xs text-center text-muted-foreground">
-              Operated by Travel & Tours Cape Town Pty Ltd · Contact: traveltourscapetown@gmail.com
+              An Ubuntu Journeys experience · Operated by Travel & Tours Cape Town Pty Ltd, presented with Omni Wellness Media · traveltourscapetown@gmail.com
             </p>
+          </div>
+        </div>
+      </section>
+
+
+      <WalkSeriesNav slug="great-mother-cave-tour" />
+
+      {/* The wellness layer: this walk is one thread of a wider programme.
+          Links only to routes that exist. */}
+      <section className="py-12 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-6 rounded-2xl border bg-background p-7">
+            <div className="min-w-[260px] flex-1">
+              <p className="font-heading text-xl">Make a wellness day of it</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Screenings, workshops and community wellness events run alongside our walks.
+                Every listing on the calendar is checked by a person before it appears.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link to="/events"><Button variant="outline">What is on</Button></Link>
+              <Link to="/tours"><Button variant="outline">All tours</Button></Link>
+            </div>
           </div>
         </div>
       </section>

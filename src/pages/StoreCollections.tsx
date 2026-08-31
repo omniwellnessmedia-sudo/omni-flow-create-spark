@@ -17,7 +17,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useProductComparison } from '@/hooks/useProductComparison';
 import { useWishlist } from '@/hooks/useWishlist';
-import curatedSeed from '@/data/curated_wellness_seed.json';
+import { curatedSeed } from '@/config/seedCatalogue';
+import { curatedOnly } from "@/config/catalogueGate";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 interface Product {
   id: string;
@@ -37,6 +39,8 @@ interface Product {
 }
 
 const StoreCollections = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const { handle } = useParams<{ handle: string }>();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -76,8 +80,7 @@ const StoreCollections = () => {
   }, [comparisonProducts]);
 
   const fetchComparisonProducts = async () => {
-    const { data } = await supabase
-      .from('affiliate_products')
+    const { data } = await curatedOnly((supabase.from('affiliate_products')))
       .select('*')
       .in('id', comparisonProducts);
     
@@ -91,8 +94,7 @@ const StoreCollections = () => {
 
   const fetchProducts = async () => {
     try {
-      let query = supabase
-        .from('affiliate_products')
+      let query = curatedOnly((supabase.from('affiliate_products')))
         .select('*')
         .eq('is_active', true);
 

@@ -4,6 +4,8 @@ import { CameraStuffProductCard } from "@/components/conscious-media/CameraStuff
 import { ConsciousnessFrameworkModal } from "@/components/conscious-media/ConsciousnessFrameworkModal";
 import { PartnerValuesSection } from "@/components/conscious-media/PartnerValuesSection";
 import { ArrowRight, Camera } from "lucide-react";
+import { camerastuffLink } from "@/config/programmes";
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 const ConsciousMediaPartnershipPage = () => {
   const products = [
@@ -142,7 +144,7 @@ const ConsciousMediaPartnershipPage = () => {
             <ConsciousnessFrameworkModal />
             <Button size="lg" variant="outline" asChild>
               <a
-                href="https://www.camerastuff.co.za/?a_aid=omniwellnessmedia"
+                href={camerastuffLink("/")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="gap-2"
@@ -154,6 +156,9 @@ const ConsciousMediaPartnershipPage = () => {
           </div>
         </div>
       </section>
+      <div className="container mx-auto px-4 pb-10">
+        <AffiliateDisclosure variant="panel" />
+      </div>
     </div>
   );
 };

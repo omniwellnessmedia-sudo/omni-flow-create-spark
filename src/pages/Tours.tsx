@@ -21,8 +21,11 @@ import { toast } from 'sonner';
 import { FloatingDecorations } from '@/components/ui/gaia-elements';
 import { CuratorTip } from '@/components/curator/CuratorTip';
 import { omniVoice } from '@/data/omniVoiceGuide';
-import { IMAGES } from '@/lib/images';
+import { IMAGES, applyImageFallback } from '@/lib/images';
 import { classifyTour, TOUR_CATEGORIES, type TourCategory } from '@/lib/tourCategories';
+import { useSEO } from '@/lib/seo';
+import { withViatorAttribution } from '@/config/programmes';
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface ViatorTour {
   id: string;
@@ -72,6 +75,29 @@ const featuredExperiences = [
   },
 ];
 
+/**
+ * Tours we run ourselves, each with a real page on this site. Shown when the
+ * partner feed returns nothing, so an empty feed never leaves the page with
+ * nothing to offer. Titles match the pages they link to.
+ */
+const OWN_TOURS = [
+  {
+    href: '/tours/great-mother-cave-tour',
+    title: 'The Great Mother Cave Tour',
+    blurb: 'A sacred indigenous experience in Fish Hoek, led by Chief Kingsley.',
+  },
+  {
+    href: '/tours/muizenberg-cave-tours',
+    title: 'Muizenberg Living Heritage Walk',
+    blurb: 'Ancient history by the sea, on foot.',
+  },
+  {
+    href: '/tours/kalk-bay-tour',
+    title: 'Kalk Bay Rich Tapestry Walk',
+    blurb: 'Ancient whispers and healing herbs along the harbour.',
+  },
+];
+
 const formatDuration = (duration: any): string => {
   if (!duration) return 'Varies';
   if (typeof duration === 'string') {
@@ -115,6 +141,16 @@ export default function Tours() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [priceRange, setPriceRange] = useState('all');
   const { generateAffiliateLink, trackAffiliateClick } = useConsciousAffiliate();
+
+  // Without this the page inherited the site wide title, so every tours
+  // result in search and every shared link read "Conscious Content Creation
+  // and Business Development", which tells a traveller nothing.
+  useSEO({
+    title: 'Tours and Experiences in Cape Town | Omni Wellness Media',
+    description:
+      'Guided cave, heritage and ocean experiences around Cape Town, plus wellness day experiences and corporate retreats booked directly with us.',
+    canonical: 'https://omniwellnessmedia.co.za/tours',
+  });
 
   useEffect(() => {
     fetchTours();
@@ -167,11 +203,16 @@ export default function Tours() {
   });
 
   const handleTourClick = async (tour: ViatorTour) => {
-    // Track affiliate click
+    // booking_url comes from the Viator product sync, not from our partner
+    // link builder, so it carries no pid or mcid of ours. Opening it directly
+    // meant every click from this page was unattributable and unpaid. See
+    // src/config/programmes.ts.
+    const destination = withViatorAttribution(tour.booking_url, 'tours-page');
+
     await trackAffiliateClick(
       tour.title,
       'viator_tours_page',
-      tour.booking_url,
+      destination,
       'tour_booking',
       tour.category,
       'viator'
@@ -179,8 +220,7 @@ export default function Tours() {
 
     trackAdsConversion('marketplace_clickthrough', { value: tour.price_from || 0, currency: tour.currency || 'USD' });
 
-    // Open Viator in new tab
-    window.open(tour.booking_url, '_blank', 'noopener,noreferrer');
+    window.open(destination, '_blank', 'noopener,noreferrer');
   };
 
   const TourCard = ({ tour }: { tour: ViatorTour }) => {
@@ -196,7 +236,7 @@ export default function Tours() {
             alt={tour.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80';
+              applyImageFallback(e, 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80');
             }}
           />
           <div className="absolute top-3 left-3 flex gap-2">
@@ -272,15 +312,26 @@ export default function Tours() {
         <FloatingDecorations variant="hero" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-4 text-sm px-4 py-2" variant="outline">
-              <Globe className="w-4 h-4 mr-2" />
-              Powered by Viator
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="magic-shimmer-text">{omniVoice.pageIntros.tours.headline}</span>
+            {/* The supplier is a fact about how booking works, not the
+                headline. It used to be the first thing on the page, above our
+                own name for what we offer. It now sits under the intro, where
+                a traveller reads it as reassurance rather than as the pitch. */}
+            <p
+              className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-[.2em] text-muted-foreground"
+              style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+            >
+              <span aria-hidden="true" className="h-[6px] w-[6px] rounded-full bg-[#2BB9B9]" />
+              Tours and Experiences
+            </p>
+            <h1 className="mt-3 font-wwpl-display text-4xl font-medium md:text-5xl">
+              {omniVoice.pageIntros.tours.headline}
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8">
+            <p className="mx-auto mt-4 max-w-[60ch] text-lg text-muted-foreground">
               {omniVoice.pageIntros.tours.subheadline}
+            </p>
+            <p className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <Globe className="h-3.5 w-3.5" />
+              Partner experiences are booked through Viator
             </p>
             
             {/* Curator Welcome */}
@@ -329,7 +380,7 @@ export default function Tours() {
                         alt={experience.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
-                        onError={(e) => { e.currentTarget.src = IMAGES.wellness.retreat; }}
+                        onError={(e) => { applyImageFallback(e, IMAGES.wellness.retreat); }}
                       />
                     </div>
                     <CardContent className="p-5 flex flex-col gap-3">
@@ -395,7 +446,10 @@ export default function Tours() {
             </div>
           )}
 
-          {/* Filters */}
+          {/* Filters. Hidden when there is nothing to filter: a row of empty
+              dropdowns above the words "0 tours available" reads as a broken
+              page rather than as an empty one. */}
+          {!(!loading && tours.length === 0) && (
           <div className="flex flex-wrap gap-3 mb-8 p-4 bg-muted/30 rounded-lg">
             <div className="flex items-center gap-2 text-sm font-medium">
               <Filter className="w-4 h-4" />
@@ -453,13 +507,19 @@ export default function Tours() {
               </Button>
             )}
           </div>
+          )}
 
-          {/* Results Count */}
-          <div className="flex items-center justify-between mb-6">
-            <p className="text-muted-foreground">
-              {loading ? 'Loading...' : `${filteredTours.length} tours available`}
-            </p>
-          </div>
+          {/* Results Count. "0 tours available" is not worth a line of its
+              own: the empty state below already says what is going on. */}
+          {!(!loading && tours.length === 0) && (
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-muted-foreground">
+                {loading
+                  ? 'Loading...'
+                  : `${filteredTours.length} ${filteredTours.length === 1 ? 'tour' : 'tours'} available`}
+              </p>
+            </div>
+          )}
 
           {/* Tours Grid */}
           {loading ? (
@@ -477,20 +537,61 @@ export default function Tours() {
               ))}
             </div>
           ) : filteredTours.length === 0 ? (
-            <div className="text-center py-16">
-              <Mountain className="w-16 h-16 mx-auto mb-4 text-muted-foreground/50" />
-              <h3 className="text-xl font-semibold mb-2">No Tours Found</h3>
-              <p className="text-muted-foreground mb-6">
-                {tours.length === 0 
-                  ? 'Tours are being synced. Please check back soon!' 
-                  : 'Try adjusting your filters or search query.'}
-              </p>
-              {tours.length === 0 && (
-                <Button onClick={() => navigate('/viator-wellness-experiences')}>
-                  View Curated Experiences
+            /* When the partner feed returns nothing, the page used to say
+               "Tours are being synced, please check back soon" and stop. That
+               asks a visitor to come back later on a page where we already
+               have things they can book today. Our own tours are listed
+               instead. The filter case is different and still says so. */
+            tours.length === 0 ? (
+              <div className="py-12">
+                <div className="mx-auto max-w-2xl text-center">
+                  <h3 className="font-wwpl-display text-2xl font-medium">
+                    Our own tours are running
+                  </h3>
+                  <p className="mt-2 text-muted-foreground">
+                    Partner listings are not loading at the moment. These are ours, and
+                    you can book them directly with us.
+                  </p>
+                </div>
+                <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
+                  {OWN_TOURS.map((t) => (
+                    <Card
+                      key={t.href}
+                      className="cursor-pointer transition-colors hover:border-foreground/20"
+                      onClick={() => navigate(t.href)}
+                    >
+                      <CardContent className="py-5">
+                        <p className="text-[15px] font-medium">{t.title}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">{t.blurb}</p>
+                        <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium">
+                          See the tour
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </span>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <Mountain className="w-16 h-16 mx-auto mb-4 text-muted-foreground/50" />
+                <h3 className="text-xl font-semibold mb-2">Nothing matches that</h3>
+                <p className="text-muted-foreground mb-6">
+                  Try a different search, or clear the filters to see everything.
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedLocation('all');
+                    setSelectedCategory('all');
+                    setPriceRange('all');
+                  }}
+                >
+                  Clear filters
                 </Button>
-              )}
-            </div>
+              </div>
+            )
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredTours.map((tour) => (
@@ -526,6 +627,9 @@ export default function Tours() {
         </div>
       </section>
 
+      <div className="container mx-auto px-4 pb-8">
+        <AffiliateDisclosure variant="panel" />
+      </div>
       <Footer />
     </>
   );

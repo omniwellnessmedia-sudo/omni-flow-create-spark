@@ -14,6 +14,7 @@ import {
 import { useConsciousAffiliate } from '@/hooks/useConsciousAffiliate';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { AffiliateDisclosure } from "@/components/affiliate/AffiliateDisclosure";
 
 interface WellnessExperience {
   id: string;
@@ -694,6 +695,9 @@ export default function ViatorWellnessExperiences() {
         </div>
       </section>
 
+      <div className="container mx-auto px-4 pb-8">
+        <AffiliateDisclosure variant="panel" />
+      </div>
       <Footer />
     </>
   );

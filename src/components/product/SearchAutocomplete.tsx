@@ -4,7 +4,8 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@
 import { Search, TrendingUp, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import curatedSeed from '@/data/curated_wellness_seed.json';
+import { curatedSeed } from '@/config/seedCatalogue';
+import { curatedOnly } from "@/config/catalogueGate";
 
 interface SearchResult {
   id: string;
@@ -68,8 +69,7 @@ export const SearchAutocomplete = ({ onResultClick }: SearchAutocompleteProps) =
       setLoading(true);
       try {
         // Search database products
-        const { data: dbProducts } = await supabase
-          .from('affiliate_products')
+        const { data: dbProducts } = await curatedOnly(supabase.from('affiliate_products'))
           .select('id, name, category, price_zar, image_url')
           .or(`name.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%`)
           .eq('is_active', true)

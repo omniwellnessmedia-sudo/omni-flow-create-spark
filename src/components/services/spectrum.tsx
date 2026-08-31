@@ -98,8 +98,13 @@ export const OfferCard = ({ offer }: { offer: RateCardOffer }) => (
     style={{ border: `1px solid ${LINE}` }}
   >
     <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px]" style={{ background: offer.hue }} />
+    {/* The name links to the offer's own page. The primary action below still
+        goes straight to the enquiry form, so the shorter path to contact is
+        not lengthened for anyone who already knows what they want. */}
     <h3 className="font-wwpl-display text-[25px] leading-tight" style={{ color: INK }}>
-      {offer.name}
+      <Link to={`/services/${offer.slug}`} className="hover:underline underline-offset-4">
+        {offer.name}
+      </Link>
     </h3>
     <p className="mt-2 text-[12.5px] uppercase tracking-[.14em]" style={{ ...mono, color: offer.hue }}>
       {offer.price}
@@ -137,6 +142,13 @@ export const OfferCard = ({ offer }: { offer: RateCardOffer }) => (
           WhatsApp us
         </a>
       )}
+      <Link
+        to={`/services/${offer.slug}`}
+        className="inline-flex items-center gap-1.5 text-[13.5px] underline-offset-4 hover:underline"
+        style={{ color: SLATE }}
+      >
+        Full details
+      </Link>
     </div>
     {offer.footnote && (
       <p className="mt-4 text-[12.5px] leading-relaxed" style={{ color: SLATE }}>

@@ -60,7 +60,6 @@ const NAV_GROUPS: {
     hue: "#5C2A8A",
     items: [
       { id: "providers", label: "Providers", icon: UserCog },
-      { id: "products", label: "Products", icon: Package },
       { id: "content", label: "Content", icon: FileText },
       { id: "newsletter", label: "Newsletter", icon: Mail },
       { id: "social", label: "Social", icon: Share2 },
@@ -69,10 +68,24 @@ const NAV_GROUPS: {
   {
     label: "Marketplace",
     hue: "#4FAE3F",
+    // The two entries with real work behind them come first and say what the
+    // work is. "Products" used to sit in Manage as a second screen over the
+    // same table as Shop products, which is why nobody could tell which one to
+    // use; it is now reached from the hub as "Import tools".
     items: [
-      { id: "catalogue", label: "Local Catalogue", icon: Store, href: "/admin/catalogue" },
-      { id: "affiliate-performance", label: "Affiliate Performance", icon: TrendingUp, href: "/admin/affiliate-performance" },
-      { id: "affiliate-payouts", label: "Affiliate Payouts", icon: HandCoins, href: "/admin/affiliate-payouts" },
+      { id: "marketplace-hub", label: "Overview", icon: LayoutDashboard, href: "/admin/marketplace" },
+      { id: "shop-products", label: "Approve shop products", icon: Package, href: "/admin/products" },
+      { id: "catalogue", label: "Local businesses", icon: Store, href: "/admin/catalogue" },
+      { id: "products", label: "Import tools", icon: Wrench },
+      { id: "affiliate-performance", label: "Affiliate performance", icon: TrendingUp, href: "/admin/affiliate-performance" },
+      { id: "affiliate-payouts", label: "Affiliate payouts", icon: HandCoins, href: "/admin/affiliate-payouts" },
+    ],
+  },
+  {
+    label: "Events",
+    hue: "#2C6FB5",
+    items: [
+      { id: "events-admin", label: "Events calendar", icon: CalendarCheck, href: "/admin/events" },
     ],
   },
   {

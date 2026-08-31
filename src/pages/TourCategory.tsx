@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PriceDisplay } from '@/components/ui/price-display';
 import { supabase } from '@/integrations/supabase/client';
-import { IMAGES } from '@/lib/images';
+import { IMAGES, applyImageFallback } from '@/lib/images';
 
 interface Tour {
   id: string;
@@ -350,7 +350,7 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
               className="w-full h-full object-cover object-center"
               loading="lazy"
               onError={(e) => {
-                e.currentTarget.src = IMAGES.wellness.retreat;
+                applyImageFallback(e, IMAGES.wellness.retreat);
               }}
             />
             <div className="absolute top-3 left-3">
@@ -429,7 +429,7 @@ const TourCard = ({ tour, viewMode }: { tour: Tour; viewMode: 'grid' | 'list' })
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
           onError={(e) => {
-            e.currentTarget.src = IMAGES.wellness.retreat;
+            applyImageFallback(e, IMAGES.wellness.retreat);
           }}
         />
         <div className="absolute top-3 left-3">

@@ -27,6 +27,8 @@ export interface TourSEOData extends SEOMetadata {
   duration: string;
   rating?: number;
   reviewCount?: number;
+  /** Where the reviews can be inspected. Without this, no rating is published. */
+  reviewSource?: string;
   images: string[];
 }
 
@@ -114,7 +116,9 @@ export const generateTourJSONLD = (data: TourSEOData) => {
     provider: {
       '@type': 'Organization',
       name: 'Omni Wellness Media',
-      url: 'https://omni-wellness.com',
+      // The apex domain the site actually lives on. This previously said
+      // omni-wellness.com, a domain we do not hold.
+      url: 'https://omniwellnessmedia.co.za',
     },
     touristType: 'Wellness travelers',
     itinerary: {
@@ -130,11 +134,20 @@ export const generateTourJSONLD = (data: TourSEOData) => {
     };
   }
 
-  if (data.rating && data.reviewCount) {
+  // aggregateRating is emitted ONLY when the caller also names where the
+  // reviews live. Until 30 August 2026 the three tour pages passed invented
+  // figures here (5.0/47, 4.9/127, 4.8/38) with no review source anywhere in
+  // the codebase, publishing fabricated review markup to search engines.
+  // That is a Google structured data policy violation that can draw a manual
+  // action against the whole domain, and one of those counts collided with a
+  // number this project explicitly bans. A rating without a reviewSource is
+  // now dropped rather than published.
+  if (data.rating && data.reviewCount && data.reviewSource) {
     jsonLD['aggregateRating'] = {
       '@type': 'AggregateRating',
       ratingValue: data.rating.toString(),
       reviewCount: data.reviewCount.toString(),
+      url: data.reviewSource,
     };
   }
 

@@ -16,7 +16,7 @@ import {
   Percent, Tag, Flame, Crown, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
-import { IMAGES, getImageWithFallback } from "@/lib/images";
+import { IMAGES, getImageWithFallback, applyImageFallback } from "@/lib/images";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import type { WellnessDeal, WellnessMarketplaceItem } from "@/types/marketplace";
 import { TwoBeWellCTA } from "@/components/sections/TwoBeWellCTA";
@@ -25,6 +25,8 @@ import { ImpactBadges } from "@/components/social-impact/ImpactBadges";
 import { supabase } from "@/integrations/supabase/client";
 import { filterQualityProducts } from "@/lib/productFilters";
 import { SmartProductImage } from "@/components/product/SmartProductImage";
+import { curatedOnly } from "@/config/catalogueGate";
+import { useNoIndex } from '@/hooks/useNoIndex';
 
 // Convert CJ Product to WellnessDeal format
 const convertToWellnessDeal = (product: any): WellnessDeal => {
@@ -312,6 +314,8 @@ const NewsletterSignup = () => {
 };
 
 const WellnessDeals = () => {
+  // Kept out of search results until the catalogue is curated. See src/hooks/useNoIndex.ts.
+  useNoIndex('affiliate storefront awaiting curation');
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
@@ -329,8 +333,7 @@ const WellnessDeals = () => {
       setLoading(true);
       try {
         // Fetch top 100 products from affiliate_products
-        const { data: products, error } = await supabase
-          .from('affiliate_products')
+        const { data: products, error } = await curatedOnly(supabase.from('affiliate_products'))
           .select('*')
           .eq('is_active', true)
           .order('view_count', { ascending: false, nullsFirst: false })
@@ -637,7 +640,7 @@ const WellnessDeals = () => {
                       alt={deal.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       onError={(e) => {
-                        e.currentTarget.src = IMAGES.wellness.deals;
+                        applyImageFallback(e, IMAGES.wellness.deals);
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>

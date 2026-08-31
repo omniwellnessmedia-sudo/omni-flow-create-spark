@@ -12,6 +12,8 @@ import {
   MapPin, Clock, Users, Mountain, Heart, Waves, Camera, Check, 
   Leaf, Shield, Gift, User, Sun, Anchor
 } from 'lucide-react';
+import { withManifestImages } from '@/data/tourGalleries';
+import { WalkAbout, WalkIncluded, WalkPricing, WalkSeriesNav } from '@/components/tours/IndigenousWalkSections';
 
 const STORAGE_BASE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
 
@@ -19,13 +21,11 @@ export default function KalkBayTour() {
   useTourSEO({
     tourName: 'Kalk Bay Rich Tapestry Walk',
     title: 'Kalk Bay Rich Tapestry Walk | Ancient Whispers, Healing Herbs | Cape Town',
-    description: 'Explore the rich tapestry of Kalk Bay — ancient whispers and healing herbs. From the Brass Bell to historic harbour herb stands, Khoi marine knowledge, ancient trade routes, and plant medicine. From R1,850pp.',
+    description: 'Explore the rich tapestry of Kalk Bay — ancient whispers and healing herbs. From the Brass Bell to historic harbour herb stands, Khoi marine knowledge, ancient trade routes, and plant medicine. Three-walk suite from R1,850 pp.',
     price: 1850,
     currency: 'ZAR',
     location: 'Kalk Bay, Cape Town',
     duration: '5-6 hours',
-    rating: 4.8,
-    reviewCount: 38,
     images: [],
     url: window.location.href
   });
@@ -43,21 +43,6 @@ export default function KalkBayTour() {
     end_date: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
     active: true
   };
-
-  const pricingTiers = [
-    { range: '1-4 People', label: 'Intimate Experience', price: 'R2,330', perPerson: true },
-    { range: '5-9 People', label: 'Small Group', price: 'R2,050', perPerson: true, popular: true },
-    { range: '10-12 People', label: 'Group Experience', price: 'R1,850', perPerson: true, bestValue: true },
-  ];
-
-  const inclusions = [
-    { icon: User, title: 'Expert Indigenous Guidance', desc: 'Led by Chief Kingsley & Travel and Tours Cape Town team' },
-    { icon: Leaf, title: 'Plant Medicine Knowledge', desc: 'Herb stands, traditional remedies & healing plant identification' },
-    { icon: Anchor, title: 'Marine Heritage', desc: 'Khoi fishing knowledge & harbour cultural history' },
-    { icon: Gift, title: 'Herbal Gift', desc: 'A traditional herbal gift to take home' },
-    { icon: Camera, title: 'Commemorative Gift', desc: 'Certificate of participation' },
-    { icon: Shield, title: 'Safety Support', desc: 'Trained support team and first aid throughout' },
-  ];
 
   return (
     <>
@@ -95,7 +80,7 @@ export default function KalkBayTour() {
                 className="bg-white text-primary hover:bg-white/90"
                 onClick={() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                Book Now — From R1,850 pp
+                Book This Experience
               </Button>
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
                 <Link to="/contact">Enquire</Link>
@@ -129,64 +114,11 @@ export default function KalkBayTour() {
         </div>
       </section>
 
-      {/* About This Experience */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="font-heading text-3xl mb-6">About This Experience</h2>
-            <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
-              <p>
-                Kalk Bay is one of Cape Town's most beloved coastal villages — a place where fishing 
-                heritage, artistic culture, and ancient Khoi knowledge converge. This guided heritage walk takes 
-                you through the heart of Kalk Bay, starting next to the iconic Brass Bell Restaurant.
-              </p>
-              <p>
-                Explore the historic harbour where fishermen still bring in their daily catch, visit the 
-                traditional herb stands that preserve centuries of plant medicine knowledge, and learn about 
-                the Khoi people's deep understanding of marine resources, tidal patterns, and coastal ecology. 
-                Chief Kingsley and the team reveal ancient trade routes that connected coastal and inland 
-                communities, and the living traditions of healing herbs that continue to this day.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <WalkAbout slug="kalk-bay-tour" />
 
-      {/* What's Included */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-heading text-3xl mb-8 text-center">What's Included</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {inclusions.map((item, i) => (
-                <Card key={i} className="text-center hover:shadow-lg transition-shadow">
-                  <CardContent className="pt-6">
-                    <item.icon className="w-8 h-8 text-primary mx-auto mb-3" />
-                    <h3 className="font-semibold mb-2">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            <div className="mt-6 text-center">
-              <Badge variant="outline" className="text-sm">
-                Optional: Traditional lunch add-on — R200 per person
-              </Badge>
-            </div>
-
-            {/* What's Not Included */}
-            <div className="mt-10 bg-muted/50 rounded-lg p-6">
-              <h3 className="font-semibold mb-3">Please Note — Not Included</h3>
-              <ul className="grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Transport to and from venues</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Lunch (optional add-on available — see above)</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Personal items and hiking gear</li>
-                <li className="flex items-center gap-2"><span className="text-destructive">✗</span> Additional drinks</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Shared inclusions, lunch package and not-included list.
+          One source for all three walks: src/data/indigenousWalks.ts. */}
+      <WalkIncluded />
 
       {/* Journey Timeline */}
       <section className="py-16 bg-background">
@@ -250,7 +182,7 @@ export default function KalkBayTour() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground">
-                  <p>Traditional refreshments and herbal tea ceremony. Reflective sharing circle, closing ceremony. Receive your herbal gift and certificate of participation.</p>
+                  <p>Traditional refreshments and herbal tea ceremony. Reflective sharing circle, closing ceremony. Receive your commemorative indigenous gift.</p>
                 </CardContent>
               </Card>
             </div>
@@ -261,14 +193,14 @@ export default function KalkBayTour() {
       {/* Image Gallery */}
       <TourImageGallery
         title="Kalk Bay's Rich Tapestry"
-        images={[
+        images={withManifestImages('kalk-bay-tour', [
           { src: `${STORAGE_BASE}/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg`, alt: 'Chief Kingsley explaining indigenous heritage', caption: 'Chief Kingsley sharing the deep history of Kalk Bay\'s coastal heritage' },
           { src: `${STORAGE_BASE}/General%20Images/community%20outing%202.jpg`, alt: 'Community walking along the coast', caption: 'Traversing ancient Khoi trading routes along False Bay' },
           { src: `${STORAGE_BASE}/General%20Images/chief%20kingsley%20talking%20to%20group.jpg`, alt: 'Chief Kingsley with group', caption: 'Learning about traditional herb knowledge and plant medicine' },
           { src: `${STORAGE_BASE}/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg`, alt: 'Chief Kingsley portrait', caption: 'Chief Kingsley — custodian of Khoi ancestral wisdom' },
           { src: `${STORAGE_BASE}/General%20Images/happy%20client%20on%20tour.jpg`, alt: 'Tour participant', caption: 'Breathtaking panoramic views of False Bay from the trail' },
           { src: `${STORAGE_BASE}/General%20Images/community%20outing%201.jpg`, alt: 'Group at Kalk Bay', caption: 'Archaeological evidence of ancient settlements along the coast' },
-        ]}
+        ])}
       />
 
       {/* What to Bring */}
@@ -295,54 +227,100 @@ export default function KalkBayTour() {
         </div>
       </section>
 
+
+      {/* Cultural Protocols. Added 30 August 2026: the other two walks carry
+          this section and this one did not. The walk visits working herb
+          stands and cultural sites, so the same respect rules apply. */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <Shield className="w-10 h-10 text-primary mx-auto mb-4" />
+              <h2 className="text-3xl font-bold mb-4">Cultural Protocols & Respect</h2>
+            </div>
+            <Card className="border-primary/20">
+              <CardContent className="p-8 space-y-6">
+                {[
+                  { icon: Heart, title: 'Working Community, Not a Backdrop', text: 'The harbour, herb stands and shops we visit are people\'s livelihoods. Ask before photographing anyone, and buy from the stands if something speaks to you.' },
+                  { icon: Leaf, title: 'Plant Knowledge Is Shared, Not Taken', text: 'Traditional remedies are explained by the people who hold that knowledge. Harvest nothing yourself, and treat what you are told as their heritage.' },
+                  { icon: Camera, title: 'Leave No Trace', text: 'Take only photographs and memories. All litter is carried out.' },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <item.icon className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground">{item.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section className="py-16 bg-gradient-to-br from-green-50 via-white to-blue-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-heading text-3xl mb-8 text-center">Tour Pricing</h2>
-            <div className="grid sm:grid-cols-3 gap-6">
-              {pricingTiers.map((tier, i) => (
-                <Card key={i} className={`text-center hover:shadow-xl transition-shadow ${tier.popular ? 'border-primary ring-2 ring-primary/20' : ''}`}>
-                  <CardHeader>
-                    {tier.popular && <Badge className="mx-auto mb-2">Most Popular</Badge>}
-                    {tier.bestValue && <Badge variant="secondary" className="mx-auto mb-2">Best Value</Badge>}
-                    <Users className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <CardTitle className="text-xl">{tier.range}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{tier.label}</p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-primary mb-1">{tier.price}</div>
-                    <p className="text-sm text-muted-foreground">per person</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <WalkPricing />
 
-            {/* Community Impact */}
+            {/* Community impact.
+                WHAT THIS REPLACED. Until 30 August 2026 this card carried
+                our sister foundation's branding, a proceeds percentage with
+                no verifiable source in this repository, and tax deduction
+                language. The standing rule for this site is explicit: it is
+                the commercial entity, and foundation branding, donation
+                links and tax receipt language do not appear on it. What remains below is only what
+                the commercial site can stand behind, and the community work
+                itself is presented on our own CSR page. */}
             <Card className="mt-8 border-2 border-green-600/20 bg-gradient-to-br from-green-50/80 to-blue-50/80">
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
                   <Heart className="w-10 h-10 text-green-600 shrink-0" />
                   <div>
-                    <h3 className="font-bold text-lg mb-1">Buy One, Sponsor One</h3>
+                    <h3 className="font-bold text-lg mb-1">Your visit gives back</h3>
                     <p className="text-sm text-muted-foreground">
-                      20% of all tour proceeds support the <strong>Dr. Phil-afel Foundation</strong> community projects — 
-                      youth education, sacred site conservation, and community development. 
-                      <em> Section 18A tax-deductible donations available.</em>
+                      These walks are run with the communities whose heritage they share. A
+                      portion of every booking supports community education and the care of
+                      the sacred sites you will visit.
                     </p>
                   </div>
                 </div>
                 <div className="mt-4 text-center">
                   <Link to="/csr-impact">
-                    <Button variant="outline" size="sm">Learn About Our Foundation →</Button>
+                    <Button variant="outline" size="sm">See our community impact</Button>
                   </Link>
                 </div>
               </CardContent>
             </Card>
 
             <p className="mt-4 text-xs text-center text-muted-foreground">
-              Operated by Travel & Tours Cape Town Pty Ltd · Contact: traveltourscapetown@gmail.com
+              An Ubuntu Journeys experience · Operated by Travel & Tours Cape Town Pty Ltd, presented with Omni Wellness Media · traveltourscapetown@gmail.com
             </p>
+          </div>
+        </div>
+      </section>
+
+
+      <WalkSeriesNav slug="kalk-bay-tour" />
+
+      {/* The wellness layer: this walk is one thread of a wider programme.
+          Links only to routes that exist. */}
+      <section className="py-12 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-6 rounded-2xl border bg-background p-7">
+            <div className="min-w-[260px] flex-1">
+              <p className="font-heading text-xl">Make a wellness day of it</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Screenings, workshops and community wellness events run alongside our walks.
+                Every listing on the calendar is checked by a person before it appears.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link to="/events"><Button variant="outline">What is on</Button></Link>
+              <Link to="/tours"><Button variant="outline">All tours</Button></Link>
+            </div>
           </div>
         </div>
       </section>

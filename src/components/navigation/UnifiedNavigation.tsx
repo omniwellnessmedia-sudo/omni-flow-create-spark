@@ -121,7 +121,7 @@ const UnifiedNavigation = () => {
       title: 'Community',
       icon: Users,
       children: [
-        { title: 'Events Calendar', href: '/community/events', description: 'Upcoming community events, month by month', icon: '📅' },
+        { title: 'Events Calendar', href: '/events', description: 'Upcoming community events, month by month', icon: '📅' },
         { title: 'Community Blog', href: '/community', description: 'Stories, updates and impact from the community', icon: '📰' },
       ]
     },
@@ -166,7 +166,7 @@ const UnifiedNavigation = () => {
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-16 items-center justify-between gap-2 min-w-0">
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
@@ -175,14 +175,17 @@ const UnifiedNavigation = () => {
                 alt="Omni Wellness Media"
                 className="h-10 w-10 rounded-full object-cover shrink-0"
               />
-              <span aria-hidden="true" className="hidden sm:inline font-heading text-base leading-tight text-foreground">
+              <span
+                aria-hidden="true"
+                className="hidden xl:inline whitespace-nowrap font-heading text-base leading-none text-foreground"
+              >
                 Omni Wellness Media
               </span>
             </Link>
           </div>
 
           {/* Search Bar - Desktop - Compact */}
-          <div className="hidden md:flex flex-1 max-w-xs mx-4">
+          <div className="hidden 2xl:flex flex-1 max-w-xs mx-4">
             <SearchAutocomplete />
           </div>
 
@@ -242,7 +245,12 @@ const UnifiedNavigation = () => {
             ) : (
               <div className="flex items-center space-x-2">
                 <CartIcon />
-                <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+                {/* Sign In hides below 1536px. Measured at 1280px, a very common
+                    laptop width, the header row needed 1303px inside 1248px and
+                    pushed Get Started 39px off screen, where body overflow-x:clip
+                    hid the evidence. Both routes lead to /auth, so the primary
+                    call to action is the one that stays. */}
+                <Button variant="ghost" size="sm" asChild className="hidden 2xl:flex">
                   <Link to="/auth">
                     <LogIn className="mr-2 h-4 w-4" />
                     Sign In
