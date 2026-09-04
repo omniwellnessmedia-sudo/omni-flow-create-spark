@@ -1,5 +1,53 @@
 -- Phase 2: Create Products and Enhanced Orders Tables
 
+-- HELPER HEAL, added 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md.
+-- Preview branches turned out to be missing not only dashboard-created tables
+-- but also helper FUNCTIONS that dozens of later migrations use bare in
+-- triggers and policies. Recreating the two ubiquitous ones here, at the
+-- earliest file the branch replay reaches broken, heals everything after it.
+-- On production both functions exist with these exact definitions, so the
+-- CREATE OR REPLACE statements change nothing.
+--
+-- check_function_bodies off: is_admin is a LANGUAGE sql function whose body
+-- names public.profiles, and sql bodies are parse-validated at creation, so
+-- on a branch without profiles the CREATE itself would fail. Turning body
+-- validation off (exactly what pg_dump emits) lets the function exist and be
+-- validated at first call instead.
+SET check_function_bodies = off;
+
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $is_admin_heal$
+BEGIN
+  CREATE OR REPLACE FUNCTION public.is_admin(user_id uuid)
+  RETURNS boolean
+  LANGUAGE sql
+  STABLE
+  SECURITY DEFINER
+  SET search_path = public
+  AS $fn$
+    SELECT EXISTS (
+      SELECT 1
+      FROM public.profiles
+      WHERE id = user_id
+        AND user_type = 'admin'
+    );
+  $fn$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function
+    OR invalid_function_definition THEN
+    RAISE NOTICE 'Skipping is_admin heal: %', SQLERRM;
+END
+$is_admin_heal$;
+
+SET check_function_bodies = on;
+
 -- Products Table
 CREATE TABLE IF NOT EXISTS public.products (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
