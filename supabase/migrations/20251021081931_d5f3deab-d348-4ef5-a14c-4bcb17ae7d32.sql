@@ -34,43 +34,61 @@ CREATE TABLE IF NOT EXISTS public.product_deals (
 );
 
 -- Enhance existing Orders Table (add new columns if they don't exist)
-DO $$ 
+-- Exception-guarded on 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md:
+-- public.orders was created via the dashboard and has no CREATE migration, so
+-- on a fresh preview branch this block must skip rather than fail the replay.
+-- On production orders exists, no exception fires, and the DDL runs as before.
+DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'orders' AND column_name = 'items') THEN
     ALTER TABLE public.orders ADD COLUMN items JSONB;
   END IF;
-  
+
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'orders' AND column_name = 'subtotal_zar') THEN
     ALTER TABLE public.orders ADD COLUMN subtotal_zar NUMERIC(10,2);
   END IF;
-  
+
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'orders' AND column_name = 'tax_zar') THEN
     ALTER TABLE public.orders ADD COLUMN tax_zar NUMERIC(10,2) DEFAULT 0;
   END IF;
-  
+
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'orders' AND column_name = 'total_zar') THEN
     ALTER TABLE public.orders ADD COLUMN total_zar NUMERIC(10,2);
   END IF;
-  
+
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'orders' AND column_name = 'paypal_payer_id') THEN
     ALTER TABLE public.orders ADD COLUMN paypal_payer_id TEXT;
   END IF;
-  
+
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'orders' AND column_name = 'payment_method') THEN
     ALTER TABLE public.orders ADD COLUMN payment_method TEXT DEFAULT 'paypal';
   END IF;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping orders enhancement, missing dependency: %', SQLERRM;
 END $$;
 
--- Order Items Table (normalized)
-CREATE TABLE IF NOT EXISTS public.order_items (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  order_id UUID REFERENCES public.orders(id) ON DELETE CASCADE,
-  product_id UUID REFERENCES public.products(id),
-  product_name TEXT NOT NULL,
-  quantity INTEGER NOT NULL DEFAULT 1,
-  price_zar NUMERIC(10,2) NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- Order Items Table (normalized). Guarded with its index and RLS for the
+-- same reason: it references public.orders, absent on fresh preview branches.
+DO $order_items_guard$
+BEGIN
+  CREATE TABLE IF NOT EXISTS public.order_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id UUID REFERENCES public.orders(id) ON DELETE CASCADE,
+    product_id UUID REFERENCES public.products(id),
+    product_name TEXT NOT NULL,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    price_zar NUMERIC(10,2) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_order_items_order ON public.order_items(order_id);
+  ALTER TABLE public.order_items ENABLE ROW LEVEL SECURITY;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping order_items, missing dependency: %', SQLERRM;
+END
+$order_items_guard$;
 
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_products_category ON public.products(category);
@@ -78,12 +96,10 @@ CREATE INDEX IF NOT EXISTS idx_products_provider ON public.products(provider);
 CREATE INDEX IF NOT EXISTS idx_products_active ON public.products(is_active);
 CREATE INDEX IF NOT EXISTS idx_product_deals_active ON public.product_deals(is_active);
 CREATE INDEX IF NOT EXISTS idx_product_deals_product ON public.product_deals(product_id);
-CREATE INDEX IF NOT EXISTS idx_order_items_order ON public.order_items(order_id);
 
 -- Enable Row Level Security
 ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.product_deals ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.order_items ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for Products
 CREATE POLICY "Products are viewable by everyone" ON public.products 
@@ -99,18 +115,26 @@ CREATE POLICY "Deals are viewable by everyone" ON public.product_deals
 CREATE POLICY "Authenticated users can manage deals" ON public.product_deals 
   FOR ALL USING (auth.role() = 'authenticated');
 
--- RLS Policies for Order Items
-CREATE POLICY "Users can view their order items" ON public.order_items 
-  FOR SELECT USING (
-    EXISTS (
-      SELECT 1 FROM public.orders 
-      WHERE orders.id = order_items.order_id 
-      AND (orders.user_id = auth.uid() OR orders.customer_email = (SELECT email FROM public.profiles WHERE id = auth.uid()))
-    )
-  );
+-- RLS Policies for Order Items. Guarded: they reference public.orders and
+-- public.profiles, and order_items itself may have been skipped above.
+DO $order_items_policies$
+BEGIN
+  CREATE POLICY "Users can view their order items" ON public.order_items
+    FOR SELECT USING (
+      EXISTS (
+        SELECT 1 FROM public.orders
+        WHERE orders.id = order_items.order_id
+        AND (orders.user_id = auth.uid() OR orders.customer_email = (SELECT email FROM public.profiles WHERE id = auth.uid()))
+      )
+    );
 
-CREATE POLICY "System can insert order items" ON public.order_items 
-  FOR INSERT WITH CHECK (true);
+  CREATE POLICY "System can insert order items" ON public.order_items
+    FOR INSERT WITH CHECK (true);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping order_items policies, missing dependency: %', SQLERRM;
+END
+$order_items_policies$;
 
 -- Phase 3: Seed 50+ Products
 INSERT INTO public.products (name, description, price_zar, price_wellcoins, category, provider, duration, type, image_url, is_active) VALUES
