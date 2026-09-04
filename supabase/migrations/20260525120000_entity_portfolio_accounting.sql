@@ -31,7 +31,7 @@ BEGIN
       SELECT 1
       FROM public.user_roles ur
       WHERE ur.user_id = is_accountant_or_admin.user_id
-        AND ur.role IN ('accountant', 'admin', 'super_admin')
+        AND ur.role::text IN ('accountant', 'admin', 'super_admin')
     )
   $fn$;
 
