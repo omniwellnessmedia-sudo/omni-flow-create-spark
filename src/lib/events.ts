@@ -67,6 +67,9 @@ export interface EventSession {
 
 export interface EventDetail extends Omit<PublicEvent, 'seats_remaining' | 'is_promoted'> {
   status: string;
+  /** Who carries our booking fee on tickets sold through us, per event. */
+  fee_payer: 'attendee' | 'organiser' | 'none';
+  fee_bps: number | null;
   sessions: EventSession[];
 }
 
@@ -165,6 +168,8 @@ export const getEvent = async (slug: string): Promise<ReadResult<EventDetail | n
       booking_mode: (first.booking_mode ?? 'none') as BookingMode,
       listing_tier: (first.listing_tier ?? 'standard') as PublicEvent['listing_tier'],
       organiser_name: first.organiser_name ?? null,
+      fee_payer: (first.fee_payer ?? 'attendee') as EventDetail['fee_payer'],
+      fee_bps: first.fee_bps ?? null,
       status: first.status,
       sessions: rows
         .filter((r) => r.session_id)

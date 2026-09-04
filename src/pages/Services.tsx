@@ -191,13 +191,33 @@ const Services = () => {
                         )}
                       </div>
                     </div>
-                    {image && (
-                      <figure className="hidden overflow-hidden rounded-[16px] md:block" style={{ border: `1px solid ${LINE}` }}>
-                        <img src={image.src} alt={image.alt} loading="lazy" className="h-[110px] w-[220px] object-cover" />
-                      </figure>
-                    )}
                   </div>
                 </Reveal>
+                {/* One wide photograph per band, treated like the hero figure.
+                    These used to render as 220x110 thumbnails floating beside
+                    the heading, which read as broken layout on the 31 August
+                    smoke test. A band image is structural or it is absent. */}
+                {image && (
+                  <Reveal delay={60}>
+                    <figure
+                      className="relative mt-8 overflow-hidden rounded-[22px]"
+                      style={{ border: `1px solid ${LINE}` }}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        loading="lazy"
+                        className="h-[180px] w-full object-cover sm:h-[240px]"
+                      />
+                      <figcaption
+                        className="absolute bottom-3 left-3 rounded-full bg-black/45 px-4 py-1.5 text-[11px] uppercase tracking-[.16em] text-white backdrop-blur-sm"
+                        style={mono}
+                      >
+                        {image.alt}
+                      </figcaption>
+                    </figure>
+                  </Reveal>
+                )}
                 <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                   {band.offers.map((o, j) => (
                     <Reveal key={o.slug} delay={j * 90} className={o.wide ? "h-full md:col-span-2 xl:col-span-3" : "h-full"}>

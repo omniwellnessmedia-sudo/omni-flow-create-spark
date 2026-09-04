@@ -9,9 +9,12 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Plus, AlertTriangle, Check, Eye, EyeOff, Inbox } from 'lucide-react';
+import {
+  Loader2, Plus, AlertTriangle, Check, Eye, EyeOff, Inbox, Pencil, Armchair,
+} from 'lucide-react';
 import { LISTING_TIERS } from '@/config/eventPricing';
 import { kindLabel, kindHue } from '@/lib/events';
+import { useSecureUserRole } from '@/hooks/useSecureUserRole';
 
 /**
  * Where the team creates events and reviews what the public submitted.
@@ -61,7 +64,17 @@ interface EventRow {
   listing_tier: string;
   featured_until: string | null;
   organiser_name: string | null;
+  host_name: string | null;
   source: string;
+}
+
+interface SessionRow {
+  id: string;
+  session_no: number;
+  title: string | null;
+  starts_at: string | null;
+  allocation: number;
+  sold: number;
 }
 
 interface SubmissionRow {
@@ -85,8 +98,28 @@ interface SubmissionRow {
 const emptyDraft = {
   slug: '', title: '', summary: '', kind: 'workshop', venue: '', city: 'Cape Town',
   event_date: '', is_free: false, price_from_zar: '', booking_mode: 'none',
-  external_booking_url: '', organiser_name: '', listing_tier: 'standard', featured_until: '',
+  external_booking_url: '', organiser_name: '', host_name: '',
+  listing_tier: 'standard', featured_until: '',
 };
+
+/** An EventRow flattened back into the form's shape, for editing. */
+const draftFrom = (e: EventRow) => ({
+  slug: e.slug,
+  title: e.title,
+  summary: e.summary ?? '',
+  kind: e.kind,
+  venue: e.venue ?? '',
+  city: e.city ?? '',
+  event_date: e.event_date ?? '',
+  is_free: e.is_free,
+  price_from_zar: e.price_from_zar === null ? '' : String(e.price_from_zar),
+  booking_mode: e.booking_mode,
+  external_booking_url: e.external_booking_url ?? '',
+  organiser_name: e.organiser_name ?? '',
+  host_name: e.host_name ?? '',
+  listing_tier: e.listing_tier,
+  featured_until: e.featured_until ? e.featured_until.slice(0, 10) : '',
+});
 
 const slugify = (s: string) =>
   s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
@@ -99,10 +132,18 @@ const EventsAdmin = () => {
   const [tab, setTab] = useState<'events' | 'submissions'>('events');
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState({ ...emptyDraft });
+  // Null means the dialog creates; an id means it edits that event.
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
   const [saving, setSaving] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
+  // The seats dialog: which event, its sessions, and the blank row being added.
+  const [seatsFor, setSeatsFor] = useState<EventRow | null>(null);
+  const [sessions, setSessions] = useState<SessionRow[]>([]);
+  const [sessionsProblem, setSessionsProblem] = useState<string | null>(null);
+  const [newSession, setNewSession] = useState({ title: '', starts_at: '', allocation: '' });
   const { toast } = useToast();
+  const role = useSecureUserRole();
 
   const load = async () => {
     setLoading(true);
@@ -111,7 +152,7 @@ const EventsAdmin = () => {
 
     const ev = await db
       .from('events')
-      .select('id,slug,title,summary,kind,venue,city,event_date,status,verified_at,is_free,price_from_zar,booking_mode,external_booking_url,listing_tier,featured_until,organiser_name,source')
+      .select('id,slug,title,summary,kind,venue,city,event_date,status,verified_at,is_free,price_from_zar,booking_mode,external_booking_url,listing_tier,featured_until,organiser_name,host_name,source')
       .order('event_date', { ascending: false, nullsFirst: false })
       .limit(200);
     if (ev.error) failures.push(`Events: ${ev.error.message}`);
@@ -135,7 +176,7 @@ const EventsAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const createEvent = async () => {
+  const saveEvent = async () => {
     if (!draft.title.trim()) {
       toast({ title: 'Give the event a name', variant: 'destructive' });
       return;
@@ -152,7 +193,7 @@ const EventsAdmin = () => {
     const price = draft.price_from_zar.trim() ? Number(draft.price_from_zar) : null;
     const { data: userData } = await supabase.auth.getUser();
 
-    const { error } = await (supabase as any).from('events').insert({
+    const fields = {
       slug: draft.slug.trim() || slugify(draft.title),
       title: draft.title.trim(),
       summary: draft.summary.trim() || null,
@@ -165,26 +206,112 @@ const EventsAdmin = () => {
       booking_mode: draft.booking_mode,
       external_booking_url: draft.external_booking_url.trim() || null,
       organiser_name: draft.organiser_name.trim() || null,
+      host_name: draft.host_name.trim() || null,
       listing_tier: draft.listing_tier,
       featured_until: draft.featured_until || null,
-      // Saved as a draft. Publishing is a separate, deliberate act.
-      status: 'draft',
-      // The tick is recorded at the moment it is given, with who gave it.
-      verified_at: checked ? new Date().toISOString() : null,
-      verified_by: checked ? userData?.user?.id ?? null : null,
-      source: 'own',
-    });
+    };
+
+    const db = supabase as any;
+    const { error } = editingId
+      ? await db.from('events').update(fields).eq('id', editingId)
+      : await db.from('events').insert({
+          ...fields,
+          // Saved as a draft. Publishing is a separate, deliberate act.
+          status: 'draft',
+          // The tick is recorded at the moment it is given, with who gave it.
+          verified_at: checked ? new Date().toISOString() : null,
+          verified_by: checked ? userData?.user?.id ?? null : null,
+          source: 'own',
+        });
     setSaving(false);
 
     if (error) {
+      // The database's own words. A refused save must never look like a
+      // saved one, and the message is what lets someone fix the cause.
       toast({ title: 'Could not save', description: error.message, variant: 'destructive' });
       return;
     }
-    toast({ title: 'Saved as a draft' });
+    toast({ title: editingId ? 'Changes saved' : 'Saved as a draft' });
     setOpen(false);
+    setEditingId(null);
     setDraft({ ...emptyDraft });
     setChecked(false);
     load();
+  };
+
+  const openCreate = () => {
+    setEditingId(null);
+    setDraft({ ...emptyDraft });
+    setChecked(false);
+    setOpen(true);
+  };
+
+  const openEdit = (e: EventRow) => {
+    setEditingId(e.id);
+    setDraft(draftFrom(e));
+    setChecked(Boolean(e.verified_at));
+    setOpen(true);
+  };
+
+  const openSeats = async (e: EventRow) => {
+    setSeatsFor(e);
+    setSessions([]);
+    setSessionsProblem(null);
+    setNewSession({ title: '', starts_at: '', allocation: '' });
+    const { data, error } = await (supabase as any)
+      .from('event_sessions')
+      .select('id,session_no,title,starts_at,allocation,sold')
+      .eq('event_id', e.id)
+      .order('session_no');
+    if (error) setSessionsProblem(error.message);
+    else setSessions((data ?? []) as SessionRow[]);
+  };
+
+  const addSession = async () => {
+    if (!seatsFor) return;
+    const allocation = Number(newSession.allocation);
+    if (!Number.isInteger(allocation) || allocation < 1) {
+      toast({ title: 'Give the session an allocation of at least 1 seat', variant: 'destructive' });
+      return;
+    }
+    const nextNo = sessions.reduce((n, s) => Math.max(n, s.session_no), 0) + 1;
+    const { error } = await (supabase as any).from('event_sessions').insert({
+      event_id: seatsFor.id,
+      session_no: nextNo,
+      title: newSession.title.trim() || null,
+      starts_at: newSession.starts_at ? new Date(newSession.starts_at).toISOString() : null,
+      allocation,
+      sold: 0,
+    });
+    if (error) {
+      toast({ title: 'Could not add the session', description: error.message, variant: 'destructive' });
+      return;
+    }
+    toast({ title: 'Session added' });
+    openSeats(seatsFor);
+  };
+
+  const updateAllocation = async (s: SessionRow, allocation: number) => {
+    if (!seatsFor) return;
+    // Seats already sold are commitments to real people; the allocation can
+    // never drop below them.
+    if (!Number.isInteger(allocation) || allocation < Math.max(1, s.sold)) {
+      toast({
+        title: 'Allocation too low',
+        description: `This session has already sold ${s.sold} ${s.sold === 1 ? 'seat' : 'seats'}.`,
+        variant: 'destructive',
+      });
+      return;
+    }
+    const { error } = await (supabase as any)
+      .from('event_sessions')
+      .update({ allocation })
+      .eq('id', s.id);
+    if (error) {
+      toast({ title: 'Could not update', description: error.message, variant: 'destructive' });
+      return;
+    }
+    openSeats(seatsFor);
   };
 
   const setStatus = async (row: EventRow, status: 'published' | 'draft' | 'archived') => {
@@ -305,6 +432,22 @@ const EventsAdmin = () => {
         and published it. Every change is recorded permanently against your name.
       </p>
 
+      {/* If this account cannot manage events, say so before a form is
+          filled in, not after a refused save. */}
+      {!role.loading && !role.isAdmin && !role.isCatalogueManager && !role.isAccountant && (
+        <Card className="mt-5 border-amber-200 bg-amber-50/60">
+          <CardContent className="py-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-amber-900">
+              <AlertTriangle className="h-4 w-4" /> This account has no events role
+            </p>
+            <p className="mt-1 text-sm text-amber-900">
+              You can look, but saves will be refused. Ask Tumelo to add the
+              catalogue manager role to your account, then reload this page.
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       {problems.length > 0 && (
         <Card className="mt-5 border-amber-200 bg-amber-50/60">
           <CardContent className="py-4">
@@ -336,7 +479,7 @@ const EventsAdmin = () => {
             Submitted ({submissions.length})
           </button>
         </div>
-        <Button onClick={() => setOpen(true)} className="ml-auto">
+        <Button onClick={openCreate} className="ml-auto">
           <Plus className="mr-2 h-4 w-4" /> Add an event
         </Button>
       </div>
@@ -383,6 +526,14 @@ const EventsAdmin = () => {
                   </div>
 
                   <div className="flex flex-wrap gap-2">
+                    <Button size="sm" variant="outline" disabled={busyId === e.id} onClick={() => openEdit(e)}>
+                      <Pencil className="mr-1.5 h-3.5 w-3.5" /> Edit
+                    </Button>
+                    {e.booking_mode === 'internal' && (
+                      <Button size="sm" variant="outline" disabled={busyId === e.id} onClick={() => openSeats(e)}>
+                        <Armchair className="mr-1.5 h-3.5 w-3.5" /> Seats
+                      </Button>
+                    )}
                     {!e.verified_at && (
                       <Button size="sm" variant="outline" disabled={busyId === e.id} onClick={() => verify(e)}>
                         <Check className="mr-1.5 h-3.5 w-3.5" /> I have checked this
@@ -440,10 +591,10 @@ const EventsAdmin = () => {
         </div>
       )}
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditingId(null); }}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Add an event</DialogTitle>
+            <DialogTitle>{editingId ? 'Edit this event' : 'Add an event'}</DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4">
@@ -480,6 +631,15 @@ const EventsAdmin = () => {
                 <Label>Town or city</Label>
                 <Input className="mt-1.5" value={draft.city} onChange={(e) => setDraft({ ...draft, city: e.target.value })} />
               </div>
+            </div>
+            <div>
+              <Label>Hosted by</Label>
+              <Input
+                className="mt-1.5"
+                placeholder="Shown on the event page. Leave empty for no host line."
+                value={draft.host_name}
+                onChange={(e) => setDraft({ ...draft, host_name: e.target.value })}
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -555,19 +715,99 @@ const EventsAdmin = () => {
               </p>
             )}
 
-            <label className="flex items-start gap-3 rounded-xl border p-4 text-sm">
-              <Checkbox className="mt-0.5" checked={checked} onCheckedChange={(v) => setChecked(Boolean(v))} />
-              <span>
-                I have checked this event is real and the details above are correct. It
-                cannot be published without this.
-              </span>
-            </label>
+            {!editingId && (
+              <label className="flex items-start gap-3 rounded-xl border p-4 text-sm">
+                <Checkbox className="mt-0.5" checked={checked} onCheckedChange={(v) => setChecked(Boolean(v))} />
+                <span>
+                  I have checked this event is real and the details above are correct. It
+                  cannot be published without this.
+                </span>
+              </label>
+            )}
 
-            <Button className="w-full" disabled={saving} onClick={createEvent}>
+            <Button className="w-full" disabled={saving} onClick={saveEvent}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save as a draft
+              {editingId ? 'Save changes' : 'Save as a draft'}
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Seats: the sessions and allocations behind an internally ticketed
+          event. Sold counts are shown because they are commitments; an
+          allocation can grow but never drop below what people already hold. */}
+      <Dialog open={seatsFor !== null} onOpenChange={(v) => { if (!v) setSeatsFor(null); }}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Seats for {seatsFor?.title}</DialogTitle>
+          </DialogHeader>
+
+          {sessionsProblem ? (
+            <p className="rounded-lg border border-amber-200 bg-amber-50/60 p-3 text-sm text-amber-900">
+              Could not load sessions: {sessionsProblem}
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {sessions.length === 0 && (
+                <p className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
+                  No sessions yet. People cannot book seats until at least one
+                  session with an allocation exists.
+                </p>
+              )}
+              {sessions.map((s) => (
+                <div key={s.id} className="rounded-xl border p-4">
+                  <p className="text-sm font-medium">
+                    {s.title || `Session ${s.session_no}`}
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {s.starts_at ? new Date(s.starts_at).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' }) : 'No time set'}
+                    {' · '}{s.sold} of {s.allocation} sold
+                  </p>
+                  <div className="mt-3 flex items-end gap-3">
+                    <div>
+                      <Label className="text-xs">Allocation</Label>
+                      <Input
+                        className="mt-1 h-9 w-28"
+                        type="number"
+                        min={Math.max(1, s.sold)}
+                        defaultValue={s.allocation}
+                        onBlur={(ev) => {
+                          const v = Number(ev.target.value);
+                          if (v !== s.allocation) updateAllocation(s, v);
+                        }}
+                      />
+                    </div>
+                    <p className="pb-2 text-xs text-muted-foreground">
+                      Changes apply when you leave the field.
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+              <div className="rounded-xl border border-dashed p-4">
+                <p className="text-sm font-medium">Add a session</p>
+                <div className="mt-3 space-y-3">
+                  <div>
+                    <Label className="text-xs">Name</Label>
+                    <Input className="mt-1 h-9" value={newSession.title} onChange={(e) => setNewSession({ ...newSession, title: e.target.value })} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs">Starts</Label>
+                      <Input className="mt-1 h-9" type="datetime-local" value={newSession.starts_at} onChange={(e) => setNewSession({ ...newSession, starts_at: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Seats</Label>
+                      <Input className="mt-1 h-9" type="number" min={1} inputMode="numeric" value={newSession.allocation} onChange={(e) => setNewSession({ ...newSession, allocation: e.target.value })} />
+                    </div>
+                  </div>
+                  <Button size="sm" onClick={addSession}>
+                    <Plus className="mr-1.5 h-3.5 w-3.5" /> Add session
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
