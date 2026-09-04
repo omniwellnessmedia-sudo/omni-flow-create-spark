@@ -1,3 +1,53 @@
+-- HELPER HEAL, added 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md.
+-- The preview branch records earlier files as applied and never re-runs
+-- them, so this heal lives HERE, at the exact file the branch replay
+-- resumes from, as well as in 20251021081931 for true from-scratch
+-- replays. Preview branches are missing helper functions that later
+-- statements use bare; recreating them with their exact production
+-- definitions makes CREATE OR REPLACE a no-op on production.
+SET check_function_bodies = off;
+
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS TRIGGER AS $upd$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$upd$ LANGUAGE plpgsql;
+
+DO $is_admin_heal$
+BEGIN
+  CREATE OR REPLACE FUNCTION public.is_admin(user_id uuid)
+  RETURNS boolean
+  LANGUAGE sql
+  STABLE
+  SECURITY DEFINER
+  SET search_path = public
+  AS $fn$
+    SELECT EXISTS (
+      SELECT 1
+      FROM public.profiles
+      WHERE id = user_id
+        AND user_type = 'admin'
+    );
+  $fn$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function
+    OR invalid_function_definition THEN
+    RAISE NOTICE 'Skipping is_admin heal: %', SQLERRM;
+END
+$is_admin_heal$;
+
+SET check_function_bodies = on;
+
+-- Exception-guarded per statement on 4 September 2026 per
+-- docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md: fresh Supabase preview branches
+-- are missing dashboard-created tables, so statements referencing them skip
+-- with a NOTICE instead of failing the replay. On production every object
+-- exists and every statement runs exactly as before.
+
+DO $g1$
+BEGIN
 -- Create resources table for document management
 CREATE TABLE public.resources (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -39,7 +89,14 @@ CREATE TABLE public.resources (
   -- Flexible metadata (JSON for additional properties)
   metadata JSONB DEFAULT '{}'::jsonb
 );
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g1$;
 
+DO $g2$
+BEGIN
 -- Create function to update search vector
 CREATE OR REPLACE FUNCTION public.update_resource_search_vector()
 RETURNS trigger
@@ -53,40 +110,121 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g2$;
 
+DO $g3$
+BEGIN
 -- Create trigger to update search vector
 CREATE TRIGGER update_resources_search_vector
   BEFORE INSERT OR UPDATE ON public.resources
   FOR EACH ROW
   EXECUTE FUNCTION public.update_resource_search_vector();
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g3$;
 
+DO $g4$
+BEGIN
 -- Create indexes for performance
 CREATE INDEX idx_resources_category ON public.resources(category);
-CREATE INDEX idx_resources_published ON public.resources(is_published);
-CREATE INDEX idx_resources_featured ON public.resources(is_featured);
-CREATE INDEX idx_resources_tags ON public.resources USING GIN(tags);
-CREATE INDEX idx_resources_search ON public.resources USING GIN(search_vector);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g4$;
 
+DO $g5$
+BEGIN
+CREATE INDEX idx_resources_published ON public.resources(is_published);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g5$;
+
+DO $g6$
+BEGIN
+CREATE INDEX idx_resources_featured ON public.resources(is_featured);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g6$;
+
+DO $g7$
+BEGIN
+CREATE INDEX idx_resources_tags ON public.resources USING GIN(tags);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g7$;
+
+DO $g8$
+BEGIN
+CREATE INDEX idx_resources_search ON public.resources USING GIN(search_vector);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g8$;
+
+DO $g9$
+BEGIN
 -- Enable RLS
 ALTER TABLE public.resources ENABLE ROW LEVEL SECURITY;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g9$;
 
+DO $g10$
+BEGIN
 -- RLS Policy: Anyone can view published resources
 CREATE POLICY "Anyone can view published resources"
   ON public.resources FOR SELECT
   USING (is_published = true);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g10$;
 
+DO $g11$
+BEGIN
 -- RLS Policy: Admins can manage all resources
 CREATE POLICY "Admins can manage all resources"
   ON public.resources FOR ALL
   USING (is_admin(auth.uid()))
   WITH CHECK (is_admin(auth.uid()));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g11$;
 
+DO $g12$
+BEGIN
 -- Create updated_at trigger
 CREATE TRIGGER update_resources_updated_at
   BEFORE UPDATE ON public.resources
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g12$;
 
+DO $g13$
+BEGIN
 -- Create download tracking function
 CREATE OR REPLACE FUNCTION public.increment_resource_download(resource_id UUID)
 RETURNS void
@@ -98,7 +236,14 @@ AS $$
   SET download_count = download_count + 1
   WHERE id = resource_id;
 $$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g13$;
 
+DO $g14$
+BEGIN
 -- Create public storage bucket for business documents
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 VALUES (
@@ -119,12 +264,26 @@ VALUES (
     'application/vnd.openxmlformats-officedocument.presentationml.presentation'
   ]
 );
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g14$;
 
+DO $g15$
+BEGIN
 -- RLS Policy: Anyone can view files
 CREATE POLICY "Anyone can view business documents"
   ON storage.objects FOR SELECT
   USING (bucket_id = 'business-documents');
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g15$;
 
+DO $g16$
+BEGIN
 -- RLS Policy: Admins can upload
 CREATE POLICY "Admins can upload business documents"
   ON storage.objects FOR INSERT
@@ -132,7 +291,14 @@ CREATE POLICY "Admins can upload business documents"
     bucket_id = 'business-documents' 
     AND is_admin(auth.uid())
   );
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g16$;
 
+DO $g17$
+BEGIN
 -- RLS Policy: Admins can update
 CREATE POLICY "Admins can update business documents"
   ON storage.objects FOR UPDATE
@@ -140,7 +306,14 @@ CREATE POLICY "Admins can update business documents"
     bucket_id = 'business-documents' 
     AND is_admin(auth.uid())
   );
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g17$;
 
+DO $g18$
+BEGIN
 -- RLS Policy: Admins can delete
 CREATE POLICY "Admins can delete business documents"
   ON storage.objects FOR DELETE
@@ -148,7 +321,14 @@ CREATE POLICY "Admins can delete business documents"
     bucket_id = 'business-documents' 
     AND is_admin(auth.uid())
   );
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g18$;
 
+DO $g19$
+BEGIN
 -- Seed initial 12 resources with placeholder URLs
 INSERT INTO public.resources (title, description, category, file_type, file_url, is_published, display_order, tags, published_at) VALUES
 -- Wellness Guides
@@ -170,3 +350,8 @@ INSERT INTO public.resources (title, description, category, file_type, file_url,
 ('Event Planning Toolkit', 'Resources for organizing community wellness events', 'community-tools', 'pdf', 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/business-documents/event-toolkit.pdf', true, 1, ARRAY['events', 'planning', 'community'], now()),
 ('Social Media Templates', 'Templates for conscious content creation', 'community-tools', 'design', 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/business-documents/social-templates.zip', true, 2, ARRAY['social-media', 'templates', 'content'], now()),
 ('Fundraising Guide', 'How to raise funds for community wellness projects', 'community-tools', 'pdf', 'https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/business-documents/fundraising-guide.pdf', true, 3, ARRAY['fundraising', 'community', 'finance'], now());
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g19$;
