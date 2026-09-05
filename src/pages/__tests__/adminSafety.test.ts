@@ -105,3 +105,64 @@ describe('money screens never pass a failed read off as zero', () => {
     expect(analytics).toContain('These numbers are incomplete');
   });
 });
+
+describe('the audit findings that corrupt data or mail the wrong people', () => {
+  const read = (f: string) => readFileSync(resolve(adminDir, f), 'utf8');
+
+  it('the social scheduler writes the column that exists', () => {
+    // The live schema has `platforms`, a NOT NULL social_platform[] array.
+    // Every write named a `platform` column that does not exist, so
+    // scheduling, editing and bulk import all failed at the database.
+    const src = read('SocialScheduler.tsx');
+    expect(src).toContain('platforms: [formData.platform]');
+    expect(src).toContain('platforms: [platform]');
+    expect(src).toContain('post.platforms?.[0]');
+    expect(src).not.toMatch(/\bplatform:\s*formData\.platform\b/);
+  });
+
+  it('editing a newsletter cannot wipe its body', () => {
+    // openEditDialog seeds an empty body, so regenerating html_content from
+    // the form destroyed the stored campaign.
+    const src = read('NewsletterEditor.tsx');
+    expect(src).toContain('bodyHydrated');
+    expect(src).toContain('if (!editingCampaign || bodyHydrated)');
+    expect(src).toContain('The saved body is not shown here');
+  });
+
+  it('the leads screen no longer mails newsletter subscribers instead of leads', () => {
+    // It computed the lead list, discarded it, and queued a newsletter
+    // campaign, which the sender delivers to confirmed subscribers.
+    const src = read('AdminLeads.tsx');
+    expect(src).not.toMatch(/from\("newsletter_campaigns"\)/);
+    expect(src).not.toMatch(/\.insert\(\{\s*name: `Lead Email/);
+    expect(src).toContain('mailto:?bcc=');
+  });
+
+  it('granting a role happens server side, not against a table nobody can read', () => {
+    // profiles has one SELECT policy for signed in users, own row only, so a
+    // client side email lookup found nobody and blamed the person.
+    const tools = read('AdminTools.tsx');
+    expect(tools).toContain("rpc('grant_role_by_email'");
+    expect(tools).toContain("rpc('revoke_role'");
+    expect(migrations).toContain('CREATE OR REPLACE FUNCTION public.grant_role_by_email');
+    expect(migrations).toContain("has_role(auth.uid(), 'super_admin')");
+  });
+
+  it('the last super admin cannot be revoked', () => {
+    expect(migrations).toContain("'last_super_admin'");
+  });
+
+  it('super_admin is not grantable from the application', () => {
+    expect(migrations).toContain("'role_not_allowed'");
+  });
+
+  it('seeding a provider is confirmed and does not publish listings', () => {
+    const tools = read('AdminTools.tsx');
+    expect(tools).toContain('window.confirm');
+    expect(tools).toContain('active: false');
+  });
+
+  it('destructive role removal asks first', () => {
+    expect(read('AdminTools.tsx')).toContain('Remove the ${row.role');
+  });
+});

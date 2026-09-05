@@ -122,21 +122,37 @@ const AdminTools = () => {
       return;
     }
     setLoading(true);
-    const db = supabase as any;
 
-    const { data: profile, error: lookupError } = await db
-      .from('profiles')
-      .select('id')
-      .eq('email', address)
-      .maybeSingle();
+    // The whole operation happens server side. Resolving the address here
+    // could never work: public.profiles has one SELECT policy for signed in
+    // users, "Users can view their own profile" USING (auth.uid() = id), so
+    // a client side lookup finds nobody but yourself and returns no error,
+    // which this screen used to report as "they need to sign up first".
+    const { data, error } = await (supabase as any).rpc('grant_role_by_email', {
+      p_email: address,
+      p_role: role,
+    });
+    setLoading(false);
 
-    if (lookupError) {
-      setLoading(false);
-      toast({ title: 'Could not look up that person', description: lookupError.message, variant: 'destructive' });
+    if (error) {
+      toast({ title: 'Could not grant the role', description: error.message, variant: 'destructive' });
       return;
     }
-    if (!profile) {
-      setLoading(false);
+
+    const status = (data as { status?: string } | null)?.status;
+    if (status === 'granted') {
+      toast({ title: 'Access granted', description: `${address} is now a ${role.replace('_', ' ')}.` });
+      setEmail('');
+      loadRoles();
+      return;
+    }
+    if (status === 'already_had_it') {
+      toast({ title: 'They already have that role' });
+      setEmail('');
+      loadRoles();
+      return;
+    }
+    if (status === 'no_account') {
       toast({
         title: 'No account with that address',
         description: 'They need to sign up at /auth first, with this exact address.',
@@ -144,40 +160,63 @@ const AdminTools = () => {
       });
       return;
     }
-
-    const { error } = await db.from('user_roles').insert({ user_id: profile.id, role });
-    setLoading(false);
-
-    if (error) {
-      if (error.code === '23505') {
-        toast({ title: 'They already have that role' });
-        return;
-      }
-      // The database's own words. A refused write and a mistyped address are
-      // different problems and must not look the same.
-      toast({ title: 'Could not grant the role', description: error.message, variant: 'destructive' });
+    if (status === 'forbidden') {
+      toast({
+        title: 'Only a super admin can grant roles',
+        description: 'Ask Tumelo to make the change, or to give this account super admin.',
+        variant: 'destructive',
+      });
       return;
     }
-
-    toast({ title: 'Access granted', description: `${address} is now a ${role.replace('_', ' ')}.` });
-    setEmail('');
-    loadRoles();
+    toast({ title: 'Could not grant that role', description: `The database returned: ${status}`, variant: 'destructive' });
   };
 
   const revokeRole = async (row: RoleRow) => {
-    const db = supabase as any;
-    const { error } = await db.from('user_roles').delete().eq('id', row.id);
+    const who = row.email ?? `account ${row.user_id.slice(0, 8)}`;
+    // Removing access is destructive and silent otherwise: the row simply
+    // vanishes and the person loses the screen next time they load it.
+    if (!window.confirm(`Remove the ${row.role.replace('_', ' ')} role from ${who}?`)) return;
+
+    const { data, error } = await (supabase as any).rpc('revoke_role', {
+      p_user_id: row.user_id,
+      p_role: row.role,
+    });
     if (error) {
       toast({ title: 'Could not remove the role', description: error.message, variant: 'destructive' });
       return;
     }
-    toast({ title: 'Access removed' });
-    loadRoles();
+    const status = (data as { status?: string } | null)?.status;
+    if (status === 'revoked') {
+      toast({ title: 'Access removed' });
+      loadRoles();
+      return;
+    }
+    if (status === 'last_super_admin') {
+      toast({
+        title: 'That is the last super admin',
+        description: 'Removing it would leave nobody able to grant or remove roles. Give someone else super admin first.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    if (status === 'forbidden') {
+      toast({ title: 'Only a super admin can remove roles', variant: 'destructive' });
+      return;
+    }
+    toast({ title: 'Nothing was removed', description: `The database returned: ${status}`, variant: 'destructive' });
   };
 
   const [seedResult, setSeedResult] = useState<{ success: boolean; message: string } | null>(null);
 
   const seedSandyProvider = async () => {
+    // This writes a provider profile under YOUR account and publishes six
+    // priced listings. Both were previously one unconfirmed click away.
+    if (!window.confirm(
+      'This creates or OVERWRITES the provider profile on your own account ' +
+      '(business name, description, contact details, verified flag and wellcoin ' +
+      'balance) and adds six of Sandy Mitchell\'s services as drafts. Continue?'
+    )) return;
+
     setLoading(true);
     setSeedResult(null);
     try {
@@ -236,6 +275,7 @@ const AdminTools = () => {
       }
 
       let servicesCreated = 0;
+      const failed: string[] = [];
       for (const svc of sandyServices) {
         const { data: existingSvc } = await supabase
           .from('services')
@@ -262,16 +302,23 @@ const AdminTools = () => {
             location: svc.location || profile.location,
             is_online: svc.is_online,
             images: svc.images,
-            active: true,
+            // Seeded listings arrive as drafts. Publishing a priced service
+            // to the marketplace is a decision, not a side effect of seeding.
+            active: false,
           });
 
         if (!svcError) servicesCreated++;
-        else console.error('Service insert error:', svc.title, svcError);
+        else {
+          failed.push(`${svc.title}: ${svcError.message}`);
+          console.error('Service insert error:', svc.title, svcError);
+        }
       }
 
       setSeedResult({
-        success: true,
-        message: `Provider "${profile.business_name}" seeded with ${servicesCreated} services under your admin account`
+        success: failed.length === 0,
+        message: failed.length === 0
+          ? `Provider "${profile.business_name}" seeded with ${servicesCreated} services, saved as drafts under your account. Publish them in the catalogue when you are ready.`
+          : `${servicesCreated} services saved, ${failed.length} failed: ${failed.join('; ')}`,
       });
 
       toast({

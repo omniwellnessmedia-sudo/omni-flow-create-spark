@@ -130,6 +130,10 @@ const NewsletterEditor = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [editingCampaign, setEditingCampaign] = useState<NewsletterCampaign | null>(null);
+  /** True when formData.content holds the body that will be published. False
+   *  while editing a saved campaign, because the body is not parsed back out
+   *  of the stored HTML. See openEditDialog. */
+  const [bodyHydrated, setBodyHydrated] = useState(true);
   const [previewHtml, setPreviewHtml] = useState('');
 
   // Form state
@@ -199,13 +203,10 @@ const NewsletterEditor = () => {
 
   const handleSaveCampaign = async (status: 'draft' | 'scheduled' = 'draft') => {
     try {
-      const html = generateHtml();
-      
-      const campaignData = {
+      const campaignData: Record<string, unknown> = {
         name: formData.name,
         subject: formData.subject,
         preview_text: formData.preview_text,
-        html_content: html,
         from_name: formData.from_name,
         from_email: formData.from_email,
         status,
@@ -213,6 +214,13 @@ const NewsletterEditor = () => {
           ? new Date(formData.scheduled_send_time).toISOString()
           : null,
       };
+
+      // Only write the body when the form actually holds one. Editing an
+      // existing campaign seeds an empty body (see openEditDialog), so
+      // regenerating the HTML from it would wipe what is stored.
+      if (!editingCampaign || bodyHydrated) {
+        campaignData.html_content = generateHtml();
+      }
 
       if (editingCampaign) {
         const { error } = await (supabase
@@ -298,6 +306,8 @@ const NewsletterEditor = () => {
   };
 
   const resetForm = () => {
+    // A new campaign is authored here in full, so the form owns its body.
+    setBodyHydrated(true);
     setFormData({
       name: '',
       subject: '',
@@ -314,7 +324,14 @@ const NewsletterEditor = () => {
 
   const openEditDialog = (campaign: NewsletterCampaign) => {
     setEditingCampaign(campaign);
-    // Parse HTML to extract values (simplified - in production use proper HTML parsing)
+    // THE BODY IS NOT PARSED BACK OUT OF THE SAVED HTML. The form below is
+    // therefore seeded with placeholder headline and CTA text and an EMPTY
+    // body. Saving used to regenerate html_content from that empty form,
+    // which silently destroyed the body, headline and call to action of any
+    // campaign whose name or subject someone edited. bodyHydrated records
+    // that the form does not hold this campaign's body, and the save path
+    // leaves html_content untouched while it is false.
+    setBodyHydrated(false);
     setFormData({
       name: campaign.name,
       subject: campaign.subject,
@@ -425,10 +442,33 @@ const NewsletterEditor = () => {
 
                 <div>
                   <Label>Email Content</Label>
+                  {/* Editing a saved campaign cannot yet show its body back,
+                      so say so rather than presenting an empty box that looks
+                      like the campaign is empty. Saving leaves the stored
+                      body untouched while this notice is showing. */}
+                  {editingCampaign && !bodyHydrated && (
+                    <div className="mb-2 rounded-lg border border-amber-300 bg-amber-50 p-3">
+                      <p className="text-xs font-medium text-amber-900">
+                        The saved body is not shown here
+                      </p>
+                      <p className="mt-1 text-xs text-amber-900">
+                        This campaign already has content. It is kept exactly as it is
+                        unless you type below, so you can safely change the name, subject
+                        or schedule. Typing here replaces the whole body.
+                      </p>
+                    </div>
+                  )}
                   <Textarea
                     value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    placeholder="Write your newsletter content here..."
+                    onChange={(e) => {
+                      // The moment the operator types, the form owns the body
+                      // and the save path writes it.
+                      setBodyHydrated(true);
+                      setFormData({ ...formData, content: e.target.value });
+                    }}
+                    placeholder={editingCampaign && !bodyHydrated
+                      ? 'Type here only if you want to replace the saved body'
+                      : 'Write your newsletter content here...'}
                     rows={8}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
