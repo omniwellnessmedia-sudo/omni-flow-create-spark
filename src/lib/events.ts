@@ -76,6 +76,18 @@ export interface EventDetail extends Omit<PublicEvent, 'seats_remaining' | 'is_p
 /** A read either succeeded with rows, or failed with a reason. Never both. */
 export type ReadResult<T> = { ok: true; data: T } | { ok: false; reason: string };
 
+/**
+ * Narrow a ReadResult to its failure branch.
+ *
+ * tsconfig.app.json sets strict:false, and without strictNullChecks
+ * TypeScript will not narrow a union on a boolean literal discriminant, so
+ * `if (!res.ok) res.reason` fails to compile even though it is correct at
+ * runtime. A user defined type guard narrows regardless of that setting.
+ */
+export const isReadFailure = <T,>(
+  r: ReadResult<T>
+): r is { ok: false; reason: string } => r.ok === false;
+
 const KIND_LABELS: Record<EventKind, string> = {
   screening: 'Screening',
   workshop: 'Workshop',

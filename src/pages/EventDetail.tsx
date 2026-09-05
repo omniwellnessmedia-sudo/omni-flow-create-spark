@@ -10,8 +10,7 @@ import {
 } from 'lucide-react';
 import {
   getEvent, formatEventDate, kindLabel, kindHue,
-  type EventDetail as Detail, type EventSession,
-} from '@/lib/events';
+  type EventDetail as Detail, type EventSession, isReadFailure } from '@/lib/events';
 import { getEventContent, type EventExtraContent, type EventTicketTier } from '@/data/eventContent';
 import { calculateFees, formatZar } from '@/config/eventPricing';
 import { useCart } from '@/components/CartProvider';
@@ -409,7 +408,7 @@ const EventDetailPage = () => {
     (async () => {
       const res = await getEvent(slug);
       if (cancelled) return;
-      if (!res.ok) {
+      if (isReadFailure(res)) {
         setProblem(res.reason);
       } else if (res.data === null) {
         setNotFound(true);

@@ -202,7 +202,8 @@ const AdminDashboard = () => {
       if (section === "home") next.delete("section"); else next.set("section", section);
       return next;
     }, { replace: true });
-    setMobileNavOpen(false);
+    // The mobile drawer is AdminLayout's now, and it closes itself in
+    // changeSection. This line referenced a setter that no longer exists here.
   }, [setSearchParams]);
 
   const updateTourBookingStatus = async (id: string, status: string) => {
