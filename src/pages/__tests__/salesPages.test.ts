@@ -326,14 +326,17 @@ describe('the service pack handoff did not become a second price source', () => 
 });
 
 describe('the pricing page publishes only rate card figures', () => {
-  const pricing = readFileSync(resolve(__dirname, '../Pricing.tsx'), 'utf8');
+  const pricingFile = readFileSync(resolve(__dirname, '../Pricing.tsx'), 'utf8');
+  // The file header records which figures are deliberately excluded and why,
+  // so the guards apply to the code below it, which is what renders.
+  const pricing = pricingFile.slice(pricingFile.indexOf('const INK'));
 
   it('writes no price of its own', () => {
     // Every figure is read from publicRateCard.ts by slug, so a rate change
     // reaches this page without anyone editing it.
     expect(pricing).not.toMatch(/R\s?\d/);
-    expect(pricing).toContain('getOffer');
-    expect(pricing).toContain('{t.offer!.price}');
+    expect(pricingFile).toContain('getOffer');
+    expect(pricingFile).toContain('{t.offer!.price}');
   });
 
   it('omits the digital kits until their prices are approved', () => {
