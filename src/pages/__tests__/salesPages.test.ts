@@ -285,9 +285,23 @@ describe('the service pack handoff did not become a second price source', () => 
     }
   });
 
-  it('keeps the two unapproved figures out', () => {
-    expect(detail.slice(detail.indexOf('export const SERVICE_DETAIL_CONTENT'))).not.toContain('R5,500');
-    expect(detail.slice(detail.indexOf('export const SERVICE_DETAIL_CONTENT'))).not.toContain('R10,000');
+  it('never reinstates the withdrawn prepaid block price', () => {
+    // R10,000 for ten prepaid hours was withdrawn on 27 August 2026 because
+    // it implied R1,000 per hour against a published rate of R1,500. The
+    // handoff still carries it in an FAQ answer. Nothing in this repository
+    // may republish it without written sign off on a block rate.
+    const body = detail.slice(detail.indexOf('export const SERVICE_DETAIL_CONTENT'));
+    expect(body).not.toContain('R10,000');
+    expect(rateCard).not.toMatch(/price:\s*'[^']*R10,000/);
+  });
+
+  it('keeps the digital resource prices out until they are on the rate card', () => {
+    // The handoff prices four downloadable kits at R199, R349, R499 and R799.
+    // None appears on the rate card, so none may reach a public page yet.
+    const body = detail.slice(detail.indexOf('export const SERVICE_DETAIL_CONTENT'));
+    for (const f of ['R199', 'R349', 'R499', 'R799']) {
+      expect(body, `${f} is not an approved price`).not.toContain(f);
+    }
   });
 
   it('the rate card keeps the recurrence and the second workshop rate', () => {

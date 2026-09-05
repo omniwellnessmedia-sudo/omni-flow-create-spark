@@ -37,15 +37,21 @@
  * is left null until the real photography is in /public. The page renders
  * without it.
  *
- * TWO FAQ ANSWERS WERE HELD BACK. The handoff answers "Starter or Signature?"
- * with a R5,500 Signature tier, and "How does the block work?" with ten
- * prepaid hours at R10,000. Neither figure appears on the approved rate card,
- * and this site does not publish a price the rate card does not carry. Both
- * answers are good and should return the moment Chad confirms the figures.
- * Every other price the handoff mentions (R7,500 launch rate, R2,800,
- * R1,500 per hour, R12,500) matches the rate card exactly. Its workshops
- * answer also states "From R7,500 half day, from R12,500 full day", which
- * confirms the full day rate its own card price had dropped.
+ * ONE FAQ ANSWER IS HELD BACK, AND IT MATTERS. The handoff answers "How does
+ * the block work?" with ten prepaid hours at R10,000. That price was
+ * WITHDRAWN from the public page on 27 August 2026 because it implied
+ * R1,000 per hour and undercut the published hourly rate by a third; rate
+ * card v0.9 proposes R13,500 but is unratified, so no block price is
+ * published at all. Carrying the handoff's answer would have quietly
+ * reinstated a figure the team had deliberately removed nine days earlier.
+ * It returns only with written sign off on a block rate.
+ *
+ * Everything else the handoff prices is consistent with the rate card,
+ * including the Starter and Signature brand identity tiers at R2,800 and
+ * R5,500, both of which the rate card publishes in the brand-identity blurb.
+ * Its workshops answer also states "From R7,500 half day, from R12,500 full
+ * day", which independently confirms the full day rate its own card price
+ * had dropped.
  *
  * No em dashes in this file.
  */
@@ -192,6 +198,7 @@ export const SERVICE_DETAIL_CONTENT: Record<string, ServiceDetailContent> = {
       'Teams who need templates, not just a logo',
     ],
     faqs: [
+      { question: 'Starter or Signature?', answer: 'Starter (R2,800) for a solo practice; Signature (R5,500) when you need a full suite and guideline.' },
       { question: 'Revisions?', answer: 'One consolidated round on Starter, two on Signature.' },
     ],
     image: null,
