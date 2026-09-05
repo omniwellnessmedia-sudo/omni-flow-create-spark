@@ -1,189 +1,178 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Wand2, UserPlus, RefreshCw, CheckCircle, AlertCircle, Users, Info, Database } from 'lucide-react';
+import { useSecureUserRole } from '@/hooks/useSecureUserRole';
+import { UserPlus, RefreshCw, CheckCircle, AlertCircle, Users, Info, Database, Trash2, Loader2, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import sandyMitchellData from '@/data/sandyMitchellProfile';
 
+/**
+ * Admin tools: granting access, and seeding a provider.
+ *
+ * WHAT WAS REMOVED, AND WHY IT MATTERED
+ *
+ * 1. AUTO-CURATION. This page carried a "Run Auto-Curation" button calling
+ *    auto_curate_featured_products(), which sets is_featured on every active
+ *    product with commission above 15 per cent and any image at all.
+ *    is_featured is exactly the flag src/config/catalogueGate.ts uses to
+ *    decide what shoppers see, so one click published unvetted stock to the
+ *    live storefront, ranked by what we earn rather than by whether anyone
+ *    had looked at the picture. That is how catalogue photography of a
+ *    topless model came to sit beside a mirror and a laptop battery on a
+ *    public page in the 28 August audit. The same button was removed from
+ *    Product Curation at the time and this copy was missed. Featuring is now
+ *    only ever done by a person in /admin/products, one product at a time.
+ *    The migration that revokes the function accompanies this change.
+ *
+ * 2. "ADD TEAM ADMINS". A one click button whose label said Chad, Zenith and
+ *    Feroza but whose code granted admin to two hardcoded addresses that are
+ *    neither: a transposed spelling of the company address, and an external
+ *    yoga provider. A button that grants standing access to addresses the
+ *    label does not name is not a shortcut, so it is gone. Access is granted
+ *    below, one person and one role at a time, by someone who types the
+ *    address and picks the role.
+ *
+ * WHO CAN GRANT. Writing user_roles requires super_admin: the RLS policy is
+ * "Super admins can manage user roles". A plain admin previously got a
+ * generic "Failed to add admin user" here, which is indistinguishable from a
+ * typo in the email. This screen now says which of the two happened.
+ *
+ * No em dashes in this file.
+ */
+
+/** The roles that actually gate anything in this application. */
+const ASSIGNABLE_ROLES = [
+  {
+    role: 'catalogue_manager',
+    label: 'Catalogue manager',
+    detail: 'The catalogue, product approvals and the events desk. No accounting, leads or role changes.',
+  },
+  {
+    role: 'accountant',
+    label: 'Accountant',
+    detail: 'Read only access to the financial screens.',
+  },
+  {
+    role: 'admin',
+    label: 'Admin',
+    detail: 'The whole dashboard except granting roles.',
+  },
+] as const;
+
+interface RoleRow {
+  id: string;
+  user_id: string;
+  role: string;
+  email?: string | null;
+}
+
 const AdminTools = () => {
   const [loading, setLoading] = useState(false);
-  const [newAdminEmail, setNewAdminEmail] = useState('');
-  const [autoCurationResults, setAutoCurationResults] = useState<any>(null);
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState<string>('catalogue_manager');
+  const [rows, setRows] = useState<RoleRow[]>([]);
+  const [rowsProblem, setRowsProblem] = useState<string | null>(null);
+  const [rowsLoading, setRowsLoading] = useState(true);
   const { toast } = useToast();
+  const { roles: myRoles, loading: roleLoading } = useSecureUserRole();
+  const isSuperAdmin = (myRoles as string[]).includes('super_admin');
 
-  const runAutoCuration = async () => {
-    setLoading(true);
-    setAutoCurationResults(null);
-    
-    try {
-      // Call the auto-curation function
-      const { error } = await supabase.rpc('auto_curate_featured_products');
-      
-      if (error) throw error;
+  const loadRoles = async () => {
+    setRowsLoading(true);
+    setRowsProblem(null);
+    const db = supabase as any;
+    const { data, error } = await db
+      .from('user_roles')
+      .select('id, user_id, role')
+      .order('role');
 
-      // Fetch updated stats
-      const { data: featured, error: featuredError } = await supabase
-        .from('affiliate_products')
-        .select('id', { count: 'exact', head: true })
-        .eq('is_featured', true);
-
-      const { data: trending, error: trendingError } = await supabase
-        .from('affiliate_products')
-        .select('id', { count: 'exact', head: true })
-        .eq('is_trending', true);
-
-      if (featuredError || trendingError) throw featuredError || trendingError;
-
-      setAutoCurationResults({
-        success: true,
-        featuredCount: featured?.length || 0,
-        trendingCount: trending?.length || 0,
-      });
-
-      toast({
-        title: 'Auto-curation complete',
-        description: 'Products have been automatically curated based on performance',
-      });
-    } catch (error) {
-      console.error('Error running auto-curation:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to run auto-curation',
-        variant: 'destructive',
-      });
-      setAutoCurationResults({
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      });
-    } finally {
-      setLoading(false);
+    if (error) {
+      setRowsProblem(error.message);
+      setRows([]);
+      setRowsLoading(false);
+      return;
     }
+
+    // Attach emails where the profile is readable. A missing profile is not
+    // an error worth failing the list over; the user id still identifies the
+    // row for anyone who needs to chase it.
+    const ids = Array.from(new Set((data ?? []).map((r: RoleRow) => r.user_id)));
+    let emails: Record<string, string> = {};
+    if (ids.length > 0) {
+      const { data: profiles } = await db.from('profiles').select('id, email').in('id', ids);
+      emails = Object.fromEntries((profiles ?? []).map((p: any) => [p.id, p.email]));
+    }
+    setRows((data ?? []).map((r: RoleRow) => ({ ...r, email: emails[r.user_id] ?? null })));
+    setRowsLoading(false);
   };
 
-  const addAdminUser = async () => {
-    if (!newAdminEmail.trim()) {
+  useEffect(() => {
+    loadRoles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const grantRole = async () => {
+    const address = email.trim().toLowerCase();
+    if (!address) {
+      toast({ title: 'Enter the person’s email address', variant: 'destructive' });
+      return;
+    }
+    setLoading(true);
+    const db = supabase as any;
+
+    const { data: profile, error: lookupError } = await db
+      .from('profiles')
+      .select('id')
+      .eq('email', address)
+      .maybeSingle();
+
+    if (lookupError) {
+      setLoading(false);
+      toast({ title: 'Could not look up that person', description: lookupError.message, variant: 'destructive' });
+      return;
+    }
+    if (!profile) {
+      setLoading(false);
       toast({
-        title: 'Email required',
-        description: 'Please enter an email address',
+        title: 'No account with that address',
+        description: 'They need to sign up at /auth first, with this exact address.',
         variant: 'destructive',
       });
       return;
     }
 
-    setLoading(true);
-    try {
-      // First, find the user by email
-      const { data: userData, error: userError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', newAdminEmail.trim())
-        .single();
+    const { error } = await db.from('user_roles').insert({ user_id: profile.id, role });
+    setLoading(false);
 
-      if (userError || !userData) {
-        toast({
-          title: 'User not found',
-          description: 'This user needs to sign up first',
-          variant: 'destructive',
-        });
+    if (error) {
+      if (error.code === '23505') {
+        toast({ title: 'They already have that role' });
         return;
       }
-
-      // Add admin role
-      const { error: roleError } = await supabase
-        .from('user_roles')
-        .insert({
-          user_id: userData.id,
-          role: 'admin',
-        });
-
-      if (roleError) {
-        if (roleError.code === '23505') {
-          toast({
-            title: 'Already an admin',
-            description: 'This user already has admin access',
-            variant: 'destructive',
-          });
-        } else {
-          throw roleError;
-        }
-        return;
-      }
-
-      toast({
-        title: 'Admin added',
-        description: `${newAdminEmail} now has admin access`,
-      });
-
-      setNewAdminEmail('');
-    } catch (error) {
-      console.error('Error adding admin:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to add admin user',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
+      // The database's own words. A refused write and a mistyped address are
+      // different problems and must not look the same.
+      toast({ title: 'Could not grant the role', description: error.message, variant: 'destructive' });
+      return;
     }
+
+    toast({ title: 'Access granted', description: `${address} is now a ${role.replace('_', ' ')}.` });
+    setEmail('');
+    loadRoles();
   };
 
-  const addPredefinedAdmins = async () => {
-    setLoading(true);
-    const adminEmails = [
-      'omnimediawellness@gmail.com',
-      'sandy@druyogacapetown.co.za',
-    ];
-
-    let successCount = 0;
-    let alreadyAdminCount = 0;
-    let notFoundCount = 0;
-
-    for (const email of adminEmails) {
-      try {
-        const { data: userData, error: userError } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('email', email)
-          .maybeSingle();
-
-        if (userError) throw userError;
-
-        if (!userData) {
-          notFoundCount++;
-          continue;
-        }
-
-        const { error: roleError } = await supabase
-          .from('user_roles')
-          .insert({
-            user_id: userData.id,
-            role: 'admin',
-          });
-
-        if (roleError) {
-          if (roleError.code === '23505') {
-            alreadyAdminCount++;
-          } else {
-            throw roleError;
-          }
-        } else {
-          successCount++;
-        }
-      } catch (error) {
-        console.error(`Error adding admin ${email}:`, error);
-      }
+  const revokeRole = async (row: RoleRow) => {
+    const db = supabase as any;
+    const { error } = await db.from('user_roles').delete().eq('id', row.id);
+    if (error) {
+      toast({ title: 'Could not remove the role', description: error.message, variant: 'destructive' });
+      return;
     }
-
-    toast({
-      title: 'Admin setup complete',
-      description: `Added: ${successCount}, Already admin: ${alreadyAdminCount}, Not found: ${notFoundCount}`,
-    });
-
-    setLoading(false);
+    toast({ title: 'Access removed' });
+    loadRoles();
   };
 
   const [seedResult, setSeedResult] = useState<{ success: boolean; message: string } | null>(null);
@@ -200,7 +189,6 @@ const AdminTools = () => {
 
       const providerId = user.id;
 
-      // First check if this admin already has a provider profile
       const { data: existing } = await supabase
         .from('provider_profiles')
         .select('id')
@@ -208,7 +196,6 @@ const AdminTools = () => {
         .maybeSingle();
 
       if (existing) {
-        // Update existing profile
         const { error: updateError } = await supabase
           .from('provider_profiles')
           .update({
@@ -228,7 +215,6 @@ const AdminTools = () => {
 
         if (updateError) throw updateError;
       } else {
-        // Insert new profile — id must match auth.uid() for RLS
         const { error: insertError } = await supabase
           .from('provider_profiles')
           .insert({
@@ -249,10 +235,8 @@ const AdminTools = () => {
         if (insertError) throw insertError;
       }
 
-      // Insert services — use provider_id matching auth.uid()
       let servicesCreated = 0;
       for (const svc of sandyServices) {
-        // Check if service with same title already exists for this provider
         const { data: existingSvc } = await supabase
           .from('services')
           .select('id')
@@ -261,7 +245,7 @@ const AdminTools = () => {
           .maybeSingle();
 
         if (existingSvc) {
-          servicesCreated++; // Already exists, count it
+          servicesCreated++;
           continue;
         }
 
@@ -302,7 +286,7 @@ const AdminTools = () => {
       });
       toast({
         title: 'Seed Failed',
-        description: 'Check console for details',
+        description: error instanceof Error ? error.message : 'Unknown error',
         variant: 'destructive',
       });
     } finally {
@@ -310,211 +294,130 @@ const AdminTools = () => {
     }
   };
 
-  const teamMembers = [
-    { name: 'Chad Cupido', email: 'chad@omniwellnessmedia.com', role: 'Founder & Head of Media' },
-    { name: 'Zenith', email: 'zenith@omniwellnessmedia.com', role: 'Administration & Coordination' },
-    { name: 'Feroza', email: 'feroza@omniwellnessmedia.com', role: 'Team Member' },
-  ];
-
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-2">Admin Tools</h2>
-        <p className="text-muted-foreground">Manage product curation and admin users</p>
+        <p className="text-muted-foreground">Who can get into what, and provider seeding</p>
       </div>
 
-      {/* Team Signup Instructions */}
-      <Card className="mb-8 border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-primary" />
-            Team Member Setup
-          </CardTitle>
-          <CardDescription>
-            Instructions for new team members to get admin access
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="p-4 bg-background rounded-lg border">
-            <h4 className="font-semibold mb-3 flex items-center gap-2">
-              <Info className="h-4 w-4 text-blue-500" />
-              Setup Process (3 Steps)
-            </h4>
-            <ol className="list-decimal list-inside space-y-2 text-sm">
-              <li>
-                <strong>Sign Up:</strong> Each team member visits{' '}
-                <a href="/auth" className="text-primary hover:underline font-medium">
-                  /auth
-                </a>{' '}
-                and creates an account using their official email
-              </li>
-              <li>
-                <strong>Verify Email:</strong> Check inbox and verify email address
-              </li>
-              <li>
-                <strong>Admin Grant:</strong> An existing admin adds them using the form below
-              </li>
-            </ol>
-          </div>
+      {/* Said before anyone fills in the form, because the database will
+          refuse the write and a generic failure reads like a typo. */}
+      {!roleLoading && !isSuperAdmin && (
+        <Card className="border-amber-300 bg-amber-50">
+          <CardContent className="py-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-amber-900">
+              <AlertTriangle className="h-4 w-4" />
+              You can see who has access, but not change it
+            </p>
+            <p className="mt-1 text-sm text-amber-900">
+              Granting and removing roles requires the super admin role. Ask Tumelo
+              to make the change, or to give this account super admin.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
-          <div>
-            <h4 className="font-semibold mb-3">Team Members</h4>
-            <div className="space-y-2">
-              {teamMembers.map((member) => (
-                <div
-                  key={member.email}
-                  className="flex items-center justify-between p-3 bg-background rounded-lg border"
-                >
-                  <div>
-                    <p className="font-medium">{member.name}</p>
-                    <p className="text-sm text-muted-foreground">{member.email}</p>
-                  </div>
-                  <Badge variant="outline" className="text-xs">
-                    {member.role}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => window.open('/auth', '_blank')}
-              className="flex-1"
-            >
-              <UserPlus className="h-4 w-4 mr-2" />
-              Open Signup Page
-            </Button>
-            <Button
-              onClick={() => {
-                const emails = teamMembers.map(m => m.email).join('\n');
-                navigator.clipboard.writeText(emails);
-                toast({
-                  title: 'Success',
-                  description: 'Team emails copied to clipboard',
-                });
-              }}
-              variant="secondary"
-            >
-              Copy Emails
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Auto-Curation Tool */}
+      {/* Access */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Wand2 className="w-5 h-5 text-primary" />
-            Auto-Curate Products
+            <Users className="w-5 h-5 text-primary" />
+            Who can get in
           </CardTitle>
           <CardDescription>
-            Automatically mark products as featured (commission {'>'} 15% + good images) and trending (top viewed)
+            Everyone signs up at /auth first with the address you type here. Roles
+            take effect the next time they load the dashboard.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <Button 
-            onClick={runAutoCuration} 
-            disabled={loading}
-            className="w-full sm:w-auto"
-          >
-            {loading ? (
-              <>
-                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                Running...
-              </>
-            ) : (
-              <>
-                <Wand2 className="w-4 h-4 mr-2" />
-                Run Auto-Curation
-              </>
-            )}
-          </Button>
-
-          {autoCurationResults && (
-            <div className={`p-4 rounded-lg ${
-              autoCurationResults.success 
-                ? 'bg-green-500/10 border border-green-500/20' 
-                : 'bg-red-500/10 border border-red-500/20'
-            }`}>
-              {autoCurationResults.success ? (
-                <>
-                  <div className="flex items-center gap-2 mb-3">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span className="font-semibold text-green-600">Curation Complete</span>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-yellow-500">Featured</Badge>
-                      <span>{autoCurationResults.featuredCount} products marked as featured</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-orange-500">Trending</Badge>
-                      <span>{autoCurationResults.trendingCount} products marked as trending</span>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex items-center gap-2 mb-2">
-                    <AlertCircle className="w-5 h-5 text-red-600" />
-                    <span className="font-semibold text-red-600">Curation Failed</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{autoCurationResults.error}</p>
-                </>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Add Admin Users */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <UserPlus className="w-5 h-5 text-primary" />
-            Manage Admin Users
-          </CardTitle>
-          <CardDescription>
-            Add team members as administrators (they must sign up first)
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="admin-email">Add Admin by Email</Label>
-            <div className="flex gap-2">
+        <CardContent className="space-y-5">
+          <div className="grid gap-3 sm:grid-cols-[1fr_220px_auto] sm:items-end">
+            <div className="space-y-1.5">
+              <Label htmlFor="grant-email">Email address</Label>
               <Input
-                id="admin-email"
+                id="grant-email"
                 type="email"
-                placeholder="user@example.com"
-                value={newAdminEmail}
-                onChange={(e) => setNewAdminEmail(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && addAdminUser()}
+                placeholder="person@example.com"
+                value={email}
+                disabled={!isSuperAdmin}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && isSuperAdmin && grantRole()}
               />
-              <Button onClick={addAdminUser} disabled={loading}>
-                <UserPlus className="w-4 h-4 mr-2" />
-                Add
-              </Button>
             </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="grant-role">Role</Label>
+              <select
+                id="grant-role"
+                className="h-10 w-full rounded-md border bg-background px-3 text-sm"
+                value={role}
+                disabled={!isSuperAdmin}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                {ASSIGNABLE_ROLES.map((r) => (
+                  <option key={r.role} value={r.role}>{r.label}</option>
+                ))}
+              </select>
+            </div>
+            <Button onClick={grantRole} disabled={loading || !isSuperAdmin}>
+              {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <UserPlus className="w-4 h-4 mr-2" />}
+              Grant
+            </Button>
           </div>
+
+          <p className="text-xs text-muted-foreground">
+            {ASSIGNABLE_ROLES.find((r) => r.role === role)?.detail}
+          </p>
 
           <div className="border-t pt-4">
-            <p className="text-sm text-muted-foreground mb-3">
-              Quick action: Add predefined team admins (Chad, Zenith, Feroza)
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-medium">Current access</h4>
+              <Button variant="ghost" size="sm" onClick={loadRoles} disabled={rowsLoading}>
+                <RefreshCw className={`h-3.5 w-3.5 ${rowsLoading ? 'animate-spin' : ''}`} />
+              </Button>
+            </div>
+
+            {rowsProblem ? (
+              <p className="mt-3 rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
+                Could not read who has access: {rowsProblem}
+              </p>
+            ) : rowsLoading ? (
+              <p className="mt-3 text-sm text-muted-foreground">Loading…</p>
+            ) : rows.length === 0 ? (
+              <p className="mt-3 text-sm text-muted-foreground">Nobody has a role yet.</p>
+            ) : (
+              <div className="mt-3 space-y-2">
+                {rows.map((r) => (
+                  <div key={r.id} className="flex items-center justify-between rounded-lg border bg-background p-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">
+                        {r.email ?? <span className="text-muted-foreground">account {r.user_id.slice(0, 8)}</span>}
+                      </p>
+                      <Badge variant="outline" className="mt-1 text-[11px]">{r.role.replace('_', ' ')}</Badge>
+                    </div>
+                    {isSuperAdmin && (
+                      <Button variant="ghost" size="sm" onClick={() => revokeRole(r)}>
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-lg border bg-muted/40 p-3">
+            <p className="flex items-center gap-1.5 text-xs font-medium">
+              <Info className="h-3.5 w-3.5" />
+              Nothing is featured on the storefront from this page
             </p>
-            <Button 
-              variant="outline" 
-              onClick={addPredefinedAdmins} 
-              disabled={loading}
-            >
-              <UserPlus className="w-4 h-4 mr-2" />
-              Add Team Admins
-            </Button>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Products reach shoppers only when a person approves them in Product
+              Curation, one at a time, having looked at the picture.
+            </p>
           </div>
         </CardContent>
       </Card>
+
       {/* Provider Onboarding Seed */}
       <Card>
         <CardHeader>
@@ -528,10 +431,11 @@ const AdminTools = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="p-4 bg-muted/50 rounded-lg">
-            <h4 className="font-medium mb-1">Sandy Mitchell — Dru Yoga Cape Town</h4>
+            <h4 className="font-medium mb-1">Sandy Mitchell, Dru Yoga Cape Town</h4>
             <p className="text-xs text-muted-foreground">
-              6 services, certifications, profile image, contact details.
-              This will create/update her provider profile and services in Supabase so her public profile page loads live data.
+              6 services, certifications, profile image, contact details. This
+              creates the profile under your own account, because the row is keyed
+              on the signed in user.
             </p>
           </div>
           <Button onClick={seedSandyProvider} disabled={loading}>

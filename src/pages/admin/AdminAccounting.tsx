@@ -22,7 +22,9 @@ import {
   ArrowDownRight,
   Building,
   Filter,
+  AlertTriangle,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { format, subDays, startOfMonth, endOfMonth, subMonths, parseISO } from "date-fns";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import PortfolioOverview from "@/components/admin/accounting/PortfolioOverview";
@@ -97,6 +99,10 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
   const [dateRange, setDateRange] = useState("current_month");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  /** Reads that failed on the last fetch, in the database's own words. Empty
+   *  means every figure below was actually read. */
+  const [readFailures, setReadFailures] = useState<string[]>([]);
+  const { toast } = useToast();
 
   const getDateRange = () => {
     const now = new Date();
@@ -129,6 +135,7 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
 
   const fetchData = async () => {
     setLoading(true);
+    setReadFailures([]);
     const { from, to } = getDateRange();
     // entityFilter is the entities.id UUID (or undefined = all). Only orders and
     // affiliate_commissions carry entity_id today; payouts/transactions don't,
@@ -165,12 +172,32 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
           .order("created_at", { ascending: false }),
       ]);
 
+      // The Supabase client REPORTS query errors in `error`; it does not
+      // throw them, so the catch below never sees an RLS denial or a missing
+      // column. Before this check, a denied read fell through to `|| []` and
+      // every figure on this screen rendered as R0.00, which reads exactly
+      // like a month with no trade. On the screen the accountant works from,
+      // that is the most expensive possible failure mode, so each read is
+      // now inspected and any failure is named on the page.
+      const failures: string[] = [];
+      const collect = (label: string, res: { error: { message: string } | null }) => {
+        if (res.error) failures.push(`${label}: ${res.error.message}`);
+      };
+      collect("Orders", ordersRes);
+      collect("Affiliate commissions", commissionsRes);
+      collect("Payouts", payoutsRes);
+      collect("Transactions", transactionsRes);
+
       setOrders(ordersRes.data || []);
       setCommissions(commissionsRes.data || []);
       setPayouts(payoutsRes.data || []);
       setTransactions(transactionsRes.data || []);
+      setReadFailures(failures);
     } catch (error) {
       console.error("Error fetching accounting data:", error);
+      setReadFailures([
+        error instanceof Error ? error.message : "The accounting service did not respond.",
+      ]);
     } finally {
       setLoading(false);
     }
@@ -222,6 +249,17 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
 
   // --- CSV Export ---
   const exportCSV = (type: "orders" | "commissions" | "transactions" | "summary") => {
+    // A report built from a failed read is worse than no report: it leaves
+    // the building looking authoritative and showing zero. Refuse it.
+    if (readFailures.length > 0) {
+      toast({
+        title: "Not exporting an incomplete period",
+        description:
+          "Some records could not be read, so these totals are not the full picture. Fix the error shown above, refresh, then export.",
+        variant: "destructive",
+      });
+      return;
+    }
     let csvContent = "";
     const { from, to } = getDateRange();
     const period = `${format(parseISO(from), "yyyy-MM-dd")}_to_${format(parseISO(to), "yyyy-MM-dd")}`;
@@ -326,6 +364,32 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
           </Button>
         </div>
       </div>
+
+      {/* A failed read must never pass for a quiet month. Named here, above
+          the figures it invalidates, because everything below is computed
+          from rows that may not have arrived. */}
+      {readFailures.length > 0 && (
+        <Card className="border-amber-300 bg-amber-50">
+          <CardContent className="py-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-amber-900">
+              <AlertTriangle className="h-4 w-4" />
+              These totals are incomplete. Do not report from them.
+            </p>
+            <p className="mt-1 text-sm text-amber-900">
+              Some records could not be read, so every figure below is lower than
+              the real one. This usually means the database refused the request for
+              the account you are signed in with. Send this to Tumelo as written:
+            </p>
+            <ul className="mt-2 space-y-1">
+              {readFailures.map((f) => (
+                <li key={f} className="text-xs text-amber-900" style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Financial Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
