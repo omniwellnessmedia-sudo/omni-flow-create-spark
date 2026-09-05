@@ -13,6 +13,17 @@ import { resolve } from 'node:path';
  */
 
 const adminDir = resolve(__dirname, '../admin');
+
+/**
+ * Source with comments removed.
+ *
+ * These files explain the defects they fixed, and those explanations quote
+ * the old broken expressions verbatim. A "must not contain" assertion over
+ * the raw text therefore fails on the very comment that documents the fix,
+ * so the guards below read the code only.
+ */
+const codeOnly = (src: string): string =>
+  src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 const read = (p: string) => readFileSync(resolve(__dirname, p), 'utf8');
 const adminPages = readdirSync(adminDir).filter((f) => f.endsWith('.tsx'));
 const migrations = readdirSync(resolve(__dirname, '../../../supabase/migrations'))
@@ -117,7 +128,7 @@ describe('the audit findings that corrupt data or mail the wrong people', () => 
     expect(src).toContain('platforms: [formData.platform]');
     expect(src).toContain('platforms: [platform]');
     expect(src).toContain('post.platforms?.[0]');
-    expect(src).not.toMatch(/\bplatform:\s*formData\.platform\b/);
+    expect(codeOnly(src)).not.toMatch(/\bplatform:\s*formData\.platform\b/);
   });
 
   it('editing a newsletter cannot wipe its body', () => {
@@ -133,8 +144,8 @@ describe('the audit findings that corrupt data or mail the wrong people', () => 
     // It computed the lead list, discarded it, and queued a newsletter
     // campaign, which the sender delivers to confirmed subscribers.
     const src = read('AdminLeads.tsx');
-    expect(src).not.toMatch(/from\("newsletter_campaigns"\)/);
-    expect(src).not.toMatch(/\.insert\(\{\s*name: `Lead Email/);
+    expect(codeOnly(src)).not.toMatch(/from\("newsletter_campaigns"\)/);
+    expect(codeOnly(src)).not.toMatch(/\.insert\(\{\s*name: `Lead Email/);
     expect(src).toContain('mailto:?bcc=');
   });
 
@@ -164,5 +175,41 @@ describe('the audit findings that corrupt data or mail the wrong people', () => 
 
   it('destructive role removal asks first', () => {
     expect(read('AdminTools.tsx')).toContain('Remove the ${row.role');
+  });
+});
+
+describe('the accounting screen reports money correctly', () => {
+  const accounting = readFileSync(resolve(adminDir, 'AdminAccounting.tsx'), 'utf8');
+
+  it('never sums a foreign currency into a rand total', () => {
+    // The old arithmetic fell back to the order's own amount, which is
+    // denominated in its own currency, and printed it with an R prefix.
+    expect(codeOnly(accounting)).not.toMatch(/total_zar \|\| o\.amount/);
+    expect(accounting).toContain('const zarOfOrder');
+    expect(accounting).toContain('c.commission_currency === "ZAR"');
+  });
+
+  it('says how many rows were left out of the totals', () => {
+    // A total that is quietly short is the same class of problem as one that
+    // is quietly wrong.
+    expect(accounting).toContain('excludedOrders');
+    expect(accounting).toContain('Totals below count rand only');
+  });
+
+  it('filters payouts by the period the tab is labelled with', () => {
+    expect(accounting).toContain('.gte("payout_period_end", from)');
+    expect(accounting).toContain('.lte("payout_period_start", to)');
+  });
+
+  it('escapes every text field it exports', () => {
+    // An unescaped quote, comma or newline shifts every later column, which
+    // is how an export becomes wrong rather than obviously broken.
+    expect(accounting).toContain("const csv = (value: unknown): string");
+    expect(accounting).toContain(`replace(/"/g, '""')`);
+    expect(accounting).toContain('csv(o.customer_name)');
+    expect(accounting).toContain('csv(t.description)');
+    // No row may interpolate a data value straight into a quoted column.
+    expect(codeOnly(accounting)).not.toMatch(/"\$\{o\.customer_name\}"/);
+    expect(codeOnly(accounting)).not.toMatch(/"\$\{t\.description\}"/);
   });
 });
