@@ -186,6 +186,14 @@ const NewsletterEditor = () => {
     }
   };
 
+  /**
+   * The stored body of a campaign.
+   *
+   * {{unsubscribe_url}} is deliberately left in place. Each recipient needs
+   * their own link, so the sender fills it in per address at send time. The
+   * old code substituted a single fixed URL here, which both flattened the
+   * link for everyone and pointed it at a route that did not exist.
+   */
   const generateHtml = () => {
     let html = NEWSLETTER_TEMPLATE;
     html = html.replace(/{{subject}}/g, formData.subject);
@@ -193,12 +201,18 @@ const NewsletterEditor = () => {
     html = html.replace(/{{content}}/g, formData.content.replace(/\n/g, '<br>'));
     html = html.replace(/{{cta_text}}/g, formData.cta_text);
     html = html.replace(/{{cta_url}}/g, formData.cta_url);
-    html = html.replace(/{{unsubscribe_url}}/g, 'https://omniwellnessmedia.com/unsubscribe');
     return html;
   };
 
+  // Preview and test sends have no recipient row to address, so the footer
+  // link points at the page without an id, which explains itself.
+  const withPlaceholdersFilled = (html: string) =>
+    html
+      .replace(/{{unsubscribe_url}}/g, `${window.location.origin}/unsubscribe`)
+      .replace(/{{name}}/g, 'there');
+
   const handlePreview = () => {
-    setPreviewHtml(generateHtml());
+    setPreviewHtml(withPlaceholdersFilled(generateHtml()));
     setIsPreviewOpen(true);
   };
 
@@ -303,7 +317,7 @@ const NewsletterEditor = () => {
           test: true,
           email: user.email,
           subject: formData.subject,
-          html: generateHtml(),
+          html: withPlaceholdersFilled(generateHtml()),
           from_name: formData.from_name,
         },
       });

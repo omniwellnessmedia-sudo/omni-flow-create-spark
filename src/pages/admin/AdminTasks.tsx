@@ -35,6 +35,7 @@ import {
   Megaphone,
   Calendar
 } from 'lucide-react';
+import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
 
 interface Task {
   id: string;
@@ -43,15 +44,15 @@ interface Task {
   type: 'sales' | 'newsletter' | 'content' | 'outreach' | 'general';
   priority: 'low' | 'medium' | 'high';
   status: 'todo' | 'in_progress' | 'done';
-  dueDate?: string;
-  createdAt: string;
+  due_date?: string | null;
+  created_at: string;
 }
-
-// Local storage key for tasks (will be moved to Supabase later)
-const TASKS_STORAGE_KEY = 'omni_admin_tasks';
 
 const AdminTasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [filter, setFilter] = useState<'all' | Task['type']>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | Task['status']>('all');
@@ -65,95 +66,101 @@ const AdminTasks = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    loadTasks();
+    void loadTasks();
   }, []);
 
-  const loadTasks = () => {
-    try {
-      const stored = localStorage.getItem(TASKS_STORAGE_KEY);
-      if (stored) {
-        setTasks(JSON.parse(stored));
-      } else {
-        // Initialize with sample tasks
-        const sampleTasks: Task[] = [
-          {
-            id: '1',
-            title: 'Follow up with wellness retreat leads',
-            description: 'Contact leads from the Cape Point tour inquiry form',
-            type: 'sales',
-            priority: 'high',
-            status: 'todo',
-            createdAt: new Date().toISOString()
-          },
-          {
-            id: '2',
-            title: 'Weekly newsletter - Wellness Tips',
-            description: 'Draft and send the weekly wellness newsletter',
-            type: 'newsletter',
-            priority: 'medium',
-            status: 'in_progress',
-            dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-            createdAt: new Date().toISOString()
-          },
-          {
-            id: '3',
-            title: 'New blog post: Benefits of Dru Yoga',
-            description: 'Write and publish blog content on Dru Yoga benefits',
-            type: 'content',
-            priority: 'medium',
-            status: 'todo',
-            createdAt: new Date().toISOString()
-          }
-        ];
-        setTasks(sampleTasks);
-        localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(sampleTasks));
-      }
-    } catch (error) {
-      console.error('Error loading tasks:', error);
+  const loadTasks = async () => {
+    setLoadError(null);
+    const { data, error } = await (supabase
+      .from('admin_tasks' as any)
+      .select('*')
+      .order('created_at', { ascending: false }) as any);
+
+    if (error) {
+      // An empty board and a board nobody could read look identical, and
+      // the first one says "you are on top of everything".
+      setLoadError(error.message);
+      setTasks([]);
+    } else {
+      setTasks((data || []) as Task[]);
     }
+    setLoading(false);
   };
 
-  const saveTasks = (updatedTasks: Task[]) => {
-    setTasks(updatedTasks);
-    localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(updatedTasks));
-  };
-
-  const addTask = () => {
+  const addTask = async () => {
+    if (busy) return;
     if (!newTask.title.trim()) {
       toast({
-        title: 'Error',
-        description: 'Task title is required',
+        title: 'A task needs a title',
+        description: 'That is what everyone else will see on the board.',
         variant: 'destructive'
       });
       return;
     }
 
-    const task: Task = {
-      id: Date.now().toString(),
-      title: newTask.title,
-      description: newTask.description,
-      type: newTask.type,
-      priority: newTask.priority,
-      status: 'todo',
-      dueDate: newTask.dueDate || undefined,
-      createdAt: new Date().toISOString()
-    };
+    setBusy(true);
+    const { error } = await (supabase
+      .from('admin_tasks' as any)
+      .insert({
+        title: newTask.title.trim(),
+        description: newTask.description.trim(),
+        type: newTask.type,
+        priority: newTask.priority,
+        status: 'todo',
+        due_date: newTask.dueDate || null,
+      }) as any);
+    setBusy(false);
 
-    saveTasks([task, ...tasks]);
+    if (error) {
+      toast({ title: 'Not created', description: error.message, variant: 'destructive' });
+      return;
+    }
+
     setNewTask({ title: '', description: '', type: 'general', priority: 'medium', dueDate: '' });
     setShowAddDialog(false);
-    toast({ title: 'Task created', description: 'New task added successfully' });
+    toast({ title: 'Task created', description: 'It is on the board for everyone.' });
+    void loadTasks();
   };
 
-  const updateTaskStatus = (taskId: string, status: Task['status']) => {
-    const updated = tasks.map(t => t.id === taskId ? { ...t, status } : t);
-    saveTasks(updated);
-    toast({ title: 'Task updated' });
+  const updateTaskStatus = async (taskId: string, status: Task['status']) => {
+    const previous = tasks;
+    setTasks(tasks.map(t => (t.id === taskId ? { ...t, status } : t)));
+
+    const { error } = await (supabase
+      .from('admin_tasks' as any)
+      .update({ status })
+      .eq('id', taskId) as any);
+
+    if (error) {
+      // Put the card back where it was. A card that moves on screen and
+      // nowhere else is worse than one that refuses to move.
+      setTasks(previous);
+      toast({ title: 'Not moved', description: error.message, variant: 'destructive' });
+    }
   };
 
-  const deleteTask = (taskId: string) => {
-    saveTasks(tasks.filter(t => t.id !== taskId));
-    toast({ title: 'Task deleted' });
+  const deleteTask = async (taskId: string) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (!window.confirm(`Delete "${task?.title ?? 'this task'}" for everyone? This cannot be undone.`)) {
+      return;
+    }
+
+    const previous = tasks;
+    setTasks(tasks.filter(t => t.id !== taskId));
+
+    const { error } = await (supabase
+      .from('admin_tasks' as any)
+      .delete()
+      .eq('id', taskId) as any);
+
+    if (error) {
+      setTasks(previous);
+      toast({
+        title: 'Not deleted',
+        description: `${error.message}. Deleting a task is held to admin.`,
+        variant: 'destructive'
+      });
+    }
   };
 
   const getTypeIcon = (type: Task['type']) => {
@@ -210,10 +217,10 @@ const AdminTasks = () => {
       )}
       <div className="flex flex-wrap items-center gap-1 mb-2">
         <Badge className={`text-[10px] ${getTypeColor(task.type)}`}>{task.type}</Badge>
-        {task.dueDate && (
+        {task.due_date && (
           <span className="text-[10px] text-muted-foreground flex items-center gap-1">
             <Calendar className="h-3 w-3" />
-            {new Date(task.dueDate).toLocaleDateString()}
+            {new Date(task.due_date).toLocaleDateString()}
           </span>
         )}
       </div>
@@ -250,15 +257,30 @@ const AdminTasks = () => {
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
+        Loading the board
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
+      {loadError && (
+        <ReadFailureNotice what="the task board" reason={loadError} onRetry={loadTasks} />
+      )}
+
       {/* Quick Actions */}
       <Card>
         <CardHeader className="pb-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <CardTitle className="text-lg">Task Management</CardTitle>
-              <CardDescription>Manage sales, newsletters, and content tasks</CardDescription>
+              <CardTitle className="text-lg">Task Board</CardTitle>
+              <CardDescription>
+                Shared with everyone who can open the admin. Anyone here can add a task
+                and move it; only an admin can delete one.
+              </CardDescription>
             </div>
             <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
               <DialogTrigger asChild>
@@ -270,7 +292,7 @@ const AdminTasks = () => {
               <DialogContent className="max-w-md">
                 <DialogHeader>
                   <DialogTitle>Create New Task</DialogTitle>
-                  <DialogDescription>Add a new task to your workflow</DialogDescription>
+                  <DialogDescription>This goes on the shared board, not a private list.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
@@ -331,7 +353,9 @@ const AdminTasks = () => {
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancel</Button>
-                  <Button onClick={addTask}>Create Task</Button>
+                  <Button onClick={addTask} disabled={busy}>
+                    {busy ? 'Creating...' : 'Create Task'}
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>

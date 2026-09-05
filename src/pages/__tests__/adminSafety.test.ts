@@ -231,6 +231,53 @@ describe('the accounting screen reports money correctly', () => {
   });
 });
 
+describe('marketing carries a working way off the list', () => {
+  const editor = readFileSync(resolve(adminDir, 'NewsletterEditor.tsx'), 'utf8');
+  const sender = readFileSync(
+    resolve(__dirname, '../../../supabase/functions/send-scheduled-newsletter/index.ts'),
+    'utf8'
+  );
+  const app = readFileSync(resolve(__dirname, '../../App.tsx'), 'utf8');
+
+  it('the unsubscribe link points at a route that exists', () => {
+    // Every campaign footer linked to /unsubscribe, which resolved to the
+    // not found page, so there was no way off the list but to reply.
+    expect(app).toContain('path="/unsubscribe"');
+    expect(app).toContain("import('@/pages/Unsubscribe')");
+  });
+
+  it('the stored campaign keeps the per recipient placeholder', () => {
+    // Substituting one fixed URL at save time flattened the link for
+    // everyone, so the sender had nothing left to personalise.
+    expect(codeOnly(editor)).not.toMatch(
+      /replace\(\/\{\{unsubscribe_url\}\}\/g, 'https:/
+    );
+    expect(editor).toContain('withPlaceholdersFilled');
+  });
+
+  it('the sender addresses the link to the recipient and refuses to send without one', () => {
+    expect(sender).toContain("select('id, email, full_name')");
+    expect(sender).toContain('/unsubscribe?id=${subscriber.id}');
+    expect(sender).toContain("has no unsubscribe link");
+  });
+
+  it('the opt out is a function the recipient can call without signing in', () => {
+    expect(migrations).toContain('CREATE OR REPLACE FUNCTION public.unsubscribe_newsletter');
+    expect(migrations).toContain('GRANT EXECUTE ON FUNCTION public.unsubscribe_newsletter(uuid) TO anon');
+  });
+
+  it('a subscriber sitting at NULL is not silently excluded from every send', () => {
+    // The column is nullable and nothing wrote it, and every query asks for
+    // unsubscribed = false, which NULL is not.
+    expect(migrations).toContain('SET unsubscribed = (unsubscribed_at IS NOT NULL)');
+    expect(migrations).toContain('ALTER COLUMN unsubscribed SET NOT NULL');
+  });
+
+  it('a subscriber with no name is not greeted by the placeholder', () => {
+    expect(sender).toContain('subscriber.full_name || "there"');
+  });
+});
+
 describe('every built admin screen is reachable', () => {
   const sidebar = readFileSync(resolve(__dirname, '../../components/dashboard/AdminSidebar.tsx'), 'utf8');
   const dashboard = readFileSync(resolve(__dirname, '../AdminDashboard.tsx'), 'utf8');
@@ -318,6 +365,35 @@ describe('a failed read is never presented as having nothing', () => {
     const src = read('SocialScheduler.tsx');
     expect(src).toContain('Not saving over a setting we could not read');
     expect(src).toContain('settingsError');
+  });
+
+  it('the task board is shared, not one person\'s browser', () => {
+    // It kept everything in localStorage under omni_admin_tasks, so a task
+    // one admin created was invisible to everyone else and to that same
+    // person on another device.
+    const src = read('AdminTasks.tsx');
+    expect(codeOnly(src)).not.toContain('localStorage');
+    expect(codeOnly(src)).not.toContain('omni_admin_tasks');
+    expect(src).toContain("from('admin_tasks' as any)");
+    expect(src).toContain('ReadFailureNotice');
+    expect(src).toContain('the task board');
+  });
+
+  it('the task board invents no work of its own', () => {
+    // First load seeded three sample tasks that read as real assignments,
+    // including one telling somebody to contact tour enquiry leads.
+    const src = read('AdminTasks.tsx');
+    expect(src).not.toContain('Follow up with wellness retreat leads');
+    expect(src).not.toContain('Benefits of Dru Yoga');
+    expect(src).not.toContain('sampleTasks');
+  });
+
+  it('a task that moves on screen has moved in the database', () => {
+    // An optimistic move with no rollback showed a card in Done that the
+    // next person to open the board would still see in To Do.
+    const src = read('AdminTasks.tsx');
+    expect(src).toContain('setTasks(previous)');
+    expect(src).toContain('Delete "${task?.title');
   });
 
   it('a session cannot be created without the name the column requires', () => {
