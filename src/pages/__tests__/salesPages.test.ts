@@ -99,7 +99,9 @@ describe('the page structure holds the conversion checklist', () => {
     ['a lead magnet for people not ready to buy', '/scorecard'],
     ['qualification, both ways', 'notForYouIf'],
     ['the process written out', 'sales.process'],
-    ['objection handling', 'sales.faqs'],
+    // FAQs now come from the merged list: per service where the service pack
+    // supplies them, per category otherwise. The section is still required.
+    ['objection handling', 'faqs.map'],
     ['commercial terms in plain sight', 'RATE_CARD_TERMS'],
     ['a way to ask a question', 'WHATSAPP_URL'],
     ['onward navigation to related offers', 'siblings'],
@@ -109,6 +111,14 @@ describe('the page structure holds the conversion checklist', () => {
 
   it.each(required)('renders %s', (_label, marker) => {
     expect(page).toContain(marker);
+  });
+
+  it('prefers per service copy over the per category fallback', () => {
+    // BAND_SALES answers the same questions for every offer in a category.
+    // Where the service pack supplies copy for the specific offer, that wins.
+    expect(page).toContain('getServiceDetailContent');
+    expect(page).toContain('detail?.audience?.length ? detail.audience : sales?.forYouIf');
+    expect(page).toContain('detail?.faqs?.length');
   });
 
   it('declares both Service and FAQPage structured data', () => {
@@ -254,5 +264,49 @@ describe('the scorecard is a working diagnostic, not a form', () => {
   it('reports a failed send rather than dropping the address silently', () => {
     const sc = readFileSync(resolve(__dirname, '../Scorecard.tsx'), 'utf8');
     expect(sc).toContain('setSendError');
+  });
+});
+
+describe('the service pack handoff did not become a second price source', () => {
+  const detail = readFileSync(resolve(__dirname, '../../data/serviceDetailContent.ts'), 'utf8');
+  const rateCard = readFileSync(resolve(__dirname, '../../data/publicRateCard.ts'), 'utf8');
+
+  it('states no price the approved rate card does not carry', () => {
+    // The handoff's README calls its own JSON the source of truth for prices.
+    // It is not. Two of its FAQ answers quote a R5,500 Signature tier and a
+    // R10,000 prepaid block, neither of which the rate card publishes, and
+    // three of its card prices are less complete than the approved strings.
+    // So: any figure that survives in this content must also appear in the
+    // rate card, which is the only place a client facing price is defined.
+    const body = detail.slice(detail.indexOf('export const SERVICE_DETAIL_CONTENT'));
+    const figures = Array.from(new Set(Array.from(body.matchAll(/R[\d,]+/g)).map((m) => m[0].replace(/,$/, ''))));
+    for (const f of figures) {
+      expect(rateCard, `${f} is published nowhere on the rate card`).toContain(f);
+    }
+  });
+
+  it('keeps the two unapproved figures out', () => {
+    expect(detail.slice(detail.indexOf('export const SERVICE_DETAIL_CONTENT'))).not.toContain('R5,500');
+    expect(detail.slice(detail.indexOf('export const SERVICE_DETAIL_CONTENT'))).not.toContain('R10,000');
+  });
+
+  it('the rate card keeps the recurrence and the second workshop rate', () => {
+    expect(rateCard).toContain('R6,500 per month');
+    expect(rateCard).toContain('From R1,850 per month');
+    expect(rateCard).toContain('full day');
+  });
+
+  it('every detail entry maps to a real rate card offer', () => {
+    const slugs = Array.from(detail.matchAll(/^ {2}'([a-z0-9-]+)': \{/gm)).map((m) => m[1]);
+    expect(slugs.length).toBe(19);
+    for (const s of slugs) {
+      expect(rateCard, `${s} has no offer`).toContain(`slug: '${s}'`);
+    }
+  });
+
+  it('ships no hotlinked handoff imagery', () => {
+    // The handoff hotlinks Unsplash. Imagery here is served from our own
+    // domain, the same rule the tour galleries follow.
+    expect(detail).not.toContain('unsplash.com');
   });
 });

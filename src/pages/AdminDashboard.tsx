@@ -1,17 +1,14 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from "react";
-import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { LogOut, Plus, Home, ChevronDown, ChevronRight, FileText, Mic, Video, Menu, CheckCircle, XCircle, Mail } from "lucide-react";
-import { IMAGES } from "@/lib/images";
+import { ChevronDown, ChevronRight, CheckCircle, XCircle, Mail } from "lucide-react";
 import SmartGreeting from "@/components/dashboard/SmartGreeting";
-import AdminSidebar from "@/components/dashboard/AdminSidebar";
+import AdminLayout from "@/components/dashboard/AdminLayout";
 import AdminHome from "@/components/dashboard/AdminHome";
 
 // Lazy load section components
@@ -42,7 +39,6 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const activeSection = searchParams.get("section") || "home";
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [expandedBooking, setExpandedBooking] = useState<string | null>(null);
   const [dashboardData, setDashboardData] = useState({
     orders: [] as any[],
@@ -419,97 +415,22 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header. The 3px seven hue rule beneath it is the site's signature
-          (the public pages carry it as the scroll progress ground); with it,
-          the operator surface reads as the same product rather than a bolted
-          on admin template. */}
-      <div className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-sm">
-        <div aria-hidden="true" className="flex h-[3px] w-full">
-          {['#E63946','#F38020','#F5C518','#4FAE3F','#2BB9B9','#2C6FB5','#5C2A8A'].map((c) => (
-            <span key={c} className="h-full flex-1" style={{ background: c }} />
-          ))}
-        </div>
-        <div className="flex h-14 items-center justify-between px-4 md:px-6 max-w-[1400px] mx-auto">
-          <div className="flex items-center gap-3 min-w-0">
-            {/* Mobile menu */}
-            <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="lg:hidden h-8 w-8 p-0">
-                  <Menu className="h-4 w-4" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-64 p-4 overflow-y-auto">
-                <div className="mt-4">
-                  <AdminSidebar activeSection={activeSection} onSectionChange={handleSectionChange} alerts={dashboardData.alertCounts} className="block w-full" />
-                </div>
-              </SheetContent>
-            </Sheet>
-            <Link to="/" className="shrink-0">
-              <img src={IMAGES.logos.omniHorizontal} alt="Omni" className="h-7 md:h-8 w-auto object-contain" />
-            </Link>
-            <div className="hidden sm:flex items-center gap-2">
-              <span className="text-border">/</span>
-              <span
-                className="text-[10px] font-medium uppercase tracking-[.2em] text-muted-foreground"
-                style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
-              >
-                Admin
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5 shrink-0">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" className="h-8 text-xs rounded-full">
-                  <Plus className="h-3 w-3 mr-1" />
-                  <span className="hidden sm:inline">Create</span>
-                  <ChevronDown className="h-3 w-3 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => navigate("/blog/editor/new")}>
-                  <FileText className="h-3.5 w-3.5 mr-2" /> Blog Post
-                </DropdownMenuItem>
-                {/* Video upload lives in the Content section's media dialog */}
-                <DropdownMenuItem onClick={() => handleSectionChange("content")}>
-                  <Video className="h-3.5 w-3.5 mr-2" /> Upload Video
-                </DropdownMenuItem>
-                <DropdownMenuItem disabled>
-                  <Mic className="h-3.5 w-3.5 mr-2" /> Podcast <Badge variant="outline" className="ml-2 text-[9px]">Planned</Badge>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button variant="ghost" size="sm" asChild className="h-8 px-2.5">
-              <Link to="/"><Home className="h-3.5 w-3.5 md:mr-1.5" /><span className="hidden md:inline text-xs">Site</span></Link>
-            </Button>
-            <Button variant="ghost" size="sm" onClick={handleLogout} className="h-8 px-2.5 text-muted-foreground">
-              <LogOut className="h-3.5 w-3.5 md:mr-1.5" /><span className="hidden sm:inline text-xs">Logout</span>
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex max-w-[1400px] mx-auto">
-        {/* Desktop Sidebar */}
-        <div className="hidden lg:block border-r border-border/50 min-h-[calc(100vh-3.5rem)] p-4">
-          <AdminSidebar activeSection={activeSection} onSectionChange={handleSectionChange} alerts={dashboardData.alertCounts} />
-        </div>
-
-        {/* Main Content. The cream ground is the public site's; white cards
-            sit on it with visible edges in every section, including the older
-            screens that have not had their own theme pass yet. */}
-        <div className="min-w-0 flex-1 p-4 md:p-6" style={{ background: '#FAF8F2' }}>
-          <SmartGreeting
-            userName={user?.user_metadata?.full_name || user?.email?.split("@")[0]}
-            role="admin"
-            alerts={activeSection === "home" ? dashboardData.alerts : []}
-            subtitle="Omni Wellness Media"
-          />
-          {renderSection()}
-        </div>
-      </div>
-    </div>
+    // The shell (header, spectrum rule, sidebar, cream ground) lives in
+    // AdminLayout so that the ten standalone admin routes carry exactly the
+    // same navigation and theme as the sections rendered here.
+    <AdminLayout
+      activeSection={activeSection}
+      onSectionChange={handleSectionChange}
+      alerts={dashboardData.alertCounts}
+    >
+      <SmartGreeting
+        userName={user?.user_metadata?.full_name || user?.email?.split("@")[0]}
+        role="admin"
+        alerts={activeSection === "home" ? dashboardData.alerts : []}
+        subtitle="Omni Wellness Media"
+      />
+      {renderSection()}
+    </AdminLayout>
   );
 };
 
