@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle, XCircle, DollarSign, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import ReadFailureNotice from "@/components/admin/ReadFailureNotice";
 
 interface Commission {
   id: string;
@@ -29,12 +30,14 @@ const AffiliatePayouts = () => {
   const [selectedCommission, setSelectedCommission] = useState<Commission | null>(null);
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPendingCommissions();
   }, []);
 
   const fetchPendingCommissions = async () => {
+    setLoadError(null);
     try {
       const { data, error } = await supabase
         .from('affiliate_commissions')
@@ -45,6 +48,10 @@ const AffiliatePayouts = () => {
       if (error) throw error;
       setCommissions(data || []);
     } catch (error) {
+      // Without this, a refused read rendered "No commissions to review",
+      // 0 pending and R0.00 approved, which reads as "nobody is owed money".
+      setLoadError(error instanceof Error ? error.message : 'The commissions service did not respond.');
+      setCommissions([]);
       console.error('Error fetching commissions:', error);
       toast.error('Failed to load commissions');
     } finally {
@@ -181,6 +188,12 @@ const AffiliatePayouts = () => {
               <div className="flex items-center justify-center py-8">
                 <p className="text-muted-foreground">Loading commissions...</p>
               </div>
+            ) : loadError ? (
+              <ReadFailureNotice
+                what="the commissions queue"
+                reason={loadError}
+                onRetry={fetchPendingCommissions}
+              />
             ) : commissions.length === 0 ? (
               <div className="flex items-center justify-center py-8">
                 <p className="text-muted-foreground">No commissions to review</p>

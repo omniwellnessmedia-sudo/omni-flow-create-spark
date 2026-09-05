@@ -37,6 +37,7 @@ import { Loader2, Plus, Store, Package, Eye, EyeOff, Pencil, ArrowLeft } from 'l
 // Canonical shared taxonomy: the marketplace filters normalise through the
 // same module, so what Feroza picks here is exactly what shoppers filter by.
 import { CATALOGUE_CATEGORIES } from '@/data/catalogueCategories';
+import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
 
 const CATEGORIES = CATALOGUE_CATEGORIES;
 
@@ -108,6 +109,7 @@ const LocalCatalogue = () => {
 
   const [diagRunning, setDiagRunning] = useState(false);
   const [diagResults, setDiagResults] = useState<string[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   /**
    * Non-destructive system check. Each step reports OK/WARN/FAIL with the
@@ -160,6 +162,7 @@ const LocalCatalogue = () => {
 
   const load = useCallback(async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       // Cast: src/integrations/supabase/types.ts is generated and predates this
       // migration. Regenerate the types and these casts can go.
@@ -175,9 +178,16 @@ const LocalCatalogue = () => {
       setBusinesses((b ?? []) as Business[]);
       setProducts((p ?? []) as Product[]);
     } catch (err) {
+      // Without this the screen fell through to "No businesses yet. Add the
+      // first one.", so a refused read invited someone to re-enter a
+      // catalogue that already exists.
+      const reason = err instanceof Error ? err.message : String(err);
+      setLoadError(reason);
+      setBusinesses([]);
+      setProducts([]);
       toast({
         title: 'Could not load the catalogue',
-        description: 'Something went wrong on our side. Please refresh, and if it keeps happening say so.',
+        description: reason,
         variant: 'destructive',
       });
     } finally {
@@ -591,8 +601,14 @@ const LocalCatalogue = () => {
         </p>
       )}
 
+      {loadError && (
+        <div className="mt-6">
+          <ReadFailureNotice what="the catalogue" reason={loadError} onRetry={load} />
+        </div>
+      )}
+
       <div className="mt-6 space-y-3">
-        {businesses.length === 0 && (
+        {!loadError && businesses.length === 0 && (
           <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
             No businesses yet. Add the first one.
           </p>

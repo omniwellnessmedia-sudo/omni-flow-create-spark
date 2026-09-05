@@ -269,6 +269,19 @@ const EventsAdmin = () => {
 
   const addSession = async () => {
     if (!seatsFor) return;
+    // event_sessions.title is NOT NULL, and this form sent null when the
+    // field was blank, so an unnamed session always failed at the database
+    // with nothing on screen explaining why. The name is also what the
+    // public event page shows for the session, so it is worth requiring
+    // rather than defaulting to "Session 2".
+    if (!newSession.title.trim()) {
+      toast({
+        title: 'Give the session a name',
+        description: 'It is shown on the public event page, for example "Morning yoga".',
+        variant: 'destructive',
+      });
+      return;
+    }
     const allocation = Number(newSession.allocation);
     if (!Number.isInteger(allocation) || allocation < 1) {
       toast({ title: 'Give the session an allocation of at least 1 seat', variant: 'destructive' });
@@ -278,7 +291,7 @@ const EventsAdmin = () => {
     const { error } = await (supabase as any).from('event_sessions').insert({
       event_id: seatsFor.id,
       session_no: nextNo,
-      title: newSession.title.trim() || null,
+      title: newSession.title.trim(),
       starts_at: newSession.starts_at ? new Date(newSession.starts_at).toISOString() : null,
       allocation,
       sold: 0,
@@ -469,14 +482,14 @@ const EventsAdmin = () => {
             onClick={() => setTab('events')}
             className={`rounded-full px-4 py-1.5 text-sm ${tab === 'events' ? 'bg-muted font-medium' : 'text-muted-foreground'}`}
           >
-            Events ({liveCount} live)
+            Events ({problems.length > 0 ? 'unread' : `${liveCount} live`})
           </button>
           <button
             onClick={() => setTab('submissions')}
             className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm ${tab === 'submissions' ? 'bg-muted font-medium' : 'text-muted-foreground'}`}
           >
             <Inbox className="h-3.5 w-3.5" />
-            Submitted ({submissions.length})
+            Submitted ({problems.length > 0 ? '?' : submissions.length})
           </button>
         </div>
         <Button onClick={openCreate} className="ml-auto">
@@ -490,8 +503,13 @@ const EventsAdmin = () => {
         </div>
       ) : tab === 'events' ? (
         events.length === 0 ? (
+          // "No events yet" is a claim about the calendar. It may only be
+          // made when the read succeeded; otherwise the banner above is the
+          // whole truth and this line would contradict it.
           <p className="mt-10 rounded-lg border border-dashed p-10 text-center text-sm text-muted-foreground">
-            No events yet. Add the first one.
+            {problems.length > 0
+              ? 'The events could not be read, so this list is not the calendar.'
+              : 'No events yet. Add the first one.'}
           </p>
         ) : (
           <div className="mt-6 space-y-3">
@@ -556,7 +574,9 @@ const EventsAdmin = () => {
         )
       ) : submissions.length === 0 ? (
         <p className="mt-10 rounded-lg border border-dashed p-10 text-center text-sm text-muted-foreground">
-          Nothing waiting for review.
+          {problems.length > 0
+            ? 'The submissions queue could not be read, so this is not what is waiting.'
+            : 'Nothing waiting for review.'}
         </p>
       ) : (
         <div className="mt-6 space-y-3">
@@ -788,8 +808,8 @@ const EventsAdmin = () => {
                 <p className="text-sm font-medium">Add a session</p>
                 <div className="mt-3 space-y-3">
                   <div>
-                    <Label className="text-xs">Name</Label>
-                    <Input className="mt-1 h-9" value={newSession.title} onChange={(e) => setNewSession({ ...newSession, title: e.target.value })} />
+                    <Label className="text-xs">Name, shown publicly</Label>
+                    <Input className="mt-1 h-9" placeholder="Morning yoga" value={newSession.title} onChange={(e) => setNewSession({ ...newSession, title: e.target.value })} />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>

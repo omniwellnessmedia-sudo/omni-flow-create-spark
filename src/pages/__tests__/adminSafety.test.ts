@@ -263,3 +263,47 @@ describe('every built admin screen is reachable', () => {
     expect(viator).toContain('data?.count ?? data?.tours?.length');
   });
 });
+
+describe('a failed read is never presented as having nothing', () => {
+  const read = (f: string) => readFileSync(resolve(adminDir, f), 'utf8');
+
+  it('there is one shared notice, so the wording cannot drift', () => {
+    const notice = readFileSync(
+      resolve(__dirname, '../../components/admin/ReadFailureNotice.tsx'), 'utf8'
+    );
+    expect(notice).toContain('This is not the same as having none');
+  });
+
+  it.each([
+    ['ProductCuration.tsx', 'the product feed'],
+    ['AffiliatePayouts.tsx', 'the commissions queue'],
+    ['LocalCatalogue.tsx', 'the catalogue'],
+    ['SocialScheduler.tsx', 'the scheduled posts'],
+  ])('%s shows the notice instead of its empty state', (file, what) => {
+    const src = read(file);
+    expect(src).toContain('ReadFailureNotice');
+    expect(src).toContain(what);
+    expect(src).toContain('loadError');
+  });
+
+  it('the events desk does not claim an empty calendar it could not read', () => {
+    const src = read('EventsAdmin.tsx');
+    expect(src).toContain('The events could not be read, so this list is not the calendar.');
+    expect(src).toContain("problems.length > 0 ? 'unread'");
+  });
+
+  it('saving is refused over a setting that could not be read', () => {
+    // A failed read left the webhook box empty, and Save wrote that empty
+    // string over the stored URL, disconnecting the automation.
+    const src = read('SocialScheduler.tsx');
+    expect(src).toContain('Not saving over a setting we could not read');
+    expect(src).toContain('settingsError');
+  });
+
+  it('a session cannot be created without the name the column requires', () => {
+    // event_sessions.title is NOT NULL and the form sent null when blank.
+    const src = read('EventsAdmin.tsx');
+    expect(src).toContain('Give the session a name');
+    expect(codeOnly(src)).not.toContain('title: newSession.title.trim() || null');
+  });
+});
