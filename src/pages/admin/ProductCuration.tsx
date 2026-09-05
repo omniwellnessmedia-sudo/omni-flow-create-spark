@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Search, Eye, EyeOff, Loader2, AlertTriangle } from 'lucide-react';
+import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
 
 /**
  * Product curation: the one screen that decides what a shopper sees.
@@ -50,10 +51,12 @@ const ProductCuration = () => {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [view, setView] = useState<View>('review');
+  const [loadError, setLoadError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const fetchProducts = async () => {
     setLoading(true);
+    setLoadError(null);
     const { data, error } = await supabase
       .from('affiliate_products')
       .select('id, name, image_url, price_zar, category, brand, is_featured, is_active')
@@ -61,7 +64,14 @@ const ProductCuration = () => {
       .order('created_at', { ascending: false })
       .limit(300);
     if (error) {
+      // A refused read used to fall through to an empty grid and
+      // "Showing on site (0)", which reads as "nothing to approve" on the
+      // one screen that decides what shoppers see.
+      setLoadError(error.message);
       toast({ title: 'Could not load products', description: error.message, variant: 'destructive' });
+      setProducts([]);
+      setLoading(false);
+      return;
     }
     setProducts((data as FeedProduct[]) || []);
     setLoading(false);
@@ -160,6 +170,10 @@ const ProductCuration = () => {
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      ) : loadError ? (
+        <div className="mt-6">
+          <ReadFailureNotice what="the product feed" reason={loadError} onRetry={fetchProducts} />
         </div>
       ) : visible.length === 0 ? (
         <p className="mt-10 rounded-lg border border-dashed p-10 text-center text-sm text-muted-foreground">

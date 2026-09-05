@@ -8,11 +8,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { 
+import {
   Users, Plus, Search, Filter, Download, Mail, Phone, Calendar,
   Building2, Briefcase, Globe, GraduationCap, ArrowRight, RefreshCw,
   Target, TrendingUp, ChevronRight, MoreHorizontal, Edit, Trash2
 } from 'lucide-react';
+import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
 
 // Pipeline stages
 const stages = [
@@ -61,6 +62,8 @@ const AdminUWCRecruitment: React.FC = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const { toast } = useToast();
 
+  const [loadError, setLoadError] = useState<string | null>(null);
+
   // New lead form state
   const [newLead, setNewLead] = useState({
     name: '',
@@ -79,6 +82,7 @@ const AdminUWCRecruitment: React.FC = () => {
   }, []);
 
   const fetchLeads = async () => {
+    setLoadError(null);
     try {
       const { data, error } = await supabase
         .from('uwc_programme_leads')
@@ -88,6 +92,10 @@ const AdminUWCRecruitment: React.FC = () => {
       if (error) throw error;
       setLeads(data || []);
     } catch (error) {
+      // A refused read rendered every stage column as "No leads" and every
+      // counter as 0: a fully believable empty pipeline.
+      setLoadError(error instanceof Error ? error.message : 'Failed to load leads');
+      setLeads([]);
       console.error('Error fetching leads:', error);
       toast({
         title: 'Error',
@@ -228,6 +236,10 @@ const AdminUWCRecruitment: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {loadError && (
+        <ReadFailureNotice what="the recruitment pipeline" reason={loadError} onRetry={fetchLeads} />
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

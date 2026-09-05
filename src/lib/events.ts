@@ -67,11 +67,26 @@ export interface EventSession {
 
 export interface EventDetail extends Omit<PublicEvent, 'seats_remaining' | 'is_promoted'> {
   status: string;
+  /** Who carries our booking fee on tickets sold through us, per event. */
+  fee_payer: 'attendee' | 'organiser' | 'none';
+  fee_bps: number | null;
   sessions: EventSession[];
 }
 
 /** A read either succeeded with rows, or failed with a reason. Never both. */
 export type ReadResult<T> = { ok: true; data: T } | { ok: false; reason: string };
+
+/**
+ * Narrow a ReadResult to its failure branch.
+ *
+ * tsconfig.app.json sets strict:false, and without strictNullChecks
+ * TypeScript will not narrow a union on a boolean literal discriminant, so
+ * `if (!res.ok) res.reason` fails to compile even though it is correct at
+ * runtime. A user defined type guard narrows regardless of that setting.
+ */
+export const isReadFailure = <T,>(
+  r: ReadResult<T>
+): r is { ok: false; reason: string } => r.ok === false;
 
 const KIND_LABELS: Record<EventKind, string> = {
   screening: 'Screening',
@@ -165,6 +180,8 @@ export const getEvent = async (slug: string): Promise<ReadResult<EventDetail | n
       booking_mode: (first.booking_mode ?? 'none') as BookingMode,
       listing_tier: (first.listing_tier ?? 'standard') as PublicEvent['listing_tier'],
       organiser_name: first.organiser_name ?? null,
+      fee_payer: (first.fee_payer ?? 'attendee') as EventDetail['fee_payer'],
+      fee_bps: first.fee_bps ?? null,
       status: first.status,
       sessions: rows
         .filter((r) => r.session_id)

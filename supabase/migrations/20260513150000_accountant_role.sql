@@ -17,6 +17,11 @@ DO $guard$
 BEGIN
 
 -- 2. Helper function: returns true for accountants, admins, and super_admins
+-- Compared as text (4 September 2026): the 'accountant' enum value is added
+-- by the ALTER TYPE above IN THIS SAME FILE, and a runner that wraps the
+-- file in one transaction cannot reference a new enum value as a literal in
+-- that same transaction (SQLSTATE 55P04). ::text sidesteps that entirely,
+-- the same way is_catalogue_manager does. Semantics are identical.
 CREATE OR REPLACE FUNCTION public.is_accountant_or_admin(user_id uuid)
 RETURNS boolean
 LANGUAGE sql
@@ -28,7 +33,7 @@ AS $$
     SELECT 1
     FROM public.user_roles ur
     WHERE ur.user_id = is_accountant_or_admin.user_id
-      AND ur.role IN ('accountant', 'admin', 'super_admin')
+      AND ur.role::text IN ('accountant', 'admin', 'super_admin')
   )
 $$;
 

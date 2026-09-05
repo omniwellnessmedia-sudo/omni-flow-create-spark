@@ -104,6 +104,7 @@ const PrivacyPolicy = React.lazy(() => import('@/pages/PrivacyPolicy'));
 const TermsOfService = React.lazy(() => import('@/pages/TermsOfService'));
 const CookiePolicy = React.lazy(() => import('@/pages/CookiePolicy'));
 const ESGPolicy = React.lazy(() => import('@/pages/ESGPolicy'));
+const Unsubscribe = React.lazy(() => import('@/pages/Unsubscribe'));
 const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
 const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
@@ -167,6 +168,8 @@ const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
 const ProductCuration = React.lazy(() => import('@/pages/admin/ProductCuration'));
 const MarketplaceHub = React.lazy(() => import('@/pages/admin/MarketplaceHub'));
 const ServiceOfferDetail = React.lazy(() => import('@/pages/ServiceOfferDetail'));
+const Pricing = React.lazy(() => import('@/pages/Pricing'));
+const AdminLayout = React.lazy(() => import('@/components/dashboard/AdminLayout'));
 const EventsIndex = React.lazy(() => import('@/pages/EventsIndex'));
 const EventDetailPage = React.lazy(() => import('@/pages/EventDetail'));
 const EventSubmit = React.lazy(() => import('@/pages/EventSubmit'));
@@ -230,6 +233,7 @@ function App() {
                   <Route path="/terms-of-service" element={<TermsOfService />} />
                   <Route path="/cookie-policy" element={<CookiePolicy />} />
                   <Route path="/esg-policy" element={<ESGPolicy />} />
+                  <Route path="/unsubscribe" element={<Unsubscribe />} />
                   <Route path="/auth" element={<AuthPage />} />
                   <Route path="/update-password" element={<UpdatePassword />} />
                   <Route path="/upgrade" element={<UpgradePage />} />
@@ -256,6 +260,7 @@ function App() {
                       stable id, which is also the ?service= value the contact
                       form reads, so an enquiry traces back to its page. */}
                   <Route path="/services/:slug" element={<ServiceOfferDetail />} />
+                  <Route path="/pricing" element={<Pricing />} />
                   {/* Free diagnostic, the top of the funnel for every service page. */}
                   <Route path="/scorecard" element={<Scorecard />} />
                   <Route path="/service/:id" element={<ServiceDetail />} />
@@ -422,12 +427,12 @@ function App() {
                       accounting, leads, team management or role assignment. */}
                   <Route path="/admin/catalogue" element={
                     <ProtectedRoute requireCatalogueManager={true}>
-                      <LocalCatalogue />
+                      <AdminLayout><LocalCatalogue /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/products" element={
                     <ProtectedRoute requireCatalogueManager={true}>
-                      <ProductCuration />
+                      <AdminLayout><ProductCuration /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   {/* One front door for the marketplace. The screens below it
@@ -435,12 +440,12 @@ function App() {
                       this page says what needs a person and sends them there. */}
                   <Route path="/admin/marketplace" element={
                     <ProtectedRoute requireCatalogueManager={true}>
-                      <MarketplaceHub />
+                      <AdminLayout><MarketplaceHub /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/events" element={
                     <ProtectedRoute requireCatalogueManager={true}>
-                      <EventsAdmin />
+                      <AdminLayout><EventsAdmin /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   <Route path="/admin-dashboard" element={
@@ -468,32 +473,32 @@ function App() {
                   <Route path="/roambuddy/privacy" element={<RoamBuddyPrivacy />} />
                   <Route path="/admin/affiliate-performance" element={
                     <ProtectedRoute requireAdmin={true}>
-                      <AffiliatePerformance />
+                      <AdminLayout><AffiliatePerformance /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/affiliate-payouts" element={
                     <ProtectedRoute requireAdmin={true}>
-                      <AffiliatePayouts />
+                      <AdminLayout><AffiliatePayouts /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/tools" element={
                     <ProtectedRoute requireAdmin={true}>
-                      <AdminTools />
+                      <AdminLayout><AdminTools /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/monetizable-urls" element={
                     <ProtectedRoute requireAdmin={true}>
-                      <MonetizableURLsReference />
+                      <AdminLayout><MonetizableURLsReference /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/roambuddy-sales" element={
                     <ProtectedRoute requireAdmin={true}>
-                      <RoamBuddySalesDashboard />
+                      <AdminLayout><RoamBuddySalesDashboard /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   <Route path="/admin/roam-marketing" element={
                     <ProtectedRoute requireAdmin={true}>
-                      <RoamMarketingHub />
+                      <AdminLayout><RoamMarketingHub /></AdminLayout>
                     </ProtectedRoute>
                   } />
                   {/* Blog unpublished: legacy slug URLs also redirect home */}

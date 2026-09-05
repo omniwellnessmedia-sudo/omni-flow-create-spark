@@ -26,11 +26,34 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
+/**
+ * A team directory. IT GRANTS NO ACCESS TO ANYTHING.
+ *
+ * Read this before wiring the screen to a route. It writes public.team_members
+ * with roles "admin", "editor" and "viewer" and a permissions array. None of
+ * those three names exist in the app_role enum, nothing in the application
+ * reads this table for authorisation, and every real gate (ProtectedRoute,
+ * every RLS policy) reads public.user_roles instead. Granting somebody "admin"
+ * here therefore changes precisely nothing about what they can open, while
+ * looking exactly as though it had.
+ *
+ * Real access is granted in /admin/tools, which writes user_roles and needs
+ * super_admin to do it. If this directory is ever put in front of the team,
+ * it needs a line on screen saying it records who is on the team and not what
+ * they may do, or the two screens will be confused for one another.
+ *
+ * The screen is currently unreachable: no route, and nothing imports it.
+ * Audit of 5 September 2026.
+ *
+ * No em dashes in this file.
+ */
+
 interface TeamMember {
   id: string;
   user_id: string | null;
   name: string;
   email: string;
+  /** Directory labels only. Not app_role, and not read by any permission check. */
   role: "admin" | "editor" | "viewer";
   department: string | null;
   permissions: string[];

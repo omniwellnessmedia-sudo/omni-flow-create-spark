@@ -51,6 +51,7 @@ import {
   Trash2,
   ExternalLink
 } from 'lucide-react';
+import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
 
 interface Product {
   id: string;
@@ -103,6 +104,7 @@ const ProductManagement = () => {
   const [importing, setImporting] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [newProduct, setNewProduct] = useState({
     name: '',
     description: '',
@@ -136,12 +138,14 @@ const ProductManagement = () => {
       if (error) throw error;
       setProducts(data || []);
     } catch (error) {
+      // Without this, a refused read left products at [] and rendered an
+      // empty catalogue plus eight zeroed stat cards, so "the database is
+      // down" and "you have no products" looked identical.
+      const reason = error instanceof Error ? error.message : 'Failed to load products';
+      setLoadError(reason);
+      setProducts([]);
       console.error('Error fetching products:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load products',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: reason, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -499,6 +503,12 @@ const ProductManagement = () => {
 
   return (
     <div className="space-y-4 md:space-y-6">
+      {/* Eight zeroed stat cards are a claim about the catalogue. They may
+          only be shown when the read succeeded. */}
+      {loadError && (
+        <ReadFailureNotice what="the product catalogue" reason={loadError} onRetry={fetchProducts} />
+      )}
+
       {/* Stats Cards - Mobile Optimized */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 md:gap-4">
         <Card className="p-3">

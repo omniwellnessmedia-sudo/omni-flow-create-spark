@@ -1,4 +1,18 @@
+-- Exception-guarded on 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md:
+-- this content seed references tour tables that a fresh Supabase preview
+-- branch may not carry (their creating migrations skip there). Every section
+-- now skips with a NOTICE instead of failing the whole replay. On production
+-- the tables exist and every statement runs exactly as before.
+
+DO $seed_guard$
+BEGIN
 -- Add detailed itinerary for Indigenous Surfing Tour with Cass Collier
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded section, missing dependency: %', SQLERRM;
+END
+$seed_guard$;
+
 DO $$
 DECLARE
   v_tour_id UUID;
@@ -34,4 +48,7 @@ BEGIN
   (v_tour_id, 11, '17:30 | Wrap Up & Return', 'Scenic return drive to Muizenberg. Closing circle with Cass and the team.', 'Return to Muizenberg', ARRAY['Scenic return drive', 'Closing circle ceremony', 'Group reflection', 'Farewell'], NULL);
 
   RAISE NOTICE 'Successfully added 11 itinerary items for Indigenous Surfing Tour with Cass Collier';
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded section, missing dependency: %', SQLERRM;
 END $$;

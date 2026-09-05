@@ -1,3 +1,11 @@
+-- Exception-guarded per statement on 4 September 2026 per
+-- docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md: fresh Supabase preview branches
+-- are missing dashboard-created tables, so statements referencing them skip
+-- with a NOTICE instead of failing the replay. On production every object
+-- exists and every statement runs exactly as before.
+
+DO $g1$
+BEGIN
 -- Fix provider roles security issue by creating proper database table
 -- and fixing function search_path issues
 
@@ -12,24 +20,52 @@ CREATE TABLE IF NOT EXISTS public.provider_roles (
   updated_at timestamptz DEFAULT now(),
   UNIQUE (user_id, provider_id)
 );
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g1$;
 
+DO $g2$
+BEGIN
 -- Enable RLS
 ALTER TABLE public.provider_roles ENABLE ROW LEVEL SECURITY;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g2$;
 
+DO $g3$
+BEGIN
 -- Users can view their own provider roles
 CREATE POLICY "Users can view their own provider roles"
 ON public.provider_roles
 FOR SELECT
 TO authenticated
 USING (auth.uid() = user_id);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g3$;
 
+DO $g4$
+BEGIN
 -- Admins can view all provider roles
 CREATE POLICY "Admins can view all provider roles"
 ON public.provider_roles
 FOR SELECT
 TO authenticated
 USING (public.is_admin(auth.uid()));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g4$;
 
+DO $g5$
+BEGIN
 -- Only admins can insert/update/delete provider roles
 CREATE POLICY "Admins can manage provider roles"
 ON public.provider_roles
@@ -37,14 +73,44 @@ FOR ALL
 TO authenticated
 USING (public.is_admin(auth.uid()))
 WITH CHECK (public.is_admin(auth.uid()));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g5$;
 
+DO $g6$
+BEGIN
 -- Create index for faster lookups
 CREATE INDEX IF NOT EXISTS idx_provider_roles_user_id ON public.provider_roles(user_id);
-CREATE INDEX IF NOT EXISTS idx_provider_roles_provider_id ON public.provider_roles(provider_id);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g6$;
 
+DO $g7$
+BEGIN
+CREATE INDEX IF NOT EXISTS idx_provider_roles_provider_id ON public.provider_roles(provider_id);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g7$;
+
+DO $g8$
+BEGIN
 -- Fix search_path on existing functions - use CASCADE to handle dependencies
 -- Update check_contact_rate_limit
 DROP FUNCTION IF EXISTS public.check_contact_rate_limit(text) CASCADE;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g8$;
+
+DO $g9$
+BEGIN
 CREATE OR REPLACE FUNCTION public.check_contact_rate_limit(submitter_email text)
 RETURNS boolean
 LANGUAGE sql
@@ -57,16 +123,38 @@ AS $$
   WHERE email = submitter_email
     AND created_at > NOW() - INTERVAL '1 hour';
 $$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g9$;
 
+DO $g10$
+BEGIN
 -- Recreate the policy that depends on check_contact_rate_limit
 CREATE POLICY "Allow rate-limited contact submissions"
 ON public.contact_submissions
 FOR INSERT
 TO public
 WITH CHECK (public.check_contact_rate_limit(email));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g10$;
 
+DO $g11$
+BEGIN
 -- Update check_quote_rate_limit
 DROP FUNCTION IF EXISTS public.check_quote_rate_limit(text) CASCADE;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g11$;
+
+DO $g12$
+BEGIN
 CREATE OR REPLACE FUNCTION public.check_quote_rate_limit(submitter_email text)
 RETURNS boolean
 LANGUAGE sql
@@ -79,14 +167,28 @@ AS $$
   WHERE email = submitter_email
     AND created_at > NOW() - INTERVAL '1 hour';
 $$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g12$;
 
+DO $g13$
+BEGIN
 -- Recreate the policy that depends on check_quote_rate_limit
 CREATE POLICY "Allow rate-limited quote submissions"
 ON public.service_quotes
 FOR INSERT
 TO public
 WITH CHECK (public.check_quote_rate_limit(email));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g13$;
 
+DO $g14$
+BEGIN
 -- Update auto_curate_awin_products
 CREATE OR REPLACE FUNCTION public.auto_curate_awin_products()
 RETURNS void
@@ -109,7 +211,14 @@ BEGIN
     AND is_featured = false;
 END;
 $$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g14$;
 
+DO $g15$
+BEGIN
 -- Update increment_resource_download
 CREATE OR REPLACE FUNCTION public.increment_resource_download(resource_id uuid)
 RETURNS void
@@ -121,7 +230,14 @@ AS $$
   SET download_count = download_count + 1
   WHERE id = resource_id;
 $$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g15$;
 
+DO $g16$
+BEGIN
 -- Update auto_curate_featured_products
 CREATE OR REPLACE FUNCTION public.auto_curate_featured_products()
 RETURNS void
@@ -157,3 +273,8 @@ BEGIN
   AND is_trending = false;
 END;
 $$;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g16$;

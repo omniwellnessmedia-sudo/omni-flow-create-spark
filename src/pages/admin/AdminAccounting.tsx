@@ -22,7 +22,9 @@ import {
   ArrowDownRight,
   Building,
   Filter,
+  AlertTriangle,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { format, subDays, startOfMonth, endOfMonth, subMonths, parseISO } from "date-fns";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import PortfolioOverview from "@/components/admin/accounting/PortfolioOverview";
@@ -97,6 +99,10 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
   const [dateRange, setDateRange] = useState("current_month");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  /** Reads that failed on the last fetch, in the database's own words. Empty
+   *  means every figure below was actually read. */
+  const [readFailures, setReadFailures] = useState<string[]>([]);
+  const { toast } = useToast();
 
   const getDateRange = () => {
     const now = new Date();
@@ -129,6 +135,7 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
 
   const fetchData = async () => {
     setLoading(true);
+    setReadFailures([]);
     const { from, to } = getDateRange();
     // entityFilter is the entities.id UUID (or undefined = all). Only orders and
     // affiliate_commissions carry entity_id today; payouts/transactions don't,
@@ -153,10 +160,17 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
             .lte("created_at", to)
             .order("created_at", { ascending: false })
         ),
+        // Filtered on the payout period, not created_at: this tab and the
+        // Financial Summary CSV are both labelled with the selected period,
+        // and an unfiltered query put all time payouts under that heading.
+        // payout_period_end is declared non-null; created_at is nullable and
+        // filtering on it would silently drop rows.
         supabase
           .from("affiliate_payouts")
           .select("*")
-          .order("created_at", { ascending: false }),
+          .gte("payout_period_end", from)
+          .lte("payout_period_start", to)
+          .order("payout_period_end", { ascending: false }),
         supabase
           .from("transactions")
           .select("*")
@@ -165,25 +179,69 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
           .order("created_at", { ascending: false }),
       ]);
 
+      // The Supabase client REPORTS query errors in `error`; it does not
+      // throw them, so the catch below never sees an RLS denial or a missing
+      // column. Before this check, a denied read fell through to `|| []` and
+      // every figure on this screen rendered as R0.00, which reads exactly
+      // like a month with no trade. On the screen the accountant works from,
+      // that is the most expensive possible failure mode, so each read is
+      // now inspected and any failure is named on the page.
+      const failures: string[] = [];
+      const collect = (label: string, res: { error: { message: string } | null }) => {
+        if (res.error) failures.push(`${label}: ${res.error.message}`);
+      };
+      collect("Orders", ordersRes);
+      collect("Affiliate commissions", commissionsRes);
+      collect("Payouts", payoutsRes);
+      collect("Transactions", transactionsRes);
+
       setOrders(ordersRes.data || []);
       setCommissions(commissionsRes.data || []);
       setPayouts(payoutsRes.data || []);
       setTransactions(transactionsRes.data || []);
+      setReadFailures(failures);
     } catch (error) {
       console.error("Error fetching accounting data:", error);
+      setReadFailures([
+        error instanceof Error ? error.message : "The accounting service did not respond.",
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
   // --- Calculations ---
-  const grossRevenue = orders.reduce((s, o) => s + (o.total_zar || o.amount || 0), 0);
+  //
+  // CURRENCY. Every figure on this screen is printed with an R prefix, so
+  // only rand may be summed into it. The previous arithmetic was
+  // `o.total_zar || o.amount || 0`, which falls back to the order's own
+  // amount when the ZAR column is null. That amount is denominated in
+  // o.currency, so a 100 dollar order was counted as R100 and the headline
+  // revenue was simply wrong whenever any row was not in rand. The
+  // commissions table two hundred lines below already prefixes by currency,
+  // so the difference was understood elsewhere in this very file.
+  //
+  // Non rand rows are excluded and counted, and the count is shown, because
+  // a total that is quietly short is the same class of problem as a total
+  // that is quietly wrong.
+  const zarOfOrder = (o: Order): number | null =>
+    o.total_zar ?? (o.currency === "ZAR" ? o.amount ?? null : null);
+  const zarOfCommission = (c: Commission): number | null =>
+    c.commission_currency === "ZAR" ? c.commission_amount : null;
+
+  const sumZar = <T,>(rows: T[], pick: (r: T) => number | null) =>
+    rows.reduce((total, r) => total + (pick(r) ?? 0), 0);
+
+  const excludedOrders = orders.filter((o) => zarOfOrder(o) === null).length;
+  const excludedCommissions = commissions.filter((c) => zarOfCommission(c) === null).length;
+
+  const grossRevenue = sumZar(orders, zarOfOrder);
   const totalTax = orders.reduce((s, o) => s + (o.tax_zar || 0), 0);
   const netRevenue = grossRevenue - totalTax;
-  const totalCommissionsEarned = commissions.reduce((s, c) => s + c.commission_amount, 0);
-  const pendingCommissions = commissions.filter((c) => c.status === "pending" || !c.status).reduce((s, c) => s + c.commission_amount, 0);
-  const approvedCommissions = commissions.filter((c) => c.status === "approved").reduce((s, c) => s + c.commission_amount, 0);
-  const paidCommissions = commissions.filter((c) => c.status === "paid").reduce((s, c) => s + c.commission_amount, 0);
+  const totalCommissionsEarned = sumZar(commissions, zarOfCommission);
+  const pendingCommissions = sumZar(commissions.filter((c) => c.status === "pending" || !c.status), zarOfCommission);
+  const approvedCommissions = sumZar(commissions.filter((c) => c.status === "approved"), zarOfCommission);
+  const paidCommissions = sumZar(commissions.filter((c) => c.status === "paid"), zarOfCommission);
   const completedOrders = orders.filter((o) => o.status === "completed" || o.status === "paid");
   const pendingOrders = orders.filter((o) => o.status === "pending");
   const refundedOrders = orders.filter((o) => o.status === "refunded" || o.status === "cancelled");
@@ -192,7 +250,7 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
   const revenueByType: Record<string, number> = {};
   orders.forEach((o) => {
     const type = o.product_type || "Other";
-    revenueByType[type] = (revenueByType[type] || 0) + (o.total_zar || o.amount || 0);
+    revenueByType[type] = (revenueByType[type] || 0) + (zarOfOrder(o) ?? 0);
   });
 
   // Revenue by month chart
@@ -200,7 +258,7 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
   orders.forEach((o) => {
     const m = format(parseISO(o.created_at), "MMM yyyy");
     if (!revenueByMonth[m]) revenueByMonth[m] = { revenue: 0, commissions: 0, orders: 0 };
-    revenueByMonth[m].revenue += o.total_zar || o.amount || 0;
+    revenueByMonth[m].revenue += zarOfOrder(o) ?? 0;
     revenueByMonth[m].orders += 1;
   });
   commissions.forEach((c) => {
@@ -221,7 +279,30 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
   });
 
   // --- CSV Export ---
+  //
+  // Every text value goes through csv(). Fields were interpolated raw into
+  // quoted columns, so a customer name, product name or transaction
+  // description containing a quote, a comma or a newline shifted every later
+  // column of that row, which is how an accounting export silently becomes
+  // wrong rather than obviously broken. RFC 4180: wrap in quotes, double any
+  // quote inside.
+  const csv = (value: unknown): string => {
+    if (value === null || value === undefined) return '""';
+    return `"${String(value).replace(/"/g, '""')}"`;
+  };
+
   const exportCSV = (type: "orders" | "commissions" | "transactions" | "summary") => {
+    // A report built from a failed read is worse than no report: it leaves
+    // the building looking authoritative and showing zero. Refuse it.
+    if (readFailures.length > 0) {
+      toast({
+        title: "Not exporting an incomplete period",
+        description:
+          "Some records could not be read, so these totals are not the full picture. Fix the error shown above, refresh, then export.",
+        variant: "destructive",
+      });
+      return;
+    }
     let csvContent = "";
     const { from, to } = getDateRange();
     const period = `${format(parseISO(from), "yyyy-MM-dd")}_to_${format(parseISO(to), "yyyy-MM-dd")}`;
@@ -229,17 +310,35 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
     if (type === "orders") {
       csvContent = "Date,Order Number,Customer,Email,Product,Type,Subtotal (ZAR),Tax (ZAR),Total (ZAR),Currency,Amount,Status,Payment Method,Affiliate Program\n";
       orders.forEach((o) => {
-        csvContent += `${format(parseISO(o.created_at), "yyyy-MM-dd HH:mm")},"${o.order_number}","${o.customer_name}","${o.customer_email}","${o.product_name}","${o.product_type}",${o.subtotal_zar || ""},${o.tax_zar || ""},${o.total_zar || ""},${o.currency},${o.amount},${o.status},${o.payment_method || ""},${o.affiliate_program_id || ""}\n`;
+        csvContent += [
+          csv(format(parseISO(o.created_at), "yyyy-MM-dd HH:mm")),
+          csv(o.order_number), csv(o.customer_name), csv(o.customer_email),
+          csv(o.product_name), csv(o.product_type),
+          o.subtotal_zar ?? "", o.tax_zar ?? "", o.total_zar ?? "",
+          csv(o.currency), o.amount, csv(o.status),
+          csv(o.payment_method ?? ""), csv(o.affiliate_program_id ?? ""),
+        ].join(",") + "\n";
       });
     } else if (type === "commissions") {
       csvContent = "Date,Product,Affiliate Program,Order Amount,Commission Amount,Currency,Rate (%),Status,Approved Date,Paid Date\n";
       commissions.forEach((c) => {
-        csvContent += `${c.created_at ? format(parseISO(c.created_at), "yyyy-MM-dd HH:mm") : ""},"${c.product_name || ""}","${c.affiliate_program_id}",${c.order_amount},${c.commission_amount},${c.commission_currency},${c.commission_rate || ""},${c.status || "pending"},${c.approved_at ? format(parseISO(c.approved_at), "yyyy-MM-dd") : ""},${c.paid_at ? format(parseISO(c.paid_at), "yyyy-MM-dd") : ""}\n`;
+        csvContent += [
+          csv(c.created_at ? format(parseISO(c.created_at), "yyyy-MM-dd HH:mm") : ""),
+          csv(c.product_name ?? ""), csv(c.affiliate_program_id),
+          c.order_amount, c.commission_amount, csv(c.commission_currency),
+          c.commission_rate ?? "", csv(c.status ?? "pending"),
+          csv(c.approved_at ? format(parseISO(c.approved_at), "yyyy-MM-dd") : ""),
+          csv(c.paid_at ? format(parseISO(c.paid_at), "yyyy-MM-dd") : ""),
+        ].join(",") + "\n";
       });
     } else if (type === "transactions") {
       csvContent = "Date,Type,Description,Amount (ZAR),WellCoins,Status\n";
       transactions.forEach((t) => {
-        csvContent += `${format(parseISO(t.created_at), "yyyy-MM-dd HH:mm")},"${t.transaction_type}","${t.description}",${t.amount_zar || ""},${t.amount_wellcoins || ""},${t.status}\n`;
+        csvContent += [
+          csv(format(parseISO(t.created_at), "yyyy-MM-dd HH:mm")),
+          csv(t.transaction_type), csv(t.description),
+          t.amount_zar ?? "", t.amount_wellcoins ?? "", csv(t.status),
+        ].join(",") + "\n";
       });
     } else if (type === "summary") {
       csvContent = "Omni Wellness Media — Financial Summary\n";
@@ -254,7 +353,8 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
       csvContent += `Refunded / Cancelled,${refundedOrders.length}\n\n`;
       csvContent += "REVENUE BY PRODUCT TYPE\n";
       Object.entries(revenueByType).forEach(([type, amount]) => {
-        csvContent += `${type},${amount.toFixed(2)}\n`;
+        // product_type comes from the data and can contain a comma.
+        csvContent += `${csv(type)},${amount.toFixed(2)}\n`;
       });
       csvContent += "\nCOMMISSIONS\n";
       csvContent += `Total Commissions,${totalCommissionsEarned.toFixed(2)}\n`;
@@ -267,7 +367,13 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
       });
       csvContent += "\nPAYOUTS\n";
       payouts.forEach((p) => {
-        csvContent += `${format(parseISO(p.payout_period_start), "dd MMM yyyy")} - ${format(parseISO(p.payout_period_end), "dd MMM yyyy")},ZAR ${(p.total_amount_zar || 0).toFixed(2)},USD ${(p.total_amount_usd || 0).toFixed(2)},EUR ${(p.total_amount_eur || 0).toFixed(2)},${p.status || "pending"},${p.payment_gateway || ""},${p.payment_reference || ""}\n`;
+        csvContent += [
+          csv(`${format(parseISO(p.payout_period_start), "dd MMM yyyy")} - ${format(parseISO(p.payout_period_end), "dd MMM yyyy")}`),
+          csv(`ZAR ${(p.total_amount_zar || 0).toFixed(2)}`),
+          csv(`USD ${(p.total_amount_usd || 0).toFixed(2)}`),
+          csv(`EUR ${(p.total_amount_eur || 0).toFixed(2)}`),
+          csv(p.status ?? "pending"), csv(p.payment_gateway ?? ""), csv(p.payment_reference ?? ""),
+        ].join(",") + "\n";
       });
     }
 
@@ -326,6 +432,51 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
           </Button>
         </div>
       </div>
+
+      {/* A failed read must never pass for a quiet month. Named here, above
+          the figures it invalidates, because everything below is computed
+          from rows that may not have arrived. */}
+      {readFailures.length > 0 && (
+        <Card className="border-amber-300 bg-amber-50">
+          <CardContent className="py-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-amber-900">
+              <AlertTriangle className="h-4 w-4" />
+              These totals are incomplete. Do not report from them.
+            </p>
+            <p className="mt-1 text-sm text-amber-900">
+              Some records could not be read, so every figure below is lower than
+              the real one. This usually means the database refused the request for
+              the account you are signed in with. Send this to Tumelo as written:
+            </p>
+            <ul className="mt-2 space-y-1">
+              {readFailures.map((f) => (
+                <li key={f} className="text-xs text-amber-900" style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Rand only totals: say what was left out rather than showing a
+          number that is quietly short. */}
+      {(excludedOrders > 0 || excludedCommissions > 0) && (
+        <Card className="border-amber-200 bg-amber-50/60">
+          <CardContent className="py-3">
+            <p className="text-xs text-amber-900">
+              Totals below count rand only.{" "}
+              {excludedOrders > 0 && `${excludedOrders} order${excludedOrders === 1 ? "" : "s"} `}
+              {excludedOrders > 0 && excludedCommissions > 0 && "and "}
+              {excludedCommissions > 0 && `${excludedCommissions} commission${excludedCommissions === 1 ? "" : "s"} `}
+              {excludedOrders + excludedCommissions === 1 ? "is" : "are"} in another currency and
+              {" "}
+              {excludedOrders + excludedCommissions === 1 ? "is" : "are"} excluded. They appear in the
+              tables with their own currency.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Financial Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -777,7 +928,7 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
                     <div className="text-right">
                       <span className="font-bold text-sm">{completedOrders.length}</span>
                       <span className="text-xs text-muted-foreground ml-2">
-                        R{completedOrders.reduce((s, o) => s + (o.total_zar || o.amount || 0), 0).toLocaleString("en-ZA", { minimumFractionDigits: 2 })}
+                        R{sumZar(completedOrders, zarOfOrder).toLocaleString("en-ZA", { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
@@ -789,7 +940,7 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
                     <div className="text-right">
                       <span className="font-bold text-sm">{pendingOrders.length}</span>
                       <span className="text-xs text-muted-foreground ml-2">
-                        R{pendingOrders.reduce((s, o) => s + (o.total_zar || o.amount || 0), 0).toLocaleString("en-ZA", { minimumFractionDigits: 2 })}
+                        R{sumZar(pendingOrders, zarOfOrder).toLocaleString("en-ZA", { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
@@ -801,7 +952,7 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
                     <div className="text-right">
                       <span className="font-bold text-sm">{refundedOrders.length}</span>
                       <span className="text-xs text-muted-foreground ml-2">
-                        R{refundedOrders.reduce((s, o) => s + (o.total_zar || o.amount || 0), 0).toLocaleString("en-ZA", { minimumFractionDigits: 2 })}
+                        R{sumZar(refundedOrders, zarOfOrder).toLocaleString("en-ZA", { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>

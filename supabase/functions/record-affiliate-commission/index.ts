@@ -46,7 +46,6 @@ serve(async (req) => {
     const commissionRates: Record<string, number> = {
       'cj_affiliate': 8.5,
       'getyourguide': 7.0,
-      'faithful_to_nature': 10.0,
       'awin': 6.0,
       'travelstart': 5.0,
       'shareasale': 8.0,

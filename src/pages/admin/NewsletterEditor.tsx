@@ -34,8 +34,6 @@ import {
   FileText
 } from 'lucide-react';
 import { format } from 'date-fns';
-import SiteHeader from '@/components/SiteHeader';
-import Footer from '@/components/Footer';
 
 interface NewsletterCampaign {
   id: string;
@@ -130,6 +128,13 @@ const NewsletterEditor = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [editingCampaign, setEditingCampaign] = useState<NewsletterCampaign | null>(null);
+  /** True when formData.content holds the body that will be published. False
+   *  while editing a saved campaign, because the body is not parsed back out
+   *  of the stored HTML. See openEditDialog. */
+  const [bodyHydrated, setBodyHydrated] = useState(true);
+  /** Guards against a double click inserting the campaign twice. */
+  const [saving, setSaving] = useState(false);
+  const [sendingTest, setSendingTest] = useState(false);
   const [previewHtml, setPreviewHtml] = useState('');
 
   // Form state
@@ -181,6 +186,14 @@ const NewsletterEditor = () => {
     }
   };
 
+  /**
+   * The stored body of a campaign.
+   *
+   * {{unsubscribe_url}} is deliberately left in place. Each recipient needs
+   * their own link, so the sender fills it in per address at send time. The
+   * old code substituted a single fixed URL here, which both flattened the
+   * link for everyone and pointed it at a route that did not exist.
+   */
   const generateHtml = () => {
     let html = NEWSLETTER_TEMPLATE;
     html = html.replace(/{{subject}}/g, formData.subject);
@@ -188,24 +201,37 @@ const NewsletterEditor = () => {
     html = html.replace(/{{content}}/g, formData.content.replace(/\n/g, '<br>'));
     html = html.replace(/{{cta_text}}/g, formData.cta_text);
     html = html.replace(/{{cta_url}}/g, formData.cta_url);
-    html = html.replace(/{{unsubscribe_url}}/g, 'https://omniwellnessmedia.com/unsubscribe');
     return html;
   };
 
+  // Preview and test sends have no recipient row to address, so the footer
+  // link points at the page without an id, which explains itself.
+  const withPlaceholdersFilled = (html: string) =>
+    html
+      .replace(/{{unsubscribe_url}}/g, `${window.location.origin}/unsubscribe`)
+      .replace(/{{name}}/g, 'there');
+
   const handlePreview = () => {
-    setPreviewHtml(generateHtml());
+    setPreviewHtml(withPlaceholdersFilled(generateHtml()));
     setIsPreviewOpen(true);
   };
 
   const handleSaveCampaign = async (status: 'draft' | 'scheduled' = 'draft') => {
+    if (saving) return;
+    if (!formData.name.trim() || !formData.subject.trim()) {
+      toast({
+        title: 'A campaign needs a name and a subject',
+        description: 'The name is internal; the subject is what recipients see.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setSaving(true);
     try {
-      const html = generateHtml();
-      
-      const campaignData = {
+      const campaignData: Record<string, unknown> = {
         name: formData.name,
         subject: formData.subject,
         preview_text: formData.preview_text,
-        html_content: html,
         from_name: formData.from_name,
         from_email: formData.from_email,
         status,
@@ -213,6 +239,13 @@ const NewsletterEditor = () => {
           ? new Date(formData.scheduled_send_time).toISOString()
           : null,
       };
+
+      // Only write the body when the form actually holds one. Editing an
+      // existing campaign seeds an empty body (see openEditDialog), so
+      // regenerating the HTML from it would wipe what is stored.
+      if (!editingCampaign || bodyHydrated) {
+        campaignData.html_content = generateHtml();
+      }
 
       if (editingCampaign) {
         const { error } = await (supabase
@@ -239,9 +272,11 @@ const NewsletterEditor = () => {
       console.error('Error saving campaign:', error);
       toast({
         title: 'Error',
-        description: 'Failed to save campaign',
+        description: error instanceof Error ? error.message : 'Failed to save campaign',
         variant: 'destructive',
       });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -268,6 +303,8 @@ const NewsletterEditor = () => {
   };
 
   const handleSendTestEmail = async () => {
+    if (sendingTest) return;
+    setSendingTest(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user?.email) {
@@ -280,7 +317,7 @@ const NewsletterEditor = () => {
           test: true,
           email: user.email,
           subject: formData.subject,
-          html: generateHtml(),
+          html: withPlaceholdersFilled(generateHtml()),
           from_name: formData.from_name,
         },
       });
@@ -291,13 +328,17 @@ const NewsletterEditor = () => {
       console.error('Error sending test:', error);
       toast({
         title: 'Error',
-        description: 'Failed to send test email',
+        description: error instanceof Error ? error.message : 'Failed to send test email',
         variant: 'destructive',
       });
+    } finally {
+      setSendingTest(false);
     }
   };
 
   const resetForm = () => {
+    // A new campaign is authored here in full, so the form owns its body.
+    setBodyHydrated(true);
     setFormData({
       name: '',
       subject: '',
@@ -314,7 +355,14 @@ const NewsletterEditor = () => {
 
   const openEditDialog = (campaign: NewsletterCampaign) => {
     setEditingCampaign(campaign);
-    // Parse HTML to extract values (simplified - in production use proper HTML parsing)
+    // THE BODY IS NOT PARSED BACK OUT OF THE SAVED HTML. The form below is
+    // therefore seeded with placeholder headline and CTA text and an EMPTY
+    // body. Saving used to regenerate html_content from that empty form,
+    // which silently destroyed the body, headline and call to action of any
+    // campaign whose name or subject someone edited. bodyHydrated records
+    // that the form does not hold this campaign's body, and the save path
+    // leaves html_content untouched while it is false.
+    setBodyHydrated(false);
     setFormData({
       name: campaign.name,
       subject: campaign.subject,
@@ -356,10 +404,12 @@ const NewsletterEditor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <SiteHeader />
-      
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+    // A dashboard section, not a page. It used to render the public site
+    // header and footer inside the admin shell, which stacked two sticky
+    // headers at the same z-index and put a marketing footer halfway down
+    // the dashboard.
+    <div className="space-y-6">
+      <div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">Newsletter Campaigns</h1>
@@ -425,10 +475,33 @@ const NewsletterEditor = () => {
 
                 <div>
                   <Label>Email Content</Label>
+                  {/* Editing a saved campaign cannot yet show its body back,
+                      so say so rather than presenting an empty box that looks
+                      like the campaign is empty. Saving leaves the stored
+                      body untouched while this notice is showing. */}
+                  {editingCampaign && !bodyHydrated && (
+                    <div className="mb-2 rounded-lg border border-amber-300 bg-amber-50 p-3">
+                      <p className="text-xs font-medium text-amber-900">
+                        The saved body is not shown here
+                      </p>
+                      <p className="mt-1 text-xs text-amber-900">
+                        This campaign already has content. It is kept exactly as it is
+                        unless you type below, so you can safely change the name, subject
+                        or schedule. Typing here replaces the whole body.
+                      </p>
+                    </div>
+                  )}
                   <Textarea
                     value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    placeholder="Write your newsletter content here..."
+                    onChange={(e) => {
+                      // The moment the operator types, the form owns the body
+                      // and the save path writes it.
+                      setBodyHydrated(true);
+                      setFormData({ ...formData, content: e.target.value });
+                    }}
+                    placeholder={editingCampaign && !bodyHydrated
+                      ? 'Type here only if you want to replace the saved body'
+                      : 'Write your newsletter content here...'}
                     rows={8}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
@@ -489,14 +562,14 @@ const NewsletterEditor = () => {
                   <Eye className="h-4 w-4 mr-2" />
                   Preview
                 </Button>
-                <Button variant="outline" onClick={handleSendTestEmail}>
+                <Button variant="outline" onClick={handleSendTestEmail} disabled={saving || sendingTest}>
                   <Send className="h-4 w-4 mr-2" />
                   Send Test
                 </Button>
-                <Button variant="secondary" onClick={() => handleSaveCampaign('draft')}>
-                  Save Draft
+                <Button variant="secondary" onClick={() => handleSaveCampaign('draft')} disabled={saving || sendingTest}>
+                  {saving ? 'Saving...' : 'Save Draft'}
                 </Button>
-                <Button onClick={() => handleSaveCampaign(formData.scheduled_send_time ? 'scheduled' : 'draft')}>
+                <Button onClick={() => handleSaveCampaign(formData.scheduled_send_time ? 'scheduled' : 'draft')} disabled={saving || sendingTest}>
                   <CalendarIcon className="h-4 w-4 mr-2" />
                   {formData.scheduled_send_time ? 'Schedule' : 'Save'}
                 </Button>
@@ -687,7 +760,7 @@ const NewsletterEditor = () => {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
 
       {/* Preview Modal */}
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
@@ -707,8 +780,6 @@ const NewsletterEditor = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      <Footer />
     </div>
   );
 };

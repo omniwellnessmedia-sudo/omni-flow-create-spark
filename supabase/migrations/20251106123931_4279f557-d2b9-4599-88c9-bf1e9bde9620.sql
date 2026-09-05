@@ -32,10 +32,20 @@ CREATE POLICY "Anyone can view brands"
   USING (true);
 
 -- Admins can manage brands
-CREATE POLICY "Admins can manage brands"
-  ON affiliate_brands FOR ALL
-  TO authenticated
-  USING (is_admin(auth.uid()));
+-- Guarded on 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md:
+-- is_admin() is created inside 20251024114906's guarded block, which rolls
+-- back wholesale on a preview branch missing its dependencies.
+DO $brands_admin_guard$
+BEGIN
+  CREATE POLICY "Admins can manage brands"
+    ON affiliate_brands FOR ALL
+    TO authenticated
+    USING (is_admin(auth.uid()));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping brands admin policy, missing dependency: %', SQLERRM;
+END
+$brands_admin_guard$;
 
 -- Create index for faster brand lookups
 CREATE INDEX IF NOT EXISTS idx_affiliate_products_advertiser ON affiliate_products(advertiser_id);
