@@ -25,6 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import OutreachPipeline from "@/components/admin/OutreachPipeline";
 import LeadDrawer, { LeadType } from "@/components/admin/LeadDrawer";
+import ReadFailureNotice from "@/components/admin/ReadFailureNotice";
 
 interface ContactSubmission {
   id: string;
@@ -138,6 +139,7 @@ const AdminLeads = () => {
   // Pipeline + drawer
   const [pipelineFilter, setPipelineFilter] = useState<string>("active");
   const [drawerLead, setDrawerLead] = useState<{ type: LeadType; data: any } | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const activeFilter =
     PIPELINE_FILTERS.find((p) => p.k === pipelineFilter) ?? PIPELINE_FILTERS[PIPELINE_FILTERS.length - 1];
@@ -208,6 +210,7 @@ const AdminLeads = () => {
   }, []);
 
   const fetchLeadsData = async () => {
+    setLoadError(null);
     setLoading(true);
     try {
       const [contactResult, quoteResult] = await Promise.all([
@@ -231,8 +234,14 @@ const AdminLeads = () => {
         pendingQuotes: quoteData.filter((q) => q.status === "pending" || !q.status).length,
       });
     } catch (error) {
+      // A refused read rendered four zero tiles and "No contact submissions
+      // yet", which is a claim about the pipeline rather than about the read.
+      const reason = error instanceof Error ? error.message : "Failed to load leads data";
+      setLoadError(reason);
+      setContacts([]);
+      setQuotes([]);
       console.error("Error fetching leads:", error);
-      toast({ title: "Error", description: "Failed to load leads data", variant: "destructive" });
+      toast({ title: "Error", description: reason, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -513,6 +522,10 @@ const AdminLeads = () => {
 
   return (
     <div className="space-y-6">
+      {loadError && (
+        <ReadFailureNotice what="the leads" reason={loadError} onRetry={fetchLeadsData} />
+      )}
+
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card>

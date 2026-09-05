@@ -34,8 +34,6 @@ import {
   FileText
 } from 'lucide-react';
 import { format } from 'date-fns';
-import SiteHeader from '@/components/SiteHeader';
-import Footer from '@/components/Footer';
 
 interface NewsletterCampaign {
   id: string;
@@ -134,6 +132,9 @@ const NewsletterEditor = () => {
    *  while editing a saved campaign, because the body is not parsed back out
    *  of the stored HTML. See openEditDialog. */
   const [bodyHydrated, setBodyHydrated] = useState(true);
+  /** Guards against a double click inserting the campaign twice. */
+  const [saving, setSaving] = useState(false);
+  const [sendingTest, setSendingTest] = useState(false);
   const [previewHtml, setPreviewHtml] = useState('');
 
   // Form state
@@ -202,6 +203,16 @@ const NewsletterEditor = () => {
   };
 
   const handleSaveCampaign = async (status: 'draft' | 'scheduled' = 'draft') => {
+    if (saving) return;
+    if (!formData.name.trim() || !formData.subject.trim()) {
+      toast({
+        title: 'A campaign needs a name and a subject',
+        description: 'The name is internal; the subject is what recipients see.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    setSaving(true);
     try {
       const campaignData: Record<string, unknown> = {
         name: formData.name,
@@ -247,9 +258,11 @@ const NewsletterEditor = () => {
       console.error('Error saving campaign:', error);
       toast({
         title: 'Error',
-        description: 'Failed to save campaign',
+        description: error instanceof Error ? error.message : 'Failed to save campaign',
         variant: 'destructive',
       });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -276,6 +289,8 @@ const NewsletterEditor = () => {
   };
 
   const handleSendTestEmail = async () => {
+    if (sendingTest) return;
+    setSendingTest(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user?.email) {
@@ -299,9 +314,11 @@ const NewsletterEditor = () => {
       console.error('Error sending test:', error);
       toast({
         title: 'Error',
-        description: 'Failed to send test email',
+        description: error instanceof Error ? error.message : 'Failed to send test email',
         variant: 'destructive',
       });
+    } finally {
+      setSendingTest(false);
     }
   };
 
@@ -373,10 +390,12 @@ const NewsletterEditor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <SiteHeader />
-      
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+    // A dashboard section, not a page. It used to render the public site
+    // header and footer inside the admin shell, which stacked two sticky
+    // headers at the same z-index and put a marketing footer halfway down
+    // the dashboard.
+    <div className="space-y-6">
+      <div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">Newsletter Campaigns</h1>
@@ -529,14 +548,14 @@ const NewsletterEditor = () => {
                   <Eye className="h-4 w-4 mr-2" />
                   Preview
                 </Button>
-                <Button variant="outline" onClick={handleSendTestEmail}>
+                <Button variant="outline" onClick={handleSendTestEmail} disabled={saving || sendingTest}>
                   <Send className="h-4 w-4 mr-2" />
                   Send Test
                 </Button>
-                <Button variant="secondary" onClick={() => handleSaveCampaign('draft')}>
-                  Save Draft
+                <Button variant="secondary" onClick={() => handleSaveCampaign('draft')} disabled={saving || sendingTest}>
+                  {saving ? 'Saving...' : 'Save Draft'}
                 </Button>
-                <Button onClick={() => handleSaveCampaign(formData.scheduled_send_time ? 'scheduled' : 'draft')}>
+                <Button onClick={() => handleSaveCampaign(formData.scheduled_send_time ? 'scheduled' : 'draft')} disabled={saving || sendingTest}>
                   <CalendarIcon className="h-4 w-4 mr-2" />
                   {formData.scheduled_send_time ? 'Schedule' : 'Save'}
                 </Button>
@@ -727,7 +746,7 @@ const NewsletterEditor = () => {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
+      </div>
 
       {/* Preview Modal */}
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
@@ -747,8 +766,6 @@ const NewsletterEditor = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      <Footer />
     </div>
   );
 };

@@ -140,6 +140,23 @@ describe('the audit findings that corrupt data or mail the wrong people', () => 
     expect(src).toContain('The saved body is not shown here');
   });
 
+  it('a newsletter cannot be saved or test mailed twice by a double click', () => {
+    // Save had no in flight guard, so a second click inserted a second draft
+    // of the same campaign, and a second test send mailed the team twice.
+    const src = read('NewsletterEditor.tsx');
+    expect(src).toContain('if (saving) return;');
+    expect(src).toContain('if (sendingTest) return;');
+    expect(src).toContain('disabled={saving || sendingTest}');
+  });
+
+  it('the newsletter editor does not stack a second header inside the dashboard', () => {
+    // It rendered the public SiteHeader and Footer, which put a sticky
+    // marketing header under the admin one and a footer mid dashboard.
+    const src = codeOnly(read('NewsletterEditor.tsx'));
+    expect(src).not.toMatch(/<SiteHeader\b/);
+    expect(src).not.toMatch(/<Footer\b/);
+  });
+
   it('the leads screen no longer mails newsletter subscribers instead of leads', () => {
     // It computed the lead list, discarded it, and queued a newsletter
     // campaign, which the sender delivers to confirmed subscribers.
@@ -279,6 +296,9 @@ describe('a failed read is never presented as having nothing', () => {
     ['AffiliatePayouts.tsx', 'the commissions queue'],
     ['LocalCatalogue.tsx', 'the catalogue'],
     ['SocialScheduler.tsx', 'the scheduled posts'],
+    ['ProductManagement.tsx', 'the product catalogue'],
+    ['AdminLeads.tsx', 'the leads'],
+    ['AdminUWCRecruitment.tsx', 'the recruitment pipeline'],
   ])('%s shows the notice instead of its empty state', (file, what) => {
     const src = read(file);
     expect(src).toContain('ReadFailureNotice');
