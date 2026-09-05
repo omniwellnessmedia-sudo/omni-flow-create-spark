@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Store, Package, TrendingUp, HandCoins, Wrench, ArrowRight } from 'lucide-react';
+import { useSecureUserRole } from '@/hooks/useSecureUserRole';
 
 /**
  * One front door for everything the team sells.
@@ -61,6 +62,12 @@ const MarketplaceHub = () => {
   const [counts, setCounts] = useState<Counts>(EMPTY);
   const [loading, setLoading] = useState(true);
   const [problems, setProblems] = useState<string[]>([]);
+  // This page is reachable by catalogue managers, but every screen in the
+  // Reference row below is gated requireAdmin, including the import tools,
+  // which live inside /admin-dashboard. Showing those links to a catalogue
+  // manager sends them to a full screen "Access Denied" wall for doing
+  // exactly what the page invited them to do.
+  const { isAdmin } = useSecureUserRole();
 
   useEffect(() => {
     let cancelled = false;
@@ -271,6 +278,8 @@ const MarketplaceHub = () => {
             ))}
           </div>
 
+          {isAdmin && (
+          <>
           <h2 className="mt-10 text-sm font-medium">Reference</h2>
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
             {reference.map((item) => (
@@ -285,6 +294,8 @@ const MarketplaceHub = () => {
               </Link>
             ))}
           </div>
+          </>
+          )}
 
           <p className="mt-8 max-w-[70ch] text-xs text-muted-foreground">
             The public shop pages are currently kept out of search results. They come back into

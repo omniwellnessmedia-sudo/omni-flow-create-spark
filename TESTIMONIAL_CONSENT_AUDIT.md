@@ -1,6 +1,6 @@
 # Testimonial Consent Audit
 
-Generated at build time: 2026-09-05T14:16:48.401Z
+Generated at build time: 2026-09-05T14:20:15.027Z
 
 This file is written by scripts/audit-testimonials.mjs on every build.
 It is a visibility tool, not a gate: the publication decision is made

@@ -25,6 +25,10 @@ const AdminAccounting = lazy(() => import("@/pages/admin/AdminAccounting"));
 const SocialScheduler = lazy(() => import("@/pages/admin/SocialScheduler"));
 const NewsletterEditor = lazy(() => import("@/pages/admin/NewsletterEditor"));
 const AdminProviders = lazy(() => import("@/pages/admin/AdminProviders"));
+// Wired up on 5 September 2026: built, working, and previously unreachable.
+const AdminSettings = lazy(() => import("@/pages/admin/AdminSettings"));
+const AdminTours = lazy(() => import("@/pages/admin/AdminTours"));
+const AdminSchedule = lazy(() => import("@/pages/admin/AdminSchedule"));
 
 const SectionLoader = () => (
   <div className="flex items-center justify-center py-16">
@@ -408,6 +412,12 @@ const AdminDashboard = () => {
         return <Suspense fallback={<SectionLoader />}><AdminViatorTours /></Suspense>;
       case "uwc":
         return <Suspense fallback={<SectionLoader />}><AdminUWCRecruitment /></Suspense>;
+      case "settings":
+        return <Suspense fallback={<SectionLoader />}><AdminSettings /></Suspense>;
+      case "local-tours":
+        return <Suspense fallback={<SectionLoader />}><AdminTours /></Suspense>;
+      case "schedule":
+        return <Suspense fallback={<SectionLoader />}><AdminSchedule /></Suspense>;
       case "tools":
         return <Suspense fallback={<SectionLoader />}><AdminTools /></Suspense>;
       default:

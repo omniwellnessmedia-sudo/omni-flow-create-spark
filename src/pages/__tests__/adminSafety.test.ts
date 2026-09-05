@@ -213,3 +213,53 @@ describe('the accounting screen reports money correctly', () => {
     expect(codeOnly(accounting)).not.toMatch(/"\$\{t\.description\}"/);
   });
 });
+
+describe('every built admin screen is reachable', () => {
+  const sidebar = readFileSync(resolve(__dirname, '../../components/dashboard/AdminSidebar.tsx'), 'utf8');
+  const dashboard = readFileSync(resolve(__dirname, '../AdminDashboard.tsx'), 'utf8');
+
+  it('the three orphaned screens have a nav entry and a section', () => {
+    // All three were fully built against live tables and wired to nothing:
+    // no route, no section, no import. AdminSettings holds the feature flag
+    // switches gating public functionality and the Cal.com booking config,
+    // AdminTours is the only editor for the local tours table, and
+    // AdminSchedule owns service_time_slots.
+    for (const [id, component] of [
+      ['settings', 'AdminSettings'],
+      ['local-tours', 'AdminTours'],
+      ['schedule', 'AdminSchedule'],
+    ]) {
+      expect(sidebar, `${id} nav entry`).toContain(`id: "${id}"`);
+      expect(dashboard, `${id} section`).toContain(`case "${id}":`);
+      expect(dashboard, `${component} import`).toContain(`import("@/pages/admin/${component}")`);
+    }
+  });
+
+  it('local tours does not collide with the Viator screen', () => {
+    // "tours" is already bound to AdminViatorTours, which is a different
+    // screen against a different table.
+    expect(sidebar).toContain('id: "tours", label: "Viator"');
+    expect(sidebar).toContain('id: "local-tours"');
+  });
+
+  it('the two routed but unlinked screens have nav entries', () => {
+    expect(sidebar).toContain('href: "/admin/roambuddy-sales"');
+    expect(sidebar).toContain('href: "/admin/roam-marketing"');
+  });
+
+  it('the marketplace hub hides links a catalogue manager cannot open', () => {
+    // Every screen in that Reference row is gated requireAdmin, so showing
+    // them on a catalogue_manager page sent Feroza to an Access Denied wall.
+    const hub = readFileSync(resolve(adminDir, 'MarketplaceHub.tsx'), 'utf8');
+    expect(hub).toContain('useSecureUserRole');
+    expect(hub).toContain('{isAdmin && (');
+  });
+
+  it('the viator sync reports the number it actually synced', () => {
+    // The edge function returns { success, count, tours, image_stats } and
+    // never a cachedTours key, so a successful sync always said zero.
+    const viator = readFileSync(resolve(adminDir, 'AdminViatorTours.tsx'), 'utf8');
+    expect(codeOnly(viator)).not.toContain('cachedTours');
+    expect(viator).toContain('data?.count ?? data?.tours?.length');
+  });
+});
