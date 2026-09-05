@@ -167,6 +167,7 @@ const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
 const ProductCuration = React.lazy(() => import('@/pages/admin/ProductCuration'));
 const MarketplaceHub = React.lazy(() => import('@/pages/admin/MarketplaceHub'));
 const ServiceOfferDetail = React.lazy(() => import('@/pages/ServiceOfferDetail'));
+const Pricing = React.lazy(() => import('@/pages/Pricing'));
 const AdminLayout = React.lazy(() => import('@/components/dashboard/AdminLayout'));
 const EventsIndex = React.lazy(() => import('@/pages/EventsIndex'));
 const EventDetailPage = React.lazy(() => import('@/pages/EventDetail'));
@@ -257,6 +258,7 @@ function App() {
                       stable id, which is also the ?service= value the contact
                       form reads, so an enquiry traces back to its page. */}
                   <Route path="/services/:slug" element={<ServiceOfferDetail />} />
+                  <Route path="/pricing" element={<Pricing />} />
                   {/* Free diagnostic, the top of the funnel for every service page. */}
                   <Route path="/scorecard" element={<Scorecard />} />
                   <Route path="/service/:id" element={<ServiceDetail />} />

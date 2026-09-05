@@ -324,3 +324,26 @@ describe('the service pack handoff did not become a second price source', () => 
     expect(detail).not.toContain('unsplash.com');
   });
 });
+
+describe('the pricing page publishes only rate card figures', () => {
+  const pricing = readFileSync(resolve(__dirname, '../Pricing.tsx'), 'utf8');
+
+  it('writes no price of its own', () => {
+    // Every figure is read from publicRateCard.ts by slug, so a rate change
+    // reaches this page without anyone editing it.
+    expect(pricing).not.toMatch(/R\s?\d/);
+    expect(pricing).toContain('getOffer');
+    expect(pricing).toContain('{t.offer!.price}');
+  });
+
+  it('omits the digital kits until their prices are approved', () => {
+    for (const f of ['R199', 'R349', 'R499', 'R799']) {
+      expect(pricing).not.toContain(f);
+    }
+  });
+
+  it('lists the quoted areas rather than showing them with an empty rate', () => {
+    expect(pricing).toContain('QUOTED_CATEGORIES');
+    expect(pricing).toContain('Quoted on scope');
+  });
+});
