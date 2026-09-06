@@ -278,6 +278,39 @@ describe('marketing carries a working way off the list', () => {
   });
 });
 
+describe('a contact button describes what it actually opens', () => {
+  const srcDir = resolve(__dirname, '../..');
+  const files = [
+    'components/services/spectrum.tsx',
+    'components/FloatingActionDock.tsx',
+    'pages/ServiceOfferDetail.tsx',
+    'pages/Services.tsx',
+  ];
+
+  it('no page hardcodes "WhatsApp us" next to a link it does not control', () => {
+    // The link is a setting now, so a label written by hand can be made
+    // false by an edit in Admin Settings. WhatsappButton derives it.
+    for (const f of files) {
+      const src = codeOnly(readFileSync(resolve(srcDir, f), 'utf8'));
+      expect(src, f).not.toMatch(/>\s*WhatsApp us\s*</);
+    }
+  });
+
+  it('the link is editable without a deploy, and seeded with what shipped', () => {
+    expect(migrations).toContain("'whatsapp_url'");
+    expect(migrations).toContain('CREATE TABLE IF NOT EXISTS public.site_settings');
+    // Public pages render it, so a signed out visitor has to be able to read
+    // it, and only a super admin may change where it points.
+    expect(migrations).toContain('FOR SELECT TO anon, authenticated');
+    expect(migrations).toContain('"Super admin can change settings"');
+  });
+
+  it('a failed settings read keeps the button working', () => {
+    const hook = readFileSync(resolve(srcDir, 'hooks/useSiteSetting.ts'), 'utf8');
+    expect(hook).toContain('if (error || !data) return;');
+  });
+});
+
 describe('every built admin screen is reachable', () => {
   const sidebar = readFileSync(resolve(__dirname, '../../components/dashboard/AdminSidebar.tsx'), 'utf8');
   const dashboard = readFileSync(resolve(__dirname, '../AdminDashboard.tsx'), 'utf8');

@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import { MessageCircle, X, Compass, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IMAGES } from "@/lib/images";
+import { classifyWhatsapp } from "@/lib/whatsapp";
+import { useSiteSetting } from "@/hooks/useSiteSetting";
 
 /**
  * FloatingActionDock — one floating button that expands to a stack of contextual actions.
@@ -32,7 +34,8 @@ const HIDDEN_PATH_PREFIXES = [
 
 const STORAGE_KEY = "omni:floating-dock-hidden";
 
-const WHATSAPP_URL = "https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y";
+/** Fallback only. The live link is site_settings.whatsapp_url. */
+const WHATSAPP_FALLBACK = "https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y";
 
 type Action = {
   id: string;
@@ -54,6 +57,8 @@ export const FloatingActionDock = () => {
   });
 
   // Auto-collapse when the route changes so the dock doesn't stay open across navigations
+  const whatsapp = classifyWhatsapp(useSiteSetting("whatsapp_url", WHATSAPP_FALLBACK));
+
   useEffect(() => { setExpanded(false); }, [location.pathname]);
   useEffect(() => () => { if (spinTimer.current) clearTimeout(spinTimer.current); }, []);
 
@@ -94,9 +99,12 @@ export const FloatingActionDock = () => {
     },
     {
       id: "whatsapp",
-      label: "WhatsApp channel",
+      // Labelled from the link, not hardcoded: a super admin can point this
+      // at a wa.me number, and then it is a way to message us rather than a
+      // channel to follow.
+      label: whatsapp.label,
       icon: MessageCircle,
-      onClick: () => window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer"),
+      onClick: () => window.open(whatsapp.url, "_blank", "noopener,noreferrer"),
       tone: "from-emerald-500 to-emerald-600",
     },
     {

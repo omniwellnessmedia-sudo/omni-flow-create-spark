@@ -103,7 +103,9 @@ describe('the page structure holds the conversion checklist', () => {
     // supplies them, per category otherwise. The section is still required.
     ['objection handling', 'faqs.map'],
     ['commercial terms in plain sight', 'RATE_CARD_TERMS'],
-    ['a way to ask a question', 'WHATSAPP_URL'],
+    // The label is no longer written here. WhatsappButton derives it from
+    // the link, so a channel cannot be presented as a way to message us.
+    ['a way to ask a question', 'WhatsappButton'],
     ['onward navigation to related offers', 'siblings'],
     ['structured data for search', 'application/ld+json'],
     ['a sticky action on small screens', 'fixed inset-x-0 bottom-0'],

@@ -13,7 +13,7 @@ import {
 import { bandImage } from '@/data/serviceImagery';
 import { getServiceDetailContent } from '@/data/serviceDetailContent';
 import { useSEO } from '@/lib/seo';
-import { WHATSAPP_URL } from '@/components/services/spectrum';
+import { WhatsappButton } from '@/components/services/spectrum';
 
 /**
  * One page per offer on the rate card, built to convert.
@@ -133,20 +133,17 @@ const ServiceOfferDetail = () => {
         {offer.cta}
         <ArrowRight className="h-4 w-4" />
       </Link>
-      <a
-        href={WHATSAPP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+      <WhatsappButton
+        source={`service_detail_${offer.slug}`}
+        prefill={`Hi, I would like to ask about ${offer.name}.`}
+        icon={<MessageCircle className="h-4 w-4" />}
         className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-[15px] font-medium"
         style={
           variant === 'dark'
             ? { borderColor: 'rgba(250,248,242,.3)', color: '#FAF8F2' }
             : { borderColor: 'rgba(14,21,19,.18)' }
         }
-      >
-        <MessageCircle className="h-4 w-4" />
-        Ask a question
-      </a>
+      />
     </div>
   );
 

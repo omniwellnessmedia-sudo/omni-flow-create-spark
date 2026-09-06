@@ -17,7 +17,7 @@ import {
   CREAM_2,
   LINE,
   HAIRLINE,
-  WHATSAPP_URL,
+  WhatsappButton,
   mono,
   SpectrumRule,
   Reveal,
@@ -270,16 +270,12 @@ const Services = () => {
               >
                 Request a quotation <ArrowRight className="h-4 w-4" />
               </Link>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackWhatsappClick("services_quotation")}
+              <WhatsappButton
+                source="services_quotation"
+                prefill="Hi, I would like to ask about your services."
                 className="inline-flex items-center rounded-full px-6 py-3 text-[14px] text-wwpl-cream transition-colors hover:bg-white/10"
                 style={{ border: "1px solid rgba(246,241,232,.3)" }}
-              >
-                WhatsApp us
-              </a>
+              />
             </div>
           </div>
         </section>
