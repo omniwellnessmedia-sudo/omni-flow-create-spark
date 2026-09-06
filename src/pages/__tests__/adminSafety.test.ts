@@ -311,6 +311,74 @@ describe('a contact button describes what it actually opens', () => {
   });
 });
 
+describe('the ad counter counts events, not people', () => {
+  const lib = readFileSync(resolve(__dirname, '../../lib/adSlots.ts'), 'utf8');
+  const tile = readFileSync(resolve(__dirname, '../../components/AdTile.tsx'), 'utf8');
+
+  it('records nothing that identifies a visitor', () => {
+    // ad_events is written by anonymous visitors. The moment it carries an
+    // IP, a user agent or a visitor id it stops being a counter and starts
+    // being a tracker, with everything that follows from that.
+    //
+    // Scoped to the ads migration on purpose: other tables in this history
+    // legitimately hold request metadata, and SQL comments are stripped so
+    // the sentence promising none of this does not fail the check.
+    const adsSql = readFileSync(
+      resolve(__dirname, '../../../supabase/migrations/20260906110000_ad_slots.sql'),
+      'utf8'
+    ).replace(/--.*$/gm, '');
+
+    const code = codeOnly(lib) + codeOnly(tile) + adsSql;
+    for (const term of ['ip_address', 'user_agent', 'navigator.userAgent', 'visitor_id', 'fingerprint']) {
+      expect(code, term).not.toContain(term);
+    }
+  });
+
+  it('the path column cannot carry a query string', () => {
+    expect(migrations).toContain('ad_events_path_is_a_path');
+    expect(migrations).toMatch(/path ~ '\^\/\[A-Za-z0-9\/_-\]\*\$'/);
+  });
+
+  it('an anonymous insert must point at a slot that is actually live', () => {
+    // Otherwise a public insert policy is an invitation to fill the table.
+    expect(migrations).toContain('"Anyone can record an event on a live slot"');
+    expect(migrations).toContain("kind IN ('impression', 'click')");
+  });
+
+  it('nobody can edit or delete a count', () => {
+    // There is deliberately no UPDATE or DELETE policy on ad_events.
+    expect(migrations).toContain('No UPDATE or DELETE policy on ad_events');
+  });
+
+  it('a draft or expired slot is not readable by the public', () => {
+    expect(migrations).toContain('"Anyone can read a live slot"');
+    expect(migrations).toContain('starts_at IS NULL OR starts_at <= now()');
+    expect(migrations).toContain('ends_at IS NULL OR ends_at > now()');
+  });
+
+  it('the performance view is read with the caller\'s own permissions', () => {
+    // Without security_invoker the view would hand the public a count the
+    // policy on ad_events refuses them.
+    expect(migrations).toContain('security_invoker = true');
+  });
+
+  it('an impression means the tile was seen, not that it was rendered', () => {
+    expect(tile).toContain('IntersectionObserver');
+    expect(tile).toContain('VISIBLE_MS');
+    expect(tile).toContain('counted.current');
+  });
+
+  it('the tile is labelled as promotional and does not pass link equity', () => {
+    expect(tile).toContain('aria-label="Promotion"');
+    expect(tile).toContain('Promoted');
+    expect(tile).toContain('nofollow sponsored');
+  });
+
+  it('an empty slot renders nothing rather than a placeholder', () => {
+    expect(tile).toContain('if (!slot) return null;');
+  });
+});
+
 describe('every built admin screen is reachable', () => {
   const sidebar = readFileSync(resolve(__dirname, '../../components/dashboard/AdminSidebar.tsx'), 'utf8');
   const dashboard = readFileSync(resolve(__dirname, '../AdminDashboard.tsx'), 'utf8');
