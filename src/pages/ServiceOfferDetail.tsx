@@ -117,7 +117,7 @@ const ServiceOfferDetail = () => {
 
   const hue = offer.hue || band.hue;
   const image = bandImage(band.id);
-  const contactHref = `/contact?service=${offer.slug}`;
+  const contactHref = `/enquire?s=${offer.slug}`;
 
   const Cta = ({ variant }: { variant: 'light' | 'dark' }) => (
     <div className="flex flex-wrap gap-3">

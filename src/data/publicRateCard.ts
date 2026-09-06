@@ -57,7 +57,7 @@ export interface RateCardOffer {
   bullets: string[];
   /** Hex accent from SPECTRUM. */
   hue: string;
-  /** Primary CTA label; routes to /contact?service=<slug>. */
+  /** Primary CTA label; routes to /enquire?s=<slug>. */
   cta: string;
   /** Renders a small footnote under the card. */
   footnote?: string;

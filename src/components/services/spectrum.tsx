@@ -174,7 +174,7 @@ export const OfferCard = ({ offer }: { offer: RateCardOffer }) => (
     )}
     <div className="mt-auto flex flex-wrap items-center gap-3 pt-5" style={{ borderTop: `1px solid ${HAIRLINE}` }}>
       <Link
-        to={`/contact?service=${offer.slug}`}
+        to={`/enquire?s=${offer.slug}`}
         className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13.5px] font-medium text-white transition-transform duration-300 group-hover:scale-[1.02]"
         style={{ background: offer.hue }}
       >

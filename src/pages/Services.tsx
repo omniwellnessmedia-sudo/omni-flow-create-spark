@@ -108,7 +108,7 @@ const Services = () => {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  to="/contact?service=clarity-session"
+                  to="/enquire?s=clarity-session"
                   className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-medium text-white transition-transform hover:scale-[1.02]"
                   style={{ background: INK }}
                 >
@@ -264,7 +264,7 @@ const Services = () => {
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/contact?service=quotation"
+                to="/enquire"
                 className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-medium transition-transform hover:scale-[1.02]"
                 style={{ background: "#F7F3EA", color: INK }}
               >

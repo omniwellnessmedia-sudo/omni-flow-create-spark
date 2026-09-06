@@ -105,6 +105,7 @@ const TermsOfService = React.lazy(() => import('@/pages/TermsOfService'));
 const CookiePolicy = React.lazy(() => import('@/pages/CookiePolicy'));
 const ESGPolicy = React.lazy(() => import('@/pages/ESGPolicy'));
 const Unsubscribe = React.lazy(() => import('@/pages/Unsubscribe'));
+const Enquire = React.lazy(() => import('@/pages/Enquire'));
 const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
 const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
@@ -234,6 +235,7 @@ function App() {
                   <Route path="/cookie-policy" element={<CookiePolicy />} />
                   <Route path="/esg-policy" element={<ESGPolicy />} />
                   <Route path="/unsubscribe" element={<Unsubscribe />} />
+                  <Route path="/enquire" element={<Enquire />} />
                   <Route path="/auth" element={<AuthPage />} />
                   <Route path="/update-password" element={<UpdatePassword />} />
                   <Route path="/upgrade" element={<UpgradePage />} />
