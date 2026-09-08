@@ -10,6 +10,42 @@
 -- Every block is idempotent.
 -- =============================================================================
 
+-- 0. Ensure is_accountant_or_admin exists before anything below uses it.
+-- Added 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md: the
+-- helper is created inside 20260513150000's guarded block, and when that
+-- block hits a missing dashboard-created table on a fresh preview branch
+-- the exception rolls the WHOLE block back, function included. Recreating
+-- it here (identical definition, guarded only on user_roles being absent)
+-- heals the branch; on production CREATE OR REPLACE of the same definition
+-- changes nothing.
+DO $helper_guard$
+BEGIN
+  CREATE OR REPLACE FUNCTION public.is_accountant_or_admin(user_id uuid)
+  RETURNS boolean
+  LANGUAGE sql
+  STABLE
+  SECURITY DEFINER
+  SET search_path = public
+  AS $fn$
+    SELECT EXISTS (
+      SELECT 1
+      FROM public.user_roles ur
+      WHERE ur.user_id = is_accountant_or_admin.user_id
+        AND ur.role::text IN ('accountant', 'admin', 'super_admin')
+    )
+  $fn$;
+
+  GRANT EXECUTE ON FUNCTION public.is_accountant_or_admin(uuid) TO authenticated, anon;
+EXCEPTION
+  -- invalid_function_definition: an existing function whose signature details
+  -- differ (e.g. a parameter name) cannot be replaced; it exists, which is
+  -- all the statements below need, so skip rather than fail.
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function
+    OR invalid_function_definition THEN
+    RAISE NOTICE 'Skipping is_accountant_or_admin recreation: %', SQLERRM;
+END
+$helper_guard$;
+
 -- 1. Entities registry — the master brand list
 CREATE TABLE IF NOT EXISTS public.entities (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -53,12 +89,34 @@ BEGIN
 END $$;
 
 -- 3. Backfill sensible defaults (re-tag later via UI)
-UPDATE public.bookings              SET entity_id = (SELECT id FROM public.entities WHERE slug = 'omni') WHERE entity_id IS NULL;
-UPDATE public.tour_bookings         SET entity_id = (SELECT id FROM public.entities WHERE slug = 'tnt')  WHERE entity_id IS NULL;
-UPDATE public.orders                SET entity_id = (SELECT id FROM public.entities WHERE slug = 'roam') WHERE entity_id IS NULL;
-UPDATE public.affiliate_commissions SET entity_id = (SELECT id FROM public.entities WHERE slug = 'roam') WHERE entity_id IS NULL;
+-- Guarded per table on 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md:
+-- some of these tables are dashboard-created and absent on preview branches;
+-- tables that do exist there still get their backfill.
+DO $backfill_guard$
+DECLARE
+  pair RECORD;
+BEGIN
+  FOR pair IN
+    SELECT * FROM (VALUES
+      ('bookings', 'omni'), ('tour_bookings', 'tnt'),
+      ('orders', 'roam'), ('affiliate_commissions', 'roam')
+    ) AS v(tbl, ent)
+  LOOP
+    IF EXISTS (SELECT 1 FROM information_schema.columns
+               WHERE table_schema = 'public' AND table_name = pair.tbl AND column_name = 'entity_id') THEN
+      EXECUTE format(
+        'UPDATE public.%I SET entity_id = (SELECT id FROM public.entities WHERE slug = %L) WHERE entity_id IS NULL',
+        pair.tbl, pair.ent);
+    END IF;
+  END LOOP;
+END
+$backfill_guard$;
 
 -- 4. Master revenue view — single source of truth for the portfolio dashboard
+-- Guarded: it reads four tables that a preview branch may lack. On
+-- production every table exists and the view is created exactly as before.
+DO $view_guard$
+BEGIN
 CREATE OR REPLACE VIEW public.entity_revenue_summary AS
 WITH bookings_agg AS (
   SELECT entity_id,
@@ -110,27 +168,60 @@ WHERE e.is_active = TRUE
 ORDER BY e.display_order;
 
 GRANT SELECT ON public.entity_revenue_summary TO authenticated;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping entity_revenue_summary view, missing dependency: %', SQLERRM;
+END
+$view_guard$;
 
 -- 5. RLS — accountants + admins get read-only access to the financial tables
---    (reuses the existing is_accountant_or_admin helper; additive to existing policies)
-ALTER TABLE public.tour_bookings ENABLE ROW LEVEL SECURITY;
+--    (reuses the existing is_accountant_or_admin helper; additive to existing
+--    policies). Guarded per table for the same preview-branch reason.
+DO $p1$
+BEGIN
+  DROP POLICY IF EXISTS "Accountants read all bookings" ON public.bookings;
+  CREATE POLICY "Accountants read all bookings"
+    ON public.bookings FOR SELECT TO authenticated
+    USING (public.is_accountant_or_admin(auth.uid()));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping bookings accountant policy, missing dependency: %', SQLERRM;
+END
+$p1$;
 
-DROP POLICY IF EXISTS "Accountants read all bookings" ON public.bookings;
-CREATE POLICY "Accountants read all bookings"
-  ON public.bookings FOR SELECT TO authenticated
-  USING (public.is_accountant_or_admin(auth.uid()));
+DO $p2$
+BEGIN
+  ALTER TABLE public.tour_bookings ENABLE ROW LEVEL SECURITY;
+  DROP POLICY IF EXISTS "Accountants read all tour bookings" ON public.tour_bookings;
+  CREATE POLICY "Accountants read all tour bookings"
+    ON public.tour_bookings FOR SELECT TO authenticated
+    USING (public.is_accountant_or_admin(auth.uid()));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping tour_bookings accountant policy, missing dependency: %', SQLERRM;
+END
+$p2$;
 
-DROP POLICY IF EXISTS "Accountants read all tour bookings" ON public.tour_bookings;
-CREATE POLICY "Accountants read all tour bookings"
-  ON public.tour_bookings FOR SELECT TO authenticated
-  USING (public.is_accountant_or_admin(auth.uid()));
+DO $p3$
+BEGIN
+  DROP POLICY IF EXISTS "Accountants read all orders" ON public.orders;
+  CREATE POLICY "Accountants read all orders"
+    ON public.orders FOR SELECT TO authenticated
+    USING (public.is_accountant_or_admin(auth.uid()));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping orders accountant policy, missing dependency: %', SQLERRM;
+END
+$p3$;
 
-DROP POLICY IF EXISTS "Accountants read all orders" ON public.orders;
-CREATE POLICY "Accountants read all orders"
-  ON public.orders FOR SELECT TO authenticated
-  USING (public.is_accountant_or_admin(auth.uid()));
-
-DROP POLICY IF EXISTS "Accountants read all affiliate" ON public.affiliate_commissions;
-CREATE POLICY "Accountants read all affiliate"
-  ON public.affiliate_commissions FOR SELECT TO authenticated
-  USING (public.is_accountant_or_admin(auth.uid()));
+DO $p4$
+BEGIN
+  DROP POLICY IF EXISTS "Accountants read all affiliate" ON public.affiliate_commissions;
+  CREATE POLICY "Accountants read all affiliate"
+    ON public.affiliate_commissions FOR SELECT TO authenticated
+    USING (public.is_accountant_or_admin(auth.uid()));
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping affiliate accountant policy, missing dependency: %', SQLERRM;
+END
+$p4$;

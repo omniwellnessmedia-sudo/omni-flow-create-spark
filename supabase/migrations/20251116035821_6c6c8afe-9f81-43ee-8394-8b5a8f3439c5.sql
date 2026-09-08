@@ -56,10 +56,19 @@ CREATE TRIGGER audit_user_roles
   AFTER INSERT OR UPDATE OR DELETE ON public.user_roles
   FOR EACH ROW EXECUTE FUNCTION log_admin_action();
 
-CREATE TRIGGER audit_orders_status
-  AFTER UPDATE ON public.orders
-  FOR EACH ROW 
-  WHEN (OLD.status IS DISTINCT FROM NEW.status)
-  EXECUTE FUNCTION log_admin_action();
+-- Guarded on 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md:
+-- public.orders is dashboard-created and absent on fresh preview branches.
+DO $orders_trigger_guard$
+BEGIN
+  CREATE TRIGGER audit_orders_status
+    AFTER UPDATE ON public.orders
+    FOR EACH ROW
+    WHEN (OLD.status IS DISTINCT FROM NEW.status)
+    EXECUTE FUNCTION log_admin_action();
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping orders audit trigger, missing dependency: %', SQLERRM;
+END
+$orders_trigger_guard$;
 
 COMMENT ON TABLE public.audit_logs IS 'Comprehensive audit trail for admin actions and sensitive data changes';

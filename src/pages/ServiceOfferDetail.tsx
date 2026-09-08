@@ -11,8 +11,9 @@ import {
   RATE_CARD_TERMS,
 } from '@/data/publicRateCard';
 import { bandImage } from '@/data/serviceImagery';
+import { getServiceDetailContent } from '@/data/serviceDetailContent';
 import { useSEO } from '@/lib/seo';
-import { WHATSAPP_URL } from '@/components/services/spectrum';
+import { WhatsappButton } from '@/components/services/spectrum';
 
 /**
  * One page per offer on the rate card, built to convert.
@@ -49,6 +50,14 @@ const ServiceOfferDetail = () => {
   const band = getBandForOffer(slug);
   const sales = getBandSales(band?.id);
   const siblings = slug ? getSiblingOffers(slug) : [];
+  // Per service content beats the per category fallback: BAND_SALES answers
+  // the same three questions for every offer in a category, which is not what
+  // a buyer looking at one offer needs.
+  const detail = getServiceDetailContent(slug);
+  const audience = detail?.audience?.length ? detail.audience : sales?.forYouIf ?? [];
+  const faqs = detail?.faqs?.length
+    ? detail.faqs.map((f) => ({ q: f.question, a: f.answer }))
+    : sales?.faqs ?? [];
 
   useSEO({
     title: offer
@@ -85,10 +94,10 @@ const ServiceOfferDetail = () => {
         },
       },
     ];
-    if (sales?.faqs?.length) {
+    if (faqs.length) {
       graph.push({
         '@type': 'FAQPage',
-        mainEntity: sales.faqs.map((f) => ({
+        mainEntity: faqs.map((f) => ({
           '@type': 'Question',
           name: f.q,
           acceptedAnswer: { '@type': 'Answer', text: f.a },
@@ -102,13 +111,13 @@ const ServiceOfferDetail = () => {
     return () => {
       el.remove();
     };
-  }, [offer, band, sales]);
+  }, [offer, band, sales, faqs]);
 
   if (!offer || !band) return <Navigate to="/services" replace />;
 
   const hue = offer.hue || band.hue;
   const image = bandImage(band.id);
-  const contactHref = `/contact?service=${offer.slug}`;
+  const contactHref = `/enquire?s=${offer.slug}`;
 
   const Cta = ({ variant }: { variant: 'light' | 'dark' }) => (
     <div className="flex flex-wrap gap-3">
@@ -124,20 +133,17 @@ const ServiceOfferDetail = () => {
         {offer.cta}
         <ArrowRight className="h-4 w-4" />
       </Link>
-      <a
-        href={WHATSAPP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+      <WhatsappButton
+        source={`service_detail_${offer.slug}`}
+        prefill={`Hi, I would like to ask about ${offer.name}.`}
+        icon={<MessageCircle className="h-4 w-4" />}
         className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-[15px] font-medium"
         style={
           variant === 'dark'
             ? { borderColor: 'rgba(250,248,242,.3)', color: '#FAF8F2' }
             : { borderColor: 'rgba(14,21,19,.18)' }
         }
-      >
-        <MessageCircle className="h-4 w-4" />
-        Ask a question
-      </a>
+      />
     </div>
   );
 
@@ -166,9 +172,30 @@ const ServiceOfferDetail = () => {
                 {band.eyebrow}
               </p>
 
-              <h1 className="mt-3 font-wwpl-display text-4xl font-medium leading-[1.08] md:text-[52px]">
-                {offer.name}
-              </h1>
+              {/* The outcome, not the product name, is the headline where the
+                  handoff supplies one: a buyer scanning wants to know what
+                  changes for them. The offer name stays directly beneath, so
+                  the page still names what it sells. */}
+              {detail?.headline ? (
+                <>
+                  <h1 className="mt-3 font-wwpl-display text-4xl font-medium leading-[1.08] md:text-[52px]">
+                    {detail.headline}{' '}
+                    {detail.accent && (
+                      <em style={{ color: '#C9B68E' }}>{detail.accent}</em>
+                    )}
+                  </h1>
+                  <p
+                    className="mt-3 text-[13px] uppercase tracking-[.14em] text-muted-foreground"
+                    style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+                  >
+                    {offer.name}
+                  </p>
+                </>
+              ) : (
+                <h1 className="mt-3 font-wwpl-display text-4xl font-medium leading-[1.08] md:text-[52px]">
+                  {offer.name}
+                </h1>
+              )}
 
               <p className="mt-4 max-w-[54ch] text-lg text-muted-foreground">{offer.blurb}</p>
 
@@ -271,7 +298,7 @@ const ServiceOfferDetail = () => {
             </section>
           )}
 
-          {sales && (
+          {(sales || detail) && (
             <>
               {/* Qualification. Saying who this is not for is the part that
                   earns the trust the rest of the page spends. */}
@@ -279,7 +306,7 @@ const ServiceOfferDetail = () => {
                 <div className="rounded-2xl border bg-white/70 p-6" style={{ borderColor: 'rgba(14,21,19,.09)' }}>
                   <h2 className="font-wwpl-display text-2xl font-medium">This is for you if</h2>
                   <ul className="mt-4 space-y-2.5">
-                    {sales.forYouIf.map((t) => (
+                    {audience.map((t) => (
                       <li key={t} className="flex items-start gap-3 text-[15px]">
                         <Check className="mt-[3px] h-4 w-4 shrink-0" style={{ color: hue }} aria-hidden="true" />
                         <span>{t}</span>
@@ -287,6 +314,7 @@ const ServiceOfferDetail = () => {
                     ))}
                   </ul>
                 </div>
+                {sales && sales.notForYouIf.length > 0 && (
                 <div className="rounded-2xl border p-6" style={{ borderColor: 'rgba(14,21,19,.09)' }}>
                   <h2 className="font-wwpl-display text-2xl font-medium">This is not for you if</h2>
                   <ul className="mt-4 space-y-2.5">
@@ -298,8 +326,10 @@ const ServiceOfferDetail = () => {
                     ))}
                   </ul>
                 </div>
+                )}
               </section>
 
+              {sales && sales.process.length > 0 && (
               <section className="mt-16">
                 <h2 className="font-wwpl-display text-3xl font-medium">What happens next</h2>
                 <ol className="mt-6 space-y-4">
@@ -320,11 +350,13 @@ const ServiceOfferDetail = () => {
                   ))}
                 </ol>
               </section>
+              )}
 
+              {faqs.length > 0 && (
               <section className="mt-16">
                 <h2 className="font-wwpl-display text-3xl font-medium">Questions people ask</h2>
                 <div className="mt-5 divide-y" style={{ borderColor: 'rgba(14,21,19,.09)' }}>
-                  {sales.faqs.map((f) => (
+                  {faqs.map((f) => (
                     <details key={f.q} className="group py-4">
                       <summary className="cursor-pointer list-none text-[16px] font-medium marker:hidden">
                         <span className="flex items-start justify-between gap-4">
@@ -343,6 +375,7 @@ const ServiceOfferDetail = () => {
                   ))}
                 </div>
               </section>
+              )}
             </>
           )}
 

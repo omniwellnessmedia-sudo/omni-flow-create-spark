@@ -99,7 +99,15 @@ export default function AdminViatorTours() {
 
       if (error) throw error;
 
-      toast.success(`Synced ${data?.cachedTours?.length || 0} tours from Viator`);
+      // The function returns { success, count, tours, image_stats }. It has
+      // never returned a cachedTours key, so this read was always undefined
+      // and a fully successful sync reported "Synced 0 tours from Viator".
+      const synced = data?.count ?? data?.tours?.length ?? 0;
+      toast.success(
+        synced > 0
+          ? `Synced ${synced} tours from Viator`
+          : 'Viator returned no tours for this search'
+      );
       fetchTours();
     } catch (error) {
       console.error('Error syncing tours:', error);

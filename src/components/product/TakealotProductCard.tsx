@@ -25,6 +25,8 @@ interface TakealotProductCardProps {
     rating?: number;
     review_count?: number;
     sale_price_zar?: number;
+    brand?: string;
+    advertiser_name?: string;
   };
   showQuickView?: boolean;
 }
@@ -61,6 +63,10 @@ export const TakealotProductCard = ({ product, showQuickView = true }: TakealotP
 
   const displayPrice = product.sale_price_zar || product.price_zar;
   const commissionAmount = Math.round(displayPrice * product.commission_rate);
+  // Who the shopper is actually buying from. Omni lists; the seller sells.
+  // Saying so on every card is the difference between a curated directory
+  // and a store pretending to hold stock it does not.
+  const seller = product.advertiser_name || product.brand;
 
   return (
     <Card 
@@ -193,7 +199,7 @@ export const TakealotProductCard = ({ product, showQuickView = true }: TakealotP
 
           {/* CTA Button */}
           <Link to={`/store/product/${product.id}`}>
-            <Button 
+            <Button
               className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all"
               size="sm"
             >
@@ -201,6 +207,12 @@ export const TakealotProductCard = ({ product, showQuickView = true }: TakealotP
               {isAffiliate ? 'Get Affiliate Link' : 'View Product'}
             </Button>
           </Link>
+
+          {/* Seller attribution. Omni is never the seller here, and the card
+              must not create that impression. */}
+          <p className="mt-2 text-center text-[11px] leading-snug text-muted-foreground">
+            {seller ? `Sold by ${seller}. ` : ''}You buy on the seller's own site.
+          </p>
         </div>
       </CardContent>
     </Card>

@@ -1,15 +1,33 @@
 -- Fix RLS policies for newsletter_subscribers to allow upsert
-CREATE POLICY "Allow public update on newsletter_subscribers" 
-ON public.newsletter_subscribers 
-FOR UPDATE 
-USING (true) 
-WITH CHECK (true);
+-- Exception-guarded on 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md:
+-- newsletter_subscribers has no CREATE migration (dashboard-created), so a
+-- fresh preview branch replay must skip this rather than fail. On production
+-- the table exists and the policy is created exactly as before.
+DO $newsletter_policy_guard$
+BEGIN
+  CREATE POLICY "Allow public update on newsletter_subscribers"
+  ON public.newsletter_subscribers
+  FOR UPDATE
+  USING (true)
+  WITH CHECK (true);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping newsletter_subscribers policy, missing dependency: %', SQLERRM;
+END
+$newsletter_policy_guard$;
 
 -- Fix RLS policies for chatbot_conversations to allow upsert
-CREATE POLICY "Allow public update on chatbot_conversations" 
-ON public.chatbot_conversations 
-FOR UPDATE 
-USING (true);
+DO $chatbot_policy_guard$
+BEGIN
+  CREATE POLICY "Allow public update on chatbot_conversations"
+  ON public.chatbot_conversations
+  FOR UPDATE
+  USING (true);
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function OR duplicate_object THEN
+    RAISE NOTICE 'Skipping chatbot_conversations policy, missing dependency or duplicate: %', SQLERRM;
+END
+$chatbot_policy_guard$;
 
 -- Create discount_codes table for coupon system
 CREATE TABLE public.discount_codes (
@@ -57,8 +75,16 @@ INSERT INTO public.discount_codes (code, discount_type, discount_value, wellcoin
 ('OMNI25', 'percentage', 25, 25, 'VIP/launch discount code', now() + interval '6 months'),
 ('FIRSTTRIP', 'percentage', 20, 20, 'First-time travelers discount', now() + interval '1 year');
 
--- Create trigger for updating updated_at
-CREATE TRIGGER update_discount_codes_updated_at
-BEFORE UPDATE ON public.discount_codes
-FOR EACH ROW
-EXECUTE FUNCTION public.update_updated_at_column();
+-- Create trigger for updating updated_at. Guarded: update_updated_at_column
+-- comes from an earlier migration a preview branch may have skipped.
+DO $discount_trigger_guard$
+BEGIN
+  CREATE TRIGGER update_discount_codes_updated_at
+  BEFORE UPDATE ON public.discount_codes
+  FOR EACH ROW
+  EXECUTE FUNCTION public.update_updated_at_column();
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping discount_codes trigger, missing dependency: %', SQLERRM;
+END
+$discount_trigger_guard$;

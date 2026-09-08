@@ -17,7 +17,7 @@ import {
   CREAM_2,
   LINE,
   HAIRLINE,
-  WHATSAPP_URL,
+  WhatsappButton,
   mono,
   SpectrumRule,
   Reveal,
@@ -108,7 +108,7 @@ const Services = () => {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  to="/contact?service=clarity-session"
+                  to="/enquire?s=clarity-session"
                   className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-medium text-white transition-transform hover:scale-[1.02]"
                   style={{ background: INK }}
                 >
@@ -191,13 +191,33 @@ const Services = () => {
                         )}
                       </div>
                     </div>
-                    {image && (
-                      <figure className="hidden overflow-hidden rounded-[16px] md:block" style={{ border: `1px solid ${LINE}` }}>
-                        <img src={image.src} alt={image.alt} loading="lazy" className="h-[110px] w-[220px] object-cover" />
-                      </figure>
-                    )}
                   </div>
                 </Reveal>
+                {/* One wide photograph per band, treated like the hero figure.
+                    These used to render as 220x110 thumbnails floating beside
+                    the heading, which read as broken layout on the 31 August
+                    smoke test. A band image is structural or it is absent. */}
+                {image && (
+                  <Reveal delay={60}>
+                    <figure
+                      className="relative mt-8 overflow-hidden rounded-[22px]"
+                      style={{ border: `1px solid ${LINE}` }}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        loading="lazy"
+                        className="h-[180px] w-full object-cover sm:h-[240px]"
+                      />
+                      <figcaption
+                        className="absolute bottom-3 left-3 rounded-full bg-black/45 px-4 py-1.5 text-[11px] uppercase tracking-[.16em] text-white backdrop-blur-sm"
+                        style={mono}
+                      >
+                        {image.alt}
+                      </figcaption>
+                    </figure>
+                  </Reveal>
+                )}
                 <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                   {band.offers.map((o, j) => (
                     <Reveal key={o.slug} delay={j * 90} className={o.wide ? "h-full md:col-span-2 xl:col-span-3" : "h-full"}>
@@ -244,22 +264,18 @@ const Services = () => {
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/contact?service=quotation"
+                to="/enquire"
                 className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-medium transition-transform hover:scale-[1.02]"
                 style={{ background: "#F7F3EA", color: INK }}
               >
                 Request a quotation <ArrowRight className="h-4 w-4" />
               </Link>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackWhatsappClick("services_quotation")}
+              <WhatsappButton
+                source="services_quotation"
+                prefill="Hi, I would like to ask about your services."
                 className="inline-flex items-center rounded-full px-6 py-3 text-[14px] text-wwpl-cream transition-colors hover:bg-white/10"
                 style={{ border: "1px solid rgba(246,241,232,.3)" }}
-              >
-                WhatsApp us
-              </a>
+              />
             </div>
           </div>
         </section>

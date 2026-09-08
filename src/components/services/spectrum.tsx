@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { SPECTRUM, type RateCardOffer } from "@/data/publicRateCard";
 import { trackWhatsappClick } from "@/lib/analytics";
+import { classifyWhatsapp, whatsappHref, type WhatsappLink } from "@/lib/whatsapp";
+import { useSiteSetting } from "@/hooks/useSiteSetting";
 
 /**
  * Spectrum System primitives, light edition.
@@ -23,7 +25,55 @@ export const CREAM_2 = "#F4EFE5";
 export const LINE = "rgba(21,32,31,.12)";
 export const HAIRLINE = "rgba(21,32,31,.07)";
 
+/**
+ * What the site shipped with, and what renders if the setting cannot be
+ * read. The live value comes from site_settings.whatsapp_url, which a
+ * super admin edits in Admin Settings.
+ */
 export const WHATSAPP_URL = "https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y";
+
+/** The current WhatsApp link, classified so a button cannot mislabel it. */
+export const useWhatsappLink = (): WhatsappLink =>
+  classifyWhatsapp(useSiteSetting("whatsapp_url", WHATSAPP_URL));
+
+/**
+ * The one WhatsApp button.
+ *
+ * Its label comes from the link, not from the caller, because the link is
+ * now editable and a hardcoded "WhatsApp us" over a broadcast channel is
+ * exactly the defect this replaces. The prefilled message is attached only
+ * when the link can actually carry one.
+ */
+export const WhatsappButton = ({
+  source,
+  prefill,
+  icon,
+  className = "",
+  style,
+}: {
+  source: string;
+  prefill?: string;
+  icon?: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+}) => {
+  const link = useWhatsappLink();
+  if (!link.url) return null;
+
+  return (
+    <a
+      href={whatsappHref(link, prefill)}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => trackWhatsappClick(source)}
+      className={className}
+      style={style}
+    >
+      {icon}
+      {link.label}
+    </a>
+  );
+};
 
 export const mono: CSSProperties = {
   fontFamily: '"JetBrains Mono", ui-monospace, monospace',
@@ -124,23 +174,19 @@ export const OfferCard = ({ offer }: { offer: RateCardOffer }) => (
     )}
     <div className="mt-auto flex flex-wrap items-center gap-3 pt-5" style={{ borderTop: `1px solid ${HAIRLINE}` }}>
       <Link
-        to={`/contact?service=${offer.slug}`}
+        to={`/enquire?s=${offer.slug}`}
         className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13.5px] font-medium text-white transition-transform duration-300 group-hover:scale-[1.02]"
         style={{ background: offer.hue }}
       >
         {offer.cta} <ArrowRight className="h-3.5 w-3.5" />
       </Link>
       {offer.whatsapp && (
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => trackWhatsappClick(`services_${offer.slug}`)}
+        <WhatsappButton
+          source={`services_${offer.slug}`}
+          prefill={`Hi, I would like to ask about ${offer.name}.`}
           className="inline-flex items-center rounded-full px-5 py-2.5 text-[13.5px] transition-colors hover:bg-black/5"
           style={{ border: `1px solid ${LINE}`, color: INK }}
-        >
-          WhatsApp us
-        </a>
+        />
       )}
       <Link
         to={`/services/${offer.slug}`}

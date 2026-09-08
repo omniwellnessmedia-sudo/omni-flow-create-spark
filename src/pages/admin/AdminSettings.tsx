@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useFeatureFlags, FeatureFlag } from "@/hooks/useFeatureFlags";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import WhatsappLinkSetting from "@/components/admin/WhatsappLinkSetting";
 import { 
   Settings, 
   Calendar, 
@@ -144,6 +145,8 @@ export const AdminSettings = () => {
 
   return (
     <div className="space-y-6">
+      <WhatsappLinkSetting />
+
       {/* Feature Flags Section */}
       <Card>
         <CardHeader>

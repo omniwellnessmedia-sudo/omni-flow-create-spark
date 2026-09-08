@@ -44,7 +44,11 @@ The page carries the figure 306 in two places. The proof band states it fully qu
 
 ## 5. Names, quotes and likenesses rendered without a traceable consent record
 
-A five-way parallel audit swept the repository and each finding was then independently verified (187 raw findings; 115 verified confirmed, 24 rejected as false positives and excluded below, 48 whose verification pass was cut short by session limits, marked "sweep only"). The confirmed picture, most severe first:
+A five-way parallel audit swept the repository and each finding was then independently verified. The audit ran twice: the first pass lost 48 verifications to a session limit, and a resumed pass (27 August) replayed the completed work from cache and re-ran the remainder, losing a further tranche to a model limit.
+
+Final position across both passes: 187 raw findings, 151 independently verified, 36 still unverified. Of those 36, nineteen concern the two ceremony files deleted on this branch, so they are moot: the files no longer exist in the repository. The remaining seventeen all correspond to findings already documented in this section from their sweep evidence, and are marked "sweep only" where they appear.
+
+The confirmed picture, most severe first:
 
 ### 5.1 Publicly served internal ceremony files (most severe)
 
@@ -79,6 +83,17 @@ No testimonial record for Toni exists anywhere; the sweep confirmed zero quote a
 The sweep confirmed invented quotes attributed to plausible-sounding people rendering as social proof on public routes: `src/components/sections/TestimonialsSection.tsx` (homepage testimonials with names and titles), `src/data/roamBuddyProducts.ts` (three), `src/pages/tours/OmniWellnessRetreat.tsx` and `src/pages/experiences/CartHorseUrbanWellness.tsx` (sample testimonials with names), `src/components/product/ReviewSystem.tsx`, and a seeded database migration (`supabase/migrations/20250710090731...sql`). One invented testimonial attaches a real university's name to a fictitious research fellow. Separately, `src/data/curatorTips.ts` renders scripted first-person quotes in team members' real names and photos. None of these carried consent records because the people are invented, which is the inverse problem: fabricated social proof on a commercial site.
 
 REMEDIATED on this branch (approved 26 August): the homepage and tours testimonial section, the conscious media infrastructure testimonials, the RoamBuddy traveller stories (component and data export) and the invented named blocks on the wine country retreat, cart horse and corporate retreat pages are all removed. The one quote credited to a real person is a strong candidate for the consent register: with her written permission it can return, attributed, through the gate. Left in place and flagged only: the curator tips (scripted site voice in real team members' names, a team decision), the seeded database migration (dormant unless that table is populated), and provider supplied profile content, which is traceable to the provider who submitted it.
+
+### 5.6b Fabricated community events, including a false partnership claim (NEW, awaiting a decision)
+
+`src/data/communityEvents.ts` contains five entirely invented events, and its own header states the intent plainly: "sample data for now, anchored on the current month so the calendar always looks live". Because the dates are computed from the current month, the calendar perpetually advertises upcoming events that do not exist. They render on the public `/community/events` page, which is listed in the sitemap, and in the admin dashboard calendar widget.
+
+Two distinct problems:
+
+1. The site publicly advertises events at named real locations (Hanover Park, Sea Point Promenade, Khayelitsha Community Garden) that are not happening. A member of the public could act on one.
+2. The "Community Food Drive" entry states it runs "in partnership with the Dr Phil Afel Foundation". That is a claimed partnership with a real organisation, attached to an event that does not exist.
+
+This is the same class as the fabricated testimonials removed on this branch, and the recommended remedy is the same: empty the sample array so the page and widget render their honest empty states, and repopulate from real events (or the planned `community_events` table) when they exist. Not actioned here because it changes what a live public page advertises, which is a business decision rather than a governance defect I should settle alone. One instruction switches it on.
 
 ### 5.7 This branch's own residual disclosure (flagged by the audit, by design of the brief)
 

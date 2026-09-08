@@ -1,3 +1,11 @@
+-- Exception-guarded per statement on 4 September 2026 per
+-- docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md: fresh Supabase preview branches
+-- are missing dashboard-created tables, so statements referencing them skip
+-- with a NOTICE instead of failing the replay. On production every object
+-- exists and every statement runs exactly as before.
+
+DO $g1$
+BEGIN
 -- POPIA consent capture on contact submissions.
 --
 -- An enquiry is not consent to be marketed to. Only an explicitly ticked,
@@ -10,17 +18,50 @@
 
 ALTER TABLE public.contact_submissions
   ADD COLUMN IF NOT EXISTS marketing_consent BOOLEAN NOT NULL DEFAULT false;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g1$;
 
+DO $g2$
+BEGIN
 ALTER TABLE public.contact_submissions
   ADD COLUMN IF NOT EXISTS marketing_consent_at TIMESTAMP WITH TIME ZONE;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g2$;
 
+DO $g3$
+BEGIN
 COMMENT ON COLUMN public.contact_submissions.marketing_consent IS
   'TRUE only when the sender explicitly ticked the optional marketing opt-in. Never set this from the act of enquiring.';
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g3$;
 
+DO $g4$
+BEGIN
 COMMENT ON COLUMN public.contact_submissions.marketing_consent_at IS
   'Timestamp the consent was given. NULL when marketing_consent is false.';
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g4$;
 
+DO $g5$
+BEGIN
 -- Only rows carrying real consent may be selected for marketing sends.
 CREATE INDEX IF NOT EXISTS contact_submissions_marketing_consent_idx
   ON public.contact_submissions (marketing_consent)
   WHERE marketing_consent = true;
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded statement, missing dependency: %', SQLERRM;
+END
+$g5$;

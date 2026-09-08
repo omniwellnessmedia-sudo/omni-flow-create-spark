@@ -25,6 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import OutreachPipeline from "@/components/admin/OutreachPipeline";
 import LeadDrawer, { LeadType } from "@/components/admin/LeadDrawer";
+import ReadFailureNotice from "@/components/admin/ReadFailureNotice";
 
 interface ContactSubmission {
   id: string;
@@ -138,6 +139,7 @@ const AdminLeads = () => {
   // Pipeline + drawer
   const [pipelineFilter, setPipelineFilter] = useState<string>("active");
   const [drawerLead, setDrawerLead] = useState<{ type: LeadType; data: any } | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const activeFilter =
     PIPELINE_FILTERS.find((p) => p.k === pipelineFilter) ?? PIPELINE_FILTERS[PIPELINE_FILTERS.length - 1];
@@ -208,6 +210,7 @@ const AdminLeads = () => {
   }, []);
 
   const fetchLeadsData = async () => {
+    setLoadError(null);
     setLoading(true);
     try {
       const [contactResult, quoteResult] = await Promise.all([
@@ -231,8 +234,14 @@ const AdminLeads = () => {
         pendingQuotes: quoteData.filter((q) => q.status === "pending" || !q.status).length,
       });
     } catch (error) {
+      // A refused read rendered four zero tiles and "No contact submissions
+      // yet", which is a claim about the pipeline rather than about the read.
+      const reason = error instanceof Error ? error.message : "Failed to load leads data";
+      setLoadError(reason);
+      setContacts([]);
+      setQuotes([]);
       console.error("Error fetching leads:", error);
-      toast({ title: "Error", description: "Failed to load leads data", variant: "destructive" });
+      toast({ title: "Error", description: reason, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -318,6 +327,27 @@ const AdminLeads = () => {
     });
   };
 
+  /**
+   * Mail the selected leads.
+   *
+   * WHAT THIS USED TO DO, AND WHY IT WAS DANGEROUS. It computed the recipient
+   * list from the filters on this screen, threw that list away, and inserted a
+   * row into newsletter_campaigns with status "scheduled" and a send time of
+   * now. The newsletter sender delivers campaigns to CONFIRMED NEWSLETTER
+   * SUBSCRIBERS, which is a different audience entirely, while the toast
+   * reported the lead count and said those leads had been mailed. So the wrong
+   * people received it, the intended people did not, and nothing on screen
+   * said so.
+   *
+   * Nothing in the current schema or edge functions can mail an arbitrary
+   * list of addresses, so this no longer pretends to. It hands the addresses
+   * to the operator's own mail client, which does reach exactly the people
+   * listed, and copies them to the clipboard for anything larger than a mail
+   * client will accept in a URL. When a send-lead-email function exists this
+   * becomes a single call and the clipboard path can go.
+   */
+  const MAILTO_LIMIT = 1800;
+
   const sendMassEmail = async () => {
     if (!emailData.subject.trim() || !emailData.message.trim()) {
       toast({ title: "Error", description: "Subject and message are required", variant: "destructive" });
@@ -332,55 +362,54 @@ const AdminLeads = () => {
 
     setSending(true);
     try {
-      // Use the existing newsletter edge function pattern — send via Supabase
-      // Create a campaign-style send using the newsletter infrastructure
-      const { error } = await supabase.from("newsletter_campaigns").insert({
-        name: `Lead Email: ${emailData.subject}`,
-        subject: emailData.subject,
-        html_content: generateEmailHtml(emailData.subject, emailData.message),
-        status: "scheduled",
-        scheduled_send_time: new Date().toISOString(),
-        from_name: "Omni Wellness Media",
-        from_email: "hello@omniwellnessmedia.co.za",
-      });
+      const addresses = Array.from(new Set(recipients.map((r) => r.email).filter(Boolean)));
+      const list = addresses.join(", ");
 
-      if (error) throw error;
+      // The addresses go to the clipboard either way, so a long list is never
+      // lost to a URL length limit.
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(list);
+        copied = true;
+      } catch {
+        copied = false;
+      }
 
-      toast({
-        title: "Email queued",
-        description: `Email will be sent to ${recipients.length} recipients via the newsletter system`,
-      });
+      const mailto =
+        `mailto:?bcc=${encodeURIComponent(list)}` +
+        `&subject=${encodeURIComponent(emailData.subject)}` +
+        `&body=${encodeURIComponent(emailData.message)}`;
+
+      if (mailto.length <= MAILTO_LIMIT) {
+        window.location.href = mailto;
+        toast({
+          title: `Opening your mail client with ${addresses.length} recipients`,
+          description: "They are on BCC. Check the draft, then send it yourself.",
+        });
+      } else {
+        toast({
+          title: copied
+            ? `${addresses.length} addresses copied to your clipboard`
+            : `${addresses.length} recipients, too many for one mail link`,
+          description: copied
+            ? "Paste them into the BCC field of a new email. The list is too long for a mail link."
+            : "Select fewer leads, or copy the addresses from the list below.",
+          variant: copied ? undefined : "destructive",
+        });
+      }
+
       setShowEmailDialog(false);
       setEmailData({ subject: "", message: "", sendTo: "all" });
       setSelectMode(false);
       setSelectedEmails(new Set());
     } catch (error) {
-      console.error("Error sending mass email:", error);
-      toast({ title: "Error", description: "Failed to queue email", variant: "destructive" });
+      console.error("Error preparing lead email:", error);
+      toast({ title: "Error", description: "Could not prepare the email", variant: "destructive" });
     } finally {
       setSending(false);
     }
   };
 
-  const generateEmailHtml = (subject: string, message: string) => {
-    return `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f4f4f5}
-.container{max-width:600px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;margin-top:20px;margin-bottom:20px}
-.header{background:linear-gradient(135deg,#7c3aed,#2563eb,#0891b2);padding:32px;text-align:center}
-.header h1{color:#fff;margin:0;font-size:24px}
-.body{padding:32px}
-.body p{color:#374151;line-height:1.7;font-size:15px;margin:0 0 16px}
-.footer{padding:24px 32px;background:#f9fafb;text-align:center;font-size:12px;color:#9ca3af}
-</style></head><body>
-<div class="container">
-<div class="header"><h1>${subject}</h1></div>
-<div class="body">${message.split("\n").map((p) => `<p>${p}</p>`).join("")}</div>
-<div class="footer">
-<p>Omni Wellness Media | omniwellnessmedia.co.za</p>
-<p>You received this because you contacted us. <a href="mailto:hello@omniwellnessmedia.co.za">Unsubscribe</a></p>
-</div></div></body></html>`;
-  };
 
   const toggleEmailSelection = (email: string) => {
     const next = new Set(selectedEmails);
@@ -493,6 +522,10 @@ const AdminLeads = () => {
 
   return (
     <div className="space-y-6">
+      {loadError && (
+        <ReadFailureNotice what="the leads" reason={loadError} onRetry={fetchLeadsData} />
+      )}
+
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card>
@@ -715,7 +748,7 @@ const AdminLeads = () => {
                 <Button variant="outline" onClick={() => setShowEmailDialog(false)}>Cancel</Button>
                 <Button onClick={sendMassEmail} disabled={sending}>
                   {sending ? <RefreshCw className="h-4 w-4 animate-spin mr-1" /> : <Send className="h-4 w-4 mr-1" />}
-                  {sending ? "Sending..." : `Send to ${getEmailRecipients().length} leads`}
+                  {sending ? "Preparing..." : `Compose to ${getEmailRecipients().length} leads`}
                 </Button>
               </DialogFooter>
             </DialogContent>

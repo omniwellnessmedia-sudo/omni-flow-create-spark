@@ -10,8 +10,7 @@ import {
   formatEventDate,
   kindLabel,
   kindHue,
-  type PublicEvent,
-} from '@/lib/events';
+  type PublicEvent, isReadFailure } from '@/lib/events';
 import { useSEO } from '@/lib/seo';
 
 /**
@@ -56,7 +55,7 @@ const EventsIndex = () => {
       if (res.ok) {
         setEvents(res.data);
         setProblem(null);
-      } else {
+      } else if (isReadFailure(res)) {
         setEvents([]);
         setProblem(res.reason);
       }

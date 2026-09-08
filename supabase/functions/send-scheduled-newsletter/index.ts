@@ -22,6 +22,11 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // The public origin the unsubscribe link points at. Overridable so a
+    // staging deploy does not send people to the live site.
+    const siteUrl = (Deno.env.get("PUBLIC_SITE_URL") ?? "https://omniwellnessmedia.com")
+      .replace(/\/+$/, "");
+
     // Check if this is a test email request
     const body = await req.json().catch(() => ({}));
     
@@ -82,10 +87,11 @@ serve(async (req) => {
 
     console.log(`Found ${dueCampaigns.length} newsletters to send`);
 
-    // Get confirmed subscribers
+    // Get confirmed subscribers. The id comes back because each recipient's
+    // unsubscribe link is addressed to their own row.
     const { data: subscribers, error: subError } = await supabase
       .from('newsletter_subscribers')
-      .select('email, full_name')
+      .select('id, email, full_name')
       .eq('confirmed', true)
       .eq('unsubscribed', false);
 
@@ -119,13 +125,33 @@ serve(async (req) => {
         // Send to each subscriber (in batches for production, simplified here)
         for (const subscriber of subscribers) {
           try {
-            // Personalize HTML if needed
-            let personalizedHtml = campaign.html_content;
-            if (subscriber.full_name) {
-              personalizedHtml = personalizedHtml.replace(
-                /{{name}}/g, 
-                subscriber.full_name
+            // Personalize. The name is always substituted: it used to be
+            // replaced only when the row had one, so a subscriber with no
+            // name was greeted with the literal text {{name}}.
+            let personalizedHtml = campaign.html_content.replace(
+              /{{name}}/g,
+              subscriber.full_name || "there"
+            );
+
+            // Each recipient gets an unsubscribe link addressed to their own
+            // row. Campaigns saved before this existed have the old fixed URL
+            // baked in, which pointed at a route that did not exist, so it is
+            // rewritten here too rather than left dead.
+            const unsubscribeUrl = `${siteUrl}/unsubscribe?id=${subscriber.id}`;
+            personalizedHtml = personalizedHtml
+              .replace(/{{unsubscribe_url}}/g, unsubscribeUrl)
+              .replace(
+                /https:\/\/[a-z0-9.-]+\/unsubscribe(?![?/\w])/gi,
+                unsubscribeUrl
               );
+
+            if (!personalizedHtml.includes('/unsubscribe?id=')) {
+              // Never send marketing without a working way off the list.
+              failCount++;
+              console.error(
+                `Skipped ${subscriber.email}: campaign ${campaign.id} has no unsubscribe link`
+              );
+              continue;
             }
 
             const resendResponse = await fetch("https://api.resend.com/emails", {

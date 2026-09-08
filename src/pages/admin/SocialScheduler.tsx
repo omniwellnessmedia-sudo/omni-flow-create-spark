@@ -44,6 +44,7 @@ import {
   Upload
 } from 'lucide-react';
 import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
+import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
 // NOTE: rendered inside AdminDashboard, which already supplies the header,
 // sidebar and padded content area — so this view must NOT add the public
 // SiteHeader/Footer (that produced a double header + a stray public footer
@@ -51,7 +52,12 @@ import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay
 
 interface ScheduledPost {
   id: string;
-  platform: 'facebook' | 'instagram' | 'tiktok';
+  /** The live column is `platforms`, a NOT NULL social_platform[] array.
+   *  This screen writes and reads a single platform, so it sends a one
+   *  element array and reads the first entry. Every write used to name a
+   *  `platform` column that does not exist, so scheduling, editing and bulk
+   *  import all failed at the database. */
+  platforms: ('facebook' | 'instagram' | 'tiktok')[];
   content_text: string;
   image_url?: string;
   hashtags?: string[];
@@ -87,6 +93,12 @@ const SocialScheduler = () => {
   const [generatingCampaign, setGeneratingCampaign] = useState(false);
   const [editingPost, setEditingPost] = useState<ScheduledPost | null>(null);
   const [zapierWebhookUrl, setZapierWebhookUrl] = useState('');
+  /** Set when the webhook could not be read. Saving is refused while it is
+   *  set, because the field does not hold what is stored. */
+  const [settingsError, setSettingsError] = useState<string | null>(null);
+  /** Set when the posts could not be read, so an empty list is never shown
+   *  as "no posts". */
+  const [loadError, setLoadError] = useState<string | null>(null);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -109,6 +121,7 @@ const SocialScheduler = () => {
   }, []);
 
   const fetchPosts = async () => {
+    setLoadError(null);
     try {
       const { data, error } = await (supabase
         .from('scheduled_social_posts' as any)
@@ -120,6 +133,7 @@ const SocialScheduler = () => {
       setPosts((data || []) as ScheduledPost[]);
     } catch (error) {
       console.error('Error fetching posts:', error);
+      setLoadError(error instanceof Error ? error.message : 'Failed to load scheduled posts');
       toast({
         title: 'Error',
         description: 'Failed to load scheduled posts',
@@ -132,21 +146,43 @@ const SocialScheduler = () => {
 
   const fetchSettings = async () => {
     try {
-      const { data } = await (supabase
+      const { data, error } = await (supabase
         .from('social_automation_settings' as any)
         .select('setting_value')
         .eq('setting_key', 'zapier_webhook_url')
         .maybeSingle() as any);  // maybeSingle: no row yet returns null, not a 406
-      
+
+      // The error field was previously discarded. A refused read then left
+      // the input empty, which reads as "no webhook configured", and pressing
+      // Save wrote that empty string over the stored URL. Losing an
+      // integration because a read failed is not an acceptable failure mode,
+      // so the error is recorded and Save is blocked while it stands.
+      if (error) {
+        setSettingsError(error.message);
+        return;
+      }
+      setSettingsError(null);
       if (data) {
         setZapierWebhookUrl(data.setting_value || '');
       }
     } catch (error) {
+      setSettingsError(error instanceof Error ? error.message : 'The settings service did not respond.');
       console.error('Error fetching settings:', error);
     }
   };
 
   const handleSaveWebhook = async () => {
+    // Refuse to write over a value we could not read. Otherwise a failed read
+    // presents an empty box and one click replaces the stored webhook with
+    // an empty string, silently disconnecting the automation.
+    if (settingsError) {
+      toast({
+        title: 'Not saving over a setting we could not read',
+        description: 'The stored webhook could not be loaded, so this box does not hold it. Reload the page first.',
+        variant: 'destructive',
+      });
+      return;
+    }
     try {
       const { error } = await (supabase
         .from('social_automation_settings' as any)
@@ -178,7 +214,7 @@ const SocialScheduler = () => {
         .map(tag => tag.startsWith('#') ? tag : `#${tag}`);
 
       const postData = {
-        platform: formData.platform,
+        platforms: [formData.platform],
         content_text: formData.content_text,
         image_url: formData.image_url || null,
         hashtags: hashtagsArray,
@@ -274,7 +310,7 @@ const SocialScheduler = () => {
         const hashtagMatches = content.match(/#\w+/g) || [];
         
         postsToCreate.push({
-          platform,
+          platforms: [platform],
           content_text: content,
           hashtags: hashtagMatches,
           scheduled_date: format(postDate, 'yyyy-MM-dd'),
@@ -365,7 +401,7 @@ const SocialScheduler = () => {
   const openEditDialog = (post: ScheduledPost) => {
     setEditingPost(post);
     setFormData({
-      platform: post.platform,
+      platform: post.platforms?.[0] ?? 'facebook',
       content_text: post.content_text,
       image_url: post.image_url || '',
       hashtags: post.hashtags?.join(' ') || '',
@@ -404,7 +440,8 @@ const SocialScheduler = () => {
     return found?.color || 'bg-gray-500';
   };
 
-  const getPlatformIcon = (platform: string) => {
+  const getPlatformIcon = (platform: string | undefined) => {
+    if (!platform) return null;
     const found = PLATFORMS.find(p => p.value === platform);
     if (!found) return null;
     const Icon = found.icon;
@@ -422,6 +459,17 @@ const SocialScheduler = () => {
   return (
     <div>
       <main className="max-w-7xl mx-auto">
+        {/* An empty calendar and a refused read look identical otherwise. */}
+        {loadError && (
+          <div className="mb-4">
+            <ReadFailureNotice what="the scheduled posts" reason={loadError} onRetry={fetchPosts} />
+          </div>
+        )}
+        {settingsError && (
+          <div className="mb-4">
+            <ReadFailureNotice what="the Zapier webhook setting" reason={settingsError} onRetry={fetchSettings} />
+          </div>
+        )}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">Social Media Scheduler</h1>
@@ -721,7 +769,7 @@ const SocialScheduler = () => {
                               title={post.content_text}
                             >
                               <div className="flex items-center gap-1">
-                                {getPlatformIcon(post.platform)}
+                                {getPlatformIcon(post.platforms?.[0])}
                                 <span className="truncate hidden md:inline">{post.scheduled_time}</span>
                               </div>
                             </div>
@@ -757,7 +805,7 @@ const SocialScheduler = () => {
                         <div className={`w-1 h-full min-h-[60px] rounded ${getPillarColor(post.content_pillar)}`} />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-2">
-                            {getPlatformIcon(post.platform)}
+                            {getPlatformIcon(post.platforms?.[0])}
                             <span className="text-sm font-medium">
                               {format(new Date(post.scheduled_date), 'MMM d, yyyy')} at {post.scheduled_time}
                             </span>

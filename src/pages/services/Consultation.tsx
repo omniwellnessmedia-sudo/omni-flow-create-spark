@@ -230,7 +230,7 @@ const Consultation = () => {
               )}
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button asChild className="rounded-full bg-primary text-white hover:bg-primary/90">
-                  <Link to="/contact?service=quotation">Request a quotation</Link>
+                  <Link to="/enquire">Request a quotation</Link>
                 </Button>
                 <Button asChild variant="outline" className="rounded-full">
                   <Link to="/services">See all services and rates</Link>

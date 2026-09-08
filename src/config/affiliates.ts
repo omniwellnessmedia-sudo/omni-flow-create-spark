@@ -51,28 +51,12 @@ export const AFFILIATE_PROGRAMS: Record<string, AffiliateProgram> = {
     status: 'active',
     launch_date: '2025-11-03'
   },
-  faithful_to_nature: {
-    id: 'faithful_to_nature',
-    name: 'Faithful to Nature',
-    network: 'direct',
-    tier: 1,
-    commission_type: 'percentage',
-    // Published terms (faithful-to-nature.co.za/affiliate-program, read 28 Aug
-    // 2026): "Earn up to 15% commission on validated sales", 30-day cookie,
-    // run through AdMarula, paid in ZAR. Their page offers text links that
-    // "link directly to the product, brand, or category", so deep linking is
-    // supported. We are NOT yet approved: status stays 'testing' until
-    // AdMarula confirms, at which point set commission_rate to the real tier.
-    commission_rate: 15.0,
-    cookie_duration_days: 30,
-    currency: 'ZAR',
-    tracking_domain: 'faithful-to-nature.co.za',
-    deep_linking_enabled: true,
-    categories: ['wellness', 'natural-products', 'supplements', 'eco-friendly'],
-    status: 'testing',
-    launch_date: '2025-11-03'
-  },
-  
+  // Faithful to Nature was removed on 4 September 2026. Feroza confirmed on
+  // 31 August that no affiliate relationship exists with them, and naming a
+  // merchant we have no agreement with misstates who we work with. If AdMarula
+  // ever approves an application, the entry can be added back with the
+  // approved terms.
+
   // Tier 2: Launch Nov 10-14
   awin: {
     id: 'awin',

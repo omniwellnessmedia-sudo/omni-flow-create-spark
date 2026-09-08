@@ -20,6 +20,7 @@ import { useWishlist } from '@/hooks/useWishlist';
 import { curatedSeed } from '@/config/seedCatalogue';
 import { curatedOnly } from "@/config/catalogueGate";
 import { useNoIndex } from '@/hooks/useNoIndex';
+import ServiceAnchoredSections from '@/components/store/ServiceAnchoredSections';
 
 interface Product {
   id: string;
@@ -235,22 +236,36 @@ const StoreCollections = () => {
                 {collectionTitle}
               </h1>
               <p className="text-xl md:text-2xl text-white/90 mb-6 drop-shadow-md">
-                Discover {filteredProducts.length} curated wellness products
+                Products our team has curated around the services we sell
               </p>
+              {/* Only claims we can stand behind. Delivery, certification and
+                  eco claims belong to the sellers, not to us, so they do not
+                  appear here. Feedback of 31 August and the catalogue
+                  direction agreed on 4 September 2026. */}
               <div className="flex flex-wrap gap-3 justify-center">
                 <Badge variant="secondary" className="text-base px-4 py-2">
-                  🇿🇦 Free SA Delivery
+                  Curated by a person
                 </Badge>
                 <Badge variant="secondary" className="text-base px-4 py-2">
-                  ✨ Wellness Certified
-                </Badge>
-                <Badge variant="secondary" className="text-base px-4 py-2">
-                  💚 Eco-Friendly
+                  You buy on the seller's own site
                 </Badge>
               </div>
             </div>
           </div>
         </section>
+
+        {/* The services first, on the front of the store. Each curated
+            section leads with the Omni offer it exists to support; gear is
+            supporting kit beneath it. Collection views skip this and go
+            straight to browsing. */}
+        {!handle && !loading && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+            <ServiceAnchoredSections products={products as any} />
+            <div className="mt-12 border-t pt-8">
+              <h2 className="font-wwpl-display text-2xl font-medium">Browse everything</h2>
+            </div>
+          </section>
+        )}
 
         {/* Main Content */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -312,10 +327,11 @@ const StoreCollections = () => {
                 <SelectValue placeholder="Sort by..." />
               </SelectTrigger>
               <SelectContent>
+                {/* What we earn on a sale is not a shopper's sort key, so
+                    commission ordering is deliberately absent here. */}
                 <SelectItem value="featured">Featured</SelectItem>
                 <SelectItem value="price_low">Price: Low to High</SelectItem>
                 <SelectItem value="price_high">Price: High to Low</SelectItem>
-                <SelectItem value="commission">Highest Commission</SelectItem>
                 <SelectItem value="rating">Customer Rating</SelectItem>
                 <SelectItem value="newest">Newest First</SelectItem>
               </SelectContent>

@@ -1,3 +1,11 @@
+-- Exception-guarded on 4 September 2026 per docs/SUPABASE_PREVIEW_MIGRATIONS_FIX.md:
+-- this content seed references tour tables that a fresh Supabase preview
+-- branch may not carry (their creating migrations skip there). Every section
+-- now skips with a NOTICE instead of failing the whole replay. On production
+-- the tables exist and every statement runs exactly as before.
+
+DO $seed_guard$
+BEGIN
 -- ============================================
 -- COMPREHENSIVE TOURS & SERVICES UPDATE
 -- Adding all Travel and Tours Cape Town experiences
@@ -20,6 +28,12 @@ ON CONFLICT (slug) DO UPDATE SET
   display_order = EXCLUDED.display_order;
 
 -- Get category IDs for tours
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded section, missing dependency: %', SQLERRM;
+END
+$seed_guard$;
+
 DO $$
 DECLARE
   cat_indigenous UUID;
@@ -970,12 +984,25 @@ INSERT INTO public.tours (
   title = EXCLUDED.title,
   overview = EXCLUDED.overview;
 
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded section, missing dependency: %', SQLERRM;
 END $$;
-
+DO $seed_guard$
+BEGIN
 -- Create success message
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded section, missing dependency: %', SQLERRM;
+END
+$seed_guard$;
+
 DO $$
 BEGIN
   RAISE NOTICE 'Successfully created/updated all tours and services!';
   RAISE NOTICE 'Categories: 8 (Indigenous, Adventure, Surf, Study Abroad, Wellness, Media, Community, Events)';
   RAISE NOTICE 'Tours created: 20+ comprehensive experiences';
+EXCEPTION
+  WHEN undefined_table OR undefined_column OR undefined_object OR undefined_function THEN
+    RAISE NOTICE 'Skipping guarded section, missing dependency: %', SQLERRM;
 END $$;

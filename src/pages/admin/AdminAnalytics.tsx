@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { TrendingUp, TrendingDown, DollarSign, Users, ShoppingCart, Mail, RefreshCw, BarChart3, Globe, MousePointerClick } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, Users, ShoppingCart, Mail, RefreshCw, BarChart3, Globe, MousePointerClick, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format, subDays, startOfDay, parseISO } from "date-fns";
 
@@ -14,6 +14,8 @@ const COLORS = ["#8b5cf6", "#06b6d4", "#f59e0b", "#10b981", "#ef4444", "#ec4899"
 const AdminAnalytics = () => {
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState("30");
+  /** Reads that failed on the last fetch. Empty means the numbers below are real. */
+  const [readFailures, setReadFailures] = useState<string[]>([]);
   const [data, setData] = useState({
     revenueByDay: [] as { date: string; revenue: number; orders: number }[],
     leadsByDay: [] as { date: string; contacts: number; quotes: number }[],
@@ -150,8 +152,29 @@ const AdminAnalytics = () => {
           prevSubscribers: (prevSubscribersResult.data || []).length,
         },
       });
+      // Query errors arrive in `error`, not as exceptions, so the catch below
+      // never sees an RLS denial. Unchecked, a denied read renders as zeros
+      // and, worse, as confident trend badges comparing one empty period
+      // against another. Both are reported instead.
+      setReadFailures(
+        ([
+          ["Orders", ordersResult],
+          ["Orders, previous period", prevOrdersResult],
+          ["Contact submissions", contactsResult],
+          ["Contact submissions, previous period", prevContactsResult],
+          ["Service quotes", quotesResult],
+          ["Service quotes, previous period", prevQuotesResult],
+          ["Newsletter subscribers", subscribersResult],
+          ["Newsletter subscribers, previous period", prevSubscribersResult],
+        ] as [string, { error: { message: string } | null }][])
+          .filter(([, r]) => r.error)
+          .map(([label, r]) => `${label}: ${r.error!.message}`)
+      );
     } catch (error) {
       console.error("Error fetching analytics:", error);
+      setReadFailures([
+        error instanceof Error ? error.message : "The analytics service did not respond.",
+      ]);
     } finally {
       setLoading(false);
     }
@@ -185,6 +208,31 @@ const AdminAnalytics = () => {
 
   return (
     <div className="space-y-6">
+      {/* Zeros from a failed read look identical to a quiet month, and the
+          trend badges would compare one empty period against another. Say so. */}
+      {readFailures.length > 0 && (
+        <Card className="border-amber-300 bg-amber-50">
+          <CardContent className="py-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-amber-900">
+              <AlertTriangle className="h-4 w-4" />
+              These numbers are incomplete
+            </p>
+            <p className="mt-1 text-sm text-amber-900">
+              Some records could not be read, so the totals and the trend
+              percentages below are wrong, not merely low. Send this to Tumelo as
+              written:
+            </p>
+            <ul className="mt-2 space-y-1">
+              {readFailures.map((f) => (
+                <li key={f} className="text-xs text-amber-900" style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
+
       <Tabs defaultValue="overview" className="space-y-4">
         <div className="flex items-center justify-between">
           <TabsList className="h-9">

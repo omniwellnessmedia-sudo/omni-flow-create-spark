@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, Check, AlertTriangle } from 'lucide-react';
-import { submitEvent } from '@/lib/events';
+import { submitEvent, isReadFailure } from '@/lib/events';
 import { useSEO } from '@/lib/seo';
 
 /**
@@ -90,7 +90,7 @@ const EventSubmit = () => {
     setSending(false);
 
     if (res.ok) setDone(true);
-    else setError(res.reason);
+    else if (isReadFailure(res)) setError(res.reason);
   };
 
   return (

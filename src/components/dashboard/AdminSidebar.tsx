@@ -1,6 +1,11 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import {
+  Settings,
+  MapPin,
+  CalendarClock,
+  Smartphone,
+  Megaphone,
   LayoutDashboard,
   BarChart3,
   Users,
@@ -96,7 +101,20 @@ const NAV_GROUPS: {
       { id: "team", label: "Team", icon: UserPlus },
       { id: "tasks", label: "Tasks", icon: ListTodo },
       { id: "tours", label: "Viator", icon: Globe },
+      // Reachable from 5 September 2026. All three screens were fully built
+      // against live tables and wired to nothing: no route, no section, no
+      // import. AdminSettings holds the feature flag switches that gate
+      // public functionality and the Cal.com booking configuration;
+      // AdminTours is the only editor for the local tours table, which is
+      // not the same thing as the Viator screen above; AdminSchedule owns
+      // service_time_slots. The local tours id cannot be "tours" because
+      // Viator already holds it.
+      { id: "local-tours", label: "Tours (local)", icon: MapPin },
+      { id: "schedule", label: "Schedule", icon: CalendarClock },
       { id: "uwc", label: "UWC", icon: GraduationCap },
+      { id: "roambuddy-sales", label: "RoamBuddy sales", icon: Smartphone, href: "/admin/roambuddy-sales" },
+      { id: "roam-marketing", label: "Roam marketing", icon: Megaphone, href: "/admin/roam-marketing" },
+      { id: "settings", label: "Settings", icon: Settings },
       { id: "tools", label: "Tools", icon: Wrench },
     ],
   },

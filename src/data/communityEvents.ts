@@ -1,5 +1,5 @@
 import { Leaf, Users, Heart, ArrowRight, Sparkles, Film, Mountain, type LucideIcon } from "lucide-react";
-import { listPublishedEvents, type PublicEvent } from "@/lib/events";
+import { listPublishedEvents, isReadFailure, type PublicEvent } from "@/lib/events";
 
 /**
  * Community events, read from the database.
@@ -104,7 +104,7 @@ export const loadCommunityEvents = async (): Promise<
   { ok: true; events: CommunityEvent[] } | { ok: false; reason: string }
 > => {
   const res = await listPublishedEvents(null, null);
-  if (!res.ok) return { ok: false, reason: res.reason };
+  if (isReadFailure(res)) return { ok: false, reason: res.reason };
 
   const events = res.data
     .filter((e: PublicEvent) => Boolean(e.event_date))
