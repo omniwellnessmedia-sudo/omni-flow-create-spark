@@ -12,6 +12,7 @@ import {
   RATE_CARD_TERMS,
 } from '@/data/publicRateCard';
 import { INK, SLATE, CREAM, LINE, mono, SpectrumRule, WhatsappButton } from '@/components/services/spectrum';
+import TalkToAHuman from '@/components/services/TalkToAHuman';
 
 /**
  * The enquiry form the service pages point at.
@@ -229,6 +230,8 @@ const Enquire = () => {
                   style={{ borderColor: LINE, color: INK }}
                 />
               </div>
+
+              <TalkToAHuman compact className="mt-8 text-left" />
             </div>
           ) : (
             <form onSubmit={submit} noValidate className="mt-10 space-y-6">
@@ -459,7 +462,9 @@ const Enquire = () => {
             </form>
           )}
 
-          <section className="mt-14 rounded-2xl border bg-white p-6" style={{ borderColor: LINE }}>
+          <TalkToAHuman className="mt-12" />
+
+          <section className="mt-8 rounded-2xl border bg-white p-6" style={{ borderColor: LINE }}>
             <h2 className="text-[11px] uppercase tracking-[.2em]" style={{ ...mono, color: SLATE }}>
               Terms that apply
             </h2>

@@ -25,6 +25,7 @@ import {
   OfferCard,
   BandNumeral,
 } from "@/components/services/spectrum";
+import TalkToAHuman from "@/components/services/TalkToAHuman";
 import { trackWhatsappClick } from "@/lib/analytics";
 import { IMAGES } from "@/lib/images";
 
@@ -277,6 +278,8 @@ const Services = () => {
                 style={{ border: "1px solid rgba(246,241,232,.3)" }}
               />
             </div>
+
+            <TalkToAHuman variant="dark" compact className="mt-10 max-w-xl" />
           </div>
         </section>
 

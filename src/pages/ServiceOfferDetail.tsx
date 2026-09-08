@@ -14,6 +14,7 @@ import { bandImage } from '@/data/serviceImagery';
 import { getServiceDetailContent } from '@/data/serviceDetailContent';
 import { useSEO } from '@/lib/seo';
 import { WhatsappButton } from '@/components/services/spectrum';
+import TalkToAHuman from '@/components/services/TalkToAHuman';
 
 /**
  * One page per offer on the rate card, built to convert.
@@ -434,7 +435,9 @@ const ServiceOfferDetail = () => {
             </section>
           )}
 
-          <section className="mt-16 border-t pt-10" style={{ borderColor: 'rgba(14,21,19,.09)' }}>
+          <TalkToAHuman className="mt-16" />
+
+          <section className="mt-12 border-t pt-10" style={{ borderColor: 'rgba(14,21,19,.09)' }}>
             <h2
               className="text-[10px] uppercase tracking-[.2em] text-muted-foreground"
               style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}

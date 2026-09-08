@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { MessageCircle, X, Compass, Eye, EyeOff } from "lucide-react";
+import { MessageCircle, X, Compass, Eye, EyeOff, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IMAGES } from "@/lib/images";
 import { classifyWhatsapp } from "@/lib/whatsapp";
+import { publishedContacts, telHref } from "@/data/humanContact";
 import { useSiteSetting } from "@/hooks/useSiteSetting";
 
 /**
@@ -58,6 +59,7 @@ export const FloatingActionDock = () => {
 
   // Auto-collapse when the route changes so the dock doesn't stay open across navigations
   const whatsapp = classifyWhatsapp(useSiteSetting("whatsapp_url", WHATSAPP_FALLBACK));
+  const callContact = publishedContacts()[0];
 
   useEffect(() => { setExpanded(false); }, [location.pathname]);
   useEffect(() => () => { if (spinTimer.current) clearTimeout(spinTimer.current); }, []);
@@ -97,16 +99,27 @@ export const FloatingActionDock = () => {
       onClick: () => window.dispatchEvent(new CustomEvent("omni:open-roambuddy-chat")),
       tone: "from-blue-600 to-blue-700",
     },
-    {
-      id: "whatsapp",
-      // Labelled from the link, not hardcoded: a super admin can point this
-      // at a wa.me number, and then it is a way to message us rather than a
-      // channel to follow.
-      label: whatsapp.label,
-      icon: MessageCircle,
-      onClick: () => window.open(whatsapp.url, "_blank", "noopener,noreferrer"),
-      tone: "from-emerald-500 to-emerald-600",
-    },
+    // WhatsApp appears here only when the link can actually carry a message.
+    // The channel on file is broadcast only, so offering it as a quick action
+    // pointed people at a dead end. Set a wa.me number in Admin Settings and
+    // this returns on its own.
+    ...(whatsapp.canMessageUs
+      ? [{
+          id: "whatsapp",
+          label: whatsapp.label,
+          icon: MessageCircle,
+          onClick: () => window.open(whatsapp.url, "_blank", "noopener,noreferrer"),
+          tone: "from-emerald-500 to-emerald-600",
+        } as Action]
+      : callContact
+        ? [{
+            id: "call",
+            label: `Call ${callContact.name.split(" ")[0]}`,
+            icon: Phone,
+            onClick: () => window.open(telHref(callContact.phone)),
+            tone: "from-emerald-500 to-emerald-600",
+          } as Action]
+        : []),
     {
       id: "tour",
       label: "Take the tour",

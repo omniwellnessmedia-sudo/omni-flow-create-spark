@@ -39,10 +39,20 @@ export const useWhatsappLink = (): WhatsappLink =>
 /**
  * The one WhatsApp button.
  *
- * Its label comes from the link, not from the caller, because the link is
- * now editable and a hardcoded "WhatsApp us" over a broadcast channel is
- * exactly the defect this replaces. The prefilled message is attached only
- * when the link can actually carry one.
+ * IT RENDERS NOTHING UNLESS THE LINK CAN CARRY A MESSAGE. The link on file
+ * is a broadcast channel: people can follow it, nobody can reply through
+ * it. Offering it as a way to reach us sent every person who tried into a
+ * dead end we never saw. So until a wa.me number is set in Admin Settings,
+ * no WhatsApp button appears anywhere on the site, and TalkToAHuman offers
+ * a phone call instead.
+ *
+ * This is not a hardcoded switch anybody has to remember to turn off. Set a
+ * real number and every button returns on its own, correctly labelled and
+ * carrying its prefilled message.
+ *
+ * Its label comes from the link rather than from the caller, because a
+ * hardcoded "WhatsApp us" over a channel is exactly the defect this
+ * replaces.
  */
 export const WhatsappButton = ({
   source,
@@ -58,7 +68,7 @@ export const WhatsappButton = ({
   style?: CSSProperties;
 }) => {
   const link = useWhatsappLink();
-  if (!link.url) return null;
+  if (!link.url || !link.canMessageUs) return null;
 
   return (
     <a

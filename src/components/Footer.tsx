@@ -6,8 +6,12 @@ import { Input } from "@/components/ui/input";
 import { IMAGES } from "@/lib/images";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { classifyWhatsapp } from "@/lib/whatsapp";
+import { useSiteSetting } from "@/hooks/useSiteSetting";
+import { WHATSAPP_URL } from "@/components/services/spectrum";
 
 const Footer = () => {
+  const whatsapp = classifyWhatsapp(useSiteSetting("whatsapp_url", WHATSAPP_URL));
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
 
@@ -87,9 +91,16 @@ const Footer = () => {
               <a href="https://www.youtube.com/watch?v=ZOoaiV-IiiU" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label="YouTube">
                 <Youtube className="w-4 h-4" />
               </a>
-              <a href="https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label="WhatsApp">
-                <MessageCircle className="w-4 h-4" />
-              </a>
+              {/* Shown only when the link can be replied to. The channel on
+                  file is broadcast only, and WhatsApp reads as messaging to
+                  most people, so an icon that lands somewhere nobody can
+                  reply is the same dead end as the old buttons. Set a wa.me
+                  number in Admin Settings and this returns on its own. */}
+              {whatsapp.canMessageUs && (
+                <a href={whatsapp.url} target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label={whatsapp.label}>
+                  <MessageCircle className="w-4 h-4" />
+                </a>
+              )}
               <a href="https://x.com/Omniwellmedia" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label="X">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
               </a>
