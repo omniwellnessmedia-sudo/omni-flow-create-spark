@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Components · Omni Wellness Media</title><link rel="stylesheet" href="omni.css"><style>
+body{padding-bottom:96px}
+.spec-h{padding:72px 0 40px;border-bottom:1px solid var(--line-2)}
+.spec-h h1{font-size:clamp(36px,4.5vw,60px)}
+section.c{padding:48px 0;border-bottom:1px solid var(--line-2)}
+section.c h2{font-size:26px;margin-bottom:6px}
+.desc{font-size:14px;color:var(--slate);max-width:64ch;margin:0 0 24px}
+.rowx{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.lab{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);display:block;margin:22px 0 10px}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.sw div{height:72px;border-radius:12px;display:flex;align-items:flex-end;padding:10px;font-family:var(--font-mono);font-size:10px;color:#fff;letter-spacing:.06em}
+.dark{background:var(--ink);color:var(--cream);padding:28px;border-radius:18px}
+.dark .btn{color:var(--cream);border-color:rgba(247,243,234,.3)}.dark .btn:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.dark .btn-hue{background:#2BB9B9;border-color:#2BB9B9;color:var(--ink);font-weight:600}
+.btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.btn.loading{position:relative;color:transparent!important}.btn.loading:after{content:"";position:absolute;width:16px;height:16px;border:2px solid currentColor;border-color:var(--cream) transparent var(--cream) transparent;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{border:1px solid var(--line);border-radius:18px;padding:30px 28px 26px;background:linear-gradient(180deg,color-mix(in oklch,var(--hue) 9%,#fff),rgba(255,255,255,.6));display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden;transition:.3s cubic-bezier(.22,1,.36,1)}
+.card:hover{transform:translateY(-4px);box-shadow:0 20px 48px rgba(14,21,19,.13);border-color:var(--hue)}
+.card:before{content:"";position:absolute;inset:0 auto auto 0;width:100%;height:3px;background:var(--hue)}
+.card h3{font-size:23px}.card h3 a{color:var(--ink)}
+.card .badge{align-self:flex-start;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--hue);padding:6px 12px;border-radius:999px;margin-bottom:-4px}
+.card p.price{font-size:22px;font-family:var(--font-display);color:var(--ink)}.card p.price small{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--hue);margin-left:10px}
+.card p{margin:0;font-size:15px;color:var(--mist)}
+.incl{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:14px;color:var(--mist)}.incl li{display:flex;gap:10px}.incl li:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--hue);flex:none;margin-top:8px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:20px;border-top:1px solid var(--line-2)}
+.cta a{display:inline-flex;align-items:center;min-height:44px;white-space:nowrap;font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:10px 16px;border-radius:999px;border:1px solid var(--line);color:var(--ink)}
+.cta a.pri{background:var(--hue);border-color:var(--hue);color:#fff;font-weight:500}.cta a:hover{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.ad{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.6);padding:16px 18px;display:flex;gap:14px;align-items:center;color:var(--ink);min-height:84px}
+.ad .th{width:56px;height:56px;border-radius:10px;flex:none;background:repeating-linear-gradient(135deg,rgba(14,21,19,.06) 0 6px,transparent 6px 12px)}
+.ad b{display:block;font-size:14.5px;font-weight:600;margin:4px 0 2px}.ad p{margin:0;font-size:12.5px;color:var(--mist)}
+.ad.open{border-style:dashed;background:transparent}
+.adlabel{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate)}
+.field{display:grid;gap:6px;max-width:420px}
+.field label{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate)}
+.field input,.field select,.field textarea{font:inherit;font-size:15px;padding:13px 16px;min-height:48px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);width:100%}
+.field input:focus{outline:3px solid var(--teal);outline-offset:2px;border-color:var(--teal)}
+.field.err input{border-color:var(--red)}.field .msg{font-size:13px;color:var(--red)}.field .hint{font-size:13px;color:var(--slate)}
+.toast{display:inline-flex;gap:12px;align-items:center;padding:14px 18px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:14px}
+.toast i{width:10px;height:10px;border-radius:50%;flex:none}
+.faq details{border-bottom:1px solid var(--line);max-width:640px}.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;padding:16px 0;font-size:17px;font-weight:500;min-height:48px}
+.faq summary::-webkit-details-marker{display:none}.faq summary:after{content:"+";font-family:var(--font-mono);color:var(--teal);font-size:20px}.faq details[open] summary:after{content:"–"}
+.faq p{margin:0 0 18px;font-size:15px;color:var(--mist)}
+.empty{border:1px dashed var(--line);border-radius:18px;padding:44px;text-align:center;color:var(--slate);font-size:15px;max-width:520px}
+.empty b{display:block;font-family:var(--font-display);font-size:26px;color:var(--ink);font-weight:400;margin-bottom:6px}
+.sk{background:linear-gradient(90deg,rgba(14,21,19,.06),rgba(14,21,19,.12),rgba(14,21,19,.06));background-size:200% 100%;animation:sk 1.4s infinite;border-radius:8px;height:14px}
+@keyframes sk{to{background-position:-200% 0}}
+@media(max-width:900px){.grid3{grid-template-columns:1fr}}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><div class="wrap"><a class="brandmark" href="index.html"><img src="assets/omni-icon.png" alt=""><span>Omni Wellness Media</span></a><nav class="navlinks" aria-label="Primary"><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="enquire.html">Enquire</a></nav><a class="btn btn-solid" href="enquire.html?s=clarity-session">Book a clarity session</a></div></header>
+<main id="main" class="wrap">
+<div class="spec-h"><p class="eyebrow">Design system · Spectrum v2</p><h1>Components</h1><p class="lede">Every reusable part of the service pack, with states. Values live in <code>data/tokens.json</code>; this sheet is the visual contract.</p></div>
+
+<section class="c" id="color"><h2>Colour</h2><p class="desc">Spectrum hues (light theme, AA on cream) carry meaning per category. Bright set is for dark surfaces only. Neutrals do the rest.</p>
+<div class="sw"><div style="background:#BE2029">red</div><div style="background:#A34E0C">orange</div><div style="background:#8A6A05">yellow</div><div style="background:#337A29">green</div><div style="background:#0E6E70">teal</div><div style="background:#2C6FB5">blue</div><div style="background:#5C2A8A">violet</div><div style="background:#8A7444">clay</div><div style="background:#0E1513">ink</div><div style="background:#43524E">mist</div><div style="background:#5A6763">slate</div><div style="background:#F7F3EA;color:#0E1513;border:1px solid var(--line)">cream</div></div>
+<span class="lab">Bright (dark surfaces)</span><div class="sw"><div style="background:#E63946">red</div><div style="background:#F38020">orange</div><div style="background:#F5C518;color:#0E1513">yellow</div><div style="background:#4FAE3F">green</div><div style="background:#2BB9B9;color:#0E1513">teal</div><div style="background:#7FB2E5;color:#0E1513">blue</div><div style="background:#B39DDB;color:#0E1513">violet</div></div></section>
+
+<section class="c" id="type"><h2>Type</h2><p class="desc">Cormorant Garamond for display (italic + clay = accent), Inter for body, JetBrains Mono for labels and prices.</p>
+<p style="font-family:var(--font-display);font-size:52px;line-height:1.05;margin:0">Bridging wellness, outreach and media. <em style="color:var(--clay)">Work that earns its fee.</em></p><span class="lab">h1 · clamp(32px,3.8vw,52px)</span>
+<h2 style="margin:0">Websites and sprints</h2><span class="lab">h2 · 30px</span>
+<h3 style="font-size:23px;margin:0">Revenue-Ready Website &amp; Campaign Sprint</h3><span class="lab">h3 · 23px</span>
+<p style="margin:0;font-size:15px;color:var(--mist)">Body 15px, Inter, line-height 1.6, colour mist. One offer, one page, one route to payment, measured.</p><span class="lab">body</span>
+<p class="eyebrow" style="margin:0">Entry offers · once-off</p><span class="lab">eyebrow · mono 11px .22em</span>
+<p style="margin:0;font-family:var(--font-display);font-size:22px">R7,500 <small style="font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-left:10px">launch rate</small></p><span class="lab">price + unit</span></section>
+
+<section class="c" id="buttons"><h2>Buttons</h2><p class="desc">Pill, mono uppercase, 46px min height (44px in cards). Primary fills the service hue; hover inverts to ink/cream.</p>
+<div class="rowx"><a class="btn btn-solid" href="#">Solid</a><a class="btn" href="#">Outline</a><a class="btn" style="background:var(--orange);border-color:var(--orange);color:#fff" href="#">Hue primary</a><a class="btn" aria-disabled="true" href="#">Disabled</a><a class="btn btn-solid loading" href="#">Loading</a></div>
+<span class="lab">On ink</span><div class="dark"><div class="rowx"><a class="btn btn-hue" href="#">Hue primary</a><a class="btn" href="#">Outline</a></div></div>
+<span class="lab">Card CTA row (44px)</span><div class="cta" style="border:0;padding:0;margin:0;--hue:var(--teal)"><a class="pri" href="#">Book a slot</a><a href="#">Pay now</a><a href="#">WhatsApp us</a></div></section>
+
+<section class="c" id="cards"><h2>Service card</h2><p class="desc">Hue wash from <code>--hue</code>, 3px top bar, badge, price + unit, inclusions, CTA row. Lifts 4px on hover. Ad card fills empty grid cells.</p>
+<div class="grid3">
+<article class="card" style="--hue:var(--orange)"><span class="badge">Most chosen</span><h3><a href="#">Revenue-Ready Website &amp; Campaign Sprint</a></h3><p class="price">R7,500<small>launch rate</small></p><p>One offer, one page, one route to payment, measured.</p><ul class="incl"><li>One focused landing page and offer copy</li><li>Analytics setup and one conversion test</li></ul><div class="cta"><a class="pri" href="#">Start a sprint</a><a href="#">WhatsApp us</a></div></article>
+<article class="card" style="--hue:var(--teal)"><h3><a href="#">AI &amp; Business Clarity Session</a></h3><p class="price">R1,500<small>once-off · 60 min</small></p><p>A focused 60 minutes on the decision in front of you.</p><ul class="incl"><li>60-minute online strategy session</li><li>Concise written action map</li></ul><div class="cta"><a class="pri" href="#">Book a slot</a><a href="#">Pay now</a></div></article>
+<a class="ad open card" href="#" style="--hue:var(--slate);flex-direction:column;align-items:stretch;padding:22px;gap:12px"><span class="th" style="width:100%;height:120px"></span><span><span class="adlabel">Ad space</span><b>Available</b><p>Grid card · 1/3 width. Sold from the backend.</p></span></a>
+</div>
+<span class="lab">Ad strip tile · open and filled</span><div class="grid3"><a class="ad open" href="#"><span class="th"></span><span><span class="adlabel">Ad space</span><b>Available</b><p>Strip tile · 3 per row</p></span></a><a class="ad" href="#" rel="sponsored"><span class="th" style="background:var(--violet)"></span><span><span class="adlabel">Affiliate · Partner</span><b>Product name</b><p>One sentence on why it fits.</p></span></a></div></section>
+
+<section class="c" id="forms"><h2>Form fields and feedback</h2><p class="desc">48px inputs, 12px radius, teal focus ring. Errors are inline, specific and never colour-only.</p>
+<div class="rowx" style="align-items:flex-start;gap:28px">
+<div class="field"><label for="f1">Email</label><input id="f1" type="email" placeholder="you@practice.co.za"><span class="hint">We reply within one working day.</span></div>
+<div class="field err"><label for="f2">Email</label><input id="f2" type="email" value="hello@" aria-invalid="true" aria-describedby="f2m"><span class="msg" id="f2m">Enter a full email address, e.g. name@domain.co.za</span></div></div>
+<span class="lab">Toasts</span><div class="rowx"><span class="toast"><i style="background:var(--green)"></i>Enquiry sent. Reference OWM-2481.</span><span class="toast"><i style="background:var(--red)"></i>Could not send. Check your connection and try again.</span><span class="toast"><i style="background:var(--teal)"></i>Saving your answers…</span></div></section>
+
+<section class="c" id="states"><h2>Empty, loading, disclosure</h2>
+<div class="rowx" style="align-items:flex-start;gap:28px"><div class="empty"><b>No offers match</b>Clear the filter or start with the R1,500 clarity session.</div>
+<div style="width:320px;display:grid;gap:12px;padding:24px;border:1px solid var(--line);border-radius:18px"><div class="sk" style="width:60%"></div><div class="sk" style="width:40%;height:22px"></div><div class="sk"></div><div class="sk" style="width:80%"></div></div></div>
+<span class="lab">FAQ (native details)</span><div class="faq"><details open><summary>What happens after the hour?</summary><p>You receive a concise written action map the same week.</p></details><details><summary>Is it online?</summary><p>Yes.</p></details></div></section>
+</main>
+<footer class="site"><div class="wrap"><span>Omni Wellness Media · Cape Town, South Africa</span><span>hello@omniwellnessmedia.co.za</span></div></footer>
+</body></html>

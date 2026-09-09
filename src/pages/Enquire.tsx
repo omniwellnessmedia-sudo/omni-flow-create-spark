@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { ArrowLeft, ArrowRight, Check, AlertCircle, Loader2, MessageCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useSEO } from '@/lib/seo';
+import { trackAdsConversion } from '@/lib/googleAds';
 import {
   SERVICE_BANDS,
   getOffer,
@@ -12,6 +13,7 @@ import {
   RATE_CARD_TERMS,
 } from '@/data/publicRateCard';
 import { INK, SLATE, CREAM, LINE, mono, SpectrumRule, WhatsappButton } from '@/components/services/spectrum';
+import TalkToAHuman from '@/components/services/TalkToAHuman';
 
 /**
  * The enquiry form the service pages point at.
@@ -149,6 +151,21 @@ const Enquire = () => {
     }
 
     setStatus({ kind: 'sent' });
+
+    // Google Ads conversion, fired only after the enquiry is confirmed saved.
+    //
+    // WHY THIS IS HERE. Every service CTA used to point at /contact, which
+    // fires contact_submit. Those CTAs now point here, so without this the
+    // services funnel would report zero conversions in Ads while actually
+    // producing leads, and the campaign would look dead and get switched off.
+    //
+    // booking_inquiry rather than contact_submit: this is a service enquiry
+    // naming a specific offer, which is what that action was created for.
+    //
+    // No value is attached. The rate card price is what the offer lists, not
+    // what this enquiry is worth, and feeding a list price in as conversion
+    // value would train bidding on a number nobody has agreed to pay.
+    trackAdsConversion('booking_inquiry');
   };
 
   const field =
@@ -229,6 +246,8 @@ const Enquire = () => {
                   style={{ borderColor: LINE, color: INK }}
                 />
               </div>
+
+              <TalkToAHuman compact className="mt-8 text-left" />
             </div>
           ) : (
             <form onSubmit={submit} noValidate className="mt-10 space-y-6">
@@ -459,7 +478,9 @@ const Enquire = () => {
             </form>
           )}
 
-          <section className="mt-14 rounded-2xl border bg-white p-6" style={{ borderColor: LINE }}>
+          <TalkToAHuman className="mt-12" />
+
+          <section className="mt-8 rounded-2xl border bg-white p-6" style={{ borderColor: LINE }}>
             <h2 className="text-[11px] uppercase tracking-[.2em]" style={{ ...mono, color: SLATE }}>
               Terms that apply
             </h2>

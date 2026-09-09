@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Revenue Readiness Scorecard · Omni Wellness Media</title><link rel="stylesheet" href="omni.css"><style>
+.hero{padding:80px 0 46px}
+.hero h1{font-size:clamp(40px,5.4vw,68px);margin:22px 0 20px;max-width:20ch}
+.hero h1 em{font-style:italic;color:var(--clay)}
+.board{display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start;padding-bottom:40px}
+.qcard{border:1px solid rgba(14,21,19,.16);border-radius:18px;padding:26px 26px 22px;margin-bottom:14px;background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.55))}
+.qcard .qh{display:flex;gap:14px;align-items:baseline;margin-bottom:16px}
+.qnum{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--slate)}
+.qcard h3{font-size:22px;font-family:var(--font-body);font-weight:500;letter-spacing:0;line-height:1.35}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{font-family:var(--font-body);font-size:13px;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--mist);cursor:pointer;transition:.2s}
+.opts button:hover{border-color:var(--ink);color:var(--ink)}
+.opts button[aria-pressed=true]{background:var(--hue,var(--teal));border-color:var(--hue,var(--teal));color:#fff;font-weight:500}
+.panel{position:sticky;top:100px;border:1px solid rgba(14,21,19,.16);border-radius:20px;padding:30px 26px;background:rgba(255,255,255,.8)}
+.score{font-family:var(--font-display);font-size:72px;line-height:1;color:var(--ink)}
+.score span{font-size:22px;color:var(--slate)}
+.meter{height:6px;border-radius:6px;background:rgba(14,21,19,.12);overflow:hidden;margin:18px 0 20px}
+.meter i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--teal));transition:width .5s cubic-bezier(.22,1,.36,1)}
+.verdict{font-family:var(--font-display);font-size:26px;margin-bottom:10px}
+.panel p{font-size:14.5px;color:var(--mist);margin:0 0 18px}
+.reco{border-top:1px solid var(--line);padding-top:18px;margin-top:6px}
+.reco p.eyebrow{margin-bottom:10px}
+.capture{margin-top:20px;display:grid;gap:9px}
+.capture input{font-family:var(--font-body);font-size:14px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.capture input::placeholder{color:var(--slate)}
+.capture button{font-family:var(--font-body);font-size:14px;font-weight:500;padding:13px;border-radius:999px;border:0;background:var(--ink);color:var(--cream);cursor:pointer}
+.capture button:hover{background:var(--teal);color:#fff}
+.fine{font-family:var(--font-mono);font-size:10.5px;color:var(--slate);letter-spacing:.04em;line-height:1.6}
+@media(max-width:900px){.board{grid-template-columns:1fr}.panel{position:static}}
+</style></head><body>
+<header class="topbar"><div class="wrap"><a class="brandmark" href="index.html"><img src="assets/omni-icon.png" alt="Omni"><span>Omni Wellness Media</span></a><nav class="navlinks"><a href="services.html">Services</a><a href="pricing.html">Pricing</a></nav><a class="btn btn-solid" href="services.html#clarity">Book a clarity session</a></div></header>
+
+<section class="hero"><div class="wrap"><p class="eyebrow">Free lead resource · 10 questions · 3 minutes</p>
+<h1>Revenue Readiness <em>Scorecard</em></h1>
+<p class="lede">Ten honest questions about how your business turns attention into income. Answer them and you will get a score, a plain-language verdict and the one thing worth doing next.</p></div></section>
+
+<div class="wrap"><div class="board">
+<div id="qs"></div>
+<aside class="panel"><p class="eyebrow">Your readiness</p><p class="score"><b id="pts">0</b><span>/30</span></p><div class="meter"><i id="bar"></i></div>
+<p class="verdict" id="verdict">Answer to begin</p><p id="blurb">Each question scores 0 to 3. The lowest-scoring area is usually where the money is leaking.</p>
+<div class="reco"><p class="eyebrow">Recommended next step</p><p id="reco" style="color:var(--ink)">Answer all ten questions</p><a class="btn" id="recolink" href="services.html" style="width:100%;justify-content:center">See the offer</a></div>
+<div class="capture"><input type="text" placeholder="Your name" aria-label="Your name"><input type="email" placeholder="Email address" aria-label="Email address"><button type="button" onclick="this.textContent='Sent · check your inbox'">Email me my full scorecard</button><p class="fine">We store your name, email and score to send this scorecard and related Omni offers. Unsubscribe any time. No third-party sharing.</p></div>
+</aside>
+</div><hr class="spectrum-rule" style="margin:20px 0 0"></div>
+
+<footer class="site"><div class="wrap"><span>Omni Wellness Media · Revenue Readiness Scorecard v1</span><span>hello@omniwellnessmedia.co.za</span></div></footer>
+<script>
+const QS=[["Can a stranger tell what you sell within ten seconds of landing on your site?","var(--red)"],["Do you have one clearly priced entry offer someone can buy today?","var(--orange)"],["Is there a single, obvious route to pay, book or enquire?","var(--yellow)"],["Do you know how many enquiries you received last month, and from where?","var(--green)"],["Does your site work properly on a phone, including the contact route?","var(--teal)"],["Do you post consistently enough that your audience expects you?","var(--blue)"],["Do you have a list, WhatsApp or email, that you actually use?","var(--violet)"],["Do you follow up every enquiry within 24 hours, by system rather than memory?","var(--red)"],["Can you name your three best client outcomes with evidence?","var(--green)"],["Do you review your numbers monthly and change one thing as a result?","var(--teal)"]];
+const LV=[["Not yet",0],["Partly",1],["Mostly",2],["Yes",3]];
+const A={};const box=document.getElementById('qs');
+QS.forEach((q,i)=>{const d=document.createElement('div');d.className='qcard';d.style.setProperty('--hue',q[1]);
+d.innerHTML='<div class="qh"><span class="qnum">'+String(i+1).padStart(2,'0')+'</span><h3>'+q[0]+'</h3></div><div class="opts">'+LV.map((l,j)=>'<button type="button" aria-pressed="false" data-q="'+i+'" data-v="'+l[1]+'">'+l[0]+'</button>').join('')+'</div>';box.appendChild(d)});
+box.addEventListener('click',e=>{const b=e.target.closest('button[data-q]');if(!b)return;
+b.parentElement.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');A[b.dataset.q]=+b.dataset.v;render()});
+const RECO=[["Book the R1,500 AI & Business Clarity Session","services.html#clarity"],["Start with the R2,500 Website & Visibility Audit","services.html#clarity"],["Run the R7,500 Revenue-Ready Sprint","services.html#build"],["Move to the R6,500 Omni Growth Desk","services.html#retainer"]];
+function render(){const vals=Object.values(A);const t=vals.reduce((a,b)=>a+b,0);
+document.getElementById('pts').textContent=t;document.getElementById('bar').style.width=(t/30*100)+'%';
+const answered=vals.length;const v=document.getElementById('verdict'),bl=document.getElementById('blurb');
+let idx=0,txt,note;
+if(answered<10){v.textContent=answered+' of 10 answered';bl.textContent='Keep going for your verdict.';return}
+if(t<=10){txt='Foundations missing';note='The basics are not in place yet. Fix clarity and one route to payment before spending anything on reach.';idx=0}
+else if(t<=18){txt='Leaking revenue';note='You have attention but lose it on the way to a decision. The journey, not the content, is the problem.';idx=1}
+else if(t<=25){txt='Ready to convert';note='The pieces exist. A focused sprint on offer, page and tracking should move the numbers quickly.';idx=2}
+else{txt='Ready to scale';note='Strong fundamentals. Consistency and optimisation over months will compound from here.';idx=3}
+v.textContent=txt;bl.textContent=note;
+document.getElementById('reco').textContent=RECO[idx][0];document.getElementById('recolink').href=RECO[idx][1]}
+</script><template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#0E1513"/><rect x="30" y="46" width="40" height="4" rx="2" fill="#F5C518"/><text x="50" y="40" text-anchor="middle" font-family="Georgia,serif" font-size="22" fill="#F7F3EA">SC</text></svg></template></body></html>

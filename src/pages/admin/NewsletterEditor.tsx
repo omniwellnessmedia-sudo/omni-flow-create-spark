@@ -31,7 +31,9 @@ import {
   BarChart3,
   Calendar as CalendarIcon,
   Sparkles,
-  FileText
+  FileText,
+  Monitor,
+  Smartphone
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -62,6 +64,29 @@ interface Subscriber {
   unsubscribed: boolean;
 }
 
+/**
+ * The campaign shell.
+ *
+ * WHY IT IS TYPOGRAPHIC RATHER THAN LOGO LED. Most clients block remote
+ * images until the reader allows them, so a header built on a logo file
+ * opens as a broken picture for a large share of the list. A wordmark set
+ * in type always renders, and the spectrum bar carries the brand without
+ * loading anything.
+ *
+ * Every colour is the real palette from the site, not the generic rainbow
+ * this template shipped with. Fonts name the brand faces first and fall
+ * back to faces that exist on every machine, because email clients rarely
+ * load webfonts.
+ *
+ * The social links are the three accounts the site actually links to.
+ * There are no Facebook or TikTok links, which the old template carried
+ * and which appear nowhere else on the site.
+ *
+ * {{unsubscribe_url}} is left as a placeholder on purpose. The sender
+ * fills it per recipient so each person gets a link to their own row.
+ *
+ * No em dashes in this file.
+ */
 const NEWSLETTER_TEMPLATE = `
 <!DOCTYPE html>
 <html>
@@ -70,49 +95,77 @@ const NEWSLETTER_TEMPLATE = `
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{subject}}</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px 0;">
+<body style="margin:0; padding:0; background-color:#FAF8F2; font-family:Inter,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased;">
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0;">{{preview_text}}</div>
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#FAF8F2; padding:28px 12px;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-          <!-- Header with Rainbow Gradient -->
+        <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width:600px; width:100%; background-color:#FFFFFF; border:1px solid #E1DDD1; border-radius:16px; overflow:hidden;">
+
           <tr>
-            <td style="background: linear-gradient(135deg, #FF6B6B, #FFE66D, #4ECDC4, #45B7D1, #96CEB4, #9B59B6); padding: 30px; text-align: center;">
-              <img src="https://omniwellnessmedia.com/omni-logo-white.png" alt="Omni Wellness Media" style="max-width: 180px; height: auto;">
-              <h1 style="color: #ffffff; margin: 15px 0 0 0; font-size: 24px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">{{headline}}</h1>
+            <td style="padding:0; font-size:0; line-height:0;">
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                <tr>
+                  <td width="14.28%" height="6" style="background-color:#E63946; font-size:0; line-height:0;">&nbsp;</td>
+                  <td width="14.28%" height="6" style="background-color:#F38020; font-size:0; line-height:0;">&nbsp;</td>
+                  <td width="14.28%" height="6" style="background-color:#F5C518; font-size:0; line-height:0;">&nbsp;</td>
+                  <td width="14.28%" height="6" style="background-color:#4FAE3F; font-size:0; line-height:0;">&nbsp;</td>
+                  <td width="14.28%" height="6" style="background-color:#2BB9B9; font-size:0; line-height:0;">&nbsp;</td>
+                  <td width="14.28%" height="6" style="background-color:#2C6FB5; font-size:0; line-height:0;">&nbsp;</td>
+                  <td width="14.32%" height="6" style="background-color:#5C2A8A; font-size:0; line-height:0;">&nbsp;</td>
+                </tr>
+              </table>
             </td>
           </tr>
-          
-          <!-- Main Content -->
+
           <tr>
-            <td style="padding: 40px 30px;">
+            <td style="background-color:#15201F; padding:34px 34px 30px 34px;">
+              <p style="margin:0 0 18px 0; font-family:'JetBrains Mono',Consolas,monospace; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#C9B68E;">
+                Omni Wellness Media
+              </p>
+              <h1 style="margin:0; font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif; font-size:34px; line-height:1.15; font-weight:500; color:#FAF8F2;">
+                {{headline}}
+              </h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:34px; font-size:16px; line-height:1.75; color:#33403E;">
               {{content}}
             </td>
           </tr>
-          
-          <!-- CTA Button -->
+
           <tr>
-            <td style="padding: 0 30px 40px 30px; text-align: center;">
-              <a href="{{cta_url}}" style="display: inline-block; background: linear-gradient(135deg, #9B59B6, #45B7D1); color: #ffffff; padding: 15px 40px; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 16px;">{{cta_text}}</a>
+            <td style="padding:0 34px 36px 34px;">
+              <a href="{{cta_url}}" style="display:inline-block; background-color:#15201F; color:#FAF8F2; padding:14px 30px; text-decoration:none; border-radius:999px; font-weight:600; font-size:15px;">{{cta_text}}</a>
             </td>
           </tr>
-          
-          <!-- Footer -->
+
           <tr>
-            <td style="background-color: #1a1a2e; padding: 30px; text-align: center;">
-              <p style="color: #ffffff; margin: 0 0 15px 0; font-size: 14px;">Follow us on social media</p>
-              <div style="margin-bottom: 20px;">
-                <a href="https://facebook.com/omniwellnessmedia" style="display: inline-block; margin: 0 8px;"><img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook"></a>
-                <a href="https://instagram.com/omniwellnessmedia" style="display: inline-block; margin: 0 8px;"><img src="https://img.icons8.com/ios-filled/30/ffffff/instagram-new.png" alt="Instagram"></a>
-                <a href="https://tiktok.com/@omniwellnessmedia" style="display: inline-block; margin: 0 8px;"><img src="https://img.icons8.com/ios-filled/30/ffffff/tiktok.png" alt="TikTok"></a>
-              </div>
-              <p style="color: #888888; font-size: 12px; margin: 0;">
-                © 2025 Omni Wellness Media. All rights reserved.<br>
-                <a href="{{unsubscribe_url}}" style="color: #888888;">Unsubscribe</a> | <a href="https://omniwellnessmedia.com/privacy-policy" style="color: #888888;">Privacy Policy</a>
+            <td style="background-color:#15201F; padding:30px 34px;">
+              <p style="margin:0 0 14px 0; font-family:'JetBrains Mono',Consolas,monospace; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:#C9B68E;">
+                Find us
+              </p>
+              <p style="margin:0 0 20px 0; font-size:14px; line-height:1.9;">
+                <a href="https://www.instagram.com/omniwellnessmedia/" style="color:#FAF8F2; text-decoration:none; border-bottom:1px solid rgba(250,248,242,.3);">Instagram</a>
+                <span style="color:#5A6A68;">&nbsp;&nbsp;/&nbsp;&nbsp;</span>
+                <a href="https://www.youtube.com/@omniwellnessmedia" style="color:#FAF8F2; text-decoration:none; border-bottom:1px solid rgba(250,248,242,.3);">YouTube</a>
+                <span style="color:#5A6A68;">&nbsp;&nbsp;/&nbsp;&nbsp;</span>
+                <a href="https://x.com/Omniwellmedia" style="color:#FAF8F2; text-decoration:none; border-bottom:1px solid rgba(250,248,242,.3);">X</a>
+              </p>
+              <p style="margin:0; font-size:12px; line-height:1.8; color:#8A9794;">
+                You are receiving this because you asked us to keep you posted.<br>
+                <a href="{{unsubscribe_url}}" style="color:#C9B68E;">Unsubscribe</a>
+                <span style="color:#5A6A68;">&nbsp;·&nbsp;</span>
+                <a href="https://omniwellnessmedia.co.za/privacy-policy" style="color:#C9B68E;">Privacy policy</a>
               </p>
             </td>
           </tr>
+
         </table>
+        <p style="margin:18px 0 0 0; font-size:11px; color:#5A6A68; font-family:Inter,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;">
+          Omni Wellness Media, Cape Town
+        </p>
       </td>
     </tr>
   </table>
@@ -136,6 +189,7 @@ const NewsletterEditor = () => {
   const [saving, setSaving] = useState(false);
   const [sendingTest, setSendingTest] = useState(false);
   const [previewHtml, setPreviewHtml] = useState('');
+  const [previewWidth, setPreviewWidth] = useState<'desktop' | 'phone'>('desktop');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -201,6 +255,11 @@ const NewsletterEditor = () => {
     html = html.replace(/{{content}}/g, formData.content.replace(/\n/g, '<br>'));
     html = html.replace(/{{cta_text}}/g, formData.cta_text);
     html = html.replace(/{{cta_url}}/g, formData.cta_url);
+    // The hidden preheader: the line most clients show beside the subject in
+    // the inbox list. Left empty rather than filled with the subject again,
+    // because a preheader that repeats the subject wastes the one line of
+    // persuasion you get before somebody decides whether to open.
+    html = html.replace(/{{preview_text}}/g, formData.preview_text || '');
     return html;
   };
 
@@ -762,19 +821,56 @@ const NewsletterEditor = () => {
         </Tabs>
       </div>
 
-      {/* Preview Modal */}
+      {/* Preview.
+          Two widths, because most newsletters are read on a phone and a
+          layout that only ever gets checked at desktop width is a layout
+          nobody has actually checked. The iframe is sandboxed: campaign
+          bodies are edited by hand and there is no reason for one to run
+          script inside the admin. */}
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh]">
+        <DialogContent className="max-w-4xl max-h-[92vh]">
           <DialogHeader>
-            <DialogTitle>Email Preview</DialogTitle>
+            <DialogTitle>Preview</DialogTitle>
+            <DialogDescription>
+              This is the campaign as it will arrive. The unsubscribe link is
+              filled in per recipient when it sends.
+            </DialogDescription>
           </DialogHeader>
-          <div className="border rounded-lg overflow-hidden bg-gray-100">
+
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              variant={previewWidth === 'desktop' ? 'default' : 'outline'}
+              onClick={() => setPreviewWidth('desktop')}
+              className="h-8 text-xs"
+            >
+              <Monitor className="mr-1.5 h-3.5 w-3.5" />
+              Desktop
+            </Button>
+            <Button
+              size="sm"
+              variant={previewWidth === 'phone' ? 'default' : 'outline'}
+              onClick={() => setPreviewWidth('phone')}
+              className="h-8 text-xs"
+            >
+              <Smartphone className="mr-1.5 h-3.5 w-3.5" />
+              Phone
+            </Button>
+            <span className="ml-auto text-xs text-muted-foreground">
+              {previewWidth === 'phone' ? '390px wide' : 'Full width'}
+            </span>
+          </div>
+
+          <div className="flex justify-center overflow-auto rounded-lg border bg-[#EFEAE0] p-3">
             <iframe
               srcDoc={previewHtml}
-              className="w-full h-[500px] border-0"
-              title="Email Preview"
+              sandbox=""
+              title="Campaign preview"
+              className="h-[62vh] border-0 bg-white transition-all"
+              style={{ width: previewWidth === 'phone' ? 390 : '100%' }}
             />
           </div>
+
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsPreviewOpen(false)}>Close</Button>
           </DialogFooter>

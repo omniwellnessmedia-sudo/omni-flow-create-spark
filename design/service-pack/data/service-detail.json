@@ -1,0 +1,406 @@
+{
+ "clarity-session": {
+  "variant": "split",
+  "headline": "One hour. One <em>clear next step.</em>",
+  "for": [
+   "Founders stuck between two directions",
+   "Practitioners who want a plan, not a pitch",
+   "Anyone about to spend money on the wrong thing"
+  ],
+  "img": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1400&q=80",
+  "fb": "assets/plate-valley.png",
+  "alt": "Writing an action plan by hand",
+  "faq": [
+   [
+    "What happens after the hour?",
+    "You receive a concise written action map the same week: the decision, the sequence and the tools to use."
+   ],
+   [
+    "Is it online?",
+    "Yes. Sixty minutes on a video call, recorded on request."
+   ],
+   [
+    "What if I need more?",
+    "The session fee is credited against any audit or sprint booked within 30 days."
+   ]
+  ]
+ },
+ "brand-content-audit": {
+  "variant": "split",
+  "headline": "How your brand <em>actually lands.</em>",
+  "for": [
+   "Wellness brands posting without traction",
+   "Practices about to refresh their look",
+   "Teams who want an honest outside read"
+  ],
+  "img": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1400&q=80",
+  "fb": "assets/plate-hero.png",
+  "alt": "Meditation at sunrise",
+  "faq": [
+   [
+    "What do you review?",
+    "Your website and social channels: message, consistency, tone and calls to action."
+   ],
+   [
+    "What do I get?",
+    "A scored audit, ranked priorities and a 45-minute debrief."
+   ]
+  ]
+ },
+ "website-visibility-audit": {
+  "variant": "split",
+  "headline": "Where do visitors <em>give up?</em>",
+  "for": [
+   "Sites that get traffic but no enquiries",
+   "Practices planning a redesign",
+   "Owners who want fixes they can run themselves"
+  ],
+  "img": "https://cdn.pixabay.com/photo/2017/01/09/07/05/graphics-tablet-1964816_1280.jpg",
+  "fb": "assets/plate-workshop.png",
+  "alt": "Graphics tablet and laptop in use",
+  "faq": [
+   [
+    "Do you fix things?",
+    "The audit is diagnosis plus a 30-day plan. Fixes can be booked as a sprint or by the hour."
+   ],
+   [
+    "How long does it take?",
+    "Five working days from access to debrief."
+   ]
+  ],
+  "credit": "Pixabay"
+ },
+ "revenue-ready-sprint": {
+  "variant": "diag",
+  "headline": "Selling <em>in weeks,</em> not quarters.",
+  "for": [
+   "An offer that is ready but has no page",
+   "A launch with a date attached",
+   "A first paid product for an established practice"
+  ],
+  "img": "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-workshop.png",
+  "alt": "Laptop workspace",
+  "faq": [
+   [
+    "Why is it a launch rate?",
+    "R7,500 is the introductory rate for the fixed scope. It rises once the first cohort of sprints is complete."
+   ],
+   [
+    "What is not included?",
+    "Domains, hosting, ad spend, complex integrations, full brand identity and unlimited revisions."
+   ],
+   [
+    "How fast?",
+    "Scope confirmed in writing first, then the build runs to an agreed launch date."
+   ]
+  ],
+  "video": "https://cdn.pixabay.com/video/2017/08/20/11473-230853026_large.mp4",
+  "poster": "https://cdn.pixabay.com/video/2017/08/20/11473-230853026_tiny.jpg"
+ },
+ "visibility-conversion-sprint": {
+  "variant": "diag",
+  "headline": "Found, understood <em>and chosen.</em>",
+  "for": [
+   "Brands with a budget for a focused month",
+   "Launches that need paid reach",
+   "Sites that need a conversion refresh"
+  ],
+  "img": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-workshop.png",
+  "alt": "Team at a table",
+  "faq": [
+   [
+    "Is ad spend included?",
+    "No. Advertising spend is paid separately by you; we set up and run the campaign."
+   ],
+   [
+    "What are the 12 assets?",
+    "Campaign graphics and copy across feed, story and email, built on one message."
+   ]
+  ],
+  "video": "https://cdn.pixabay.com/video/2017/08/20/11473-230853026_large.mp4",
+  "poster": "https://cdn.pixabay.com/video/2017/08/20/11473-230853026_tiny.jpg"
+ },
+ "landing-page": {
+  "variant": "diag",
+  "headline": "One page, <em>built properly.</em>",
+  "for": [
+   "Strategy already settled",
+   "A single offer or event",
+   "Replacing a page that underperforms"
+  ],
+  "img": "https://cdn.pixabay.com/photo/2017/10/10/21/47/laptop-2838921_1280.jpg",
+  "fb": "assets/plate-workshop.png",
+  "alt": "Designer's desk with laptop and graphics tablet",
+  "faq": [
+   [
+    "Do you write the copy?",
+    "Yes, copy and design are both included."
+   ],
+   [
+    "Hosting?",
+    "Quoted separately or set up on your existing platform."
+   ]
+  ],
+  "credit": "Pixabay"
+ },
+ "content-starter-pack": {
+  "variant": "disc",
+  "headline": "A month of posting, <em>decided in a week.</em>",
+  "for": [
+   "Practitioners who stop posting by week three",
+   "One campaign theme to carry",
+   "Teams without a designer"
+  ],
+  "img": "https://cdn.pixabay.com/photo/2014/06/22/17/21/colored-pencils-374771_1280.jpg",
+  "fb": "assets/plate-podcast.png",
+  "alt": "Colour pencils arranged in a circle",
+  "faq": [
+   [
+    "Which platforms?",
+    "Graphics are sized for Instagram and Facebook; captions adapt to LinkedIn."
+   ],
+   [
+    "Can I edit them?",
+    "Yes, files are delivered as editable templates."
+   ]
+  ],
+  "credit": "Pixabay"
+ },
+ "brand-identity": {
+  "variant": "disc",
+  "headline": "A brand that looks like <em>the work you do.</em>",
+  "for": [
+   "New practices",
+   "Rebrands after a change of direction",
+   "Teams who need templates, not just a logo"
+  ],
+  "img": "https://cdn.pixabay.com/photo/2017/01/09/07/05/graphics-tablet-1964816_1280.jpg",
+  "fb": "assets/plate-retreat.png",
+  "alt": "Graphics tablet and laptop in use",
+  "faq": [
+   [
+    "Starter or Signature?",
+    "Starter (R2,800) for a solo practice; Signature (R5,500) when you need a full suite and guideline."
+   ],
+   [
+    "Revisions?",
+    "One consolidated round on Starter, two on Signature."
+   ]
+  ],
+  "credit": "Pixabay"
+ },
+ "bespoke-content-pack": {
+  "variant": "disc",
+  "headline": "Original graphics, <em>not templates.</em>",
+  "for": [
+   "Established brands with a guideline",
+   "Campaigns that need infographics",
+   "A quarter of posting in one delivery"
+  ],
+  "img": "https://cdn.pixabay.com/photo/2017/10/10/21/47/laptop-2838921_1280.jpg",
+  "fb": "assets/plate-podcast.png",
+  "alt": "Designer's desk with laptop and graphics tablet",
+  "faq": [
+   [
+    "How many infographics?",
+    "Up to four, approved at concept stage before design."
+   ]
+  ],
+  "credit": "Pixabay"
+ },
+ "growth-desk": {
+  "variant": "editorial",
+  "headline": "The work that never quite <em>gets done.</em>",
+  "for": [
+   "Practices with no marketing hire",
+   "Owners tired of chasing freelancers",
+   "Brands that need consistent output and a monthly read"
+  ],
+  "img": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-valley.png",
+  "alt": "Young plant growing",
+  "faq": [
+   [
+    "Is there a minimum term?",
+    "Retainers are payable monthly in advance; a three-month initial term is recommended."
+   ],
+   [
+    "What if I need more hours?",
+    "Additional work is billed at R1,500 per hour or as a prepaid block."
+   ]
+  ]
+ },
+ "social-media-management": {
+  "variant": "editorial",
+  "headline": "Consistent, on brand, <em>every week.</em>",
+  "for": [
+   "Brands with source content to adapt",
+   "Multi-platform presence",
+   "Owners who want reporting, not guesswork"
+  ],
+  "img": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-workshop.png",
+  "alt": "Team working together",
+  "faq": [
+   [
+    "Why 'from'?",
+    "Five tiers from Essentials to Signature; cadence and rate are confirmed on enquiry."
+   ]
+  ]
+ },
+ "executive-support": {
+  "variant": "editorial",
+  "headline": "Senior hands, <em>by the hour.</em>",
+  "for": [
+   "Leaders who need implementation, not advice",
+   "AI and systems set-up",
+   "Campaign operations under deadline"
+  ],
+  "img": "https://cdn.pixabay.com/photo/2017/10/10/21/47/laptop-2838921_1280.jpg",
+  "fb": "assets/plate-workshop.png",
+  "alt": "Designer's desk with laptop and graphics tablet",
+  "faq": [
+   [
+    "How does the block work?",
+    "Ten prepaid hours at R10,000, applied across agreed priorities and reported monthly."
+   ]
+  ],
+  "credit": "Pixabay"
+ },
+ "podcast-starter": {
+  "variant": "duo",
+  "headline": "Start the show <em>properly.</em>",
+  "for": [
+   "A first podcast",
+   "Practitioners with an audience and no format",
+   "Deciding before buying equipment"
+  ],
+  "img": "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-podcast.png",
+  "alt": "Microphone",
+  "faq": [
+   [
+    "Do you produce episodes?",
+    "Episode production is quoted separately once the format is set."
+   ]
+  ]
+ },
+ "podcast-concept": {
+  "variant": "duo",
+  "headline": "Audience, format, <em>launch plan.</em>",
+  "for": [
+   "Shows that stalled after a pilot",
+   "Organisations launching a branded podcast",
+   "Formats that need a guest strategy"
+  ],
+  "img": "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-podcast.png",
+  "alt": "Microphone",
+  "faq": [
+   [
+    "What do I receive?",
+    "A format document: audience, purpose, episode structure, guest strategy and launch plan."
+   ]
+  ]
+ },
+ "podcast-launch": {
+  "variant": "duo",
+  "headline": "A launch people <em>can find.</em>",
+  "for": [
+   "A finished pilot season",
+   "Shows that need a page and a pathway",
+   "Launches with a date"
+  ],
+  "img": "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-podcast.png",
+  "alt": "Microphone",
+  "faq": [
+   [
+    "What is tracked?",
+    "Page visits, follows and the pathway from listener to enquiry."
+   ]
+  ]
+ },
+ "campaign-command-centre": {
+  "variant": "wide",
+  "headline": "One place where the <em>campaign lives.</em>",
+  "for": [
+   "Events, screenings and launches",
+   "Partner-driven campaigns",
+   "Teams who need one dashboard and one report"
+  ],
+  "img": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-hap.png",
+  "alt": "Stage lights",
+  "faq": [
+   [
+    "What is separate?",
+    "Venue hire, catering, performers, transport, ticketing charges, technical suppliers, printing and paid advertising, unless expressly included."
+   ],
+   [
+    "How is it priced?",
+    "From R12,500, confirmed after a short brief."
+   ]
+  ]
+ },
+ "event-marketing": {
+  "variant": "wide",
+  "headline": "Fill the room, <em>report the result.</em>",
+  "for": [
+   "Retreats, workshops and talks",
+   "Organisers without a marketing team",
+   "Events that need a listing and a pathway"
+  ],
+  "img": "https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-retreat.png",
+  "alt": "Theatre seats",
+  "faq": [
+   [
+    "Ticketing?",
+    "We set up the pathway; ticketing platform charges are paid by the organiser."
+   ]
+  ]
+ },
+ "screening-campaign": {
+  "variant": "wide",
+  "headline": "Put the film <em>in front of people.</em>",
+  "for": [
+   "Documentary and impact films",
+   "NGOs using film for outreach",
+   "Screenings with partner organisations"
+  ],
+  "img": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-hap.png",
+  "alt": "Cinema",
+  "faq": [
+   [
+    "What is included?",
+    "Film positioning, ticketing, campaign hub, partner mobilisation, social assets and reporting."
+   ]
+  ]
+ },
+ "workshops": {
+  "variant": "wide",
+  "headline": "AI, content and conscious leadership, <em>taught in a day.</em>",
+  "for": [
+   "Teams adopting AI responsibly",
+   "Organisations building content capacity",
+   "Leadership groups and retreats"
+  ],
+  "img": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80",
+  "fb": "assets/plate-workshop.png",
+  "alt": "Team working together",
+  "faq": [
+   [
+    "Where?",
+    "Cape Town in person, or online."
+   ],
+   [
+    "Half or full day?",
+    "From R7,500 half day, from R12,500 full day; content is adapted to the group."
+   ]
+  ]
+ }
+}

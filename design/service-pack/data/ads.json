@@ -1,0 +1,15 @@
+{
+  "note": "Sellable ad inventory. Each slot renders as an ad card (grid) or a strip tile (hero bar). Set available:false and fill title/line/img/href/partner to publish. Links render rel=sponsored.",
+  "slots": [
+    {"id": "hero-1", "zone": "hero-strip", "available": true, "size": "Strip tile · 3 per row"},
+    {"id": "hero-2", "zone": "hero-strip", "available": true, "size": "Strip tile · 3 per row"},
+    {"id": "hero-3", "zone": "hero-strip", "available": true, "size": "Strip tile · 3 per row"},
+    {"id": "build-1", "zone": "band:build", "available": true, "size": "Grid card · 1/3 width"},
+    {"id": "build-2", "zone": "band:build", "available": true, "size": "Grid card · 1/3 width"},
+    {"id": "content-1", "zone": "band:content", "available": true, "size": "Grid card · 1/3 width"},
+    {"id": "content-2", "zone": "band:content", "available": true, "size": "Grid card · 1/3 width"},
+    {"id": "retainer-1", "zone": "band:retainer", "available": true, "size": "Grid card · 1/3 width"},
+    {"id": "retainer-2", "zone": "band:retainer", "available": true, "size": "Grid card · 1/3 width"}
+  ],
+  "example_filled": {"id": "build-1", "zone": "band:build", "available": false, "partner": "Partner name", "label": "Affiliate", "title": "Product name", "line": "One sentence on why it fits this category.", "img": "assets/ad-placeholder.png", "href": "https://example.com/?ref=omni", "cta": "Visit"}
+}

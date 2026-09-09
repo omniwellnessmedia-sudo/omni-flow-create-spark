@@ -128,3 +128,26 @@ describe('it says what happens to what you send', () => {
     expect(src).toContain('/privacy-policy');
   });
 });
+
+describe('the services funnel is measurable in Google Ads', () => {
+  it('fires a conversion once the enquiry is confirmed saved', () => {
+    // Every service CTA used to point at /contact, which fires
+    // contact_submit. They now point here, so without this the funnel we
+    // advertise would report zero conversions while producing real leads.
+    expect(src).toContain("trackAdsConversion('booking_inquiry')");
+    expect(src).toContain("from '@/lib/googleAds'");
+  });
+
+  it('does not fire on a failure or before the save is confirmed', () => {
+    const fireAt = src.indexOf("trackAdsConversion('booking_inquiry')");
+    const sentAt = src.indexOf("setStatus({ kind: 'sent' });");
+    expect(fireAt).toBeGreaterThan(sentAt);
+  });
+
+  it('attaches no conversion value', () => {
+    // The rate card price is what an offer lists, not what an enquiry is
+    // worth. Feeding a list price in would train bidding on a number
+    // nobody has agreed to pay.
+    expect(src).not.toMatch(/trackAdsConversion\('booking_inquiry',\s*\{/);
+  });
+});

@@ -352,3 +352,32 @@ describe('the pricing page publishes only rate card figures', () => {
     expect(pricing).toContain('Quoted on scope');
   });
 });
+
+describe('the services hero matches the handoff treatment', () => {
+  const svc = readFileSync(resolve(__dirname, '../Services.tsx'), 'utf8');
+
+  it('sits on ink, as the handoff sets it', () => {
+    expect(svc).toContain('<section className="relative overflow-hidden" style={{ background: INK }}>');
+  });
+
+  it('frames the banner at 21:9 under the spectrum rule', () => {
+    expect(svc).toContain('aspect-[21/9]');
+    expect(svc).toContain('<SpectrumRule />');
+  });
+
+  it('uses our own production photograph rather than stock', () => {
+    // The handoff frames a Pixabay clip of a laptop. We hold rights to a
+    // photograph of the thing we actually sell.
+    expect(svc).toContain('/screenings/night/stage-screen-wide.webp');
+    expect(svc).not.toContain('pixabay');
+  });
+
+  it('offers every category as a jump target, including quotation-based', () => {
+    expect(svc).toContain('{ href: "#quote", label: "Quotation-based"');
+    expect(svc).toContain('SERVICE_BANDS.map((b) => ({ href: `#${b.id}`');
+  });
+
+  it('keeps one h1', () => {
+    expect((svc.match(/<h1/g) || []).length).toBe(1);
+  });
+});

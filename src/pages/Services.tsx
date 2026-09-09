@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import {
   SERVICE_BANDS,
   QUOTED_CATEGORIES,
+  SPECTRUM,
   RATE_CARD_TERMS,
   PRACTICE_PROJECTS,
 } from "@/data/publicRateCard";
@@ -25,6 +26,7 @@ import {
   OfferCard,
   BandNumeral,
 } from "@/components/services/spectrum";
+import TalkToAHuman from "@/components/services/TalkToAHuman";
 import { trackWhatsappClick } from "@/lib/analytics";
 import { IMAGES } from "@/lib/images";
 
@@ -80,8 +82,13 @@ const Services = () => {
     <div className="min-h-screen" style={{ background: CREAM }}>
       <UnifiedNavigation />
       <main style={{ background: CREAM, color: INK }}>
-        {/* Hero */}
-        <section className="relative overflow-hidden">
+        {/* Hero.
+            The handoff sets this on ink with a framed 21:9 banner. Its banner
+            is a Pixabay stock clip of a laptop; ours is a photograph of our own
+            production at The Masque Theatre, which is both truer to what we
+            sell and something we hold the rights to. Same composition, real
+            subject. */}
+        <section className="relative overflow-hidden" style={{ background: INK }}>
           {/* Soft spectrum glow behind the display type */}
           <div
             aria-hidden="true"
@@ -90,51 +97,61 @@ const Services = () => {
           />
           <div className="relative mx-auto max-w-[1180px] px-5 pb-10 pt-16 sm:px-8 sm:pt-20">
             <Reveal>
-              <p className="text-[11px] uppercase tracking-[.22em]" style={{ ...mono, color: SLATE }}>
+              <p className="text-[11px] uppercase tracking-[.22em]" style={{ ...mono, color: "rgba(246,241,232,.6)" }}>
                 Services · South Africa · Rates in ZAR
               </p>
-              <h1
-                className="mt-5 max-w-[21ch] font-wwpl-display font-medium leading-[1.06] tracking-[-.01em]"
-                style={{ fontSize: "clamp(40px, 6vw, 76px)", color: INK }}
-              >
-                Bridging wellness, outreach and media.{" "}
-                <em style={{ color: CLAY }}>Work that earns its fee.</em>
-              </h1>
-              <p className="mt-6 max-w-[62ch] text-[17.5px] leading-relaxed" style={{ color: INK_SOFT }}>
-                Omni Wellness Media creates conscious content and builds the commercial engine
-                behind it: strategy, websites, campaigns, media production and systems. Start with
-                a single session or a fixed-scope sprint. Everything larger is quoted properly,
-                after we understand the work.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  to="/enquire?s=clarity-session"
-                  className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-medium text-white transition-transform hover:scale-[1.02]"
-                  style={{ background: INK }}
+              <div className="mt-5 grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:items-end">
+                <h1
+                  className="max-w-[21ch] font-wwpl-display font-medium leading-[1.06] tracking-[-.01em]"
+                  style={{ fontSize: "clamp(38px, 5.6vw, 72px)", color: "#FAF8F2" }}
                 >
-                  Start with R1,500 <ArrowRight className="h-4 w-4" />
-                </Link>
-                <a
-                  href="#clarity"
-                  className="inline-flex items-center rounded-full px-6 py-3 text-[14px] transition-colors hover:bg-black/5"
-                  style={{ border: `1px solid ${LINE}`, color: INK }}
-                >
-                  See all packages
-                </a>
+                  Bridging wellness, outreach and media.{" "}
+                  <em style={{ color: CLAY }}>Work that earns its fee.</em>
+                </h1>
+                <div>
+                  <p className="max-w-[52ch] text-[16.5px] leading-relaxed" style={{ color: "rgba(246,241,232,.78)" }}>
+                    Omni Wellness Media creates conscious content and builds the commercial engine
+                    behind it: strategy, websites, campaigns, media production and systems. Start with
+                    a single session or a fixed-scope sprint. Everything larger is quoted properly,
+                    after we understand the work.
+                  </p>
+                  <div className="mt-7 flex flex-wrap gap-3">
+                    <Link
+                      to="/enquire?s=clarity-session"
+                      className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[14px] font-medium transition-transform hover:scale-[1.02]"
+                      style={{ background: SPECTRUM.teal, color: "#0E1513" }}
+                    >
+                      Start with R1,500 <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <a
+                      href="#clarity"
+                      className="inline-flex items-center rounded-full px-6 py-3 text-[14px] transition-colors hover:bg-white/10"
+                      style={{ border: "1px solid rgba(246,241,232,.28)", color: "#FAF8F2" }}
+                    >
+                      See all packages
+                    </a>
+                  </div>
+                </div>
               </div>
             </Reveal>
 
-            {/* Real photograph: our stage at The Masque Theatre. */}
+            {/* The banner, framed at 21:9 with the spectrum rule across the
+                top, as the handoff frames its video. Real photograph of our
+                own production rather than stock. */}
             <Reveal delay={120}>
-              <figure className="relative mt-12 overflow-hidden rounded-[22px]" style={{ border: `1px solid ${LINE}` }}>
-                <img
-                  src="/screenings/night/stage-screen-wide.webp"
-                  alt="The Omni Wellness Media stage and full cinema screen at The Masque Theatre"
-                  className="h-[240px] w-full object-cover sm:h-[320px]"
-                />
+              <figure className="mt-11">
+                <div className="overflow-hidden rounded-[22px]" style={{ border: "1px solid rgba(246,241,232,.16)" }}>
+                  <SpectrumRule />
+                  <img
+                    src="/screenings/night/stage-screen-wide.webp"
+                    alt="The Omni Wellness Media stage and full cinema screen at The Masque Theatre"
+                    className="aspect-[21/9] w-full object-cover"
+                    loading="eager"
+                  />
+                </div>
                 <figcaption
-                  className="absolute bottom-3 left-3 rounded-full bg-black/45 px-4 py-1.5 text-[11px] uppercase tracking-[.16em] text-white backdrop-blur-sm"
-                  style={mono}
+                  className="mt-3 text-right text-[11px] uppercase tracking-[.16em]"
+                  style={{ ...mono, color: "rgba(246,241,232,.5)" }}
                 >
                   The Masque Theatre · 10 August 2026 · our production
                 </figcaption>
@@ -150,8 +167,8 @@ const Services = () => {
                 <a
                   key={l.href}
                   href={l.href}
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[13px] transition-all hover:-translate-y-0.5 hover:shadow-md"
-                  style={{ border: `1px solid ${LINE}`, color: INK_SOFT }}
+                  className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[13px] transition-all hover:-translate-y-0.5 hover:bg-white/10"
+                  style={{ border: "1px solid rgba(246,241,232,.22)", color: "rgba(246,241,232,.86)" }}
                 >
                   <span aria-hidden="true" className="h-[7px] w-[7px] rounded-full" style={{ background: l.hue }} />
                   {l.label}
@@ -277,6 +294,8 @@ const Services = () => {
                 style={{ border: "1px solid rgba(246,241,232,.3)" }}
               />
             </div>
+
+            <TalkToAHuman variant="dark" compact className="mt-10 max-w-xl" />
           </div>
         </section>
 

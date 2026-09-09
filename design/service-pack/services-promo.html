@@ -1,0 +1,410 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Services Promo Kit — Omni Wellness Media</title><link rel="stylesheet" href="omni.css">
+<script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<style>
+#prog{position:fixed;top:0;left:0;height:3px;width:0;z-index:99;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--teal),var(--blue),var(--violet))}
+.hero{padding:84px 0 0;overflow:hidden}
+.hero h1{font-size:clamp(44px,6.2vw,92px);margin:24px 0 20px;max-width:16ch}
+.hero h1 em{font-style:italic;color:var(--clay)}
+.marq{margin-top:44px;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);overflow:hidden;white-space:nowrap}
+.marq div{display:inline-block;padding:13px 0;animation:mq 36s linear infinite;font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--slate)}
+.marq b{color:var(--ink);font-weight:500}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.chips{position:sticky;top:74px;z-index:40;background:rgba(247,243,234,.92);backdrop-filter:blur(12px);display:flex;gap:8px;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--line-2)}
+.chips a{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--mist);display:inline-flex;align-items:center;gap:8px}
+.chips a i{width:8px;height:8px;border-radius:50%;background:var(--hue);font-size:0}
+.chips a:hover{border-color:var(--ink);color:var(--ink)}
+.chap{padding:74px 0 0}
+.chaphead{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:baseline;margin-bottom:8px}
+.chaphead .no{font-family:var(--font-mono);font-size:12px;color:var(--hue);letter-spacing:.2em}
+.chaphead h2{font-size:clamp(30px,3.4vw,44px)}
+.chaphead h2 em{font-style:italic;color:var(--clay)}
+.chapline{display:flex;gap:20px;align-items:baseline;border-bottom:2px solid var(--hue);padding-bottom:16px;margin-bottom:30px}
+.chapline p{margin:0;font-size:15px;color:var(--mist);max-width:70ch}
+.chapline span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);margin-left:auto;white-space:nowrap}
+.duet{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px}
+.acard{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.72);overflow:hidden;display:flex;flex-direction:column;transition:.3s cubic-bezier(.22,1,.36,1)}
+.acard:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(14,21,19,.12)}
+.ahead{padding:18px 20px 12px;display:flex;align-items:baseline;gap:10px}
+.ahead h3{font-size:19px;font-family:var(--font-body);font-weight:600;letter-spacing:0}
+.ahead .sz{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-left:auto;text-align:right}
+.ecue{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);padding:0 20px 12px}
+.hues{display:flex;gap:7px;padding:0 20px 12px}
+.hues button{width:20px;height:20px;border-radius:50%;border:2px solid rgba(14,21,19,.15);cursor:pointer;padding:0}
+.hues button[aria-pressed=true]{border-color:var(--ink);transform:scale(1.15)}
+.abtns{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid var(--line-2);margin-top:auto}
+.abtns button,.abtns label{white-space:nowrap;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink);cursor:pointer}
+.abtns .dl{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.abtns .dl:hover{background:var(--teal);border-color:var(--teal)}
+.abtns button:hover,.abtns label:hover{border-color:var(--ink)}
+.abtns input{display:none}
+.stage{display:flex;justify-content:center;padding:22px;background:repeating-conic-gradient(rgba(14,21,19,.05) 0 25%,transparent 0 50%) 0 0/22px 22px}
+.frame{overflow:hidden;border-radius:8px;box-shadow:0 10px 30px rgba(14,21,19,.18);flex:none;max-width:100%}
+.frame>.g{transform-origin:top left}
+[data-edit]{outline:none;border-radius:4px;cursor:text}
+[data-edit]:hover{box-shadow:0 0 0 2px rgba(43,185,185,.5)}
+[data-edit]:focus{box-shadow:0 0 0 2px #2BB9B9}
+/* artboards */
+.g{--gink:#0E1513;--gcream:#F7F3EA;--gclay:#C9B68E;--gmist:#B9C6C2;background:var(--gink);color:var(--gcream);position:relative;font-family:var(--font-body);display:flex;flex-direction:column;overflow:hidden}
+.g .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.g .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,21,19,.3),rgba(14,21,19,.55) 55%,rgba(14,21,19,.93))}
+.g .pad{position:relative;padding:80px;display:flex;flex-direction:column;height:100%}
+.g .spec7{position:relative;height:12px;background:linear-gradient(90deg,#E63946,#F38020,#F5C518,#4FAE3F,#2BB9B9,#2C6FB5,#5C2A8A);flex:none}
+.g .eyb{font-family:var(--font-mono);font-size:25px;letter-spacing:.24em;text-transform:uppercase;color:var(--hue,#2BB9B9)}
+.g h4{font-family:var(--font-display);font-weight:400;line-height:1.02;letter-spacing:-.015em;margin:0;color:var(--gcream)}
+.g em{font-style:italic;color:var(--gclay)}
+.g .sub{font-size:30px;color:var(--gmist);line-height:1.5;margin:0}
+.g .mono{font-family:var(--font-mono);letter-spacing:.06em}
+.g .pill{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:22px;letter-spacing:.14em;text-transform:uppercase;padding:16px 30px;border-radius:999px;background:var(--hue,#2BB9B9);color:var(--gink);font-weight:500}
+.g .foot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding-top:40px}
+.g .handle{font-family:var(--font-mono);font-size:21px;letter-spacing:.12em;text-transform:uppercase;color:var(--gmist)}
+.g .rowline{list-style:none;margin:0;padding:0;display:grid;gap:20px;font-size:31px;color:var(--gcream)}
+.g .rowline li{display:flex;gap:18px;align-items:baseline}
+.g .rowline b{font-family:var(--font-mono);font-size:21px;font-weight:500;color:var(--hue,#2BB9B9);min-width:96px;letter-spacing:.04em}
+.g .rowline span{color:var(--gmist);font-size:25px}
+.g .rand{font-family:var(--font-display);font-size:170px;line-height:.95;color:var(--gcream)}
+.g .rand small{display:block;font-family:var(--font-mono);font-size:22px;letter-spacing:.18em;text-transform:uppercase;color:var(--hue,#2BB9B9);margin-top:18px}
+/* variants */
+.g.duo img{filter:grayscale(1) contrast(1.08) brightness(.9)}
+.g.duo .tint{position:absolute;inset:0;background:var(--hue,#2BB9B9);mix-blend-mode:multiply;opacity:.5}
+.g.duo .shade{background:linear-gradient(180deg,rgba(14,21,19,.25),rgba(14,21,19,.5) 55%,rgba(14,21,19,.9))}
+.g.split{flex-direction:row}
+.g.split .side{position:relative;width:44%;flex:none;overflow:hidden}
+.g.split .side img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.g.split .side:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,#0E1513)}
+.g.split .txt{flex:1;display:flex;flex-direction:column;padding:74px 70px;position:relative}
+.g .disc{position:relative;width:520px;height:520px;border-radius:50%;overflow:hidden;border:10px solid var(--hue,#2BB9B9);align-self:flex-end;margin-top:-40px}
+.g .disc img{width:100%;height:100%;object-fit:cover}
+.g .diag{position:absolute;inset:0}
+.g .diag img{width:100%;height:100%;object-fit:cover;clip-path:polygon(0 0,100% 0,100% 44%,0 62%)}
+.g .diag:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,21,19,.24),rgba(14,21,19,.55) 40%,#0E1513 62%)}
+.g .meter{height:16px;border-radius:16px;background:rgba(247,243,234,.16);overflow:hidden;margin-top:30px}
+.g .meter i{display:block;height:100%;width:72%;border-radius:16px;background:linear-gradient(90deg,#E63946,#F38020,#F5C518,#4FAE3F,#2BB9B9)}
+/* calendar + copy */
+.phase{margin-bottom:30px}
+.phead{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+.phead .pd{width:9px;height:9px;border-radius:50%;background:var(--hue);transform:translateY(-2px)}
+.phead h3{font-size:23px}
+.phead span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);margin-left:auto}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px}
+.day{border:1px solid var(--line);border-radius:12px;padding:12px 13px;background:rgba(255,255,255,.6);font-size:12.5px;color:var(--mist);line-height:1.5}
+.day b{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--hue);font-weight:500;margin-bottom:5px}
+.day u{text-decoration:none;color:var(--ink);font-weight:500}
+.bank{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.cp{border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.72);padding:20px 20px 16px;display:flex;flex-direction:column}
+.cp h3{font-size:18px;font-family:var(--font-body);font-weight:600;letter-spacing:0}
+.cp .use{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--hue,var(--teal));margin:4px 0 12px}
+.cp p{white-space:pre-line;font-size:13.5px;color:var(--mist);margin:0 0 14px;line-height:1.65}
+.cp button{align-self:flex-start;margin-top:auto;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:none;cursor:pointer;color:var(--ink)}
+.cp button:hover{background:var(--ink);color:var(--cream)}
+.note{font-family:var(--font-mono);font-size:11px;color:var(--slate);letter-spacing:.05em;margin:16px 0 0}
+.sechead{display:flex;align-items:baseline;gap:16px;border-bottom:1px solid var(--line-2);padding-bottom:14px;margin-bottom:26px}
+.sechead h2{font-size:29px}
+.sechead span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);margin-left:auto;text-align:right}
+.sec{padding:74px 0 0}
+</style></head><body>
+<div id="prog"></div>
+<header class="topbar"><div class="wrap"><a class="brandmark" href="index.html"><img src="assets/omni-icon.png" alt="Omni"><span>Omni Wellness Media</span></a><nav class="navlinks"><a href="index.html">Dashboard</a><a href="screening-services.html">Screenings kit</a><a href="campaign-30.html">Stunning Pigs kit</a></nav><a class="btn btn-solid" href="https://deploy-preview-51--omniwellnessmedia.netlify.app/services" target="_blank" rel="noopener">Live services page</a></div></header>
+
+<section class="hero"><div class="wrap"><p class="eyebrow">Sales kit · The services page · 30 days</p>
+<h1>Make the services page <em>impossible to scroll past.</em></h1>
+<p class="lede">Ten editable assets built around Omni's entry offers, each with its own layout: split frames, duotones, circular crops and big-numeral price tiles. Same rules as the screening kit: click text to edit, swap the photo, pick a hue, download the PNG or rebuild in Canva.</p></div>
+<div class="marq"><div>Clarity Session R1,500 · Website &amp; Visibility Audit R2,500 · Content Starter Pack R3,500 · Revenue Sprint R7,500 · Growth Desk R6,500 p/m · Podcast Starter R2,500 · Workshops from R7,500 · <b>omniwellnessmedia.co.za/services</b> · Clarity Session R1,500 · Website &amp; Visibility Audit R2,500 · Content Starter Pack R3,500 · Revenue Sprint R7,500 · Growth Desk R6,500 p/m · Podcast Starter R2,500 · Workshops from R7,500 · <b>omniwellnessmedia.co.za/services</b> · </div></div>
+<div class="wrap"><nav class="chips"><a href="#c1" style="--hue:var(--teal)"><i></i>Brand</a><a href="#c2" style="--hue:var(--green)"><i></i>Clarity &amp; audits</a><a href="#c3" style="--hue:var(--orange)"><i></i>Sprint</a><a href="#c4" style="--hue:var(--violet)"><i></i>Content &amp; growth</a><a href="#c5" style="--hue:var(--blue)"><i></i>Podcast &amp; workshops</a><a href="#c6" style="--hue:var(--green)"><i></i>Lead magnet</a><a href="#calendar" style="--hue:var(--red)"><i></i>30 days</a><a href="#copy" style="--hue:var(--slate)"><i></i>Copy</a></nav></div>
+</section>
+
+<div class="wrap">
+<section class="chap" id="c1" style="--hue:var(--teal)">
+<div class="chaphead"><span class="no">01</span><h2>The brand, in one tile</h2></div>
+<div class="chapline"><p>The anchor post. Duotone photo, the mission line, nothing for sale. Post it first and pin it.</p><span>1 asset</span></div>
+<div class="duet">
+<article class="acard" data-name="osp-brand-anchor" data-w="1080" data-h="1080">
+<div class="ahead"><h3>Brand anchor</h3><span class="sz">IG + FB feed · 1080 × 1080</span></div>
+<p class="ecue">Stock: meditation at sunrise (Unsplash) · duotone follows the hue</p>
+<div class="hues" data-for="brand"></div>
+<div class="stage"><div class="frame" style="width:352px;height:352px"><div class="g duo" data-g="brand" style="--hue:#2BB9B9;width:1080px;height:1080px;transform:scale(.3259)">
+<img class="bg" id="img-brand" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1600&q=80" data-fb="assets/plate-hero.png" alt="Meditation at sunrise"><span class="tint"></span><div class="shade"></div>
+<div class="pad"><p class="eyb" data-edit="br-kicker">Omni Wellness Media</p>
+<h4 style="font-size:112px;margin-top:auto"><span data-edit="br-title">Bridging wellness, outreach <em>and media.</em></span></h4>
+<p class="sub" style="margin-top:32px" data-edit="br-line">Strategy, websites, content and campaigns for South Africa's conscious brands.</p>
+<div class="foot" style="padding-top:36px"><span class="handle" data-edit="br-url">omniwellnessmedia.co.za/services</span><img src="assets/omni-logo.png" alt="Omni" style="height:52px;filter:invert(1) brightness(2)"></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><label>Replace photo<input type="file" accept="image/*" data-img="img-brand"></label><button class="rst">Reset</button></div>
+</article>
+</div></section>
+
+<section class="chap" id="c2" style="--hue:var(--green)">
+<div class="chaphead"><span class="no">02</span><h2>Clarity and audits, <em>the front door</em></h2></div>
+<div class="chapline"><p>The two offers people can buy without a meeting. A split frame for the session, a checklist tile for the audit.</p><span>2 assets</span></div>
+<div class="duet">
+<article class="acard" data-name="osp-clarity-session" data-w="1080" data-h="1080">
+<div class="ahead"><h3>Clarity session</h3><span class="sz">IG + FB feed · 1080 × 1080 · split frame</span></div>
+<p class="ecue">Stock: fountain pen on paper (Unsplash) · price is the headline</p>
+<div class="stage"><div class="frame" style="width:352px;height:352px"><div class="g split" style="--hue:#2BB9B9;width:1080px;height:1080px;transform:scale(.3259)">
+<div class="side"><img id="img-clar" src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80" data-fb="assets/plate-valley.png" alt="Writing an action plan"></div>
+<div class="txt"><p class="eyb" style="font-size:22px" data-edit="cs-kicker">Start here</p>
+<p class="rand" style="margin-top:60px" data-edit="cs-price">R1,500<small data-edit="cs-unit">once-off · 60 minutes</small></p>
+<h4 style="font-size:64px;margin-top:56px"><span data-edit="cs-title">One hour. One <em>clear next step.</em></span></h4>
+<p class="sub" style="font-size:26px;margin-top:26px" data-edit="cs-line">A senior strategist, your one decision, and a written action map the same week.</p>
+<div class="foot" style="padding-top:30px"><span class="pill" style="font-size:20px" data-edit="cs-cta">Book a slot</span></div></div>
+<div class="spec7" style="position:absolute;bottom:0;left:0;right:0"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><label>Replace photo<input type="file" accept="image/*" data-img="img-clar"></label><button class="rst">Reset</button></div>
+</article>
+
+<article class="acard" data-name="osp-audit-checklist" data-w="1080" data-h="1080" data-hueable>
+<div class="ahead"><h3>Audit checklist</h3><span class="sz">IG + FB feed · 1080 × 1080 · type-led</span></div>
+<p class="ecue">No photo · pick a hue, edit every line</p>
+<div class="hues" data-for="audit"></div>
+<div class="stage"><div class="frame" style="width:352px;height:352px"><div class="g" data-g="audit" style="--hue:#4FAE3F;width:1080px;height:1080px;transform:scale(.3259)">
+<div class="pad"><p class="eyb" data-edit="au-kicker">Website &amp; Visibility Audit · R2,500</p>
+<h4 style="font-size:100px;margin-top:40px"><span data-edit="au-title">Where do visitors <em>give up?</em></span></h4>
+<ul class="rowline" style="margin-top:54px">
+<li><b data-edit="au-t1">Check</b><span data-edit="au-d1">Messaging: ten seconds to "what is this?"</span></li>
+<li><b data-edit="au-t2">Check</b><span data-edit="au-d2">Mobile journey and every contact route</span></li>
+<li><b data-edit="au-t3">Check</b><span data-edit="au-d3">Calls to action and search basics</span></li>
+<li><b data-edit="au-t4">Get</b><span data-edit="au-d4">A 30-day fix-it plan you can run yourself</span></li>
+</ul>
+<div class="foot"><span class="pill" data-edit="au-cta">Book the audit</span><span class="handle">@omniwellnessmedia</span></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><button class="rst">Reset</button></div>
+</article>
+</div></section>
+
+<section class="chap" id="c3" style="--hue:var(--orange)">
+<div class="chaphead"><span class="no">03</span><h2>The Revenue Sprint, <em>hero offer</em></h2></div>
+<div class="chapline"><p>One offer, one page, one route to payment. A diagonal story for reach, a duotone feed tile for the scroll.</p><span>2 assets</span></div>
+<div class="duet">
+<article class="acard" data-name="osp-sprint-story" data-w="1080" data-h="1920">
+<div class="ahead"><h3>Sprint story</h3><span class="sz">IG story / WA status · 1080 × 1920 · diagonal frame</span></div>
+<p class="ecue">Stock: laptop workspace (Unsplash) · photo sits in the diagonal</p>
+<div class="stage"><div class="frame" style="width:300px;height:533px"><div class="g" style="--hue:#F38020;width:1080px;height:1920px;transform:scale(.2778)">
+<div class="diag"><img id="img-sprint" src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1600&q=80" data-fb="assets/plate-workshop.png" alt="Laptop workspace"></div>
+<div class="pad" style="padding:110px 90px"><p class="eyb" style="--hue:#FFC38A;color:#FFC38A" data-edit="sp-kicker">Revenue-Ready Sprint</p>
+<h4 style="font-size:132px;margin-top:auto"><span data-edit="sp-title">One offer. One page. <em>One route to payment.</em></span></h4>
+<p class="sub" style="font-size:36px;margin-top:50px" data-edit="sp-line">Landing page, offer copy, a route to pay or book, and tracking that shows it working. Live in weeks, not quarters.</p>
+<p class="mono" style="font-size:52px;color:#F38020;margin:56px 0 0" data-edit="sp-price">R7,500 launch rate</p>
+<div class="foot" style="padding-top:56px"><span class="pill" style="--hue:#F38020" data-edit="sp-cta">Start a sprint</span><span class="handle">@omniwellnessmedia</span></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><label>Replace photo<input type="file" accept="image/*" data-img="img-sprint"></label><button class="rst">Reset</button></div>
+</article>
+
+<article class="acard" data-name="osp-sprint-feed" data-w="1080" data-h="1080">
+<div class="ahead"><h3>Sprint feed tile</h3><span class="sz">IG + FB feed · 1080 × 1080 · duotone</span></div>
+<p class="ecue">Stock: planning desk (Unsplash) · duotone follows hue</p>
+<div class="hues" data-for="sprintf"></div>
+<div class="stage"><div class="frame" style="width:352px;height:352px"><div class="g duo" data-g="sprintf" style="--hue:#F38020;width:1080px;height:1080px;transform:scale(.3259)">
+<img class="bg" id="img-sprintf" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=80" data-fb="assets/plate-workshop.png" alt="Planning documents"><span class="tint"></span><div class="shade"></div>
+<div class="pad"><p class="eyb" data-edit="sf-kicker">For the idea you keep postponing</p>
+<h4 style="font-size:104px;margin-top:auto"><span data-edit="sf-title">Selling <em>in 30 days.</em></span></h4>
+<p class="sub" style="margin-top:30px" data-edit="sf-line">The Revenue-Ready Sprint builds the page, the payment route and the proof. R7,500, fixed scope, no surprises.</p>
+<div class="foot" style="padding-top:34px"><span class="pill" data-edit="sf-cta">Claim a sprint slot</span><span class="handle">@omniwellnessmedia</span></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><label>Replace photo<input type="file" accept="image/*" data-img="img-sprintf"></label><button class="rst">Reset</button></div>
+</article>
+</div></section>
+
+<section class="chap" id="c4" style="--hue:var(--violet)">
+<div class="chaphead"><span class="no">04</span><h2>Content and the <em>Growth Desk</em></h2></div>
+<div class="chapline"><p>A circular-crop tile for the Content Starter Pack, and an editorial serif tile for the retainer.</p><span>2 assets</span></div>
+<div class="duet">
+<article class="acard" data-name="osp-content-pack" data-w="1080" data-h="1080">
+<div class="ahead"><h3>Content Starter Pack</h3><span class="sz">IG + FB feed · 1080 × 1080 · circle crop</span></div>
+<p class="ecue">Stock: camera in hand (Unsplash) · disc border follows hue</p>
+<div class="hues" data-for="content"></div>
+<div class="stage"><div class="frame" style="width:352px;height:352px"><div class="g" data-g="content" style="--hue:#5C2A8A;width:1080px;height:1080px;transform:scale(.3259)">
+<div class="pad"><p class="eyb" style="color:#B39DDB" data-edit="cp2-kicker">Content Starter Pack · R3,500</p>
+<h4 style="font-size:96px;margin-top:36px;max-width:12ch"><span data-edit="cp2-title">A month of posting, <em>decided in a week.</em></span></h4>
+<div class="disc"><img id="img-content" src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=1200&q=80" data-fb="assets/plate-podcast.png" alt="Camera in hand"></div>
+<div class="foot" style="padding-top:20px"><ul class="rowline" style="gap:12px"><li><b style="min-width:64px" data-edit="cp2-t1">6</b><span data-edit="cp2-d1">branded graphics + captions</span></li><li><b style="min-width:64px" data-edit="cp2-t2">1</b><span data-edit="cp2-d2">theme, 30-day posting plan</span></li></ul><span class="pill" style="font-size:20px" data-edit="cp2-cta">Buy now</span></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><label>Replace photo<input type="file" accept="image/*" data-img="img-content"></label><button class="rst">Reset</button></div>
+</article>
+
+<article class="acard" data-name="osp-growth-desk" data-w="1080" data-h="1080">
+<div class="ahead"><h3>Growth Desk</h3><span class="sz">IG + FB feed · 1080 × 1080 · editorial</span></div>
+<p class="ecue">Stock: young plant (Unsplash) · quiet, serif-led</p>
+<div class="stage"><div class="frame" style="width:352px;height:352px"><div class="g" style="--hue:#2BB9B9;width:1080px;height:1080px;transform:scale(.3259)">
+<img class="bg" id="img-desk" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1600&q=80" data-fb="assets/plate-valley.png" alt="Young plant growing"><div class="shade" style="background:rgba(14,21,19,.78)"></div>
+<div class="pad"><p class="eyb" data-edit="gd-kicker">Omni Growth Desk · R6,500 per month</p>
+<h4 style="font-size:118px;margin-top:auto"><span data-edit="gd-title">The work that never quite <em>gets done.</em></span></h4>
+<p class="sub" style="margin-top:34px" data-edit="gd-line">Strategy, eight content pieces, one campaign and four site-support hours. Every month, without chasing.</p>
+<div class="foot" style="padding-top:36px"><span class="pill" data-edit="gd-cta">Reserve a desk</span><span class="handle">@omniwellnessmedia</span></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><label>Replace photo<input type="file" accept="image/*" data-img="img-desk"></label><button class="rst">Reset</button></div>
+</article>
+</div></section>
+
+<section class="chap" id="c5" style="--hue:var(--blue)">
+<div class="chaphead"><span class="no">05</span><h2>Podcast and <em>workshops</em></h2></div>
+<div class="chapline"><p>A mic tile for the Podcast Starter System and a wide banner for workshops and facilitation.</p><span>2 assets</span></div>
+<div class="duet">
+<article class="acard" data-name="osp-podcast-starter" data-w="1080" data-h="1080">
+<div class="ahead"><h3>Podcast Starter</h3><span class="sz">IG + FB feed · 1080 × 1080</span></div>
+<p class="ecue">Stock: microphone (Unsplash)</p>
+<div class="stage"><div class="frame" style="width:352px;height:352px"><div class="g" style="--hue:#2C6FB5;width:1080px;height:1080px;transform:scale(.3259)">
+<img class="bg" id="img-pod" src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=1600&q=80" data-fb="assets/plate-podcast.png" alt="Microphone"><div class="shade"></div>
+<div class="pad"><p class="eyb" style="--hue:#7FB2E5;color:#7FB2E5" data-edit="pd-kicker">Podcast Starter System · R2,500</p>
+<h4 style="font-size:110px;margin-top:auto"><span data-edit="pd-title">Start the show <em>properly.</em></span></h4>
+<p class="sub" style="margin-top:32px" data-edit="pd-line">A 90-minute strategy session, a launch checklist and a curated equipment guide. Everything decided before you press record.</p>
+<div class="foot" style="padding-top:36px"><span class="pill" style="--hue:#2C6FB5;color:#fff" data-edit="pd-cta">Book the session</span><span class="handle">@omniwellnessmedia</span></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><label>Replace photo<input type="file" accept="image/*" data-img="img-pod"></label><button class="rst">Reset</button></div>
+</article>
+
+<article class="acard" data-name="osp-workshops-banner" data-w="1200" data-h="627">
+<div class="ahead"><h3>Workshops banner</h3><span class="sz">LinkedIn / email header · 1200 × 627</span></div>
+<p class="ecue">Stock: team at a table (Unsplash) · B2B wording</p>
+<div class="stage"><div class="frame" style="width:360px;height:188.1px"><div class="g" style="--hue:#F5C518;width:1200px;height:627px;transform:scale(.3)">
+<img class="bg" id="img-work" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80" data-fb="assets/plate-workshop.png" alt="Team working together"><div class="shade" style="background:linear-gradient(90deg,rgba(14,21,19,.94) 36%,rgba(14,21,19,.3))"></div>
+<div class="pad" style="padding:64px 70px"><p class="eyb" style="font-size:20px" data-edit="wk-kicker">Workshops &amp; facilitation · from R7,500</p>
+<h4 style="font-size:82px;margin-top:20px"><span data-edit="wk-title">AI, content and conscious leadership, <em>taught in a day.</em></span></h4>
+<p class="sub" style="font-size:25px;margin-top:18px;max-width:660px" data-edit="wk-line">Half-day and full-day programmes for teams · Cape Town and online</p>
+<div class="foot" style="padding-top:16px"><span class="mono" style="font-size:21px;color:#F5C518" data-edit="wk-url">omniwellnessmedia.co.za/services</span></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><label>Replace photo<input type="file" accept="image/*" data-img="img-work"></label><button class="rst">Reset</button></div>
+</article>
+</div></section>
+
+<section class="chap" id="c6" style="--hue:var(--green)">
+<div class="chaphead"><span class="no">06</span><h2>The free way in</h2></div>
+<div class="chapline"><p>The scorecard story with a live-looking meter. Run it as the top-of-funnel post every campaign.</p><span>1 asset</span></div>
+<div class="duet">
+<article class="acard" data-name="osp-scorecard-story" data-w="1080" data-h="1920" data-hueable>
+<div class="ahead"><h3>Scorecard story</h3><span class="sz">IG story / WA status · 1080 × 1920 · type-led</span></div>
+<p class="ecue">No photo · the meter is drawn in · edit the score line</p>
+<div class="hues" data-for="score"></div>
+<div class="stage"><div class="frame" style="width:300px;height:533px"><div class="g" data-g="score" style="--hue:#4FAE3F;width:1080px;height:1920px;transform:scale(.2778)">
+<div class="pad" style="padding:120px 90px"><p class="eyb" data-edit="sc2-kicker">Free · 10 questions · 3 minutes</p>
+<h4 style="font-size:150px;margin-top:70px"><span data-edit="sc2-title">Where is your revenue <em>leaking?</em></span></h4>
+<p class="mono" style="font-size:44px;color:var(--gcream);margin:80px 0 0" data-edit="sc2-score">Your score: 21/30</p>
+<div class="meter"><i></i></div>
+<p class="sub" style="font-size:36px;margin-top:44px" data-edit="sc2-line">Ten honest questions, a plain verdict, and the one thing worth fixing first.</p>
+<div class="foot" style="padding-top:60px"><span class="pill" data-edit="sc2-cta">Take the scorecard</span><span class="handle">Link in bio</span></div></div>
+<div class="spec7"></div></div></div></div>
+<div class="abtns"><button class="dl">Download PNG</button><button class="rst">Reset</button></div>
+</article>
+</div></section>
+
+<section class="sec" id="calendar"><div class="sechead"><h2>The 30 days</h2><span>Services always-on rotation</span></div>
+<div class="phase" style="--hue:var(--teal)"><div class="phead"><span class="pd"></span><h3>Week 1 · Anchor and open the door</h3><span>Brand, then the cheapest yes</span></div>
+<div class="days">
+<div class="day"><b>Day 1</b><u>Brand anchor</u> on IG + FB · pin it · banner into email signatures</div>
+<div class="day"><b>Day 2</b><u>Clarity session</u> split tile · caption "Start here"</div>
+<div class="day"><b>Day 3</b><u>Scorecard story</u> on IG + WA status</div>
+<div class="day"><b>Day 4</b>WA broadcast: clarity session to the warm list</div>
+<div class="day"><b>Day 5</b><u>Audit checklist</u> tile · answer comments with the audit link</div>
+<div class="day"><b>Day 6</b>Story: repost anchor with a question sticker</div>
+<div class="day"><b>Day 7</b>Review: saves, shares, enquiries · thank first bookings</div>
+</div></div>
+<div class="phase" style="--hue:var(--orange)"><div class="phead"><span class="pd"></span><h3>Week 2 · Hero offer</h3><span>The sprint carries the week</span></div>
+<div class="days">
+<div class="day"><b>Day 8</b><u>Sprint feed tile</u> on IG + FB</div>
+<div class="day"><b>Day 9</b><u>Sprint story</u> · countdown sticker to the month's last slot</div>
+<div class="day"><b>Day 10</b>Workshops banner on LI · tag past workshop clients</div>
+<div class="day"><b>Day 11</b>Email 1: sprint launch email (email kit) to the list</div>
+<div class="day"><b>Day 12</b>Story: sprint scope in plain words, Q&amp;A sticker</div>
+<div class="day"><b>Day 13</b>WA broadcast: sprint launch rate to warm list</div>
+<div class="day"><b>Day 14</b>Review: sprint enquiries · boost the better sprint tile</div>
+</div></div>
+<div class="phase" style="--hue:var(--violet)"><div class="phead"><span class="pd"></span><h3>Week 3 · Content and retainers</h3><span>Monthly money</span></div>
+<div class="days">
+<div class="day"><b>Day 15</b><u>Content pack</u> circle tile on IG + FB</div>
+<div class="day"><b>Day 16</b><u>Growth Desk</u> editorial tile · LI text post on capacity</div>
+<div class="day"><b>Day 17</b>Story: show a real content calendar screenshot</div>
+<div class="day"><b>Day 18</b><u>Podcast starter</u> tile on IG + FB</div>
+<div class="day"><b>Day 19</b>Scorecard story rerun · new question line</div>
+<div class="day"><b>Day 20</b>Email 2: scorecard invite to non-openers</div>
+<div class="day"><b>Day 21</b>Review: which offer pulled · plan week 4 around it</div>
+</div></div>
+<div class="phase" style="--hue:var(--red)"><div class="phead"><span class="pd"></span><h3>Week 4 · Close the month</h3><span>Follow-ups and honest urgency</span></div>
+<div class="days">
+<div class="day"><b>Day 22</b>Rerun the winning tile with a fresh first line</div>
+<div class="day"><b>Day 23</b><u>Audit checklist</u> rerun in a new hue · "last audits this month"</div>
+<div class="day"><b>Day 24</b>LI: workshops banner rerun · DM every commenter</div>
+<div class="day"><b>Day 25</b><u>Clarity session</u> rerun · WA broadcast three-option close</div>
+<div class="day"><b>Day 26</b>Story: month recap numbers (real ones)</div>
+<div class="day"><b>Day 27</b>Email 3: month wrap + one offer for next month</div>
+<div class="day"><b>Day 28</b>Follow up every open enquiry in the tracker</div>
+<div class="day"><b>Day 29</b>Review month: cost per lead, bookings per offer</div>
+<div class="day"><b>Day 30</b>Thank-you post · queue next month from the winner</div>
+</div></div>
+</section>
+
+<section class="sec" id="copy"><div class="sechead"><h2>Copy bank</h2><span>Captions ready to paste</span></div>
+<div class="bank">
+<div class="cp" style="--hue:var(--teal)"><h3>Brand anchor</h3><p class="use">Day 1, pinned</p>
+<p>Wellness businesses are good at the work and quietly bad at the selling. That gap is our job.
+
+Omni Wellness Media builds the commercial engine behind conscious brands: strategy, websites, content, campaigns and systems.
+
+Start small: a R1,500 clarity session or the free Revenue Readiness Scorecard. Everything else is on the services page, link in bio.</p>
+<button data-copy>Copy caption</button></div>
+<div class="cp" style="--hue:var(--green)"><h3>Clarity + audit</h3><p class="use">Days 2 and 5</p>
+<p>You do not need a rebrand. You need one hour and an honest list.
+
+R1,500 buys sixty minutes with a senior strategist and a written action map. R2,500 buys a full website and visibility audit with a 30-day fix-it plan.
+
+Both bookable today, link in bio.</p>
+<button data-copy>Copy caption</button></div>
+<div class="cp" style="--hue:var(--orange)"><h3>Sprint week</h3><p class="use">Days 8 and 9</p>
+<p>The idea is ready. The page is not.
+
+The Revenue-Ready Sprint fixes that in one fixed scope: landing page, offer copy, a route to pay or book, and tracking that proves it. R7,500 at the launch rate.
+
+One slot left this month, link in bio.</p>
+<button data-copy>Copy caption</button></div>
+<div class="cp" style="--hue:var(--violet)"><h3>Retainer week</h3><p class="use">Days 15 and 16</p>
+<p>Posting stopped again in week three? That is not a discipline problem, it is a capacity problem.
+
+The Omni Growth Desk: strategy, eight content pieces, one campaign and four site-support hours, every month, R6,500.
+
+Or start smaller with the R3,500 Content Starter Pack. Link in bio.</p>
+<button data-copy>Copy caption</button></div>
+</div>
+<p class="note">Photos are royalty-free Unsplash stock: sunrise meditation, pen on paper, workspaces, young plant, camera, microphone, team at a table. Replace with real Omni photography as it lands. Facts and prices stay aligned to the rate card.</p>
+<hr class="spectrum-rule" style="margin:52px 0 0">
+</section>
+</div>
+<footer class="site"><div class="wrap"><span>Omni Wellness Media · Services promo kit v1</span><span>Edits, hues and uploads stay on this device</span></div></footer>
+
+<script>
+const NS='osp:';
+const HUES=[['#E63946','red'],['#F38020','orange'],['#F5C518','yellow'],['#4FAE3F','green'],['#2BB9B9','teal'],['#2C6FB5','blue'],['#5C2A8A','violet']];
+document.querySelectorAll('[data-edit]').forEach(el=>{if(!el.hasAttribute('contenteditable'))el.setAttribute('contenteditable','true');
+if(!el.dataset.orig)el.dataset.orig=el.innerHTML;
+const k=NS+el.dataset.edit;const saved=localStorage.getItem(k);if(saved!==null)el.innerHTML=saved;
+el.addEventListener('input',()=>localStorage.setItem(k,el.innerHTML));
+el.addEventListener('paste',e=>{e.preventDefault();document.execCommand('insertText',false,(e.clipboardData||window.clipboardData).getData('text'))})});
+document.querySelectorAll('input[type=file][data-img]').forEach(inp=>{const img=document.getElementById(inp.dataset.img);const k=NS+'img:'+inp.dataset.img;
+const saved=localStorage.getItem(k);if(saved)img.src=saved;
+inp.addEventListener('change',()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();
+r.onload=()=>{const im=new Image();im.onload=()=>{const max=1800,sc=Math.min(1,max/Math.max(im.width,im.height));
+const c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
+c.getContext('2d').drawImage(im,0,0,c.width,c.height);const d=c.toDataURL('image/jpeg',.85);
+img.src=d;try{localStorage.setItem(k,d)}catch(e){alert('Photo too large to save; it will show until you reload.')}};im.src=r.result};
+r.readAsDataURL(f)})});
+document.querySelectorAll('.g img').forEach(i=>{i.dataset.orig=i.getAttribute('src');i.crossOrigin='anonymous';i.addEventListener('error',()=>{if(i.dataset.fb&&i.src.indexOf(i.dataset.fb)<0)i.src=i.dataset.fb})});
+// hue swatches
+document.querySelectorAll('.hues').forEach(row=>{const name=row.dataset.for;const g=document.querySelector('[data-g="'+name+'"]');if(!g)return;
+const k=NS+'hue:'+name;g.dataset.hue0=getComputedStyle(g).getPropertyValue('--hue').trim()||'#2BB9B9';
+HUES.forEach(([c])=>{const b=document.createElement('button');b.type='button';b.style.background=c;b.setAttribute('aria-pressed','false');b.title=c;
+b.addEventListener('click',()=>{g.style.setProperty('--hue',c);localStorage.setItem(k,c);row.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true')});
+row.appendChild(b)});
+const saved=localStorage.getItem(k);if(saved){g.style.setProperty('--hue',saved);const btn=[...row.children].find(x=>x.title===saved);if(btn)btn.setAttribute('aria-pressed','true')}});
+document.querySelectorAll('.acard .rst').forEach(b=>b.addEventListener('click',()=>{const card=b.closest('.acard');
+card.querySelectorAll('[data-edit]').forEach(el=>{el.innerHTML=el.dataset.orig;localStorage.removeItem(NS+el.dataset.edit)});
+card.querySelectorAll('input[data-img]').forEach(inp=>{const img=document.getElementById(inp.dataset.img);
+localStorage.removeItem(NS+'img:'+inp.dataset.img);if(img.dataset.orig)img.src=img.dataset.orig});
+const g=card.querySelector('[data-g]');if(g){g.style.setProperty('--hue',g.dataset.hue0);localStorage.removeItem(NS+'hue:'+g.dataset.g);card.querySelectorAll('.hues button').forEach(x=>x.setAttribute('aria-pressed','false'))}}));
+document.querySelectorAll('.acard .dl').forEach(b=>b.addEventListener('click',async()=>{const card=b.closest('.acard');
+const g=card.querySelector('.g');const w=+card.dataset.w,h=+card.dataset.h;
+b.textContent='Rendering…';b.disabled=true;
+try{const url=await htmlToImage.toPng(g,{width:w,height:h,pixelRatio:1,style:{transform:'none'}});
+const a=document.createElement('a');a.href=url;a.download=card.dataset.name+'-'+w+'x'+h+'.png';a.click();
+b.textContent='Downloaded ✓';setTimeout(()=>{b.textContent='Download PNG';b.disabled=false},1800)}
+catch(e){console.error(e);b.textContent='Failed, retry';b.disabled=false}}));
+document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{const t=b.parentElement.querySelector('p:last-of-type').innerText;
+navigator.clipboard.writeText(t).then(()=>{const o=b.textContent;b.textContent='Copied ✓';setTimeout(()=>b.textContent=o,1500)})}));
+addEventListener('scroll',()=>{const d=document.documentElement;document.getElementById('prog').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight)*100)+'%'},{passive:true});
+</script>
+<template id="__bundler_thumbnail" data-bg-color="#F7F3EA"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#F7F3EA"/><text x="50" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="20" fill="#0E1513">SV</text><rect x="28" y="54" width="44" height="4" rx="2" fill="#12888A"/></svg></template>
+</body></html>

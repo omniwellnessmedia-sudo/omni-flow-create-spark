@@ -71,3 +71,4 @@ LOGIN_CREDENTIALS.md
 credentials.*
 .env.local
 .env.*.local
+design/service-pack/assets/

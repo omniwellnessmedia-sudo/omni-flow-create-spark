@@ -10,11 +10,14 @@ import { classifyWhatsapp, whatsappHref } from '../whatsapp';
  */
 
 describe('a WhatsApp link is described by what it does', () => {
-  it('a channel is never presented as a way to message us', () => {
+  it('a channel is offered as something to follow, never as a way to message us', () => {
+    // We have a channel and no number, so the channel is worth promoting.
+    // What it must never do is invite a message nobody will receive.
     const link = classifyWhatsapp('https://whatsapp.com/channel/0029VbAwPluA89MadCKPxE1y');
     expect(link.kind).toBe('channel');
     expect(link.canMessageUs).toBe(false);
-    expect(link.label).toBe('WhatsApp channel');
+    expect(link.purpose).toBe('follow');
+    expect(link.label).toBe('Follow on WhatsApp');
     expect(link.label).not.toBe('WhatsApp us');
   });
 
@@ -22,6 +25,7 @@ describe('a WhatsApp link is described by what it does', () => {
     const link = classifyWhatsapp('https://wa.me/27821234567');
     expect(link.kind).toBe('chat');
     expect(link.canMessageUs).toBe(true);
+    expect(link.purpose).toBe('contact');
     expect(link.label).toBe('WhatsApp us');
   });
 
@@ -34,6 +38,7 @@ describe('a WhatsApp link is described by what it does', () => {
     const link = classifyWhatsapp('https://chat.whatsapp.com/ABCdef123');
     expect(link.kind).toBe('group');
     expect(link.canMessageUs).toBe(false);
+    expect(link.purpose).toBe('follow');
   });
 
   it.each([
@@ -45,6 +50,9 @@ describe('a WhatsApp link is described by what it does', () => {
     const link = classifyWhatsapp(url);
     expect(link.canMessageUs).toBe(false);
     expect(link.label).not.toBe('WhatsApp us');
+    // Nothing honest can be written on a button we cannot classify, so it
+    // is not shown at all.
+    expect(link.purpose).toBe('none');
   });
 
   it('handles a www prefix and a trailing path the same way', () => {

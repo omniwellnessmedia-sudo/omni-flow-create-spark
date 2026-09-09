@@ -14,6 +14,8 @@ import { bandImage } from '@/data/serviceImagery';
 import { getServiceDetailContent } from '@/data/serviceDetailContent';
 import { useSEO } from '@/lib/seo';
 import { WhatsappButton } from '@/components/services/spectrum';
+import TalkToAHuman from '@/components/services/TalkToAHuman';
+import BookAndPayButton from '@/components/services/BookAndPayButton';
 
 /**
  * One page per offer on the rate card, built to convert.
@@ -133,6 +135,19 @@ const ServiceOfferDetail = () => {
         {offer.cta}
         <ArrowRight className="h-4 w-4" />
       </Link>
+      {/* Book and pay, for the offers that need no scoping call. Renders
+          nothing until a paid booking link is set in Admin Settings, so it
+          cannot go live before the money can reach the account. */}
+      <BookAndPayButton
+        settingKey={`booking_url_${offer.slug.replace(/-/g, '_')}`}
+        source={`book_and_pay_${offer.slug}`}
+        className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-medium"
+        style={
+          variant === 'dark'
+            ? { background: '#FAF8F2', color: '#15201F' }
+            : { background: hue, color: '#FFFFFF' }
+        }
+      />
       <WhatsappButton
         source={`service_detail_${offer.slug}`}
         prefill={`Hi, I would like to ask about ${offer.name}.`}
@@ -434,7 +449,9 @@ const ServiceOfferDetail = () => {
             </section>
           )}
 
-          <section className="mt-16 border-t pt-10" style={{ borderColor: 'rgba(14,21,19,.09)' }}>
+          <TalkToAHuman className="mt-16" />
+
+          <section className="mt-12 border-t pt-10" style={{ borderColor: 'rgba(14,21,19,.09)' }}>
             <h2
               className="text-[10px] uppercase tracking-[.2em] text-muted-foreground"
               style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}

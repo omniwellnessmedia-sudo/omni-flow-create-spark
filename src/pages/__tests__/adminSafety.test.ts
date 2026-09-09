@@ -504,3 +504,94 @@ describe('a failed read is never presented as having nothing', () => {
     expect(codeOnly(src)).not.toContain('title: newSession.title.trim() || null');
   });
 });
+
+describe('the admin has one way to find anything', () => {
+  const search = readFileSync(
+    resolve(__dirname, '../../components/admin/AdminSearch.tsx'), 'utf8'
+  );
+  const layout = readFileSync(
+    resolve(__dirname, '../../components/dashboard/AdminLayout.tsx'), 'utf8'
+  );
+
+  it('sits in the shell, so it is on every admin screen', () => {
+    expect(layout).toContain('<AdminSearch />');
+  });
+
+  it('takes its screen list from the sidebar rather than a second copy', () => {
+    // Two hand-maintained lists drift, and the one nobody edits is the one
+    // that sends people to a screen that moved.
+    expect(search).toContain("from '@/components/dashboard/AdminSidebar'");
+    expect(search).toContain('NAV_GROUPS.flatMap');
+  });
+
+  it('finds screens without needing the network', () => {
+    // The half that always works must not depend on the half that can fail.
+    const screenBlock = search.slice(search.indexOf('const screenHits'), search.indexOf('const searchRecords'));
+    expect(screenBlock).not.toContain('supabase');
+  });
+
+  it('never reports a refused search as no results', () => {
+    expect(search).toContain('which is not the same as there being none');
+    expect(search).toContain('failed: error.message');
+  });
+
+  it('one refused table does not hide the ones that answered', () => {
+    // Each source resolves to its own result rather than throwing, so a
+    // single denial cannot blank the whole list.
+    expect(search).toContain('Promise.all(sources.map');
+    expect(search).toContain("return { label: 'Leads', hits: [], failed: error.message }");
+  });
+
+  it('a slow early keystroke cannot overwrite a newer answer', () => {
+    expect(search).toContain('if (mine !== runId.current) return;');
+  });
+
+  it('opens on the shortcut every other tool uses', () => {
+    expect(search).toContain("e.key.toLowerCase() === 'k' && (e.metaKey || e.ctrlKey)");
+  });
+});
+
+describe('the newsletter looks like us and links where it says', () => {
+  const editor = readFileSync(resolve(adminDir, 'NewsletterEditor.tsx'), 'utf8');
+
+  it('links only to accounts the site itself links to', () => {
+    // The old template linked to Facebook and TikTok, which appear nowhere
+    // else on the site. Dead social links go out to the whole list.
+    const footer = readFileSync(resolve(__dirname, '../../components/Footer.tsx'), 'utf8');
+    for (const host of ['facebook.com', 'tiktok.com']) {
+      expect(editor, host).not.toContain(host);
+      expect(footer, host).not.toContain(host);
+    }
+    for (const host of ['instagram.com', 'x.com']) {
+      expect(editor, host).toContain(host);
+    }
+  });
+
+  it('uses the real palette rather than a generic rainbow', () => {
+    for (const hue of ['#E63946', '#F38020', '#F5C518', '#4FAE3F', '#2BB9B9', '#2C6FB5', '#5C2A8A']) {
+      expect(editor, hue).toContain(hue);
+    }
+    expect(codeOnly(editor)).not.toContain('#FF6B6B');
+  });
+
+  it('carries no hardcoded year that goes stale', () => {
+    expect(codeOnly(editor)).not.toMatch(/©\s*20\d\d/);
+  });
+
+  it('hotlinks no third party image service', () => {
+    // Every remote image in an email is a request that identifies the
+    // reader to whoever serves it.
+    expect(editor).not.toContain('icons8');
+  });
+
+  it('keeps the per recipient unsubscribe placeholder', () => {
+    expect(editor).toContain('{{unsubscribe_url}}');
+  });
+
+  it('can be seen at phone width before it is sent', () => {
+    // Most newsletters are read on a phone, so a layout only ever checked
+    // at desktop width is a layout nobody has checked.
+    expect(editor).toContain("previewWidth === 'phone' ? 390");
+    expect(editor).toContain('sandbox=""');
+  });
+});

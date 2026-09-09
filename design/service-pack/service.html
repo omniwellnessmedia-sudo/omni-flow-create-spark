@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Service · Omni Wellness Media</title><link rel="stylesheet" href="omni.css"><style>
+.hero{position:relative;background:var(--ink);color:var(--cream);overflow:hidden;--gclay:#C9B68E;--gmist:#B9C6C2}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;min-height:620px;padding-top:72px;padding-bottom:72px}
+.hero .crumb{display:flex;gap:10px;align-items:center;font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gmist)}
+.hero .crumb a{color:var(--gmist)}.hero .crumb a:hover{color:var(--cream)}
+.hero .crumb i{width:8px;height:8px;border-radius:50%;background:var(--hueb);font-size:0}
+.hero .name{font-family:var(--font-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--hueb);margin:26px 0 0}
+.hero h1{font-size:clamp(44px,5.6vw,84px);color:var(--cream);margin:14px 0 20px;max-width:15ch}
+.hero h1 em{font-style:italic;color:var(--gclay)}
+.hero .lede{color:var(--gmist);font-size:18px;max-width:52ch}
+.pricebox{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin:34px 0 0}
+.amt{font-family:var(--font-display);font-size:64px;line-height:1;color:var(--cream)}
+.unit{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--hueb)}
+.hero .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.hero .btn{color:var(--cream);border-color:rgba(247,243,234,.3);min-height:48px}
+.hero .btn:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.hero .btn-hue{background:var(--hueb);border-color:var(--hueb);color:var(--ink);font-weight:600}
+.hero .btn-hue:hover{background:var(--cream);border-color:var(--cream)}
+.trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gmist)}
+.trust span:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--hueb);margin-right:9px;vertical-align:middle}
+.media{position:relative;min-height:440px;border-radius:14px;overflow:hidden;z-index:0}
+.media img,.media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.media video{z-index:1}.media img{transition:opacity .6s}
+.credit{position:absolute;right:32px;bottom:18px;z-index:2;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gmist)}
+.v-diag .credit{position:static;display:block;grid-column:2;margin:-56px 0 0;text-align:right}
+.credit a{color:var(--gmist);text-decoration:underline}
+@media(prefers-reduced-motion:reduce){.media video{display:none}}
+.spec{position:absolute;left:0;right:0;bottom:0;height:5px;background:linear-gradient(90deg,#E63946,#F38020,#F5C518,#4FAE3F,#2BB9B9,#2C6FB5,#5C2A8A)}
+/* variants */
+.v-split .media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ink),transparent 40%)}
+.v-split .media{border:1px solid rgba(247,243,234,.12)}
+.v-diag .wrap{grid-template-columns:1fr 1.05fr;gap:64px;min-height:640px}
+.v-diag .media{min-height:0;aspect-ratio:16/10;border:1px solid rgba(247,243,234,.14);border-radius:14px;box-shadow:0 40px 90px rgba(0,0,0,.5);background:#000}
+.v-diag .media:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--hueb);z-index:2}
+.v-diag .media img,.v-diag .media video{clip-path:none}
+.v-diag h1{max-width:14ch}
+.v-diag .lede{max-width:44ch}
+.v-disc .media{width:440px;height:440px;min-height:0;border-radius:50%;border:10px solid var(--hueb);justify-self:end;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.v-disc .spec{display:none}
+.v-editorial .wrap{grid-template-columns:1fr;min-height:560px}
+.v-editorial .media{position:absolute;inset:0;border-radius:0;min-height:0}
+.v-editorial .media img{opacity:.22}
+.v-editorial .media:after{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 80% 50%,transparent,var(--ink) 80%)}
+.v-editorial .wrap>.copy{position:relative;z-index:1;max-width:760px}
+.v-editorial h1{font-size:clamp(48px,6.4vw,104px);max-width:14ch}
+.v-duo .media img{filter:grayscale(1) contrast(1.08) brightness(.85)}
+.v-duo .media:before{content:"";position:absolute;inset:0;background:var(--hueb);mix-blend-mode:multiply;opacity:.55;z-index:1}
+.v-wide .wrap{grid-template-columns:1fr;min-height:620px}
+.v-wide .media{position:absolute;inset:0;border-radius:0;min-height:0}
+.v-wide .media:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,21,19,.96) 40%,rgba(14,21,19,.45))}
+.v-wide .wrap>.copy{position:relative;z-index:1;max-width:720px}
+/* body */
+.body{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;padding:72px 0 0}
+.panel{border:1px solid rgba(14,21,19,.16);border-radius:18px;padding:30px 28px;background:linear-gradient(180deg,color-mix(in oklch,var(--hue) 9%,#fff),rgba(255,255,255,.6));position:relative;overflow:hidden}
+.panel:before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--hue)}
+.panel h2{font-size:28px;margin-bottom:18px}
+.incl{list-style:none;margin:0;padding:0;display:grid;gap:12px;font-size:15.5px;color:var(--mist)}
+.incl li{display:flex;gap:12px}.incl li:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--hue);flex:none;margin-top:9px}
+.note{font-family:var(--font-mono);font-size:11.5px;color:var(--slate);letter-spacing:.05em;margin:22px 0 0;padding-top:18px;border-top:1px solid var(--line-2)}
+.forwho{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+.forwho li{display:flex;gap:12px;align-items:baseline;font-size:16px;color:var(--ink);padding:12px 0;border-bottom:1px solid var(--line-2)}
+.forwho li b{font-family:var(--font-mono);font-size:11px;color:var(--hue);letter-spacing:.14em;font-weight:500;min-width:26px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px}
+.step{padding:22px 22px 24px;border:1px solid rgba(14,21,19,.16);border-radius:16px;background:rgba(255,255,255,.72)}
+.step b{font-family:var(--font-mono);font-size:12px;color:var(--hue);letter-spacing:.14em;font-weight:500}
+.step h3{font-family:var(--font-body);font-size:17px;font-weight:600;letter-spacing:0;margin:10px 0 6px}
+.step p{margin:0;font-size:14.5px;color:var(--mist)}
+.faq{margin-top:72px;max-width:760px}
+.faq h2{font-size:32px;margin-bottom:8px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px 0;font-size:17px;font-weight:500;color:var(--ink);min-height:48px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";font-family:var(--font-mono);color:var(--hue);font-size:20px;flex:none}
+.faq details[open] summary:after{content:"–"}
+.faq details p{margin:0 0 20px;font-size:15px;color:var(--mist);max-width:62ch}
+.related{padding:72px 0 0}
+.related h2{font-size:32px;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.mini{border:1px solid rgba(14,21,19,.16);border-radius:16px;padding:24px 22px;background:linear-gradient(180deg,color-mix(in oklch,var(--hue) 8%,#fff),rgba(255,255,255,.6));display:flex;flex-direction:column;gap:8px;color:var(--ink);position:relative;overflow:hidden;transition:.25s cubic-bezier(.22,1,.36,1)}
+.mini:before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--hue)}
+.mini:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(14,21,19,.12);color:var(--ink)}
+.mini h3{font-size:22px}.mini .p{font-family:var(--font-mono);font-size:12.5px;color:var(--hue);letter-spacing:.04em}
+.mini p{margin:0;font-size:14px;color:var(--mist)}
+.terms{margin-top:80px;padding-top:36px;border-top:1px solid var(--line-2)}
+.terms ul{columns:2;column-gap:44px;list-style:none;padding:0;margin:18px 0 0;font-size:14px;color:var(--slate)}
+.terms li{margin-bottom:10px;break-inside:avoid;padding-left:14px;border-left:1px solid var(--line)}
+/* sticky conversion bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(247,243,234,.94);backdrop-filter:blur(14px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.bar.on{transform:none}
+.bar .wrap{display:flex;align-items:center;gap:18px;min-height:68px;padding-top:10px;padding-bottom:10px}
+.bar .bn{font-family:var(--font-display);font-size:20px;color:var(--ink)}
+.bar .bp{font-family:var(--font-mono);font-size:12.5px;color:var(--hue);letter-spacing:.04em}
+.bar .btn{margin-left:auto;background:var(--hue);border-color:var(--hue);color:#fff;min-height:44px}
+.bar .btn:hover{background:var(--ink);border-color:var(--ink)}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr;min-height:0;padding-top:56px;padding-bottom:56px}.media{min-height:280px}.v-diag .credit{grid-column:1;margin:0}.v-disc .media{width:280px;height:280px;justify-self:start}.body{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.terms ul{columns:1}.bar .bn{display:none}.amt{font-size:52px}}
+@media(prefers-reduced-motion:reduce){.bar,.mini{transition:none}}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><div class="wrap"><a class="brandmark" href="index.html"><img src="assets/omni-icon.png" alt="" width="30" height="30"><span>Omni Wellness Media</span></a><nav class="navlinks" aria-label="Primary"><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="scorecard.html">Free scorecard</a><a href="#enquire">Contact</a></nav><a class="btn btn-solid" href="services.html#clarity">Book a clarity session</a></div></header>
+<main id="main" tabindex="-1"></main>
+<div class="bar" id="bar" aria-hidden="true"></div>
+<footer class="site"><div class="wrap"><span>Omni Wellness Media · Cape Town, South Africa</span><span>hello@omniwellnessmedia.co.za · WhatsApp on request</span></div></footer>
+<script>
+// One template per service. ?s=<slug> selects the offer; data lives in data/services.json (facts, prices) and data/service-detail.json (visual variant, outcome copy, FAQ).
+const ROUTES={book:'enquire.html?a=book&s=',pay:'enquire.html?a=pay&s=',enquire:'enquire.html?a=enquire&s=',whatsapp:'enquire.html?a=whatsapp&s='};
+const BRIGHT={red:'#E63946',orange:'#F38020',yellow:'#F5C518',green:'#4FAE3F',teal:'#2BB9B9',blue:'#7FB2E5',violet:'#B39DDB',clay:'#C9B68E',slate:'#B9C6C2'};
+const STEPS=[['01','Choose the offer','Pay or book directly for entry offers. Larger work starts with a short enquiry.'],['02','Scope in writing','What is included, what is not, and the date you will have it. Nothing starts before you approve it.'],['03','Delivered and reported','Agreed deliverables, professional setup and a plain report on what happened.']];
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+Promise.all([fetch('data/services.json').then(r=>r.json()),fetch('data/service-detail.json').then(r=>r.json())]).then(([D,X])=>{
+const slug=new URLSearchParams(location.search).get('s')||'revenue-ready-sprint';
+const s=D.services.find(x=>x.slug===slug)||D.services[0];const d=X[s.slug]||X['revenue-ready-sprint'];const cat=D.categories.find(c=>c.id===s.category);
+const hue=`var(--${s.hue})`,hueb=BRIGHT[s.hue]||BRIGHT.teal;
+document.title=`${s.name} · ${s.price} · Omni Wellness Media`;
+const related=D.services.filter(x=>x.category===s.category&&x.slug!==s.slug).slice(0,3);
+const primary=s.cta.find(c=>c.primary)||s.cta[0];
+document.getElementById('main').innerHTML=`
+<section class="hero v-${d.variant}" style="--hue:${hue};--hueb:${hueb}" aria-labelledby="h1">
+<div class="wrap"><div class="copy">
+<p class="crumb"><i></i><a href="services.html#${cat.id}">${cat.no} · ${esc(cat.title)}</a></p>
+<p class="name">${esc(s.name)}</p>
+<h1 id="h1">${d.headline}</h1>
+<p class="lede">${esc(s.summary)}</p>
+<div class="pricebox"><span class="amt">${esc(s.price)}</span>${s.priceNote?`<span class="unit">${esc(s.priceNote)}</span>`:''}</div>
+<div class="row">${s.cta.map(c=>`<a class="btn ${c.primary?'btn-hue':''}" href="${ROUTES[c.action]}${s.slug}">${esc(c.label)}</a>`).join('')}</div>
+<p class="trust"><span>Scope in writing before payment</span><span>Rates in ZAR</span><span>Quotes valid 14 days</span></p>
+</div>
+<div class="media">${d.video?`<video autoplay muted loop playsinline preload="metadata" poster="${d.poster}" aria-hidden="true"><source src="${d.video}" type="video/mp4"></video>`:''}<img src="${d.img}" data-fb="${d.fb}" alt="${esc(d.alt)}" loading="eager"><div class="spec"></div></div>
+${d.video||d.credit?`<p class="credit">${d.video?'Video: Templune / Pixabay':'Photo: Pixabay'}</p>`:''}
+</div></section>
+<div class="wrap" style="--hue:${hue}">
+<div class="body">
+<div class="panel"><h2>What you get</h2>${s.includes.length?`<ul class="incl">${s.includes.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:`<p style="margin:0;font-size:15.5px;color:var(--mist)">Scope is confirmed on enquiry. ${esc(s.summary)}</p>`}${s.excludes?`<p class="note">${esc(s.excludes)}</p>`:''}${cat.note?`<p class="note">${esc(cat.note)}</p>`:''}</div>
+<div><p class="eyebrow">Who this is for</p><ul class="forwho">${d.for.map((f,i)=>`<li><b>0${i+1}</b>${esc(f)}</li>`).join('')}</ul>
+<div class="row" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px"><a class="btn btn-solid" href="${ROUTES[primary.action]}${s.slug}">${esc(primary.label)}</a><a class="btn" href="scorecard.html">Not sure? Take the free scorecard</a></div></div>
+</div>
+<div class="steps" aria-label="How it works">${STEPS.map(([n,h,p])=>`<div class="step"><b>${n}</b><h3>${h}</h3><p>${p}</p></div>`).join('')}</div>
+<section class="faq" aria-labelledby="faqh"><h2 id="faqh">Before you book</h2>${d.faq.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</section>
+${related.length?`<section class="related" aria-labelledby="relh"><h2 id="relh">Also in ${esc(cat.title.toLowerCase())}</h2><div class="grid">${related.map(r=>`<a class="mini" style="--hue:var(--${r.hue})" href="service.html?s=${r.slug}"><h3>${esc(r.name)}</h3><span class="p">${esc(r.price)}</span><p>${esc(r.summary)}</p></a>`).join('')}</div></section>`:''}
+<section class="terms" id="enquire" aria-labelledby="termh"><p class="eyebrow">How we work</p><h2 id="termh" style="font-size:30px;margin-top:14px">Standard commercial terms</h2><ul>${D.terms.map(t=>`<li>${esc(t)}</li>`).join('')}</ul><hr class="spectrum-rule" style="margin:44px 0 0"></section>
+</div>`;
+document.querySelectorAll('.media img').forEach(i=>i.addEventListener('error',()=>{if(i.src.indexOf(i.dataset.fb)<0)i.src=i.dataset.fb}));
+const mv=document.querySelector('.media video');if(mv){const mi=mv.parentElement.querySelector('img');mv.addEventListener('playing',()=>{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)mi.style.opacity=0})}
+const bar=document.getElementById('bar');bar.style.setProperty('--hue',hue);
+bar.innerHTML=`<div class="wrap"><span class="bn">${esc(s.name)}</span><span class="bp">${esc(s.price)}${s.priceNote?' · '+esc(s.priceNote):''}</span><a class="btn" href="${ROUTES[primary.action]}${s.slug}">${esc(primary.label)}</a></div>`;
+const hero=document.querySelector('.hero');
+new IntersectionObserver(([e])=>{const on=!e.isIntersecting;bar.classList.toggle('on',on);bar.setAttribute('aria-hidden',String(!on))},{threshold:0}).observe(hero);
+});
+</script>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#0E1513"/><text x="50" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="20" fill="#F7F3EA">SD</text><rect x="28" y="54" width="44" height="4" rx="2" fill="#F38020"/></svg></template>
+</body></html>
