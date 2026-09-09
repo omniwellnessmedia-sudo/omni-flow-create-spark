@@ -4,8 +4,7 @@ import { resolve } from 'node:path';
 import { HUMAN_CONTACTS, publishedContacts, telHref, OFFICE_HOURS } from '../humanContact';
 
 /**
- * The phone numbers the site offers, and the WhatsApp button it no longer
- * offers.
+ * The phone numbers the site offers, and how a WhatsApp link is labelled.
  *
  * No em dashes in this file.
  */
@@ -64,7 +63,7 @@ describe('a published number is a number that works', () => {
   });
 });
 
-describe('the WhatsApp button is withheld until it can carry a message', () => {
+describe('a WhatsApp button says what the link actually does', () => {
   const spectrum = readFileSync(
     resolve(__dirname, '../../components/services/spectrum.tsx'), 'utf8'
   );
@@ -75,12 +74,15 @@ describe('the WhatsApp button is withheld until it can carry a message', () => {
     resolve(__dirname, '../../components/services/TalkToAHuman.tsx'), 'utf8'
   );
 
-  it('renders nothing when the link cannot be replied to', () => {
-    expect(spectrum).toContain('if (!link.url || !link.canMessageUs) return null;');
+  it('shows a link we can describe, and nothing we cannot', () => {
+    // We have a channel and no number, so the channel is promoted as a
+    // follow. An unclassifiable link is still hidden, because there is no
+    // honest wording for a button whose destination we do not understand.
+    expect(spectrum).toContain("if (!link.url || link.purpose === 'none') return null;");
   });
 
-  it('the quick action dock withholds it on the same test', () => {
-    expect(dock).toContain('whatsapp.canMessageUs');
+  it('the quick action dock uses the same test', () => {
+    expect(dock).toContain("whatsapp.purpose !== 'none'");
   });
 
   it('this is not a hardcoded switch somebody has to remember to undo', () => {

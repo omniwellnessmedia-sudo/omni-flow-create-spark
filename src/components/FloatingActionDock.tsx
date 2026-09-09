@@ -103,7 +103,7 @@ export const FloatingActionDock = () => {
     // The channel on file is broadcast only, so offering it as a quick action
     // pointed people at a dead end. Set a wa.me number in Admin Settings and
     // this returns on its own.
-    ...(whatsapp.canMessageUs
+    ...(whatsapp.purpose !== 'none'
       ? [{
           id: "whatsapp",
           label: whatsapp.label,

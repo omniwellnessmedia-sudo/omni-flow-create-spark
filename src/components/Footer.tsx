@@ -91,12 +91,11 @@ const Footer = () => {
               <a href="https://www.youtube.com/watch?v=ZOoaiV-IiiU" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label="YouTube">
                 <Youtube className="w-4 h-4" />
               </a>
-              {/* Shown only when the link can be replied to. The channel on
-                  file is broadcast only, and WhatsApp reads as messaging to
-                  most people, so an icon that lands somewhere nobody can
-                  reply is the same dead end as the old buttons. Set a wa.me
-                  number in Admin Settings and this returns on its own. */}
-              {whatsapp.canMessageUs && (
+              {/* A follow link in a row of follow links, which is what this
+                  row is. The aria-label comes from the classifier, so it
+                  reads "Follow on WhatsApp" for the channel we have and
+                  "WhatsApp us" only if a real number is ever set. */}
+              {whatsapp.purpose !== 'none' && (
                 <a href={whatsapp.url} target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 hover:bg-white/10 rounded-lg transition-colors" aria-label={whatsapp.label}>
                   <MessageCircle className="w-4 h-4" />
                 </a>

@@ -39,20 +39,22 @@ export const useWhatsappLink = (): WhatsappLink =>
 /**
  * The one WhatsApp button.
  *
- * IT RENDERS NOTHING UNLESS THE LINK CAN CARRY A MESSAGE. The link on file
- * is a broadcast channel: people can follow it, nobody can reply through
- * it. Offering it as a way to reach us sent every person who tried into a
- * dead end we never saw. So until a wa.me number is set in Admin Settings,
- * no WhatsApp button appears anywhere on the site, and TalkToAHuman offers
- * a phone call instead.
+ * WE HAVE A CHANNEL, NOT A NUMBER, and a channel is worth promoting. What
+ * it is not is a way to reach us: people can follow it, nobody can reply
+ * through it. So the button shows, and it says "Follow on WhatsApp"
+ * instead of "WhatsApp us". Following is the thing on offer, and the
+ * label names it.
  *
- * This is not a hardcoded switch anybody has to remember to turn off. Set a
- * real number and every button returns on its own, correctly labelled and
- * carrying its prefilled message.
+ * The label is never written by the caller. It comes from the link, so a
+ * channel cannot be dressed up as a contact route by anybody adding a
+ * button in a hurry. Set a wa.me number in Admin Settings and every button
+ * on the site turns into "WhatsApp us" and starts carrying its prefilled
+ * message, with no code change.
  *
- * Its label comes from the link rather than from the caller, because a
- * hardcoded "WhatsApp us" over a channel is exactly the defect this
- * replaces.
+ * Contact still has its own answer: TalkToAHuman offers a phone call.
+ *
+ * A link we cannot classify renders nothing, because there is no honest
+ * wording for a button whose destination we do not understand.
  */
 export const WhatsappButton = ({
   source,
@@ -68,7 +70,7 @@ export const WhatsappButton = ({
   style?: CSSProperties;
 }) => {
   const link = useWhatsappLink();
-  if (!link.url || !link.canMessageUs) return null;
+  if (!link.url || link.purpose === 'none') return null;
 
   return (
     <a

@@ -16,6 +16,15 @@
 
 export type WhatsappKind = 'chat' | 'channel' | 'group' | 'unknown';
 
+/**
+ * What the link is good for, which is not the same as whether to show it.
+ *
+ * 'contact' is a way to reach us. 'follow' is something to subscribe to.
+ * Both are worth offering. Presenting the second as the first is the
+ * defect: it invites a message nobody will receive.
+ */
+export type WhatsappPurpose = 'contact' | 'follow' | 'none';
+
 export interface WhatsappLink {
   url: string;
   kind: WhatsappKind;
@@ -23,6 +32,7 @@ export interface WhatsappLink {
   label: string;
   /** True only when a person can send us a message through it. */
   canMessageUs: boolean;
+  purpose: WhatsappPurpose;
 }
 
 /**
@@ -35,7 +45,7 @@ export const classifyWhatsapp = (raw: string | null | undefined): WhatsappLink =
   const url = (raw ?? '').trim();
 
   if (!url) {
-    return { url: '', kind: 'unknown', label: 'WhatsApp', canMessageUs: false };
+    return { url: '', kind: 'unknown', label: 'WhatsApp', canMessageUs: false, purpose: 'none' };
   }
 
   let host = '';
@@ -45,7 +55,7 @@ export const classifyWhatsapp = (raw: string | null | undefined): WhatsappLink =
     host = parsed.hostname.toLowerCase().replace(/^www\./, '');
     path = parsed.pathname;
   } catch {
-    return { url, kind: 'unknown', label: 'WhatsApp', canMessageUs: false };
+    return { url, kind: 'unknown', label: 'WhatsApp', canMessageUs: false, purpose: 'none' };
   }
 
   // wa.me/27821234567 and api.whatsapp.com/send?phone=... both open a
@@ -56,21 +66,30 @@ export const classifyWhatsapp = (raw: string | null | undefined): WhatsappLink =
     (host === 'whatsapp.com' && path === '/send');
 
   if (isChat) {
-    return { url, kind: 'chat', label: 'WhatsApp us', canMessageUs: true };
+    return { url, kind: 'chat', label: 'WhatsApp us', canMessageUs: true, purpose: 'contact' };
   }
 
+  // A channel is worth promoting. It is simply a thing to follow rather
+  // than a way to reach us, and the label says so.
   if (/^\/channel\//.test(path)) {
-    return { url, kind: 'channel', label: 'WhatsApp channel', canMessageUs: false };
+    return {
+      url,
+      kind: 'channel',
+      label: 'Follow on WhatsApp',
+      canMessageUs: false,
+      purpose: 'follow',
+    };
   }
 
   // chat.whatsapp.com/<code> is a group invite. A person can post in the
   // group, but that is joining a room, not messaging us, and the button
   // should not pretend otherwise.
   if (host === 'chat.whatsapp.com') {
-    return { url, kind: 'group', label: 'WhatsApp group', canMessageUs: false };
+    return { url, kind: 'group', label: 'Join our WhatsApp group', canMessageUs: false, purpose: 'follow' };
   }
 
-  return { url, kind: 'unknown', label: 'WhatsApp', canMessageUs: false };
+  // Not recognised, so there is nothing honest to write on a button.
+  return { url, kind: 'unknown', label: 'WhatsApp', canMessageUs: false, purpose: 'none' };
 };
 
 /**
