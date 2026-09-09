@@ -57,3 +57,38 @@ describe('it does not restate anything that lives elsewhere', () => {
     expect(btn).toContain("trackAdsConversion('booking_inquiry')");
   });
 });
+
+describe('switching it on is a deliberate act', () => {
+  const settingUi = readFileSync(
+    resolve(__dirname, '../../admin/BookingLinkSetting.tsx'), 'utf8'
+  );
+  const adminSettings = readFileSync(
+    resolve(__dirname, '../../../pages/admin/AdminSettings.tsx'), 'utf8'
+  );
+
+  it('there is a screen for it, not just a database row', () => {
+    expect(adminSettings).toContain('<BookingLinkSetting />');
+  });
+
+  it('warns that saving makes it possible to charge a stranger', () => {
+    expect(settingUi).toContain('Anyone can be charged from the moment you save');
+    expect(settingUi).toContain('window.confirm');
+  });
+
+  it('tells you to confirm payouts work before filling it in', () => {
+    expect(settingUi).toContain('can actually pay out to a South African');
+  });
+
+  it('applies the same link rule as the button', () => {
+    expect(settingUi).toContain("u.protocol === 'https:'");
+    expect(settingUi).toContain('cal\\.com$');
+  });
+
+  it('is held to super admin', () => {
+    expect(settingUi).toContain("roles.includes('super_admin')");
+  });
+
+  it('can be switched off again', () => {
+    expect(settingUi).toContain('Clear, and remove the button');
+  });
+});

@@ -11,6 +11,7 @@ import { useFeatureFlags, FeatureFlag } from "@/hooks/useFeatureFlags";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import WhatsappLinkSetting from "@/components/admin/WhatsappLinkSetting";
+import BookingLinkSetting from "@/components/admin/BookingLinkSetting";
 import { 
   Settings, 
   Calendar, 
@@ -146,6 +147,8 @@ export const AdminSettings = () => {
   return (
     <div className="space-y-6">
       <WhatsappLinkSetting />
+
+      <BookingLinkSetting />
 
       {/* Feature Flags Section */}
       <Card>
