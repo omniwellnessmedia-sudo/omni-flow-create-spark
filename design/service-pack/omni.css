@@ -1,0 +1,43 @@
+/* Omni Wellness Media — shared asset styles (Spectrum System v2, light) */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--red:#BE2029;--orange:#A34E0C;--yellow:#8A6A05;--green:#337A29;--teal:#0E6E70;--blue:#2C6FB5;--violet:#5C2A8A;--ink:#0E1513;--ink-2:#15201F;--deep:#1F2F27;--slate:#5A6763;--mist:#43524E;--clay:#8A7444;--cream:#F7F3EA;--cream-2:#FAF8F2;--paper:#fff;--line:rgba(14,21,19,.16);--line-2:rgba(14,21,19,.09);--surface:rgba(255,255,255,.72);--surface-2:rgba(255,255,255,.5);--font-display:"Cormorant Garamond",Georgia,serif;--font-body:"Inter",system-ui,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,monospace;--maxw:1180px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--font-body);line-height:1.6;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:16px;top:-60px;z-index:100;background:var(--ink);color:var(--cream);padding:12px 18px;border-radius:999px;font-size:14px}
+.skip:focus{top:12px;color:var(--cream)}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+a{color:var(--teal);text-decoration:none}
+a:hover{color:var(--ink)}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:400;line-height:1.08;margin:0;letter-spacing:-.01em;color:var(--ink)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+.spectrum-rule{height:3px;border:0;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--teal),var(--blue),var(--violet))}
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--slate);margin:0}
+.lede{font-size:19px;color:var(--mist);max-width:62ch;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;white-space:nowrap;gap:10px;font-size:14px;font-weight:500;padding:13px 22px;border-radius:999px;border:1px solid var(--line);color:var(--ink);background:none;transition:.25s cubic-bezier(.22,1,.36,1)}
+.btn:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.btn-solid{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.btn-solid:hover{background:var(--teal);border-color:var(--teal);color:#fff}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(247,243,234,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-2)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;height:74px}
+.brandmark{display:flex;align-items:center;gap:12px;color:var(--ink)}
+.brandmark img{height:30px;width:auto}
+.brandmark span{font-family:var(--font-display);font-size:19px;letter-spacing:.01em}
+.navlinks{display:flex;gap:26px;font-size:14px}
+.navlinks a{color:var(--mist)}
+.navlinks a:hover{color:var(--ink)}
+footer.site{border-top:1px solid var(--line-2);margin-top:96px;padding:44px 0 60px;color:var(--slate);font-size:13px}
+footer.site .wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between}
+@media(max-width:760px){.wrap{padding:0 20px}.navlinks{display:none}}
+
+/* mobile nav */
+.menu{display:none;width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;position:relative;margin-left:8px}
+.menu span,.menu span:before,.menu span:after{position:absolute;left:12px;width:20px;height:2px;background:var(--ink);content:"";transition:.25s cubic-bezier(.22,1,.36,1)}
+.menu span{top:21px}.menu span:before{top:-6px;left:0}.menu span:after{top:6px;left:0}
+.menu[aria-expanded="true"] span{background:transparent}.menu[aria-expanded="true"] span:before{transform:translateY(6px) rotate(45deg)}.menu[aria-expanded="true"] span:after{transform:translateY(-6px) rotate(-45deg)}
+.drawer{position:fixed;inset:74px 0 0 0;z-index:49;background:var(--cream);padding:24px 20px;display:grid;gap:4px;align-content:start;border-top:1px solid var(--line-2)}
+.drawer a{font-family:var(--font-display);font-size:30px;color:var(--ink);padding:14px 0;border-bottom:1px solid var(--line-2);min-height:48px}
+.drawer a.btn{font-family:var(--font-mono);font-size:11px;margin-top:20px;border-bottom:1px solid var(--ink);justify-content:center}
+body.nav-open{overflow:hidden}
+@media(max-width:760px){.menu{display:block}.topbar .btn-solid{display:none}}
+@media(min-width:761px){.drawer{display:none!important}}

@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Enquire · Omni Wellness Media</title><link rel="stylesheet" href="omni.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+.enq{display:grid;grid-template-columns:1fr 380px;gap:44px;padding:56px 0 96px;align-items:start}
+.steps{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.steps span{white-space:nowrap;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:9px 14px;border-radius:999px;border:1px solid var(--line);color:var(--slate);display:inline-flex;gap:8px;align-items:center;min-height:36px}
+.steps span.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}.steps span.done{border-color:var(--hue);color:var(--hue)}
+.steps span.done:before{content:"✓"}
+h1.t{font-size:clamp(30px,3.6vw,46px);margin:0 0 8px}
+.sub{font-size:15.5px;color:var(--mist);margin:0 0 28px;max-width:56ch}
+.routes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.route{text-align:left;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.72);padding:22px;cursor:pointer;font:inherit;color:var(--ink);display:grid;gap:6px;transition:.25s cubic-bezier(.22,1,.36,1);min-height:44px}
+.route:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(14,21,19,.12);border-color:var(--hue)}
+.route.on{border-color:var(--hue);box-shadow:inset 0 0 0 1px var(--hue);background:color-mix(in oklch,var(--hue) 8%,#fff)}
+.route b{font-family:var(--font-display);font-size:24px;font-weight:400;line-height:1.05}
+.route small{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hue)}
+.route p{margin:0;font-size:13.5px;color:var(--mist)}
+.form{display:grid;gap:18px;margin-top:28px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field{display:grid;gap:6px}
+.field label{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate)}
+.field input,.field select,.field textarea{font:inherit;font-size:15px;padding:13px 16px;min-height:48px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);width:100%}
+.field textarea{min-height:120px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid var(--teal);outline-offset:2px;border-color:var(--teal)}
+.field.err input,.field.err textarea,.field.err select{border-color:var(--red)}.msg{font-size:13px;color:var(--red)}.hint{font-size:13px;color:var(--slate)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.slot{min-height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;font:inherit;font-size:14px;cursor:pointer;color:var(--ink)}
+.slot:hover{border-color:var(--hue)}.slot.on{background:var(--hue);border-color:var(--hue);color:#fff}
+.slot[disabled]{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+.day{flex:none;min-width:72px;min-height:64px;border-radius:12px;border:1px solid var(--line);background:#fff;font:inherit;cursor:pointer;color:var(--ink);display:grid;place-content:center;gap:2px}
+.day small{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate)}
+.day.on{background:var(--ink);color:var(--cream)}.day.on small{color:var(--cream)}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--mist);cursor:pointer}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--hue);flex:none}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.btn-hue{background:var(--hue);border-color:var(--hue);color:#fff;font-weight:500}.btn-hue:hover{background:var(--ink);border-color:var(--ink)}
+.btn.busy{position:relative;color:transparent!important;pointer-events:none}.btn.busy:after{content:"";position:absolute;width:16px;height:16px;border:2px solid var(--cream);border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.side{position:sticky;top:96px;border:1px solid var(--line);border-radius:18px;padding:26px;background:linear-gradient(180deg,color-mix(in oklch,var(--hue) 9%,#fff),rgba(255,255,255,.6));display:grid;gap:14px;overflow:hidden}
+.side:before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--hue)}
+.side .eyebrow{color:var(--hue)}
+.side h2{font-size:24px}
+.side .amt{font-family:var(--font-display);font-size:38px;line-height:1}
+.side .unit{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--hue);margin-left:8px}
+.side ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:14px;color:var(--mist)}.side li{display:flex;gap:10px}.side li:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--hue);flex:none;margin-top:8px}
+.side .sw{border-top:1px solid var(--line-2);padding-top:14px}
+.side select{font:inherit;font-size:14px;padding:10px 12px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;width:100%}
+.done{border:1px solid var(--line);border-radius:22px;padding:44px;background:rgba(255,255,255,.72);display:grid;gap:14px;max-width:640px}
+.done b.ref{font-family:var(--font-mono);font-size:13px;color:var(--hue);letter-spacing:.1em;font-weight:500}
+.done h2{font-size:36px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);display:flex;gap:12px;align-items:center;padding:14px 18px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:14px;box-shadow:0 20px 48px rgba(14,21,19,.13);z-index:80;animation:up .35s cubic-bezier(.22,1,.36,1)}
+.toast i{width:10px;height:10px;border-radius:50%;flex:none}
+@keyframes up{from{opacity:0;transform:translate(-50%,12px)}}
+.fade{animation:fd .3s cubic-bezier(.22,1,.36,1)}@keyframes fd{from{opacity:0;transform:translateY(8px)}}
+@media(max-width:900px){.enq{grid-template-columns:1fr}.side{position:static;order:-1}.two,.routes{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.fade,.toast,.route{animation:none;transition:none}}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><div class="wrap"><a class="brandmark" href="index.html"><img src="assets/omni-icon.png" alt=""><span>Omni Wellness Media</span></a><nav class="navlinks" aria-label="Primary"><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="scorecard.html">Free scorecard</a></nav><a class="btn btn-solid" href="services.html">All services</a></div></header>
+<main id="main" class="wrap"><div id="root"></div></main>
+<footer class="site"><div class="wrap"><span>Omni Wellness Media · Cape Town, South Africa</span><span>hello@omniwellnessmedia.co.za</span></div></footer>
+<script type="text/babel">
+const {useState,useEffect,useMemo}=React;
+const WA='27000000000'; // replace with the business WhatsApp number (country code, no +)
+const ACTIONS={enquire:{t:'Enquire',s:'Tell us about the work. Written scope within two working days.'},book:{t:'Book a slot',s:'Pick a time. Invoice and calendar invite follow by email.'},pay:{t:'Pay now',s:'Secure card or EFT via Yoco. Scope confirmation follows in writing.'},whatsapp:{t:'WhatsApp',s:'Opens a chat with the offer pre-filled.'}};
+const TIMES=['09:00','10:00','11:30','13:00','14:30','16:00'];
+const days=()=>{const out=[];let d=new Date();while(out.length<10){d.setDate(d.getDate()+1);if(d.getDay()&&d.getDay()<6)out.push(new Date(d))}return out};
+const fmtD=d=>d.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'});
+const emailOk=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+const phoneOk=v=>!v||/^(\+?27|0)\d{9}$/.test(v.replace(/[\s-]/g,''));
+const ref=()=>'OWM-'+Math.floor(1000+Math.random()*9000);
+
+function Field({id,label,hint,error,children}){return <div className={'field'+(error?' err':'')}><label htmlFor={id}>{label}</label>{children}{error?<span className="msg" id={id+'-m'} role="alert">{error}</span>:hint?<span className="hint">{hint}</span>:null}</div>}
+
+function App(){
+const [D,setD]=useState(null);
+const q=new URLSearchParams(location.search);
+const [slug,setSlug]=useState(q.get('s')||'clarity-session');
+const [action,setAction]=useState(q.get('a')||'');
+const [step,setStep]=useState(1);
+const [f,setF]=useState({name:'',email:'',phone:'',org:'',msg:'',when:'',budget:'',consent:false,day:null,time:''});
+const [errs,setErrs]=useState({});
+const [busy,setBusy]=useState(false);
+const [doneRef,setDone]=useState(null);
+const [toast,setToast]=useState(null);
+useEffect(()=>{fetch('data/services.json').then(r=>r.json()).then(setD)},[]);
+useEffect(()=>{if(toast){const t=setTimeout(()=>setToast(null),3200);return()=>clearTimeout(t)}},[toast]);
+useEffect(()=>{if(Object.keys(errs).length){const first=document.querySelector('.field.err input,.field.err textarea,.field.err select');first&&first.focus()}},[errs]);
+const s=useMemo(()=>D&&(D.services.find(x=>x.slug===slug)||D.services[0]),[D,slug]);
+if(!D||!s)return <div style={{padding:'96px 0'}}><div className="hint">Loading offers…</div></div>;
+const hue=`var(--${s.hue})`;
+const avail=s.cta.map(c=>c.action);
+const set=k=>e=>setF(o=>({...o,[k]:e.target.type==='checkbox'?e.target.checked:e.target.value}));
+const pick=a=>{setAction(a);setErrs({});if(a==='whatsapp'){window.open(`https://wa.me/${WA}?text=${encodeURIComponent(`Hi Omni, I'm interested in ${s.name} (${s.price}). `)}`,'_blank','noopener');setToast(['teal','Opening WhatsApp…']);return}setStep(2)};
+const validate=()=>{const e={};if(f.name.trim().length<2)e.name='Enter your name.';if(!emailOk(f.email))e.email='Enter a full email address, e.g. name@domain.co.za';if(!phoneOk(f.phone))e.phone='South African number, e.g. 082 123 4567';if(action==='enquire'&&f.msg.trim().length<20)e.msg='A sentence or two helps us scope properly (20+ characters).';if(action==='book'&&(!f.day||!f.time))e.slot='Choose a day and time.';if(!f.consent)e.consent='Please confirm so we can reply.';return e};
+const submit=ev=>{ev.preventDefault();const e=validate();setErrs(e);if(Object.keys(e).length){setToast(['red','Check the highlighted fields.']);return}setBusy(true);setTimeout(()=>{setBusy(false);const r=ref();setDone(r);setStep(3);setToast(['green',action==='pay'?'Redirecting to secure payment…':'Sent. Reference '+r])},1100)};
+const restart=()=>{setStep(1);setAction('');setDone(null);setF({name:'',email:'',phone:'',org:'',msg:'',when:'',budget:'',consent:false,day:null,time:''})};
+const labels=['Choose a route','Your details',action==='pay'?'Payment':'Confirmation'];
+return <div className="enq" style={{'--hue':hue}}>
+<section aria-labelledby="t">
+<div className="steps" aria-label="Progress">{labels.map((l,i)=><span key={l} className={step===i+1?'on':step>i+1?'done':''} aria-current={step===i+1?'step':undefined}>{step>i+1?'':`0${i+1} `}{l}</span>)}</div>
+{step===1&&<div className="fade"><h1 className="t" id="t">How would you like to start?</h1><p className="sub">Every route ends with the scope in writing before any money moves. Pick the one that suits you.</p>
+<div className="routes">{['enquire','book','pay','whatsapp'].filter(a=>avail.includes(a)||a==='enquire').map(a=><button key={a} type="button" className={'route'+(action===a?' on':'')} onClick={()=>pick(a)}><small>{a==='pay'?s.price:a==='book'?'60 min · online':a==='whatsapp'?'Instant':'2 working days'}</small><b>{ACTIONS[a].t}</b><p>{ACTIONS[a].s}</p></button>)}</div></div>}
+{step===2&&<form className="fade" onSubmit={submit} noValidate><h1 className="t" id="t">{ACTIONS[action].t}: {s.name}</h1><p className="sub">{ACTIONS[action].s}</p>
+<div className="form">
+<div className="two"><Field id="name" label="Name" error={errs.name}><input id="name" value={f.name} onChange={set('name')} autoComplete="name" aria-invalid={!!errs.name}/></Field><Field id="org" label="Practice or organisation" hint="Optional"><input id="org" value={f.org} onChange={set('org')} autoComplete="organization"/></Field></div>
+<div className="two"><Field id="email" label="Email" error={errs.email}><input id="email" type="email" value={f.email} onChange={set('email')} autoComplete="email" aria-invalid={!!errs.email}/></Field><Field id="phone" label="Phone / WhatsApp" hint="Optional" error={errs.phone}><input id="phone" type="tel" value={f.phone} onChange={set('phone')} autoComplete="tel" placeholder="082 123 4567"/></Field></div>
+{action==='enquire'&&<><Field id="msg" label="What are you trying to achieve?" error={errs.msg}><textarea id="msg" value={f.msg} onChange={set('msg')} aria-invalid={!!errs.msg}/></Field>
+<div className="two"><Field id="when" label="Timing"><select id="when" value={f.when} onChange={set('when')}><option value="">Select</option><option>This month</option><option>Next 1–3 months</option><option>Later this year</option><option>Not sure yet</option></select></Field><Field id="budget" label="Budget range" hint="Helps us propose the right scope"><select id="budget" value={f.budget} onChange={set('budget')}><option value="">Select</option><option>Under R5,000</option><option>R5,000 – R15,000</option><option>R15,000 – R40,000</option><option>Over R40,000</option></select></Field></div></>}
+{action==='book'&&<div className={'field'+(errs.slot?' err':'')}><label>Choose a day</label><div className="days">{days().map(d=><button type="button" key={+d} className={'day'+(f.day===+d?' on':'')} onClick={()=>setF(o=>({...o,day:+d,time:''}))}><small>{d.toLocaleDateString('en-ZA',{weekday:'short'})}</small><span>{d.getDate()} {d.toLocaleDateString('en-ZA',{month:'short'})}</span></button>)}</div>
+{f.day&&<><label style={{marginTop:10}}>Time (SAST)</label><div className="slots">{TIMES.map((t,i)=><button type="button" key={t} className={'slot'+(f.time===t?' on':'')} disabled={(new Date(f.day).getDate()+i)%4===0} onClick={()=>setF(o=>({...o,time:t}))}>{t}</button>)}</div></>}
+{errs.slot&&<span className="msg" role="alert">{errs.slot}</span>}</div>}
+{action==='pay'&&<Field id="msg" label="Anything we should know before we start?" hint="Optional"><textarea id="msg" value={f.msg} onChange={set('msg')}/></Field>}
+<div className={'field'+(errs.consent?' err':'')}><label className="check"><input type="checkbox" checked={f.consent} onChange={set('consent')} aria-invalid={!!errs.consent}/><span>I agree to be contacted about this enquiry and understand my details are handled under POPIA. No marketing without separate consent.</span></label>{errs.consent&&<span className="msg" role="alert">{errs.consent}</span>}</div>
+<div className="actions"><button type="submit" className={'btn btn-hue'+(busy?' busy':'')} disabled={busy}>{action==='pay'?`Pay ${s.price} securely`:action==='book'?'Confirm booking':'Send enquiry'}</button><button type="button" className="btn" onClick={()=>setStep(1)}>Back</button><span className="hint">Quotes valid 14 days · Scope in writing first</span></div>
+</div></form>}
+{step===3&&<div className="done fade" role="status"><b className="ref">Reference {doneRef}</b><h2>{action==='pay'?'Almost there.':action==='book'?'Booked, pending confirmation.':'Received.'}</h2>
+<p className="sub" style={{margin:0}}>{action==='pay'?`You will be redirected to Yoco to pay ${s.price} for ${s.name}. A receipt and your written scope arrive by email within one working day.`:action==='book'?`${s.name} on ${fmtD(new Date(f.day))} at ${f.time} SAST. We will confirm by email to ${f.email} with the invoice and a calendar invite.`:`Thanks ${f.name.split(' ')[0]}. We will reply to ${f.email} within two working days with questions or a written scope.`}</p>
+<div className="actions">{action==='pay'&&<a className="btn btn-hue" href="#yoco">Continue to payment</a>}<a className="btn" href="scorecard.html">Take the free scorecard meanwhile</a><button type="button" className="btn" onClick={restart}>Start another</button></div></div>}
+</section>
+<aside className="side" aria-label="Selected offer"><p className="eyebrow">Selected offer</p><h2>{s.name}</h2><div><span className="amt">{s.price}</span>{s.priceNote&&<span className="unit">{s.priceNote}</span>}</div>
+{s.includes.length>0&&<ul>{s.includes.slice(0,4).map(i=><li key={i}>{i}</li>)}</ul>}
+<div className="sw"><label className="hint" htmlFor="sw" style={{display:'block',marginBottom:6}}>Change offer</label><select id="sw" value={s.slug} onChange={e=>{setSlug(e.target.value);setStep(1);setAction('')}}>{D.categories.map(c=><optgroup key={c.id} label={`${c.no} ${c.title}`}>{D.services.filter(x=>x.category===c.id).map(x=><option key={x.slug} value={x.slug}>{x.name} · {x.price}</option>)}</optgroup>)}</select></div>
+<a className="hint" href={`service.html?s=${s.slug}`}>Full details →</a></aside>
+{toast&&<div className="toast" role="status"><i style={{background:`var(--${toast[0]})`}}></i>{toast[1]}</div>}
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>

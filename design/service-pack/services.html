@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Services · Omni Wellness Media</title><link rel="stylesheet" href="omni.css"><style>
+.hero{position:relative;padding:0;border-bottom:1px solid var(--line-2);background:var(--ink);color:var(--cream);overflow:hidden}
+.hero .vid{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;border:1px solid rgba(247,243,234,.14);box-shadow:0 40px 90px rgba(0,0,0,.5);background:#000}
+.hero video,.hero .vid img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero .vid:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;z-index:2;background:linear-gradient(90deg,#E63946,#F38020,#F5C518,#4FAE3F,#2BB9B9,#2C6FB5,#5C2A8A)}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1fr;gap:40px;padding-top:72px;padding-bottom:72px;max-width:1180px}
+.hero .copy{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end}
+.hero .copy h1{max-width:none}
+.hero .vid{aspect-ratio:21/9}
+.hero .eyebrow{color:#B9C6C2}
+.hero h1{font-size:clamp(32px,3.8vw,52px);max-width:22ch;margin:18px 0 0;color:var(--cream)}
+.hero h1 em{font-style:italic;color:#C9B68E}
+.hero .lede{color:#B9C6C2;font-size:16px}
+.hero .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.hero .btn{color:var(--cream);border-color:rgba(247,243,234,.3)}.hero .btn:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.hero .btn-solid{background:#2BB9B9;border-color:#2BB9B9;color:var(--ink);font-weight:600}.hero .btn-solid:hover{background:var(--cream);border-color:var(--cream)}
+.hero .spec{position:absolute;left:0;right:0;bottom:0;height:5px;z-index:2;background:linear-gradient(90deg,#E63946,#F38020,#F5C518,#4FAE3F,#2BB9B9,#2C6FB5,#5C2A8A)}
+.vctl{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-top:14px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#B9C6C2}
+.vctl a{color:#B9C6C2;text-decoration:underline}.vctl a:hover{color:var(--cream)}
+.vctl button{min-width:44px;min-height:44px;border-radius:999px;border:1px solid rgba(247,243,234,.35);background:rgba(14,21,19,.5);color:var(--cream);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:0 16px;cursor:pointer}
+.vctl button:hover{background:var(--cream);color:var(--ink)}
+@media(prefers-reduced-motion:reduce){.hero video{display:none}}
+@media(max-width:900px){.hero .wrap{gap:28px;padding-top:56px;padding-bottom:56px}.hero .copy{grid-template-columns:1fr;gap:18px}.hero .vid{aspect-ratio:16/10}.grid{grid-template-columns:repeat(2,1fr)}.adbar{grid-template-columns:1fr}}
+@media(max-width:620px){.grid{grid-template-columns:1fr}}
+/* advertising inventory */
+.adbar{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:22px 0;border-bottom:1px solid var(--line-2)}
+.adlabel{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);display:flex;align-items:center;gap:8px}
+.adlabel:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--slate);opacity:.5}
+.ad{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.6);padding:16px 18px;display:flex;gap:14px;align-items:center;color:var(--ink);min-height:84px}
+.ad .th{width:56px;height:56px;border-radius:10px;flex:none;background:repeating-linear-gradient(135deg,rgba(14,21,19,.06) 0 6px,transparent 6px 12px);overflow:hidden}
+.ad .th img{width:100%;height:100%;object-fit:cover}
+.ad b{display:block;font-size:14.5px;font-weight:600;margin:4px 0 2px}
+.ad p{margin:0;font-size:12.5px;color:var(--mist)}
+.ad.open{border-style:dashed;background:transparent}
+.ad.open b{color:var(--slate);font-weight:500}
+.card.ad{flex-direction:column;align-items:stretch;padding:22px 22px 20px;gap:12px;min-height:0}
+.card.ad .th{width:100%;height:120px;border-radius:10px}
+.card.ad .go{margin-top:auto;padding-top:10px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.card.ad:before{background:var(--slate);opacity:.4}
+.jump{display:flex;flex-wrap:wrap;gap:8px;padding:26px 0;border-bottom:1px solid var(--line-2)}
+.jump a{white-space:nowrap;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--mist)}
+.jump a:hover{border-color:var(--ink);color:var(--ink)}
+.band{padding:78px 0 10px}
+.bandhead{display:flex;align-items:baseline;gap:18px;margin-bottom:34px}
+.bandhead h2{font-size:30px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--hue);flex:none;transform:translateY(-6px)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{border:1px solid rgba(14,21,19,.16);border-radius:18px;padding:30px 28px 26px;background:linear-gradient(180deg,color-mix(in oklch,var(--hue) 9%,#fff),rgba(255,255,255,.6));display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden;transition:.3s cubic-bezier(.22,1,.36,1)}
+.card:hover,.card:focus-within{transform:translateY(-4px);box-shadow:0 20px 48px rgba(14,21,19,.13);border-color:var(--hue)}
+.card:before{content:"";position:absolute;inset:0 auto auto 0;width:100%;height:3px;background:var(--hue)}
+.card .badge{align-self:flex-start;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--hue);padding:6px 12px;border-radius:999px;margin-bottom:-4px}
+.card h3 a{color:var(--ink)}.card h3 a:hover{color:var(--hue)}
+.card p.price{font-size:22px;font-family:var(--font-display);color:var(--ink);letter-spacing:0}.card p.price small{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--hue);margin-left:10px}
+.card h3{font-size:23px;padding-right:8px}
+.card p.price{font-family:var(--font-mono);font-size:14px;color:var(--hue);letter-spacing:.04em}
+.card p{margin:0;font-size:15px;color:var(--mist)}
+.incl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;font-size:14px;color:var(--mist)}
+.incl li{display:flex;gap:10px}
+.incl li:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--hue);flex:none;margin-top:8px}
+.cta{margin-top:auto;padding-top:20px;border-top:1px solid var(--line-2);display:flex;gap:10px;flex-wrap:wrap}
+.cta a{display:inline-flex;align-items:center;min-height:44px;white-space:nowrap;font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:10px 16px;border-radius:999px;border:1px solid var(--line);color:var(--ink)}
+.cta a.pri{background:var(--hue);border-color:var(--hue);color:#fff;font-weight:500}
+.cta a:hover{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.card.wide{grid-column:1/-1}
+.card.art{padding:0;min-height:300px;justify-content:flex-end;background:var(--ink);border-color:transparent}
+.card.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(.85)}
+.card.art i{position:absolute;inset:0;background:var(--hue);mix-blend-mode:multiply;opacity:.6}
+.card.art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(14,21,19,.92))}
+.card.art figcaption{position:relative;z-index:1;padding:28px;color:var(--cream);font-family:var(--font-display);font-size:30px;line-height:1.1}
+.card.art figcaption em{font-style:italic;color:#C9B68E}
+.card.art small{display:block;margin-top:12px;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#B9C6C2}
+.card.art:hover{border-color:transparent}
+.note{font-family:var(--font-mono);font-size:11.5px;color:var(--slate);letter-spacing:.05em;margin:18px 0 0}
+.quotebox{margin-top:46px;border:1px solid rgba(14,21,19,.16);border-radius:20px;padding:40px 34px;display:grid;grid-template-columns:1.1fr 1fr;gap:34px;background:rgba(255,255,255,.72)}
+.quotebox h2{font-size:34px;margin-bottom:14px}
+.qlist{list-style:none;margin:0;padding:0;display:grid;gap:11px;font-size:15px;color:var(--mist)}
+.qlist li{display:flex;gap:12px;align-items:baseline}
+.qlist b{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);font-weight:400}
+.terms{margin-top:80px;padding:44px 0 0;border-top:1px solid var(--line-2)}
+.terms ul{columns:2;column-gap:44px;list-style:none;padding:0;margin:22px 0 0;font-size:14px;color:var(--slate)}
+.terms li{margin-bottom:10px;break-inside:avoid;padding-left:14px;border-left:1px solid var(--line)}
+@media(max-width:860px){.quotebox{grid-template-columns:1fr}.terms ul{columns:1}}
+</style></head><body>
+<a class="skip" href="#clarity">Skip to services</a>
+<header class="topbar"><div class="wrap"><a class="brandmark" href="index.html"><img src="assets/omni-icon.png" alt=""><span>Omni Wellness Media</span></a><nav class="navlinks" aria-label="Primary"><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="scorecard.html">Free scorecard</a><a href="#enquire">Contact</a></nav><a class="btn btn-solid" href="#enquire">Book a clarity session</a></div></header>
+
+<section class="hero" aria-labelledby="h1"><div class="wrap"><div class="copy"><div><p class="eyebrow">Services · South Africa · Rates in ZAR</p>
+<h1 id="h1">Bridging wellness, outreach and media. <em>Work that earns its fee.</em></h1></div>
+<div><p class="lede">Strategy, websites, campaigns, media production and systems for conscious brands. Start with a single session or a fixed-scope sprint; everything larger is quoted after we understand the work.</p>
+<div class="row"><a class="btn btn-solid" href="#clarity">Start with R1,500</a><a class="btn" href="pricing.html">See all packages</a></div></div></div>
+<div><div class="vid" aria-hidden="true"><video id="hv" autoplay muted loop playsinline preload="metadata" poster="https://cdn.pixabay.com/video/2017/08/20/11473-230853026_tiny.jpg"><source src="https://cdn.pixabay.com/video/2017/08/20/11473-230853026_large.mp4" type="video/mp4"></video></div>
+<div class="vctl"><span>Video: <a href="https://pixabay.com/users/templune-1493489/" rel="noopener" target="_blank">Templune</a> / Pixabay</span><button type="button" id="hvb" aria-pressed="false">Pause</button></div></div></div><div class="spec"></div></section>
+
+<div class="wrap"><nav class="adbar" aria-label="Partner offers" data-ad-zone="hero-strip"></nav></div>
+<div class="wrap"><nav class="jump"><a href="#clarity">Clarity &amp; audits</a><a href="#build">Websites &amp; sprints</a><a href="#content">Content &amp; brand</a><a href="#retainer">Ongoing support</a><a href="#podcast">Podcast</a><a href="#campaign">Campaigns &amp; events</a><a href="#quote">Quotation-based</a></nav></div>
+
+<section class="band" id="clarity" style="--hue:var(--teal)"><div class="wrap">
+<div class="bandhead"><span class="dot"></span><div><p class="eyebrow">01 · Entry offers</p><h2>Clarity and audits</h2></div></div>
+<div class="grid">
+<article class="card"><h3><a href="service.html?s=clarity-session">AI &amp; Business Clarity Session</a></h3><p class="price">R1,500<small>once-off · 60 min</small></p><p>A focused 60 minutes on the decision in front of you, with a written action map you can act on the same week.</p>
+<ul class="incl"><li>60-minute online strategy session</li><li>Concise written action map</li><li>Tool and workflow recommendations</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=book&s=clarity-session">Book a slot</a><a href="enquire.html?a=pay&s=clarity-session">Pay now</a></div></article>
+
+<article class="card" style="--hue:var(--green)"><h3><a href="service.html?s=brand-content-audit">Wellness Brand &amp; Content Audit</a></h3><p class="price">R2,500</p><p>An outside read on how your brand and content actually land, scored and prioritised.</p>
+<ul class="incl"><li>Website and social-media review</li><li>Scorecard and ranked priorities</li><li>45-minute debrief</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=book&s=brand-content-audit">Book audit</a><a href="enquire.html?a=pay&s=brand-content-audit">Pay now</a></div></article>
+
+<article class="card" style="--hue:var(--green)"><h3><a href="service.html?s=website-visibility-audit">Website &amp; Visibility Audit</a></h3><p class="price">R2,500</p><p>Where visitors lose interest, and what to fix in the next thirty days.</p>
+<ul class="incl"><li>Messaging, user journey, mobile experience</li><li>Calls to action, search basics, analytics readiness</li><li>30-day action plan</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=book&s=website-visibility-audit">Book audit</a><a href="enquire.html?a=pay&s=website-visibility-audit">Pay now</a></div></article>
+</div></div></section>
+
+<section class="band" id="build" style="--hue:var(--orange)"><div class="wrap">
+<div class="bandhead"><span class="dot"></span><div><p class="eyebrow">02 · Fixed-scope builds</p><h2>Websites and sprints</h2></div></div>
+<div class="grid">
+<figure class="card art" style="--hue:var(--orange);margin:0"><img src="https://cdn.pixabay.com/photo/2017/10/10/21/47/laptop-2838921_1280.jpg" alt="Designer's desk with laptop and graphics tablet" loading="lazy"><i></i><figcaption>Built to sell, <em>measured from day one.</em><small>Photo: lukasbieri / Pixabay</small></figcaption></figure>
+<article class="card"><span class="badge">Most chosen</span><h3><a href="service.html?s=revenue-ready-sprint">Revenue-Ready Website &amp; Campaign Sprint</a></h3><p class="price">R7,500<small>launch rate · fixed scope</small></p><p>One offer, one page, one route to payment, measured. The fastest way from idea to income.</p>
+<ul class="incl"><li>One focused landing page and offer copy</li><li>One lead, booking or payment route</li><li>Analytics setup and one conversion test</li><li>One consolidated revision round</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=revenue-ready-sprint">Start a sprint</a><a href="enquire.html?a=whatsapp&s=revenue-ready-sprint">WhatsApp us</a></div>
+<p class="note">Excludes domains, hosting, ad spend, complex integrations, full brand identity and unlimited revisions.</p></article>
+
+<article class="card" style="--hue:var(--red)"><h3><a href="service.html?s=visibility-conversion-sprint">30-Day Visibility &amp; Conversion Sprint</a></h3><p class="price">R10,500</p><p>A month of concentrated work on being found, understood and chosen.</p>
+<ul class="incl"><li>Positioning and messaging</li><li>Landing-page build or conversion refresh</li><li>12 campaign assets and a lead form</li><li>Advertising setup, tracking and review</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=visibility-conversion-sprint">Enquire</a><a href="enquire.html?a=whatsapp&s=visibility-conversion-sprint">WhatsApp us</a></div>
+<p class="note">Advertising spend is paid separately by the client.</p></article>
+
+<article class="card" style="--hue:var(--yellow)"><h3><a href="service.html?s=landing-page">One-Page Landing Page</a></h3><p class="price">R6,000</p><p>A single well-built page when the strategy is already settled.</p>
+<ul class="incl"><li>Copy and mobile-first design</li><li>Contact pathways and integrations</li><li>Basic SEO and click tracking</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=landing-page">Enquire</a></div></article>
+<div data-ad-zone="band:build" style="display:contents"></div>
+</div></div></section>
+
+<section class="band" id="content" style="--hue:var(--violet)"><div class="wrap">
+<div class="bandhead"><span class="dot"></span><div><p class="eyebrow">03 · Brand and content</p><h2>Content and brand identity</h2></div></div>
+<div class="grid">
+<figure class="card art" style="--hue:var(--violet);margin:0"><img src="https://cdn.pixabay.com/photo/2014/06/22/17/21/colored-pencils-374771_1280.jpg" alt="Colour pencils arranged in a circle" loading="lazy"><i></i><figcaption>One theme, <em>a month of posting.</em><small>Photo: stux / Pixabay</small></figcaption></figure>
+<article class="card"><h3><a href="service.html?s=content-starter-pack">Content Starter Pack</a></h3><p class="price">R3,500</p><p>One campaign theme, carried across a month of posting without guesswork.</p>
+<ul class="incl"><li>Six branded graphics and six captions</li><li>WhatsApp or email copy</li><li>30-day posting plan</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=pay&s=content-starter-pack">Buy now</a><a href="enquire.html?a=enquire&s=content-starter-pack">Ask a question</a></div></article>
+
+<article class="card" style="--hue:var(--clay)"><h3><a href="service.html?s=brand-identity">Brand Identity</a></h3><p class="price">from R2,800</p><p>Starter Brand Kit at R2,800, or the Signature Identity at R5,500 when you need the full suite.</p>
+<ul class="incl"><li>Starter: two logo concepts, palette, two fonts, one-page guide, five Canva templates</li><li>Signature: expanded logo suite, 15 templates, card, email signature, brand guideline</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=brand-identity">Choose a kit</a></div></article>
+
+<article class="card" style="--hue:var(--blue)"><h3><a href="service.html?s=bespoke-content-pack">12-Post Bespoke Content Pack</a></h3><p class="price">R6,000</p><p>Original graphics built for your brand, not adapted from a template.</p>
+<ul class="incl"><li>Twelve branded posts with captions and hashtags</li><li>Up to four approved infographics</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=bespoke-content-pack">Enquire</a></div></article>
+<div data-ad-zone="band:content" style="display:contents"></div>
+</div></div></section>
+
+<section class="band" id="retainer" style="--hue:var(--teal)"><div class="wrap">
+<div class="bandhead"><span class="dot"></span><div><p class="eyebrow">04 · Monthly</p><h2>Ongoing support</h2></div></div>
+<div class="grid">
+<figure class="card art" style="--hue:var(--teal);margin:0"><img src="https://cdn.pixabay.com/photo/2017/01/09/07/05/graphics-tablet-1964816_1280.jpg" alt="Graphics tablet and laptop in use" loading="lazy"><i></i><figcaption>Senior hands, <em>every month.</em><small>Photo: stevepb / Pixabay</small></figcaption></figure>
+<article class="card"><h3><a href="service.html?s=growth-desk">Omni Growth Desk</a></h3><p class="price">R6,500<small>per month</small></p><p>A standing desk for the work that never quite gets done: strategy, content, site changes, reporting.</p>
+<ul class="incl"><li>Monthly strategy and eight content pieces</li><li>One WhatsApp or email campaign</li><li>Up to four website-support hours</li><li>Optimisation and monthly reporting</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=growth-desk">Enquire</a><a href="enquire.html?a=book&s=growth-desk">Book a call</a></div></article>
+
+<article class="card" style="--hue:var(--green)"><h3><a href="service.html?s=social-media-management">Social-Media Management</a></h3><p class="price">from R1,850 per month</p><p>Five tiers from Essentials to Signature, built on source content adapted across platforms.</p>
+<ul class="incl"><li>Instagram, Facebook and TikTok, with LinkedIn from Momentum up</li><li>Captions, calendar, community management and reporting</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=social-media-management">Request current rates</a></div>
+<p class="note">Cadence and rates confirmed on enquiry. Advertising spend not included.</p></article>
+
+<article class="card" style="--hue:var(--slate)"><h3><a href="service.html?s=executive-support">Executive, AI, Media &amp; Systems Support</a></h3><p class="price">R1,500 per hour · R10,000 per 10 hours</p><p>Senior hands on strategy, implementation, campaigns, operations or systems.</p>
+<ul class="incl"><li>Buy by the hour, or a prepaid ten-hour block</li><li>Applied across agreed priorities</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=pay&s=executive-support">Buy a block</a><a href="enquire.html?a=enquire&s=executive-support">Enquire</a></div></article>
+<div data-ad-zone="band:retainer" style="display:contents"></div>
+</div></div></section>
+
+<section class="band" id="podcast" style="--hue:var(--blue)"><div class="wrap">
+<div class="bandhead"><span class="dot"></span><div><p class="eyebrow">05 · Audio</p><h2>Podcast</h2></div></div>
+<div class="grid">
+<article class="card"><h3><a href="service.html?s=podcast-starter">Podcast Starter System</a></h3><p class="price">R2,500</p><p>Everything you need decided before you press record.</p>
+<ul class="incl"><li>90-minute strategy session</li><li>Launch checklist</li><li>Curated equipment and software guide</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=pay&s=podcast-starter">Buy now</a><a href="enquire.html?a=book&s=podcast-starter">Book session</a></div></article>
+
+<article class="card" style="--hue:var(--violet)"><h3><a href="service.html?s=podcast-concept">Concept &amp; Format Development</a></h3><p class="price">from R3,500</p><p>Audience, purpose, format, episode structure, guest strategy and launch plan.</p>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=podcast-concept">Enquire</a></div></article>
+
+<article class="card" style="--hue:var(--teal)"><h3><a href="service.html?s=podcast-launch">Podcast Launch Campaign</a></h3><p class="price">from R7,500</p><p>Positioning, launch page, promotional assets, audience pathway and tracking.</p>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=podcast-launch">Enquire</a></div></article>
+</div></div></section>
+
+<section class="band" id="campaign" style="--hue:var(--red)"><div class="wrap">
+<div class="bandhead"><span class="dot"></span><div><p class="eyebrow">06 · Campaigns, events and experiences</p><h2>Campaign Command Centre</h2></div></div>
+<div class="grid">
+<article class="card wide"><h3><a href="service.html?s=campaign-command-centre">Campaign Command Centre</a></h3><p class="price">from R12,500</p><p>One place where a campaign lives: assets, copy, partners, tickets and the numbers that tell you whether it worked.</p>
+<ul class="incl"><li>Campaign hub with asset bank and copy bank</li><li>Partner toolkit and mobilisation</li><li>Ticketing or lead pathway</li><li>Tracking dashboard and final impact report</li></ul>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=campaign-command-centre">Brief us</a><a href="enquire.html?a=book&s=campaign-command-centre">Book a call</a><a href="enquire.html?a=whatsapp&s=campaign-command-centre">WhatsApp us</a></div></article>
+
+<article class="card" style="--hue:var(--orange)"><h3><a href="service.html?s=event-marketing">Event Marketing Package</a></h3><p class="price">from R7,500</p><p>Positioning, listing copy, campaign assets, audience pathway and reporting.</p>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=event-marketing">Enquire</a></div></article>
+
+<article class="card" style="--hue:var(--yellow)"><h3><a href="service.html?s=screening-campaign">Screening Campaign</a></h3><p class="price">from R12,500</p><p>Film positioning, ticketing, campaign hub, partner mobilisation, social assets and reporting.</p>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=screening-campaign">Enquire</a></div></article>
+
+<article class="card" style="--hue:var(--green)"><h3><a href="service.html?s=workshops">Workshops &amp; Facilitation</a></h3><p class="price">from R7,500 half day · from R12,500 full day</p><p>AI and responsible use, content strategy, conscious leadership and custom organisational training.</p>
+<div class="cta"><a class="pri" href="enquire.html?a=enquire&s=workshops">Enquire</a></div></article>
+</div>
+<p class="note">Venue hire, catering, performers, transport, accommodation, ticketing charges, technical suppliers, printing, paid advertising and production partners are quoted separately unless expressly included.</p>
+</div></section>
+
+<section class="band" id="quote"><div class="wrap"><div class="quotebox">
+<div><p class="eyebrow">07 · Quotation-based</p><h2>Some work should not carry a price tag until we understand it.</h2>
+<p class="lede" style="font-size:16px">These are scoped after a paid discovery or audit, so the number you receive is one we can both stand behind.</p>
+<div class="cta" style="border:0;padding-top:24px"><a class="pri" style="--hue:var(--clay)" href="enquire.html?a=enquire&s=workshops">Request a quotation</a><a href="enquire.html?a=whatsapp&s=workshops">WhatsApp us</a></div></div>
+<ul class="qlist">
+<li><b>Web</b> Custom multi-page websites, booking, payments, e-commerce</li>
+<li><b>Media</b> Videography, photography, documentary and interview production</li>
+<li><b>Audio</b> Episode production, video podcasts, social clip packs</li>
+<li><b>Events</b> Full event production and event content capture</li>
+<li><b>Systems</b> Campaign CRM, automation and AI workflows</li>
+<li><b>Partners</b> Marketplace listings, affiliate features, lead-generation partnerships</li>
+</ul>
+</div></div></section>
+
+<section class="terms" id="enquire"><div class="wrap">
+<div id="advertise" class="quotebox" style="margin:0 0 64px;grid-template-columns:1fr auto;align-items:center"><div><p class="eyebrow">Partners and affiliates</p><h2 style="font-size:28px;margin-top:12px">Advertise to South Africa's conscious brands.</h2><p class="lede" style="font-size:15px">Strip tiles under the hero and cards inside the service bands. Inventory is managed from the backend; placements are labelled and link with rel="sponsored".</p></div><a class="btn btn-solid" href="enquire.html?a=enquire&s=workshops">Request the media kit</a></div>
+<p class="eyebrow">How we work</p><h2 style="font-size:32px;margin:16px 0 0">Standard commercial terms</h2>
+<ul>
+<li>All prices are in South African rand. VAT treatment confirmed on quotation.</li>
+<li>Project work: 50% deposit, 50% before final handover.</li>
+<li>Monthly retainers are payable in advance.</li>
+<li>Recurring social-media retainers carry a recommended three-month initial term.</li>
+<li>One consolidated revision round on entry packages; two on larger projects.</li>
+<li>Additional revisions are billed at R1,500 per hour.</li>
+<li>Advertising spend is paid separately by the client.</li>
+<li>Travel, venues, printing, software, domains, hosting and production partners are additional unless expressly included.</li>
+<li>We commit to agreed deliverables, professional setup and transparent reporting, not a guaranteed number of sales or leads.</li>
+<li>Quotations are valid for 14 days.</li>
+<li>Production rights, participant consent, raw files, licensing and portfolio use are recorded in writing.</li>
+</ul>
+<hr class="spectrum-rule" style="margin:44px 0 0">
+</div></section>
+
+<section class="band" style="--hue:var(--green)"><div class="wrap">
+<div class="bandhead"><span class="dot"></span><div><p class="eyebrow">Our work</p><h2>Projects behind the practice</h2></div></div>
+<div class="grid">
+<article class="card" style="--hue:var(--green);padding:0;overflow:hidden"><div style="position:relative;height:220px"><image-slot id="work-vop" src="assets/plate-valley.png" shape="rect" placeholder="Drop a Valley of Plenty photo"></image-slot></div><div style="padding:26px 28px 28px"><h3>Valley of Plenty</h3><p style="margin-top:12px">Sustainable development implemented across the Hanover Park community: food systems, skills and local enterprise.</p></div></article>
+<article class="card" style="--hue:var(--teal);padding:0;overflow:hidden"><div style="position:relative;height:220px"><image-slot id="work-hap" src="assets/plate-hap.png" shape="rect" placeholder="Drop a Human Animal Project photo"></image-slot></div><div style="padding:26px 28px 28px"><h3>Human Animal Project</h3><p style="margin-top:12px">Advocacy for animal rights and compassionate living, carried through film, campaign and screening work.</p></div></article>
+<article class="card" style="--hue:var(--violet);padding:0;overflow:hidden"><div style="position:relative;height:220px"><image-slot id="work-retreat" src="assets/plate-retreat.png" shape="rect" placeholder="Drop a retreat or workshop photo"></image-slot></div><div style="padding:26px 28px 28px"><h3>Retreats and experiences</h3><p style="margin-top:12px">Programme architecture, facilitation and content capture for wellness retreats and cultural experiences.</p></div></article>
+</div></div></section>
+<footer class="site"><div class="wrap"><span>Omni Wellness Media · Cape Town, South Africa</span><span>hello@omniwellnessmedia.co.za · WhatsApp on request</span></div></footer>
+<script src="image-slot.js"></script>
+<script>const mb=document.querySelector('.menu'),dr=document.getElementById('drawer');mb.addEventListener('click',()=>{const o=mb.getAttribute('aria-expanded')==='true';mb.setAttribute('aria-expanded',String(!o));dr.hidden=o;document.body.classList.toggle('nav-open',!o)});dr.addEventListener('click',e=>{if(e.target.tagName==='A'){dr.hidden=true;mb.setAttribute('aria-expanded','false');document.body.classList.remove('nav-open')}});</script>
+<script>
+// Ad inventory: data/ads.json → hero strip tiles and grid cards that fill empty cells so every band is a full row.
+fetch('data/ads.json').then(r=>r.json()).then(A=>{const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+document.querySelectorAll('[data-ad-zone]').forEach(z=>{const zone=z.dataset.adZone,card=zone.startsWith('band:');
+z.innerHTML=A.slots.filter(s=>s.zone===zone).map(s=>s.available
+?`<a class="ad open${card?' card':''}" href="#advertise" aria-label="Advertising space available"><span class="th"></span><span><span class="adlabel">Ad space</span><b>Available</b><p>${esc(s.size)}. Sold from the backend.</p></span>${card?'<span class="go">Enquire →</span>':''}</a>`
+:`<a class="ad${card?' card':''}" href="${s.href}" rel="sponsored noopener" target="_blank"><span class="th"><img src="${s.img}" alt="" loading="lazy"></span><span><span class="adlabel">${esc(s.label||'Partner')} · ${esc(s.partner)}</span><b>${esc(s.title)}</b><p>${esc(s.line)}</p></span>${card?`<span class="go">${esc(s.cta||'Visit')} →</span>`:''}</a>`).join('')})});
+</script>
+<script>const hv=document.getElementById('hv'),hvb=document.getElementById('hvb');if(matchMedia('(prefers-reduced-motion: reduce)').matches){hv.pause();hvb.textContent='Play';hvb.setAttribute('aria-pressed','true')}hvb.addEventListener('click',()=>{const p=hv.paused;p?hv.play():hv.pause();hvb.textContent=p?'Pause':'Play';hvb.setAttribute('aria-pressed',String(!p))});</script>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#0E1513"/><rect x="30" y="46" width="40" height="4" rx="2" fill="#F38020"/><text x="50" y="40" text-anchor="middle" font-family="Georgia,serif" font-size="22" fill="#F7F3EA">SV</text></svg></template></body></html>

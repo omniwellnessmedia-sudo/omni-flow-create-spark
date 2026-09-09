@@ -1,0 +1,45 @@
+{
+ "license": "Pixabay Content License (free for commercial use, no attribution required; credit shown as courtesy). Download originals into the repo; do not hotlink in production.",
+ "video": [
+  {
+   "id": 11473,
+   "use": "services.html hero banner; sprint detail heroes",
+   "page": "https://pixabay.com/videos/seo-web-web-page-responsive-11473/",
+   "cdn": "https://cdn.pixabay.com/video/2017/08/20/11473-230853026_large.mp4",
+   "poster": "https://cdn.pixabay.com/video/2017/08/20/11473-230853026_tiny.jpg",
+   "by": "Templune",
+   "size": "1920x1080, 10s"
+  }
+ ],
+ "photos": [
+  {
+   "id": 2838921,
+   "use": "Websites band art tile; landing-page, bespoke-content-pack, executive-support heroes",
+   "page": "https://pixabay.com/photos/laptop-mockup-graphics-tablet-2838921/",
+   "cdn": "https://cdn.pixabay.com/photo/2017/10/10/21/47/laptop-2838921_1280.jpg",
+   "by": "lukasbieri"
+  },
+  {
+   "id": 1964816,
+   "use": "Ongoing-support band art tile; brand-identity, website-visibility-audit heroes",
+   "page": "https://pixabay.com/photos/graphics-tablet-wacom-photoshop-1964816/",
+   "cdn": "https://cdn.pixabay.com/photo/2017/01/09/07/05/graphics-tablet-1964816_1280.jpg",
+   "by": "stevepb"
+  },
+  {
+   "id": 374771,
+   "use": "Content band art tile; content-starter-pack hero",
+   "page": "https://pixabay.com/photos/colored-pencils-colour-pencils-374771/",
+   "cdn": "https://cdn.pixabay.com/photo/2014/06/22/17/21/colored-pencils-374771_1280.jpg",
+   "by": "stux"
+  }
+ ],
+ "shortlist_to_download": [
+  "https://pixabay.com/photos/creative-work-mockup-business-869200/",
+  "https://pixabay.com/photos/workplace-computer-creative-graphic-2230698/",
+  "https://pixabay.com/photos/graphic-design-studio-web-designing-1563080/",
+  "https://pixabay.com/photos/home-office-person-work-web-design-4996834/",
+  "https://pixabay.com/photos/work-working-graphic-design-3410297/",
+  "https://pixabay.com/photos/design-equipment-creative-office-4830249/"
+ ]
+}
