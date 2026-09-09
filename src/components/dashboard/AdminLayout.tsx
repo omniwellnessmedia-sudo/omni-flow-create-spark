@@ -10,6 +10,7 @@ import {
 import { LogOut, Home, Menu, ArrowLeft, Plus, ChevronDown, FileText, Video, Mic } from 'lucide-react';
 import { IMAGES } from '@/lib/images';
 import AdminSidebar, { NAV_GROUPS } from '@/components/dashboard/AdminSidebar';
+import AdminSearch from '@/components/admin/AdminSearch';
 
 /**
  * The one admin shell: header, spectrum rule, sidebar, cream ground.
@@ -126,6 +127,10 @@ const AdminLayout = ({ children, activeSection, onSectionChange, alerts = {} }: 
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
+            {/* One search box for every screen and every record, so finding
+                a thing no longer means knowing which of the thirty screens
+                it lives on. */}
+            <AdminSearch />
             {/* Create lived in the dashboard header, so it was unreachable
                 from the standalone screens. Its items are routes, so it works
                 from anywhere now. */}
