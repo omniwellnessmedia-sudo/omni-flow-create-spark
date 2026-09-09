@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { ArrowLeft, ArrowRight, Check, AlertCircle, Loader2, MessageCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useSEO } from '@/lib/seo';
+import { trackAdsConversion } from '@/lib/googleAds';
 import {
   SERVICE_BANDS,
   getOffer,
@@ -150,6 +151,21 @@ const Enquire = () => {
     }
 
     setStatus({ kind: 'sent' });
+
+    // Google Ads conversion, fired only after the enquiry is confirmed saved.
+    //
+    // WHY THIS IS HERE. Every service CTA used to point at /contact, which
+    // fires contact_submit. Those CTAs now point here, so without this the
+    // services funnel would report zero conversions in Ads while actually
+    // producing leads, and the campaign would look dead and get switched off.
+    //
+    // booking_inquiry rather than contact_submit: this is a service enquiry
+    // naming a specific offer, which is what that action was created for.
+    //
+    // No value is attached. The rate card price is what the offer lists, not
+    // what this enquiry is worth, and feeding a list price in as conversion
+    // value would train bidding on a number nobody has agreed to pay.
+    trackAdsConversion('booking_inquiry');
   };
 
   const field =
