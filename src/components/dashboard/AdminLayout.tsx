@@ -83,7 +83,10 @@ const AdminLayout = ({ children, activeSection, onSectionChange, alerts = {} }: 
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-background">
+    // admin-surface redefines the design tokens for everything inside it, so
+    // every screen picks up the Spectrum System without being edited. See the
+    // ADMIN SURFACE block in src/index.css.
+    <div className="admin-surface min-h-screen bg-background">
       {/* Header. The 3px seven hue rule beneath it is the site's signature,
           so the operator surface reads as the same product as the public
           pages rather than a bolted on admin template. */}
@@ -188,10 +191,10 @@ const AdminLayout = ({ children, activeSection, onSectionChange, alerts = {} }: 
           <AdminSidebar activeSection={active} onSectionChange={changeSection} alerts={alerts} />
         </div>
 
-        {/* Cream ground, matching the public site. White cards sit on it with
-            visible edges on every screen, including those that have not had
-            their own theme pass yet. */}
-        <div className="min-w-0 flex-1 p-4 md:p-6" style={{ background: '#FAF8F2' }}>
+        {/* Cream ground, matching the public site. It reads from the token
+            rather than a hardcoded hex now, so the ground and the cards on it
+            can never disagree about which cream this is. */}
+        <div className="min-w-0 flex-1 bg-background p-4 md:p-6">
           {children}
         </div>
       </div>
