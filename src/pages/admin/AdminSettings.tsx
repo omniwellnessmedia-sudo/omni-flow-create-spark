@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import WhatsappLinkSetting from "@/components/admin/WhatsappLinkSetting";
 import BookingLinkSetting from "@/components/admin/BookingLinkSetting";
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 import { 
   Settings, 
   Calendar, 
@@ -146,6 +147,12 @@ export const AdminSettings = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="Settings"
+        description="Values a super admin can change without a deploy. A published setting is readable by the whole internet, so nothing secret belongs here."
+      />
+
       <WhatsappLinkSetting />
 
       <BookingLinkSetting />

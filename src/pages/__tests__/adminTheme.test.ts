@@ -125,3 +125,40 @@ describe('the screen header', () => {
     expect(header).toMatch(/<h1[^>]*>\{title\}<\/h1>/);
   });
 });
+
+describe('every admin screen names itself', () => {
+  // Thirteen of these opened with no heading at all. An operator arriving
+  // from search, a bookmark or the sidebar saw cards and numbers with
+  // nothing saying what they were looking at, and on a phone the sidebar is
+  // behind a hamburger so there was no name on screen anywhere.
+  const SCREENS = [
+    'AdminAccounting',
+    'AdminAnalytics',
+    'AdminContent',
+    'AdminInvites',
+    'AdminLeads',
+    'AdminProviders',
+    'AdminSchedule',
+    'AdminSettings',
+    'AdminTasks',
+    'AdminTeamManagement',
+    'AdminTools',
+    'AdminUWCRecruitment',
+    'AdminViatorTours',
+    'ProductManagement',
+  ];
+
+  it.each(SCREENS)('%s opens with a screen header', (screen) => {
+    const src = read(`src/pages/admin/${screen}.tsx`);
+    expect(src).toMatch(/<AdminScreenHeader/);
+    expect(src, 'the header needs a title').toMatch(/title="[^"]+"/);
+  });
+
+  it.each(SCREENS)('%s has exactly one screen header', (screen) => {
+    // Two would mean two h1 elements, which is the heading-order problem
+    // this was added to solve, reintroduced.
+    const src = read(`src/pages/admin/${screen}.tsx`);
+    const count = (src.match(/<AdminScreenHeader/g) || []).length;
+    expect(count).toBe(1);
+  });
+});

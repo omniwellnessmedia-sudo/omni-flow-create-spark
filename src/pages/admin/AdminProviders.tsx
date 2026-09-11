@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 import {
   Dialog,
   DialogContent,
@@ -209,6 +210,12 @@ const AdminProviders = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="Manage"
+        title="Providers"
+        description="Practitioners and businesses listed on the marketplace, and what each still needs before they go live."
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

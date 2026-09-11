@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import MediaUploadDialog, { type MediaTab } from '@/components/media/MediaUploadDialog';
 import { Mic, Image, Video } from 'lucide-react';
+import AdminScreenHeader from '@/components/admin/AdminScreenHeader';
 
 /**
  * Media: video and image uploads.
@@ -59,14 +60,11 @@ const AdminContent = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-lg font-medium">Media</h2>
-        <p className="mt-1 max-w-[70ch] text-sm text-muted-foreground">
-          Upload a file here, then copy its link and paste it wherever it is
-          needed. Files go to the shared media library, so anything you upload
-          is available to whoever is building the page.
-        </p>
-      </div>
+      <AdminScreenHeader
+        eyebrow="Manage"
+        title="Media"
+        description="Upload a file here, then copy its link and paste it wherever it is needed. Files go to the shared media library, so anything you upload is available to whoever is building the page."
+      />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {actions.map((action) => (

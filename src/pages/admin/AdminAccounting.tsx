@@ -32,6 +32,7 @@ import { XeroExportButton } from "@/components/admin/accounting/XeroExportButton
 import { RevenueStreamsBreakdown } from "@/components/admin/accounting/RevenueStreamsBreakdown";
 import { AccountingChecklist } from "@/components/admin/accounting/AccountingChecklist";
 import { TransactionQueryDialog } from "@/components/admin/accounting/TransactionQueryDialog";
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 interface Order {
   id: string;
@@ -397,6 +398,12 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="Accounting"
+        description="Revenue, orders and payouts, with every figure traced to the record it came from."
+      />
+
       {/* Header & Period Selection */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>

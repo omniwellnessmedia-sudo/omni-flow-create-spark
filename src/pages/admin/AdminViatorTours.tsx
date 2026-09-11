@@ -15,6 +15,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { applyImageFallback } from '@/lib/images';
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 interface ViatorTour {
   id: string;
@@ -192,6 +193,12 @@ export default function AdminViatorTours() {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="Viator"
+        description="Tours syndicated from Viator, and what they earn."
+      />
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

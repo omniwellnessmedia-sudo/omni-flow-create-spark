@@ -52,6 +52,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 interface Product {
   id: string;
@@ -503,6 +504,12 @@ const ProductManagement = () => {
 
   return (
     <div className="space-y-4 md:space-y-6">
+      <AdminScreenHeader
+        eyebrow="Marketplace"
+        title="Import tools"
+        description="Bring products in from the affiliate feeds and decide which reach the shop."
+      />
+
       {/* Eight zeroed stat cards are a claim about the catalogue. They may
           only be shown when the read succeeded. */}
       {loadError && (
