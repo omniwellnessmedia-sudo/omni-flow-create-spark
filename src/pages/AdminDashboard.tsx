@@ -196,15 +196,35 @@ const AdminDashboard = () => {
     navigate("/");
   }, [navigate]);
 
+  /**
+   * Switch section, and leave a history entry behind.
+   *
+   * THIS USED TO REPLACE. Every section change overwrote the current history
+   * entry instead of adding one, so moving Home to Leads to Accounting to
+   * Tasks left the browser with a single admin entry. Pressing Back then did
+   * not go to the previous section, it left the admin entirely and dropped
+   * the operator on whatever page they were on before they signed in. Four
+   * screens deep, one Back, and everything they had navigated through was
+   * gone, because the trail had been erased behind them as they walked it.
+   *
+   * Sections are pages here: they have their own URL, their own data and
+   * their own heading. Back should return to the previous one, so this
+   * pushes.
+   *
+   * Re-selecting the current section still replaces, because clicking the
+   * sidebar item you are already on should not add an entry you then have to
+   * press Back through.
+   */
   const handleSectionChange = useCallback((section: string) => {
+    const current = searchParams.get("section") || "home";
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       if (section === "home") next.delete("section"); else next.set("section", section);
       return next;
-    }, { replace: true });
+    }, { replace: section === current });
     // The mobile drawer is AdminLayout's now, and it closes itself in
     // changeSection. This line referenced a setter that no longer exists here.
-  }, [setSearchParams]);
+  }, [searchParams, setSearchParams]);
 
   const updateTourBookingStatus = async (id: string, status: string) => {
     try {

@@ -162,3 +162,27 @@ describe('every admin screen names itself', () => {
     expect(count).toBe(1);
   });
 });
+
+describe('admin back navigation', () => {
+  const dashboard = read('src/pages/AdminDashboard.tsx');
+
+  it('pushes a history entry when the section changes', () => {
+    // It replaced unconditionally. Moving Home to Leads to Accounting to
+    // Tasks left one history entry, so one Back press ejected the operator
+    // from the admin entirely instead of returning them to Accounting.
+    expect(dashboard).not.toMatch(/\},\s*\{ replace: true \}\);/);
+    expect(dashboard).toMatch(/replace: section === current/);
+  });
+
+  it('still replaces when re-selecting the current section', () => {
+    // Clicking the sidebar item you are already on should not add an entry
+    // you then have to press Back through.
+    expect(dashboard).toMatch(/const current = searchParams\.get\("section"\) \|\| "home";/);
+  });
+
+  it('keeps a way back to the dashboard from every standalone screen', () => {
+    const layout = read('src/components/dashboard/AdminLayout.tsx');
+    expect(layout).toMatch(/\{!onDashboard && \(/);
+    expect(layout).toMatch(/<Link to="\/admin-dashboard">/);
+  });
+});
