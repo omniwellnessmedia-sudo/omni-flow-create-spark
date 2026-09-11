@@ -111,11 +111,6 @@ export const pageTips: Record<string, CuratorTipData> = {
     message: "We're here to listen. Whatever you're dreaming of, let's talk.",
     context: "contact intro",
   },
-  "blog": {
-    curator: "zenith",
-    message: "These stories matter to us. Hope they inspire you too.",
-    context: "blog intro",
-  },
 
   // Tours & Experiences
   "tours": {

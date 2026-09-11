@@ -40,7 +40,6 @@ import { toast } from "sonner";
 
 const quickLinks = [
   { icon: Compass, label: "Browse Services", href: "/services", color: "text-omni-blue" },
-  { icon: BookOpen, label: "Read Blog", href: "/blog", color: "text-omni-green" },
   { icon: Calendar, label: "Book a Tour", href: "/tours-retreats", color: "text-omni-orange" },
   { icon: MessageCircle, label: "Contact Us", href: "/contact", color: "text-omni-violet" },
 ];

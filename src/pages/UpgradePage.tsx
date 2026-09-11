@@ -26,7 +26,6 @@ const FREE_FEATURES = [
   "Accept bookings",
   "Public provider profile",
   "Basic earnings overview",
-  "Community blog",
   "Media uploads",
 ];
 

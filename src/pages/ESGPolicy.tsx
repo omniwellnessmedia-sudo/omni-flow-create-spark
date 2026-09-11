@@ -169,7 +169,7 @@ const ESGPolicy = () => {
                   <li>Offset carbon emissions from company-organized tours and retreats through verified carbon credit programs</li>
                   <li>Promote eco-friendly travel options and sustainable tourism practices through our platform</li>
                   <li>Partner with local environmental organizations for conservation and restoration projects</li>
-                  <li>Educate our community on sustainable wellness practices through blog content and workshops</li>
+                  <li>Educate our community on sustainable wellness practices through our published resources and workshops</li>
                   <li>Annually assess and report on our carbon footprint and environmental impact</li>
                 </ul>
               </div>

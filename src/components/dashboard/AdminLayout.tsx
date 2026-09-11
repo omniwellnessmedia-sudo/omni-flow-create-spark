@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LogOut, Home, Menu, ArrowLeft, Plus, ChevronDown, FileText, Video, Mic } from 'lucide-react';
+import { LogOut, Home, Menu, ArrowLeft, Plus, ChevronDown, Mail, Mic } from 'lucide-react';
 import { IMAGES } from '@/lib/images';
 import AdminSidebar, { NAV_GROUPS } from '@/components/dashboard/AdminSidebar';
 import AdminSearch from '@/components/admin/AdminSearch';
@@ -143,15 +143,16 @@ const AdminLayout = ({ children, activeSection, onSectionChange, alerts = {} }: 
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => navigate('/blog/editor/new')}>
-                  <FileText className="mr-2 h-3.5 w-3.5" /> Blog Post
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/admin-dashboard?section=content')}>
-                  <Video className="mr-2 h-3.5 w-3.5" /> Upload Video
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate('/admin/events')}>
                   <Plus className="mr-2 h-3.5 w-3.5" /> Event
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/admin-dashboard?section=newsletter')}>
+                  <Mail className="mr-2 h-3.5 w-3.5" /> Newsletter
+                </DropdownMenuItem>
+                {/* Blog Post and Upload Video are gone. The blog is removed,
+                    and Upload Video pointed at the blog panel, so it promised
+                    something the admin could not do. A menu item that leads
+                    nowhere is worse than a shorter menu. */}
                 <DropdownMenuItem disabled>
                   <Mic className="mr-2 h-3.5 w-3.5" /> Podcast
                   <Badge variant="outline" className="ml-2 text-[9px]">Planned</Badge>

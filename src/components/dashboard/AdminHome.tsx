@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import {
-  FileText,
   Users,
   TrendingUp,
   Mail,
@@ -55,8 +54,8 @@ const AdminHomeSkeleton = () => (
     {/* Stat tiles */}
     <div>
       <Sk className="h-4 w-24 mb-3" />
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-        {Array.from({ length: 6 }).map((_, i) => (
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+        {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="p-3 rounded-lg bg-muted/30 flex flex-col items-center gap-2">
             <Sk className="h-5 w-14" />
             <Sk className="h-3 w-10" />
@@ -104,8 +103,7 @@ const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate, loading = f
   if (loading) return <AdminHomeSkeleton />;
 
   const shortcuts = [
-    { label: "New Blog Post", icon: FileText, onClick: () => navigate("/blog/editor/new"), accent: true },
-    { label: "View Leads", icon: Users, onClick: () => onNavigate("leads"), count: stats.totalServiceBookings },
+    { label: "View Leads", icon: Users, onClick: () => onNavigate("leads"), count: stats.totalServiceBookings, accent: true },
     { label: "Send Newsletter", icon: Mail, onClick: () => onNavigate("newsletter") },
     { label: "View Site", icon: Eye, onClick: () => window.open("/", "_blank") },
   ];
@@ -145,14 +143,13 @@ const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate, loading = f
         <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-1.5">
           <TrendingUp className="h-3.5 w-3.5" /> At a Glance
         </h3>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
           {[
             { label: "Revenue", value: `R${stats.totalRevenue?.toLocaleString() || 0}` },
             { label: "Orders", value: stats.totalOrders || 0 },
             { label: "Leads", value: stats.totalServiceBookings || 0 },
             { label: "Providers", value: stats.totalProviders || 0 },
             { label: "Users", value: stats.totalUsers || 0 },
-            { label: "Content", value: stats.totalBlogPosts || 0 },
           ].map((s) => (
             <div key={s.label} className="text-center p-3 rounded-lg bg-muted/30">
               <p className="text-lg font-heading">{s.value}</p>
@@ -252,7 +249,6 @@ const AdminHome = memo(({ stats, recentActivity, alerts, onNavigate, loading = f
                 { label: "WellCoins in circulation", value: stats.wellcoinCirculation?.toLocaleString() || 0, color: "text-primary" },
                 { label: "Active services", value: stats.activeServices || 0 },
                 { label: "Active tours", value: stats.activeTours || 0 },
-                { label: "Published blog posts", value: `${stats.publishedBlogPosts || 0} / ${stats.totalBlogPosts || 0}` },
                 { label: "Verified providers", value: `${stats.activeProviders || 0} / ${stats.totalProviders || 0}` },
                 { label: "Pending orders", value: stats.pendingOrders || 0, color: stats.pendingOrders > 0 ? "text-amber-600" : undefined },
               ].map((item) => (

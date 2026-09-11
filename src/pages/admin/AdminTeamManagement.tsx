@@ -63,7 +63,7 @@ interface TeamMember {
 }
 
 const AVAILABLE_PERMISSIONS = [
-  { key: "content_management", label: "Content Management", description: "Create and edit blog posts" },
+  { key: "content_management", label: "Content Management", description: "Upload and manage media" },
   { key: "product_management", label: "Product Management", description: "Manage products and pricing" },
   { key: "booking_management", label: "Booking Management", description: "View and manage bookings" },
   { key: "feature_flags", label: "Feature Flags", description: "Toggle platform features" },

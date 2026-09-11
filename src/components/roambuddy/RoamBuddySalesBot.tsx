@@ -62,7 +62,6 @@ const HIDDEN_PATH_PREFIXES = [
   "/provider-dashboard",
   "/provider-portal",
   "/wellness-account",
-  "/blog/editor",
 ];
 
 export const RoamBuddySalesBot = ({ onProductRecommended }: RoamBuddySalesBotProps) => {

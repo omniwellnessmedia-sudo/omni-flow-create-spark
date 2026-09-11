@@ -19,7 +19,6 @@ export const omniVoice = {
     services: "Not sure where to start? We've got you.",
     about: "Hey, let us tell you our story",
     contact: "We're all ears",
-    blog: "Grab a cup of tea and explore",
     tours: "Ready for an adventure?",
     shop: "Meet Zenith and Feroza",
   },
@@ -76,10 +75,6 @@ export const omniVoice = {
     contact: {
       headline: "We're All Ears",
       subheadline: "Whatever you're dreaming of, let's talk about making it real. We'd love to hear from you.",
-    },
-    blog: {
-      headline: "Grab a Cup of Tea and Explore",
-      subheadline: "These are the stories, ideas, and insights we're excited to share with you.",
     },
     tours: {
       headline: "Ready for an Adventure?",
@@ -148,7 +143,7 @@ export const omniVoice = {
 
   // Contact form responses
   contactResponses: {
-    success: "Got it! Your message is in Chad's inbox. He'll get back to you within 24 hours. In the meantime, explore our services or grab a cup of tea with our blog.",
+    success: "Got it! Your message is in Chad's inbox. He'll get back to you within 24 hours. In the meantime, have a look at our services.",
     error: "Oops! Something went wrong. Please try again, or reach out to us directly at omniwellnessmedia@gmail.com",
   },
 };

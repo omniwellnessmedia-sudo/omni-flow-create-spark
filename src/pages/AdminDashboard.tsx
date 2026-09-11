@@ -55,7 +55,7 @@ const AdminDashboard = () => {
       totalRevenue: 0, totalOrders: 0, totalBookings: 0, totalServiceBookings: 0,
       totalUsers: 0, totalProviders: 0, activeProviders: 0, wellcoinCirculation: 0,
       pendingOrders: 0, activeServices: 0, totalProducts: 0, affiliateProducts: 0,
-      omniProducts: 0, totalBlogPosts: 0, publishedBlogPosts: 0, activeTours: 0,
+      omniProducts: 0, activeTours: 0,
     },
   });
 
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
         totalProductsResult, affiliateResult, omniResult,
         providerResult, consumerResult,
         ordersCountResult, bookingsCountResult, serviceBookingsCountResult,
-        blogCountResult, publishedBlogCountResult, pendingOrdersCountResult,
+        pendingOrdersCountResult,
         revenueResult, allProvidersResult,
       ] = await Promise.all([
         supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(10),
@@ -125,8 +125,6 @@ const AdminDashboard = () => {
         supabase.from("orders").select("*", { count: "exact", head: true }),
         supabase.from("tour_bookings").select("*", { count: "exact", head: true }),
         supabase.from("contact_submissions").select("*", { count: "exact", head: true }),
-        supabase.from("blog_posts").select("*", { count: "exact", head: true }),
-        supabase.from("blog_posts").select("*", { count: "exact", head: true }).eq("status", "published"),
         supabase.from("orders").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("orders").select("amount"),
         supabase.from("provider_profiles").select("*", { count: "exact", head: true }),
@@ -183,8 +181,6 @@ const AdminDashboard = () => {
           totalProducts: totalProductsResult.count || 0,
           affiliateProducts: affiliateResult.count || 0,
           omniProducts: omniResult.count || 0,
-          totalBlogPosts: blogCountResult.count || 0,
-          publishedBlogPosts: publishedBlogCountResult.count || 0,
           activeTours: toursResult.count || 0,
         },
       });
