@@ -87,7 +87,7 @@ const HeroSection = () => {
   const workspaceItems = [
     {
       title: "Indigenous Walks",
-      description: "Sacred heritage journeys with Chief Kingsley — Fish Hoek, Muizenberg & Kalk Bay",
+      description: "Sacred heritage journeys with Chief Kingsley, in Fish Hoek, Muizenberg and Kalk Bay",
       href: "/tours-retreats",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/Chief%20Kingsley%20amazing%20portrait.jpg",
       badge: "Impact Travel"
@@ -101,7 +101,7 @@ const HeroSection = () => {
     },
     {
       title: "ROAM eSIM Store",
-      description: "Stay connected while you travel — global eSIM plans",
+      description: "Global eSIM plans, so you stay connected while you travel",
       href: "/roambuddy-store",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/community%20outing%202.jpg",
       badge: "Travel Store"
@@ -173,7 +173,7 @@ const HeroSection = () => {
     },
     {
       title: "Meet Chad Cupido",
-      description: "Founding Director — bridging tourism, culture, and community",
+      description: "Founding Director, bridging tourism, culture and community",
       href: "/about",
       image: getStorageUrl("Chad Amazing portrait.jpg"),
       category: "community",
@@ -228,7 +228,7 @@ const HeroSection = () => {
     },
     {
       title: "Corporate Wellness Retreats",
-      description: "Rewild your team — bespoke programmes with measurable ESG outcomes",
+      description: "Rewild your team with bespoke programmes and measurable ESG outcomes",
       href: "/experiences/corporate-wellness-retreat",
       image: getStorageUrl("tour picture couple with chief kingsley.jpg"),
       category: "wellness",
@@ -348,7 +348,7 @@ const HeroSection = () => {
                 <span className="magic-shimmer-text">Experiences That Matter</span>
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto text-base sm:text-lg leading-relaxed">
-                Indigenous heritage walks, equine-assisted wellness, and transformative corporate retreats — each journey creates lasting impact.
+                Indigenous heritage walks, equine assisted wellness and transformative corporate retreats. Each journey creates lasting impact.
               </p>
             </div>
 
