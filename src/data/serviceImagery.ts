@@ -17,10 +17,11 @@
  * PHOTOGRAPH ONLY IF THE SUBJECT IS GENUINELY WHAT THE BAND SELLS. Licensed
  * stock qualifies. An owned photograph of something else does not.
  *
- * Under that rule three bands gained an image and one did not. Podcast is
- * still null, because nothing available is about recording audio, and the
- * old file was right that a microphone stock photo is the obvious move and
- * the exact mistake to avoid.
+ * Under that rule all six bands now have one. Podcast was the last and took
+ * two rounds: the first images offered were a microphone on a plain field,
+ * which is a photograph of equipment. The one used is a photograph of a
+ * session. The old file was right that a microphone stock photo is the
+ * obvious move and the wrong one, and waiting was worth it.
  *
  * These are the same files /services uses, so a visitor moving from the
  * catalogue to an offer page sees one system rather than two.
@@ -81,12 +82,15 @@ const BAND_IMAGES: Record<string, ServiceImage | null> = {
   },
 
   /**
-   * Podcast. We hold no recording or studio photography and none of the
-   * licensed set is about audio. Mapping a microphone here would be the
-   * obvious move and the exact mistake this file exists to avoid, so this
-   * band keeps its typographic panel.
+   * Podcast. This band ran without an image longer than any other, because
+   * the honest options were a microphone on a plain background, which shows
+   * equipment rather than work. This shows a session: the mic in front of a
+   * laptop with a conversation happening behind it.
    */
-  podcast: null,
+  podcast: {
+    src: '/services/podcast-studio.webp',
+    alt: 'A podcast microphone on a desk beside an open laptop, two people talking behind it',
+  },
 
   /**
    * Campaigns and events. A campaign starts as an agreement across a table.

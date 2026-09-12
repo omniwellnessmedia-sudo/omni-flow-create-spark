@@ -69,10 +69,11 @@ import { IMAGES } from "@/lib/images";
  * public/services anyway, so the provenance of anything here can be traced
  * without asking anyone.
  *
- * Two bands changed for the better by gaining an image at all: builds and
- * campaigns had none. Podcast still has none, because none of the available
- * photographs is about audio and a picture that says nothing true about the
- * offer is worse than white space.
+ * Three bands changed for the better by gaining an image at all: builds,
+ * campaigns and podcast had none. Podcast held out longest and was worth
+ * holding out for: the first images offered were a microphone on a plain
+ * red field, which is equipment rather than work. This one is a session,
+ * with the mic in front of a laptop and a conversation going on behind it.
  */
 const BAND_IMAGES: Record<string, { src: string; alt: string } | undefined> = {
   clarity: {
@@ -90,6 +91,10 @@ const BAND_IMAGES: Record<string, { src: string; alt: string } | undefined> = {
   retainer: {
     src: "/services/retainer-support.webp",
     alt: "Someone standing with an open laptop in a meeting room",
+  },
+  podcast: {
+    src: "/services/podcast-studio.webp",
+    alt: "A podcast microphone on a desk beside an open laptop, two people talking behind it",
   },
   campaign: {
     src: "/services/campaign-events.webp",
