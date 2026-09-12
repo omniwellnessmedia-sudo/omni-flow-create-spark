@@ -1,4 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection";
+import ScorecardSection from "@/components/sections/ScorecardSection";
 import FeaturedEventSection from "@/components/sections/FeaturedEventSection";
 import ServicesSection from "@/components/sections/ServicesSection";
 import FeaturedProjectsSection from "@/components/sections/FeaturedProjectsSection";
@@ -16,6 +17,12 @@ const Index = () => {
       {/* Main Content Area - WCAG Landmark */}
       <main id="main-content" role="main" aria-label="Main content">
         <HeroSection />
+        {/* Directly after the hero, and only here. It is the one thing on
+            the site that qualifies a visitor without costing anybody an
+            hour, so it earns the best slot. Repeating it between the other
+            sections would read as a pop-up that cannot be closed, and the
+            later placements would cannibalise this one. */}
+        <ScorecardSection />
         <FeaturedEventSection />
         <ServicesSection />
         <ToursRetreatsPreview />
