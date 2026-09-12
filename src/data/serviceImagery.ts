@@ -1,30 +1,37 @@
-import { IMAGES } from '@/lib/images';
-
 /**
- * Photography for the service pages, mapped per band.
+ * Photography for the service detail pages, mapped per band.
  *
- * THE RULE: A BAND GETS A PHOTOGRAPH ONLY IF WE HAVE ONE THAT ACTUALLY SHOWS
- * THE WORK. Where we do not, the page renders a typographic panel instead and
- * that is the better outcome.
+ * THIS FILE USED TO FORBID STOCK, and the rule read: "A band gets a
+ * photograph only if we have one that actually shows the work. Do not map a
+ * stock photograph to fill a gap." Three of the six bands rendered a
+ * typographic panel instead, because we held nothing that fitted.
  *
- * This is not caution for its own sake. The image catalogue in lib/images.ts
- * has convenience groups that alias unrelated photographs: `ai.neural` points
- * at a Beauty Without Cruelty campaign cover, and `business.strategy`,
- * `business.consulting` and `business.teamwork` all resolve to the same team
- * photograph. Wiring those in would put a campaign cover beside a podcast
- * offer and the same picture on four pages. That is exactly the "images to
- * context are very sus" problem already raised about the home page, and
- * repeating it on nineteen sales pages would be worse, because a mismatched
- * photograph on a page asking for money reads as filler and costs more trust
- * than a blank space does.
+ * THAT RULE WAS SOLVING THE RIGHT PROBLEM AND NAMED THE WRONG CULPRIT. What
+ * it was protecting against is a photograph that says nothing true about the
+ * offer beside it: a Beauty Without Cruelty campaign cover next to a podcast
+ * package, or the same team photograph on four unrelated pages. That is a
+ * relevance problem, not a licensing one. Owning a picture never made it
+ * relevant, and licensing one never made it irrelevant.
  *
- * So: real photographs where the subject genuinely matches, and null
- * otherwise. Every alt text below describes what is actually in the frame,
- * which is both an accessibility requirement and a check on whether the image
- * belongs at all. If the alt text has to be vague to fit, the image is wrong.
+ * So the rule is now stated as what it always meant: A BAND GETS A
+ * PHOTOGRAPH ONLY IF THE SUBJECT IS GENUINELY WHAT THE BAND SELLS. Licensed
+ * stock qualifies. An owned photograph of something else does not.
  *
- * TO ADD MORE. Put real photography of the work into the image catalogue and
- * map it here. Do not map a stock photograph to fill a gap.
+ * Under that rule three bands gained an image and one did not. Podcast is
+ * still null, because nothing available is about recording audio, and the
+ * old file was right that a microphone stock photo is the obvious move and
+ * the exact mistake to avoid.
+ *
+ * These are the same files /services uses, so a visitor moving from the
+ * catalogue to an offer page sees one system rather than two.
+ *
+ * Every alt text describes what is actually in the frame, which is both an
+ * accessibility requirement and a check on whether the image belongs. If the
+ * alt has to go vague to fit, the image is wrong.
+ *
+ * Sources are licensed from Pixabay, which permits commercial use without
+ * attribution. The original filenames are preserved in this repository's
+ * history so provenance can be traced without asking anyone.
  *
  * No em dashes in this file.
  */
@@ -37,50 +44,56 @@ export interface ServiceImage {
 
 const BAND_IMAGES: Record<string, ServiceImage | null> = {
   /**
-   * Clarity and audits. A working session between people is what this offer
-   * is, and the team photograph shows exactly that.
+   * Clarity and audits. Two people going through printed figures is what a
+   * paid audit looks like from the outside.
    */
   clarity: {
-    src: IMAGES.services.team,
-    alt: 'The Omni Wellness Media team working together at a table in Cape Town',
+    src: '/services/clarity-audit.webp',
+    alt: 'Two people reviewing printed charts and figures across a table',
   },
 
   /**
-   * Websites and sprints. We hold no photographs of screens, builds or
-   * development work. A person at a laptop would be stock, so this band takes
-   * the typographic panel.
+   * Websites and sprints. This band had nothing. An analytics dashboard is
+   * the output of a build sprint, which is closer to the offer than a
+   * photograph of a developer would be.
    */
-  build: null,
+  build: {
+    src: '/services/build-sprint.webp',
+    alt: 'A web analytics dashboard on screen, traffic and conversion charts in view',
+  },
 
   /**
-   * Content and brand identity. Production stills from our own shoots show
-   * the work being made, which is the thing being sold.
+   * Content and brand identity. Someone at a desk making something.
    */
   content: {
-    src: IMAGES.services.artscape,
-    alt: 'Filming on location at the Artscape during an Omni production',
+    src: '/services/content-brand.webp',
+    alt: 'Someone working at a laptop at a wooden desk',
   },
 
   /**
-   * Ongoing support. This is a retainer, meaning capacity and consistency
-   * over months. Nothing photographic represents that honestly.
+   * Ongoing support. A retainer is capacity and consistency over months,
+   * which nothing photographs directly. Someone arriving at a meeting with
+   * their work open is the nearest honest thing.
    */
-  retainer: null,
+  retainer: {
+    src: '/services/retainer-support.webp',
+    alt: 'Someone standing with an open laptop in a meeting room',
+  },
 
   /**
-   * Podcast. We hold no recording or studio photography. Mapping a microphone
-   * stock image here was the obvious move and is the exact mistake this file
-   * exists to avoid.
+   * Podcast. We hold no recording or studio photography and none of the
+   * licensed set is about audio. Mapping a microphone here would be the
+   * obvious move and the exact mistake this file exists to avoid, so this
+   * band keeps its typographic panel.
    */
   podcast: null,
 
   /**
-   * Campaigns and events. Our own screening and event work, photographed at
-   * the events themselves.
+   * Campaigns and events. A campaign starts as an agreement across a table.
    */
   campaign: {
-    src: IMAGES.services.humanAnimal1,
-    alt: 'Audience gathered at an Omni Wellness Media screening event',
+    src: '/services/campaign-events.webp',
+    alt: 'A handshake across a desk covered in planning documents',
   },
 };
 

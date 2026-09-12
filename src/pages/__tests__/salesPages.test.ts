@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
   SERVICE_BANDS, ALL_OFFERS, getOffer, getBandForOffer, getBandSales, RATE_CARD_TERMS,
@@ -84,7 +84,11 @@ describe('every offer can fill every section of its page', () => {
     for (const band of SERVICE_BANDS) {
       const img = bandImage(band.id);
       if (img === null) continue;
-      expect(img.src, band.id).toMatch(/^https?:\/\//);
+      // These used to be absolute Supabase storage URLs. They are local files
+      // now, which is the stronger requirement: same origin, no third party
+      // that can move or rate limit them, and a build that fails loudly if
+      // one was never committed.
+      expect(img.src, band.id).toMatch(/^\/services\/[a-z-]+\.webp$/);
       // Alt text must describe the photograph, not restate the offer. A short
       // or generic alt is the signal that the image does not belong.
       expect(img.alt.length, band.id).toBeGreaterThan(25);
@@ -365,11 +369,27 @@ describe('the services hero matches the handoff treatment', () => {
     expect(svc).toContain('<SpectrumRule />');
   });
 
-  it('uses our own production photograph rather than stock', () => {
-    // The handoff frames a Pixabay clip of a laptop. We hold rights to a
-    // photograph of the thing we actually sell.
-    expect(svc).toContain('/screenings/night/stage-screen-wide.webp');
-    expect(svc).not.toContain('pixabay');
+  it('uses an image about the work, served from our own origin', () => {
+    // THIS TEST USED TO REQUIRE THE OPPOSITE. It pinned the Masque Theatre
+    // photograph and forbade stock, on the reasoning that we hold rights to a
+    // picture of the thing we actually sell. The reasoning was half right:
+    // we do hold the rights, and a theatre stage is not what this page sells.
+    // It sells audits, websites, content and retainers. The owner asked for
+    // imagery that matches the offers, so licensed stock replaced it.
+    //
+    // What still has to hold is that the image is ours to serve and cheap to
+    // load: a local file, not a hotlink to somebody else's CDN that can move,
+    // rate limit or start charging.
+    expect(svc).toContain('/services/services-hero.webp');
+    expect(svc).not.toMatch(/src="https?:\/\//);
+  });
+
+  it('gives the hero intrinsic dimensions and a loading priority', () => {
+    // It is the largest contentful paint on this route. Without width and
+    // height the page reflows around it, and without the priority hint the
+    // browser discovers it late.
+    expect(svc).toContain('fetchPriority="high"');
+    expect(svc).toMatch(/width=\{1600\}[\s\S]{0,40}height=\{686\}/);
   });
 
   it('offers every category as a jump target, including quotation-based', () => {
@@ -379,5 +399,80 @@ describe('the services hero matches the handoff treatment', () => {
 
   it('keeps one h1', () => {
     expect((svc.match(/<h1/g) || []).length).toBe(1);
+  });
+});
+
+describe('service and screening imagery', () => {
+  const svc = readFileSync(resolve(__dirname, '../Services.tsx'), 'utf8');
+  const scr = readFileSync(resolve(__dirname, '../Screenings.tsx'), 'utf8');
+  const dir = resolve(__dirname, '../../../public/services');
+
+  const REFERENCED = [
+    'services-hero.webp',
+    'clarity-audit.webp',
+    'build-sprint.webp',
+    'content-brand.webp',
+    'retainer-support.webp',
+    'campaign-events.webp',
+    'screening-curtains.webp',
+    'screening-seats.webp',
+    'screening-tickets.webp',
+    'screening-popcorn.webp',
+  ];
+
+  it.each(REFERENCED)('%s exists on disk', (file) => {
+    // A referenced image that was never committed renders as a broken box,
+    // and nothing in a typecheck or a build catches it.
+    expect(existsSync(resolve(dir, file))).toBe(true);
+  });
+
+  it.each(REFERENCED)('%s is small enough to serve', (file) => {
+    // These arrived as camera and stock originals between 276KB and 1.6MB.
+    // Shipping them unprocessed is the difference between a page that loads
+    // on South African mobile data and one that does not.
+    const bytes = statSync(resolve(dir, file)).size;
+    expect(bytes, `${file} is ${Math.round(bytes / 1024)}KB`).toBeLessThan(250 * 1024);
+  });
+
+  it.each(REFERENCED)('%s is not excluded from the deploy by .gitignore', (file) => {
+    // THE TRAP THIS CATCHES. .gitignore blanket-ignores *.webp to keep bulk
+    // media out of the repository, with an explicit exception per directory.
+    // Miss the exception and the page references an image that was never
+    // committed: the build succeeds, the typecheck passes, the file sits on
+    // the disk of whoever added it, and the live site shows a broken box.
+    // Nothing else in this suite would notice.
+    const ignore = readFileSync(resolve(__dirname, '../../../.gitignore'), 'utf8');
+    expect(ignore, 'public/services/*.webp needs a ! exception in .gitignore')
+      .toMatch(/^!public\/services\/\*\.webp$/m);
+    expect(file).toMatch(/\.webp$/);
+  });
+
+  it('ships no unprocessed source originals', () => {
+    // The originals stay in git history and in the owner's Drive. Keeping a
+    // 1.6MB JPEG next to the 60KB WebP that replaced it invites somebody to
+    // reference the wrong one.
+    const stray = readdirSync(dir).filter((f) => /\.(jpe?g|png)$/i.test(f));
+    expect(stray, `unprocessed originals left in public/services: ${stray.join(', ')}`).toEqual([]);
+  });
+
+  it('gives every band image intrinsic dimensions and lazy loading', () => {
+    // Only the hero loads eagerly. Everything below the fold waits.
+    expect(svc).toMatch(/src=\{image\.src\}[\s\S]{0,200}loading="lazy"/);
+    expect(svc).toMatch(/src=\{image\.src\}[\s\S]{0,200}width=\{1400\}/);
+  });
+
+  it('illustrates all four screening offerings', () => {
+    // They carried an icon and nothing else on the section where somebody
+    // chooses between R500 and R25,000.
+    expect((scr.match(/image: '\/services\/screening-/g) || []).length).toBe(4);
+    expect(scr).toMatch(/src=\{o\.image\}/);
+    expect(scr).toMatch(/alt=\{o\.imageAlt\}/);
+  });
+
+  it("leaves the screenings collage as Omni's own photography", () => {
+    // The collage is the evidence on that page. Stock belongs on the price
+    // cards, not where a reader is being shown what we have actually done.
+    expect(scr).toContain('IMAGES.services.artscape');
+    expect(scr).toContain('/screenings/night/qa-panel-wide.webp');
   });
 });

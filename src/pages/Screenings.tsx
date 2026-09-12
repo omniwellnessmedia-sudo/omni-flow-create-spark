@@ -131,6 +131,8 @@ const OFFERINGS = [
       'MC, panel or Q&A production on the night',
       'Photo recap pack for your funders, press and socials',
     ],
+    image: '/services/screening-curtains.webp',
+    imageAlt: 'Stage curtains lit above empty theatre seats',
     enquiry: 'hosted-screening',
   },
   {
@@ -153,6 +155,8 @@ const OFFERINGS = [
     ],
     /** Rendered beneath this card's bullets only. Governed, 17 August 2026. */
     gate: 'Sponsored screenings are confirmed only once written exhibition rights and the classification position are documented for that specific film.',
+    image: '/services/screening-seats.webp',
+    imageAlt: 'A darkened cinema auditorium facing the screen',
     enquiry: 'sponsored-screening',
   },
   {
@@ -166,6 +170,8 @@ const OFFERINGS = [
       'Named local-business target list and outreach',
       'We negotiate and close; you deliver your event',
     ],
+    image: '/services/screening-tickets.webp',
+    imageAlt: 'A roll of cinema admission tickets',
     enquiry: 'sponsorship-service',
   },
   {
@@ -179,6 +185,8 @@ const OFFERINGS = [
       '“Official product partner” of a full season',
       'Mention from the stage and on the event page',
     ],
+    image: '/services/screening-popcorn.webp',
+    imageAlt: 'Popcorn and confectionery at a cinema counter',
     enquiry: 'product-activation',
   },
 ];
@@ -796,7 +804,29 @@ const Screenings = () => {
             </div>
             <div className="mt-10 grid gap-5 md:grid-cols-2">
               {OFFERINGS.map((o) => (
-                <article key={o.name} className="flex flex-col rounded-[18px] border border-wwpl-line bg-white p-7 shadow-[0_1px_2px_rgba(21,32,31,.05)]">
+                <article key={o.name} className="flex flex-col overflow-hidden rounded-[18px] border border-wwpl-line bg-white shadow-[0_1px_2px_rgba(21,32,31,.05)]">
+                  {/* A photograph of the thing being bought, at the top of the
+                      card that sells it. These four had icons and nothing
+                      else, on the section of the page where somebody decides
+                      how to spend between R500 and R25,000.
+
+                      Licensed stock, and deliberately stock: the collage
+                      further up this page carries Omni's own production
+                      photography and one frame from the 10 August night, and
+                      that is where the real evidence belongs. Illustrating a
+                      price card with a photograph of a real event would read
+                      as a claim about what your night will look like. A
+                      cinema seat claims nothing. */}
+                  <img
+                    src={o.image}
+                    alt={o.imageAlt}
+                    width={1200}
+                    height={800}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-[150px] w-full object-cover"
+                  />
+                  <div className="flex flex-1 flex-col p-7">
                   <div className="flex items-start justify-between gap-4">
                     <o.icon className="h-7 w-7 text-wwpl-goldText" aria-hidden="true" />
                     <div className="text-right">
@@ -830,6 +860,7 @@ const Screenings = () => {
                   >
                     Enquire about this
                   </Button>
+                  </div>
                 </article>
               ))}
             </div>
