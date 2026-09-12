@@ -39,26 +39,61 @@ import { IMAGES } from "@/lib/images";
  *
  * The dark handoff palette is recast on the site's cream ground so this
  * page reads as part of the same website as everything else; the category
- * hues, Cormorant display and mono labels carry the system. Band imagery
- * is Omni's own photography from the shared catalogue, never stock.
+ * hues, Cormorant display and mono labels carry the system.
+ *
+ * IMAGERY IS LICENSED STOCK, and this line used to say the opposite: "Omni's
+ * own photography from the shared catalogue, never stock." That was true and
+ * it was the wrong rule for this page. Omni's photography is of events,
+ * retreats and productions, so a page selling audits and retainers was
+ * illustrated with a theatre and a landscape. Owning a photograph is not the
+ * same as it being about the thing you are selling.
+ *
+ * Omni's own photography still carries the pages where it is the evidence:
+ * the screenings collage, the project cards at the foot of this page, the
+ * event pages. Nothing was displaced there.
  */
 
+/**
+ * One photograph per band, of the work rather than of us.
+ *
+ * These used to be Omni's own photography: a Cape Town landscape, the
+ * Artscape stage, a community project. Good pictures, and the wrong ones
+ * here. Somebody reading about a website audit does not learn anything from
+ * a landscape, and a page that sells business services was illustrated with
+ * a theatre. The subjects now match what is being sold: documents and
+ * charts over an audit, analytics over a sprint, a desk over a content
+ * pack, a meeting over campaigns.
+ *
+ * Licensed stock from Pixabay, which grants commercial use without
+ * attribution. Attribution is left in the source filenames in
+ * public/services anyway, so the provenance of anything here can be traced
+ * without asking anyone.
+ *
+ * Two bands changed for the better by gaining an image at all: builds and
+ * campaigns had none. Podcast still has none, because none of the available
+ * photographs is about audio and a picture that says nothing true about the
+ * offer is worse than white space.
+ */
 const BAND_IMAGES: Record<string, { src: string; alt: string } | undefined> = {
   clarity: {
-    src: IMAGES.services.team,
-    alt: "Cape Town landscape from an Omni location shoot",
+    src: "/services/clarity-audit.webp",
+    alt: "Two people reviewing printed charts and figures across a table",
+  },
+  build: {
+    src: "/services/build-sprint.webp",
+    alt: "A web analytics dashboard on screen, traffic and conversion charts in view",
   },
   content: {
-    src: IMAGES.services.artscape,
-    alt: "On stage at the Artscape Theatre during an Omni production",
+    src: "/services/content-brand.webp",
+    alt: "Someone working at a laptop at a wooden desk",
   },
   retainer: {
-    src: IMAGES.services.community1,
-    alt: "An Omni community wellness project in session",
+    src: "/services/retainer-support.webp",
+    alt: "Someone standing with an open laptop in a meeting room",
   },
   campaign: {
-    src: "/screenings/night/stage-banner-wide.webp",
-    alt: "The Omni stage at The Masque Theatre on 10 August 2026",
+    src: "/services/campaign-events.webp",
+    alt: "A handshake across a desk covered in planning documents",
   },
 };
 
@@ -82,12 +117,7 @@ const Services = () => {
     <div className="min-h-screen" style={{ background: CREAM }}>
       <UnifiedNavigation />
       <main style={{ background: CREAM, color: INK }}>
-        {/* Hero.
-            The handoff sets this on ink with a framed 21:9 banner. Its banner
-            is a Pixabay stock clip of a laptop; ours is a photograph of our own
-            production at The Masque Theatre, which is both truer to what we
-            sell and something we hold the rights to. Same composition, real
-            subject. */}
+        {/* Hero. The handoff sets this on ink with a framed 21:9 banner. */}
         <section className="relative overflow-hidden" style={{ background: INK }}>
           {/* Soft spectrum glow behind the display type */}
           <div
@@ -136,25 +166,32 @@ const Services = () => {
             </Reveal>
 
             {/* The banner, framed at 21:9 with the spectrum rule across the
-                top, as the handoff frames its video. Real photograph of our
-                own production rather than stock. */}
+                top, as the handoff frames its video.
+
+                This was a photograph of our own Masque Theatre production. It
+                is a good photograph and it was selling the wrong thing: a
+                theatre stage at the top of a page about audits, websites and
+                retainers set an expectation the nineteen offers below it do
+                not meet. The desk says what this page is.
+
+                Encoded at exactly the 21:9 it renders at, so the crop happens
+                once here rather than in every visitor's browser, and it is
+                the only image on the page loaded eagerly because it is the
+                one the largest paint waits for. */}
             <Reveal delay={120}>
               <figure className="mt-11">
                 <div className="overflow-hidden rounded-[22px]" style={{ border: "1px solid rgba(246,241,232,.16)" }}>
                   <SpectrumRule />
                   <img
-                    src="/screenings/night/stage-screen-wide.webp"
-                    alt="The Omni Wellness Media stage and full cinema screen at The Masque Theatre"
+                    src="/services/services-hero.webp"
+                    alt="A desk from above with laptops, notebooks, printed pages and coffee"
                     className="aspect-[21/9] w-full object-cover"
+                    width={1600}
+                    height={686}
                     loading="eager"
+                    fetchPriority="high"
                   />
                 </div>
-                <figcaption
-                  className="mt-3 text-right text-[11px] uppercase tracking-[.16em]"
-                  style={{ ...mono, color: "rgba(246,241,232,.5)" }}
-                >
-                  The Masque Theatre · 10 August 2026 · our production
-                </figcaption>
               </figure>
             </Reveal>
 
@@ -213,7 +250,14 @@ const Services = () => {
                 {/* One wide photograph per band, treated like the hero figure.
                     These used to render as 220x110 thumbnails floating beside
                     the heading, which read as broken layout on the 31 August
-                    smoke test. A band image is structural or it is absent. */}
+                    smoke test. A band image is structural or it is absent.
+
+                    The caption pill is gone with the old photographs. It
+                    printed the alt text on top of the image, which earned its
+                    place when the caption was a fact a reader could not see
+                    ("Artscape Theatre, Cape Town") and stopped earning it the
+                    moment the caption merely described the picture. It also
+                    made a screen reader announce the same sentence twice. */}
                 {image && (
                   <Reveal delay={60}>
                     <figure
@@ -223,15 +267,12 @@ const Services = () => {
                       <img
                         src={image.src}
                         alt={image.alt}
+                        width={1400}
+                        height={300}
                         loading="lazy"
+                        decoding="async"
                         className="h-[180px] w-full object-cover sm:h-[240px]"
                       />
-                      <figcaption
-                        className="absolute bottom-3 left-3 rounded-full bg-black/45 px-4 py-1.5 text-[11px] uppercase tracking-[.16em] text-white backdrop-blur-sm"
-                        style={mono}
-                      >
-                        {image.alt}
-                      </figcaption>
                     </figure>
                   </Reveal>
                 )}

@@ -72,3 +72,12 @@ credentials.*
 .env.local
 .env.*.local
 design/service-pack/assets/
+
+# Exception: service and screening page photography.
+# Web-size WebP only, each one encoded at the ratio it renders at and none
+# over 200KB. The blanket *.webp above would otherwise let these be
+# referenced by the pages and silently left out of the deploy, which shows
+# up as a broken image on the live site and on nothing else: the build
+# succeeds, the typecheck passes, and the file is right there on the disk of
+# whoever added it.
+!public/services/*.webp
