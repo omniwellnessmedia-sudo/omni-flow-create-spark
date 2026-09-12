@@ -10,7 +10,7 @@ import {
   getBandSales,
   RATE_CARD_TERMS,
 } from '@/data/publicRateCard';
-import { bandImage } from '@/data/serviceImagery';
+import { offerImage } from '@/data/serviceImagery';
 import { getServiceDetailContent } from '@/data/serviceDetailContent';
 import { useSEO } from '@/lib/seo';
 import { WhatsappButton } from '@/components/services/spectrum';
@@ -118,7 +118,7 @@ const ServiceOfferDetail = () => {
   if (!offer || !band) return <Navigate to="/services" replace />;
 
   const hue = offer.hue || band.hue;
-  const image = bandImage(band.id);
+  const image = offerImage(offer.slug);
   const contactHref = `/enquire?s=${offer.slug}`;
 
   const Cta = ({ variant }: { variant: 'light' | 'dark' }) => (
@@ -233,11 +233,20 @@ const ServiceOfferDetail = () => {
               </p>
             </div>
 
-            {/* Imagery is used only where a genuinely relevant photograph of
-                our own work exists for the band. A mismatched stock photo is
-                worse than none: it is the thing that makes a page read as
-                filler. bandImage returns null rather than reaching for
-                something vaguely related. */}
+            {/* Imagery is per offer, not per band. Keyed by band, all three
+                clarity offers showed one photograph and all three build
+                offers showed another, so two offers a visitor was comparing
+                looked identical.
+
+                The file is cropped to 4:5 for this frame specifically. The
+                strip on /services is 4.67:1, and filling this tall box with
+                that wide file scaled it up about 1.7 times and cropped away
+                four fifths of the width, which rendered as a blown up slab
+                of tabletop rather than a photograph.
+
+                Ten of the nineteen offers have no image and render the panel
+                below instead. That is deliberate: a photograph that says
+                nothing true about the offer beside it is worse than none. */}
             {image ? (
               <img
                 src={image.src}
