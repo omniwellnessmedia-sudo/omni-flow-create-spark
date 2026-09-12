@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import {
   SERVICE_BANDS, ALL_OFFERS, getOffer, getBandForOffer, getBandSales, RATE_CARD_TERMS,
 } from '@/data/publicRateCard';
-import { bandImage, bandsWithoutImagery } from '@/data/serviceImagery';
+import { offerImage, offersWithoutImagery, offerImageFiles } from '@/data/serviceImagery';
 import { QUESTIONS, scoreAnswers, MAX_SCORE, DIMENSIONS, BANDS } from '@/data/scorecard';
 
 /**
@@ -80,26 +80,52 @@ describe('every offer can fill every section of its page', () => {
     }
   );
 
-  it('has photography for every band now', () => {
-    // Podcast was the last holdout and took two rounds to fill honestly.
-    // If this ever goes back to null, something was removed rather than
-    // replaced.
-    expect(bandsWithoutImagery()).toEqual([]);
+  it('never shows two offers the same photograph', () => {
+    // This was keyed by band, so all three clarity offers shared one image
+    // and all three build offers shared another. Two offers a visitor is
+    // comparing looked identical, which reads as a template.
+    const used = ALL_OFFERS.map((o) => offerImage(o.slug)?.src).filter(Boolean);
+    expect(new Set(used).size, 'a photograph is used on more than one offer').toBe(used.length);
   });
 
-  it('gives every band either a real photograph with real alt text, or none', () => {
-    for (const band of SERVICE_BANDS) {
-      const img = bandImage(band.id);
+  it('reports which offers render the typographic panel', () => {
+    // Not a failure. Ten of nineteen have no photograph that says anything
+    // true about them, and the panel is a deliberate design rather than an
+    // absence. This is the standing list of what per offer photography
+    // would still buy.
+    expect(offersWithoutImagery(ALL_OFFERS.map((o) => o.slug))).toEqual([
+      'brand-content-audit',
+      'website-audit',
+      'visibility-sprint',
+      'brand-identity',
+      'content-pack-12',
+      'social-media-management',
+      'executive-support',
+      'podcast-concept',
+      'podcast-launch',
+      'workshops',
+    ]);
+  });
+
+  it('gives every offer photograph real alt text and a local file', () => {
+    for (const offer of ALL_OFFERS) {
+      const img = offerImage(offer.slug);
       if (img === null) continue;
-      // These used to be absolute Supabase storage URLs. They are local files
-      // now, which is the stronger requirement: same origin, no third party
-      // that can move or rate limit them, and a build that fails loudly if
-      // one was never committed.
-      expect(img.src, band.id).toMatch(/^\/services\/[a-z-]+\.webp$/);
+      expect(img.src, offer.slug).toMatch(/^\/services\/offer-[a-z-]+\.webp$/);
       // Alt text must describe the photograph, not restate the offer. A short
       // or generic alt is the signal that the image does not belong.
-      expect(img.alt.length, band.id).toBeGreaterThan(25);
+      expect(img.alt.length, offer.slug).toBeGreaterThan(25);
     }
+  });
+
+  it.each(offerImageFiles())('%s exists on disk and is portrait', (src) => {
+    // THE BUG THIS CATCHES. These files are cropped to 4:5 for the offer
+    // page. The band strips on /services are 4.67:1. Pointing this page at
+    // a strip scales it up about 1.7 times to fill the tall frame and crops
+    // away four fifths of the width.
+    const file = resolve(__dirname, '../../../public', src.replace(/^\//, ''));
+    expect(existsSync(file), `${src} is missing`).toBe(true);
+    expect(statSync(file).size, `${src} is too heavy`).toBeLessThan(250 * 1024);
   });
 });
 

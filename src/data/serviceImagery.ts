@@ -1,40 +1,40 @@
 /**
- * Photography for the service detail pages, mapped per band.
+ * Photography for the individual offer pages.
  *
- * THIS FILE USED TO FORBID STOCK, and the rule read: "A band gets a
- * photograph only if we have one that actually shows the work. Do not map a
- * stock photograph to fill a gap." Three of the six bands rendered a
- * typographic panel instead, because we held nothing that fitted.
+ * THIS WAS KEYED BY BAND AND THAT WAS WRONG TWICE OVER.
  *
- * THAT RULE WAS SOLVING THE RIGHT PROBLEM AND NAMED THE WRONG CULPRIT. What
- * it was protecting against is a photograph that says nothing true about the
- * offer beside it: a Beauty Without Cruelty campaign cover next to a podcast
- * package, or the same team photograph on four unrelated pages. That is a
- * relevance problem, not a licensing one. Owning a picture never made it
- * relevant, and licensing one never made it irrelevant.
+ * Wrong once because six images across nineteen offers guarantees
+ * repetition: all three clarity offers showed the same photograph, all
+ * three build offers showed the same photograph, and a visitor comparing
+ * two offers in a category saw the identical picture twice. That reads as
+ * a template, not as a page about the thing they are considering.
  *
- * So the rule is now stated as what it always meant: A BAND GETS A
- * PHOTOGRAPH ONLY IF THE SUBJECT IS GENUINELY WHAT THE BAND SELLS. Licensed
- * stock qualifies. An owned photograph of something else does not.
+ * Wrong twice because the band images are encoded at 4.67:1 for the strip
+ * on /services, and this page frames them at 4:5 portrait. Filling a tall
+ * box with a wide image scales it up about 1.7 times and crops away four
+ * fifths of the width, so what rendered here was a meaningless blown up
+ * fragment: a slab of tabletop, half a word, part of a hand.
  *
- * Under that rule all six bands now have one. Podcast was the last and took
- * two rounds: the first images offered were a microphone on a plain field,
- * which is a photograph of equipment. The one used is a photograph of a
- * session. The old file was right that a microphone stock photo is the
- * obvious move and the wrong one, and waiting was worth it.
+ * So this is keyed by offer, and points at files cropped to 4:5 for this
+ * page and nowhere else. Two files per subject is the cost of two
+ * differently shaped containers, and it is cheaper than either one of them
+ * looking broken.
  *
- * These are the same files /services uses, so a visitor moving from the
- * catalogue to an offer page sees one system rather than two.
+ * NINE OF NINETEEN OFFERS HAVE ONE. The other ten render the typographic
+ * panel, which is the original rule of this file and still the right one: a
+ * photograph that says nothing true about the offer beside it is worse than
+ * none, and the panel is a deliberate design rather than an absence. No two
+ * offers share a photograph.
  *
- * Every alt text describes what is actually in the frame, which is both an
- * accessibility requirement and a check on whether the image belongs. If the
- * alt has to go vague to fit, the image is wrong.
+ * What the missing ten would need is genuinely per-offer photography. Word
+ * tiles spelling SEO or ADWORDS were tried and cannot work here: the word
+ * runs horizontally and the frame is vertical, so every crop cuts letters.
  *
  * Sources are licensed from Pixabay, which permits commercial use without
- * attribution, except the campaigns band, which is Omni's own event
- * photography published with the consent of the person in it. The original
- * filenames are preserved in this repository's history so provenance can be
- * traced without asking anyone.
+ * attribution, except the campaign command centre, which is Omni's own
+ * event photography published with the consent of the person in it. The
+ * original filenames are preserved in this repository's history so
+ * provenance can be traced without asking anyone.
  *
  * No em dashes in this file.
  */
@@ -45,73 +45,61 @@ export interface ServiceImage {
   alt: string;
 }
 
-const BAND_IMAGES: Record<string, ServiceImage | null> = {
-  /**
-   * Clarity and audits. Two people going through printed figures is what a
-   * paid audit looks like from the outside.
-   */
-  clarity: {
-    src: '/services/clarity-audit.webp',
-    alt: 'Two people reviewing printed charts and figures across a table',
+/**
+ * Keyed by offer slug. An offer absent from this map renders the
+ * typographic panel, which is a valid outcome and not a gap to be filled
+ * with something vaguely related.
+ */
+const OFFER_IMAGES: Record<string, ServiceImage> = {
+  'clarity-session': {
+    src: '/services/offer-clarity-session.webp',
+    alt: 'Two people going through printed charts and figures across a table',
   },
-
-  /**
-   * Websites and sprints. This band had nothing. An analytics dashboard is
-   * the output of a build sprint, which is closer to the offer than a
-   * photograph of a developer would be.
-   */
-  build: {
-    src: '/services/build-sprint.webp',
-    alt: 'A web analytics dashboard on screen, traffic and conversion charts in view',
+  'revenue-sprint': {
+    src: '/services/offer-revenue-sprint.webp',
+    alt: 'A pen pointing at a traffic and conversion chart on a screen',
   },
-
-  /**
-   * Content and brand identity. Someone at a desk making something.
-   */
-  content: {
-    src: '/services/content-brand.webp',
+  'landing-page': {
+    src: '/services/offer-landing-page.webp',
     alt: 'Someone working at a laptop at a wooden desk',
   },
-
-  /**
-   * Ongoing support. A retainer is capacity and consistency over months,
-   * which nothing photographs directly. Someone arriving at a meeting with
-   * their work open is the nearest honest thing.
-   */
-  retainer: {
-    src: '/services/retainer-support.webp',
+  'content-starter-pack': {
+    src: '/services/offer-content-starter.webp',
+    alt: 'A desk from above with a newspaper, notebooks, a calculator and coffee',
+  },
+  'growth-desk': {
+    src: '/services/offer-growth-desk.webp',
     alt: 'Someone standing with an open laptop in a meeting room',
   },
-
-  /**
-   * Podcast. This band ran without an image longer than any other, because
-   * the honest options were a microphone on a plain background, which shows
-   * equipment rather than work. This shows a session: the mic in front of a
-   * laptop with a conversation happening behind it.
-   */
-  podcast: {
-    src: '/services/podcast-studio.webp',
-    alt: 'A podcast microphone on a desk beside an open laptop, two people talking behind it',
+  'podcast-starter': {
+    src: '/services/offer-podcast-starter.webp',
+    alt: 'A podcast microphone on a desk beside an open laptop in a studio',
   },
-
-  /**
-   * Campaigns and events. Omni's own photography, published with consent,
-   * and the one band where owned beats licensed: this sells running events,
-   * so a photograph of Omni running one proves something a stock image
-   * cannot.
-   */
-  campaign: {
-    src: '/services/campaign-events.webp',
-    alt: 'A speaker addressing an audience from a microphone at an Omni event',
+  'campaign-command-centre': {
+    // Omni's own photography, published with consent. On the offer about
+    // running campaigns and events, a photograph of Omni running one proves
+    // something no licensed image can.
+    src: '/services/offer-campaign-centre.webp',
+    alt: 'A speaker addressing an audience from a podium at an Omni event',
+  },
+  'screening-campaign': {
+    src: '/services/offer-screening-campaign.webp',
+    alt: 'Stage curtains lit above empty theatre seats',
+  },
+  'event-marketing': {
+    src: '/services/offer-event-marketing.webp',
+    alt: 'A handshake across a desk covered in planning documents',
   },
 };
 
-/** The band's photograph, or null when we have nothing that genuinely fits. */
-export const bandImage = (bandId: string | undefined): ServiceImage | null =>
-  bandId ? (BAND_IMAGES[bandId] ?? null) : null;
+/** The offer's photograph, or null when we have none that genuinely fits. */
+export const offerImage = (slug: string | undefined): ServiceImage | null =>
+  slug ? (OFFER_IMAGES[slug] ?? null) : null;
 
-/** Bands that currently have no photography, for the coverage test. */
-export const bandsWithoutImagery = (): string[] =>
-  Object.entries(BAND_IMAGES)
-    .filter(([, v]) => v === null)
-    .map(([k]) => k);
+/** Offers that currently render the typographic panel, for the coverage test. */
+export const offersWithoutImagery = (allSlugs: string[]): string[] =>
+  allSlugs.filter((s) => !OFFER_IMAGES[s]);
+
+/** Every file this map references, for the exists-on-disk test. */
+export const offerImageFiles = (): string[] =>
+  Object.values(OFFER_IMAGES).map((i) => i.src);
