@@ -7,7 +7,23 @@ import { useLocation } from "react-router-dom";
  * - Trails behind the pointer with an organic lag
  * - Scales + brightens on interactive elements (a, button, [role=button], [data-cursor=hover])
  * - Auto-disables on touch devices and when prefers-reduced-motion is set
- * - Auto-disables inside text inputs / textareas / contenteditable so the native caret is visible
+ *
+ * IT NO LONGER HIDES THE REAL CURSOR, and that was the whole of the "sticky
+ * cursor" complaint. The native pointer used to be hidden everywhere except
+ * form fields, so the only pointer on screen was the sparkle dot, and that
+ * dot is drawn on a requestAnimationFrame loop: always at least one frame
+ * behind where the mouse actually is, and further behind whenever the main
+ * thread is busy loading forty photographs. The lag was real and it was the
+ * only pointer the visitor had.
+ *
+ * A decoration is now a decoration. The system cursor stays visible and
+ * instant, the sparkles trail behind it, and nothing about the brand flourish
+ * is lost.
+ *
+ * The hover test also moved off mousemove and into the animation frame. It
+ * walks up the DOM with closest(), a pointer can fire that over a hundred
+ * times a second, and each React state change re-rendered eight sparkles plus
+ * the dot. Once per frame, and only when the answer changes.
  */
 
 type Trail = { x: number; y: number; key: number };
@@ -35,6 +51,8 @@ export const MagicCursor = () => {
   const dotRef = useRef<HTMLDivElement>(null);
   const trailRefs = useRef<(HTMLDivElement | null)[]>([]);
   const pos = useRef({ x: -100, y: -100 });
+  const target = useRef<HTMLElement | null>(null);
+  const hoverRef = useRef(false);
   const trail = useRef<Trail[]>(
     Array.from({ length: TRAIL_LENGTH }, (_, i) => ({ x: -100, y: -100, key: i }))
   );
@@ -55,6 +73,9 @@ export const MagicCursor = () => {
     }
     setEnabled(true);
     document.documentElement.classList.add("magic-cursor-active");
+    // magic-cursor-hide-native is deliberately never added now. See the note
+    // at the top of this file.
+    document.documentElement.classList.remove("magic-cursor-hide-native");
     return () => document.documentElement.classList.remove("magic-cursor-active", "magic-cursor-hide-native");
   }, [onWorkSurface]);
 
@@ -64,19 +85,25 @@ export const MagicCursor = () => {
     let raf = 0;
     const onMove = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY };
-      // Don't override native cursor on form fields / contenteditable
-      const t = e.target as HTMLElement | null;
-      const inField =
-        !!t && (t.matches("input, textarea, select, [contenteditable=true], [contenteditable='']") ||
-        !!t.closest("input, textarea, [contenteditable=true]"));
-      document.documentElement.classList.toggle("magic-cursor-hide-native", !inField);
-
-      const hoverable =
-        !!t && !!t.closest('a, button, [role="button"], [data-cursor="hover"], summary, label[for]');
-      setHovering(hoverable);
+      // The hover test is a walk up the DOM tree, so it is recorded here and
+      // read once per frame rather than run on every mousemove. A pointer can
+      // fire well over a hundred move events a second; the screen updates
+      // sixty times.
+      target.current = e.target as HTMLElement | null;
     };
 
     const tick = () => {
+      // One closest() per frame, and setHovering only when the answer changes,
+      // so a steady mouse movement over a link no longer re-renders eight
+      // sparkles plus the dot on every event.
+      const t = target.current;
+      const hoverable =
+        !!t && !!t.closest('a, button, [role="button"], [data-cursor="hover"], summary, label[for]');
+      if (hoverable !== hoverRef.current) {
+        hoverRef.current = hoverable;
+        setHovering(hoverable);
+      }
+
       // dot follows immediately
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;

@@ -2,6 +2,7 @@ import * as React from "react";
 import { ImageOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IMAGES } from "@/lib/images";
+import { transformedStorageUrl, DEFAULT_RENDER_WIDTH } from "@/lib/supabaseImage";
 
 export type SmartImageFallbackCategory = keyof typeof IMAGES.fallbacks;
 
@@ -23,6 +24,15 @@ export interface SmartImageProps
   fetchPriority?: "high" | "low" | "auto";
   /** CSS aspect-ratio (e.g. "16/9") to reserve space and prevent layout shift. */
   aspectRatio?: string;
+  /**
+   * Widest this image is ever drawn, in CSS pixels. Supabase storage images
+   * are requested at roughly twice this so they stay sharp on a 2x screen,
+   * instead of the camera original. Defaults to a size that covers every card
+   * on the site; full bleed images should pass their own.
+   *
+   * Pass null to opt out entirely, for an image that must arrive untouched.
+   */
+  renderWidth?: number | null;
 }
 
 /**
@@ -44,6 +54,7 @@ const SmartImage = React.forwardRef<HTMLImageElement, SmartImageProps>(
       eager = false,
       fetchPriority,
       aspectRatio,
+      renderWidth,
       alt = "",
       className,
       style,
@@ -57,11 +68,18 @@ const SmartImage = React.forwardRef<HTMLImageElement, SmartImageProps>(
     ref
   ) => {
     const candidates = React.useMemo(() => {
-      const chain = [src, fallback, ...(category ? IMAGES.fallbacks[category] : [])];
+      // A resized copy of src goes first, with the untouched original right
+      // behind it. If Supabase image transformation is not enabled on this
+      // project the first request errors and the second one is what loads,
+      // which is exactly the behaviour before this existed. That is why the
+      // optimisation can ship without being able to test the endpoint.
+      const resized =
+        renderWidth === null ? null : transformedStorageUrl(src, renderWidth ?? DEFAULT_RENDER_WIDTH);
+      const chain = [resized, src, fallback, ...(category ? IMAGES.fallbacks[category] : [])];
       return chain.filter((url): url is string => Boolean(url)).filter(
         (url, index, all) => all.indexOf(url) === index
       );
-    }, [src, fallback, category]);
+    }, [src, fallback, category, renderWidth]);
 
     const [attempt, setAttempt] = React.useState(0);
     const [status, setStatus] = React.useState<"loading" | "loaded" | "failed">("loading");
