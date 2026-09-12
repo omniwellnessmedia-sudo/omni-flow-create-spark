@@ -65,9 +65,10 @@ import { IMAGES } from "@/lib/images";
  * pack, a meeting over campaigns.
  *
  * Licensed stock from Pixabay, which grants commercial use without
- * attribution. Attribution is left in the source filenames in
- * public/services anyway, so the provenance of anything here can be traced
- * without asking anyone.
+ * attribution, with one exception: the campaigns band carries Omni's own
+ * event photography, published with the consent of the person in it. That
+ * band sells running events, so a photograph of Omni running one is
+ * evidence rather than decoration, which no stock image can be.
  *
  * Three bands changed for the better by gaining an image at all: builds,
  * campaigns and podcast had none. Podcast held out longest and was worth
@@ -97,8 +98,12 @@ const BAND_IMAGES: Record<string, { src: string; alt: string } | undefined> = {
     alt: "A podcast microphone on a desk beside an open laptop, two people talking behind it",
   },
   campaign: {
+    // The one band carrying Omni's own photography rather than stock, and
+    // the only band where that is the stronger choice: this sells running
+    // events, and a photograph of Omni running one is evidence where a
+    // stock handshake was only decoration. Published with consent.
     src: "/services/campaign-events.webp",
-    alt: "A handshake across a desk covered in planning documents",
+    alt: "A speaker addressing an audience from a microphone at an Omni event",
   },
 };
 
