@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import {
   SERVICE_BANDS, ALL_OFFERS, getOffer, getBandForOffer, getBandSales, RATE_CARD_TERMS,
 } from '@/data/publicRateCard';
-import { bandImage } from '@/data/serviceImagery';
+import { bandImage, bandsWithoutImagery } from '@/data/serviceImagery';
 import { QUESTIONS, scoreAnswers, MAX_SCORE, DIMENSIONS, BANDS } from '@/data/scorecard';
 
 /**
@@ -79,6 +79,13 @@ describe('every offer can fill every section of its page', () => {
       expect(sales!.faqs.length).toBeGreaterThanOrEqual(3);
     }
   );
+
+  it('has photography for every band now', () => {
+    // Podcast was the last holdout and took two rounds to fill honestly.
+    // If this ever goes back to null, something was removed rather than
+    // replaced.
+    expect(bandsWithoutImagery()).toEqual([]);
+  });
 
   it('gives every band either a real photograph with real alt text, or none', () => {
     for (const band of SERVICE_BANDS) {
@@ -414,6 +421,7 @@ describe('service and screening imagery', () => {
     'content-brand.webp',
     'retainer-support.webp',
     'campaign-events.webp',
+    'podcast-studio.webp',
     'screening-curtains.webp',
     'screening-seats.webp',
     'screening-tickets.webp',
