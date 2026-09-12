@@ -15,6 +15,10 @@ const WebDevelopment = () => (
       </>
     }
     lede="Fast, search friendly websites and landing pages for wellness brands and campaigns, built mobile first and measured from day one. Fixed scopes with fixed prices, so you know what you are buying before we begin."
+    image={{
+      src: "/services/webdev-hero.webp",
+      alt: "A wireframe sketch of a web page on a notepad, with a pen and a phone beside it",
+    }}
     highlights={[
       {
         heading: "One page, one job",
