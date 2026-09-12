@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 import { 
   Calendar, 
   Clock, 
@@ -246,6 +247,12 @@ export const AdminSchedule = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="Schedule"
+        description="What is booked, and when."
+      />
+
       {/* Header */}
       <Card>
         <CardHeader>

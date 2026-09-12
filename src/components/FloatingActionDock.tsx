@@ -30,7 +30,6 @@ const HIDDEN_PATH_PREFIXES = [
   "/provider-dashboard",
   "/provider-portal",
   "/wellness-account",
-  "/blog/editor",
 ];
 
 const STORAGE_KEY = "omni:floating-dock-hidden";

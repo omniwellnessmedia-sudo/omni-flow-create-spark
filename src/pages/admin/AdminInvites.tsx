@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Mail, Loader2, UserPlus, CheckCircle, AlertCircle, Send } from "lucide-react";
 import { z } from "zod";
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 const emailSchema = z.string().email("Please enter a valid email address");
 
@@ -75,6 +76,12 @@ const AdminInvites = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="Invites"
+        description="Invite somebody into the admin and choose what they may reach."
+      />
+
       {/* Quick Invite Team Members */}
       <Card>
         <CardHeader>

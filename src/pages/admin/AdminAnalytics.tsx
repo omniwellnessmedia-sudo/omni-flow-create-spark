@@ -8,6 +8,7 @@ import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, R
 import { TrendingUp, TrendingDown, DollarSign, Users, ShoppingCart, Mail, RefreshCw, BarChart3, Globe, MousePointerClick, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format, subDays, startOfDay, parseISO } from "date-fns";
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 const COLORS = ["#8b5cf6", "#06b6d4", "#f59e0b", "#10b981", "#ef4444", "#ec4899"];
 
@@ -208,6 +209,12 @@ const AdminAnalytics = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="Core"
+        title="Analytics"
+        description="Traffic and conversion for the public site."
+      />
+
       {/* Zeros from a failed read look identical to a quiet month, and the
           trend badges would compare one empty period against another. Say so. */}
       {readFailures.length > 0 && (

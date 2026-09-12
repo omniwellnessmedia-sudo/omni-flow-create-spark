@@ -33,7 +33,6 @@ const TABS = [
   { value: "clients", label: "Clients" },
   { value: "financial", label: "Financial" },
   { value: "media", label: "Media" },
-  { value: "blog", label: "Blog" },
   { value: "reviews", label: "Reviews" },
 ] as const;
 
@@ -55,7 +54,6 @@ const ProviderDashboard = () => {
   const [profileCompletion, setProfileCompletion] = useState(0);
   const [providerProfile, setProviderProfile] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
   const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,15 +66,14 @@ const ProviderDashboard = () => {
     if (showLoader) setLoading(true);
     setDashboardError(null);
     try {
-      const [profileRes, servicesRes, bookingsRes, transactionsRes, blogPostsRes] = await Promise.all([
+      const [profileRes, servicesRes, bookingsRes, transactionsRes] = await Promise.all([
         supabase.from("provider_profiles").select("*").eq("id", userId).maybeSingle(),
         supabase.from("services").select("*").eq("provider_id", userId).order("created_at", { ascending: false }),
         supabase.from("bookings").select("*, services(title)").eq("provider_id", userId).order("created_at", { ascending: false }).limit(50),
         supabase.from("transactions").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(50),
-        supabase.from("blog_posts").select("id,title,slug,status,updated_at,published_at,views_count,likes_count,comments_count").eq("user_id", userId).order("updated_at", { ascending: false }).limit(10),
       ]);
 
-      const firstError = profileRes.error || servicesRes.error || bookingsRes.error || transactionsRes.error || blogPostsRes.error;
+      const firstError = profileRes.error || servicesRes.error || bookingsRes.error || transactionsRes.error;
       if (firstError) throw firstError;
 
       const profile = profileRes.data;
@@ -85,7 +82,6 @@ const ProviderDashboard = () => {
       setServices(servicesRes.data || []);
       setUpcomingBookings(bookingsRes.data || []);
       setRecentTransactions(transactionsRes.data || []);
-      setBlogPosts(blogPostsRes.data || []);
 
       const fields = [profile?.business_name, profile?.description, profile?.location, profile?.phone, profile?.specialties?.length > 0, profile?.certifications?.length > 0, profile?.profile_image_url];
       setProfileCompletion(Math.round((fields.filter(Boolean).length / fields.length) * 100));
@@ -145,7 +141,6 @@ const ProviderDashboard = () => {
       .on("postgres_changes", { event: "*", schema: "public", table: "services", filter: `provider_id=eq.${user.id}` }, refreshDashboard)
       .on("postgres_changes", { event: "*", schema: "public", table: "bookings", filter: `provider_id=eq.${user.id}` }, refreshDashboard)
       .on("postgres_changes", { event: "*", schema: "public", table: "transactions", filter: `user_id=eq.${user.id}` }, refreshDashboard)
-      .on("postgres_changes", { event: "*", schema: "public", table: "blog_posts", filter: `user_id=eq.${user.id}` }, refreshDashboard)
       .subscribe();
 
     return () => {
@@ -229,9 +224,6 @@ const ProviderDashboard = () => {
             <Button size="sm" onClick={() => navigate("/wellness-exchange/add-service")} className="h-8 text-xs rounded-full">
               <Plus className="h-3 w-3 mr-1" /> New Service
             </Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/blog/editor/new")} className="h-8 text-xs rounded-full">
-              <FileText className="h-3 w-3 mr-1" /> Write Post
-            </Button>
           </div>
         </div>
 
@@ -274,9 +266,7 @@ const ProviderDashboard = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
                 { label: "Add Service", icon: Plus, onClick: () => navigate("/wellness-exchange/add-service"), primary: true },
-                { label: "Write Blog Post", icon: FileText, onClick: () => navigate("/blog/editor/new") },
                 { label: "View Public Profile", icon: Eye, onClick: () => window.open(providerProfile?.id ? `/provider/${providerProfile.id}` : "/provider/sandy-mitchell", "_blank") },
-                { label: "Browse Community", icon: MessageCircle, onClick: () => navigate("/blog/community") },
               ].map((action) => (
                 <Card
                   key={action.label}
@@ -469,62 +459,9 @@ const ProviderDashboard = () => {
             </Suspense>
           </TabsContent>
 
-          {/* ── Blog ── */}
-          <TabsContent value="blog" className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-heading text-lg">Community Blog</h3>
-                <p className="text-xs text-muted-foreground">Share wellness insights and grow your audience</p>
-              </div>
-              <Button size="sm" className="h-8 text-xs" onClick={() => navigate("/blog/editor/new")}>
-                <Plus className="h-3 w-3 mr-1" /> Write Post
-              </Button>
-            </div>
-            {blogPosts.length > 0 && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base">Your latest posts</CardTitle>
-                  <CardDescription className="text-xs">Drafts and published stories stay synced here</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {blogPosts.slice(0, 5).map((post) => (
-                    <button
-                      key={post.id}
-                      type="button"
-                      onClick={() => navigate(`/blog/editor/${post.id}`)}
-                      className="w-full min-h-[44px] rounded-lg border px-3 py-2 text-left transition-colors hover:bg-muted/50"
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="truncate text-sm font-medium">{post.title}</span>
-                        <Badge variant={post.status === "published" ? "default" : "secondary"} className="shrink-0 text-[10px]">
-                          {post.status}
-                        </Badge>
-                      </div>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {post.views_count || 0} views · {post.likes_count || 0} likes · {post.comments_count || 0} comments
-                      </p>
-                    </button>
-                  ))}
-                </CardContent>
-              </Card>
-            )}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Card className="cursor-pointer hover:shadow-md transition-all hover:-translate-y-0.5 border-primary/20 bg-primary/5" onClick={() => navigate("/blog/editor/new")}>
-                <CardContent className="p-6 text-center">
-                  <FileText className="h-8 w-8 mx-auto mb-3 text-primary" />
-                  <h4 className="font-medium mb-1">Write Your Story</h4>
-                  <p className="text-xs text-muted-foreground">Share your wellness journey with the community</p>
-                </CardContent>
-              </Card>
-              <Card className="cursor-pointer hover:shadow-md transition-all hover:-translate-y-0.5" onClick={() => navigate("/blog/community")}>
-                <CardContent className="p-6 text-center">
-                  <MessageCircle className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-                  <h4 className="font-medium mb-1">Browse Community</h4>
-                  <p className="text-xs text-muted-foreground">Read and engage with other practitioners</p>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
+          {/* The Blog tab was here. It is gone with the blog itself. Media
+              above it still takes video and image uploads, which is the part
+              of it providers were actually using. */}
 
           {/* ── Reviews ── */}
           <TabsContent value="reviews">

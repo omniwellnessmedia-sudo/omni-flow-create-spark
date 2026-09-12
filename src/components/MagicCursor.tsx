@@ -25,7 +25,7 @@ const TRAIL_LENGTH = 8;
 
 // Admin, editors and dashboards are work surfaces: a decorative cursor there
 // costs typing/scroll performance where it matters most and adds nothing.
-const WORK_SURFACES = ["/admin", "/blog/editor", "/blog-editor", "/accountant", "/provider-dashboard", "/provider-portal"];
+const WORK_SURFACES = ["/admin", "/accountant", "/provider-dashboard", "/provider-portal"];
 
 export const MagicCursor = () => {
   const { pathname } = useLocation();

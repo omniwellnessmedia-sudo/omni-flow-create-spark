@@ -70,7 +70,6 @@ export const MegaNavigation = () => {
       title: 'Community',
       items: [
         { title: 'Events Calendar', href: '/events', description: 'Upcoming community events, month by month', icon: '📅', featured: true },
-        { title: 'Community Blog', href: '/community', description: 'Stories, updates and impact from the community', icon: '📰' },
       ]
     }
   ];

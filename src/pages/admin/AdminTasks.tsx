@@ -36,6 +36,7 @@ import {
   Calendar
 } from 'lucide-react';
 import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 interface Task {
   id: string;
@@ -267,6 +268,12 @@ const AdminTasks = () => {
 
   return (
     <div className="space-y-4">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="Tasks"
+        description="The shared board. Everyone with admin access sees the same cards."
+      />
+
       {loadError && (
         <ReadFailureNotice what="the task board" reason={loadError} onRetry={loadTasks} />
       )}

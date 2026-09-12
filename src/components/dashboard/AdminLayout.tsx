@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LogOut, Home, Menu, ArrowLeft, Plus, ChevronDown, FileText, Video, Mic } from 'lucide-react';
+import { LogOut, Home, Menu, ArrowLeft, Plus, ChevronDown, Mail, Mic } from 'lucide-react';
 import { IMAGES } from '@/lib/images';
 import AdminSidebar, { NAV_GROUPS } from '@/components/dashboard/AdminSidebar';
 import AdminSearch from '@/components/admin/AdminSearch';
@@ -83,7 +83,10 @@ const AdminLayout = ({ children, activeSection, onSectionChange, alerts = {} }: 
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-background">
+    // admin-surface redefines the design tokens for everything inside it, so
+    // every screen picks up the Spectrum System without being edited. See the
+    // ADMIN SURFACE block in src/index.css.
+    <div className="admin-surface min-h-screen bg-background">
       {/* Header. The 3px seven hue rule beneath it is the site's signature,
           so the operator surface reads as the same product as the public
           pages rather than a bolted on admin template. */}
@@ -143,15 +146,16 @@ const AdminLayout = ({ children, activeSection, onSectionChange, alerts = {} }: 
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => navigate('/blog/editor/new')}>
-                  <FileText className="mr-2 h-3.5 w-3.5" /> Blog Post
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/admin-dashboard?section=content')}>
-                  <Video className="mr-2 h-3.5 w-3.5" /> Upload Video
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate('/admin/events')}>
                   <Plus className="mr-2 h-3.5 w-3.5" /> Event
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/admin-dashboard?section=newsletter')}>
+                  <Mail className="mr-2 h-3.5 w-3.5" /> Newsletter
+                </DropdownMenuItem>
+                {/* Blog Post and Upload Video are gone. The blog is removed,
+                    and Upload Video pointed at the blog panel, so it promised
+                    something the admin could not do. A menu item that leads
+                    nowhere is worse than a shorter menu. */}
                 <DropdownMenuItem disabled>
                   <Mic className="mr-2 h-3.5 w-3.5" /> Podcast
                   <Badge variant="outline" className="ml-2 text-[9px]">Planned</Badge>
@@ -187,10 +191,10 @@ const AdminLayout = ({ children, activeSection, onSectionChange, alerts = {} }: 
           <AdminSidebar activeSection={active} onSectionChange={changeSection} alerts={alerts} />
         </div>
 
-        {/* Cream ground, matching the public site. White cards sit on it with
-            visible edges on every screen, including those that have not had
-            their own theme pass yet. */}
-        <div className="min-w-0 flex-1 p-4 md:p-6" style={{ background: '#FAF8F2' }}>
+        {/* Cream ground, matching the public site. It reads from the token
+            rather than a hardcoded hex now, so the ground and the cards on it
+            can never disagree about which cream this is. */}
+        <div className="min-w-0 flex-1 bg-background p-4 md:p-6">
           {children}
         </div>
       </div>

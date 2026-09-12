@@ -213,7 +213,7 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         data,
-        message: "Got it! Your message is in Chad's inbox. He'll get back to you within 24 hours. In the meantime, explore our services or grab a cup of tea with our blog. 🙏" 
+        message: "Got it! Your message is in Chad's inbox. He'll get back to you within 24 hours. In the meantime, have a look at our services. 🙏" 
       }),
       { 
         status: 200, 

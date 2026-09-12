@@ -64,7 +64,6 @@ const MegaNavigation = () => {
     {
       title: 'Omni Wellness Impact',
       items: [
-        { name: 'Community Blog', href: '/community-blog', icon: '✍️' },
         { name: 'CSR Stories', href: '/impact', icon: '🌍' },
         { name: 'Partners Directory', href: '/partners-directory', icon: '🤝' },
         { name: 'Resources', href: '/resources', icon: '📚' }

@@ -14,6 +14,7 @@ import {
   Target, TrendingUp, ChevronRight, MoreHorizontal, Edit, Trash2
 } from 'lucide-react';
 import ReadFailureNotice from '@/components/admin/ReadFailureNotice';
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 // Pipeline stages
 const stages = [
@@ -236,6 +237,12 @@ const AdminUWCRecruitment: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="UWC recruitment"
+        description="The Human Animal Project recruitment pipeline."
+      />
+
       {loadError && (
         <ReadFailureNotice what="the recruitment pipeline" reason={loadError} onRetry={fetchLeads} />
       )}

@@ -55,7 +55,7 @@ const AdminDashboard = () => {
       totalRevenue: 0, totalOrders: 0, totalBookings: 0, totalServiceBookings: 0,
       totalUsers: 0, totalProviders: 0, activeProviders: 0, wellcoinCirculation: 0,
       pendingOrders: 0, activeServices: 0, totalProducts: 0, affiliateProducts: 0,
-      omniProducts: 0, totalBlogPosts: 0, publishedBlogPosts: 0, activeTours: 0,
+      omniProducts: 0, activeTours: 0,
     },
   });
 
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
         totalProductsResult, affiliateResult, omniResult,
         providerResult, consumerResult,
         ordersCountResult, bookingsCountResult, serviceBookingsCountResult,
-        blogCountResult, publishedBlogCountResult, pendingOrdersCountResult,
+        pendingOrdersCountResult,
         revenueResult, allProvidersResult,
       ] = await Promise.all([
         supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(10),
@@ -125,8 +125,6 @@ const AdminDashboard = () => {
         supabase.from("orders").select("*", { count: "exact", head: true }),
         supabase.from("tour_bookings").select("*", { count: "exact", head: true }),
         supabase.from("contact_submissions").select("*", { count: "exact", head: true }),
-        supabase.from("blog_posts").select("*", { count: "exact", head: true }),
-        supabase.from("blog_posts").select("*", { count: "exact", head: true }).eq("status", "published"),
         supabase.from("orders").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("orders").select("amount"),
         supabase.from("provider_profiles").select("*", { count: "exact", head: true }),
@@ -183,8 +181,6 @@ const AdminDashboard = () => {
           totalProducts: totalProductsResult.count || 0,
           affiliateProducts: affiliateResult.count || 0,
           omniProducts: omniResult.count || 0,
-          totalBlogPosts: blogCountResult.count || 0,
-          publishedBlogPosts: publishedBlogCountResult.count || 0,
           activeTours: toursResult.count || 0,
         },
       });
@@ -200,15 +196,35 @@ const AdminDashboard = () => {
     navigate("/");
   }, [navigate]);
 
+  /**
+   * Switch section, and leave a history entry behind.
+   *
+   * THIS USED TO REPLACE. Every section change overwrote the current history
+   * entry instead of adding one, so moving Home to Leads to Accounting to
+   * Tasks left the browser with a single admin entry. Pressing Back then did
+   * not go to the previous section, it left the admin entirely and dropped
+   * the operator on whatever page they were on before they signed in. Four
+   * screens deep, one Back, and everything they had navigated through was
+   * gone, because the trail had been erased behind them as they walked it.
+   *
+   * Sections are pages here: they have their own URL, their own data and
+   * their own heading. Back should return to the previous one, so this
+   * pushes.
+   *
+   * Re-selecting the current section still replaces, because clicking the
+   * sidebar item you are already on should not add an entry you then have to
+   * press Back through.
+   */
   const handleSectionChange = useCallback((section: string) => {
+    const current = searchParams.get("section") || "home";
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       if (section === "home") next.delete("section"); else next.set("section", section);
       return next;
-    }, { replace: true });
+    }, { replace: section === current });
     // The mobile drawer is AdminLayout's now, and it closes itself in
     // changeSection. This line referenced a setter that no longer exists here.
-  }, [setSearchParams]);
+  }, [searchParams, setSearchParams]);
 
   const updateTourBookingStatus = async (id: string, status: string) => {
     try {

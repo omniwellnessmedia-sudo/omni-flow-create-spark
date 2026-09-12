@@ -25,6 +25,7 @@ import {
   Clock
 } from "lucide-react";
 import { format } from "date-fns";
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 /**
  * A team directory. IT GRANTS NO ACCESS TO ANYTHING.
@@ -63,7 +64,7 @@ interface TeamMember {
 }
 
 const AVAILABLE_PERMISSIONS = [
-  { key: "content_management", label: "Content Management", description: "Create and edit blog posts" },
+  { key: "content_management", label: "Content Management", description: "Upload and manage media" },
   { key: "product_management", label: "Product Management", description: "Manage products and pricing" },
   { key: "booking_management", label: "Booking Management", description: "View and manage bookings" },
   { key: "feature_flags", label: "Feature Flags", description: "Toggle platform features" },
@@ -279,6 +280,12 @@ export const AdminTeamManagement = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="Team"
+        description="Who has access, and what each role may reach."
+      />
+
       {/* Header */}
       <Card>
         <CardHeader>

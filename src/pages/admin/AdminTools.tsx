@@ -9,6 +9,7 @@ import { useSecureUserRole } from '@/hooks/useSecureUserRole';
 import { UserPlus, RefreshCw, CheckCircle, AlertCircle, Users, Info, Database, Trash2, Loader2, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import sandyMitchellData from '@/data/sandyMitchellProfile';
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 /**
  * Admin tools: granting access, and seeding a provider.
@@ -343,6 +344,12 @@ const AdminTools = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="System"
+        title="Tools"
+        description="Imports, exports and maintenance jobs."
+      />
+
       <div>
         <h2 className="text-2xl font-bold mb-2">Admin Tools</h2>
         <p className="text-muted-foreground">Who can get into what, and provider seeding</p>

@@ -13,7 +13,16 @@ import { omniVoice } from "@/data/omniVoiceGuide";
 import EnquiryCTA from "@/components/sections/EnquiryCTA";
 
 // Supabase storage URLs for team photos
-const warrenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/warren.png";
+/**
+ * Steven Bosch's photograph.
+ *
+ * The file in storage is still called warren.png, from when this card
+ * carried the wrong name. The photograph itself was always correct, so
+ * the URL is left alone rather than risk breaking a live image for a
+ * tidier filename. Rename it in Supabase storage and update this line
+ * together, or not at all.
+ */
+const stevenPhoto = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/warren.png";
 
 const About = () => {
   const STORAGE = "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images";
@@ -87,11 +96,11 @@ const About = () => {
       location: "Western Cape, South Africa"
     },
     {
-      name: "Warren Cramer",
+      name: "Steven Bosch",
       role: "Senior Financial Advisor & Governance Oversight",
-      image: warrenPhoto,
-      initials: "WC",
-      description: "Warren provides senior financial oversight and governance guidance, supporting leadership in ensuring financial sustainability, compliance, and sound decision-making.",
+      image: stevenPhoto,
+      initials: "SB",
+      description: "Steven provides senior financial oversight and governance guidance, supporting leadership in ensuring financial sustainability, compliance, and sound decision-making.",
       location: "Cape Town, South Africa"
     }
   ];

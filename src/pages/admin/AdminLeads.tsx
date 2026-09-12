@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,7 @@ import { format } from "date-fns";
 import OutreachPipeline from "@/components/admin/OutreachPipeline";
 import LeadDrawer, { LeadType } from "@/components/admin/LeadDrawer";
 import ReadFailureNotice from "@/components/admin/ReadFailureNotice";
+import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
 
 interface ContactSubmission {
   id: string;
@@ -140,6 +141,10 @@ const AdminLeads = () => {
   const [pipelineFilter, setPipelineFilter] = useState<string>("active");
   const [drawerLead, setDrawerLead] = useState<{ type: LeadType; data: any } | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  // Shown in the header so "is this current?" has an answer on screen,
+  // which matters more now that rows arrive without anybody pressing
+  // anything.
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const activeFilter =
     PIPELINE_FILTERS.find((p) => p.k === pipelineFilter) ?? PIPELINE_FILTERS[PIPELINE_FILTERS.length - 1];
@@ -209,9 +214,61 @@ const AdminLeads = () => {
     fetchLeadsData();
   }, []);
 
-  const fetchLeadsData = async () => {
-    setLoadError(null);
-    setLoading(true);
+  // The subscription effect below runs once and must not re-subscribe on
+  // every render, so it reaches the current fetch through a ref rather than
+  // capturing the first one it ever saw.
+  const fetchLeadsDataRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>();
+
+  /**
+   * Keep the list current while it sits open.
+   *
+   * This screen fetched once on mount and never again. That is fine for a
+   * page you open and close, and wrong for the one screen somebody leaves
+   * open all day waiting for work to arrive: an enquiry submitted at 10am
+   * was invisible until they happened to press Refresh or reload the tab.
+   * Both lead tables are watched, and a change on either refetches.
+   *
+   * The refetch is debounced. A single form submission can produce more
+   * than one event, and three overlapping full table reads to show the same
+   * one new row is waste the operator pays for in spinner time.
+   *
+   * A failed subscription is deliberately silent. Refresh still works and
+   * the screen is still correct, so an unreachable websocket is not worth
+   * a red toast on a screen somebody is trying to work in.
+   */
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    const refresh = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        fetchLeadsDataRef.current?.({ quiet: true });
+      }, 600);
+    };
+
+    const channel = supabase
+      .channel("admin-leads")
+      .on("postgres_changes", { event: "*", schema: "public", table: "contact_submissions" }, refresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "service_quotes" }, refresh)
+      .subscribe();
+
+    return () => {
+      if (timer) clearTimeout(timer);
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  /**
+   * quiet skips the loading state, so a row arriving in the background does
+   * not blank out a list somebody is reading or collapse a row they have
+   * open. It also skips the error toast: a background refetch that fails
+   * should leave the last good data on screen, not interrupt.
+   */
+  const fetchLeadsData = async ({ quiet = false }: { quiet?: boolean } = {}) => {
+    if (!quiet) {
+      setLoadError(null);
+      setLoading(true);
+    }
     try {
       const [contactResult, quoteResult] = await Promise.all([
         supabase.from("contact_submissions").select("*").order("created_at", { ascending: false }),
@@ -227,6 +284,8 @@ const AdminLeads = () => {
       setContacts(contactData);
       setQuotes(quoteData);
 
+      setLastUpdated(new Date());
+
       setStats({
         totalContacts: contactData.length,
         totalQuotes: quoteData.length,
@@ -237,15 +296,22 @@ const AdminLeads = () => {
       // A refused read rendered four zero tiles and "No contact submissions
       // yet", which is a claim about the pipeline rather than about the read.
       const reason = error instanceof Error ? error.message : "Failed to load leads data";
-      setLoadError(reason);
-      setContacts([]);
-      setQuotes([]);
       console.error("Error fetching leads:", error);
-      toast({ title: "Error", description: reason, variant: "destructive" });
+      // A background refetch that fails leaves the last good data on screen.
+      // Wiping a working list because one websocket-triggered read was
+      // refused would turn a recoverable blip into a blank screen.
+      if (!quiet) {
+        setLoadError(reason);
+        setContacts([]);
+        setQuotes([]);
+        toast({ title: "Error", description: reason, variant: "destructive" });
+      }
     } finally {
-      setLoading(false);
+      if (!quiet) setLoading(false);
     }
   };
+
+  fetchLeadsDataRef.current = fetchLeadsData;
 
   // --- Add Lead ---
   const addLead = async () => {
@@ -522,8 +588,27 @@ const AdminLeads = () => {
 
   return (
     <div className="space-y-6">
+      <AdminScreenHeader
+        eyebrow="Core"
+        title="Leads"
+        description="Enquiries from the contact form and quote requests from the services pages. New ones appear here on their own while this screen is open."
+        actions={
+          <Button variant="outline" size="sm" onClick={() => fetchLeadsData()}>
+            <RefreshCw className="mr-1 h-4 w-4" />
+            Refresh
+          </Button>
+        }
+        meta={
+          lastUpdated && (
+            <span>
+              Updated {format(lastUpdated, "HH:mm")}
+            </span>
+          )
+        }
+      />
+
       {loadError && (
-        <ReadFailureNotice what="the leads" reason={loadError} onRetry={fetchLeadsData} />
+        <ReadFailureNotice what="the leads" reason={loadError} onRetry={() => fetchLeadsData()} />
       )}
 
       {/* Stats Overview */}
@@ -767,10 +852,9 @@ const AdminLeads = () => {
           </Button>
         </div>
 
-        <Button variant="outline" size="sm" onClick={fetchLeadsData}>
-          <RefreshCw className="w-4 h-4 mr-1" />
-          Refresh
-        </Button>
+        {/* Refresh moved to the screen header, where an action that affects
+            the whole screen belongs. It was down here next to the row
+            selection controls, which read as refreshing the selection. */}
       </div>
 
       {/* Pipeline filter */}
@@ -966,7 +1050,7 @@ const AdminLeads = () => {
         onOpenChange={(v) => !v && setDrawerLead(null)}
         leadType={drawerLead?.type || "contact"}
         lead={drawerLead?.data || null}
-        onUpdated={fetchLeadsData}
+        onUpdated={() => fetchLeadsData()}
       />
     </div>
   );

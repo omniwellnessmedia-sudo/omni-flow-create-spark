@@ -20,7 +20,6 @@ const IndividualProviderProfile = React.lazy(() => import('@/pages/IndividualPro
 const SandyMitchellProfile = React.lazy(() => import('@/pages/SandyMitchellProfile'));
 const AddService = React.lazy(() => import('@/pages/AddService'));
 const EditService = React.lazy(() => import('@/pages/EditService'));
-const CommunityBlog = React.lazy(() => import('@/pages/CommunityBlog'));
 const StunningPigs = React.lazy(() => import('@/pages/events/StunningPigs'));
 // UNLISTED, NOINDEX: BWC Meet the Team controlled staging page. Holds real
 // people's photographs and biographies that are NOT cleared for publication —
@@ -120,9 +119,6 @@ const OrderConfirmation = React.lazy(() => import('@/pages/OrderConfirmation'));
 const GuestOrderLookup = React.lazy(() => import('@/pages/GuestOrderLookup'));
 const PaymentSuccess = React.lazy(() => import('@/pages/PaymentSuccess'));
 const PaymentCancelled = React.lazy(() => import('@/pages/PaymentCancelled'));
-// Blog is unpublished for launch: public viewing routes redirect home below.
-// The editor stays reachable so content can be prepared before re-launch.
-const BlogEditor = React.lazy(() => import('@/pages/BlogEditor'));
 const Podcast = React.lazy(() => import('@/pages/Podcast'));
 const Portfolio = React.lazy(() => import('@/pages/Portfolio'));
 const Resources = React.lazy(() => import('@/pages/Resources'));
@@ -253,7 +249,7 @@ function App() {
                   <Route path="/wellness-exchange/add-want" element={<AddWant />} />
                   <Route path="/wellness-exchange/provider-dashboard" element={<ProviderDashboard />} />
                   <Route path="/wellness-exchange-signup" element={<WellnessExchangeSignup />} />
-                  <Route path="/wellness-community" element={<Navigate to="/community" replace />} />
+                  <Route path="/wellness-community" element={<Navigate to="/" replace />} />
 
                   {/* Marketplace & Services */}
                   <Route path="/marketplace" element={<UnifiedMarketplace />} />
@@ -345,16 +341,20 @@ function App() {
                   <Route path="/add-service" element={<AddService />} />
                   <Route path="/edit-service/:serviceId" element={<EditService />} />
                   
-                  {/* Community & Content */}
-                  <Route path="/community" element={<CommunityBlog />} />
-                  <Route path="/community-blog" element={<CommunityBlog />} />
-                  {/* Blog unpublished: public viewing routes redirect home; editor kept for content prep */}
+                  {/* The blog is gone. Every URL it ever had redirects home
+                      rather than 404ing, because links live on in inboxes,
+                      bookmarks and search results long after a page does.
+                      The blog_posts table is deliberately left in the
+                      database: nothing written is destroyed by this, it just
+                      stops being reachable from the site. */}
+                  <Route path="/community" element={<Navigate to="/" replace />} />
+                  <Route path="/community-blog" element={<Navigate to="/" replace />} />
                   <Route path="/blog" element={<Navigate to="/" replace />} />
-                  <Route path="/blog-editor" element={<BlogEditor />} />
-                  <Route path="/blog/editor/new" element={<BlogEditor />} />
-                  <Route path="/blog/editor/:postId" element={<BlogEditor />} />
+                  <Route path="/blog-editor" element={<Navigate to="/" replace />} />
+                  <Route path="/blog/editor/new" element={<Navigate to="/" replace />} />
+                  <Route path="/blog/editor/:postId" element={<Navigate to="/" replace />} />
                   <Route path="/blog/post/:slug" element={<Navigate to="/" replace />} />
-                  <Route path="/blog/community" element={<Navigate to="/community" replace />} />
+                  <Route path="/blog/community" element={<Navigate to="/" replace />} />
                   <Route path="/blog-post/:slug" element={<Navigate to="/" replace />} />
                   <Route path="/podcast" element={<Podcast />} />
                   <Route path="/portfolio" element={<Portfolio />} />
@@ -503,7 +503,7 @@ function App() {
                       <AdminLayout><RoamMarketingHub /></AdminLayout>
                     </ProtectedRoute>
                   } />
-                  {/* Blog unpublished: legacy slug URLs also redirect home */}
+                  {/* Legacy blog slug URLs also redirect home */}
                   <Route path="/blog/:slug" element={<Navigate to="/" replace />} />
 
                   {/* Error Handling */}
