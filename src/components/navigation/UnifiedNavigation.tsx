@@ -43,6 +43,15 @@ import { CartIcon } from '@/components/cart/CartIcon';
 
 import { SearchAutocomplete } from '@/components/product/SearchAutocomplete';
 import { MegaNavigation } from './MegaNavigation';
+import ServiceMenuSearch from './ServiceMenuSearch';
+import {
+  TRAVEL,
+  STORE,
+  COMMUNITY,
+  SERVICE_ENTRY_POINTS,
+  SERVICE_PAGES,
+  SERVICE_CATEGORIES,
+} from '@/data/navigation';
 import { IMAGES } from '@/lib/images';
 
 interface NavItem {
@@ -54,7 +63,10 @@ interface NavItem {
     title: string;
     href: string;
     description: string;
-    icon: string;
+    /** Legacy emoji slot, now always empty. Hue drives the marker instead. */
+    icon?: string;
+    /** Spectrum hue, where the item belongs to a category that owns one. */
+    hue?: string;
   }[];
 }
 
@@ -73,62 +85,41 @@ const UnifiedNavigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  /**
+   * The mobile menu, from the same source the desktop menu reads.
+   *
+   * THESE WERE TWO SEPARATE LISTS AND THEY HAD DRIFTED. This one offered
+   * All Services and Rates and Impact Screenings; the desktop mega menu
+   * offered neither, so the whole priced catalogue was unreachable by
+   * browsing on a laptop. One source now, so a link added appears in both.
+   */
   const navigationItems: NavItem[] = [
+    { title: 'Home', href: '/', icon: Home },
+    { title: 'About', href: '/about', icon: Users },
     {
-      title: 'Home',
-      href: '/',
-      icon: Home,
-    },
-    {
-      title: 'About',
-      href: '/about',
-      icon: Users,
-    },
-    {
-      title: 'Impact Travel',
+      title: TRAVEL.title,
       icon: Plane,
-      children: [
-        { title: 'Great Mother Cave Tour', href: '/tours/great-mother-cave-tour', description: '12,000 years of sacred heritage — Fish Hoek', icon: '⛰️' },
-        { title: "Muizenberg's Living Heritage", href: '/tours/muizenberg-cave-tours', description: 'Ancient history by the sea — Muizenberg', icon: '🏔️' },
-        { title: "Kalk Bay's Rich Tapestry", href: '/tours/kalk-bay-tour', description: 'Ancient whispers, healing herbs — Kalk Bay', icon: '🌊' },
-        { title: 'Hoofbeats & Healing', href: '/experiences/cart-horse-urban-wellness', description: 'Equine-assisted wellness experience', icon: '🐴' },
-        { title: 'Corporate Wellness Retreats', href: '/experiences/corporate-wellness-retreat', description: 'Bespoke team retreats with measurable impact', icon: '🏢' },
-        { title: 'Annual Omni Wellness Retreat', href: '/tour-detail/winter-wine-country-wellness', description: 'Weekend retreat — Tufcat Sanctuary', icon: '🧘‍♀️' },
-        { title: 'All Tours & Experiences', href: '/tours-retreats', description: 'Browse everything', icon: '🗺️' },
-      ]
+      children: TRAVEL.links.map((l) => ({ ...l, icon: '' })),
     },
     {
-      title: 'ROAM Store',
+      title: STORE.title,
       icon: Store,
-      children: [
-        { title: 'ROAM eSIM Store', href: '/roambuddy-store', description: 'Stay connected while you travel — global eSIM plans', icon: '🌐' },
-      ]
+      children: STORE.links.map((l) => ({ ...l, icon: '' })),
     },
     {
       title: 'Services',
       icon: Briefcase,
-      children: [
-        // The catalogue overview leads the menu: without this entry the new
-        // services page was unreachable by browsing (nothing linked to it).
-        { title: 'All Services & Rates', href: '/services', description: 'The full catalogue with prices, from R1,500', icon: '🗂️' },
-        { title: 'Business Consulting', href: '/business-consulting', description: 'Strategic business development', icon: '💼' },
-        { title: 'Impact Screenings', href: '/screenings', description: 'Film screening as a service — we deliver the audience', icon: '🎟️' },
-        { title: 'Media Production', href: '/media-production', description: 'Content creation & storytelling', icon: '🎬' },
-        { title: 'Web Development', href: '/web-development', description: 'Digital platforms & systems', icon: '💻' },
-      ]
+      children: [...SERVICE_ENTRY_POINTS, ...SERVICE_CATEGORIES, ...SERVICE_PAGES].map((l) => ({
+        ...l,
+        icon: '',
+      })),
     },
     {
-      title: 'Community',
+      title: COMMUNITY.title,
       icon: Users,
-      children: [
-        { title: 'Events Calendar', href: '/events', description: 'Upcoming community events, month by month', icon: '📅' },
-      ]
+      children: COMMUNITY.links.map((l) => ({ ...l, icon: '' })),
     },
-    {
-      title: 'Contact',
-      href: '/contact',
-      icon: Heart,
-    },
+    { title: 'Contact', href: '/contact', icon: Heart },
   ];
 
   const handleSignOut = async () => {
@@ -284,8 +275,12 @@ const UnifiedNavigation = () => {
                   </SheetTitle>
                 </SheetHeader>
                 
-                {/* Mobile Search */}
-                <div className="mt-4 mb-2">
+                {/* Two searches, deliberately. SearchAutocomplete looks
+                    across products; this one finds a service by name, which
+                    is the question a visitor on these pages is actually
+                    asking. */}
+                <div className="mt-4 mb-2 space-y-2">
+                  <ServiceMenuSearch onNavigate={closeMobileMenu} />
                   <SearchAutocomplete />
                 </div>
                 
@@ -308,7 +303,13 @@ const UnifiedNavigation = () => {
                                   location.pathname === child.href ? 'bg-accent text-accent-foreground' : ''
                                 }`}
                               >
-                                <span className="mr-3">{child.icon}</span>
+                                {(child as { hue?: string }).hue && (
+                                  <span
+                                    aria-hidden="true"
+                                    className="mr-3 h-2 w-2 shrink-0 rounded-full"
+                                    style={{ background: (child as { hue?: string }).hue }}
+                                  />
+                                )}
                                 {child.title}
                               </Link>
                             ))}

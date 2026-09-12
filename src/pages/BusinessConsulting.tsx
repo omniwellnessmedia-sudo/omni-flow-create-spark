@@ -1,6 +1,5 @@
 import ServiceDetailShell from "@/components/services/ServiceDetailShell";
 import { CLAY } from "@/components/services/spectrum";
-import { IMAGES } from "@/lib/images";
 
 /**
  * Business consulting, on the shared Spectrum detail shell. Offers and
@@ -18,8 +17,12 @@ const BusinessConsulting = () => (
     }
     lede="Strategic business development for wellness and impact ventures: positioning, offers, partnerships and revenue plans that hold up in the market. We start small on purpose, with a session or an audit, so bigger decisions rest on something real."
     image={{
-      src: IMAGES.services.team,
-      alt: "Cape Town landscape from an Omni location shoot",
+      // Was a Cape Town landscape from a location shoot. A good photograph
+      // and the wrong one over a page whose promise is "on evidence": a
+      // landscape shows nothing being decided. Two people going through
+      // printed figures does.
+      src: "/services/consulting-hero.webp",
+      alt: "Two people going through printed charts and figures across a table",
     }}
     highlights={[
       {
