@@ -31,8 +31,10 @@
  * alt has to go vague to fit, the image is wrong.
  *
  * Sources are licensed from Pixabay, which permits commercial use without
- * attribution. The original filenames are preserved in this repository's
- * history so provenance can be traced without asking anyone.
+ * attribution, except the campaigns band, which is Omni's own event
+ * photography published with the consent of the person in it. The original
+ * filenames are preserved in this repository's history so provenance can be
+ * traced without asking anyone.
  *
  * No em dashes in this file.
  */
@@ -93,11 +95,14 @@ const BAND_IMAGES: Record<string, ServiceImage | null> = {
   },
 
   /**
-   * Campaigns and events. A campaign starts as an agreement across a table.
+   * Campaigns and events. Omni's own photography, published with consent,
+   * and the one band where owned beats licensed: this sells running events,
+   * so a photograph of Omni running one proves something a stock image
+   * cannot.
    */
   campaign: {
     src: '/services/campaign-events.webp',
-    alt: 'A handshake across a desk covered in planning documents',
+    alt: 'A speaker addressing an audience from a microphone at an Omni event',
   },
 };
 
