@@ -10,7 +10,8 @@ const FeaturedProjectsSection = () => {
     title: string;
     description: string;
     image: string;
-    fallback: string;
+    /** Optional: omit where no second photograph is truthful for this card. */
+    fallback?: string;
     fallbackCategory: SmartImageFallbackCategory;
     category: string;
     href: string;
@@ -28,7 +29,12 @@ const FeaturedProjectsSection = () => {
       title: "Indigenous Wisdom & Healing",
       description: "Learning from traditional healers and documenting ancient wisdom for future generations.",
       image: "https://dtjmhieeywdvhjxqyxad.supabase.co/storage/v1/object/public/provider-images/General%20Images/indigenous%20tour%20chief%20kingsley%20explaining.jpg",
-      fallback: IMAGES.services.chief,
+      // NO NAMED-PERSON FALLBACK HERE. This used to fall back to
+      // IMAGES.services.chief, which is a photograph of Chief Hennie van Wyk,
+      // on a card whose primary image and subject are Chief Kingsley. If the
+      // primary ever failed to load, the card published one man's photograph
+      // under another man's work. A landscape says nothing false, so the
+      // category fallback carries it alone.
       fallbackCategory: "locations",
       category: "Cultural Heritage",
       href: "/tours/great-mother-cave-tour"
