@@ -178,11 +178,17 @@ const Services = () => {
             {/* The banner, framed at 21:9 with the spectrum rule across the
                 top, as the handoff frames its video.
 
-                This was a photograph of our own Masque Theatre production. It
-                is a good photograph and it was selling the wrong thing: a
-                theatre stage at the top of a page about audits, websites and
+                This was a photograph of our own Masque Theatre production,
+                then briefly a desk. The theatre was selling the wrong thing:
+                a stage at the top of a page about audits, websites and
                 retainers set an expectation the nineteen offers below it do
-                not meet. The desk says what this page is.
+                not meet. The desk was true and quiet.
+
+                This one says reach, which is what every offer below is
+                ultimately bought for. It also carries its own cyan, close
+                enough to the spectrum teal that the CTA above it belongs to
+                the same picture, and it is a dark frame on a dark section
+                rather than a bright panel cut out of one.
 
                 Encoded at exactly the 21:9 it renders at, so the crop happens
                 once here rather than in every visitor's browser, and it is
@@ -194,7 +200,7 @@ const Services = () => {
                   <SpectrumRule />
                   <img
                     src="/services/services-hero.webp"
-                    alt="A desk from above with laptops, notebooks, printed pages and coffee"
+                    alt="A laptop seen from above, with lines drawn out from the screen to a ring of user icons around the desk"
                     className="aspect-[21/9] w-full object-cover"
                     width={1600}
                     height={686}
