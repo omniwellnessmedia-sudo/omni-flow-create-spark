@@ -107,6 +107,7 @@ const Unsubscribe = React.lazy(() => import('@/pages/Unsubscribe'));
 const Enquire = React.lazy(() => import('@/pages/Enquire'));
 const Muizenberg = React.lazy(() => import('@/pages/Muizenberg'));
 const MuizenbergAuditSheet = React.lazy(() => import('@/pages/MuizenbergAuditSheet'));
+const Talks = React.lazy(() => import('@/pages/Talks'));
 const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
 const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
@@ -236,6 +237,7 @@ function App() {
                   <Route path="/enquire" element={<Enquire />} />
                   <Route path="/muizenberg" element={<Muizenberg />} />
                   <Route path="/muizenberg/audit-sheet" element={<MuizenbergAuditSheet />} />
+                  <Route path="/talks" element={<Talks />} />
                   <Route path="/auth" element={<AuthPage />} />
                   <Route path="/update-password" element={<UpdatePassword />} />
                   <Route path="/upgrade" element={<UpgradePage />} />
