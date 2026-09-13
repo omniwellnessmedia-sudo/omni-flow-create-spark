@@ -55,7 +55,7 @@ describe('governance', () => {
     ['Muizenberg.tsx', page],
     ['MuizenbergAuditSheet.tsx', sheet],
   ])('%s has no em dashes', (_name, src) => {
-    expect(src).not.toMatch(/—/);
+    expect(src).not.toMatch(/\u2014/);
   });
 
   it.each([
