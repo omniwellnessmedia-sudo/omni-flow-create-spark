@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getOffer } from '@/data/publicRateCard';
 import { SERVICE_ENTRY_POINTS } from '@/data/navigation';
@@ -89,6 +89,47 @@ describe('leads from this page are attributable', () => {
     // pass enquiryContext. Neither path may reach /enquire bare.
     expect(page).not.toMatch(/to=["'`]\/enquire["'`]/);
     expect(page).toMatch(/enquiryContext=\{MUIZENBERG_CONTEXT\}/);
+  });
+});
+
+describe('photographs', () => {
+  const servicesDir = resolve(__dirname, '../../../public/services');
+  const referenced = Array.from(page.matchAll(/'\/services\/([a-z0-9-]+\.webp)'/g)).map((m) => m[1]);
+
+  it('references at least the five Muizenberg crops', () => {
+    for (const f of ['muizenberg-hero', 'muizenberg-strip', 'muizenberg-audit', 'muizenberg-outdoors', 'muizenberg-made-here']) {
+      expect(referenced).toContain(`${f}.webp`);
+    }
+  });
+
+  it.each(Array.from(new Set(page.match(/muizenberg-[a-z-]+\.webp/g) ?? [])))(
+    '%s exists and is under 250KB',
+    (file) => {
+      const path = resolve(servicesDir, file);
+      expect(existsSync(path), path).toBe(true);
+      expect(statSync(path).size).toBeLessThan(250 * 1024);
+    }
+  );
+
+  it('serves no camera original from the services folder', () => {
+    // The uploads arrive as multi megabyte JPEGs. They are cropped and
+    // encoded, and the originals are removed so a phone never downloads one.
+    const originals = readdirSync(servicesDir).filter((f) => /\.(jpe?g|png|heic)$/i.test(f));
+    expect(originals).toEqual([]);
+  });
+
+  it('does not reference the two photographs with a child in them', () => {
+    expect(page).not.toMatch(/APPRENTICE|DAILY_MUIZ/);
+  });
+
+  it('gives every photograph an alt that names no person', () => {
+    // Nobody in these photographs is named on the page, so the alt text
+    // must not name anyone either.
+    const alts = Array.from(page.matchAll(/alt: '([^']+)'/g)).map((m) => m[1]);
+    expect(alts.length).toBeGreaterThanOrEqual(5);
+    for (const alt of alts) {
+      expect(alt).not.toMatch(/\b(Chad|Feroza|Zenith|Steven|Kingsley|Hennie)\b/);
+    }
   });
 });
 
