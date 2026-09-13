@@ -237,7 +237,7 @@ function App() {
                   <Route path="/enquire" element={<Enquire />} />
                   <Route path="/muizenberg" element={<Muizenberg />} />
                   <Route path="/muizenberg/audit-sheet" element={<MuizenbergAuditSheet />} />
-                  <Route path="/talks" element={<Talks />} />
+                  <Route path="/watch" element={<Talks />} />
                   <Route path="/auth" element={<AuthPage />} />
                   <Route path="/update-password" element={<UpdatePassword />} />
                   <Route path="/upgrade" element={<UpgradePage />} />

@@ -8,7 +8,7 @@ import { TALKS, listedTalks, HELPLINE, CHANNEL_URL } from '@/data/talks';
 import { useSEO } from '@/lib/seo';
 
 /**
- * /talks: the produced video talks, in one place on the site.
+ * /watch: the produced short films, in one place on the site.
  *
  * The videos live on the Omni Wellness Media YouTube channel; this page is
  * the front door to them from the site, with a poster and a play button per
@@ -26,10 +26,10 @@ import { useSEO } from '@/lib/seo';
 
 const Talks = () => {
   useSEO({
-    title: 'Talks | Omni Wellness Media',
+    title: 'Watch | Omni Wellness Media',
     description:
-      'Produced talks from Omni Wellness Media on wellbeing, purpose and change, from the Omni Wellness Media YouTube channel.',
-    canonical: 'https://omniwellnessmedia.co.za/talks',
+      'Short films from Omni Wellness Media on wellbeing, purpose and change, from the Omni Wellness Media YouTube channel.',
+    canonical: 'https://omniwellnessmedia.co.za/watch',
   });
 
   const talks = listedTalks();
@@ -42,13 +42,13 @@ const Talks = () => {
       <main>
         <section className="px-4 pb-12 pt-28 sm:px-6 lg:px-8 lg:pt-36">
           <div className="mx-auto max-w-5xl">
-            <Eyebrow hue={SPECTRUM.violet}>Talks</Eyebrow>
+            <Eyebrow hue={SPECTRUM.violet}>Watch</Eyebrow>
             <h1 className="mt-5 max-w-3xl font-wwpl-display text-[42px] leading-[1.02] sm:text-[58px]" style={{ color: INK }}>
-              Talks on wellbeing, purpose and change.
+              Short films on wellbeing, purpose and change.
             </h1>
             <p className="mt-6 max-w-2xl text-[18px] leading-relaxed" style={{ color: INK_SOFT }}>
-              Produced by Omni Wellness Media. Press play on any of them here, or watch the whole series on
-              the channel.
+              Made by Omni Wellness Media. Press play on any of them here, or watch the whole series on the
+              channel.
             </p>
             <a
               href={CHANNEL_URL}
@@ -73,7 +73,7 @@ const Talks = () => {
                   Being added
                 </p>
                 <p className="mt-3 max-w-2xl text-[16px] leading-relaxed" style={{ color: INK_SOFT }}>
-                  The talks are being moved onto the channel a few at a time and each one is checked
+                  The films are being moved onto the channel a few at a time and each one is checked
                   before it goes public. The first will appear here as soon as it is live.
                 </p>
               </div>
@@ -103,7 +103,7 @@ const Talks = () => {
 
             {talks.length > 0 && unlisted > 0 && (
               <p className="mt-10 text-[13px]" style={{ ...mono, color: SLATE }}>
-                More talks are being added.
+                More films are being added.
               </p>
             )}
           </div>
