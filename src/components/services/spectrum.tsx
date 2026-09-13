@@ -153,8 +153,14 @@ export const Eyebrow = ({ hue, children }: { hue?: string; children: ReactNode }
   </p>
 );
 
-/** One offer card, light surface, hue accented. */
-export const OfferCard = ({ offer }: { offer: RateCardOffer }) => (
+/**
+ * One offer card, light surface, hue accented.
+ *
+ * `enquiryContext` rides along to the enquiry form as its `a` parameter, so
+ * a lead that started on a campaign page (the Muizenberg page, say) arrives
+ * in the leads screen already saying where it came from.
+ */
+export const OfferCard = ({ offer, enquiryContext }: { offer: RateCardOffer; enquiryContext?: string }) => (
   <article
     className={`group relative flex h-full flex-col overflow-hidden rounded-[18px] bg-white p-6 shadow-[0_1px_3px_rgba(21,32,31,.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_34px_rgba(21,32,31,.10)] ${offer.wide ? "md:col-span-2 xl:col-span-3" : ""}`}
     style={{ border: `1px solid ${LINE}` }}
@@ -186,7 +192,7 @@ export const OfferCard = ({ offer }: { offer: RateCardOffer }) => (
     )}
     <div className="mt-auto flex flex-wrap items-center gap-3 pt-5" style={{ borderTop: `1px solid ${HAIRLINE}` }}>
       <Link
-        to={`/enquire?s=${offer.slug}`}
+        to={`/enquire?s=${offer.slug}${enquiryContext ? `&a=${encodeURIComponent(enquiryContext)}` : ""}`}
         className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13.5px] font-medium text-white transition-transform duration-300 group-hover:scale-[1.02]"
         style={{ background: offer.hue }}
       >

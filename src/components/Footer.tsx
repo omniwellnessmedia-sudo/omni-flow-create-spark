@@ -131,6 +131,7 @@ const Footer = () => {
               <li><Link to="/media-production" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Media Production</Link></li>
               <li><Link to="/web-development" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Web Development</Link></li>
               <li><Link to="/screenings" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Impact Screenings</Link></li>
+              <li><Link to="/muizenberg" className="inline-block py-1 text-white/60 hover:text-white transition-colors">For Muizenberg Businesses</Link></li>
             </ul>
           </div>
 
