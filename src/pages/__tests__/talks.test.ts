@@ -80,6 +80,6 @@ describe('the page and the player', () => {
   });
 
   it('is routed', () => {
-    expect(app).toMatch(/path="\/talks"/);
+    expect(app).toMatch(/path="\/watch"/);
   });
 });

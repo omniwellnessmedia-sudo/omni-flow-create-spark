@@ -4,7 +4,7 @@
  *
  * HOW A TALK GETS ON THE PAGE. It is uploaded to the channel (from Drive,
  * through Zapier, one per upload window), lands here with its YouTube id and
- * `visibility: 'private'`, and appears on /talks only once someone has
+ * `visibility: 'private'`, and appears on /watch only once someone has
  * watched it through in YouTube Studio, made it public there, and flipped
  * this flag. A private video embedded on a page shows "Video unavailable",
  * which is worse than not being listed, so the page filters on the flag.
@@ -47,7 +47,7 @@ export const TALKS: Talk[] = [
     youtubeId: 'hgV0pzsDvZk',
     title: 'Feeling Stuck',
     blurb: 'On feeling stuck.',
-    visibility: 'private',
+    visibility: 'public',
   },
   {
     youtubeId: 'grJBftG7Wy8',
@@ -59,7 +59,7 @@ export const TALKS: Talk[] = [
     youtubeId: '5p-pAw70OUU',
     title: 'Healing Emotional Pain',
     blurb: 'On healing emotional pain.',
-    visibility: 'private',
+    visibility: 'public',
   },
 ];
 

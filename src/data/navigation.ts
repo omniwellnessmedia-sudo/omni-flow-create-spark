@@ -102,6 +102,11 @@ export const COMMUNITY: NavGroup = {
       href: '/events',
       description: 'Upcoming community events, month by month',
     },
+    {
+      title: 'Watch',
+      href: '/watch',
+      description: 'Short films on wellbeing, purpose and change',
+    },
   ],
 };
 
