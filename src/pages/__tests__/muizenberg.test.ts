@@ -122,6 +122,19 @@ describe('photographs', () => {
     expect(page).not.toMatch(/APPRENTICE|DAILY_MUIZ/);
   });
 
+  it('credits every Omni photograph and claims nothing about the people in it', () => {
+    const captions = Array.from(page.matchAll(/caption: '([^']+)'/g)).map((m) => m[1]);
+    expect(captions.length).toBe(5);
+    for (const caption of captions) {
+      // The credit is the point of the caption.
+      expect(caption).toContain('Omni Wellness Media');
+      // A caption may say whose shoot it was. It may not describe the
+      // people in the frame as clients, or how they felt: neither is known.
+      expect(caption).not.toMatch(/happy|satisfied|delighted|loved|thrilled|our clients?\b/i);
+      expect(caption).not.toMatch(/\u2014/);
+    }
+  });
+
   it('gives every photograph an alt that names no person', () => {
     // Nobody in these photographs is named on the page, so the alt text
     // must not name anyone either.
