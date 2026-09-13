@@ -76,17 +76,25 @@ const PartnersSection = () => {
             </div>
             <h3 className="font-heading font-bold text-2xl mb-2">{partners[currentIndex].name}</h3>
             <p className="text-gray-600 mb-4">{partners[currentIndex].description}</p>
-            <div className="flex justify-center space-x-2">
+            <div className="flex flex-wrap justify-center gap-2">
               {partners.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
                   aria-label={`Show ${partners[index].name}`}
                   aria-pressed={index === currentIndex}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-                    index === currentIndex ? 'bg-primary' : 'bg-gray-300'
-                  }`}
-                />
+                  // The dot stays 12px so it looks the same. The button around it
+                  // is 24px so it can actually be tapped: WCAG 2.2 SC 2.5.8 sets
+                  // 24 by 24 CSS pixels as the minimum target.
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`block h-3 w-3 rounded-full transition-all duration-300 ${
+                      index === currentIndex ? 'bg-primary' : 'bg-gray-300'
+                    }`}
+                  />
+                </button>
               ))}
             </div>
           </div>

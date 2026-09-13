@@ -255,7 +255,7 @@ const Services = () => {
                           {band.heading}
                         </h2>
                         {band.explore && (
-                          <Link to={band.explore.href} className="mt-1 inline-block text-[14px] underline-offset-4 hover:underline" style={{ color: band.hue }}>
+                          <Link to={band.explore.href} className="mt-1 inline-flex min-h-[24px] items-center text-[14px] underline-offset-4 hover:underline" style={{ color: band.hue }}>
                             {band.explore.label} →
                           </Link>
                         )}

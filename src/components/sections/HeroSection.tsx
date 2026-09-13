@@ -375,11 +375,13 @@ const HeroSection = () => {
             </div>
 
             <div className="text-center mt-8">
-              <Link to="/tours-retreats">
-                <Button variant="outline" className="rounded-full px-8 py-5 text-sm font-medium border-border/60 hover:bg-muted/50">
-                  View All Experiences
-                </Button>
-              </Link>
+              {/* asChild makes the anchor the button, rather than an inline
+                  anchor wrapped around one. The old form put an interactive
+                  element inside another, which is invalid HTML, and left the
+                  anchor itself 19px tall. */}
+              <Button asChild variant="outline" className="rounded-full px-8 py-5 text-sm font-medium border-border/60 hover:bg-muted/50">
+                <Link to="/tours-retreats">View All Experiences</Link>
+              </Button>
             </div>
           </div>
 
