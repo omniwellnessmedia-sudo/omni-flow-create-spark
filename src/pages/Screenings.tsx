@@ -728,10 +728,10 @@ const Screenings = () => {
               it is built as a moment, not a booking.
             </p>
             <div className="mt-7 flex flex-wrap justify-center gap-x-8 gap-y-2 text-[14px]">
-              <Link to="/events/stunning-pigs" className="text-wwpl-goldLight underline underline-offset-4 hover:text-wwpl-cream">
+              <Link to="/events/stunning-pigs" className="inline-flex min-h-[24px] items-center text-wwpl-goldLight underline underline-offset-4 hover:text-wwpl-cream">
                 See the event page
               </Link>
-              <a href="/awards" className="text-wwpl-goldLight underline underline-offset-4 hover:text-wwpl-cream">
+              <a href="/awards" className="inline-flex min-h-[24px] items-center text-wwpl-goldLight underline underline-offset-4 hover:text-wwpl-cream">
                 See the awards register
               </a>
             </div>
@@ -1081,7 +1081,7 @@ const Screenings = () => {
                   <label className="flex items-start gap-2.5 text-[14px] text-wwpl-slate">
                     <input
                       type="checkbox"
-                      className="mt-0.5 h-4 w-4 accent-[#9C7434]"
+                      className="mt-[1px] h-6 w-6 shrink-0 accent-[#9C7434]"
                       checked={keepPosted}
                       onChange={(e) => setKeepPosted(e.target.checked)}
                     />
