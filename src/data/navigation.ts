@@ -106,16 +106,23 @@ export const COMMUNITY: NavGroup = {
 };
 
 /**
- * The four routes into the services catalogue, ordered by how ready the
+ * The routes into the services catalogue, ordered by how ready the
  * visitor is. The scorecard comes first on purpose: it is the only one that
  * costs the visitor nothing and tells us who they are, and it is the right
- * answer for somebody who does not yet know which service they need.
+ * answer for somebody who does not yet know which service they need. The
+ * Muizenberg page is second because it is the one a neighbour handed a
+ * flyer is looking for.
  */
 export const SERVICE_ENTRY_POINTS: NavLink[] = [
   {
     title: 'Revenue Readiness Scorecard',
     href: '/scorecard',
     description: 'Ten questions, two minutes, an answer without giving us anything',
+  },
+  {
+    title: 'For Muizenberg Businesses',
+    href: '/muizenberg',
+    description: 'Three free findings before we talk about money',
   },
   {
     title: 'All Services and Rates',

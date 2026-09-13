@@ -30,6 +30,9 @@ const HIDDEN_PATH_PREFIXES = [
   "/provider-dashboard",
   "/provider-portal",
   "/wellness-account",
+  // A printable sheet the team fills in by hand. A floating button on it
+  // would print.
+  "/muizenberg/audit-sheet",
 ];
 
 const STORAGE_KEY = "omni:floating-dock-hidden";
