@@ -61,39 +61,90 @@ import { useSEO } from '@/lib/seo';
 
 const ENQUIRE_HREF = MUIZENBERG_ENQUIRE_HREF;
 
-/** Photographs used only on this page. Sizes are the encoded pixel sizes. */
+/**
+ * Photographs used only on this page. Sizes are the encoded pixel sizes.
+ *
+ * Every one was taken by Omni on a client shoot, and the caption says so.
+ * A caption is a credit and a piece of context; it is not consent from the
+ * people in the frame, which is why nobody is named and nobody is described
+ * as a client, happy or otherwise. The caption states what is known: who
+ * took the picture and the kind of job it was taken on.
+ */
 export const MUIZENBERG_IMAGES = {
   hero: {
     src: '/services/muizenberg-hero.webp',
     alt: 'Two stallholders smiling together under a gazebo at a local market',
+    caption: 'Market day, on a client shoot. Photograph: Omni Wellness Media.',
     width: 800,
     height: 1000,
   },
   strip: {
     src: '/services/muizenberg-strip.webp',
     alt: 'A crowd gathered on a field under branded umbrellas, with the mountains behind',
+    caption: 'A client event day on the field. Photograph: Omni Wellness Media.',
     width: 1600,
     height: 686,
   },
   audit: {
     src: '/services/muizenberg-audit.webp',
     alt: 'A woman in a green shirt writing notes on a sheet of paper at an outdoor event',
+    caption: 'On a client shoot. Photograph: Omni Wellness Media.',
     width: 800,
     height: 1000,
   },
   outdoors: {
     src: '/services/muizenberg-outdoors.webp',
     alt: 'A tandem paraglider lifting off from a launch site, with two crew members steadying the harness',
+    caption: 'On location for a client. Photograph: Omni Wellness Media.',
     width: 800,
     height: 1000,
   },
   madeHere: {
     src: '/services/muizenberg-made-here.webp',
     alt: 'Four members of a local crew standing together at an outdoor event, one holding a camera',
+    caption: 'The crew on a client shoot. Photograph: Omni Wellness Media.',
     width: 1200,
     height: 800,
   },
 } as const;
+
+type OmniPhoto = (typeof MUIZENBERG_IMAGES)[keyof typeof MUIZENBERG_IMAGES];
+
+/** An Omni photograph with its credit line beneath it. */
+const Photo = ({
+  photo,
+  className,
+  imgClassName,
+  captionClassName = '',
+  priority = false,
+  tone = 'light',
+}: {
+  photo: OmniPhoto;
+  className?: string;
+  imgClassName: string;
+  captionClassName?: string;
+  priority?: boolean;
+  tone?: 'light' | 'dark';
+}) => (
+  <figure className={className}>
+    <img
+      src={photo.src}
+      alt={photo.alt}
+      width={photo.width}
+      height={photo.height}
+      loading={priority ? undefined : 'lazy'}
+      fetchPriority={priority ? 'high' : undefined}
+      decoding="async"
+      className={imgClassName}
+    />
+    <figcaption
+      className={`mt-2.5 text-[11px] leading-snug tracking-[.02em] ${captionClassName}`}
+      style={{ ...mono, color: tone === 'dark' ? 'rgba(250,248,242,.6)' : SLATE }}
+    >
+      {photo.caption}
+    </figcaption>
+  </figure>
+);
 
 /**
  * Which photograph sits beside each door-opener. The clarity session uses
@@ -151,7 +202,8 @@ const PhotoOfferCard = ({
   enquiryContext,
 }: {
   offer: RateCardOffer;
-  image: ServiceImage;
+  /** A stock image carries no caption; an Omni photograph carries its credit. */
+  image: ServiceImage & { caption?: string };
   enquiryContext: string;
 }) => (
   <article
@@ -159,7 +211,7 @@ const PhotoOfferCard = ({
     style={{ border: `1px solid ${LINE}` }}
   >
     <span aria-hidden="true" className="absolute inset-x-0 top-0 z-10 h-[3px]" style={{ background: offer.hue }} />
-    <div className="aspect-[4/3] sm:aspect-auto sm:h-full" style={{ background: CREAM_2 }}>
+    <figure className="relative aspect-[4/3] sm:aspect-auto sm:h-full" style={{ background: CREAM_2 }}>
       <img
         src={image.src}
         alt={image.alt}
@@ -169,7 +221,15 @@ const PhotoOfferCard = ({
         decoding="async"
         className="h-full w-full object-cover"
       />
-    </div>
+      {image.caption && (
+        <figcaption
+          className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-black/0 px-4 pb-3 pt-8 text-[11px] leading-snug text-white/90"
+          style={mono}
+        >
+          {image.caption}
+        </figcaption>
+      )}
+    </figure>
     <div className="flex flex-col p-6">
       <h3 className="font-wwpl-display text-[25px] leading-tight" style={{ color: INK }}>
         <Link to={`/services/${offer.slug}`} className="hover:underline underline-offset-4">
@@ -285,22 +345,12 @@ const Muizenberg = () => {
               </p>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[420px] lg:max-w-none">
-              <div
-                className="overflow-hidden rounded-[22px] shadow-[0_18px_50px_rgba(21,32,31,.14)]"
-                style={{ border: `1px solid ${LINE}` }}
-              >
-                <img
-                  src={MUIZENBERG_IMAGES.hero.src}
-                  alt={MUIZENBERG_IMAGES.hero.alt}
-                  width={MUIZENBERG_IMAGES.hero.width}
-                  height={MUIZENBERG_IMAGES.hero.height}
-                  fetchPriority="high"
-                  decoding="async"
-                  className="aspect-[4/5] w-full object-cover"
-                />
-              </div>
-            </div>
+            <Photo
+              photo={MUIZENBERG_IMAGES.hero}
+              priority
+              className="mx-auto w-full max-w-[420px] lg:max-w-none"
+              imgClassName="aspect-[4/5] w-full rounded-[22px] object-cover shadow-[0_18px_50px_rgba(21,32,31,.14)]"
+            />
           </div>
         </section>
 
@@ -308,14 +358,11 @@ const Muizenberg = () => {
 
         {/* The neighbourhood */}
         <div className="w-full" style={{ background: CREAM_2 }}>
-          <img
-            src={MUIZENBERG_IMAGES.strip.src}
-            alt={MUIZENBERG_IMAGES.strip.alt}
-            width={MUIZENBERG_IMAGES.strip.width}
-            height={MUIZENBERG_IMAGES.strip.height}
-            loading="lazy"
-            decoding="async"
-            className="aspect-[1600/686] w-full object-cover"
+          <Photo
+            photo={MUIZENBERG_IMAGES.strip}
+            className="pb-4"
+            imgClassName="aspect-[1600/686] w-full object-cover"
+            captionClassName="px-4 sm:px-6 lg:px-8"
           />
         </div>
 
@@ -472,17 +519,11 @@ const Muizenberg = () => {
               </ul>
             </div>
             <Reveal delay={120}>
-              <div className="mx-auto max-w-[380px] overflow-hidden rounded-[22px] lg:max-w-none" style={{ border: `1px solid ${LINE}` }}>
-                <img
-                  src={MUIZENBERG_IMAGES.outdoors.src}
-                  alt={MUIZENBERG_IMAGES.outdoors.alt}
-                  width={MUIZENBERG_IMAGES.outdoors.width}
-                  height={MUIZENBERG_IMAGES.outdoors.height}
-                  loading="lazy"
-                  decoding="async"
-                  className="aspect-[4/5] w-full object-cover"
-                />
-              </div>
+              <Photo
+                photo={MUIZENBERG_IMAGES.outdoors}
+                className="mx-auto max-w-[380px] lg:max-w-none"
+                imgClassName="aspect-[4/5] w-full rounded-[22px] object-cover"
+              />
             </Reveal>
           </div>
         </section>
@@ -516,17 +557,11 @@ const Muizenberg = () => {
               </div>
             </Reveal>
             <Reveal delay={120}>
-              <div className="overflow-hidden rounded-[22px]" style={{ border: '1px solid rgba(250,248,242,.18)' }}>
-                <img
-                  src={MUIZENBERG_IMAGES.madeHere.src}
-                  alt={MUIZENBERG_IMAGES.madeHere.alt}
-                  width={MUIZENBERG_IMAGES.madeHere.width}
-                  height={MUIZENBERG_IMAGES.madeHere.height}
-                  loading="lazy"
-                  decoding="async"
-                  className="aspect-[3/2] w-full object-cover"
-                />
-              </div>
+              <Photo
+                photo={MUIZENBERG_IMAGES.madeHere}
+                tone="dark"
+                imgClassName="aspect-[3/2] w-full rounded-[22px] object-cover"
+              />
             </Reveal>
           </div>
         </section>
