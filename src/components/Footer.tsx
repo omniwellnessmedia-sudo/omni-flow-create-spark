@@ -109,11 +109,11 @@ const Footer = () => {
           {/* Experiences */}
           <div>
             <h4 className="text-xs font-medium uppercase tracking-wider text-white/30 mb-4">Experiences</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><Link to="/tours/great-mother-cave-tour" className="text-white/60 hover:text-white transition-colors">Great Mother Cave</Link></li>
-              <li><Link to="/tours/muizenberg-cave-tours" className="text-white/60 hover:text-white transition-colors">Muizenberg Heritage</Link></li>
-              <li><Link to="/tours/kalk-bay-tour" className="text-white/60 hover:text-white transition-colors">Kalk Bay Tapestry</Link></li>
-              <li><Link to="/tours-retreats" className="text-white/60 hover:text-white transition-colors">All Tours & Retreats</Link></li>
+            <ul className="space-y-0.5 text-sm">
+              <li><Link to="/tours/great-mother-cave-tour" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Great Mother Cave</Link></li>
+              <li><Link to="/tours/muizenberg-cave-tours" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Muizenberg Heritage</Link></li>
+              <li><Link to="/tours/kalk-bay-tour" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Kalk Bay Tapestry</Link></li>
+              <li><Link to="/tours-retreats" className="inline-block py-1 text-white/60 hover:text-white transition-colors">All Tours & Retreats</Link></li>
               {/* ROAM eSIM link removed 15 Aug 2026 per the correction pass:
                   the end-to-end purchase and eSIM delivery path has not been
                   verified by a real completed transaction. API endpoints
@@ -125,25 +125,25 @@ const Footer = () => {
           {/* Services */}
           <div>
             <h4 className="text-xs font-medium uppercase tracking-wider text-white/30 mb-4">Services</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><Link to="/services" className="text-white/60 hover:text-white transition-colors">All Services &amp; Rates</Link></li>
-              <li><Link to="/business-consulting" className="text-white/60 hover:text-white transition-colors">Business Consulting</Link></li>
-              <li><Link to="/media-production" className="text-white/60 hover:text-white transition-colors">Media Production</Link></li>
-              <li><Link to="/web-development" className="text-white/60 hover:text-white transition-colors">Web Development</Link></li>
-              <li><Link to="/screenings" className="text-white/60 hover:text-white transition-colors">Impact Screenings</Link></li>
+            <ul className="space-y-0.5 text-sm">
+              <li><Link to="/services" className="inline-block py-1 text-white/60 hover:text-white transition-colors">All Services &amp; Rates</Link></li>
+              <li><Link to="/business-consulting" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Business Consulting</Link></li>
+              <li><Link to="/media-production" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Media Production</Link></li>
+              <li><Link to="/web-development" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Web Development</Link></li>
+              <li><Link to="/screenings" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Impact Screenings</Link></li>
             </ul>
           </div>
 
           {/* Company */}
           <div>
             <h4 className="text-xs font-medium uppercase tracking-wider text-white/30 mb-4">Company</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><Link to="/about" className="text-white/60 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/events" className="text-white/60 hover:text-white transition-colors">Events Calendar</Link></li>
-              <li><Link to="/csr-impact" className="text-white/60 hover:text-white transition-colors">CSR Impact</Link></li>
-              <li><Link to="/esg-policy" className="text-white/60 hover:text-white transition-colors">ESG Policy</Link></li>
-              <li><Link to="/contact" className="text-white/60 hover:text-white transition-colors">Contact</Link></li>
-              <li><a href="mailto:omniwellnessmedia@gmail.com" className="text-white/60 hover:text-white transition-colors">omniwellnessmedia@gmail.com</a></li>
+            <ul className="space-y-0.5 text-sm">
+              <li><Link to="/about" className="inline-block py-1 text-white/60 hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/events" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Events Calendar</Link></li>
+              <li><Link to="/csr-impact" className="inline-block py-1 text-white/60 hover:text-white transition-colors">CSR Impact</Link></li>
+              <li><Link to="/esg-policy" className="inline-block py-1 text-white/60 hover:text-white transition-colors">ESG Policy</Link></li>
+              <li><Link to="/contact" className="inline-block py-1 text-white/60 hover:text-white transition-colors">Contact</Link></li>
+              <li><a href="mailto:omniwellnessmedia@gmail.com" className="inline-block py-1 text-white/60 hover:text-white transition-colors">omniwellnessmedia@gmail.com</a></li>
             </ul>
           </div>
         </div>
@@ -154,10 +154,10 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-5 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-white/30 text-xs">&copy; 2026 Omni Wellness Media. All rights reserved.</p>
           <div className="flex gap-5 text-xs">
-            <Link to="/privacy-policy" className="text-white/30 hover:text-white/60 transition-colors">Privacy</Link>
-            <Link to="/terms-of-service" className="text-white/30 hover:text-white/60 transition-colors">Terms</Link>
-            <Link to="/cookie-policy" className="text-white/30 hover:text-white/60 transition-colors">Cookies</Link>
-            <Link to="/esg-policy" className="text-white/30 hover:text-white/60 transition-colors">ESG</Link>
+            <Link to="/privacy-policy" className="inline-block py-1 text-white/30 hover:text-white/60 transition-colors">Privacy</Link>
+            <Link to="/terms-of-service" className="inline-block py-1 text-white/30 hover:text-white/60 transition-colors">Terms</Link>
+            <Link to="/cookie-policy" className="inline-block py-1 text-white/30 hover:text-white/60 transition-colors">Cookies</Link>
+            <Link to="/esg-policy" className="inline-block py-1 text-white/30 hover:text-white/60 transition-colors">ESG</Link>
           </div>
         </div>
       </div>

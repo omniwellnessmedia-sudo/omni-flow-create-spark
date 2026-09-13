@@ -129,19 +129,20 @@ const ToursRetreatsPreview = () => {
                 </div>
 
                 <div className="mt-auto">
-                  <Link to="/roambuddy-store">
-                    <Button
-                      className={`w-full ${
-                        plan.popular
-                          ? 'bg-primary hover:bg-primary/90'
-                          : ''
-                      }`}
-                      variant={plan.popular ? 'default' : 'outline'}
-                    >
+                  <Button
+                    asChild
+                    className={`w-full ${
+                      plan.popular
+                        ? 'bg-primary hover:bg-primary/90'
+                        : ''
+                    }`}
+                    variant={plan.popular ? 'default' : 'outline'}
+                  >
+                    <Link to="/roambuddy-store">
                       Get Connected
                       <Wifi className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 </div>
               </CardContent>
             </Card>

@@ -202,7 +202,7 @@ export const OfferCard = ({ offer }: { offer: RateCardOffer }) => (
       )}
       <Link
         to={`/services/${offer.slug}`}
-        className="inline-flex items-center gap-1.5 text-[13.5px] underline-offset-4 hover:underline"
+        className="inline-flex min-h-[24px] items-center gap-1.5 text-[13.5px] underline-offset-4 hover:underline"
         style={{ color: SLATE }}
       >
         Full details
