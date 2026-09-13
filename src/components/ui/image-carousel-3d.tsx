@@ -97,11 +97,21 @@ const ImageCarousel3D: React.FC<ImageCarousel3DProps> = ({
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex ? 'bg-white w-6' : 'bg-white/50 hover:bg-white/80'
-            }`}
+            // The dot stays 8px so it looks the same; the button around it is
+            // 24px so a thumb can hit it. WCAG 2.2 SC 2.5.8 sets 24 by 24 CSS
+            // pixels as the minimum target, and 8 by 8 is the smallest on the
+            // whole site. shrink-0 stops a crowded row squeezing it back down.
+            className="flex h-6 min-w-6 shrink-0 items-center justify-center rounded-full px-1"
             aria-label={`Go to slide ${index + 1}`}
-          />
+            aria-pressed={index === currentIndex}
+          >
+            <span
+              aria-hidden="true"
+              className={`block h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex ? 'w-6 bg-white' : 'w-2 bg-white/50 hover:bg-white/80'
+              }`}
+            />
+          </button>
         ))}
       </div>
     </div>
