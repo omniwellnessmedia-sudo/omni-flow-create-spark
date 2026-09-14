@@ -16,6 +16,7 @@ const ProductManagement = lazy(() => import("@/pages/admin/ProductManagement"));
 const AdminTools = lazy(() => import("@/pages/admin/AdminTools"));
 const AdminLeads = lazy(() => import("@/pages/admin/AdminLeads"));
 const PipelineBoard = lazy(() => import("@/components/admin/PipelineBoard"));
+const ClientsScreen = lazy(() => import("@/components/admin/ClientsScreen"));
 const AdminInvites = lazy(() => import("@/pages/admin/AdminInvites"));
 const AdminTasks = lazy(() => import("@/pages/admin/AdminTasks"));
 const AdminContent = lazy(() => import("@/pages/admin/AdminContent"));
@@ -279,6 +280,8 @@ const AdminDashboard = () => {
         return <Suspense fallback={<SectionLoader />}><AdminAnalytics /></Suspense>;
       case "pipeline":
         return <Suspense fallback={<SectionLoader />}><PipelineBoard /></Suspense>;
+      case "clients":
+        return <Suspense fallback={<SectionLoader />}><ClientsScreen /></Suspense>;
       case "leads":
         return <Suspense fallback={<SectionLoader />}><AdminLeads /></Suspense>;
       case "bookings":
@@ -457,7 +460,9 @@ const AdminDashboard = () => {
       <SmartGreeting
         userName={user?.user_metadata?.full_name || user?.email?.split("@")[0]}
         role="admin"
-        alerts={activeSection === "home" ? dashboardData.alerts : []}
+        // Today lists the alerts itself, under "Elsewhere", so the greeting
+        // no longer repeats them as pills above it.
+        alerts={[]}
         subtitle="Omni Wellness Media"
       />
       {renderSection()}

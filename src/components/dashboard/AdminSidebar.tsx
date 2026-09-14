@@ -26,6 +26,7 @@ import {
   TrendingUp,
   HandCoins,
   KanbanSquare,
+  Contact,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -84,6 +85,7 @@ const NAV_GROUPS: {
     // same table as Shop products, which is why nobody could tell which one to
     // use; it is now reached from the hub as "Import tools".
     items: [
+      { id: "clients", label: "Clients", icon: Contact },
       { id: "catalogue", label: "Local businesses", icon: Store, href: "/admin/catalogue" },
       { id: "providers", label: "Providers", icon: UserCog },
       { id: "marketplace-hub", label: "Marketplace", icon: LayoutDashboard, href: "/admin/marketplace" },

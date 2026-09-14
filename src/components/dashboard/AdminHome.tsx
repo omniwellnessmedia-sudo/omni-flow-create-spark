@@ -102,8 +102,6 @@ const AdminHome = memo(({ recentActivity, alerts, onNavigate, loading = false }:
     [pipeline.leads]
   );
 
-  const dateLine = new Date().toLocaleDateString("en-ZA", { weekday: "long", day: "numeric", month: "long" });
-
   if (loading || (pipeline.loading && pipeline.leads.length === 0)) {
     return (
       <div className="space-y-5" role="status" aria-busy="true" aria-label="Loading today">
@@ -121,11 +119,12 @@ const AdminHome = memo(({ recentActivity, alerts, onNavigate, loading = false }:
 
   return (
     <div className="space-y-6">
+      {/* The greeting above already carries the h1 and the date, so this
+          row is the eyebrow and the actions only. */}
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="admin-eyebrow">Sales</p>
-          <h1 className="mt-1.5">Today</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{dateLine}. Who needs a reply, who is close, and what to start.</p>
+          <p className="admin-eyebrow">Sales / Today</p>
+          <p className="mt-1.5 text-sm text-muted-foreground">Who needs a reply, who is close, and what to start.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button size="sm" className="h-9 rounded-full" onClick={() => setWalkIn(true)}>
