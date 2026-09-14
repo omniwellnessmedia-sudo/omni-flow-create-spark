@@ -25,6 +25,7 @@ import {
   Store,
   TrendingUp,
   HandCoins,
+  KanbanSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -44,73 +45,80 @@ interface AdminSidebarProps {
  * routes (the catalogue and marketplace tools live outside the dashboard's
  * section switcher and were previously unreachable from here at all).
  */
+/**
+ * Grouped by the job, not by the table. The old groups were Core, Manage,
+ * Marketplace, Events, System: a developer's map of the codebase. These are
+ * the five things the team does in a week, in the order they do them.
+ */
 const NAV_GROUPS: {
   label: string;
   hue: string;
   items: { id: string; label: string; icon: typeof LayoutDashboard; href?: string }[];
 }[] = [
   {
-    label: "Core",
+    label: "Sales",
     hue: "#2BB9B9",
     items: [
-      { id: "home", label: "Home", icon: LayoutDashboard },
-      { id: "analytics", label: "Analytics", icon: BarChart3 },
-      { id: "leads", label: "Leads", icon: Users },
+      { id: "home", label: "Today", icon: LayoutDashboard },
+      { id: "pipeline", label: "Pipeline", icon: KanbanSquare },
+      { id: "leads", label: "All leads", icon: Users },
       { id: "bookings", label: "Bookings", icon: CalendarCheck },
       { id: "orders", label: "Orders", icon: ShoppingCart },
     ],
   },
   {
-    label: "Manage",
+    label: "Marketing",
     hue: "#5C2A8A",
     items: [
-      { id: "providers", label: "Providers", icon: UserCog },
-      { id: "content", label: "Content", icon: FileText },
+      { id: "analytics", label: "Analytics", icon: BarChart3 },
       { id: "newsletter", label: "Newsletter", icon: Mail },
       { id: "social", label: "Social", icon: Share2 },
+      { id: "content", label: "Media", icon: FileText },
     ],
   },
   {
-    label: "Marketplace",
+    label: "Clients and partners",
     hue: "#4FAE3F",
     // The two entries with real work behind them come first and say what the
     // work is. "Products" used to sit in Manage as a second screen over the
     // same table as Shop products, which is why nobody could tell which one to
     // use; it is now reached from the hub as "Import tools".
     items: [
-      { id: "marketplace-hub", label: "Overview", icon: LayoutDashboard, href: "/admin/marketplace" },
-      { id: "shop-products", label: "Approve shop products", icon: Package, href: "/admin/products" },
       { id: "catalogue", label: "Local businesses", icon: Store, href: "/admin/catalogue" },
+      { id: "providers", label: "Providers", icon: UserCog },
+      { id: "marketplace-hub", label: "Marketplace", icon: LayoutDashboard, href: "/admin/marketplace" },
+      { id: "shop-products", label: "Approve shop products", icon: Package, href: "/admin/products" },
       { id: "products", label: "Import tools", icon: Wrench },
       { id: "affiliate-performance", label: "Affiliate performance", icon: TrendingUp, href: "/admin/affiliate-performance" },
+    ],
+  },
+  {
+    label: "Money",
+    hue: "#F38020",
+    items: [
+      { id: "accounting", label: "Accounting", icon: DollarSign },
       { id: "affiliate-payouts", label: "Affiliate payouts", icon: HandCoins, href: "/admin/affiliate-payouts" },
     ],
   },
   {
-    label: "Events",
+    label: "Events and tours",
     hue: "#2C6FB5",
     items: [
       { id: "events-admin", label: "Events calendar", icon: CalendarCheck, href: "/admin/events" },
+      // AdminTours is the only editor for the local tours table, which is
+      // not the same thing as the Viator screen; the local tours id cannot
+      // be "tours" because Viator already holds it.
+      { id: "local-tours", label: "Tours (local)", icon: MapPin },
+      { id: "tours", label: "Viator", icon: Globe },
+      { id: "schedule", label: "Schedule", icon: CalendarClock },
     ],
   },
   {
     label: "System",
     hue: "#8A9A96",
     items: [
-      { id: "accounting", label: "Accounting", icon: DollarSign },
       { id: "team", label: "Team", icon: UserPlus },
       { id: "tasks", label: "Tasks", icon: ListTodo },
-      { id: "tours", label: "Viator", icon: Globe },
-      // Reachable from 5 September 2026. All three screens were fully built
-      // against live tables and wired to nothing: no route, no section, no
-      // import. AdminSettings holds the feature flag switches that gate
-      // public functionality and the Cal.com booking configuration;
-      // AdminTours is the only editor for the local tours table, which is
-      // not the same thing as the Viator screen above; AdminSchedule owns
-      // service_time_slots. The local tours id cannot be "tours" because
-      // Viator already holds it.
-      { id: "local-tours", label: "Tours (local)", icon: MapPin },
-      { id: "schedule", label: "Schedule", icon: CalendarClock },
       { id: "uwc", label: "UWC", icon: GraduationCap },
       { id: "roambuddy-sales", label: "RoamBuddy sales", icon: Smartphone, href: "/admin/roambuddy-sales" },
       { id: "roam-marketing", label: "Roam marketing", icon: Megaphone, href: "/admin/roam-marketing" },

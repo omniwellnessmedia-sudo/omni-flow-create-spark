@@ -15,6 +15,7 @@ import AdminHome from "@/components/dashboard/AdminHome";
 const ProductManagement = lazy(() => import("@/pages/admin/ProductManagement"));
 const AdminTools = lazy(() => import("@/pages/admin/AdminTools"));
 const AdminLeads = lazy(() => import("@/pages/admin/AdminLeads"));
+const PipelineBoard = lazy(() => import("@/components/admin/PipelineBoard"));
 const AdminInvites = lazy(() => import("@/pages/admin/AdminInvites"));
 const AdminTasks = lazy(() => import("@/pages/admin/AdminTasks"));
 const AdminContent = lazy(() => import("@/pages/admin/AdminContent"));
@@ -154,6 +155,7 @@ const AdminDashboard = () => {
       if (pendingLeads.length > 0) {
         alerts.push({ type: "warning", message: `${pendingLeads.length} unanswered lead${pendingLeads.length > 1 ? "s" : ""}` });
         alertCounts.leads = pendingLeads.length;
+        alertCounts.pipeline = pendingLeads.length;
       }
       if ((pendingOrdersCountResult.count || 0) > 0) {
         alerts.push({ type: "info", message: `${pendingOrdersCountResult.count} pending order${(pendingOrdersCountResult.count || 0) > 1 ? "s" : ""}` });
@@ -275,6 +277,8 @@ const AdminDashboard = () => {
         return <AdminHome stats={dashboardData.stats} recentActivity={dashboardData.recentActivity} alerts={dashboardData.alerts} onNavigate={handleSectionChange} />;
       case "analytics":
         return <Suspense fallback={<SectionLoader />}><AdminAnalytics /></Suspense>;
+      case "pipeline":
+        return <Suspense fallback={<SectionLoader />}><PipelineBoard /></Suspense>;
       case "leads":
         return <Suspense fallback={<SectionLoader />}><AdminLeads /></Suspense>;
       case "bookings":

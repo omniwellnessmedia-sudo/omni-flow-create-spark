@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, Copy, Archive, Trash2, Send, Sparkles, ExternalLink, FileText, Calendar } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
+import { STAGES, stageForStatus, statusForStage } from "@/lib/pipeline";
 
 export type LeadType = "contact" | "quote" | "outreach";
 
@@ -50,8 +51,9 @@ const TEMPLATES: Record<string, { subject: string; body: string }> = {
   },
 };
 
-const STATUS_OPTIONS_DEFAULT = ["pending", "in_progress", "responded", "quoted", "closed", "archived"];
-const STATUS_OPTIONS_OUTREACH = ["no_response", "contacted", "positive", "awaiting", "applied", "registered", "declined", "archived"];
+// The pipeline's stages, written back as the word each table understands.
+// See src/lib/pipeline.ts for the map; the old status words stay readable.
+const STAGE_BUTTONS = STAGES.map((s) => ({ stage: s.id, label: s.label, hue: s.hue }));
 
 const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawerProps) => {
   const { toast } = useToast();
@@ -90,7 +92,7 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
   const name = leadType === "outreach" ? lead.organisation : lead.name;
   const email = leadType === "outreach" ? lead.contact_email : lead.email;
   const org = leadType === "outreach" ? lead.organisation : (lead.organization || lead.company);
-  const statusOptions = leadType === "outreach" ? STATUS_OPTIONS_OUTREACH : STATUS_OPTIONS_DEFAULT;
+  const currentStage = stageForStatus(edit.status ?? lead.status);
 
   const save = async () => {
     setSaving(true);
@@ -220,13 +222,20 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
 
         <Separator className="my-4" />
 
-        {/* Status pipeline */}
+        {/* Stage. One vocabulary for every lead; the table's own word is written underneath. */}
         <div>
-          <Label className="text-xs">Move to status</Label>
+          <Label className="text-xs">Stage</Label>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
-            {statusOptions.map((s) => (
-              <Button key={s} size="sm" variant={lead.status === s ? "default" : "outline"} className="h-7 text-[11px]" onClick={() => setStatus(s)}>
-                {s}
+            {STAGE_BUTTONS.map((s) => (
+              <Button
+                key={s.stage}
+                size="sm"
+                variant={currentStage === s.stage ? "default" : "outline"}
+                className="h-7 text-[11px]"
+                onClick={() => setStatus(statusForStage(s.stage, leadType))}
+              >
+                <span aria-hidden="true" className="mr-1.5 inline-block h-[6px] w-[6px] rounded-full" style={{ background: s.hue }} />
+                {s.label}
               </Button>
             ))}
           </div>
