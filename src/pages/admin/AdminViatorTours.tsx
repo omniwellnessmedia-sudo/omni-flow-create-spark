@@ -194,7 +194,7 @@ export default function AdminViatorTours() {
   return (
     <div className="space-y-6">
       <AdminScreenHeader
-        eyebrow="System"
+        eyebrow="Events and tours"
         title="Viator"
         description="Tours syndicated from Viator, and what they earn."
       />

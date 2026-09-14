@@ -505,7 +505,7 @@ const ProductManagement = () => {
   return (
     <div className="space-y-4 md:space-y-6">
       <AdminScreenHeader
-        eyebrow="Marketplace"
+        eyebrow="Clients and partners"
         title="Import tools"
         description="Bring products in from the affiliate feeds and decide which reach the shop."
       />

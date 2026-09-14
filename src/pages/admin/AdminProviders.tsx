@@ -211,7 +211,7 @@ const AdminProviders = () => {
   return (
     <div className="space-y-6">
       <AdminScreenHeader
-        eyebrow="Manage"
+        eyebrow="Clients and partners"
         title="Providers"
         description="Practitioners and businesses listed on the marketplace, and what each still needs before they go live."
       />

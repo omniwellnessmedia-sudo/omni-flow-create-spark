@@ -210,7 +210,7 @@ const AdminAnalytics = () => {
   return (
     <div className="space-y-6">
       <AdminScreenHeader
-        eyebrow="Core"
+        eyebrow="Marketing"
         title="Analytics"
         description="Traffic and conversion for the public site."
       />
@@ -465,6 +465,12 @@ const AdminAnalytics = () => {
           <CardDescription className="text-xs">Daily breakdown for the selected period</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* An empty chart with axes reads as broken. Say what it means. */}
+          {data.revenueByDay.every((d: { revenue?: number; orders?: number }) => !d.revenue && !d.orders) && (
+            <p className="mb-3 rounded-[12px] bg-muted/50 p-3 text-sm text-muted-foreground">
+              No store orders in this period. Service work is quoted and paid under Money, not sold as orders, so it does not appear here.
+            </p>
+          )}
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.revenueByDay}>
