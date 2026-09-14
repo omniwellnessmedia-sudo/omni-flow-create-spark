@@ -1,6 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { reloadOnceForChunkError } from '@/lib/lazyWithRetry';
 
 interface Props {
   children: ReactNode;
@@ -23,6 +24,10 @@ class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo);
+    // A page chunk that vanished in a deploy is not a broken site. Reload
+    // once and the new filenames load; a second failure falls through to
+    // the screen below.
+    reloadOnceForChunkError(error);
   }
 
   public render() {

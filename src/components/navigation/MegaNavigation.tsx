@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Plane, Store, Briefcase, Users, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -38,13 +38,19 @@ import ServiceMenuSearch from './ServiceMenuSearch';
  * operating system and cannot take a brand colour. The spectrum hue each
  * category already owns does that job and does it consistently.
  *
- * Its descriptions carried em dashes, against the house rule.
- *
  * WHAT THIS DOES INSTEAD. Services gets a real panel: a search across all
  * nineteen offers, the six categories down one side with their hues, and
- * the four ways in ordered by how ready the visitor is. The scorecard leads
+ * the ways in ordered by how ready the visitor is. The scorecard leads
  * because it is the only one that costs the visitor nothing and still tells
  * us who they are.
+ *
+ * THE TYPE IS THE SITE'S. The public pages moved to one system: Cormorant
+ * for display, Inter for reading, JetBrains Mono for eyebrows. The menu had
+ * kept its own: a lucide icon beside every label and shadcn's default
+ * uppercase for panel headings. Icons are gone (the labels are words, and
+ * the hue dots do the colour work), panel headings are mono eyebrows, and
+ * the titles inside a panel are set in the display face, so the menu reads
+ * as the same product as the pages it opens.
  *
  * Everything reads from src/data/navigation.ts, which the mobile sheet also
  * reads, so the two menus cannot drift apart again.
@@ -52,8 +58,17 @@ import ServiceMenuSearch from './ServiceMenuSearch';
  * No em dashes in this file.
  */
 
+const MONO = { fontFamily: '"JetBrains Mono", ui-monospace, monospace' } as const;
+
 const triggerClass =
-  'group inline-flex h-10 w-max items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none';
+  'group inline-flex h-10 w-max items-center justify-center rounded-full px-4 py-2 text-[14px] font-medium tracking-[.01em] transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground focus-visible:outline-none';
+
+/** A panel heading, in the eyebrow style the pages use. */
+const Eyebrow = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <p className={cn('px-3 pb-2 text-[10px] uppercase tracking-[.22em] text-muted-foreground', className)} style={MONO}>
+    {children}
+  </p>
+);
 
 /** One link in a panel. The hue dot replaces the emoji the old menu used. */
 const PanelLink = ({ item, onNavigate }: { item: NavLinkData; onNavigate?: () => void }) => (
@@ -65,24 +80,23 @@ const PanelLink = ({ item, onNavigate }: { item: NavLinkData; onNavigate?: () =>
     >
       <span className="flex items-center gap-2.5">
         {item.hue && (
-          <span
-            aria-hidden="true"
-            className="h-2 w-2 shrink-0 rounded-full"
-            style={{ background: item.hue }}
-          />
+          <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ background: item.hue }} />
         )}
-        <span className="text-sm font-medium text-foreground">{item.title}</span>
+        <span className="font-wwpl-display text-[18px] leading-tight text-foreground">{item.title}</span>
       </span>
-      <span className="mt-1.5 block text-xs leading-snug text-muted-foreground">
-        {item.description}
-      </span>
+      <span className="mt-1.5 block text-[12.5px] leading-snug text-muted-foreground">{item.description}</span>
     </Link>
   </NavigationMenuLink>
 );
 
+const Trigger = ({ children }: { children: React.ReactNode }) => (
+  <NavigationMenuTrigger className="h-10 rounded-full bg-transparent px-4 text-[14px] font-medium tracking-[.01em]">
+    {children}
+  </NavigationMenuTrigger>
+);
+
 export const MegaNavigation = () => {
   const { pathname } = useLocation();
-
   const isOn = (href: string) => pathname === href;
 
   return (
@@ -91,7 +105,6 @@ export const MegaNavigation = () => {
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
             <Link to="/" aria-current={isOn('/') ? 'page' : undefined} className={triggerClass}>
-              <Home className="mr-2 h-4 w-4" aria-hidden="true" />
               Home
             </Link>
           </NavigationMenuLink>
@@ -107,20 +120,13 @@ export const MegaNavigation = () => {
 
         {/* Travel */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="h-10 rounded-full bg-transparent px-4 text-sm font-medium">
-            <Plane className="mr-2 h-4 w-4" aria-hidden="true" />
-            Travel
-          </NavigationMenuTrigger>
+          <Trigger>Travel</Trigger>
           <NavigationMenuContent>
             <div className="w-[560px] p-5">
-              <p className="px-3 pb-2 text-[11px] uppercase tracking-[.18em] text-muted-foreground">
-                {TRAVEL.title}
-              </p>
+              <Eyebrow>{TRAVEL.title}</Eyebrow>
               <ul className="grid grid-cols-2 gap-1">
                 {TRAVEL.links.map((item) => (
-                  <li key={item.href}>
-                    <PanelLink item={item} />
-                  </li>
+                  <li key={item.href}><PanelLink item={item} /></li>
                 ))}
               </ul>
             </div>
@@ -129,20 +135,13 @@ export const MegaNavigation = () => {
 
         {/* Store */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="h-10 rounded-full bg-transparent px-4 text-sm font-medium">
-            <Store className="mr-2 h-4 w-4" aria-hidden="true" />
-            Store
-          </NavigationMenuTrigger>
+          <Trigger>Store</Trigger>
           <NavigationMenuContent>
             <div className="w-[340px] p-5">
-              <p className="px-3 pb-2 text-[11px] uppercase tracking-[.18em] text-muted-foreground">
-                {STORE.title}
-              </p>
+              <Eyebrow>{STORE.title}</Eyebrow>
               <ul className="grid gap-1">
                 {STORE.links.map((item) => (
-                  <li key={item.href}>
-                    <PanelLink item={item} />
-                  </li>
+                  <li key={item.href}><PanelLink item={item} /></li>
                 ))}
               </ul>
             </div>
@@ -151,10 +150,7 @@ export const MegaNavigation = () => {
 
         {/* Services. The one that actually needs the room. */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="h-10 rounded-full bg-transparent px-4 text-sm font-medium">
-            <Briefcase className="mr-2 h-4 w-4" aria-hidden="true" />
-            Services
-          </NavigationMenuTrigger>
+          <Trigger>Services</Trigger>
           <NavigationMenuContent>
             <div className="w-[720px]">
               {/* The search sits above everything, because somebody who
@@ -166,9 +162,7 @@ export const MegaNavigation = () => {
 
               <div className="grid grid-cols-[1fr_1.15fr] gap-5 p-5">
                 <div>
-                  <p className="px-3 pb-2 text-[11px] uppercase tracking-[.18em] text-muted-foreground">
-                    Browse by category
-                  </p>
+                  <Eyebrow>Browse by category</Eyebrow>
                   <ul className="grid gap-0.5">
                     {SERVICE_CATEGORIES.map((item) => (
                       <li key={item.href}>
@@ -178,14 +172,10 @@ export const MegaNavigation = () => {
                             className="flex items-center justify-between gap-3 rounded-xl px-3 py-2 no-underline outline-none transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:ring-2 focus-visible:ring-primary/40"
                           >
                             <span className="flex min-w-0 items-center gap-2.5">
-                              <span
-                                aria-hidden="true"
-                                className="h-2 w-2 shrink-0 rounded-full"
-                                style={{ background: item.hue }}
-                              />
-                              <span className="truncate text-sm text-foreground">{item.title}</span>
+                              <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ background: item.hue }} />
+                              <span className="truncate text-[14px] text-foreground">{item.title}</span>
                             </span>
-                            <span className="shrink-0 text-xs text-muted-foreground">
+                            <span className="shrink-0 text-[11px] text-muted-foreground" style={MONO}>
                               {item.description}
                             </span>
                           </Link>
@@ -194,16 +184,14 @@ export const MegaNavigation = () => {
                     ))}
                   </ul>
 
-                  <p className="px-3 pb-2 pt-5 text-[11px] uppercase tracking-[.18em] text-muted-foreground">
-                    Service pages
-                  </p>
+                  <Eyebrow className="pt-5">Service pages</Eyebrow>
                   <ul className="grid gap-0.5">
                     {SERVICE_PAGES.map((item) => (
                       <li key={item.href}>
                         <NavigationMenuLink asChild>
                           <Link
                             to={item.href}
-                            className="block truncate rounded-xl px-3 py-2 text-sm text-foreground no-underline outline-none transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:ring-2 focus-visible:ring-primary/40"
+                            className="block truncate rounded-xl px-3 py-2 text-[14px] text-foreground no-underline outline-none transition-colors hover:bg-accent focus-visible:bg-accent focus-visible:ring-2 focus-visible:ring-primary/40"
                           >
                             {item.title}
                           </Link>
@@ -214,9 +202,7 @@ export const MegaNavigation = () => {
                 </div>
 
                 <div className="rounded-2xl bg-muted/50 p-2">
-                  <p className="px-3 pb-2 pt-2 text-[11px] uppercase tracking-[.18em] text-muted-foreground">
-                    Start here
-                  </p>
+                  <Eyebrow className="pt-2">Start here</Eyebrow>
                   <ul className="grid gap-1">
                     {SERVICE_ENTRY_POINTS.map((item, i) => (
                       <li key={item.href}>
@@ -230,13 +216,11 @@ export const MegaNavigation = () => {
                               i === 0 && 'bg-background shadow-sm'
                             )}
                           >
-                            <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+                            <span className="flex items-center gap-2 font-wwpl-display text-[18px] leading-tight text-foreground">
                               {item.title}
-                              {i === 0 && (
-                                <ArrowRight className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-                              )}
+                              {i === 0 && <ArrowRight className="h-3.5 w-3.5 text-primary" aria-hidden="true" />}
                             </span>
-                            <span className="mt-1.5 block text-xs leading-snug text-muted-foreground">
+                            <span className="mt-1.5 block text-[12.5px] leading-snug text-muted-foreground">
                               {item.description}
                             </span>
                           </Link>
@@ -244,7 +228,7 @@ export const MegaNavigation = () => {
                       </li>
                     ))}
                   </ul>
-                  <p className="px-3 pb-2 pt-2 text-[11px] text-muted-foreground">
+                  <p className="px-3 pb-2 pt-2 text-[10.5px] text-muted-foreground" style={MONO}>
                     {OFFER_COUNT} services, priced in rand.
                   </p>
                 </div>
@@ -255,20 +239,13 @@ export const MegaNavigation = () => {
 
         {/* Community */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="h-10 rounded-full bg-transparent px-4 text-sm font-medium">
-            <Users className="mr-2 h-4 w-4" aria-hidden="true" />
-            Community
-          </NavigationMenuTrigger>
+          <Trigger>Community</Trigger>
           <NavigationMenuContent>
             <div className="w-[340px] p-5">
-              <p className="px-3 pb-2 text-[11px] uppercase tracking-[.18em] text-muted-foreground">
-                {COMMUNITY.title}
-              </p>
+              <Eyebrow>{COMMUNITY.title}</Eyebrow>
               <ul className="grid gap-1">
                 {COMMUNITY.links.map((item) => (
-                  <li key={item.href}>
-                    <PanelLink item={item} />
-                  </li>
+                  <li key={item.href}><PanelLink item={item} /></li>
                 ))}
               </ul>
             </div>

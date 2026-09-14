@@ -6,38 +6,39 @@ import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/components/CartProvider';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { lazyWithRetry } from '@/lib/lazyWithRetry';
 
 // Lazy load components for better performance
-const Index = React.lazy(() => import('@/pages/Index'));
-const WellnessExchange = React.lazy(() => import('@/pages/WellnessExchange'));
-const WellnessMarketplace = React.lazy(() => import('@/pages/WellnessMarketplace'));
-const UnifiedMarketplace = React.lazy(() => import('@/pages/UnifiedMarketplace'));
-const WellnessAccount = React.lazy(() => import('@/pages/WellnessAccount'));
-const WellnessWants = React.lazy(() => import('@/pages/WellnessWants'));
-const WellnessCommunity = React.lazy(() => import('@/pages/WellnessCommunity'));
+const Index = lazyWithRetry(() => import('@/pages/Index'));
+const WellnessExchange = lazyWithRetry(() => import('@/pages/WellnessExchange'));
+const WellnessMarketplace = lazyWithRetry(() => import('@/pages/WellnessMarketplace'));
+const UnifiedMarketplace = lazyWithRetry(() => import('@/pages/UnifiedMarketplace'));
+const WellnessAccount = lazyWithRetry(() => import('@/pages/WellnessAccount'));
+const WellnessWants = lazyWithRetry(() => import('@/pages/WellnessWants'));
+const WellnessCommunity = lazyWithRetry(() => import('@/pages/WellnessCommunity'));
 // Consolidated to use ServiceDetail.tsx for all service detail routes
-const IndividualProviderProfile = React.lazy(() => import('@/pages/IndividualProviderProfile'));
-const SandyMitchellProfile = React.lazy(() => import('@/pages/SandyMitchellProfile'));
-const AddService = React.lazy(() => import('@/pages/AddService'));
-const EditService = React.lazy(() => import('@/pages/EditService'));
-const StunningPigs = React.lazy(() => import('@/pages/events/StunningPigs'));
+const IndividualProviderProfile = lazyWithRetry(() => import('@/pages/IndividualProviderProfile'));
+const SandyMitchellProfile = lazyWithRetry(() => import('@/pages/SandyMitchellProfile'));
+const AddService = lazyWithRetry(() => import('@/pages/AddService'));
+const EditService = lazyWithRetry(() => import('@/pages/EditService'));
+const StunningPigs = lazyWithRetry(() => import('@/pages/events/StunningPigs'));
 // UNLISTED, NOINDEX: BWC Meet the Team controlled staging page. Holds real
 // people's photographs and biographies that are NOT cleared for publication —
 // see the header comment in src/pages/team/bwcTeamData.ts. Deliberately absent
 // from nav and sitemap; reachable only by direct link, for Chad's review.
-const BwcTeamStaging = React.lazy(() => import('@/pages/team/BwcTeamStaging'));
+const BwcTeamStaging = lazyWithRetry(() => import('@/pages/team/BwcTeamStaging'));
 
 // Decorative / non-critical global overlays — lazy so they leave the initial
 // bundle instead of loading on every page before first paint. They render at
 // the end of the tree inside Suspense(fallback=null), so they simply appear a
 // beat after hydration rather than blocking the page. The ROAM chatbot in
 // particular is heavy and is never needed on first render.
-const MagicCursor = React.lazy(() => import('@/components/MagicCursor'));
-const FloatingActionDock = React.lazy(() => import('@/components/FloatingActionDock'));
-const RoamBuddySalesBot = React.lazy(() =>
+const MagicCursor = lazyWithRetry(() => import('@/components/MagicCursor'));
+const FloatingActionDock = lazyWithRetry(() => import('@/components/FloatingActionDock'));
+const RoamBuddySalesBot = lazyWithRetry(() =>
   import('@/components/roambuddy/RoamBuddySalesBot').then((m) => ({ default: m.RoamBuddySalesBot }))
 );
-const AccessibilitySettings = React.lazy(() => import('@/components/accessibility/AccessibilitySettings'));
+const AccessibilitySettings = lazyWithRetry(() => import('@/components/accessibility/AccessibilitySettings'));
 
 // Provider-signup redirect that KEEPS incoming query params (gclid, utm_*) —
 // a fixed-string <Navigate> discarded them, breaking Google Ads attribution
@@ -87,116 +88,116 @@ const ProviderSignupRedirect = () => {
   params.set('role', 'provider');
   return <Navigate to={`/auth?${params.toString()}`} replace />;
 };
-const ProviderDashboard = React.lazy(() => import('@/pages/ProviderDashboard'));
-const ModernProviderPortal = React.lazy(() => import('@/pages/ModernProviderPortal'));
-const TransactionPage = React.lazy(() => import('@/pages/TransactionPage'));
+const ProviderDashboard = lazyWithRetry(() => import('@/pages/ProviderDashboard'));
+const ModernProviderPortal = lazyWithRetry(() => import('@/pages/ModernProviderPortal'));
+const TransactionPage = lazyWithRetry(() => import('@/pages/TransactionPage'));
 // 2BeWell routes redirect to services (brand retired)
 
-const WellnessDeals = React.lazy(() => import('@/pages/WellnessDeals'));
-const AuthPage = React.lazy(() => import('@/pages/Auth'));
-const TestPage = React.lazy(() => import('@/pages/TestPage'));
-const TestSimple = React.lazy(() => import('@/pages/TestSimple'));
-const About = React.lazy(() => import('@/pages/About'));
-const Contact = React.lazy(() => import('@/pages/Contact'));
-const Services = React.lazy(() => import('@/pages/Services'));
-const PrivacyPolicy = React.lazy(() => import('@/pages/PrivacyPolicy'));
-const TermsOfService = React.lazy(() => import('@/pages/TermsOfService'));
-const CookiePolicy = React.lazy(() => import('@/pages/CookiePolicy'));
-const ESGPolicy = React.lazy(() => import('@/pages/ESGPolicy'));
-const Unsubscribe = React.lazy(() => import('@/pages/Unsubscribe'));
-const Enquire = React.lazy(() => import('@/pages/Enquire'));
-const Muizenberg = React.lazy(() => import('@/pages/Muizenberg'));
-const MuizenbergAuditSheet = React.lazy(() => import('@/pages/MuizenbergAuditSheet'));
-const Talks = React.lazy(() => import('@/pages/Talks'));
-const QuotePrint = React.lazy(() => import('@/pages/admin/QuotePrint'));
-const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
-const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
-const AddWant = React.lazy(() => import('@/pages/AddWant'));
+const WellnessDeals = lazyWithRetry(() => import('@/pages/WellnessDeals'));
+const AuthPage = lazyWithRetry(() => import('@/pages/Auth'));
+const TestPage = lazyWithRetry(() => import('@/pages/TestPage'));
+const TestSimple = lazyWithRetry(() => import('@/pages/TestSimple'));
+const About = lazyWithRetry(() => import('@/pages/About'));
+const Contact = lazyWithRetry(() => import('@/pages/Contact'));
+const Services = lazyWithRetry(() => import('@/pages/Services'));
+const PrivacyPolicy = lazyWithRetry(() => import('@/pages/PrivacyPolicy'));
+const TermsOfService = lazyWithRetry(() => import('@/pages/TermsOfService'));
+const CookiePolicy = lazyWithRetry(() => import('@/pages/CookiePolicy'));
+const ESGPolicy = lazyWithRetry(() => import('@/pages/ESGPolicy'));
+const Unsubscribe = lazyWithRetry(() => import('@/pages/Unsubscribe'));
+const Enquire = lazyWithRetry(() => import('@/pages/Enquire'));
+const Muizenberg = lazyWithRetry(() => import('@/pages/Muizenberg'));
+const MuizenbergAuditSheet = lazyWithRetry(() => import('@/pages/MuizenbergAuditSheet'));
+const Talks = lazyWithRetry(() => import('@/pages/Talks'));
+const QuotePrint = lazyWithRetry(() => import('@/pages/admin/QuotePrint'));
+const ServiceDetail = lazyWithRetry(() => import('@/pages/ServiceDetail'));
+const SearchServices = lazyWithRetry(() => import('@/pages/SearchServices'));
+const AddWant = lazyWithRetry(() => import('@/pages/AddWant'));
 // TwoBeWell retired — redirects in routes below
-const TravelWellConnectedStore = React.lazy(() => import('@/pages/TravelWellConnectedStore'));
-const WellnessRoamingPackages = React.lazy(() => import('@/pages/WellnessRoamingPackages'));
-const DataProducts = React.lazy(() => import('@/pages/DataProducts'));
-const ProductDetail = React.lazy(() => import('@/pages/ProductDetail'));
-const DealDetail = React.lazy(() => import('@/pages/DealDetail'));
-const Checkout = React.lazy(() => import('@/pages/Checkout'));
-const OrderConfirmation = React.lazy(() => import('@/pages/OrderConfirmation'));
-const GuestOrderLookup = React.lazy(() => import('@/pages/GuestOrderLookup'));
-const PaymentSuccess = React.lazy(() => import('@/pages/PaymentSuccess'));
-const PaymentCancelled = React.lazy(() => import('@/pages/PaymentCancelled'));
-const Podcast = React.lazy(() => import('@/pages/Podcast'));
-const Portfolio = React.lazy(() => import('@/pages/Portfolio'));
-const Resources = React.lazy(() => import('@/pages/Resources'));
-const WellnessExchangeSignup = React.lazy(() => import('@/pages/WellnessExchangeSignup'));
-const BusinessConsulting = React.lazy(() => import('@/pages/BusinessConsulting'));
-const MediaProduction = React.lazy(() => import('@/pages/MediaProduction'));
-const Screenings = React.lazy(() => import('@/pages/Screenings'));
-const WebDevelopment = React.lazy(() => import('@/pages/WebDevelopment'));
-const SocialMediaStrategy = React.lazy(() => import('@/pages/SocialMediaStrategy'));
-const ConsciousMediaPartnershipPage = React.lazy(() => import('@/pages/ConsciousMediaPartnershipPage'));
-const ConsciousMediaInfrastructurePage = React.lazy(() => import('@/pages/ConsciousMediaInfrastructurePage'));
-// const AITools = React.lazy(() => import('@/pages/AITools')); // Temporarily hidden
-const TourCategory = React.lazy(() => import('@/pages/TourCategory'));
-const TourDetail = React.lazy(() => import('@/pages/TourDetail'));
-const ToursRetreats = React.lazy(() => import('@/pages/ToursRetreats'));
-const Tours = React.lazy(() => import('@/pages/Tours'));
-const MuizenbergCaveTours = React.lazy(() => import('@/pages/tours/MuizenbergCaveTours'));
-const OmniWellnessRetreat = React.lazy(() => import('@/pages/tours/OmniWellnessRetreat'));
-const GreatMotherCaveTour = React.lazy(() => import('@/pages/tours/GreatMotherCaveTour'));
-const KalkBayTour = React.lazy(() => import('@/pages/tours/KalkBayTour'));
-const CartHorseUrbanWellness = React.lazy(() => import('@/pages/experiences/CartHorseUrbanWellness'));
-const CorporateWellnessRetreat = React.lazy(() => import('@/pages/experiences/CorporateWellnessRetreat'));
-const ViatorWellnessExperiences = React.lazy(() => import('@/pages/ViatorWellnessExperiences'));
-const ESIMStore = React.lazy(() => import('@/pages/ESIMStore'));
+const TravelWellConnectedStore = lazyWithRetry(() => import('@/pages/TravelWellConnectedStore'));
+const WellnessRoamingPackages = lazyWithRetry(() => import('@/pages/WellnessRoamingPackages'));
+const DataProducts = lazyWithRetry(() => import('@/pages/DataProducts'));
+const ProductDetail = lazyWithRetry(() => import('@/pages/ProductDetail'));
+const DealDetail = lazyWithRetry(() => import('@/pages/DealDetail'));
+const Checkout = lazyWithRetry(() => import('@/pages/Checkout'));
+const OrderConfirmation = lazyWithRetry(() => import('@/pages/OrderConfirmation'));
+const GuestOrderLookup = lazyWithRetry(() => import('@/pages/GuestOrderLookup'));
+const PaymentSuccess = lazyWithRetry(() => import('@/pages/PaymentSuccess'));
+const PaymentCancelled = lazyWithRetry(() => import('@/pages/PaymentCancelled'));
+const Podcast = lazyWithRetry(() => import('@/pages/Podcast'));
+const Portfolio = lazyWithRetry(() => import('@/pages/Portfolio'));
+const Resources = lazyWithRetry(() => import('@/pages/Resources'));
+const WellnessExchangeSignup = lazyWithRetry(() => import('@/pages/WellnessExchangeSignup'));
+const BusinessConsulting = lazyWithRetry(() => import('@/pages/BusinessConsulting'));
+const MediaProduction = lazyWithRetry(() => import('@/pages/MediaProduction'));
+const Screenings = lazyWithRetry(() => import('@/pages/Screenings'));
+const WebDevelopment = lazyWithRetry(() => import('@/pages/WebDevelopment'));
+const SocialMediaStrategy = lazyWithRetry(() => import('@/pages/SocialMediaStrategy'));
+const ConsciousMediaPartnershipPage = lazyWithRetry(() => import('@/pages/ConsciousMediaPartnershipPage'));
+const ConsciousMediaInfrastructurePage = lazyWithRetry(() => import('@/pages/ConsciousMediaInfrastructurePage'));
+// const AITools = lazyWithRetry(() => import('@/pages/AITools')); // Temporarily hidden
+const TourCategory = lazyWithRetry(() => import('@/pages/TourCategory'));
+const TourDetail = lazyWithRetry(() => import('@/pages/TourDetail'));
+const ToursRetreats = lazyWithRetry(() => import('@/pages/ToursRetreats'));
+const Tours = lazyWithRetry(() => import('@/pages/Tours'));
+const MuizenbergCaveTours = lazyWithRetry(() => import('@/pages/tours/MuizenbergCaveTours'));
+const OmniWellnessRetreat = lazyWithRetry(() => import('@/pages/tours/OmniWellnessRetreat'));
+const GreatMotherCaveTour = lazyWithRetry(() => import('@/pages/tours/GreatMotherCaveTour'));
+const KalkBayTour = lazyWithRetry(() => import('@/pages/tours/KalkBayTour'));
+const CartHorseUrbanWellness = lazyWithRetry(() => import('@/pages/experiences/CartHorseUrbanWellness'));
+const CorporateWellnessRetreat = lazyWithRetry(() => import('@/pages/experiences/CorporateWellnessRetreat'));
+const ViatorWellnessExperiences = lazyWithRetry(() => import('@/pages/ViatorWellnessExperiences'));
+const ESIMStore = lazyWithRetry(() => import('@/pages/ESIMStore'));
 // TravelWellConnectedESIM retired — redirects to ROAM store
-const UWCHumanAnimalProgram = React.lazy(() => import('@/pages/programs/UWCHumanAnimalProgram'));
-const UWCUniversityPartners = React.lazy(() => import('@/pages/programs/UWCUniversityPartners'));
-const UWCSponsors = React.lazy(() => import('@/pages/programs/UWCSponsors'));
-const UWCRecruitment = React.lazy(() => import('@/pages/programs/UWCRecruitment'));
-const CSRImpact = React.lazy(() => import('@/pages/CSRImpact'));
-const PartnersDirectory = React.lazy(() => import('@/pages/PartnersDirectory'));
-const PartnerProfile = React.lazy(() => import('@/pages/PartnerProfile'));
-const PartnerPortal = React.lazy(() => import('@/pages/PartnerPortal'));
-const ExerciseLibrary = React.lazy(() => import('@/pages/ExerciseLibrary'));
-const DeviceCompatibility = React.lazy(() => import('@/pages/DeviceCompatibility'));
-const RoamBuddyOverview = React.lazy(() => import('@/pages/partner/RoamBuddyOverview'));
-const NotFound = React.lazy(() => import('@/pages/NotFound'));
-const AdminDashboard = React.lazy(() => import('@/pages/AdminDashboard'));
-const AccountantDashboard = React.lazy(() => import('@/pages/AccountantDashboard'));
-const ProductManagement = React.lazy(() => import('@/pages/admin/ProductManagement'));
-const LocalCatalogue = React.lazy(() => import('@/pages/admin/LocalCatalogue'));
+const UWCHumanAnimalProgram = lazyWithRetry(() => import('@/pages/programs/UWCHumanAnimalProgram'));
+const UWCUniversityPartners = lazyWithRetry(() => import('@/pages/programs/UWCUniversityPartners'));
+const UWCSponsors = lazyWithRetry(() => import('@/pages/programs/UWCSponsors'));
+const UWCRecruitment = lazyWithRetry(() => import('@/pages/programs/UWCRecruitment'));
+const CSRImpact = lazyWithRetry(() => import('@/pages/CSRImpact'));
+const PartnersDirectory = lazyWithRetry(() => import('@/pages/PartnersDirectory'));
+const PartnerProfile = lazyWithRetry(() => import('@/pages/PartnerProfile'));
+const PartnerPortal = lazyWithRetry(() => import('@/pages/PartnerPortal'));
+const ExerciseLibrary = lazyWithRetry(() => import('@/pages/ExerciseLibrary'));
+const DeviceCompatibility = lazyWithRetry(() => import('@/pages/DeviceCompatibility'));
+const RoamBuddyOverview = lazyWithRetry(() => import('@/pages/partner/RoamBuddyOverview'));
+const NotFound = lazyWithRetry(() => import('@/pages/NotFound'));
+const AdminDashboard = lazyWithRetry(() => import('@/pages/AdminDashboard'));
+const AccountantDashboard = lazyWithRetry(() => import('@/pages/AccountantDashboard'));
+const ProductManagement = lazyWithRetry(() => import('@/pages/admin/ProductManagement'));
+const LocalCatalogue = lazyWithRetry(() => import('@/pages/admin/LocalCatalogue'));
 // The curation screen decides what shoppers see (src/config/catalogueGate.ts).
 // It existed but was never routed, so the control was unreachable.
-const ProductCuration = React.lazy(() => import('@/pages/admin/ProductCuration'));
-const MarketplaceHub = React.lazy(() => import('@/pages/admin/MarketplaceHub'));
-const ServiceOfferDetail = React.lazy(() => import('@/pages/ServiceOfferDetail'));
-const Pricing = React.lazy(() => import('@/pages/Pricing'));
-const AdminLayout = React.lazy(() => import('@/components/dashboard/AdminLayout'));
-const EventsIndex = React.lazy(() => import('@/pages/EventsIndex'));
-const EventDetailPage = React.lazy(() => import('@/pages/EventDetail'));
-const EventSubmit = React.lazy(() => import('@/pages/EventSubmit'));
-const EventsAdmin = React.lazy(() => import('@/pages/admin/EventsAdmin'));
-const Scorecard = React.lazy(() => import('@/pages/Scorecard'));
-const TechnicalOverview = React.lazy(() => import('@/pages/TechnicalOverview'));
-const RoamBuddyAPITest = React.lazy(() => import('@/pages/RoamBuddyAPITest'));
-const RoamBuddyIntegrationTest = React.lazy(() => import('@/pages/RoamBuddyIntegrationTest'));
-const RoamBuddyStore = React.lazy(() => import('@/pages/RoamBuddyStore'));
-const RoamBuddyTerms = React.lazy(() => import('@/pages/roambuddy/RoamBuddyTerms'));
-const RoamBuddyPrivacy = React.lazy(() => import('@/pages/roambuddy/RoamBuddyPrivacy'));
-const AffiliateMarketplace = React.lazy(() => import('@/pages/AffiliateMarketplace'));
-const AffiliatePerformance = React.lazy(() => import('@/pages/admin/AffiliatePerformance'));
-const AffiliatePayouts = React.lazy(() => import('@/pages/admin/AffiliatePayouts'));
-const CJAffiliateProducts = React.lazy(() => import('@/pages/CJAffiliateProducts'));
-const AwinAffiliateProducts = React.lazy(() => import('@/pages/AwinAffiliateProducts'));
-const CJProductDetail = React.lazy(() => import('@/pages/CJProductDetail'));
-const StoreCollections = React.lazy(() => import('@/pages/StoreCollections'));
-const AdminTools = React.lazy(() => import('@/pages/admin/AdminTools'));
-const MonetizableURLsReference = React.lazy(() => import('@/pages/admin/MonetizableURLsReference'));
-const RoamBuddySalesDashboard = React.lazy(() => import('@/pages/admin/RoamBuddySalesDashboard'));
-const RoamMarketingHub = React.lazy(() => import('@/pages/admin/RoamMarketingHub'));
-const Wishlist = React.lazy(() => import('@/pages/Wishlist'));
-const StoreProductDetail = React.lazy(() => import('@/pages/StoreProductDetail'));
-const UpdatePassword = React.lazy(() => import('@/pages/UpdatePassword'));
-const UpgradePage = React.lazy(() => import('@/pages/UpgradePage'));
+const ProductCuration = lazyWithRetry(() => import('@/pages/admin/ProductCuration'));
+const MarketplaceHub = lazyWithRetry(() => import('@/pages/admin/MarketplaceHub'));
+const ServiceOfferDetail = lazyWithRetry(() => import('@/pages/ServiceOfferDetail'));
+const Pricing = lazyWithRetry(() => import('@/pages/Pricing'));
+const AdminLayout = lazyWithRetry(() => import('@/components/dashboard/AdminLayout'));
+const EventsIndex = lazyWithRetry(() => import('@/pages/EventsIndex'));
+const EventDetailPage = lazyWithRetry(() => import('@/pages/EventDetail'));
+const EventSubmit = lazyWithRetry(() => import('@/pages/EventSubmit'));
+const EventsAdmin = lazyWithRetry(() => import('@/pages/admin/EventsAdmin'));
+const Scorecard = lazyWithRetry(() => import('@/pages/Scorecard'));
+const TechnicalOverview = lazyWithRetry(() => import('@/pages/TechnicalOverview'));
+const RoamBuddyAPITest = lazyWithRetry(() => import('@/pages/RoamBuddyAPITest'));
+const RoamBuddyIntegrationTest = lazyWithRetry(() => import('@/pages/RoamBuddyIntegrationTest'));
+const RoamBuddyStore = lazyWithRetry(() => import('@/pages/RoamBuddyStore'));
+const RoamBuddyTerms = lazyWithRetry(() => import('@/pages/roambuddy/RoamBuddyTerms'));
+const RoamBuddyPrivacy = lazyWithRetry(() => import('@/pages/roambuddy/RoamBuddyPrivacy'));
+const AffiliateMarketplace = lazyWithRetry(() => import('@/pages/AffiliateMarketplace'));
+const AffiliatePerformance = lazyWithRetry(() => import('@/pages/admin/AffiliatePerformance'));
+const AffiliatePayouts = lazyWithRetry(() => import('@/pages/admin/AffiliatePayouts'));
+const CJAffiliateProducts = lazyWithRetry(() => import('@/pages/CJAffiliateProducts'));
+const AwinAffiliateProducts = lazyWithRetry(() => import('@/pages/AwinAffiliateProducts'));
+const CJProductDetail = lazyWithRetry(() => import('@/pages/CJProductDetail'));
+const StoreCollections = lazyWithRetry(() => import('@/pages/StoreCollections'));
+const AdminTools = lazyWithRetry(() => import('@/pages/admin/AdminTools'));
+const MonetizableURLsReference = lazyWithRetry(() => import('@/pages/admin/MonetizableURLsReference'));
+const RoamBuddySalesDashboard = lazyWithRetry(() => import('@/pages/admin/RoamBuddySalesDashboard'));
+const RoamMarketingHub = lazyWithRetry(() => import('@/pages/admin/RoamMarketingHub'));
+const Wishlist = lazyWithRetry(() => import('@/pages/Wishlist'));
+const StoreProductDetail = lazyWithRetry(() => import('@/pages/StoreProductDetail'));
+const UpdatePassword = lazyWithRetry(() => import('@/pages/UpdatePassword'));
+const UpgradePage = lazyWithRetry(() => import('@/pages/UpgradePage'));
 
 // Loading component
 const LoadingSpinner = () => (
