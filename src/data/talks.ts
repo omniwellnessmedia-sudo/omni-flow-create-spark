@@ -61,6 +61,36 @@ export const TALKS: Talk[] = [
     blurb: 'On healing emotional pain.',
     visibility: 'public',
   },
+  {
+    youtubeId: 'zKZ4xgqLtXU',
+    title: 'Recognising Our Purpose After a Difficult Season',
+    blurb: 'On recognising our purpose after a difficult season.',
+    visibility: 'private',
+  },
+  {
+    youtubeId: 'A2JknZS8-Ng',
+    title: 'New Season of Life',
+    blurb: 'On a new season of life.',
+    visibility: 'private',
+  },
+  {
+    youtubeId: 'nYWEJnXaWig',
+    title: 'I Am Possible',
+    blurb: 'I am possible.',
+    visibility: 'private',
+  },
+  {
+    youtubeId: 'pXPZRF5ugeQ',
+    title: 'Emotional Heaviness Clearance',
+    blurb: 'On clearing emotional heaviness.',
+    visibility: 'private',
+  },
+  {
+    youtubeId: 'T2CzabSM1pg',
+    title: 'Fear and Protection',
+    blurb: 'On fear and protection.',
+    visibility: 'private',
+  },
 ];
 
 /** Talks the page may show: public, and if sensitive, only with a helpline to print. */
