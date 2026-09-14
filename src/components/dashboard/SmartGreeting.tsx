@@ -55,8 +55,10 @@ const SmartGreeting = memo(({ userName, role, alerts = [], subtitle }: SmartGree
     <div className="mb-6">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-1">
         <div>
+          {/* No emoji: the site's type system carries the warmth, and a
+              pictograph draws differently on every operating system. */}
           <h1 className="font-wwpl-display text-3xl md:text-4xl font-medium tracking-tight">
-            {greeting}{firstName ? `, ${firstName}` : ""} {emoji}
+            {greeting}{firstName ? `, ${firstName}` : ""}
           </h1>
           <p className="text-sm text-muted-foreground mt-1 flex items-center gap-2">
             <Clock className="h-3.5 w-3.5" />

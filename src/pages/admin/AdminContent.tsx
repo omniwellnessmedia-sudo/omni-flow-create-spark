@@ -61,7 +61,7 @@ const AdminContent = () => {
   return (
     <div className="space-y-6">
       <AdminScreenHeader
-        eyebrow="Manage"
+        eyebrow="Marketing"
         title="Media"
         description="Upload a file here, then copy its link and paste it wherever it is needed. Files go to the shared media library, so anything you upload is available to whoever is building the page."
       />

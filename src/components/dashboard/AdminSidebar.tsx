@@ -28,6 +28,7 @@ import {
   KanbanSquare,
   Contact,
   Receipt,
+  Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -73,6 +74,7 @@ const NAV_GROUPS: {
     hue: "#5C2A8A",
     items: [
       { id: "marketing", label: "Channels", icon: Megaphone },
+      { id: "ads", label: "Google Ads", icon: Target },
       { id: "analytics", label: "Analytics", icon: BarChart3 },
       { id: "newsletter", label: "Newsletter", icon: Mail },
       { id: "social", label: "Social", icon: Share2 },

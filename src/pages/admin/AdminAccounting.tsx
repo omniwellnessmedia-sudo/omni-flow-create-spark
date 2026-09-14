@@ -399,7 +399,7 @@ const AdminAccounting = ({ entityFilter }: { entityFilter?: string } = {}) => {
   return (
     <div className="space-y-6">
       <AdminScreenHeader
-        eyebrow="System"
+        eyebrow="Money"
         title="Accounting"
         description="Revenue, orders and payouts, with every figure traced to the record it came from."
       />

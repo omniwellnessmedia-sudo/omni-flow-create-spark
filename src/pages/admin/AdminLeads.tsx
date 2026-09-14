@@ -589,7 +589,7 @@ const AdminLeads = () => {
   return (
     <div className="space-y-6">
       <AdminScreenHeader
-        eyebrow="Core"
+        eyebrow="Sales"
         title="Leads"
         description="Enquiries from the contact form and quote requests from the services pages. New ones appear here on their own while this screen is open."
         actions={
