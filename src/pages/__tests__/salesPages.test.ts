@@ -89,21 +89,15 @@ describe('every offer can fill every section of its page', () => {
   });
 
   it('reports which offers render the typographic panel', () => {
-    // Not a failure. Ten of nineteen have no photograph that says anything
+    // Not a failure. Four of nineteen have no photograph that says anything
     // true about them, and the panel is a deliberate design rather than an
     // absence. This is the standing list of what per offer photography
     // would still buy.
     expect(offersWithoutImagery(ALL_OFFERS.map((o) => o.slug))).toEqual([
-      'brand-content-audit',
-      'website-audit',
-      'visibility-sprint',
       'brand-identity',
       'content-pack-12',
-      'social-media-management',
-      'executive-support',
       'podcast-concept',
       'podcast-launch',
-      'workshops',
     ]);
   });
 

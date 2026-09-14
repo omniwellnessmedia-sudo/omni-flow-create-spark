@@ -15,11 +15,12 @@ import {
   SpectrumRule,
   Reveal,
   Eyebrow,
+  OfferCard,
   WhatsappButton,
   useWhatsappLink,
 } from '@/components/services/spectrum';
 import { SPECTRUM, getOffer, type RateCardOffer } from '@/data/publicRateCard';
-import { offerImage, type ServiceImage } from '@/data/serviceImagery';
+import { offerImage, imageCreditLine, type ServiceImage } from '@/data/serviceImagery';
 import { publishedContacts, telHref } from '@/data/humanContact';
 import { MUIZENBERG_CONTEXT, MUIZENBERG_OFFER_SLUGS, MUIZENBERG_ENQUIRE_HREF } from '@/data/muizenberg';
 import { useSEO } from '@/lib/seo';
@@ -146,16 +147,6 @@ const Photo = ({
   </figure>
 );
 
-/**
- * Which photograph sits beside each door-opener. The clarity session uses
- * the same image as its catalogue card; the audit gets the page's own
- * photograph of somebody writing findings down, which is the product.
- */
-const OFFER_PHOTOS: Record<(typeof MUIZENBERG_OFFER_SLUGS)[number], ServiceImage> = {
-  'clarity-session': offerImage('clarity-session') ?? MUIZENBERG_IMAGES.audit,
-  'website-audit': MUIZENBERG_IMAGES.audit,
-};
-
 /** Three larger offers for the owner who already knows they need more. */
 const BIGGER_SLUGS = ['revenue-sprint', 'landing-page', 'content-starter-pack'] as const;
 
@@ -202,8 +193,8 @@ const PhotoOfferCard = ({
   enquiryContext,
 }: {
   offer: RateCardOffer;
-  /** A stock image carries no caption; an Omni photograph carries its credit. */
-  image: ServiceImage & { caption?: string };
+  /** The offer's own photograph from the catalogue, with its credit line. */
+  image: ServiceImage;
   enquiryContext: string;
 }) => (
   <article
@@ -221,14 +212,12 @@ const PhotoOfferCard = ({
         decoding="async"
         className="h-full w-full object-cover"
       />
-      {image.caption && (
-        <figcaption
-          className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-black/0 px-4 pb-3 pt-8 text-[11px] leading-snug text-white/90"
-          style={mono}
-        >
-          {image.caption}
-        </figcaption>
-      )}
+      <figcaption
+        className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-black/0 px-4 pb-3 pt-8 text-[11px] leading-snug text-white/90"
+        style={mono}
+      >
+        {imageCreditLine(image)}
+      </figcaption>
     </figure>
     <div className="flex flex-col p-6">
       <h3 className="font-wwpl-display text-[25px] leading-tight" style={{ color: INK }}>
@@ -431,15 +420,18 @@ const Muizenberg = () => {
             </Reveal>
 
             <div className="mt-10 grid gap-6">
-              {offers.map((offer, i) => (
-                <Reveal key={offer.slug} delay={i * 100}>
-                  <PhotoOfferCard
-                    offer={offer}
-                    image={OFFER_PHOTOS[offer.slug as (typeof MUIZENBERG_OFFER_SLUGS)[number]]}
-                    enquiryContext={MUIZENBERG_CONTEXT}
-                  />
-                </Reveal>
-              ))}
+              {offers.map((offer, i) => {
+                const image = offerImage(offer.slug);
+                return (
+                  <Reveal key={offer.slug} delay={i * 100}>
+                    {image ? (
+                      <PhotoOfferCard offer={offer} image={image} enquiryContext={MUIZENBERG_CONTEXT} />
+                    ) : (
+                      <OfferCard offer={offer} enquiryContext={MUIZENBERG_CONTEXT} />
+                    )}
+                  </Reveal>
+                );
+              })}
             </div>
 
             {bigger.length > 0 && (

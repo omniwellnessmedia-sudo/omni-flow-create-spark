@@ -10,7 +10,7 @@ import {
   getBandSales,
   RATE_CARD_TERMS,
 } from '@/data/publicRateCard';
-import { offerImage } from '@/data/serviceImagery';
+import { offerImage, imageCreditLine } from '@/data/serviceImagery';
 import { getServiceDetailContent } from '@/data/serviceDetailContent';
 import { useSEO } from '@/lib/seo';
 import { WhatsappButton } from '@/components/services/spectrum';
@@ -248,12 +248,26 @@ const ServiceOfferDetail = () => {
                 below instead. That is deliberate: a photograph that says
                 nothing true about the offer beside it is worse than none. */}
             {image ? (
-              <img
-                src={image.src}
-                alt={image.alt}
-                loading="eager"
-                className="aspect-[4/5] w-full rounded-2xl object-cover"
-              />
+              <figure>
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  width={800}
+                  height={1000}
+                  loading="eager"
+                  fetchPriority="high"
+                  className="aspect-[4/5] w-full rounded-2xl object-cover"
+                />
+                {/* Whose photograph it is. An Omni photograph is an example of
+                    our work and says so; a licensed one says it is stock, so
+                    nothing here implies work that is not ours. */}
+                <figcaption
+                  className="mt-2.5 text-[11px] leading-snug tracking-[.02em]"
+                  style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace', color: '#5A6A68' }}
+                >
+                  {imageCreditLine(image)}
+                </figcaption>
+              </figure>
             ) : (
               <div
                 className="flex aspect-[4/5] w-full flex-col justify-end rounded-2xl p-8"
