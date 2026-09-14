@@ -135,15 +135,17 @@ export const draftCopy = (offer: RateCardOffer): AdCopy => {
 
 /** Force any copy, AI's included, back inside the limits and the rules. */
 export const normaliseCopy = (copy: Partial<AdCopy>, fallback: AdCopy): AdCopy => {
-  const clean = (xs: unknown, limit: number, max: number, fb: string[]) => {
+  // Anything short of Google's minimum after the rules is topped up from
+  // the draft, so a rewrite that lost lines still produces a valid ad.
+  const clean = (xs: unknown, limit: number, min: number, max: number, fb: string[]) => {
     const arr = Array.isArray(xs) ? xs.filter((x): x is string => typeof x === 'string') : [];
     const kept = uniq(arr.map((x) => fit(x, limit)).filter((x) => x && !FORBIDDEN.test(x)));
-    return (kept.length ? kept : fb).slice(0, max);
+    return uniq(kept.length < min ? [...kept, ...fb] : kept).slice(0, max);
   };
   return {
-    headlines: clean(copy.headlines, LIMITS.headline, LIMITS.headlinesMax, fallback.headlines),
-    descriptions: clean(copy.descriptions, LIMITS.description, LIMITS.descriptionsMax, fallback.descriptions),
-    keywords: clean(copy.keywords, 80, 20, fallback.keywords).map((k) => k.toLowerCase()),
+    headlines: clean(copy.headlines, LIMITS.headline, LIMITS.headlinesMin, LIMITS.headlinesMax, fallback.headlines),
+    descriptions: clean(copy.descriptions, LIMITS.description, LIMITS.descriptionsMin, LIMITS.descriptionsMax, fallback.descriptions),
+    keywords: clean(copy.keywords, 80, 1, 20, fallback.keywords).map((k) => k.toLowerCase()),
     path1: fit(typeof copy.path1 === 'string' ? copy.path1 : fallback.path1, LIMITS.path),
     path2: fit(typeof copy.path2 === 'string' ? copy.path2 : fallback.path2, LIMITS.path),
   };
@@ -220,3 +222,71 @@ export const defaultPlan = (offer: RateCardOffer): AdPlan => {
 };
 
 export const offersForAds = (): RateCardOffer[] => ALL_OFFERS;
+
+/**
+ * SAVED CAMPAIGNS. A row in ad_campaigns is the team's copy for one offer,
+ * keyed by slug. It carries no price: the offer is looked up again on the
+ * rate card each time, and the saved copy is normalised against the same
+ * limits and rules as the AI's output, so a line saved last month cannot
+ * outlive a rule added this month.
+ */
+export type SavedStatus = 'draft' | 'approved';
+
+export interface SavedCampaign {
+  offer_slug: string;
+  campaign: string;
+  ad_group: string;
+  final_url: string;
+  daily_budget: number;
+  location: string;
+  copy: AdCopy;
+  status: SavedStatus;
+  updated_at?: string;
+}
+
+export const toSaved = (plan: AdPlan, status: SavedStatus): SavedCampaign => ({
+  offer_slug: plan.offer.slug,
+  campaign: plan.campaign,
+  ad_group: plan.adGroup,
+  final_url: plan.finalUrl,
+  daily_budget: plan.dailyBudget,
+  location: plan.location,
+  copy: plan.copy,
+  status,
+});
+
+/** A plan from a saved row, with everything the row forgot filled from the draft. */
+export const planFromSaved = (offer: RateCardOffer, saved: Partial<SavedCampaign> | undefined): AdPlan => {
+  const base = defaultPlan(offer);
+  if (!saved) return base;
+  const campaign = typeof saved.campaign === 'string' && saved.campaign.trim() ? saved.campaign : base.campaign;
+  return {
+    offer,
+    campaign,
+    adGroup: typeof saved.ad_group === 'string' && saved.ad_group.trim() ? saved.ad_group : base.adGroup,
+    finalUrl: typeof saved.final_url === 'string' && /^https:\/\//.test(saved.final_url) ? saved.final_url : landingUrl(offer, campaign),
+    dailyBudget: Number(saved.daily_budget) > 0 ? Number(saved.daily_budget) : base.dailyBudget,
+    location: typeof saved.location === 'string' && saved.location.trim() ? saved.location : base.location,
+    copy: normaliseCopy((saved.copy ?? {}) as Partial<AdCopy>, base.copy),
+  };
+};
+
+/** Every offer as a plan: the saved one where the team has one, the draft otherwise. */
+export const allPlans = (saved: Record<string, SavedCampaign | undefined>): AdPlan[] =>
+  ALL_OFFERS.map((offer) => planFromSaved(offer, saved[offer.slug]));
+
+/**
+ * One upload file for the whole rate card: every campaign, one after the
+ * other, each arriving paused. Google Ads takes the file in one go under
+ * Tools, Bulk actions, Uploads. Plans with problems are left out and
+ * returned so the screen can say which.
+ */
+export const uploadRowsAll = (plans: AdPlan[]): { rows: Record<string, string | number>[]; skipped: AdPlan[] } => {
+  const rows: Record<string, string | number>[] = [];
+  const skipped: AdPlan[] = [];
+  for (const plan of plans) {
+    if (validatePlan(plan).length) { skipped.push(plan); continue; }
+    rows.push(...uploadRows(plan));
+  }
+  return { rows, skipped };
+};
