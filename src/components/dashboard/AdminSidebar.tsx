@@ -71,6 +71,7 @@ const NAV_GROUPS: {
     label: "Marketing",
     hue: "#5C2A8A",
     items: [
+      { id: "marketing", label: "Channels", icon: Megaphone },
       { id: "analytics", label: "Analytics", icon: BarChart3 },
       { id: "newsletter", label: "Newsletter", icon: Mail },
       { id: "social", label: "Social", icon: Share2 },
