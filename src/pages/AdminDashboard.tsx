@@ -17,6 +17,7 @@ const AdminTools = lazy(() => import("@/pages/admin/AdminTools"));
 const AdminLeads = lazy(() => import("@/pages/admin/AdminLeads"));
 const PipelineBoard = lazy(() => import("@/components/admin/PipelineBoard"));
 const ClientsScreen = lazy(() => import("@/components/admin/ClientsScreen"));
+const MarketingScreen = lazy(() => import("@/components/admin/MarketingScreen"));
 const AdminInvites = lazy(() => import("@/pages/admin/AdminInvites"));
 const AdminTasks = lazy(() => import("@/pages/admin/AdminTasks"));
 const AdminContent = lazy(() => import("@/pages/admin/AdminContent"));
@@ -282,6 +283,8 @@ const AdminDashboard = () => {
         return <Suspense fallback={<SectionLoader />}><PipelineBoard /></Suspense>;
       case "clients":
         return <Suspense fallback={<SectionLoader />}><ClientsScreen /></Suspense>;
+      case "marketing":
+        return <Suspense fallback={<SectionLoader />}><MarketingScreen /></Suspense>;
       case "leads":
         return <Suspense fallback={<SectionLoader />}><AdminLeads /></Suspense>;
       case "bookings":
