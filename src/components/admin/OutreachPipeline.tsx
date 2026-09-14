@@ -19,10 +19,12 @@ const CAMPAIGNS = [
   { key: "tech", label: "Tech" },
 ];
 
+// The sales pipeline (src/lib/pipeline.ts) writes findings_sent, quoted, won
+// and lost to this table too, so those words have a home on these tabs.
 const PIPELINE = [
-  { key: "active", label: "Active", match: ["no_response", "contacted", "positive", "awaiting"] },
-  { key: "applied", label: "Applied", match: ["applied", "registered"] },
-  { key: "declined", label: "Declined", match: ["declined"] },
+  { key: "active", label: "Active", match: ["no_response", "contacted", "positive", "awaiting", "findings_sent", "quoted"] },
+  { key: "applied", label: "Applied / won", match: ["applied", "registered", "won"] },
+  { key: "declined", label: "Declined", match: ["declined", "lost"] },
   { key: "archived", label: "Archived", match: ["archived"] },
 ];
 
