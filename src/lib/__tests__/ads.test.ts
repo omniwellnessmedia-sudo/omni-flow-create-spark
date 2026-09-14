@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { ALL_OFFERS } from '@/data/publicRateCard';
-import { LIMITS, FORBIDDEN, fit, draftCopy, normaliseCopy, validatePlan, defaultPlan, uploadRows, toCsv, landingUrl } from '@/lib/ads';
+import { LIMITS, FORBIDDEN, fit, draftCopy, normaliseCopy, validatePlan, defaultPlan, uploadRows, uploadRowsAll, allPlans, planFromSaved, toSaved, toCsv, landingUrl } from '@/lib/ads';
 import { NAV_GROUPS } from '@/components/dashboard/AdminSidebar';
 
 /**
@@ -101,6 +101,69 @@ describe('the upload file', () => {
   });
 });
 
+describe('saved campaigns and the whole rate card in one file', () => {
+  const offer = ALL_OFFERS.find((o) => o.slug === 'clarity-session')!;
+
+  it('round trips through a saved row', () => {
+    const plan = defaultPlan(offer);
+    plan.copy.headlines[0] = 'Clarity in Muizenberg';
+    plan.dailyBudget = 90;
+    const back = planFromSaved(offer, toSaved(plan, 'approved'));
+    expect(back.copy.headlines[0]).toBe('Clarity in Muizenberg');
+    expect(back.dailyBudget).toBe(90);
+    expect(back.finalUrl).toBe(plan.finalUrl);
+  });
+
+  it('re-applies the rules to whatever was saved, and fills gaps from the draft', () => {
+    const back = planFromSaved(offer, {
+      offer_slug: offer.slug,
+      copy: { headlines: ['We guarantee results', 'Fine headline'], descriptions: [], keywords: [], path1: 'x', path2: 'y' },
+      daily_budget: -5,
+      final_url: 'http://not-https.example',
+      status: 'draft',
+    } as any);
+    expect(back.copy.headlines.some((h) => /guarantee/i.test(h))).toBe(false);
+    expect(back.copy.headlines).toContain('Fine headline');
+    expect(back.copy.descriptions.length).toBeGreaterThanOrEqual(LIMITS.descriptionsMin);
+    expect(back.dailyBudget).toBe(150);
+    expect(back.finalUrl).toMatch(/^https:\/\//);
+    expect(validatePlan(back)).toEqual([]);
+  });
+
+  it('builds one file for every offer, saved copy where it exists, drafts elsewhere', () => {
+    const plan = defaultPlan(offer);
+    plan.campaign = 'Omni Search: Clarity Muizenberg';
+    const plans = allPlans({ [offer.slug]: toSaved(plan, 'approved') });
+    expect(plans).toHaveLength(ALL_OFFERS.length);
+    expect(plans.find((p) => p.offer.slug === offer.slug)?.campaign).toBe('Omni Search: Clarity Muizenberg');
+    const { rows, skipped } = uploadRowsAll(plans);
+    expect(skipped).toEqual([]);
+    const campaigns = new Set(rows.map((r) => r.Campaign));
+    expect(campaigns.size).toBe(ALL_OFFERS.length);
+    expect(rows.filter((r) => r['Ad type'] === 'Responsive search ad')).toHaveLength(ALL_OFFERS.length);
+    expect(rows.every((r) => r['Campaign status'] === 'Paused')).toBe(true);
+    const csv = toCsv(rows);
+    expect(csv.split('\r\n')[0]).toContain('Headline 1');
+  });
+
+  it('leaves a broken plan out of the file and says which', () => {
+    const plans = allPlans({});
+    plans[0].copy.headlines = ['only one'];
+    const { rows, skipped } = uploadRowsAll(plans);
+    expect(skipped.map((p) => p.offer.slug)).toEqual([plans[0].offer.slug]);
+    expect(new Set(rows.map((r) => r.Campaign)).size).toBe(ALL_OFFERS.length - 1);
+  });
+
+  it('the migration creates the table with the staff policies and no delete', () => {
+    const sql = readFileSync(resolve(__dirname, '../../../supabase/migrations/20260914130000_ad_campaigns.sql'), 'utf8');
+    expect(sql).toContain('CREATE TABLE IF NOT EXISTS public.ad_campaigns');
+    expect(sql).toContain('ENABLE ROW LEVEL SECURITY');
+    expect(sql).toContain("CHECK (status IN ('draft', 'approved'))");
+    expect(sql).not.toMatch(/FOR DELETE/);
+    expect(sql).not.toMatch(/\u2014/);
+  });
+});
+
 describe('wiring', () => {
   it('sits under Marketing and has a section', () => {
     expect(NAV_GROUPS.find((g) => g.label === 'Marketing')?.items.map((i) => i.id)).toContain('ads');
@@ -111,6 +174,7 @@ describe('wiring', () => {
     ['ads.ts', '../ads.ts'],
     ['AdsScreen.tsx', '../../components/admin/AdsScreen.tsx'],
     ['generate-ad-copy', '../../../supabase/functions/generate-ad-copy/index.ts'],
+    ['useAdCampaigns.ts', '../../hooks/useAdCampaigns.ts'],
   ])('%s has no em dashes', (_n, rel) => {
     expect(readFileSync(resolve(__dirname, rel), 'utf8')).not.toMatch(/\u2014/);
   });
