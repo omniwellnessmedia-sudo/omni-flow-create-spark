@@ -10,7 +10,9 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, Copy, Archive, Trash2, Send, Sparkles, ExternalLink, FileText, Calendar } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
-import { STAGES, stageForStatus, statusForStage } from "@/lib/pipeline";
+import { STAGES, stageForStatus, statusForStage, toPipelineLead } from "@/lib/pipeline";
+import QuoteDialog from "@/components/admin/QuoteDialog";
+import type { Quote } from "@/lib/quotes";
 
 export type LeadType = "contact" | "quote" | "outreach";
 
@@ -60,6 +62,7 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
   const [activities, setActivities] = useState<any[]>([]);
   const [edit, setEdit] = useState<any>(lead || {});
   const [note, setNote] = useState("");
+  const [quoteOpen, setQuoteOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -210,7 +213,8 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
           </Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("first_contact")}>First contact</Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("follow_up")}>Follow-up</Button>
-          <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("send_quote")}>Quote</Button>
+          <Button size="sm" className="h-8 text-xs" onClick={() => setQuoteOpen(true)}>Build quote</Button>
+          <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("send_quote")}>Quote email</Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("partner_onboarding")}>Partner onboard</Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => setStatus("archived")}>
             <Archive className="h-3 w-3 mr-1" />Archive
@@ -219,6 +223,18 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
             <Trash2 className="h-3 w-3 mr-1" />Delete
           </Button>
         </div>
+
+        <QuoteDialog
+          open={quoteOpen}
+          onOpenChange={setQuoteOpen}
+          lead={toPipelineLead(leadType, lead)}
+          onIssued={(q: Quote) => {
+            // Issuing a quote is the definition of the Quoted stage.
+            setStatus(statusForStage("quoted", leadType));
+            loadActivities(lead.id);
+            window.open(`/admin/quote/${q.leadType}/${q.leadId}/${q.number}`, "_blank", "noopener");
+          }}
+        />
 
         <Separator className="my-4" />
 

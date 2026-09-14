@@ -27,6 +27,7 @@ import {
   HandCoins,
   KanbanSquare,
   Contact,
+  Receipt,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -99,6 +100,7 @@ const NAV_GROUPS: {
     label: "Money",
     hue: "#F38020",
     items: [
+      { id: "money", label: "Quotes and payments", icon: Receipt },
       { id: "accounting", label: "Accounting", icon: DollarSign },
       { id: "affiliate-payouts", label: "Affiliate payouts", icon: HandCoins, href: "/admin/affiliate-payouts" },
     ],

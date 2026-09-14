@@ -108,6 +108,7 @@ const Enquire = React.lazy(() => import('@/pages/Enquire'));
 const Muizenberg = React.lazy(() => import('@/pages/Muizenberg'));
 const MuizenbergAuditSheet = React.lazy(() => import('@/pages/MuizenbergAuditSheet'));
 const Talks = React.lazy(() => import('@/pages/Talks'));
+const QuotePrint = React.lazy(() => import('@/pages/admin/QuotePrint'));
 const ServiceDetail = React.lazy(() => import('@/pages/ServiceDetail'));
 const SearchServices = React.lazy(() => import('@/pages/SearchServices'));
 const AddWant = React.lazy(() => import('@/pages/AddWant'));
@@ -428,6 +429,13 @@ function App() {
                   <Route path="/accountant" element={
                     <ProtectedRoute requireAccountant={true}>
                       <AccountantDashboard />
+                    </ProtectedRoute>
+                  } />
+                  {/* A quotation as a printable document. No admin shell: it is
+                      a page to print or save as a PDF and send to a client. */}
+                  <Route path="/admin/quote/:leadType/:leadId/:number" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <QuotePrint />
                     </ProtectedRoute>
                   } />
                   {/* Catalogue managers onboard local businesses and products.

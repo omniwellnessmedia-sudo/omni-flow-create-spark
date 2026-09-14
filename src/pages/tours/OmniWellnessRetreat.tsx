@@ -1,3 +1,4 @@
+import { BANK_DETAILS } from '@/data/bankDetails';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, MapPin, Users, Clock, CheckCircle2, Phone, Mail } from 'lucide-react';
@@ -676,19 +677,19 @@ const OmniWellnessRetreat = () => {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Bank:</span>
-                        <span className="font-medium">Capitec Business</span>
+                        <span className="font-medium">{BANK_DETAILS.bank}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Account Name:</span>
-                        <span className="font-medium text-xs">OMNI MEDIA PRODUCTIONS PTY LTD</span>
+                        <span className="font-medium text-xs">{BANK_DETAILS.accountName}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Account No:</span>
-                        <span className="font-medium">1051893445</span>
+                        <span className="font-medium">{BANK_DETAILS.accountNumber}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Branch Code:</span>
-                        <span className="font-medium">450105</span>
+                        <span className="font-medium">{BANK_DETAILS.branchCode}</span>
                       </div>
                       <div className="pt-2 border-t">
                         <p className="text-xs text-muted-foreground">
