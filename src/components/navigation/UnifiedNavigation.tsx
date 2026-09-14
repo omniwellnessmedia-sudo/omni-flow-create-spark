@@ -167,7 +167,7 @@ const UnifiedNavigation = () => {
               />
               <span
                 aria-hidden="true"
-                className="hidden xl:inline whitespace-nowrap font-heading text-base leading-none text-foreground"
+                className="hidden xl:inline whitespace-nowrap font-wwpl-display text-[20px] leading-none tracking-[-.01em] text-foreground"
               >
                 Omni Wellness Media
               </span>
@@ -271,7 +271,7 @@ const UnifiedNavigation = () => {
                 <SheetHeader>
                   <SheetTitle className="text-left flex items-center gap-2">
                     <img src={IMAGES.logos.omniCircularBadge} alt="Omni Wellness Media" className="h-9 w-9 rounded-full object-cover shrink-0" />
-                    <span className="font-heading text-sm">Omni Wellness Media</span>
+                    <span className="font-wwpl-display text-[18px] leading-none">Omni Wellness Media</span>
                   </SheetTitle>
                 </SheetHeader>
                 
@@ -289,17 +289,19 @@ const UnifiedNavigation = () => {
                     <div key={item.title}>
                       {item.children ? (
                         <div className="space-y-2">
-                          <div className="flex items-center text-sm font-medium text-muted-foreground px-2">
-                            <item.icon className="w-4 h-4 mr-2" />
+                          <div
+                            className="px-2 pt-2 text-[10px] uppercase tracking-[.22em] text-muted-foreground"
+                            style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+                          >
                             {item.title}
                           </div>
-                          <div className="ml-6 space-y-1">
+                          <div className="space-y-0.5">
                             {item.children.map((child) => (
                               <Link
                                 key={child.href}
                                 to={child.href}
                                 onClick={closeMobileMenu}
-                                className={`flex items-center p-2 rounded-md text-sm hover:bg-accent transition-colors ${
+                                className={`flex min-h-[44px] items-center px-2 py-2 rounded-md text-[15px] hover:bg-accent transition-colors ${
                                   location.pathname === child.href ? 'bg-accent text-accent-foreground' : ''
                                 }`}
                               >
@@ -319,11 +321,10 @@ const UnifiedNavigation = () => {
                         <Link
                           to={item.href!}
                           onClick={closeMobileMenu}
-                          className={`flex items-center p-3 rounded-md text-sm hover:bg-accent transition-colors ${
+                          className={`flex min-h-[44px] items-center px-2 py-2 rounded-md font-wwpl-display text-[20px] leading-none hover:bg-accent transition-colors ${
                             location.pathname === item.href ? 'bg-accent text-accent-foreground' : ''
                           }`}
                         >
-                          <item.icon className="w-4 h-4 mr-3" />
                           {item.title}
                           {item.badge && (
                             <span className="ml-auto px-1.5 py-0.5 text-xs bg-primary text-primary-foreground rounded-full">
