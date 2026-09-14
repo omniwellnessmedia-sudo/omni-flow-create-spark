@@ -9,34 +9,32 @@ Account facts (verified in `docs/ADS_SETUP_RUNBOOK.md` and `src/lib/googleAds.ts
 
 | Item | Value |
 |---|---|
-| Google Ads customer ID | 396-986-7500 |
+| Google Ads customer ID (ordinary account, live campaigns) | 396-986-7500 |
+| Manager account, created 14 Sep 2026 | 279-178-3960 |
 | Conversion tag | AW-11266714886 |
 | Currency | ZAR |
 | Site | https://omniwellnessmedia.co.za |
 
 Google only issues developer tokens to a **manager account** (an MCC).
-The customer ID above is a normal account, so step 1 creates a manager
-account and links the existing one under it. Nothing about the existing
+The manager account exists (279-178-3960, under omniwellnessmedia@gmail.com).
+Step 1 links the ordinary account under it. Nothing about the existing
 campaigns, billing or history changes.
 
-## Step 1. Create a manager account and link Omni's account (10 minutes)
+## Step 1. Link Omni's ordinary account under the manager (5 minutes)
 
-1. Sign in with the Google account that owns 396-986-7500.
-2. Go to https://ads.google.com/home/tools/manager-accounts/ and choose
-   **Create a manager account**.
-   - Name: `Omni Wellness Media`
-   - Use: `Manage my own accounts`
-   - Country: South Africa. Time zone: Johannesburg. Currency: ZAR.
-3. Inside the new manager account: **Accounts**, then **Sub-account settings**,
-   then the plus button, **Link existing account**, and enter `396-986-7500`.
-4. Sign back into the ordinary account, open **Tools**, **Access and security**,
-   **Managers**, and accept the link request.
+1. Sign into the manager account 279-178-3960.
+2. Left menu, **Accounts**, then the blue plus button, **Link existing
+   account**, enter `396-986-7500`, send the request.
+3. Sign into the ordinary account 396-986-7500. Left menu, **Admin**, then
+   **Access and security**, then the **Managers** tab, and accept the request.
+   If that account is under a different Google login, whoever holds it does
+   this step.
 
 ## Step 2. Apply for the developer token (5 minutes)
 
 1. Sign into the **manager** account.
-2. **Tools**, then **Setup**, then **API Center**. (On older layouts: Tools and
-   settings, Setup, API Center.)
+2. Left menu, **Admin**, then **API Center**. (On the older layout it was
+   under Tools and settings, Setup, API Center.)
 3. Fill in the form:
    - API contact email: the Omni team inbox you read daily. Google sends
      policy notices here and expects a reply within a few days.
