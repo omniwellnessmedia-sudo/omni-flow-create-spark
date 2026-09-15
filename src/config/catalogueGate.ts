@@ -40,9 +40,37 @@ export const CURATED_ONLY =
  * Apply the gate to a Supabase query builder for affiliate_products.
  * Call on every shopper facing read. Chainable, so it drops into an existing
  * query without restructuring it.
+ *
+ * PASS IT A SELECT, NOT A TABLE. .eq() lives on the filter builder that
+ * .select() returns, not on the table builder that .from() returns, so
+ *
+ *   curatedOnly(supabase.from('affiliate_products').select('*')).eq(...)
+ *
+ * is right and
+ *
+ *   curatedOnly(supabase.from('affiliate_products')).select('*')
+ *
+ * throws. Every one of the thirteen call sites had it the wrong way round,
+ * which meant every shopper facing product read on the site threw
+ * "eq is not a function" before it reached the database: the storefront,
+ * search, the wishlist, related and recently viewed products and all the
+ * product pages showed nothing from the catalogue at all. Found by a
+ * browser pass on 15 September 2026, fixed everywhere, and the check below
+ * makes the mistake say so in words rather than reaching a shopper again.
+ *
+ * It throws rather than returning the query untouched on purpose. An
+ * ungated read is the failure this whole module exists to prevent, so the
+ * wrong shape has to stop the read, never quietly widen it.
  */
 export function curatedOnly<T>(query: T): T {
   if (!CURATED_ONLY) return query;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (query as any).eq('is_featured', true) as T;
+  const q = query as any;
+  if (!q || typeof q.eq !== 'function') {
+    throw new TypeError(
+      'curatedOnly needs a Supabase filter builder: call .select() before it, ' +
+        'as curatedOnly(supabase.from(table).select(columns)), not after it.'
+    );
+  }
+  return q.eq('is_featured', true) as T;
 }

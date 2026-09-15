@@ -97,8 +97,7 @@ const StoreProductDetail = () => {
   const fetchProduct = async () => {
     try {
       // Try database first
-      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
-        .select('*')
+      const { data, error } = await curatedOnly(supabase.from('affiliate_products').select('*'))
         .eq('id', id)
         .maybeSingle();
 
@@ -137,8 +136,7 @@ const StoreProductDetail = () => {
 
       // Fetch related products
       if (productData) {
-        const { data: related } = await curatedOnly(supabase.from('affiliate_products'))
-          .select('*')
+        const { data: related } = await curatedOnly(supabase.from('affiliate_products').select('*'))
           .eq('category', productData.category)
           .neq('id', id)
           .limit(4);

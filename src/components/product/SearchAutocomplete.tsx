@@ -69,8 +69,7 @@ export const SearchAutocomplete = ({ onResultClick }: SearchAutocompleteProps) =
       setLoading(true);
       try {
         // Search database products
-        const { data: dbProducts } = await curatedOnly(supabase.from('affiliate_products'))
-          .select('id, name, category, price_zar, image_url')
+        const { data: dbProducts } = await curatedOnly(supabase.from('affiliate_products').select('id, name, category, price_zar, image_url'))
           .or(`name.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%`)
           .eq('is_active', true)
           .limit(5);

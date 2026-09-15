@@ -346,9 +346,20 @@ serve(async (req) => {
             return await handleActivateEsim(data)
           case 'validateEsim':
             return await handleValidateEsim(data.iccid)
+          default:
+            // Without this the inner switch could fall out of the block and
+            // straight into getWalletTransactions below, answering an eSIM
+            // request with somebody's wallet history. The five labels above
+            // match the five on the outer case today, so it is unreachable
+            // now; it stops a sixth label added to one and not the other
+            // from turning into that.
+            return new Response(
+              JSON.stringify({ success: false, error: 'Unknown eSIM action' }),
+              { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+            )
         }
       }
-      
+
       case 'getWalletTransactions':
         return await handleGetWalletTransactions(data)
       

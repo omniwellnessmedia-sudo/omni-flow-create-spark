@@ -47,8 +47,7 @@ const AffiliateMarketplace = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
-        .select('*')
+      const { data, error } = await curatedOnly(supabase.from('affiliate_products').select('*'))
         .eq('is_active', true)
         .order('created_at', { ascending: false });
 

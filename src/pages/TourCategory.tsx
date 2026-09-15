@@ -38,12 +38,17 @@ interface Category {
 
 const TourCategory = () => {
   const { category } = useParams();
-  
-  // Redirect weekend-retreats category to the retreat detail page
-  if (category === 'weekend-retreats') {
-    return <Navigate to="/tour-detail/winter-wine-country-wellness" replace />;
-  }
-  
+
+  // Redirect weekend-retreats to the retreat detail page. The check has to
+  // sit with the hooks rather than above them: this is one route with a
+  // changing parameter, so React Router reuses the same component instance
+  // when the mega nav moves between categories, and a return above the
+  // hooks meant one render calling eight of them and the next calling
+  // none. React tolerates that particular order today only because
+  // useParams reads context and takes no hook slot, which is a thin thing
+  // to rely on. The redirect happens below, after every hook has run.
+  const isRetreatRedirect = category === 'weekend-retreats';
+
   const [tours, setTours] = useState<Tour[]>([]);
   const [categoryInfo, setCategoryInfo] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,8 +58,14 @@ const TourCategory = () => {
   const [priceFilter, setPriceFilter] = useState('all');
 
   useEffect(() => {
+    if (isRetreatRedirect) return;
     fetchCategoryData();
-  }, [category]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, isRetreatRedirect]);
+
+  if (isRetreatRedirect) {
+    return <Navigate to="/tour-detail/winter-wine-country-wellness" replace />;
+  }
 
   const fetchCategoryData = async () => {
     try {

@@ -333,8 +333,7 @@ const WellnessDeals = () => {
       setLoading(true);
       try {
         // Fetch top 100 products from affiliate_products
-        const { data: products, error } = await curatedOnly(supabase.from('affiliate_products'))
-          .select('*')
+        const { data: products, error } = await curatedOnly(supabase.from('affiliate_products').select('*'))
           .eq('is_active', true)
           .order('view_count', { ascending: false, nullsFirst: false })
           .limit(100);

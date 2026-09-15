@@ -134,8 +134,7 @@ const CJAffiliateProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
-        .select('*')
+      const { data, error } = await curatedOnly(supabase.from('affiliate_products').select('*'))
         .eq('affiliate_program_id', 'cj')
         .eq('is_active', true)
         .order('is_featured', { ascending: false })
