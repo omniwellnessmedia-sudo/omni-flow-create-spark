@@ -7,6 +7,7 @@ import {
   statusForStage,
   toPipelineLead,
 } from '@/lib/pipeline';
+import { announceLeadsChanged, onLeadsChanged } from '@/lib/leadEvents';
 
 /**
  * The three lead tables, read as one list, kept live.
@@ -68,8 +69,12 @@ export const usePipelineLeads = () => {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'service_quotes' }, refresh)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'outreach_leads' }, refresh)
       .subscribe();
+    // A lead written in this tab, or the tab coming back into focus,
+    // reloads without waiting for the websocket (see src/lib/leadEvents.ts).
+    const off = onLeadsChanged(refresh);
     return () => {
       if (timer.current) clearTimeout(timer.current);
+      off();
       supabase.removeChannel(channel);
     };
   }, [load]);
@@ -102,6 +107,7 @@ export const usePipelineLeads = () => {
         ...s,
         leads: s.leads.map((l) => (l.key === lead.key ? { ...l, status, stage } : l)),
       }));
+      announceLeadsChanged();
       return null;
     },
     []
