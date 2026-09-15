@@ -23,7 +23,8 @@ import { Mail, Phone, Building, Clock, MessageSquare, FileText, RefreshCw, Check
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import OutreachPipeline from "@/components/admin/OutreachPipeline";
+import { Link } from "react-router-dom";
+import { announceLeadsChanged, onLeadsChanged } from "@/lib/leadEvents";
 import LeadDrawer, { LeadType } from "@/components/admin/LeadDrawer";
 import ReadFailureNotice from "@/components/admin/ReadFailureNotice";
 import AdminScreenHeader from "@/components/admin/AdminScreenHeader";
@@ -251,9 +252,11 @@ const AdminLeads = () => {
       .on("postgres_changes", { event: "*", schema: "public", table: "contact_submissions" }, refresh)
       .on("postgres_changes", { event: "*", schema: "public", table: "service_quotes" }, refresh)
       .subscribe();
+    const off = onLeadsChanged(refresh);
 
     return () => {
       if (timer) clearTimeout(timer);
+      off();
       supabase.removeChannel(channel);
     };
   }, []);
@@ -349,7 +352,8 @@ const AdminLeads = () => {
       toast({ title: "Lead added", description: `${newLead.name} added successfully` });
       setNewLead({ name: "", email: "", phone: "", organization: "", service: "", message: "", budget_range: "", timeline: "" });
       setShowAddDialog(false);
-      fetchLeadsData();
+      await fetchLeadsData();
+      announceLeadsChanged();
     } catch (error) {
       console.error("Error adding lead:", error);
       toast({ title: "Error", description: "Failed to add lead", variant: "destructive" });
@@ -487,6 +491,7 @@ const AdminLeads = () => {
   const updateContactStatus = async (id: string, status: string) => {
     try {
       const { error } = await supabase.from("contact_submissions").update({ status }).eq("id", id);
+      announceLeadsChanged();
       if (error) throw error;
       setContacts(contacts.map((c) => (c.id === id ? { ...c, status } : c)));
       toast({ title: "Status Updated", description: `Contact marked as ${status}` });
@@ -499,6 +504,7 @@ const AdminLeads = () => {
   const updateQuoteStatus = async (id: string, status: string) => {
     try {
       const { error } = await supabase.from("service_quotes").update({ status }).eq("id", id);
+      announceLeadsChanged();
       if (error) throw error;
       setQuotes(quotes.map((q) => (q.id === id ? { ...q, status } : q)));
       toast({ title: "Status Updated", description: `Quote marked as ${status}` });
@@ -882,13 +888,17 @@ const AdminLeads = () => {
 
       {/* Leads Tabs */}
       <Tabs defaultValue="contacts" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="contacts">Contacts ({filteredContacts.length})</TabsTrigger>
-          <TabsTrigger value="quotes">Quotes ({filteredQuotes.length})</TabsTrigger>
-          <TabsTrigger value="outreach">Outreach Pipeline</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="outreach"><OutreachPipeline /></TabsContent>
+        <div className="flex flex-wrap items-center gap-3">
+          <TabsList>
+            <TabsTrigger value="contacts">Contacts ({filteredContacts.length})</TabsTrigger>
+            <TabsTrigger value="quotes">Quotes ({filteredQuotes.length})</TabsTrigger>
+          </TabsList>
+          {/* The Outreach Pipeline tab that sat here was a second board over
+              the same outreach_leads table as the Pipeline. One board. */}
+          <Link to="/admin?section=pipeline" className="text-xs text-muted-foreground underline-offset-4 hover:underline">
+            Walk-ins and outreach are on the Pipeline
+          </Link>
+        </div>
 
         <TabsContent value="contacts" className="space-y-3">
           {contacts.length === 0 ? (

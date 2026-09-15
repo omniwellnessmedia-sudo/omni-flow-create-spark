@@ -148,7 +148,7 @@ export default function Tours() {
   useSEO({
     title: 'Tours and Experiences in Cape Town | Omni Wellness Media',
     description:
-      'Guided cave, heritage and ocean experiences around Cape Town, plus wellness day experiences and corporate retreats booked directly with us.',
+      'Guided cave, heritage and ocean experiences around Cape Town, run and booked through Travel and Tours Cape Town, plus wellness day experiences and corporate retreats.',
     canonical: 'https://omniwellnessmedia.co.za/tours',
   });
 
@@ -549,8 +549,9 @@ export default function Tours() {
                     Our own tours are running
                   </h3>
                   <p className="mt-2 text-muted-foreground">
-                    Partner listings are not loading at the moment. These are ours, and
-                    you can book them directly with us.
+                    Partner listings are not loading at the moment. These are run by
+                    Travel and Tours Cape Town, our sister company, and each page says
+                    how to book.
                   </p>
                 </div>
                 <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">

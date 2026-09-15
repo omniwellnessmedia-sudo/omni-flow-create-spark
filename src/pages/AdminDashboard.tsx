@@ -10,6 +10,7 @@ import { ChevronDown, ChevronRight, CheckCircle, XCircle, Mail } from "lucide-re
 import SmartGreeting from "@/components/dashboard/SmartGreeting";
 import AdminLayout from "@/components/dashboard/AdminLayout";
 import AdminHome from "@/components/dashboard/AdminHome";
+import { onLeadsChanged } from "@/lib/leadEvents";
 
 // Lazy load section components
 const ProductManagement = lazy(() => import("@/pages/admin/ProductManagement"));
@@ -96,8 +97,12 @@ const AdminDashboard = () => {
       .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, refresh)
       .on("postgres_changes", { event: "*", schema: "public", table: "provider_profiles" }, refresh)
       .subscribe();
+    // A lead added on any admin screen refreshes the counts here at once,
+    // without waiting for the websocket (src/lib/leadEvents.ts).
+    const off = onLeadsChanged(refresh);
     return () => {
       if (refreshTimer) clearTimeout(refreshTimer);
+      off();
       supabase.removeChannel(channel);
     };
     // fetchDashboardData is a stable useCallback with [] deps — referencing it via closure

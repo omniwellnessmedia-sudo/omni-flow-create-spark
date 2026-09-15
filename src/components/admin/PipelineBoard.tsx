@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import AdminScreenHeader from '@/components/admin/AdminScreenHeader';
 import LeadDrawer from '@/components/admin/LeadDrawer';
 import { usePipelineLeads, type PipelineApi } from '@/hooks/usePipelineLeads';
+import { announceLeadsChanged } from '@/lib/leadEvents';
 import {
   BOARD_STAGES, STAGES, WALK_IN_CAMPAIGN, ageLabel, followUpDue, isMuizenberg, oldestFirst, stageDef,
   type LeadSource, type PipelineLead, type Stage,
@@ -120,6 +121,7 @@ export const WalkInDialog = ({
     setForm({ organisation: '', contact_person: '', phone: '', email: '', sector: SECTORS[0], said: '', findings: '', follow_up_due: plusDays(3) });
     onOpenChange(false);
     onSaved?.();
+    announceLeadsChanged();
   };
 
   return (
