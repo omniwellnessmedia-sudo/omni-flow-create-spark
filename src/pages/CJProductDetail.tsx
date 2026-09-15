@@ -41,8 +41,7 @@ const CJProductDetail = () => {
 
   const fetchProduct = async () => {
     try {
-      const { data, error } = await curatedOnly((supabase.from('affiliate_products')))
-        .select('*')
+      const { data, error } = await curatedOnly(supabase.from('affiliate_products').select('*'))
         .eq('id', id)
         .single();
 

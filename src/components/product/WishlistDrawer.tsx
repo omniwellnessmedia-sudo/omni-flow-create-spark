@@ -42,8 +42,7 @@ export const WishlistDrawer = ({ open, onOpenChange }: WishlistDrawerProps) => {
     setLoadingProducts(true);
     try {
       const productIds = Array.from(wishlistItems);
-      const { data, error } = await curatedOnly(supabase.from('affiliate_products'))
-        .select('*')
+      const { data, error } = await curatedOnly(supabase.from('affiliate_products').select('*'))
         .in('id', productIds);
 
       if (error) throw error;

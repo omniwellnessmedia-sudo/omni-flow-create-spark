@@ -24,8 +24,7 @@ export const RecentlyViewedSection = ({ currentProductId, onQuickView }: Recentl
     if (recentIds.length === 0) return;
     
     const ids = recentIds.map(item => item.id);
-    const { data } = await curatedOnly((supabase.from('affiliate_products')))
-      .select('*')
+    const { data } = await curatedOnly(supabase.from('affiliate_products').select('*'))
       .in('id', ids);
     
     if (data) {

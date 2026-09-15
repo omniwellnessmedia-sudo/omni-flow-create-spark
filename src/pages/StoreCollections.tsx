@@ -81,8 +81,7 @@ const StoreCollections = () => {
   }, [comparisonProducts]);
 
   const fetchComparisonProducts = async () => {
-    const { data } = await curatedOnly((supabase.from('affiliate_products')))
-      .select('*')
+    const { data } = await curatedOnly(supabase.from('affiliate_products').select('*'))
       .in('id', comparisonProducts);
     
     const dbProducts = data || [];
@@ -95,8 +94,7 @@ const StoreCollections = () => {
 
   const fetchProducts = async () => {
     try {
-      let query = curatedOnly((supabase.from('affiliate_products')))
-        .select('*')
+      let query = curatedOnly(supabase.from('affiliate_products').select('*'))
         .eq('is_active', true);
 
       // Filter by category if handle is provided

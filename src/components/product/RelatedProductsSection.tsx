@@ -18,8 +18,7 @@ export const RelatedProductsSection = ({ category, currentProductId, onQuickView
   }, [category, currentProductId]);
 
   const fetchRelatedProducts = async () => {
-    const { data } = await curatedOnly((supabase.from('affiliate_products')))
-      .select('*')
+    const { data } = await curatedOnly(supabase.from('affiliate_products').select('*'))
       .eq('category', category)
       .eq('is_active', true)
       .neq('id', currentProductId)
