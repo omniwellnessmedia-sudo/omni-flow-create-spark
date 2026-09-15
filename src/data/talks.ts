@@ -91,6 +91,36 @@ export const TALKS: Talk[] = [
     blurb: 'On fear and protection.',
     visibility: 'private',
   },
+  {
+    youtubeId: 'ik7LNG9Zx2g',
+    title: 'Self-Awareness and Transformation',
+    blurb: 'On self-awareness and transformation.',
+    visibility: 'private',
+  },
+  {
+    youtubeId: '4X5_B0s-4rQ',
+    title: 'What Does Forgiveness Really Mean?',
+    blurb: 'What does forgiveness really mean?',
+    visibility: 'private',
+  },
+  {
+    youtubeId: 'KzR0fo1HbgM',
+    title: 'Unresolved Emotions Affect the Way We Think',
+    blurb: 'On how unresolved emotions affect the way we think.',
+    visibility: 'private',
+  },
+  {
+    youtubeId: '1IE1ZQJzvqo',
+    title: 'Renewal of the Mind',
+    blurb: 'On renewal of the mind.',
+    visibility: 'private',
+  },
+  {
+    youtubeId: 'MN34yGe6PRs',
+    title: 'Repeating Painful Patterns',
+    blurb: 'On repeating painful patterns.',
+    visibility: 'private',
+  },
 ];
 
 /** Talks the page may show: public, and if sensitive, only with a helpline to print. */
