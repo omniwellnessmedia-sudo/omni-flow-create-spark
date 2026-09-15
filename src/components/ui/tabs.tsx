@@ -13,7 +13,12 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-14 items-center justify-center rounded-xl bg-gradient-to-b from-background/80 to-muted/60 p-2 text-muted-foreground backdrop-blur-md border-2 border-border shadow-lg shadow-primary/5 ring-1 ring-border/30",
+      // max-w-full and a horizontal scroll so a third or fourth tab is
+      // reachable on a phone instead of being clipped by the screen edge
+      // (the Social scheduler lost "Settings" that way). justify-start
+      // rather than center, because a centred overflowing flex row puts
+      // its first item out of reach of the scroll.
+      "inline-flex h-14 max-w-full items-center justify-start overflow-x-auto rounded-xl bg-gradient-to-b from-background/80 to-muted/60 p-2 text-muted-foreground backdrop-blur-md border-2 border-border shadow-lg shadow-primary/5 ring-1 ring-border/30",
       className
     )}
     {...props}
@@ -28,7 +33,9 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-lg px-5 py-3 text-sm font-semibold ring-offset-background transition-all duration-300 ease-out border border-transparent",
+      // Tighter side padding on a phone: three tabs with icons came to more
+      // than a 390px screen at px-5, which is what pushed the last one off.
+      "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-3 py-3 text-sm font-semibold ring-offset-background transition-all duration-300 ease-out border border-transparent sm:px-5",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
       "disabled:pointer-events-none disabled:opacity-50",
       "hover:bg-primary/10 hover:text-foreground hover:scale-[1.03] hover:border-primary/30 hover:shadow-md hover:shadow-primary/10",

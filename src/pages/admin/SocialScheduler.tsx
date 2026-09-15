@@ -699,17 +699,21 @@ const SocialScheduler = () => {
         </div>
 
         <Tabs defaultValue="calendar" className="space-y-4">
-          <TabsList>
+          {/* Three even columns rather than an inline row: at px-5 with an
+              icon each, the three ran wider than a 390px phone and Settings
+              was cut off by the screen edge. The icons are for the desktop,
+              where there is room for them. */}
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="calendar">
-              <CalendarIcon className="h-4 w-4 mr-2" />
+              <CalendarIcon className="hidden h-4 w-4 sm:mr-2 sm:inline-block" />
               Calendar
             </TabsTrigger>
             <TabsTrigger value="list">
-              <FileText className="h-4 w-4 mr-2" />
+              <FileText className="hidden h-4 w-4 sm:mr-2 sm:inline-block" />
               List View
             </TabsTrigger>
             <TabsTrigger value="settings">
-              <Settings className="h-4 w-4 mr-2" />
+              <Settings className="hidden h-4 w-4 sm:mr-2 sm:inline-block" />
               Settings
             </TabsTrigger>
           </TabsList>
