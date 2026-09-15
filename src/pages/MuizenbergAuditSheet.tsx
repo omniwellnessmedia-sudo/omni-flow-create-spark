@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Printer } from 'lucide-react';
 import { getOffer } from '@/data/publicRateCard';
@@ -27,8 +28,19 @@ import { useSEO } from '@/lib/seo';
  * dock hides itself on this path), and it prints to one A4 page. The
  * toolbar at the top is screen only.
  *
+ * ON A PHONE it is shown scaled down to fit, not reflowed. An A4 page
+ * squeezed into 390px keeps its two column sections and its four column
+ * findings grid, so every label wraps onto three lines and the whole
+ * thing reads as broken rather than as a page. Scaling keeps the
+ * proportions of the sheet that will come out of the printer, which is
+ * what a preview is for, and "Actual size" pans it at full size for
+ * anyone who wants to read the small print. Print is unaffected.
+ *
  * No em dashes in this file.
  */
+
+/** 210mm at the CSS reference 96dpi. The width the sheet is designed at. */
+const A4_WIDTH_PX = (210 * 96) / 25.4;
 
 const GOOGLE_CHECKS = [
   'Profile exists and is claimed by the business',
@@ -76,6 +88,30 @@ const MuizenbergAuditSheet = () => {
   );
   const contact = publishedContacts()[0];
 
+  // How much the page has to shrink to fit the screen. 1 on any screen wide
+  // enough for A4, so nothing changes on a laptop.
+  const [fitScale, setFitScale] = useState(1);
+  const [actualSize, setActualSize] = useState(false);
+
+  useEffect(() => {
+    const measure = () => {
+      const available = window.innerWidth - 16;
+      setFitScale(Math.min(1, available / A4_WIDTH_PX));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    window.addEventListener('orientationchange', measure);
+    return () => {
+      window.removeEventListener('resize', measure);
+      window.removeEventListener('orientationchange', measure);
+    };
+  }, []);
+
+  const doesNotFit = fitScale < 1;
+  // zoom, not transform: it scales the layout box too, so the page below it
+  // does not keep a full A4 of empty space underneath.
+  const zoom = actualSize ? 1 : fitScale;
+
   return (
     <div className="min-h-screen bg-neutral-200 text-black">
       <style>{`
@@ -84,27 +120,47 @@ const MuizenbergAuditSheet = () => {
           .sheet-toolbar { display: none !important; }
           /* Site-wide floating widgets (accessibility gear, cookie bar) would print too. */
           .fixed { display: none !important; }
-          .sheet-page { box-shadow: none !important; margin: 0 !important; width: auto !important; min-height: 0 !important; }
+          .sheet-page { box-shadow: none !important; margin: 0 !important; width: auto !important; min-height: 0 !important; zoom: 1 !important; }
+          .sheet-scroll { overflow: visible !important; }
           body { background: #fff !important; }
         }
       `}</style>
 
       <div className="sheet-toolbar mx-auto flex max-w-[210mm] flex-wrap items-center justify-between gap-3 px-4 py-4">
-        <Link to="/muizenberg" className="inline-flex min-h-[24px] items-center gap-1.5 text-sm text-neutral-700 hover:text-black">
+        <Link to="/muizenberg" className="inline-flex min-h-[44px] items-center gap-1.5 text-sm text-neutral-700 hover:text-black">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Muizenberg page
         </Link>
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white"
-        >
-          <Printer className="h-4 w-4" aria-hidden="true" /> Print this sheet
-        </button>
+        <div className="flex items-center gap-2">
+          {doesNotFit && (
+            <button
+              type="button"
+              onClick={() => setActualSize((v) => !v)}
+              className="inline-flex min-h-[44px] items-center rounded-full border border-neutral-400 px-4 text-sm font-medium text-neutral-800"
+              aria-pressed={actualSize}
+            >
+              {actualSize ? 'Fit to screen' : 'Actual size'}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-black px-5 text-sm font-medium text-white"
+          >
+            <Printer className="h-4 w-4" aria-hidden="true" /> Print this sheet
+          </button>
+        </div>
       </div>
 
+      {doesNotFit && !actualSize && (
+        <p className="sheet-toolbar mx-auto max-w-[210mm] px-4 pb-3 text-xs text-neutral-600">
+          Shown at {Math.round(fitScale * 100)} percent so the whole A4 page fits. It prints full size.
+        </p>
+      )}
+
+      <div className="sheet-scroll overflow-x-auto pb-8">
       <main
-        className="sheet-page mx-auto mb-8 w-[210mm] max-w-full bg-white px-[10mm] py-[9mm] text-[11px] leading-snug shadow-[0_2px_18px_rgba(0,0,0,.15)]"
-        style={{ minHeight: '277mm' }}
+        className="sheet-page mx-auto w-[210mm] bg-white px-[10mm] py-[9mm] text-[11px] leading-snug shadow-[0_2px_18px_rgba(0,0,0,.15)]"
+        style={{ minHeight: '277mm', zoom }}
       >
         {/* Header */}
         <header className="flex items-start justify-between border-b-2 border-black pb-2.5">
@@ -256,6 +312,7 @@ const MuizenbergAuditSheet = () => {
           )}
         </footer>
       </main>
+      </div>
     </div>
   );
 };
