@@ -46,6 +46,35 @@ describe('talk data', () => {
   it('points at the Omni channel', () => {
     expect(CHANNEL_URL).toContain('UC9xAQa9QquyE4Glsy1zmpRQ');
   });
+
+  it('carries all eighteen short films that were uploaded', () => {
+    // The Drive to YouTube run finished on 16 September 2026, five per day
+    // against the upload cap. Verified against the channel listing.
+    expect(TALKS).toHaveLength(18);
+  });
+
+  it('flags the three mental health talks as sensitive, by name', () => {
+    const sensitive = TALKS.filter((t) => t.sensitive).map((t) => t.title).sort();
+    expect(sensitive).toEqual([
+      'Substance Abuse and Addiction',
+      'Suicidal Thoughts',
+      'What Can We Do When We Feel Anxious and Restless?',
+    ]);
+  });
+
+  it('keeps those three off the page while no helpline is on file', () => {
+    expect(HELPLINE.trim()).toBe('');
+    const listed = listedTalks().map((t) => t.title);
+    for (const title of ['Suicidal Thoughts', 'Substance Abuse and Addiction']) {
+      expect(listed).not.toContain(title);
+    }
+  });
+
+  it('prints no helpline number it was not given', () => {
+    // A wrong number on a page beside a talk about suicide is worse than no
+    // number, so nothing here may hardcode one.
+    expect(data).not.toMatch(/0800[\s\d]{6,}|\b08[67]\d[\s\d]{6,}/);
+  });
 });
 
 describe('the page and the player', () => {

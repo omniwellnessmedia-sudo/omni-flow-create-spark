@@ -121,6 +121,42 @@ export const TALKS: Talk[] = [
     blurb: 'On repeating painful patterns.',
     visibility: 'private',
   },
+  {
+    youtubeId: 'TKzEM6mPfcA',
+    title: 'The Difference Between Managing a Symptom and Healing the Root',
+    blurb: 'On the difference between managing a symptom and healing the root.',
+    visibility: 'private',
+  },
+  {
+    youtubeId: 'zOGfZ0W4Nug',
+    title: 'Move Beyond the Programming That Has Shaped Us',
+    blurb: 'On moving beyond the programming that has shaped us.',
+    visibility: 'private',
+  },
+  // The last three carry `sensitive`, so listedTalks keeps them off the page
+  // until HELPLINE above holds a number a person has confirmed, whatever
+  // anyone sets visibility to. They are private on the channel as well.
+  {
+    youtubeId: 'g0YlyCV159s',
+    title: 'What Can We Do When We Feel Anxious and Restless?',
+    blurb: 'What can we do when we feel anxious and restless?',
+    visibility: 'private',
+    sensitive: true,
+  },
+  {
+    youtubeId: 'XnJ85Yi7mug',
+    title: 'Suicidal Thoughts',
+    blurb: 'On suicidal thoughts.',
+    visibility: 'private',
+    sensitive: true,
+  },
+  {
+    youtubeId: 'gbNAdCSYksk',
+    title: 'Substance Abuse and Addiction',
+    blurb: 'On substance abuse and addiction.',
+    visibility: 'private',
+    sensitive: true,
+  },
 ];
 
 /** Talks the page may show: public, and if sensitive, only with a helpline to print. */
