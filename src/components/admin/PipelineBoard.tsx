@@ -9,10 +9,11 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Printer, Search, Mail, Phone, ChevronDown } from 'lucide-react';
+import { Plus, Printer, Search, Mail, Phone, ChevronDown, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AdminScreenHeader from '@/components/admin/AdminScreenHeader';
 import LeadDrawer from '@/components/admin/LeadDrawer';
+import ImportLeadsDialog from '@/components/admin/ImportLeadsDialog';
 import { usePipelineLeads, type PipelineApi } from '@/hooks/usePipelineLeads';
 import { announceLeadsChanged } from '@/lib/leadEvents';
 import {
@@ -271,6 +272,7 @@ const PipelineBoard = ({ api }: { api?: PipelineApi }) => {
   const [muizOnly, setMuizOnly] = useState(false);
   const [showClosed, setShowClosed] = useState(false);
   const [walkIn, setWalkIn] = useState(false);
+  const [importing, setImporting] = useState(false);
   const [selected, setSelected] = useState<PipelineLead | null>(null);
 
   const filtered = useMemo(() => {
@@ -302,6 +304,9 @@ const PipelineBoard = ({ api }: { api?: PipelineApi }) => {
           <>
             <Button size="sm" variant="outline" asChild className="h-8 rounded-full text-xs">
               <Link to="/muizenberg/audit-sheet"><Printer className="mr-1.5 h-3.5 w-3.5" />Check sheet</Link>
+            </Button>
+            <Button size="sm" variant="outline" className="h-8 rounded-full text-xs" onClick={() => setImporting(true)}>
+              <Upload className="mr-1.5 h-3.5 w-3.5" />Import a list
             </Button>
             <Button size="sm" className="h-8 rounded-full text-xs" onClick={() => setWalkIn(true)}>
               <Plus className="mr-1 h-3.5 w-3.5" />Add walk-in
@@ -393,6 +398,13 @@ const PipelineBoard = ({ api }: { api?: PipelineApi }) => {
       </button>
 
       <WalkInDialog open={walkIn} onOpenChange={setWalkIn} onSaved={() => reload(true)} />
+
+      <ImportLeadsDialog
+        open={importing}
+        onOpenChange={setImporting}
+        existing={leads}
+        onImported={() => reload(true)}
+      />
 
       <LeadDrawer
         open={selected !== null}
