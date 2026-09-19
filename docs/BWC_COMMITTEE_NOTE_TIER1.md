@@ -1,13 +1,79 @@
 # Note to the BWC committee: services to endorsed brands
 
-Draft for Tumelo to send. This is the note promised in the 12 September
-internal email "After the 17th", under "What has to happen before we sell
-anything". The site launched on 17 September. Until this is answered,
-Omni's own rule is "prepare everything, approach nobody", which is holding
-165 warm names closed.
+Two documents. The internal circulation note goes to Chad, Feroza and
+Zenith first. The committee note goes to BWC only after they have seen it.
 
-Chad recuses himself from this decision. Address it to the committee, not
-to him, and say so in the first line.
+This is the note promised in the 12 September internal email "After the
+17th", under "What has to happen before we sell anything". The site
+launched on 17 September. Until this is answered, Omni's own rule is
+"prepare everything, approach nobody", which is holding 165 warm names
+closed.
+
+## One thing to weigh on timing
+
+The committee is currently working through a BWC investment matter and a
+SARS review, and a bank letter is going back and forth. That is not a
+reason to sit on this, but it is a reason to keep the note short, clearly
+separable from that business, and easy to answer in one line. If the team
+thinks it lands badly this week, the cost of waiting a week is one week of
+Tier 1, and the Tier 0 listing work carries on regardless.
+
+---
+
+# 1. Internal circulation note
+
+**To:** Chad Cupido, Feroza Begg, Zenith Yassin
+**Subject:** Before it goes to the committee: the note on selling to endorsed brands
+
+Hi Chad, Feroza and Zenith,
+
+The draft below is the committee note I promised in "After the 17th". I am
+sending it to you before BWC sees it, for three reasons.
+
+**Chad, the recusal is yours to make, not mine to announce.** The draft
+names you as recused in its first line. I am not willing to send that to
+the committee until you have read the exact wording and are content with
+it, and until you have decided whether you want to recuse yourself to them
+formally first so that it is minuted as your act. Tell me which order you
+want and I will follow it.
+
+**Feroza, I need the audit figures confirmed.** The note cites eight
+listings showing another company's logo, 44 percent needing artwork, eight
+dead or stale links, seven with no website recorded and four pointing at a
+social page. Those come from your 14 September shortlist and my 18
+September logo note. If any number has moved since the current build,
+correct it. I would rather send a smaller true number than a rounder one.
+
+**Zenith, one adjacency.** If the committee says yes, the wellness brands
+in the Guide are the natural 10 October sponsor approach as well. Worth you
+seeing the wall before that conversation starts, so the two do not get
+tangled.
+
+**What the note actually asks for.** One decision: whether Omni may offer
+commercial services to endorsed brands, and whether BWC says anything about
+it or stays neutral. Three answers are offered, all of which work for us,
+including no.
+
+**Where this leaves us commercially.** Nobody has been approached and
+nobody will be until the committee answers. Tier 0, fixing listings for
+free, continues either way because it is the job. I want to be honest that
+this is the largest prospect list Omni has and it is closed by our own
+rule, which is exactly why I am not going near it before we have an answer
+in writing.
+
+Comments by [DATE] would let me send it in time for the next meeting. If
+any of you thinks the timing is wrong given what the committee is carrying
+at the moment, say so and we hold it.
+
+Tumelo
+
+---
+
+# 2. Committee note
+
+Send only after the above has come back. Chad recuses himself from this
+decision. Address it to the committee, not to him, and say so in the first
+line.
 
 ---
 
