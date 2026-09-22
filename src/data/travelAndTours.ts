@@ -6,17 +6,22 @@
  * page hands the visitor to Travel and Tours to book, and copies Omni on
  * an email enquiry. One place to change the address if it moves.
  *
- * The website address comes from the provider profile seeded in
- * supabase/migrations/20250702072218 and the enquiry address from the
- * booking sidebar that preceded this file. Neither could be verified live
- * from the build environment; confirm before a campaign points at them.
+ * THE ADDRESS. The site went live on 21 September 2026, announced by
+ * Tumelo to the team as travelandtourscapetown.com, so the apex is what
+ * is recorded here. The earlier value carried a www prefix, taken from the
+ * provider profile seeded in supabase/migrations/20250702072218, which
+ * nobody had confirmed resolves. Apex and www usually redirect to each
+ * other, but "usually" is not good enough for the only button on five tour
+ * pages, so this uses the spelling that was actually announced live. The
+ * enquiry address comes from the booking sidebar that preceded this file.
+ * Neither can be reached from the build environment to check.
  *
  * No em dashes in this file.
  */
 export const TRAVEL_AND_TOURS = {
   name: 'Travel and Tours Cape Town',
   shortName: 'Travel and Tours',
-  website: 'https://www.travelandtourscapetown.com',
+  website: 'https://travelandtourscapetown.com',
   email: 'traveltourscapetown@gmail.com',
   /** Omni is copied on every tour enquiry so the conversation is visible on the Pipeline. */
   cc: 'omniwellnessmedia@gmail.com',
