@@ -96,10 +96,19 @@ describe('photographs', () => {
   const servicesDir = resolve(__dirname, '../../../public/services');
   const referenced = Array.from(page.matchAll(/'\/services\/([a-z0-9-]+\.webp)'/g)).map((m) => m[1]);
 
-  it('references at least the five Muizenberg crops', () => {
-    for (const f of ['muizenberg-hero', 'muizenberg-strip', 'muizenberg-audit', 'muizenberg-outdoors', 'muizenberg-made-here']) {
+  it('references the four Muizenberg crops', () => {
+    for (const f of ['muizenberg-hero', 'muizenberg-strip', 'muizenberg-audit', 'muizenberg-outdoors']) {
       expect(referenced).toContain(`${f}.webp`);
     }
+  });
+
+  it('does not serve the crew photograph that was asked to come down', () => {
+    // Removed 23 September 2026 at Feroza's request on behalf of someone in
+    // the frame. Asserted on the file as well as the page, so a later edit
+    // cannot quietly put the old path back into service.
+    expect(referenced).not.toContain('muizenberg-made-here.webp');
+    expect(page).not.toMatch(/made-here|madeHere\s*[:.]/);
+    expect(existsSync(resolve(servicesDir, 'muizenberg-made-here.webp'))).toBe(false);
   });
 
   it.each(Array.from(new Set(page.match(/muizenberg-[a-z-]+\.webp/g) ?? [])))(
@@ -124,7 +133,8 @@ describe('photographs', () => {
 
   it('credits every Omni photograph and claims nothing about the people in it', () => {
     const captions = Array.from(page.matchAll(/caption: '([^']+)'/g)).map((m) => m[1]);
-    expect(captions.length).toBe(5);
+    // Four since the crew photograph came down on 23 September 2026.
+    expect(captions.length).toBe(4);
     for (const caption of captions) {
       // The credit is the point of the caption.
       expect(caption).toContain('Omni Wellness Media');
@@ -139,7 +149,7 @@ describe('photographs', () => {
     // Nobody in these photographs is named on the page, so the alt text
     // must not name anyone either.
     const alts = Array.from(page.matchAll(/alt: '([^']+)'/g)).map((m) => m[1]);
-    expect(alts.length).toBeGreaterThanOrEqual(5);
+    expect(alts.length).toBeGreaterThanOrEqual(4);
     for (const alt of alts) {
       expect(alt).not.toMatch(/\b(Chad|Feroza|Zenith|Steven|Kingsley|Hennie)\b/);
     }
