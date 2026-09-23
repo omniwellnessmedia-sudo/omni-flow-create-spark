@@ -100,13 +100,11 @@ export const MUIZENBERG_IMAGES = {
     width: 800,
     height: 1000,
   },
-  madeHere: {
-    src: '/services/muizenberg-made-here.webp',
-    alt: 'Four members of a local crew standing together at an outdoor event, one holding a camera',
-    caption: 'The crew on a client shoot. Photograph: Omni Wellness Media.',
-    width: 1200,
-    height: 800,
-  },
+  // The "Made here" crew photograph was removed on 23 September 2026 at
+  // Feroza's request, on behalf of a person in the frame. The file is
+  // deleted from the repository as well, so it is not served from the old
+  // path by anything that cached it. A replacement has been chosen and
+  // will be added here once the file reaches the repository.
 } as const;
 
 type OmniPhoto = (typeof MUIZENBERG_IMAGES)[keyof typeof MUIZENBERG_IMAGES];
@@ -520,9 +518,13 @@ const Muizenberg = () => {
           </div>
         </section>
 
-        {/* Made here */}
+        {/* Made here. Single column until this section has a photograph
+            again: Feroza asked on 15 September that the crew photograph
+            come off the page, so it is gone rather than held back, and a
+            two column grid with one empty half would read as broken. The
+            replacement she chose is not in the repository yet. */}
         <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24" style={{ background: INK, color: CREAM }}>
-          <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
+          <div className="mx-auto max-w-3xl">
             <Reveal>
               <p className="flex items-center gap-3 text-[11px] uppercase tracking-[.22em]" style={{ ...mono, color: 'rgba(250,248,242,.6)' }}>
                 <span aria-hidden="true" className="h-[9px] w-[9px] rounded-full" style={{ background: SPECTRUM.yellow }} />
@@ -547,13 +549,6 @@ const Muizenberg = () => {
                   .
                 </p>
               </div>
-            </Reveal>
-            <Reveal delay={120}>
-              <Photo
-                photo={MUIZENBERG_IMAGES.madeHere}
-                tone="dark"
-                imgClassName="aspect-[3/2] w-full rounded-[22px] object-cover"
-              />
             </Reveal>
           </div>
         </section>
