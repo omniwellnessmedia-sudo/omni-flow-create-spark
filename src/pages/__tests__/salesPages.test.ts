@@ -96,9 +96,22 @@ describe('every offer can fill every section of its page', () => {
     expect(offersWithoutImagery(ALL_OFFERS.map((o) => o.slug))).toEqual([
       'brand-identity',
       'content-pack-12',
+      // Joined the list on 23 September 2026 when the crew photograph came
+      // down. It needs a photograph of its own rather than a borrowed crop.
+      'social-media-management',
       'podcast-concept',
       'podcast-launch',
     ]);
+  });
+
+  it('serves no crop of the withdrawn crew photograph', () => {
+    // It existed twice: once on the Muizenberg page and once cropped for
+    // this offer. Removing one and leaving the other still published the
+    // same faces, so both files are asserted gone.
+    for (const f of ['muizenberg-made-here.webp', 'offer-social-media.webp']) {
+      expect(existsSync(resolve(__dirname, '../../../public/services', f)), f).toBe(false);
+    }
+    expect(offerImageFiles()).not.toContain('/services/offer-social-media.webp');
   });
 
   it('gives every offer photograph real alt text and a local file', () => {

@@ -108,12 +108,12 @@ const OFFER_IMAGES: Record<string, ServiceImage> = {
     alt: 'Someone standing with an open laptop in a meeting room',
     credit: 'stock',
   },
-  'social-media-management': {
-    src: '/services/offer-social-media.webp',
-    alt: 'Four members of a crew standing together at an outdoor event',
-    credit: 'omni',
-    context: 'The crew on a client shoot',
-  },
+  // 'social-media-management' had the crew photograph, a second crop of the
+  // same frame that came off the Muizenberg page on 23 September 2026 at
+  // Feroza's request on behalf of someone in it. Taking one crop down and
+  // leaving the other serving the same faces on the services pages was the
+  // same picture still published, so this one is gone too and the offer
+  // renders the typographic panel until it has a photograph of its own.
   'executive-support': {
     src: '/services/offer-executive-support.webp',
     alt: 'A person in a suit holding an open laptop in a meeting room',
