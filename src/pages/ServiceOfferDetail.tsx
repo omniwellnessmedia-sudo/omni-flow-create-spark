@@ -12,6 +12,8 @@ import {
 } from '@/data/publicRateCard';
 import { offerImage, imageCreditLine } from '@/data/serviceImagery';
 import { getServiceDetailContent } from '@/data/serviceDetailContent';
+import { usePublishedServiceContent } from '@/hooks/useServiceContent';
+import { mergeOne } from '@/lib/serviceContent';
 import { useSEO } from '@/lib/seo';
 import { WhatsappButton } from '@/components/services/spectrum';
 import TalkToAHuman from '@/components/services/TalkToAHuman';
@@ -48,7 +50,12 @@ import BookAndPayButton from '@/components/services/BookAndPayButton';
 
 const ServiceOfferDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const offer = getOffer(slug);
+  // The rate card is the baseline. Where the team has published a
+  // description or a list of inclusions from Admin, Services, that is laid
+  // over it; anything unpublished, invalid or unreachable leaves the offer
+  // exactly as the code renders it. Price is never overridden.
+  const { rows: publishedContent } = usePublishedServiceContent();
+  const offer = mergeOne(slug, publishedContent);
   const band = getBandForOffer(slug);
   const sales = getBandSales(band?.id);
   const siblings = slug ? getSiblingOffers(slug) : [];
