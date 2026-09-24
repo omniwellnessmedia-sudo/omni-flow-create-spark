@@ -96,19 +96,29 @@ describe('photographs', () => {
   const servicesDir = resolve(__dirname, '../../../public/services');
   const referenced = Array.from(page.matchAll(/'\/services\/([a-z0-9-]+\.webp)'/g)).map((m) => m[1]);
 
-  it('references the four Muizenberg crops', () => {
-    for (const f of ['muizenberg-hero', 'muizenberg-strip', 'muizenberg-audit', 'muizenberg-outdoors']) {
+  it('references the three Muizenberg crops', () => {
+    for (const f of ['muizenberg-strip', 'muizenberg-audit', 'muizenberg-outdoors']) {
       expect(referenced).toContain(`${f}.webp`);
     }
   });
 
-  it('does not serve the crew photograph that was asked to come down', () => {
-    // Removed 23 September 2026 at Feroza's request on behalf of someone in
-    // the frame. Asserted on the file as well as the page, so a later edit
-    // cannot quietly put the old path back into service.
-    expect(referenced).not.toContain('muizenberg-made-here.webp');
-    expect(page).not.toMatch(/made-here|madeHere\s*[:.]/);
-    expect(existsSync(resolve(servicesDir, 'muizenberg-made-here.webp'))).toBe(false);
+  it('serves neither photograph that was asked to come down', () => {
+    // Two separate requests, each on behalf of someone in the frame: the
+    // crew photograph on 23 September and the market gazebo photograph on
+    // 24 September. Each frame had been cropped twice, so all four files
+    // are asserted absent from disk as well as unreferenced. Removing one
+    // crop and leaving the other is the same faces still published, which
+    // is the mistake that made the first request take three attempts.
+    for (const f of [
+      'muizenberg-made-here.webp',
+      'offer-social-media.webp',
+      'muizenberg-hero.webp',
+      'offer-brand-content-audit.webp',
+    ]) {
+      expect(referenced, f).not.toContain(f);
+      expect(existsSync(resolve(servicesDir, f)), f).toBe(false);
+    }
+    expect(page).not.toMatch(/made-here|madeHere\s*[:.]|MUIZENBERG_IMAGES\.hero/);
   });
 
   it.each(Array.from(new Set(page.match(/muizenberg-[a-z-]+\.webp/g) ?? [])))(
@@ -133,8 +143,9 @@ describe('photographs', () => {
 
   it('credits every Omni photograph and claims nothing about the people in it', () => {
     const captions = Array.from(page.matchAll(/caption: '([^']+)'/g)).map((m) => m[1]);
-    // Four since the crew photograph came down on 23 September 2026.
-    expect(captions.length).toBe(4);
+    // Three: the crew photograph came down on 23 September 2026 and the
+    // market gazebo hero on 24 September, both on request.
+    expect(captions.length).toBe(3);
     for (const caption of captions) {
       // The credit is the point of the caption.
       expect(caption).toContain('Omni Wellness Media');
@@ -149,7 +160,7 @@ describe('photographs', () => {
     // Nobody in these photographs is named on the page, so the alt text
     // must not name anyone either.
     const alts = Array.from(page.matchAll(/alt: '([^']+)'/g)).map((m) => m[1]);
-    expect(alts.length).toBeGreaterThanOrEqual(4);
+    expect(alts.length).toBeGreaterThanOrEqual(3);
     for (const alt of alts) {
       expect(alt).not.toMatch(/\b(Chad|Feroza|Zenith|Steven|Kingsley|Hennie)\b/);
     }

@@ -71,12 +71,12 @@ const OFFER_IMAGES: Record<string, ServiceImage> = {
     alt: 'Two people going through printed charts and figures across a table',
     credit: 'stock',
   },
-  'brand-content-audit': {
-    src: '/services/offer-brand-content-audit.webp',
-    alt: 'Two stallholders smiling together under a branded gazebo at a market',
-    credit: 'omni',
-    context: 'Market day, on a client shoot',
-  },
+  // 'brand-content-audit' had the market gazebo photograph, the second crop
+  // of the frame that came off the Muizenberg hero on 24 September 2026 at
+  // Feroza's request on behalf of someone in it. Both crops are deleted,
+  // because removing one and leaving the other is the same faces still
+  // published. This offer renders the typographic panel until it has a
+  // photograph of its own.
   'website-audit': {
     src: '/services/offer-website-audit.webp',
     alt: 'A woman in a green shirt writing notes on a sheet of paper at an outdoor event',
