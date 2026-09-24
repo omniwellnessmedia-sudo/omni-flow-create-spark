@@ -87,19 +87,24 @@ EXCEPTION
 END
 $policies$;
 
+-- Top level on purpose. A CREATE FUNCTION nested inside a DO block is two
+-- dollar quotes deep, and the Supabase dashboard SQL editor cannot parse
+-- that: it loses track of where the inner quote ends and reports an
+-- unterminated dollar-quoted string somewhere further down the file. The
+-- CLI copes, the editor does not, and the team runs these in the editor.
+CREATE OR REPLACE FUNCTION public.touch_service_content_updated_at()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $fn_content$
+BEGIN
+  NEW.updated_at := now();
+  NEW.updated_by := COALESCE(auth.uid(), NEW.updated_by);
+  RETURN NEW;
+END;
+$fn_content$;
+
 DO $touch$
 BEGIN
-
-  CREATE OR REPLACE FUNCTION public.touch_service_content_updated_at()
-  RETURNS trigger
-  LANGUAGE plpgsql
-  AS $body$
-  BEGIN
-    NEW.updated_at := now();
-    NEW.updated_by := COALESCE(auth.uid(), NEW.updated_by);
-    RETURN NEW;
-  END;
-  $body$;
 
   DROP TRIGGER IF EXISTS service_content_touch_updated_at ON public.service_content;
   CREATE TRIGGER service_content_touch_updated_at
