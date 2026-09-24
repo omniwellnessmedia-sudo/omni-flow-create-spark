@@ -94,6 +94,9 @@ describe('every offer can fill every section of its page', () => {
     // absence. This is the standing list of what per offer photography
     // would still buy.
     expect(offersWithoutImagery(ALL_OFFERS.map((o) => o.slug))).toEqual([
+      // Joined the list on 24 September 2026 when the market gazebo
+      // photograph came down. Needs one of its own, not a borrowed crop.
+      'brand-content-audit',
       'brand-identity',
       'content-pack-12',
       // Joined the list on 23 September 2026 when the crew photograph came
@@ -108,10 +111,16 @@ describe('every offer can fill every section of its page', () => {
     // It existed twice: once on the Muizenberg page and once cropped for
     // this offer. Removing one and leaving the other still published the
     // same faces, so both files are asserted gone.
-    for (const f of ['muizenberg-made-here.webp', 'offer-social-media.webp']) {
+    for (const f of [
+      'muizenberg-made-here.webp',
+      'offer-social-media.webp',
+      'muizenberg-hero.webp',
+      'offer-brand-content-audit.webp',
+    ]) {
       expect(existsSync(resolve(__dirname, '../../../public/services', f)), f).toBe(false);
     }
     expect(offerImageFiles()).not.toContain('/services/offer-social-media.webp');
+    expect(offerImageFiles()).not.toContain('/services/offer-brand-content-audit.webp');
   });
 
   it('gives every offer photograph real alt text and a local file', () => {

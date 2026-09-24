@@ -72,13 +72,11 @@ const ENQUIRE_HREF = MUIZENBERG_ENQUIRE_HREF;
  * took the picture and the kind of job it was taken on.
  */
 export const MUIZENBERG_IMAGES = {
-  hero: {
-    src: '/services/muizenberg-hero.webp',
-    alt: 'Two stallholders smiling together under a gazebo at a local market',
-    caption: 'Market day, on a client shoot. Photograph: Omni Wellness Media.',
-    width: 800,
-    height: 1000,
-  },
+  // The hero photograph of two people under a gazebo came down on 24
+  // September 2026 at Feroza's request on behalf of someone in it. The
+  // same frame was cropped a second time for the brand and content audit
+  // offer, and that one is deleted too: taking one crop down and leaving
+  // another publishing the same faces is the picture still being used.
   strip: {
     src: '/services/muizenberg-strip.webp',
     alt: 'A crowd gathered on a field under branded umbrellas, with the mountains behind',
@@ -282,9 +280,12 @@ const Muizenberg = () => {
       <UnifiedNavigation />
 
       <main>
-        {/* Hero */}
+        {/* Hero. One column while it has no photograph: the stallholder
+            photograph came down on 24 September 2026 at Feroza's request on
+            behalf of someone in the frame, and a two column hero with an
+            empty right half reads as a failed image load. */}
         <section className="px-4 pb-14 pt-28 sm:px-6 lg:px-8 lg:pt-36">
-          <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
+          <div className="mx-auto max-w-4xl">
             <div>
               <Eyebrow hue={SPECTRUM.teal}>Muizenberg and the South Peninsula</Eyebrow>
               <h1
@@ -331,13 +332,6 @@ const Muizenberg = () => {
                 Free. Written down. Yours to keep, whether or not you hire us.
               </p>
             </div>
-
-            <Photo
-              photo={MUIZENBERG_IMAGES.hero}
-              priority
-              className="mx-auto w-full max-w-[420px] lg:max-w-none"
-              imgClassName="aspect-[4/5] w-full rounded-[22px] object-cover shadow-[0_18px_50px_rgba(21,32,31,.14)]"
-            />
           </div>
         </section>
 
