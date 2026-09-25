@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -274,6 +274,24 @@ const PipelineBoard = ({ api }: { api?: PipelineApi }) => {
   const [walkIn, setWalkIn] = useState(false);
   const [importing, setImporting] = useState(false);
   const [selected, setSelected] = useState<PipelineLead | null>(null);
+  // LeadCard has always taken a compact prop and the board never passed it.
+  // Dropping the brief off the card is the difference between five and nine
+  // leads visible in a column without scrolling.
+  const [dense, setDense] = useState(() => {
+    try {
+      return localStorage.getItem('omni.pipeline.dense') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('omni.pipeline.dense', String(dense));
+    } catch {
+      // A private window. Not worth failing a render over.
+    }
+  }, [dense]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -293,6 +311,13 @@ const PipelineBoard = ({ api }: { api?: PipelineApi }) => {
 
   const columns = showClosed ? STAGES : BOARD_STAGES;
   const closedCount = filtered.filter((l) => l.stage === 'lost' || l.stage === 'archived').length;
+
+  // The board used to grow to the height of its busiest stage, so one column
+  // with forty leads in it made the whole page scroll past everything else and
+  // the other four stages went off screen. Each column now scrolls inside a
+  // fixed frame: the board is the same height whether a stage holds three
+  // cards or three hundred, and every stage stays visible.
+  const COLUMN_HEIGHT = 'h-[min(62vh,620px)]';
 
   return (
     <div className="space-y-5">
@@ -350,8 +375,33 @@ const PipelineBoard = ({ api }: { api?: PipelineApi }) => {
           >
             Muizenberg
           </button>
+          <button
+            type="button"
+            onClick={() => setDense((v) => !v)}
+            aria-pressed={dense}
+            title={dense ? 'Show the brief on each card' : 'Hide the brief to fit more cards'}
+            className={cn(
+              'h-8 rounded-full border px-3 text-xs transition-colors',
+              dense ? 'border-foreground bg-foreground text-background' : 'border-border/70 text-muted-foreground hover:text-foreground'
+            )}
+          >
+            Compact
+          </button>
         </div>
       </div>
+
+      {filtered.length !== leads.length && (
+        <p className="text-xs text-muted-foreground">
+          Showing {filtered.length} of {leads.length} leads.{' '}
+          <button
+            type="button"
+            className="underline underline-offset-4"
+            onClick={() => { setSearch(''); setSource('all'); setMuizOnly(false); }}
+          >
+            Clear filters
+          </button>
+        </p>
+      )}
 
       {error && (
         <p className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm">
@@ -374,13 +424,18 @@ const PipelineBoard = ({ api }: { api?: PipelineApi }) => {
                     {cards.length}
                   </span>
                 </header>
-                <div className="min-h-[120px] space-y-2 rounded-[16px] bg-[#F4EFE5]/70 p-2">
+                <div
+                  className={cn(
+                    'space-y-2 overflow-y-auto overscroll-contain rounded-[16px] bg-[#F4EFE5]/70 p-2',
+                    COLUMN_HEIGHT
+                  )}
+                >
                   {loading && cards.length === 0 && <p className="p-3 text-xs text-muted-foreground">Loading</p>}
                   {!loading && cards.length === 0 && (
                     <p className="p-3 text-[12px] leading-snug text-muted-foreground">{col.hint}. Nobody here right now.</p>
                   )}
                   {cards.map((lead) => (
-                    <LeadCard key={lead.key} lead={lead} onOpen={setSelected} onStage={move} />
+                    <LeadCard key={lead.key} lead={lead} onOpen={setSelected} onStage={move} compact={dense} />
                   ))}
                 </div>
               </section>

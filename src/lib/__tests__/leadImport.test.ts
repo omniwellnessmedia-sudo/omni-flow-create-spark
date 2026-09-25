@@ -150,3 +150,48 @@ describe('what gets written', () => {
     expect(plusDays(3, new Date('2026-09-17T10:00:00Z'))).toBe('2026-09-20');
   });
 });
+
+describe('the heading names people actually paste (Feroza, 25 September 2026)', () => {
+  // Matching the whole cell against the vocabulary meant "Company Name" was
+  // not "Company". Two real pastes went wrong in two different ways.
+
+  it('reads "Company Name" and "Email" rather than importing the heading as a lead', () => {
+    const map = readHeader(['Company Name', 'Email']);
+    expect(map).not.toBeNull();
+    expect(map?.organisation).toBe(0);
+    expect(map?.email).toBe(1);
+  });
+
+  it('does not create a lead called "Company Name"', () => {
+    const { rows } = parseRows('Company Name,Email\nThe Wren Design,hello@wren.co.za');
+    expect(rows.map((r) => r.organisation)).toEqual(['The Wren Design']);
+    expect(rows[0].email).toBe('hello@wren.co.za');
+  });
+
+  it('finds the business column under "Shop Name", so the rows are not all rejected', () => {
+    const map = readHeader(['Shop Name', 'Owner', 'Mail']);
+    expect(map?.organisation).toBe(0);
+    expect(map?.contactPerson).toBe(1);
+    expect(map?.email).toBe(2);
+  });
+
+  it('imports that paste instead of rejecting every row for having no business name', () => {
+    const plan = planImport('Shop Name,Owner,Mail\nSurf Emporium,Jane,jane@surf.co.za', []);
+    expect(plan.rows).toHaveLength(1);
+    expect(plan.rows[0].organisation).toBe('Surf Emporium');
+    expect(plan.ok).toHaveLength(1);
+    expect(plan.problems).toHaveLength(0);
+  });
+
+  it.each(['Business Name', 'Shop', 'Store', 'Brand', 'Venue', 'Trading Name', 'Store Name'])(
+    '%s names the business column',
+    (heading) => {
+      expect(readHeader([heading, 'Email'])?.organisation).toBe(0);
+    }
+  );
+
+  it('still treats a row of real businesses as data, not headings', () => {
+    // The filler rule must not turn a list of shops into a header row.
+    expect(readHeader(['Surf Emporium', 'Empire Cafe'])).toBeNull();
+  });
+});

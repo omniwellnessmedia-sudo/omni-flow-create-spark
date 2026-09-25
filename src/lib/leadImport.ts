@@ -94,7 +94,13 @@ export const detectDelimiter = (text: string): string => {
 };
 
 const HEADER_WORDS: Record<keyof ImportRow, string[]> = {
-  organisation: ['business', 'organisation', 'organization', 'company', 'name', 'trading name'],
+  // "shop", "store", "brand" and "venue" are here because that is what the
+  // lists people actually paste call the business. A spreadsheet from a
+  // market organiser says Shop, not Organisation.
+  organisation: [
+    'business', 'organisation', 'organization', 'company', 'name', 'trading name',
+    'shop', 'store', 'brand', 'venue', 'client', 'customer', 'firm', 'practice', 'outlet',
+  ],
   contactPerson: ['contact', 'contact person', 'person', 'owner', 'manager', 'who'],
   email: ['email', 'e mail', 'email address', 'mail'],
   phone: ['phone', 'telephone', 'mobile', 'cell', 'whatsapp', 'number'],
@@ -104,16 +110,39 @@ const HEADER_WORDS: Record<keyof ImportRow, string[]> = {
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
 
+/**
+ * Words that carry no meaning in a column heading. "Company Name" and
+ * "Company" are the same column, and matching the whole cell against the
+ * vocabulary missed that: a list headed "Company Name, Email" had its heading
+ * row imported as a lead called "Company Name", and one headed "Shop Name,
+ * Owner, Mail" rejected every row for having no business name. Reported from
+ * a real paste on 25 September 2026.
+ */
+const FILLER = new Set(['name', 'names', 'the', 'full', 'primary', 'main', 'of']);
+
+/** Every spelling of a heading worth testing against the vocabulary. */
+const headingForms = (cell: string): string[] => {
+  const n = norm(cell);
+  if (!n) return [];
+  const stripped = n.split(' ').filter((w) => !FILLER.has(w)).join(' ');
+  return stripped && stripped !== n ? [n, stripped] : [n];
+};
+
+const headingKey = (cell: string): keyof ImportRow | null => {
+  const forms = headingForms(cell);
+  if (!forms.length) return null;
+  for (const key of Object.keys(HEADER_WORDS) as (keyof ImportRow)[]) {
+    if (HEADER_WORDS[key].some((w) => forms.includes(w))) return key;
+  }
+  return null;
+};
+
 /** Which column holds what, or null when the first row is data, not headings. */
 export const readHeader = (cells: string[]): Partial<Record<keyof ImportRow, number>> | null => {
   const map: Partial<Record<keyof ImportRow, number>> = {};
   cells.forEach((cell, i) => {
-    const n = norm(cell);
-    if (!n) return;
-    for (const key of Object.keys(HEADER_WORDS) as (keyof ImportRow)[]) {
-      if (map[key] !== undefined) continue;
-      if (HEADER_WORDS[key].includes(n)) map[key] = i;
-    }
+    const key = headingKey(cell);
+    if (key && map[key] === undefined) map[key] = i;
   });
   // One recognised heading could be a business genuinely called "Contact",
   // so two is the usual test for a header row. The exception is a list with
@@ -124,10 +153,7 @@ export const readHeader = (cells: string[]): Partial<Record<keyof ImportRow, num
   // use for importing anyway.
   const recognised = Object.keys(map).length;
   if (recognised >= 2) return map;
-  const allAreHeadings = cells.filter((c) => c.trim()).every((c) => {
-    const n = norm(c);
-    return Object.values(HEADER_WORDS).some((words) => words.includes(n));
-  });
+  const allAreHeadings = cells.filter((c) => c.trim()).every((c) => headingKey(c) !== null);
   return allAreHeadings && map.organisation !== undefined ? map : null;
 };
 
