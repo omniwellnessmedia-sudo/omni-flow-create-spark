@@ -187,3 +187,39 @@ describe('reachable and wired', () => {
     expect(dock).toMatch(/"\/muizenberg\/audit-sheet"/);
   });
 });
+
+describe('the hero photograph is a drop in, not a code change', () => {
+  // Read raw, not through uncommented(): the glob pattern contains the
+  // characters that open a block comment, so the stripper swallows the rest
+  // of the statement and the assertions below silently find nothing.
+  const raw = readFileSync(resolve(__dirname, '../Muizenberg.tsx'), 'utf8');
+
+  it('reads whatever is in the drop in folder rather than a hardcoded path', () => {
+    expect(raw).toMatch(/import\.meta\.glob\(\s*'@\/assets\/muizenberg-hero\/\*/);
+  });
+
+  it('the folder exists and explains itself, so the first person to open it is not guessing', () => {
+    const readme = resolve(__dirname, '../../assets/muizenberg-hero/README.md');
+    expect(existsSync(readme)).toBe(true);
+    const text = readFileSync(readme, 'utf8');
+    expect(text).toMatch(/1400px/);
+    expect(text).toMatch(/HERO_ALT/);
+  });
+
+  it('centres the hero when there is no photograph, rather than leaving half the screen empty', () => {
+    // The first attempt after the stallholder photograph came down kept the
+    // text hard left in a wide container. On a laptop that reads as an
+    // image that failed to load, which is what got reported.
+    expect(raw).toMatch(/heroPhotoSrc[\s\S]{0,120}?mx-auto max-w-3xl text-center/);
+    expect(raw).toMatch(/heroPhotoSrc \? '' : 'justify-center'/);
+  });
+
+  it('does not describe the photograph it has not seen', () => {
+    // Written before the file arrived. It may claim Omni took it, because
+    // Chad said so, and nothing else.
+    const alt = raw.match(/const HERO_ALT = '([^']+)'/)?.[1];
+    expect(alt).toBeTruthy();
+    expect(alt).toMatch(/Omni Wellness Media/);
+    expect(alt).not.toMatch(/\b(client|happy|smiling|customer)\b/i);
+  });
+});

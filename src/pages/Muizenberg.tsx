@@ -107,6 +107,42 @@ export const MUIZENBERG_IMAGES = {
 
 type OmniPhoto = (typeof MUIZENBERG_IMAGES)[keyof typeof MUIZENBERG_IMAGES];
 
+/**
+ * The hero photograph, added by dropping a file in rather than by editing
+ * code.
+ *
+ * Every image on this page has had to travel through a person with a
+ * laptop, because the build environment cannot reach Google Drive and the
+ * photographs live there. That turned a two minute change into a week,
+ * twice. So this folder is the handover point: put one image in
+ * src/assets/muizenberg-hero/ and push, and the hero picks it up on the
+ * next build.
+ *
+ * Nothing breaks if the folder is empty, which is the state it ships in.
+ * The hero simply centres itself and reads as a deliberate piece of
+ * typography rather than a photograph that failed to load.
+ *
+ * Export it at about 1400px on the long edge. The source files off the
+ * camera are six or seven megabytes, and that is a slow hero on a phone.
+ */
+const heroFiles = import.meta.glob('@/assets/muizenberg-hero/*.{jpg,jpeg,png,webp,avif}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>;
+
+const heroPhotoSrc: string | undefined = Object.keys(heroFiles).sort().map((k) => heroFiles[k])[0];
+
+/**
+ * Said of the photograph without having seen it, because the file arrives
+ * after this line is written. It claims only what the Drive folder and
+ * Chad's note establish: that Omni shot it. Whoever adds the file should
+ * replace this with a description of what is actually in the frame, and
+ * must not describe anyone in it as a client or as happy.
+ */
+const HERO_ALT = 'A photograph from an Omni Wellness Media shoot.';
+const HERO_CAPTION = 'Photograph: Omni Wellness Media.';
+
 /** An Omni photograph with its credit line beneath it. */
 const Photo = ({
   photo,
@@ -280,26 +316,44 @@ const Muizenberg = () => {
       <UnifiedNavigation />
 
       <main>
-        {/* Hero. One column while it has no photograph: the stallholder
-            photograph came down on 24 September 2026 at Feroza's request on
-            behalf of someone in the frame, and a two column hero with an
-            empty right half reads as a failed image load. */}
+        {/* Hero. Two columns once a photograph is dropped into
+            src/assets/muizenberg-hero/, and a single centred column until
+            then. The first version of this after the stallholder
+            photograph came down on 24 September 2026 kept the text hard
+            left in a wide container, which left the right half of a laptop
+            screen empty and read as a photograph that had failed to load.
+            Text with nothing beside it has to be centred to look chosen. */}
         <section className="px-4 pb-14 pt-28 sm:px-6 lg:px-8 lg:pt-36">
-          <div className="mx-auto max-w-4xl">
+          <div
+            className={
+              heroPhotoSrc
+                ? 'mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-14'
+                : 'mx-auto max-w-3xl text-center'
+            }
+          >
             <div>
               <Eyebrow hue={SPECTRUM.teal}>Muizenberg and the South Peninsula</Eyebrow>
               <h1
-                className="mt-5 max-w-3xl font-wwpl-display text-[42px] leading-[1.02] sm:text-[58px] lg:text-[64px]"
+                className={`mt-5 font-wwpl-display text-[42px] leading-[1.02] sm:text-[58px] lg:text-[64px] ${
+                  heroPhotoSrc ? 'max-w-3xl' : ''
+                }`}
                 style={{ color: INK }}
               >
                 The media house on your doorstep.
               </h1>
-              <p className="mt-6 max-w-2xl text-[18px] leading-relaxed sm:text-[20px]" style={{ color: INK_SOFT }}>
+              <p
+                className={`mt-6 text-[18px] leading-relaxed sm:text-[20px] ${
+                  heroPhotoSrc ? 'max-w-2xl' : 'mx-auto max-w-2xl'
+                }`}
+                style={{ color: INK_SOFT }}
+              >
                 Omni Wellness Media is in Muizenberg. We help local businesses get found online and turn
                 lookers into customers, at prices a small business can say yes to.
               </p>
 
-              <div className="mt-9 flex flex-wrap items-center gap-3">
+              <div
+                className={`mt-9 flex flex-wrap items-center gap-3 ${heroPhotoSrc ? '' : 'justify-center'}`}
+              >
                 <Link
                   to={ENQUIRE_HREF}
                   className="inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[15px] font-medium text-white transition-transform duration-300 hover:scale-[1.02]"
@@ -332,6 +386,20 @@ const Muizenberg = () => {
                 Free. Written down. Yours to keep, whether or not you hire us.
               </p>
             </div>
+
+            {heroPhotoSrc && (
+              <figure className="m-0">
+                <img
+                  src={heroPhotoSrc}
+                  alt={HERO_ALT}
+                  className="aspect-[4/5] w-full rounded-2xl object-cover"
+                  loading="eager"
+                />
+                <figcaption className="mt-3 text-[13px]" style={{ ...mono, color: SLATE }}>
+                  {HERO_CAPTION}
+                </figcaption>
+              </figure>
+            )}
           </div>
         </section>
 
