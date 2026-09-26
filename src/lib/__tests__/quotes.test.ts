@@ -109,10 +109,18 @@ describe('bank details have one source', () => {
   });
 
   it('are not retyped anywhere else', () => {
-    for (const rel of ['../../pages/tours/OmniWellnessRetreat.tsx', '../../pages/admin/QuotePrint.tsx', '../../components/admin/MoneyScreen.tsx']) {
+    // The documents read them through the shared template, which is the
+    // only place besides the retreat page and the Money screen that may
+    // name the constant. None of them may carry the number itself.
+    for (const rel of ['../../pages/tours/OmniWellnessRetreat.tsx', '../../components/documents/DocumentShell.tsx', '../../components/admin/MoneyScreen.tsx']) {
       const src = read(rel);
       expect(src, rel).toContain('BANK_DETAILS');
       expect(src, rel).not.toContain('1051893445');
+    }
+    for (const rel of ['../../pages/admin/QuotePrint.tsx', '../../pages/admin/InvoicePrint.tsx', '../../pages/admin/ReceiptPrint.tsx', '../../pages/admin/ProposalPrint.tsx']) {
+      const src = read(rel);
+      expect(src, rel).not.toContain('1051893445');
+      expect(src, rel).toContain("from '@/components/documents/DocumentShell'");
     }
   });
 });

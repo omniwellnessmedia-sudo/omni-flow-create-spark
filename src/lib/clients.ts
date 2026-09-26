@@ -124,6 +124,10 @@ const describeActivity = (a: ActivityRow): { kind: TimelineKind; text: string } 
       return { kind: 'walk_in', text: `Walk-in recorded${p.sector ? `, ${String(p.sector).toLowerCase()}` : ''}` };
     case 'edit':
       return { kind: 'edit', text: 'Details updated' };
+    case 'invoice_issued': {
+      const inv = p.invoice as { number?: string; total?: number } | undefined;
+      return { kind: 'edit', text: `Invoice ${inv?.number ?? ''} issued${typeof inv?.total === 'number' ? ` for R${Math.round(inv.total).toLocaleString('en-ZA')}` : ''}`.replace(/\s+/g, ' ') };
+    }
     case 'proposal_issued': {
       const pr = p.proposal as { number?: string; title?: string } | undefined;
       return { kind: 'edit', text: `Proposal ${pr?.number ?? ''} issued${pr?.title ? `: ${pr.title}` : ''}`.replace(/\s+/g, ' ') };

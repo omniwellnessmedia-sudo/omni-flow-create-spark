@@ -111,6 +111,8 @@ const MuizenbergAuditSheet = lazyWithRetry(() => import('@/pages/MuizenbergAudit
 const Talks = lazyWithRetry(() => import('@/pages/Talks'));
 const QuotePrint = lazyWithRetry(() => import('@/pages/admin/QuotePrint'));
 const ProposalPrint = lazyWithRetry(() => import('@/pages/admin/ProposalPrint'));
+const InvoicePrint = lazyWithRetry(() => import('@/pages/admin/InvoicePrint'));
+const ReceiptPrint = lazyWithRetry(() => import('@/pages/admin/ReceiptPrint'));
 const ServiceDetail = lazyWithRetry(() => import('@/pages/ServiceDetail'));
 const SearchServices = lazyWithRetry(() => import('@/pages/SearchServices'));
 const AddWant = lazyWithRetry(() => import('@/pages/AddWant'));
@@ -445,6 +447,18 @@ function App() {
                   <Route path="/admin/proposal/:leadType/:leadId/:number" element={
                     <ProtectedRoute requireAdmin={true}>
                       <ProposalPrint />
+                    </ProtectedRoute>
+                  } />
+                  {/* Invoices and receipts, on the same template as the
+                      quotation and read back from the same ledger. */}
+                  <Route path="/admin/invoice/:leadType/:leadId/:number" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <InvoicePrint />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/receipt/:leadType/:leadId/:activityId" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <ReceiptPrint />
                     </ProtectedRoute>
                   } />
                   {/* Catalogue managers onboard local businesses and products.

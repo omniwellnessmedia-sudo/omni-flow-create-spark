@@ -98,6 +98,8 @@ export const buildQuote = (args: {
 };
 
 export interface Payment {
+  /** The activity row's id, which is what a receipt is addressed by. */
+  id?: string;
   quoteNumber: string;
   amount: number;
   method: string;
@@ -142,6 +144,7 @@ export const quotesFromActivities = (activities: ActivityRow[], now = new Date()
     } else if (a.action === PAYMENT_RECEIVED && typeof p.quoteNumber === 'string') {
       const list = payments.get(p.quoteNumber) ?? [];
       list.push({
+        id: a.id,
         quoteNumber: p.quoteNumber,
         amount: Number(p.amount) || 0,
         method: String(p.method ?? 'EFT'),

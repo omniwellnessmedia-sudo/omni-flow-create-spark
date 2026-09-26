@@ -2,13 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, Copy, Printer } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { BANK_DETAILS, paymentReference } from '@/data/bankDetails';
 import { publishedContacts } from '@/data/humanContact';
 import { lineTotal, rand } from '@/lib/quotes';
 import { PROPOSAL_ISSUED, coverEmail, proposalOffers, themeById, type Proposal } from '@/lib/proposals';
 import { mergeOne } from '@/lib/serviceContent';
 import { usePublishedServiceContent } from '@/hooks/useServiceContent';
 import { useToast } from '@/hooks/use-toast';
+import { PayBlock, TermsBlock } from '@/components/documents/DocumentShell';
 
 /**
  * The proposal as a document: branded, themed, printable to PDF from the
@@ -231,27 +231,20 @@ const ProposalPrint = () => {
 
               <p className="mt-6 max-w-[150mm] text-[12.5px] leading-relaxed text-black/75">{theme.closing}</p>
 
-              <div className="mt-8 grid grid-cols-2 gap-8 rounded-[10px] border border-black/30 p-4">
-                <div>
-                  <p className="text-[9.5px] uppercase tracking-[.2em] text-black/60" style={MONO}>To say yes</p>
-                  <p className="mt-2 text-[12px]">Reply to the email, or send the deposit with the reference below and we will schedule the start.</p>
-                  {contact && <p className="mt-2 text-[12px]">{contact.name}, {contact.phone}</p>}
-                  <p className="text-[12px] text-black/70">omniwellnessmedia.co.za</p>
-                </div>
-                <dl className="grid grid-cols-[110px_1fr] gap-y-1 text-[11.5px]">
-                  <dt className="text-black/60">Bank</dt><dd>{BANK_DETAILS.bank}</dd>
-                  <dt className="text-black/60">Account name</dt><dd>{BANK_DETAILS.accountName}</dd>
-                  <dt className="text-black/60">Account number</dt><dd style={MONO}>{BANK_DETAILS.accountNumber}</dd>
-                  <dt className="text-black/60">Branch code</dt><dd style={MONO}>{BANK_DETAILS.branchCode}</dd>
-                  <dt className="text-black/60">Reference</dt><dd className="font-medium" style={MONO}>{paymentReference(proposal.number)}</dd>
-                </dl>
+              <div className="mt-8">
+                <PayBlock
+                  reference={proposal.number}
+                  note={
+                    <>
+                      <p>To say yes, reply to the email or send the deposit with this reference and we will schedule the start.</p>
+                      {contact && <p className="mt-1">{contact.name}, {contact.phone}. omniwellnessmedia.co.za</p>}
+                    </>
+                  }
+                />
               </div>
 
               <div className="mt-6">
-                <p className="text-[9.5px] uppercase tracking-[.2em] text-black/60" style={MONO}>Terms</p>
-                <ol className="mt-1.5 list-decimal space-y-0.5 pl-4 text-[10px] leading-snug text-black/70">
-                  {proposal.quote.terms.map((t) => <li key={t}>{t}</li>)}
-                </ol>
+                <TermsBlock terms={proposal.quote.terms} />
               </div>
             </section>
           </>
