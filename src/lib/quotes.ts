@@ -117,6 +117,13 @@ export interface QuoteRecord {
 
 export const QUOTE_ISSUED = 'quote_issued';
 export const PAYMENT_RECEIVED = 'payment_received';
+/**
+ * A proposal carries a real quotation inside it (see src/lib/proposals.ts),
+ * so the Money screen tracks a priced proposal as a quotation awaiting its
+ * deposit. Named here rather than imported to keep this module free of a
+ * dependency on the proposal module, which depends on this one.
+ */
+export const PROPOSAL_ISSUED_ACTION = 'proposal_issued';
 
 const isQuote = (v: unknown): v is Quote =>
   !!v && typeof v === 'object' && typeof (v as Quote).number === 'string' && Array.isArray((v as Quote).lines);
@@ -129,6 +136,9 @@ export const quotesFromActivities = (activities: ActivityRow[], now = new Date()
     const p = a.payload ?? {};
     if (a.action === QUOTE_ISSUED && isQuote(p.quote)) {
       quotes.set(p.quote.number, p.quote);
+    } else if (a.action === PROPOSAL_ISSUED_ACTION) {
+      const inner = (p.proposal as { quote?: unknown } | undefined)?.quote;
+      if (isQuote(inner) && inner.subtotal > 0) quotes.set(inner.number, inner);
     } else if (a.action === PAYMENT_RECEIVED && typeof p.quoteNumber === 'string') {
       const list = payments.get(p.quoteNumber) ?? [];
       list.push({

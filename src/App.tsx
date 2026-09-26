@@ -110,6 +110,7 @@ const Muizenberg = lazyWithRetry(() => import('@/pages/Muizenberg'));
 const MuizenbergAuditSheet = lazyWithRetry(() => import('@/pages/MuizenbergAuditSheet'));
 const Talks = lazyWithRetry(() => import('@/pages/Talks'));
 const QuotePrint = lazyWithRetry(() => import('@/pages/admin/QuotePrint'));
+const ProposalPrint = lazyWithRetry(() => import('@/pages/admin/ProposalPrint'));
 const ServiceDetail = lazyWithRetry(() => import('@/pages/ServiceDetail'));
 const SearchServices = lazyWithRetry(() => import('@/pages/SearchServices'));
 const AddWant = lazyWithRetry(() => import('@/pages/AddWant'));
@@ -437,6 +438,13 @@ function App() {
                   <Route path="/admin/quote/:leadType/:leadId/:number" element={
                     <ProtectedRoute requireAdmin={true}>
                       <QuotePrint />
+                    </ProtectedRoute>
+                  } />
+                  {/* A proposal as a branded document: findings, offers, plan,
+                      investment. Same shell as the quotation. */}
+                  <Route path="/admin/proposal/:leadType/:leadId/:number" element={
+                    <ProtectedRoute requireAdmin={true}>
+                      <ProposalPrint />
                     </ProtectedRoute>
                   } />
                   {/* Catalogue managers onboard local businesses and products.

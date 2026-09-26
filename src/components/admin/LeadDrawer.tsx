@@ -12,7 +12,9 @@ import { Mail, Phone, Copy, Archive, Trash2, Send, Sparkles, ExternalLink, FileT
 import { format, formatDistanceToNow } from "date-fns";
 import { STAGES, stageForStatus, statusForStage, toPipelineLead } from "@/lib/pipeline";
 import QuoteDialog from "@/components/admin/QuoteDialog";
+import ProposalDialog from "@/components/admin/ProposalDialog";
 import type { Quote } from "@/lib/quotes";
+import type { Proposal } from "@/lib/proposals";
 
 export type LeadType = "contact" | "quote" | "outreach";
 
@@ -63,6 +65,7 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
   const [edit, setEdit] = useState<any>(lead || {});
   const [note, setNote] = useState("");
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [proposalOpen, setProposalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -213,7 +216,8 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
           </Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("first_contact")}>First contact</Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("follow_up")}>Follow-up</Button>
-          <Button size="sm" className="h-8 text-xs" onClick={() => setQuoteOpen(true)}>Build quote</Button>
+          <Button size="sm" className="h-8 text-xs" onClick={() => setProposalOpen(true)}>Build proposal</Button>
+          <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => setQuoteOpen(true)}>Build quote</Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("send_quote")}>Quote email</Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => sendTemplate("partner_onboarding")}>Partner onboard</Button>
           <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => setStatus("archived")}>
@@ -233,6 +237,19 @@ const LeadDrawer = ({ open, onOpenChange, leadType, lead, onUpdated }: LeadDrawe
             setStatus(statusForStage("quoted", leadType));
             loadActivities(lead.id);
             window.open(`/admin/quote/${q.leadType}/${q.leadId}/${q.number}`, "_blank", "noopener");
+          }}
+        />
+
+        <ProposalDialog
+          open={proposalOpen}
+          onOpenChange={setProposalOpen}
+          lead={toPipelineLead(leadType, lead)}
+          onIssued={(p: Proposal) => {
+            // A priced proposal is a quotation with an argument attached, so
+            // it lands in Quoted. One without a price is a findings document.
+            setStatus(statusForStage(p.quote.subtotal > 0 ? "quoted" : "findings", leadType));
+            loadActivities(lead.id);
+            window.open(`/admin/proposal/${p.leadType}/${p.leadId}/${p.number}`, "_blank", "noopener");
           }}
         />
 

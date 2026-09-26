@@ -124,6 +124,10 @@ const describeActivity = (a: ActivityRow): { kind: TimelineKind; text: string } 
       return { kind: 'walk_in', text: `Walk-in recorded${p.sector ? `, ${String(p.sector).toLowerCase()}` : ''}` };
     case 'edit':
       return { kind: 'edit', text: 'Details updated' };
+    case 'proposal_issued': {
+      const pr = p.proposal as { number?: string; title?: string } | undefined;
+      return { kind: 'edit', text: `Proposal ${pr?.number ?? ''} issued${pr?.title ? `: ${pr.title}` : ''}`.replace(/\s+/g, ' ') };
+    }
     default:
       return { kind: 'edit', text: a.action.replace(/_/g, ' ') };
   }
